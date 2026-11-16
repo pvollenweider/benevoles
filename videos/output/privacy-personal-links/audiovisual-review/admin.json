@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:18:46.761Z",
+  "videoSha256": "fa5cbf11e7a2bb4c84da497238502ca0be8e1e0dc3d0c0aac637284e2c1496ed",
+  "promptSha256": "959e6cee7b5d4752a5020d8428774ca53e21eb3997d61f608224b0e2af32ec86",
+  "clipSha256": "373eefe135ab1af813707e01e8f8cbff661d5d39cd9b44192c0179dac815bc68",
+  "scene": "admin",
+  "review": {
+    "heardOpening": "L'organisateur travaille dans son administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Dans les inscriptions, il retrouve les personnes",
+        "visibleSeconds": 4.5,
+        "visible": "Page Événements > Inscriptions avec la liste des bénévoles et réponses",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Dans les membres, il peut consulter les disponibilités",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de l'onglet Membres avec la liste des membres et disponibilités",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Regardons la fiche de Léa",
+        "visibleSeconds": 14.7,
+        "visible": "Ouverture de la fenêtre modale Modifier le membre pour Léa Müller",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Sa page Mes inscriptions ne montre pas les notes internes",
+        "visibleSeconds": 19.3,
+        "visible": "Affichage de la page Mes inscriptions de Léa Müller",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Le responsable reçoit les contacts de son équipe",
+        "visibleSeconds": 22.8,
+        "visible": "Affichage de la vue Responsable - Accueil avec la liste des contacts",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

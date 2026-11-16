@@ -101,3 +101,7 @@ Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive
 Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les exemples de chevauchement utilisent des postes ordinaires non cumulables. Le formulaire public conserve « convention des bénévoles ». La page personnelle peut aussi afficher « Mes réponses » et « S’inscrire à d’autres créneaux ».
 
 Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.
+
+## Lot 41 — 16 novembre 2026
+
+Nouvelle narration Kore intégrale sur les sources du 1er novembre : demande publique reçue, suite par email et lien personnel seulement après preuve de l'adresse. Les anciennes notes de restauration sont historiques.

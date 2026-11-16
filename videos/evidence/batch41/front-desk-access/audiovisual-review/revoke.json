@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:33:59.682Z",
+  "videoSha256": "e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385",
+  "promptSha256": "2074a10f3cb97c8a33229f765d9535bef199d815e4ac0e3f1e47ca5e8491a3f7",
+  "clipSha256": "dccf98bf3ec1aa80a96f787251c7fcd127614046c5ec7c94fc4620ca1f6df7c9",
+  "scene": "revoke",
+  "review": {
+    "heardOpening": "Revenons au compte propriétaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Revenons au compte propriétaire.",
+        "visibleSeconds": 0.5,
+        "visible": "Défilement vers la section Accès accueil du compte administrateur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Sur la ligne de Colette, choisissons Révoquer et confirmons.",
+        "visibleSeconds": 3,
+        "visible": "Ouverture de la modale de confirmation puis clic sur le bouton Révoquer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "L'accès est fermé tout de suite.",
+        "visibleSeconds": 5.5,
+        "visible": "La mention Révoqué / Accès révoqué s'affiche en face de Colette Jensen.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Revenons au compte de Colette et ouvrons le pointage.",
+        "visibleSeconds": 10,
+        "visible": "Bascule vers la vue du compte de Colette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Sa page Accès accueil indique qu'elle n'a plus d'accès en cours.",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage de la page Accès accueil avec le message Vous n'avez plus d'accès en cours.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et dynamique, synchronisation fluide avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

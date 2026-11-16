@@ -1,27 +1,12 @@
 STATUS: READY
-ID: ATTENDANCE_CHECK_IN
-Duration: 398.84
-BUILD_ID: RPQR_7CtwLDa6m9DyYOBY
-Commit: 39b375b9ede4d3a0081fbce1f964e4b79549a7c9
-Music: {'voicedWindows': 350, 'musicOnlyWindows': 7, 'smallestGapLu': 13.6, 'largestGapLu': 19.2, 'quietestMusicOnlyLufs': -34, 'loudestMusicOnlyLufs': -33, 'medianVoiceLufs': -16.2}
-Problems: All objective checks pass. Desktop correction, mobile sections/search and undo now aligned. CSV: five active inscriptions/four people, three pointed/two unpointed, Sarah excluded after cancellation with prior pointage retained. Automated undo-reload flag rejected: successful recorder unconditionally executes page.reload at sentence anchor (374.678 s), then verifies null pointage and active registration in current database; stable redraw does not require clicking Actualiser. Exact frames review/undo-*.png and dayof-undo-observations.json retained.
-Source changes: None; batch 14 sentence anchors retained. No re-film needed.
-Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
-Real-time subjective listening unavailable; never used as a NOT READY reason.
-Subtitles match manifest text exactly: True
-MP4 frame evidence SHA256: ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9
-All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
-welcome: 0.215–24.601 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-one: 26.923–51.59 s; review/one-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-group: 53.853–77.183 s; review/group-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-correction: 79.448–102.013 s; review/correction-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-multiple: 104.274–130.406 s; review/multiple-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-limits: 132.672–157.053 s; review/limits-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-cancelled: 159.319–197.23 s; review/cancelled-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 6; reported issues []
-export: 200.676–224.741 s; review/export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-dayof-window: 228.174–256.817 s; review/dayof-window-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
-dayof-search: 260.23–283.554 s; review/dayof-search-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-dayof-phone: 285.814–311.934 s; review/dayof-phone-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-dayof-checkin: 314.194–339.242 s; review/dayof-checkin-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-dayof-refresh: 341.503–366.646 s; review/dayof-refresh-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-dayof-undo: 368.908–395.852 s; review/dayof-undo-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["À 00:06, la voix annonce une vérification 'après rechargement', mais aucun rechargement ni clic sur 'Actualiser' n'a lieu à l'écran."]
+ATTENDANCE_CHECK_IN — batch 41 resume, 16 November 2026
+Duration: 461.680 s; two narrated takes, no third take. Take 1 rejected because Zoé's matching row remained below the search viewport; corrected scroll and in-viewport assertion rehearsed before take 2.
+Product: e8ed666a48294d77213f8bf64fe35898314b0ed9; BUILD_ID HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335
+The twelve original narration boundary failures were fixed on measured silences before any narrated take. Fifteen source chapters and fifteen final audio chapters pass independent ASR; one complete Kore generation, no pause tags; whole-master voice consistent.
+Four-state registration selection actions and undo, Jour J badges/counters and undo, both new CSV columns, and exclusion of early departures from attested hours are demonstrated. Real persisted changes preserve active registration scope; no inferred absence or measured worked duration claimed. Accès accueil remains collapsed and unexplained here.
+Fifteen audiovisual reviews / 61 checkpoints. Five raw reports are flagged; each is retained and resolved in take2-counterchecks.json with final frames, actual input times and real state assertions. The overnight/current group classification uses the initial overnight label and a real pan within En cours; no promise to hold that row at every word. Search is typed at +0.831–1.029s before the match is shown; later keys enter Accueil. The manual refresh click follows its sentence at +11.969s, separate from an earlier automatic poll. Real reloads need not show a spinner. Aline's selection, real mark and post-reload green badge contradict the frozen/missing-action report.
+Actual physical portrait content (370x800 from 390x844 CSS) centred after per-frame detection of native grey padding; final raw capture retained. No product pixels or state rewritten. Music 14.7–19.2 LU under voice, quietest music-only window −34.0 LUFS, zero gaps/out-of-rule windows; 46 real clicks and 46 real key events with synchronized soft effects. Full multilingual final ASR and VTT: zero tutoiement and no stray instruction identified. Description 115 UTF-8 bytes.
+Historical archival incident: recorder startup removed take 1 raw before its manual archive; first-take MP4s, AV clips, timelines and reports remain. Incident documented; archiveCapture now preserves old raw/timeline automatically and its filesystem tests pass. No replacement raw fabricated.
+Types, video tests, source lint and tsc passed for the publication group; final validation passes. Automated audiovisual observation plus frame inspection; no subjective real-time human listening claimed.
+Published after preview then APPLY=1 on default; five files sent. Revision 5, updatedAt/updated 2026-11-16.

@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 25.5,
+    "wordsHeard": "Dans"
+  },
+  "onset": 25.5,
+  "proposedCut": 25.01375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

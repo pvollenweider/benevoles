@@ -1,0 +1,12 @@
+{
+  "anchor": "La taille du t-shirt n’a pas été renseignée. Confirmer affiche la",
+  "windowStart": 7.331000000000003,
+  "result": {
+    "found": true,
+    "startSeconds": 30.8,
+    "wordsHeard": "La taille du t-shirt n’a pas été renseignée. Confirmer affiche la"
+  },
+  "onset": 38.131,
+  "proposedCut": 37.331103999999996,
+  "note": "Proposal only; recut then independently audit before capture"
+}

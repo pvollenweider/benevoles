@@ -1,0 +1,32 @@
+{
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "take": 2,
+  "findings": {
+    "last-participation": {
+      "status": "resolved",
+      "observation": "The initial actual order is Clara/Benoît/Aline, already ascending for attested hours 0/0/6. First sort at +16.603s sets actual aria-sort ascending without moving already sorted rows. The second click +19.585s moves Aline first; third +22.118s restores the default order. Date sort +23.452s is again the same order: null Clara first, then the equal 12 September dates of Benoît and Aline. Existing main pure sorting function independently confirms every order; no sorting failure or late action is evidenced.",
+      "evidence": [
+        "take2-last-participation-15.png",
+        "take2-last-participation-16.8.png",
+        "take2-last-participation-20.png",
+        "take2-last-participation-23.png",
+        "take2-last-participation-24.png",
+        "main-sort-diagnostic.json",
+        "hours-evidence.json",
+        "timeline.json"
+      ]
+    },
+    "certificate-settings": {
+      "status": "resolved",
+      "observation": "Narration says the logo is printed grey, not that the screen preview is grey. Actual screen logo is colored as designed; actual computed print CSS is grayscale(1), and the actual final PDF is grey. The final PDF chapter review also reports no issue.",
+      "evidence": [
+        "take2-certificate-settings-30.png",
+        "take2-certificate-pdf-15.png",
+        "attestation-aline.pdf",
+        "attestation-review.png",
+        "hours-evidence.json"
+      ]
+    }
+  },
+  "firstTakeFix": "Clara CSV display now anchored at Dans ce vrai fichier; second take period-export has seven AV checkpoints with zero issue. First rejected take and all raw reports retained."
+}

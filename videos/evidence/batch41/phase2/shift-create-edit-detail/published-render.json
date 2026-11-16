@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-16T22:27:04.273282+00:00",
+  "url": "https://medias.benevol.app/shift-create-edit-detail/shift-create-edit-detail.mp4",
+  "ffprobe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 800
+      }
+    ],
+    "format": {
+      "duration": "134.760000"
+    }
+  },
+  "render": {
+    "durationMs": 134760,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "posters": "Both actually published and SHA-256 verified"
+}

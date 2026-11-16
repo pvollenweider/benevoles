@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:28:31.764Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
+  "promptSha256": "9dd4a234035ca837124233f13b31c3b9f0270d01aab8fbbdbf26c637c0f76dff",
+  "clipSha256": "5d40cafa4367b333b9f96be155d46330239db9b57ab5a584e6d11660542617af",
+  "scene": "registrations",
+  "review": {
+    "heardOpening": "Dans les inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "chaque ligne rassemble la personne, son créneau, son statut",
+        "visibleSeconds": 0,
+        "visible": "Tableau de l'onglet Inscriptions affichant les colonnes Bénévole, Créneau, Source et Statut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "comme la taille du t-shirt ou le régime alimentaire",
+        "visibleSeconds": 0,
+        "visible": "Détails sous Camille Rochat affichant 'Taille de t-shirt : M' et les informations associées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "peuvent être consultées sans ouvrir plusieurs fichiers",
+        "visibleSeconds": 0,
+        "visible": "Affichage direct des informations au sein du tableau sans manipulation supplémentaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec l'écran présenté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

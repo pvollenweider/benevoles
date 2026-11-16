@@ -63,3 +63,7 @@ Narration finale de référence (génération intégrale si modifiée, même voi
 ## Révision du 2026-10-16 — lot 23-2
 
 Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.
+
+## Lot 41 — 16 novembre 2026
+
+Le chapitre Messages ajoute : « Des délais propres à l'événement peuvent remplacer les rappels habituels. » Nouvelle narration entière, une seule voix ; tous les écrans sont repris sur main actuel.

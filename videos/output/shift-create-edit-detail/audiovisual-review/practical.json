@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:41:10.015Z",
-  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
+  "reviewedAt": "2026-11-16T22:18:24.497Z",
+  "videoSha256": "dbdce05a725e66cf7060c109dbbb8e42556113b6c43ec21c65581c15c62bf33f",
   "promptSha256": "b7cd6ec6f0374632024805dd5b71c6e9d6240cfcc7bd9201cb221daef4382f1c",
-  "clipSha256": "b54d3d720d28c06e8c3f3079945d5953d26ae863a85d3a88831da070f14607df",
+  "clipSha256": "1615aee5bfeb191a870f38f1be88be8ea8705dbb8cf8da9059c865c123ef4078",
   "scene": "practical",
   "review": {
     "heardOpening": "Renseignons d'abord le lieu de rendez-vous",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "entrée artistes, portail nord",
-        "visibleSeconds": 1,
-        "visible": "Le texte « entrée artistes, portail nord » est renseigné dans le champ Lieu de rendez-vous",
+        "spokenSeconds": 0.8,
+        "spoken": "Renseignons d'abord le lieu de rendez-vous : entrée artistes, portail nord.",
+        "visibleSeconds": 1.1,
+        "visible": "Le texte « entrée artistes, portail nord » est saisi dans le champ Lieu du créneau.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
-        "spoken": "venir dix minutes avant avec des chaussures fermées",
-        "visibleSeconds": 6,
-        "visible": "Le texte « venir dix minutes avant avec des chaussures fermées » apparaît dans Consigne pratique",
+        "spokenSeconds": 4.2,
+        "spoken": "Ajoutons une consigne : venir dix minutes avant avec des chaussures fermées.",
+        "visibleSeconds": 5.3,
+        "visible": "Le texte « venir dix minutes avant avec des chaussures fermées » apparaît dans le champ Consigne pratique.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.8,
-        "spoken": "ici Léa, accueil artistes, et son téléphone de démonstration",
-        "visibleSeconds": 11.5,
-        "visible": "Saisie de « Léa, accueil artistes » et du numéro de téléphone dans les champs de contact",
+        "spokenSeconds": 9.5,
+        "spoken": "ici Léa, accueil artistes, et son téléphone de démonstration.",
+        "visibleSeconds": 10.6,
+        "visible": "Les champs Personne de contact (« Léa, accueil artistes ») et Téléphone du contact (« 079 000 01 24 ») sont remplis.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.2,
-        "spoken": "Les coordonnées GPS placent ce rendez-vous sur la carte",
-        "visibleSeconds": 17.5,
-        "visible": "Des coordonnées GPS sont renseignées dans le champ Coordonnées GPS ou lien de carte",
+        "spokenSeconds": 16.4,
+        "spoken": "Les coordonnées GPS placent ce rendez-vous sur la carte.",
+        "visibleSeconds": 17.3,
+        "visible": "Les coordonnées GPS sont renseignées dans le champ dédié.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et bien synchronisée avec les remplissages de formulaire."
+      "observation": "Voix claire, posée, parfaitement synchronisée avec la saisie progressive des champs du formulaire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

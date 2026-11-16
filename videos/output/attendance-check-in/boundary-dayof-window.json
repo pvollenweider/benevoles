@@ -1,0 +1,12 @@
+{
+  "anchor": "La page Jour J se concentre sur les personnes attendues maintenant.",
+  "windowStart": 241.315,
+  "result": {
+    "found": true,
+    "startSeconds": 22.1,
+    "wordsHeard": "La page Jour J se concentre sur les personnes attendues maintenant"
+  },
+  "onset": 263.415,
+  "proposedCut": 263.27206249999995,
+  "note": "Proposal only; recut then independently audit before capture"
+}

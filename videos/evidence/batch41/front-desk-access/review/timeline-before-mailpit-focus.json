@@ -1,0 +1,204 @@
+{
+  "slug": "front-desk-access",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-16T19:31:30.735Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-accueil",
+    "scenario": "FRONT_DESK_ACCESS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 22812
+    },
+    {
+      "kind": "click",
+      "atMs": 26494
+    },
+    {
+      "kind": "click",
+      "atMs": 27295
+    },
+    {
+      "kind": "click",
+      "atMs": 28095
+    },
+    {
+      "kind": "click",
+      "atMs": 52609
+    },
+    {
+      "kind": "click",
+      "atMs": 62663
+    },
+    {
+      "kind": "click",
+      "atMs": 63495
+    },
+    {
+      "kind": "click",
+      "atMs": 64330
+    },
+    {
+      "kind": "click",
+      "atMs": 68741
+    },
+    {
+      "kind": "click",
+      "atMs": 69546
+    },
+    {
+      "kind": "click",
+      "atMs": 70362
+    },
+    {
+      "kind": "click",
+      "atMs": 71179
+    },
+    {
+      "kind": "click",
+      "atMs": 78998
+    },
+    {
+      "kind": "click",
+      "atMs": 99493
+    },
+    {
+      "kind": "click",
+      "atMs": 109593
+    },
+    {
+      "kind": "click",
+      "atMs": 111073
+    },
+    {
+      "kind": "click",
+      "atMs": 140474
+    },
+    {
+      "kind": "click",
+      "atMs": 141640
+    },
+    {
+      "kind": "click",
+      "atMs": 143024
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 2336,
+      "endMs": 15765
+    },
+    {
+      "id": "invite",
+      "startMs": 18026,
+      "endMs": 39782
+    },
+    {
+      "id": "email",
+      "startMs": 43353,
+      "endMs": 59868
+    },
+    {
+      "id": "activate",
+      "startMs": 62143,
+      "endMs": 76233
+    },
+    {
+      "id": "scope",
+      "startMs": 78491,
+      "endMs": 96737
+    },
+    {
+      "id": "marks",
+      "startMs": 98998,
+      "endMs": 117027
+    },
+    {
+      "id": "end",
+      "startMs": 119289,
+      "endMs": 136354
+    },
+    {
+      "id": "revoke",
+      "startMs": 138617,
+      "endMs": 164300
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "invite",
+      "phrase": "En bas, ouvrons la gestion",
+      "startMs": 4260,
+      "endMs": 7241,
+      "cueMs": 22288
+    },
+    {
+      "segmentId": "invite",
+      "phrase": "Indiquons Colette Jensen et son adresse",
+      "startMs": 8001,
+      "endMs": 13002,
+      "cueMs": 26029
+    },
+    {
+      "segmentId": "email",
+      "phrase": "Ouvrons ce lien pour activer",
+      "startMs": 8776,
+      "endMs": 10982,
+      "cueMs": 52130
+    },
+    {
+      "segmentId": "activate",
+      "phrase": "Connectons-nous avec son adresse",
+      "startMs": 6088,
+      "endMs": 8636,
+      "cueMs": 68233
+    },
+    {
+      "segmentId": "marks",
+      "phrase": "Marquons ce départ",
+      "startMs": 10118,
+      "endMs": 10846,
+      "cueMs": 109118
+    },
+    {
+      "segmentId": "marks",
+      "phrase": "Annuler le départ retrouve",
+      "startMs": 11591,
+      "endMs": 13911,
+      "cueMs": 110591
+    },
+    {
+      "segmentId": "revoke",
+      "phrase": "Sur la ligne de Colette",
+      "startMs": 2533,
+      "endMs": 7460,
+      "cueMs": 141152
+    },
+    {
+      "segmentId": "revoke",
+      "phrase": "Revenons au compte de Colette",
+      "startMs": 10343,
+      "endMs": 12824,
+      "cueMs": 148963
+    }
+  ]
+}

@@ -70,5 +70,6 @@
       "style": "Use a broad, clearly audible smile and genuine celebratory warmth, as if welcoming a new teammate. Keep that smile in the practical sentences that follow, while becoming calmly reassuring and clear about the confirmation email and personal link. Energetic but never exaggerated.",
       "fallbackDurationMs": 10500
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

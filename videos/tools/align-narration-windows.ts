@@ -40,7 +40,7 @@ async function main() {
   if (!Number.isFinite(totalSeconds) || cuts.some((cut, index) => cut.seconds <= (index ? cuts[index - 1].seconds : 0) || cut.seconds >= totalSeconds)) throw new Error("Chapter boundaries are out of order or outside the master audio")
   await writeFile(path.join(directory, "window-alignment.json"), JSON.stringify({ locatedAt: new Date().toISOString(), masterSha256, totalSeconds, cuts, applied: false, independentContentAuditRequired: true }, null, 2))
   if (apply) {
-    const { stdout: recut } = await exec(process.execPath, ["--import", "tsx", "videos/tools/recut-narration.ts", reference, ...cuts.map(c => `${c.id}=${c.seconds.toFixed(6)}`)])
+    const { stdout: recut } = await exec(process.execPath, ["--import", "tsx", "videos/tools/recut-narration.ts", reference, ...cuts.map(c => `segment:${c.id}=${c.seconds.toFixed(6)}`)])
     console.log(recut.trim())
     await writeFile(path.join(directory, "window-alignment.json"), JSON.stringify({ locatedAt: new Date().toISOString(), masterSha256, totalSeconds, cuts, applied: true, independentContentAuditRequired: true }, null, 2))
   }

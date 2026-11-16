@@ -1,0 +1,12 @@
+{
+  "anchor": "Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver",
+  "windowStart": 75.11099999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 22.1,
+    "wordsHeard": "Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver"
+  },
+  "onset": 97.21099999999998,
+  "proposedCut": 96.68339599999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

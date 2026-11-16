@@ -1,0 +1,185 @@
+{
+  "slug": "shift-create-series",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-16T22:08:30.965Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_CREATE_SERIES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7595
+    },
+    {
+      "kind": "click",
+      "atMs": 15930
+    },
+    {
+      "kind": "click",
+      "atMs": 19295
+    },
+    {
+      "kind": "click",
+      "atMs": 22045
+    },
+    {
+      "kind": "click",
+      "atMs": 28162
+    },
+    {
+      "kind": "click",
+      "atMs": 31711
+    },
+    {
+      "kind": "click",
+      "atMs": 37446
+    },
+    {
+      "kind": "click",
+      "atMs": 58094
+    },
+    {
+      "kind": "click",
+      "atMs": 69977
+    },
+    {
+      "kind": "click",
+      "atMs": 71210
+    },
+    {
+      "kind": "click",
+      "atMs": 76809
+    },
+    {
+      "kind": "click",
+      "atMs": 79277
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1195,
+      "endMs": 14229
+    },
+    {
+      "id": "range",
+      "startMs": 14682,
+      "endMs": 27243
+    },
+    {
+      "id": "duration",
+      "startMs": 27696,
+      "endMs": 44476
+    },
+    {
+      "id": "preview",
+      "startMs": 44927,
+      "endMs": 56702
+    },
+    {
+      "id": "create",
+      "startMs": 57154,
+      "endMs": 69028
+    },
+    {
+      "id": "adjust",
+      "startMs": 69480,
+      "endMs": 87492
+    },
+    {
+      "id": "result",
+      "startMs": 87950,
+      "endMs": 102566
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Au lieu de saisir chaque",
+      "startMs": 5906,
+      "endMs": 12585,
+      "cueMs": 7102
+    },
+    {
+      "segmentId": "range",
+      "phrase": "Ici, la buvette fonctionne de",
+      "startMs": 3083,
+      "endMs": 6729,
+      "cueMs": 17767
+    },
+    {
+      "segmentId": "range",
+      "phrase": "Cette plage décrit le besoin",
+      "startMs": 6894,
+      "endMs": 9487,
+      "cueMs": 21579
+    },
+    {
+      "segmentId": "duration",
+      "phrase": "La pause ajoute un intervalle",
+      "startMs": 9219,
+      "endMs": 11290,
+      "cueMs": 36916
+    },
+    {
+      "segmentId": "duration",
+      "phrase": "Ici, choisissons zéro minute ",
+      "startMs": 11707,
+      "endMs": 14944,
+      "cueMs": 39405
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Créons la série",
+      "startMs": 467,
+      "endMs": 1074,
+      "cueMs": 57623
+    },
+    {
+      "segmentId": "create",
+      "phrase": "chacune possède son propre effectif",
+      "startMs": 8447,
+      "endMs": 11300,
+      "cueMs": 65602
+    },
+    {
+      "segmentId": "adjust",
+      "phrase": "Enregistrons",
+      "startMs": 9312,
+      "endMs": 9707,
+      "cueMs": 78795
+    },
+    {
+      "segmentId": "result",
+      "phrase": "quatre places pour la première relève",
+      "startMs": 2054,
+      "endMs": 4861,
+      "cueMs": 90005
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Une série bien découpée facilite",
+      "startMs": 9881,
+      "endMs": 14334,
+      "cueMs": 97832
+    }
+  ]
+}

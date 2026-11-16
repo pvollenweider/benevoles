@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:23:12.986Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
-  "promptSha256": "82fcfa717afa1f73e3b485b0b81fc6ca69fb360542dece21be61f9032968ba22",
-  "clipSha256": "e9d5bdc2aea6a963944698ee96904c4e7e600160ea532ac1a00fd9ea33f14801",
+  "reviewedAt": "2026-11-16T19:48:51.220Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "3f9e13b2981fb8e011d779bef9ba20dab5e88901410a0e58a5c69210a07b39a8",
+  "clipSha256": "ff799beaef63844318e3ea52a22e7e9140d0c2b3647196d81144281d25716db1",
   "scene": "export",
   "review": {
     "heardOpening": "Téléchargeons maintenant le véritable export des présences.",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0,
         "spoken": "Téléchargeons maintenant le véritable export des présences.",
-        "visibleSeconds": 3.8,
-        "visible": "Affichage de la page de visualisation du fichier « Lecture du CSV téléchargé »",
+        "visibleSeconds": 3.4,
+        "visible": "Affichage de la page « Lecture du CSV téléchargé » avec le tableau des présences.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le.",
-        "visibleSeconds": 6.7,
-        "visible": "Défilement horizontal vers la droite affichant les colonnes « Présent » et « Pointé le » avec des lignes pointées et non pointées",
+        "spokenSeconds": 8.7,
+        "spoken": "leurs créneaux et les colonnes Présent et Pointé le.",
+        "visibleSeconds": 10.3,
+        "visible": "Le tableau défile horizontalement pour afficher les colonnes Présent, Pointé le, Absence notée et Parti avant la fin.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.2,
-        "spoken": "Il peut aussi contenir des coordonnées et des réponses aux questions : partagez seulement ce qui est nécessaire.",
-        "visibleSeconds": 16.5,
-        "visible": "Sélection du filtre « Léa Exemple » isolant ses deux inscriptions",
+        "spokenSeconds": 14.1,
+        "spoken": "Les colonnes Absence notée et Parti avant la fin distinguent aussi les notes de Noah et d’Aline.",
+        "visibleSeconds": 14.5,
+        "visible": "Visualisation de la mention « oui » pour Noah sous Absence notée et pour Aline sous Parti avant la fin.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
+        "spokenSeconds": 28.9,
         "spoken": "Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
-        "visibleSeconds": 19.6,
-        "visible": "Affichage de l'interface mobile « Jour J - équipe sur le terrain »",
+        "visibleSeconds": 29.5,
+        "visible": "Bascule vers l'affichage responsive mobile « Jour J — équipé sur le terrain ».",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions affichées."
+      "observation": "Voix féminine claire, posée, au débit régulier et parfaitement audible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

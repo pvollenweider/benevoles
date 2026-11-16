@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T15:33:46.035Z",
-  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
+  "reviewedAt": "2026-11-16T20:37:44.790Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
   "promptSha256": "ca9d1af621b46823273d4d1a2872949391bdf66a48c875feee9d5c0556e746c8",
-  "clipSha256": "5bf6377cf567d15cd80f7ef99204ef4d917a1cd2e7b5f5cef75c8332469d57e7",
+  "clipSha256": "e8d1b155af082c4b192bf41dd658fcb95929b40c212d96f26780a0dc932bdaaa",
   "scene": "availability",
   "review": {
-    "heardOpening": "Les disponibilités donnent",
+    "heardOpening": "Les disponibilités donnent une indication générale",
     "checkpoints": [
       {
-        "spokenSeconds": 3.2,
-        "spoken": "matin, après-midi, soir, et une courte exception si nécessaire",
-        "visibleSeconds": 3,
-        "visible": "Section 'Disponible en général' visible dans la modale avec cases Matin, Après-midi, Soir et champ 'Sauf / à savoir'",
+        "spokenSeconds": 0.5,
+        "spoken": "Les disponibilités donnent une indication générale : matin, après-midi, soir",
+        "visibleSeconds": 0.5,
+        "visible": "Fenêtre modale 'Modifier le membre' affichant les options 'Disponible en général' (Matin, Après-midi, Soir)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.2,
-        "spoken": "Maya est disponible le soir, sauf le vendredi",
-        "visibleSeconds": 15,
-        "visible": "La case Soir est cochée puis la mention 'Pas le vendredi' est saisie dans le champ texte",
+        "spokenSeconds": 13.5,
+        "spoken": "Ici, Maya est disponible le soir, sauf le vendredi.",
+        "visibleSeconds": 14.2,
+        "visible": "Coche de l'option 'Soir' puis saisie de 'Pas le vendredi' dans le champ d'exception",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18,
-        "spoken": "Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste",
-        "visibleSeconds": 18.5,
-        "visible": "La modale se ferme et la ligne de Maya Berger dans la liste affiche 'Soir' et 'Pas le vendredi' sous ses coordonnées",
+        "spokenSeconds": 16.7,
+        "spoken": "Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste.",
+        "visibleSeconds": 18,
+        "visible": "Clic sur Enregistrer et affichage de 'Soir - Pas le vendredi' sous les coordonnées de Maya Berger dans la liste des membres",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, naturelle et parfaitement synchronisée avec la saisie et l'enregistrement."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

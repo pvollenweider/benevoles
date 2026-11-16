@@ -1,0 +1,12 @@
+{
+  "anchor": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique",
+  "windowStart": 66.99899999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30.18,
+    "wordsHeard": "L'aperçu montre aussi le message affiché après l'inscription et l'email automatique"
+  },
+  "onset": 97.17899999999997,
+  "proposedCut": 96.998875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

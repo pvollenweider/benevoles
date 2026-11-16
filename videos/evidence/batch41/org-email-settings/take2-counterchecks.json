@@ -1,0 +1,14 @@
+{
+  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "take": 2,
+  "finding": "admin-alert",
+  "status": "resolved",
+  "observation": "The narration explains what the option does, without saying it is checked or that an email is sent here. The real checkbox is shown enabled at +1, disabled at +5/+10 and then re-enabled at the existing recorded cue. This optional setting demonstration makes no incorrect result claim. The raw report itself classifies its checkpoints as aligned/severity none; its issue is a presentation preference, not a contradiction.",
+  "evidence": [
+    "take2-admin-alert-1.png",
+    "take2-admin-alert-5.png",
+    "take2-admin-alert-10.png",
+    "timeline.json"
+  ],
+  "firstTakeFix": "The first take left the mailbox too early in result. The second take retains the actual test message at result +1/+4, then shows Emails envoyés at +8 in sync with that sentence. No third narrated take."
+}

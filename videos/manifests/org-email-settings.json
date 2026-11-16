@@ -2,7 +2,7 @@
   "id": "ORG_EMAIL_SETTINGS",
   "slug": "org-email-settings",
   "title": "Régler les emails de l’organisation",
-  "description": "Pour les propriétaires : régler les rappels, les inscriptions, les désistements et les adresses à vérifier, puis vérifier un véritable email de test.",
+  "description": "Choisir les rappels et alertes de l'organisation, régler l'adresse de réponse et vérifier un véritable email de test.",
   "viewer": {
     "summary": "Dans cette vidéo, vous réglez les emails automatiques de votre organisation et vérifiez un véritable email de test.",
     "steps": [
@@ -15,14 +15,14 @@
     "remember": [
       "Ces paramètres sont réservés au propriétaire ; les organisateurs suivent les envois.",
       "Un bénévole sur plusieurs créneaux le même jour reçoit un seul rappel qui les regroupe.",
-      "Un événement peut couper tous ses rappels avec sa case « Rappels automatiques ».",
+      "Un événement peut remplacer les délais habituels et les choix de l'organisation par ses propres délais, ou couper tous ses rappels.",
       "« Envoyé » signifie accepté par le serveur d'envoi, pas remis ni lu."
     ]
   },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
-  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed. Read every provided sentence verbatim: never omit, paraphrase or summarize any words.",
   "viewport": {
     "width": 1280,
     "height": 800,
@@ -41,7 +41,7 @@
     },
     {
       "id": "event-reminders",
-      "transcript": "Dans les paramètres d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels suivent les choix de l’organisation et son fuseau horaire.",
+      "transcript": "Dans les paramètres d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent. Le fuseau de l'organisation reste utilisé.",
       "fallbackDurationMs": 26000
     },
     {

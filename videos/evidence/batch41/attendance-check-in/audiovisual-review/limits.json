@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:48:50.915Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "2ca1576e64a2b25c556f09175c5855acf28c1207f2b7abf0896a11e1f87bb0bd",
+  "clipSha256": "b4db974169fca605a01ba9946ef33f92d2cfdcca18d0473388cb64db37e425dd",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "Le pointage enregistre une arrivée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le pointage enregistre une arrivée",
+        "visibleSeconds": 0,
+        "visible": "Tableau d'émargement et pointage de l'accueil des bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Dans la fiche membre, les heures prévues comptent les créneaux confirmés",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la liste Membres avec la ligne de Léa Müller et la colonne Heures prévues (4h)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Les heures attestées reprennent les créneaux passés avec présence",
+        "visibleSeconds": 10,
+        "visible": "Colonne Heures attestées (2h) visible avant le clic sur Activité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Ce ne sont donc pas des heures chronométrées",
+        "visibleSeconds": 14,
+        "visible": "Page Activité de Léa Müller affichant le détail des créneaux et des statuts de présence",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et parfaitement intelligible, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

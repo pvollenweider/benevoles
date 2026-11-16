@@ -1,0 +1,83 @@
+{
+  "id": "MEMBERS_MANAGEMENT",
+  "slug": "members-management",
+  "validatedAt": "2026-11-16T20:37:25.664Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 238840,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 20725,
+      "audioMs": 20724,
+      "driftMs": 1
+    },
+    {
+      "id": "create",
+      "visualMs": 20934,
+      "audioMs": 20933,
+      "driftMs": 1
+    },
+    {
+      "id": "edit",
+      "visualMs": 21413,
+      "audioMs": 21410,
+      "driftMs": 3
+    },
+    {
+      "id": "availability",
+      "visualMs": 20954,
+      "audioMs": 20954,
+      "driftMs": 0
+    },
+    {
+      "id": "no-email",
+      "visualMs": 17618,
+      "audioMs": 17615,
+      "driftMs": 3
+    },
+    {
+      "id": "search",
+      "visualMs": 21039,
+      "audioMs": 21037,
+      "driftMs": 2
+    },
+    {
+      "id": "filter",
+      "visualMs": 34416,
+      "audioMs": 34413,
+      "driftMs": 3
+    },
+    {
+      "id": "deactivate",
+      "visualMs": 21813,
+      "audioMs": 21812,
+      "driftMs": 1
+    },
+    {
+      "id": "activity",
+      "visualMs": 19858,
+      "audioMs": 19858,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 24443,
+      "audioMs": 24443,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 13,
+  "music": {
+    "voicedWindows": 225,
+    "musicOnlyWindows": 7,
+    "smallestGapLu": 13.9,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -34.1,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.7
+  },
+  "issues": []
+}

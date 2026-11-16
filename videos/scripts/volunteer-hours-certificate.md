@@ -60,13 +60,42 @@ Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG 
 WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narration ENTIÈRE, même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
 
 - Dans la liste des membres, regardons les heures prévues et les heures attestées.
-- Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six correspondent à une présence saisie.
+- Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six sont attestées après une présence saisie ; le départ anticipé reste enregistré sans ajouter d’heures.
 - Ces six heures font partie des douze : elles ne s'ajoutent pas.
 - Les inscriptions annulées et les créneaux annulés sont exclus, et les horaires qui se chevauchent ne sont comptés qu’une fois.
 - Il compte les créneaux confirmés non annulés de cette période, avec les heures prévues et attestées séparées.
 - Le total indique six heures prévues, dont deux attestées.
 - Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie.
 - Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres.
-- Pour Aline, nous retrouvons six heures attestées et deux heures prévues sans présence.
+- Pour Aline, nous retrouvons six heures attestées, une participation terminée avant la fin et aucune heure prévue sans présence.
 - Enfin, ouvrons Documents pour la Fête de septembre.
 - Nous retrouvons six heures prévues, dont deux attestées, puis le remplissage par poste.
+
+
+## Lot 41 — départ avant la fin
+
+La fixture marque le créneau de l’après-midi d’Aline comme terminé avant la fin : arrivée conservée, durée inconnue. Douze heures restent prévues, six attestées ; sur mai–septembre, une participation terminée avant la fin, zéro heure prévue sans présence. Le CSV de septembre reste à six heures prévues dont deux attestées, avec une participation terminée avant la fin. Deux présences sur trois créneaux sont enregistrées dans le résumé, dont ce départ.
+
+Le libellé actuel du produit est « Participations terminées avant la fin ». La colonne apparaît quand le document en compte, contrairement à l’ancienne note d’évidence qui la disait toujours visible. La fixture en montre réellement une ; aucun changement produit.
+
+### Narration courante des chapitres modifiés
+
+### hours-list
+
+Reconnaître l'engagement, c'est aussi disposer d'un bilan clair. Dans la liste des membres, regardons les heures prévues et les heures attestées. Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six sont attestées après une présence saisie. Une participation terminée avant la fin reste enregistrée, mais n'atteste aucune heure : sa durée réellement effectuée est inconnue. Ces six heures font partie des douze : elles ne s'ajoutent pas. Les inscriptions annulées et les créneaux annulés sont exclus, et les horaires qui se chevauchent ne sont comptés qu’une fois. Toutes les personnes et les données de cette démonstration sont fictives.
+
+### activity
+
+Ouvrons l'activité d'Aline. Vous retrouvez les faits enregistrés, leur date et l'événement concerné. C'est utile pour comprendre son parcours et vérifier ce qui s'est passé. Ce journal ne mesure pas le temps réellement travaillé : les heures attestées reposent sur une présence saisie et sur la durée du créneau, sauf les participations terminées avant la fin, qui n'attestent aucune heure. L'absence de présence saisie ne permet pas, à elle seule, de conclure qu'une personne était absente.
+
+### certificate-presence
+
+Par défaut, l'attestation met en avant les heures attestées. Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie. Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres. Pour Aline, nous retrouvons six heures attestées, une participation terminée avant la fin et aucune heure prévue sans présence sur cette période. La colonne Participations terminées avant la fin compte ces participations enregistrées, sans leur attribuer des heures. Ce document ne prétend pas mesurer un temps de travail chronométré. Une présence non saisie n'est pas non plus une preuve d'absence.
+
+### certificate-pdf
+
+Quand le contenu vous convient, cliquons sur Générer et imprimer l'attestation. L'application lance l'impression du navigateur : vous pouvez l'enregistrer en PDF. Pour cette démonstration, nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur, pas un téléchargement proposé par le serveur. Relisons le nom, la période, les colonnes d'heures, les participations terminées avant la fin et la remarque. Les zones Signature et Nom du signataire restent à compléter. Vérifiez le document avant de le signer et de le remettre à la personne.
+
+### event-summary
+
+Enfin, ouvrons Documents pour la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Deux participations ont une présence enregistrée, dont une terminée avant la fin. Le bilan compte ce départ à part, sans lui attribuer d'heure attestée. Une présence non saisie n'est pas déclarée absente. Nous retrouvons six heures prévues, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.

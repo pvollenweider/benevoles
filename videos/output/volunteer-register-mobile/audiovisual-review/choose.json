@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:46:49.196Z",
+  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "promptSha256": "49be947f69517dc4e6e4b6c44cb85a0f833d430385e0276837934a1c9c30e19e",
+  "clipSha256": "9f52666075b113b2ae0b516f0177377e80470055ce68e1a68e6fc9d6f6c2de9a",
+  "scene": "choose",
+  "review": {
+    "heardOpening": "Choisis simplement le créneau qui te convient",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Choisis simplement le créneau qui te convient",
+        "visibleSeconds": 0.5,
+        "visible": "Sélection du créneau 15h-18h visible sur le planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Ici, on rejoint l’équipe d’accueil",
+        "visibleSeconds": 2.1,
+        "visible": "Affichage de la page 'Tes informations' avec le créneau pour 'Accueil'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "de 15 heures à 18 heures",
+        "visibleSeconds": 2.1,
+        "visible": "Mention horaire '15:00-18:00' bien visible sous 'Accueil'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et chaleureuse, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

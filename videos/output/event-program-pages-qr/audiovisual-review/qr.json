@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T14:10:46.534Z",
-  "videoSha256": "b304932f76da7a0bf400c12ecd584a9f53b8c567bb0219a32394004c9fd55c37",
-  "promptSha256": "f9a264934774dbc4087008b012415d2a8f59f55868d0d6bf0f1cfbfc9f23bf9e",
-  "clipSha256": "62979062cde632acf2d1e6a77005f21491b461ce11305650b943274c36ffb05b",
+  "reviewedAt": "2026-11-16T20:28:02.399Z",
+  "videoSha256": "d90fc4dc3ea1b555486a8cfdf2237ed5c9bd2165e5f500e9633e083f23fca586",
+  "promptSha256": "f69ce513c7f8263d50c006a7be6610ec507130cebe990692e77d785609710454",
+  "clipSha256": "e42a310d92704fcfd8e62be7c414e80ad41970d1f4888bee3c4a257d3fcf7639",
   "scene": "qr",
   "review": {
-    "heardOpening": "Le QR code mène à la page publique",
+    "heardOpening": "Le QR code mène à la page",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Le QR code mène à la page publique de cet événement.",
-        "visibleSeconds": 0,
-        "visible": "Affichage de la page QR code avec le code et les informations de l'événement",
+        "spoken": "Le QR code mène à la page d’inscription de cet événement",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de l'onglet QR code avec le code et les détails de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3,
-        "spoken": "Téléchargez le PNG pour l’intégrer à un document, ou le SVG pour une impression nette.",
-        "visibleSeconds": 3.2,
-        "visible": "Mise en valeur successive des boutons Télécharger PNG puis Télécharger SVG",
+        "spokenSeconds": 3.3,
+        "spoken": "Téléchargez le PNG pour l’intégrer à un document, ou le SVG pour une impression nette",
+        "visibleSeconds": 6.8,
+        "visible": "Les boutons de téléchargement PNG et SVG sont présents, avec survol sur Télécharger SVG",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
-        "spoken": "La commande Imprimer prépare une fiche à afficher sur un stand.",
-        "visibleSeconds": 9,
-        "visible": "Mise en valeur du bouton Imprimer",
+        "spokenSeconds": 9.5,
+        "spoken": "La commande Imprimer prépare une fiche à afficher sur un stand",
+        "visibleSeconds": 9.5,
+        "visible": "Le bouton bleu Imprimer est bien visible à droite des options de téléchargement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "Vérifiez le nom de l’événement et l’adresse avant de diffuser le support.",
+        "spokenSeconds": 13.5,
+        "spoken": "Vérifiez le nom de l’événement et l’adresse avant de diffuser le support",
         "visibleSeconds": 13.5,
-        "visible": "Mise en valeur du titre de l'événement et de son adresse au-dessus du QR code",
+        "visible": "Le titre de l'événement et l'adresse sont affichés au-dessus du QR code",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix pédagogique, calme et claire, parfaitement synchronisée avec les animations visuelles."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

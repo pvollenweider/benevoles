@@ -1,0 +1,12 @@
+{
+  "anchor": "Marquons l'arrivée de Zoé. Son état devient Présent. Colette peut aussi",
+  "windowStart": 71.067,
+  "result": {
+    "found": true,
+    "startSeconds": 13.24,
+    "wordsHeard": "Marquons"
+  },
+  "onset": 84.30699999999999,
+  "proposedCut": 84.026625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

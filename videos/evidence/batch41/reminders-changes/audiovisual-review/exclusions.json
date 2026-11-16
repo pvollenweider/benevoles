@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:15:13.522Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
+  "promptSha256": "62466f337ee5280c831b8c14040ca4ac5c7d53986fc10482e58d6fa8892f3b5a",
+  "clipSha256": "8736a5ed67173233fe03a985d23a7ecfc4117907d97c48726089661498563629",
+  "scene": "exclusions",
+  "review": {
+    "heardOpening": "Une demande à valider ou une place en attente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une demande à valider",
+        "visibleSeconds": 2.2,
+        "visible": "Recherche de 'Lucas' affichant les lignes avec statut 'Demande à traiter'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ou une place en attente n'est pas une inscription confirmée",
+        "visibleSeconds": 4.8,
+        "visible": "Recherche de 'Anna' affichant l'inscription avec statut 'Place proposée'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas",
+        "visibleSeconds": 13.2,
+        "visible": "Onglet Créneaux basculé en vue Liste montrant un créneau avec le statut 'Fermé'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés",
+        "visibleSeconds": 18,
+        "visible": "Écran maintenu sur la liste des créneaux en appui de l'explication finale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

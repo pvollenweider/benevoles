@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:40:35.378Z",
-  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
+  "reviewedAt": "2026-11-16T22:18:09.098Z",
+  "videoSha256": "dbdce05a725e66cf7060c109dbbb8e42556113b6c43ec21c65581c15c62bf33f",
   "promptSha256": "de7aa6d347bd51845521732da68d915ead2fd994da8f8a7493ac25ea1751f589",
-  "clipSha256": "e1c09a39e7b4c881b3c661d4a5a1abde6f8564543b32ae820174c006e9849042",
+  "clipSha256": "8ff6d8a78486bcdf2eadfbe35b420ef4706bc956384dfd6552a6e2aeae4e3bcc",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Un créneau transforme un poste",
+    "heardOpening": "Un créneau transforme un poste en besoin concret",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0.5,
         "spoken": "Un créneau transforme un poste en besoin concret",
         "visibleSeconds": 0,
-        "visible": "Titre 'Ajouter et modifier un créneau dans le détail' affiché en incrustation",
+        "visible": "Titre en incrustation « Ajouter et modifier un créneau dans le détail » sur fond de la page Créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
-        "spoken": "Il dit quelle mission doit être assurée, quand",
-        "visibleSeconds": 2.8,
-        "visible": "Disparition du titre et affichage du planning des créneaux pour Montage, Accueil et Buvette",
+        "spokenSeconds": 3.2,
+        "spoken": "Il dit quelle mission doit être assurée, quand, par combien de personnes",
+        "visibleSeconds": 3,
+        "visible": "Disparition du bandeau de titre et affichage complet de la vue Frise des créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
+        "spokenSeconds": 9,
         "spoken": "Prenons le temps de parcourir chaque champ et son résultat côté bénévole",
         "visibleSeconds": 9,
-        "visible": "Vue d'ensemble stable de l'onglet Créneaux avec le bouton '+ Ajouter un créneau'",
+        "visible": "Écran stable sur la vue Frise des créneaux introduisant la suite du module",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, fluide et posée, bien synchronisée avec l'affichage."
+      "observation": "Voix off féminine naturelle, chaleureuse et bien articulée, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

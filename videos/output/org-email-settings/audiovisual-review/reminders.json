@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T15:13:39.850Z",
-  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
-  "promptSha256": "1d822b8223516ea10664c22f1cde36bb731d4e9118931d7d60ac685f9fb0deb2",
-  "clipSha256": "1264bf9d55d6bb8a2fd08ed198a4889663a27ab341d9fca790b8f99020dea522",
+  "reviewedAt": "2026-11-16T20:15:26.048Z",
+  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "promptSha256": "e99138781c5ed7c97f3d5fba12cee79a1cd125c5a3467f08b00836e04b52e6f8",
+  "clipSha256": "79cea1c9baf106d90cca249a39186b6904f816cfd5aa25432713fa42636ac314",
   "scene": "reminders",
   "review": {
     "heardOpening": "Vous pouvez activer le rappel à deux jours",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.8,
         "spoken": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même",
         "visibleSeconds": 0.5,
-        "visible": "Page 'Réglages des emails' affichant les options Rappel J-2, Rappel J-1 et Rappel du jour",
+        "visible": "Affichage des cases à cocher Rappel J-2, Rappel J-1 et Rappel du jour dans les Paramètres des emails",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
-        "spoken": "Décochons puis recochons le premier rappel.",
-        "visibleSeconds": 7.3,
-        "visible": "Aucune action à l'écran : le curseur n'apparaît pas et la case Rappel J-2 reste cochée en continu",
-        "sync": "missing",
-        "severity": "major"
+        "spokenSeconds": 7.5,
+        "spoken": "Décochons",
+        "visibleSeconds": 7.8,
+        "visible": "La case Rappel J-2 est décochée",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 13.8,
-        "spoken": "chaque rappel regroupe ses créneaux dans un seul email",
-        "visibleSeconds": 13.8,
-        "visible": "Affichage statique des paramètres de rappels automatiques",
+        "spokenSeconds": 8.7,
+        "spoken": "puis recochons le premier rappel",
+        "visibleSeconds": 9.2,
+        "visible": "La case Rappel J-2 est recochée",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:07, l'action annoncée « Décochons puis recochons le premier rappel » n'est pas réalisée : la vidéo reste entièrement figée sans clic ni changement d'état."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

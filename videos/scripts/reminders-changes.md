@@ -96,3 +96,12 @@ Cette phrase fait partie de la nouvelle prise continue entière en attente du TT
 ## Révision du 2026-10-16 — lot 23-2
 
 Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.
+
+
+## Lot 41 — Délais propres à un événement (16 novembre 2026)
+
+Ce chapitre vient après le commutateur de l’événement et avant les trois échéances habituelles. La narration courante est entièrement régénérée, dans une seule prise, avec le nouveau chapitre suivant. Le retour aux délais habituels est réellement enregistré avant la démonstration des trois emails.
+
+Un événement peut avoir ses propres délais. Dans Messages, section Rappels, choisissons Délais propres à cet événement. Préparons un rappel trois jours avant, puis un autre deux heures avant, et enregistrons les rappels. Vous pouvez en définir jusqu'à trois. Ils remplacent les rappels habituels et les choix de l'organisation pour cet événement. La ligne Prochain envoi indique le jour, l'heure et les personnes concernées. Chaque délai part du premier créneau de la journée du bénévole. Revenons aux délais habituels et enregistrons, pour regarder les trois échéances de notre exemple.
+
+La scène `manual-send` est refilmée sur Messages : le nouveau formulaire apparaît, même si le rappel manuel utilise toujours son bouton et sa confirmation. Les vrais corps des emails sont cadrés sans les en-têtes techniques de Mailpit.

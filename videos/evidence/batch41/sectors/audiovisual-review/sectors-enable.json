@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:32:50.758Z",
+  "videoSha256": "86a4bcb42c4580809057d00a4eeb12006123685b94cf05d3d83fc764791365a7",
+  "promptSha256": "6f5d40308cf5d1940515e03bede7881ee28b33e032d7787a41181f5a490434a2",
+  "clipSha256": "6f6815f10ce3eb12f3b83896941b784fd052da221ce559dbf1f14889a6416c96",
+  "scene": "sectors-enable",
+  "review": {
+    "heardOpening": "Dans les informations de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "la carte Secteurs propose l'interrupteur Organiser les postes par secteurs",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage de la carte Secteurs avec l'interrupteur Organiser les postes par secteurs",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Activons-le",
+        "visibleSeconds": 6.4,
+        "visible": "Clic sur l'interrupteur qui s'active en bleu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Suivons le lien Organiser les secteurs dans Créneaux",
+        "visibleSeconds": 11.4,
+        "visible": "Clic sur le lien puis redirection vers la vue Créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

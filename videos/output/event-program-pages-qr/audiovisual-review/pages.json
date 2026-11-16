@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T14:10:04.682Z",
-  "videoSha256": "b304932f76da7a0bf400c12ecd584a9f53b8c567bb0219a32394004c9fd55c37",
+  "reviewedAt": "2026-11-16T20:27:47.335Z",
+  "videoSha256": "d90fc4dc3ea1b555486a8cfdf2237ed5c9bd2165e5f500e9633e083f23fca586",
   "promptSha256": "9bb637546250a0a1f5ece1246ded182e5ac35f6080a965f2f3beaca1e595902a",
-  "clipSha256": "cb3d4f9746eaf474476096498ae4c43f22b1fab78abb759e7cb700b47fee8ff0",
+  "clipSha256": "d9a9d8ff9a489e8df141dc2cd1c1be658e4a5890b1c13e2fcdfcf715faeaa9bc",
   "scene": "pages",
   "review": {
-    "heardOpening": "Créons une page",
+    "heardOpening": "Créons une page Ce qu'il faut apporter",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "Créons une page Ce qu’il faut apporter",
-        "visibleSeconds": 1.5,
-        "visible": "Clic sur Ajouter une page et ouverture de la modale avec saisie du titre",
+        "visibleSeconds": 2.5,
+        "visible": "Ouverture de la fenêtre « Nouvelle page » et saisie du titre « Ce qu'il faut apporter »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
-        "spoken": "Dans le contenu, un dièse crée un titre, les tirets une liste et deux astérisques du gras",
-        "visibleSeconds": 12.5,
-        "visible": "Saisie dans le champ Contenu avec un dièse, des tirets et des astérisques",
+        "spokenSeconds": 8.7,
+        "spoken": "Dans le contenu, un dièse crée un titre, les tirets une liste et deux astérisques du gras.",
+        "visibleSeconds": 13.5,
+        "visible": "Saisie dans le champ Contenu avec un dièse pour le titre, astérisques pour le gras et tiret pour la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
-        "spoken": "Saisissons une courte liste, puis enregistrons",
+        "spokenSeconds": 15.6,
+        "spoken": "puis enregistrons",
         "visibleSeconds": 16.5,
-        "visible": "Clic sur Enregistrer et apparition de la page dans la liste",
+        "visible": "Clic sur Enregistrer et retour sur la liste avec la nouvelle page « Ce qu'il faut apporter »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, fluide et naturelle, bien calée sur les manipulations."
+      "observation": "Voix claire, posée et parfaitement compréhensible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

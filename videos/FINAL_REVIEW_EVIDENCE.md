@@ -155,6 +155,8 @@ et `admin-navigation`. Aucune narration ne décrit la disposition du tableau.
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Écart connu : confirmation et lien perdu (#1097)
 
 Après une inscription par le lien public, la page de confirmation dit maintenant
@@ -252,6 +254,8 @@ Image seulement (la narration reste juste) :
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Écart connu : communications préremplies depuis une version (#762)
 
 L'écran `/super-admin/product-updates` a maintenant, en tête de la carte
@@ -376,6 +380,8 @@ Image seulement (la narration reste juste) :
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Écart connu : commutateur d'assurance de la charte
 
 Dans Paramètres, section « Charte des bénévoles », la phrase sous le
@@ -510,6 +516,8 @@ zéro et renomment la fiche ; `prepare-accessibility` (créé une seule fois) de
 une base vidéo remise à zéro. Au prochain rendu, incrémenter `revision` et mettre à
 jour `updatedAt` dans `videos/catalog.json` pour chacune de ces huit vidéos.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Vidéos des fonctions bêta : sources et production (#1168, #1147, #1169, #1174)
 
 Les quatre rendus ont été publiés dans les lots 32 et 33. Chaque rendu utilise
@@ -980,6 +988,9 @@ Pour chaque vidéo, aperçu puis `make video-publish KUBE_CONTEXT=default ID=…
 
 ## À refilmer : page après une inscription publique sans preuve de l'adresse (2026-11-01)
 
+**Résolu pour VOLUNTEER_REGISTER (lot 41, 16 novembre 2026)** : nouvelle narration entière et nouvelle prise montrant « Demande d’inscription reçue », revue READY puis publication révision 4. Les autres vidéos de cette section conservent leurs écarts jusqu’à leur revue individuelle.
+
+
 Une inscription publique sans lien d'invitation ni lien personnel affiche
 maintenant toujours la page « Demande d'inscription reçue » (plus
 « Inscription confirmée ! », « Tu es sur la liste d'attente ! » ni
@@ -1031,6 +1042,8 @@ régénération dans ce travail (voix et capture longues). Aucune vidéo publié
 « Chercher des bénévoles ». Révision du catalogue à incrémenter au rendu.
 
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Lot 39 — sortie des secteurs de la bêta, 2026-11-10
 
 BETA_ACCESS : READY et publiée, révision 2, après aperçu puis APPLY=1 (contexte default). Build main `058f35c463cf3b1e6b47596201d0ab6f78ab3015`, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Une prise narrée, 120,600 s, musique 15,4–19,2 LU sous la voix, minimum sans voix −33,7 LUFS ; dix ancres et cinq clics sonorisés validés. Cinq chapitres AV / quinze points, zéro signalement, zéro tutoiement VTT/ASR finale. Quatre fonctions bêta seulement, aucun secteur dans leurs listes. [Rapport et preuves](evidence/beta-access/batch39/review-report.txt).
@@ -1080,6 +1093,9 @@ renders.json inchangé ; `doc-img: unchanged`. Aucun push, merge ni message ntfy
 
 ## Pages rattachées à un poste (#1324), 14 novembre 2026
 
+**Résolu pour EVENT_PROGRAM_PAGES_QR (lot 41, 16 novembre 2026)** : nouveau segment, narration entière, rattachement réel et lien personnel filmés, revue READY puis publication révision 5.
+
+
 Le formulaire d'une page d'information affiche désormais un avertissement « Cette page est
 publique » et un groupe de cases « Pour les bénévoles de ces postes » ; la liste des pages peut
 porter une troisième ligne « Pour le poste … ». Vidéo à revoir, image seulement (narration et
@@ -1088,6 +1104,9 @@ ne montre le lien « À lire avant ton créneau » : les scénarios des vidéos 
 page à un poste. Pas de nouveau rendu dans ce changement.
 
 ## Délais de rappels propres à un événement (#1139, PR 2), 15 novembre 2026
+
+**Résolu pour REMINDERS_CHANGES et ORG_EMAIL_SETTINGS (lot 41, 16 novembre 2026)** : nouvelles narrations intégrales et images actuelles, revues puis publications révision 5. La vidéo des rappels montre les délais propres et les prochains envois. ADMIN_FEATURES_OVERVIEW reste à traiter dans ce lot.
+
 
 L’onglet **Messages**, section **Rappels**, gagne le formulaire « Délais des rappels automatiques »
 (radios « Délais habituels » / « Délais propres à cet événement », jusqu’à trois rappels, bloc
@@ -1183,6 +1202,8 @@ inscriptions (`admin-registrations`, `admin-registrations-requests`, `admin-refu
 `admin-make-leader-modal`) sont déclarées sur des écrans modifiés et restent à régénérer avec une
 base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans ce travail.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## État « parti avant la fin » (#1141, second lot), 16 novembre 2026
 
 Une inscription confirmée a désormais quatre états : attendue, présente, **absente** ou **partie
@@ -1232,6 +1253,8 @@ Les captures `admin-day-of`, `admin-registrations`, `admin-registrations-request
 restent à régénérer avec une base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans
 ce travail.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## #1142, second lot : accès accueil limité à un événement
 
 La page Jour J des organisateurs gagne, pour un propriétaire seulement, une section repliée
@@ -1247,3 +1270,115 @@ relire au prochain passage :
 
 Les sélecteurs de capture ne changent pas (la section est un `<details>` fermé, sans incidence sur
 les boutons et les champs déjà filmés). Aucun fichier de `public/doc-img/` n'est modifié.
+
+
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
+## Lot 41 — tentative du 16 novembre 2026 : build produit bloqué
+
+Le build neuf du main épinglé `f9fcec47d32af10b0837b2de87beb61535d30888` vérifie les 2 438 entrées du produit et compile le JavaScript, puis Next.js refuse l'export `buildDocIndexJson` de `src/app/api/public/doc-index/route.ts:21` dans ses types de route générés. Aucun BUILD_ID vérifié, aucune prise ni publication. L'interdiction de modifier `src/` est respectée ; aucun ancien build n'est utilisé.
+
+Les sources du pointage sont préparées pour les quatre états, leurs annulations, les deux colonnes de l'export et l'exclusion des départs anticipés des heures attestées. La narration continue complète a été générée ; son audit indépendant signale douze frontières de chapitres à revoir. Ni le découpage ni une capture ne sont validés. Tous les écarts restent ouverts : aucun n'est marqué résolu sans nouveau film contrôlé.
+
+Catalogue, dates, révisions, `renders.json`, guides et captures inchangés. [Rapport, inventaire NOT DONE et contrôles](evidence/batch41/review-report.md), [journal de l'échec du build](evidence/batch41/build-main-failure.log). Aucune annonce de livraison au CHANGELOG. Aucun push, merge ni message ntfy.
+
+
+### Lot 41 — reprise après #1381, 16 novembre 2026 (en cours)
+
+Le blocage du premier build est résolu par main : `e8ed666a48294d77213f8bf64fe35898314b0ed9` (#1381) déplace le helper hors de la route. Rebase sans conflit, contenu du commit `5c659750` conservé sous `f7f6fa5a`. Un seul nouveau build propre, 2 440 entrées vérifiées, BUILD_ID `HO6mRRAZuOevekAmdhN_C` ; [preuve](evidence/batch41/product-build-resume.json) et [journal](evidence/batch41/build-main-resume.log). Le premier échec ci-dessus reste historique. Aucun fichier produit modifié.
+
+Les douze frontières signalées du pointage sont corrigées sur les silences mesurés du même master ; les quinze chapitres passent leur nouvel audit indépendant. La répétition publique locale complète réussit. Le rôle propriétaire de la fixture est corrigé en `admin` (rôle produit), et les écritures passent par la passerelle publique locale vérifiée ; la compilation et ses protections restent intactes. La prise et les revues finales sont en cours : aucun nouvel écart déclaré résolu, aucune publication à ce stade.
+
+
+### FRONT_DESK_ACCESS — nouvelle vidéo du lot 41, 16 novembre 2026
+
+**READY et publiée**, révision 1, 170,160 s, main `e8ed666a`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Une prise narrée après répétition ; huit chapitres AV / 30 points sans signalement, huit ASR source et finales réussies. Le master Kore est une génération entière, frontières corrigées sur les silences ; sa revue signale une variation naturelle d'intonation tout en concluant explicitement à une seule voix constante (rapport initial et résolution conservés).
+
+Invitation, véritable email et activation, connexion accueil, pointage et révocation vérifiés ; aucune expiration simulée. Corps réel de l'email cadré x320/y312/960×488, sans écran technique. Musique 14,8–19,5 LU, minimum seule −34,1 LUFS, aucun trou ; 19 clics réels sonorisés. ASR multilingue complète et VTT : zéro tutoiement du spectateur. Description 108 octets. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. Lien du guide et de FEATURES ajouté. [Rapport et preuves](evidence/batch41/front-desk-access/review-report.txt). Aucun défaut produit constaté ; aucune écoute subjective humaine revendiquée.
+
+
+### ATTENDANCE_CHECK_IN — reprise terminée du lot 41, 16 novembre 2026
+
+**READY et publiée**, révision 5, 461,680 s, main `e8ed666a`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Les douze frontières initiales sont corrigées et les quinze chapitres source/final passent l'ASR indépendante. Deux prises narrées : la première est rejetée pour la ligne de Zoé sous le cadre ; la seconde montre la recherche et ses résultats, les quatre états et leurs annulations sur Jour J et dans les inscriptions, les deux colonnes CSV, et la nuance des heures attestées.
+
+Quinze chapitres AV / 61 points. Cinq rapports bruts signalent des observations, conservées et résolues par les images finales, les vrais événements d'entrée et les contrôles d'état : présence d'Aline et rechargements, classification des créneaux commencés avec la veille initialement montrée, deux recherches distinctes, rafraîchissement automatique distinct du clic manuel. [Contre-preuves](evidence/batch41/attendance-check-in/take2-counterchecks.json). Musique 14,7–19,2 LU, minimum seule −34,0 LUFS, aucun trou ; 46 clics et 46 touches réels sonorisés. ASR multilingue complète et VTT : zéro tutoiement. Corps mobile réellement capturé centré sans la marge native grise, brut final conservé.
+
+Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport complet](evidence/batch41/attendance-check-in/review-report.txt). L'incident d'archivage de la première prise (brut perdu, MP4 et preuves conservés) n'est pas masqué ; le recorder archive désormais automatiquement le brut et sa timeline avant une nouvelle capture, avec deux tests de préservation de fichiers. Aucun troisième tournage ni fichier produit modifié ; aucune écoute subjective humaine revendiquée.
+
+## Lot 41 — rappels et réglages e-mail publiés, 16 novembre 2026
+
+**REMINDERS_CHANGES : READY, publiée, révision 5, 290,800 s. ORG_EMAIL_SETTINGS : READY, publiée, révision 5, 202,960 s.** Même produit main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Deux prises narrées chacune, premières rejetées et conservées. Les limites de deux prises sont respectées. Narrations intégrales Kore, nouvelles coupes vérifiées, ASR de chaque chapitre final et de la bande entière ; zéro tutoiement du spectateur. Les deux « ton » des rappels citent exactement le message saisi et affiché.
+
+Rappels : dix chapitres AV / 35 points, deux signalements de clics absents contredits par les images et les événements réels ; les rapports bruts et les contre-preuves restent conservés. Deux véritables courriels d’annulation lisibles. Réglages : dix chapitres AV / 30 points, une observation sur la démonstration d’une case facultative, sans contradiction avec la phrase conditionnelle ; le passage final de la boîte aux envois est corrigé dans la deuxième prise. Musique respectivement 14,1–19,8 et 14,8–19,5 LU sous la voix, aucun trou. 31 clics / 132 touches et 12 clics / 22 touches réels sonorisés. Aperçu puis APPLY=1 sur default pour chacune, cinq fichiers envoyés. [Rapport des rappels](evidence/batch41/reminders-changes/review-report.txt), [rapport des réglages](evidence/batch41/org-email-settings/review-report.txt).
+
+Les écarts historiques d’image pour ces deux vidéos (libellés, navigation, réglages d’e-mail et aide) sont résolus par ces nouvelles prises du produit actuel ; l’historique et les écarts des autres vidéos restent ouverts. Aucun changement du produit, aucune écoute subjective humaine revendiquée.
+
+## Lot 41 — heures et attestation publiées, 16 novembre 2026
+
+**VOLUNTEER_HOURS_CERTIFICATE : READY, publiée, révision 4, 311,360 s.** Même main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Nouvelle narration entière Kore et huit coupes vérifiées ; huit chapitres ASR finaux et bande entière, zéro tutoiement. Deux prises narrées : le CSV trop tardif de la première est corrigé sur « Dans ce vrai fichier » dans la seconde.
+
+La fixture montre un vrai départ anticipé et le libellé actuel « Participations terminées avant la fin », conditionnel à un nombre positif. Douze heures prévues et six attestées, une participation terminée avant la fin et zéro heure prévue sans présence dans l’attestation. Deux vrais CSV à sept colonnes, puis le vrai PDF A4 d’une page : logo gris, colonnes et signatures complets. Le bouton produit d’impression est réellement actionné ; la démonstration headless produit le PDF depuis une seconde vraie prévisualisation avec les mêmes contrôles, sans intercepter print ni recopier le HTML. La fenêtre native n’est pas présentée comme vérifiée.
+
+Huit chapitres AV / 33 points ; deux observations brutes conservées et résolues par les images, les états ARIA réellement vérifiés, le comparateur inchangé de main et le PDF : un tri peut garder l’ordre déjà correct, et le logo coloré à l’écran est bien gris à l’impression. Musique 14,5–19,2 LU, aucun trou ; 18 clics et 42 touches réels sonorisés. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport et contre-preuves](evidence/batch41/volunteer-hours-certificate/review-report.txt). Les écarts historiques de cette vidéo sont résolus par cette prise du produit actuel ; ceux des autres vidéos restent ouverts. Aucun changement produit, aucune écoute subjective humaine revendiquée.
+
+## Lot 41 — membres et pages par poste publiés, 16 novembre 2026
+
+**MEMBERS_MANAGEMENT : READY, publiée, révision 8, 238,840 s. EVENT_PROGRAM_PAGES_QR : READY, publiée, révision 5, 194,280 s.** Même main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`.
+
+Membres : la première prise annonçait soixante fiches face au compteur 63. Le texte dit désormais plusieurs dizaines de fiches ; toute la voix Puck a été régénérée avant la seconde et dernière prise. La nuance du départ anticipé sans heure attestée est prononcée. Dix chapitres ASR et AV / 38 points, aucune observation, zéro tutoiement ; musique 13,9–19,0 LU et minimum seule −34,1 LUFS, aucun trou. 36 clics et 132 touches réels sonorisés. [Rapport](evidence/batch41/members-management/review-report.txt).
+
+Pages : un nouveau segment rattache la vraie page à Accueil, montre l’avertissement public et le lien « À lire avant ton créneau » sur la page personnelle d’Aline Mercier réellement confirmée, puis ouvre le même contenu public. Nouvelle voix Kore entière, neuf chapitres ASR et AV / 31 points sans observation, un seul « ton » qui cite le lien affiché et aucun tutoiement du spectateur. Musique 14,7–19,6 LU, minimum seule −34,4 LUFS, aucun trou ; 30 clics et 115 touches réels sonorisés. Une prise narrée. La date d’exemple du 14 novembre reste celle prononcée ; le produit indique correctement que cet événement et son créneau sont terminés. [Rapport](evidence/batch41/event-program-pages-qr/review-report.txt).
+
+Pour chacune : aperçu puis APPLY=1 sur default, cinq fichiers envoyés, vérification distante sans fichier à renvoyer. Les écarts historiques de ces deux vidéos sont résolus par ces images actuelles ; ceux des autres vidéos restent ouverts. Aucun changement du produit, aucune écoute subjective humaine revendiquée.
+
+Les cinq captures documentaires demandées ont été régénérées par `ONLY=admin-reminders,admin-print,admin-event-archive,admin-members,admin-members-bulk-delete npm run screenshots`, sur une nouvelle base canonique indépendante des vidéos et le même build vérifié. Quatre sont identiques octet pour octet à main ; seule `admin-print`, déjà mise à jour dans ce lot, conserve les dates et l’en-tête du scénario actuel. Les textes alternatifs ont été relus et restent exacts. Les essais préliminaires sur la base vidéo avaient conservé des personnes de tournage ; ils sont remplacés par cette exécution isolée, sans effacer leur historique de preuve. [Preuve et empreintes](evidence/batch41/doc-captures-isolated.json).
+
+## Lot 41 — inscription sur téléphone publiée, 16 novembre 2026
+
+**VOLUNTEER_REGISTER : READY, publiée, révision 4, 56,080 s, 390×844.** Même main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Nouvelle narration Kore entière, six frontières recalées, sept chapitres ASR et AV / 21 points sans observation. Une prise narrée après répétition. Véritable inscription publique puis titre actuel « Demande d’inscription reçue », sans lien personnel sur cet écran ; le vrai email contient un lien dont l’API retourne l’inscription active d’Alex Martin. Preuve séparée sans conserver le jeton.
+
+Bande finale multilingue et VTT : deux « tu » littéraux, treize candidats de registre au total, tous voulus et permis pour l’audience exclusivement bénévole. Musique 16,0–19,0 LU sous la voix, aucun trou ; dix clics réels sonorisés et aucune touche inventée pour fill(). Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport et images](evidence/batch41/volunteer-register-mobile/review-report.txt). Les écarts historiques de cette vidéo sont résolus ; aucun changement produit ni écoute subjective humaine revendiquée.
+
+## Lot 41 — erreurs d’inscription non publiées, 16 novembre 2026
+
+Deux prises, **NOT READY**, 310,68 s. Les corrections du formulaire et des deux cartes personnelles sont prouvées ; les onze ASR et la validation technique passent. Deux défauts de capture subsistent : clic de nouvelle confirmation environ 1,9 s avant son verbe et notification réelle d’un autre scénario Mailpit pendant le message. La limite de deux prises interdit une troisième capture ; aucun défaut produit ni modification de src. L’écart reste ouvert et la révision publiée reste inchangée. [Rapport et preuves finales](evidence/batch41/volunteer-confirmation-errors/review-report.txt).
+
+## Lot 41 — confidentialité et liens personnels publiés, 16 novembre 2026
+
+**PRIVACY_PERSONAL_LINKS : READY, publiée, révision 6, 358,56 s.** Une nouvelle voix Kore continue, neuf limites de chapitres alignées, dix ASR source et final conformes. Dix revues AV / 41 points ; le signalement brut de fin tronquée est contredit par l’ASR du MP4 (mot final complet et aucun écart de bord) et son silence final de 178 ms. Les images montrent les deux organisations, les vrais messages reçus, la récupération neutre, la révocation réelle, les vues limitées et la différence rapport/CSV ; les CGU affichent le 15 novembre 2026. Un « Ton » cité, aucun tutoiement du spectateur ; musique 15,3–19,7 LU, aucun trou. Aperçu puis APPLY=1, quatre fichiers envoyés et transcription déjà identique. Les écarts historiques de cette vidéo sont résolus. [Rapport et contre-preuve conservée](evidence/batch41/privacy-personal-links/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
+
+## Lot 41 — suivi des inscriptions non publié, 16 novembre 2026
+
+**REGISTRATION_MONITOR_FOLLOWUP : NOT READY**, deux prises, 191,48 s. Le destinataire « créneau » omis dans la première prise est réellement sélectionné dans la seconde après correction et répétition. Deux défauts temporels restent visibles : fermeture de la demande 1,7 s avant son annonce et filtres manipulés trop tôt dans leur énumération. La limite de deux prises interdit une troisième capture ; aucun changement produit. ASR et validation technique passent, musique 14,6–19,0 LU sans trou, zéro tutoiement ; les observations brutes sont conservées. L’écart reste ouvert, aucune publication ni hausse de révision. [Rapport et preuves](evidence/batch41/organizer-monitor-followup/review-report.txt).
+
+## Lot 41 — secteurs publiés, 16 novembre 2026
+
+**SECTORS : READY, publiée, révision 3, 226,08 s.** Nouvelle voix Puck continue, dix limites alignées et onze ASR source/final conformes. Onze revues AV / 39 points et 22 images finales inspectées. Le seul signalement constate l’absence de barre du navigateur : la phrase sur la persistance dans l’adresse est une explication, pas une promesse d’afficher cette barre. Le recorder vérifie réellement le paramètre secteur et la réouverture ; une contre-vérification indépendante conserve l’URL actuelle et retrouve Parking avec cinq inscriptions. L’observation brute reste visible. Secteurs disponibles sans consentement ni activation bêta ; musique 15,0–19,4 LU sans trou, zéro tutoiement, 28 clics et 37 touches réels sonorisés. Aperçu puis APPLY=1, quatre fichiers envoyés et transcription déjà identique, vérification distante cinq inchangés. Les écarts historiques de cette vidéo sont résolus. [Rapport et preuves](evidence/batch41/sectors/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
+
+## Lot 41 — visibilité des équipes publiée, 16 novembre 2026
+
+**SHIFT_ROSTER_VISIBILITY : READY, publiée, révision 3, 260,00 s.** Une nouvelle voix Kore continue, sept limites alignées, huit ASR source/final conformes. Huit revues AV / 34 points et seize images finales inspectées. L’unique signalement d’état absent est contredit par l’image finale exacte : « À confirmer » est bien lisible sous l’interrupteur désactivé. Les preuves de comportements réels passent, y compris email/lien, accord ancien élargi explicitement, nom masqué pour les autres, invitation et mineur exclu. Un « toi » cité dans le libellé « Avec toi », aucun tutoiement du spectateur ; musique 14,7–20,0 LU sans trou. Aperçu puis APPLY=1, cinq fichiers envoyés et vérification distante cinq inchangés. Les écarts historiques de cette vidéo sont résolus. [Rapport et contre-preuve](evidence/batch41/shift-roster-visibility/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
+
+## Lot 41 — visite d’administration publiée, 16 novembre 2026
+
+**ADMIN_FEATURES_OVERVIEW : READY, publiée, révision 6, 292,68 s.** Nouvelle voix Kore continue incluant la phrase sur les délais propres à l’événement, quinze limites alignées et seize ASR source/final conformes. Seize revues AV / 54 points, aucun signalement ; 32 images finales inspectées, dont le formulaire réel des délais dans Messages. L’ancien doublon de compte local est retiré sous garde d’identité exacte avant le tournage. Musique 15,3–19,7 LU sans trou, zéro tutoiement, vingt clics et huit touches réels sonorisés. Aperçu puis APPLY=1, cinq fichiers envoyés. Les écarts historiques de cette vidéo sont résolus. [Rapport et images](evidence/batch41/admin-features-tour/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
+
+## Lot 41 — imprévus non publiés, 16 novembre 2026
+
+**LAST_MINUTE_CHANGES : NOT READY**, deux prises, 403,28 s. La modification trop précoce des horaires de la première prise est corrigée et contrôlée dans la seconde. Le chapitre d’ajout manuel garde toutefois une saisie et un retour au résultat en retard de cinq à sept secondes. Onze revues AV / 45 points, onze ASR et validation technique ; onze vrais messages reçus vérifiés, musique 13,4–19,8 LU sans trou, zéro tutoiement. Les défauts sont ceux du recorder, sans changement produit. La limite de deux prises interdit une troisième capture ; l’écart historique reste ouvert, aucune publication ni hausse de révision. [Rapport et images exactes](evidence/batch41/last-minute-changes/review-report.txt).
+
+## Lot 41 — clôture de la phase 1, 16 novembre 2026
+
+Les quinze vidéos des points 1 à 9 ont été traitées : **douze READY publiées**, trois **NOT READY non publiées** après leurs deux prises autorisées (erreurs d’inscription, suivi des inscriptions, imprévus). Leurs écarts restent ouverts avec les images et raisons ci-dessus ; aucune troisième prise ni assemblage de prises différentes. Les 67 MP4 du catalogue publié ont tous été mesurés directement sur le serveur public, et leurs deux affiches vérifiées ; `renders.json` reprend ces mesures, avec douze entrées modifiées, uniquement celles effectivement publiées. Les rendus des trois vidéos non publiées restent ceux du serveur. [Mesures distantes](evidence/batch41/published-renders-phase1.json). Les cinq captures documentaires et leurs textes alternatifs sont contrôlés sur une base jetable indépendante. La phase 2 suit désormais les 36 écarts historiques H dans leur ordre initial, sans effacer cet historique.
+
+## Lot 41 — phase 2, gestes de Frise : écart H résolu, 16 novembre 2026
+
+**SHIFT_TIMELINE_QUICK_ACTIONS : READY, publiée, révision 6, 126,36 s.** Première vidéo H reprise dans l’ordre du fichier : nouvelle voix Kore continue, six limites de chapitres corrigées avant la prise, sept ASR source/final conformes. Le contrôle des mots réellement prononcés corrige un repère de saisie tardif avant la première prise narrée. Sept revues AV / 25 points ; deux observations brutes sont résolues par les images : « Relève suivante » est réellement saisi puis enregistré, et le panneau qui s’ouvre automatiquement après le redimensionnement est fermé puis rouvert au moment demandé. Le champ Minimum, le nouveau panneau d’application au poste, les libellés actuels et le Minimum (optionnel) de l’éditeur sont visibles. Les écarts historiques de minimum et de libellés de cette vidéo sont résolus ; les autres vidéos gardent leur statut. Musique 13,9–18,7 LU sans trou, zéro tutoiement, 22 clics et 59 touches réels sonorisés. Aperçu puis APPLY=1, cinq fichiers envoyés et vérification distante cinq inchangés ; durée et affiches publiées contrôlées, `renders.json` mis à jour pour garder ce commit publiable. [Rapport et contre-preuves](evidence/batch41/phase2/shift-timeline-quick-actions/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
+
+## Lot 41 — phase 2, série de créneaux : écart H résolu, 16 novembre 2026
+
+**SHIFT_CREATE_SERIES : READY, publiée, révision 7, 103,04 s.** Deuxième vidéo H dans l’ordre initial : nouvelle voix Puck continue, sept ASR source/final et contrôle de voix conformes. Deux répétitions, une seule prise narrée ; première ligne centrée avant son décompte. Sept revues AV / 24 points sans signalement, quatorze images finales inspectées. Les Minimum par créneau (optionnel) et Minimum (optionnel) sont visibles ; six relèves réelles, quatre places pour la première et trois pour les cinq autres. Les écarts historiques de minimum et de libellés de cette vidéo sont résolus ; le scénario part d’un planning publié et n’entre pas dans l’assistant, donc la note conditionnelle sur son ancien en-tête ne s’applique pas. Musique 13,0–18,9 LU sans trou, zéro tutoiement, douze clics réels sonorisés. Aperçu puis APPLY=1, quatre fichiers envoyés et transcription déjà identique ; vérification distante cinq inchangés, durée publiée mesurée et métadonnées synchronisées. [Rapport et preuves](evidence/batch41/phase2/shift-create-series/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
+
+## Lot 41 — phase 2, éditeur de créneau : écart H résolu, 16 novembre 2026
+
+**SHIFT_CREATE_EDIT_DETAIL : READY, publiée, révision 6, 134,76 s.** Troisième vidéo H dans l’ordre initial : nouvelle voix Kore continue, six limites corrigées avant la prise, sept ASR source/final et contrôle de voix conformes. Deux répétitions, une seule prise narrée ; pauses des heures raccourcies avant la prise pour terminer leur saisie pendant leur explication. Sept revues AV / 25 points sans signalement, quatorze images finales inspectées. Minimum (optionnel), aide des paramètres du poste et libellés actuels sont visibles ; le vrai créneau 18h–21h30 est enregistré avec trois places et ses informations pratiques, puis relu. Les écarts historiques de minimum et de libellés de cette vidéo sont résolus. Musique 15,4–19,1 LU sans trou, zéro tutoiement, dix-neuf clics réels sonorisés. Aperçu puis APPLY=1, cinq fichiers envoyés ; vérification distante cinq inchangés et durée publiée synchronisée. [Rapport et preuves](evidence/batch41/phase2/shift-create-edit-detail/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.

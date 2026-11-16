@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour un poste sensible comme la Caisse, activez l’inscription sur validation.",
+  "windowStart": 20.159,
+  "result": {
+    "found": true,
+    "startSeconds": 30.29,
+    "wordsHeard": "Pour"
+  },
+  "onset": 50.449,
+  "proposedCut": 50.158812499999996,
+  "note": "Proposal only; recut then independently audit before capture"
+}

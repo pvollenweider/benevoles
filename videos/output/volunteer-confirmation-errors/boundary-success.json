@@ -1,0 +1,12 @@
+{
+  "anchor": "La connexion est rétablie et la demande est envoyée. La page",
+  "windowStart": 72.296,
+  "result": {
+    "found": true,
+    "startSeconds": 26.96,
+    "wordsHeard": "La connexion est rétablie et la demande est envoyée. La page"
+  },
+  "onset": 99.256,
+  "proposedCut": 99.098,
+  "note": "Proposal only; recut then independently audit before capture"
+}

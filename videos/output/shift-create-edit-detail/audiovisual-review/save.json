@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:41:23.387Z",
-  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
+  "reviewedAt": "2026-11-16T22:18:19.457Z",
+  "videoSha256": "dbdce05a725e66cf7060c109dbbb8e42556113b6c43ec21c65581c15c62bf33f",
   "promptSha256": "2703b8a6376480bc125c50cfc0e55e1a1a89bcad9c5d8f481a098cfdd79d9704",
-  "clipSha256": "08f9ce2af19c53311f14e8e403f4f2fd750442cbb0c22523f4ae1c9aed82ad0f",
+  "clipSha256": "4c647a258febe241df8b0d5b7fb38a66577805c9a78eb1380423c759aa609423",
   "scene": "save",
   "review": {
     "heardOpening": "Enregistrons le créneau et vérifions sa place",
     "checkpoints": [
       {
-        "spokenSeconds": 0.2,
+        "spokenSeconds": 0.6,
         "spoken": "Enregistrons le créneau",
         "visibleSeconds": 1,
-        "visible": "Clic sur le bouton Ajouter en bas du formulaire de création de créneau",
+        "visible": "Clic sur le bouton Ajouter pour valider le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 1.6,
-        "spoken": "et vérifions sa place dans le planning.",
-        "visibleSeconds": 2,
-        "visible": "Affichage de la vue planning (Frise) avec le créneau positionné",
+        "spokenSeconds": 2,
+        "spoken": "vérifions sa place dans le planning",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage de la frise chronologique avec le bloc Accueil des artistes de 18h à 21h30",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
-        "spoken": "Le libellé complète le nom du poste sans le remplacer,",
-        "visibleSeconds": 3.8,
-        "visible": "Visualisation du poste Accueil avec le bloc 18h-21h30 Accueil des artistes",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 6.8,
         "spoken": "la capacité apparaît dans les indicateurs",
-        "visibleSeconds": 7.3,
-        "visible": "Bascule vers l'onglet Liste montrant la colonne des places et indicateurs de capacité",
+        "visibleSeconds": 8.5,
+        "visible": "Bascule sur l'onglet Liste affichant le décompte des places et le statut",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.3,
-        "spoken": "et la fiche détaillée rassemble les consignes utiles au jour J.",
-        "visibleSeconds": 9,
-        "visible": "Ouverture du formulaire détaillé après clic sur Modifier, affichant les consignes pratiques et infos",
+        "spokenSeconds": 9.5,
+        "spoken": "la fiche détaillée rassemble les consignes utiles au jour J",
+        "visibleSeconds": 10,
+        "visible": "Ouverture du formulaire de détail du créneau avec les consignes pratiques",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et fluide, parfaitement synchronisée avec les manipulations à l'écran."
+      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

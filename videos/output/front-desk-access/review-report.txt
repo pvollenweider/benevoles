@@ -1,0 +1,11 @@
+STATUS: READY
+FRONT_DESK_ACCESS — batch 41, 16 November 2026
+Duration: 170.160 s; one narrated take after two complete quick rehearsals (the first rehearsal used the wrong dialog role; fixed to alertdialog).
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385
+New complete Kore master, one generation, no pause tags; all eight chapter boundaries recut on measured silences and independently audited. All eight final audio chapters pass. Whole-master report explicitly finds one constant speaker; its sole natural rhythm/intonation variation is resolved in voice-review-resolution.json without erasing the original report.
+Eight final audiovisual reviews, 30 checkpoints, no issue; actual frames inspected. Real invitation email, activation and login; restricted event pointage and real attendance writes; owner revocation refuses pointage in Colette's real session. Email body uses actual pixels, frame-measured crop x320/y312/960x488; no technical mailbox header.
+Music 14.8–19.5 LU under voice; quietest music-only window −34.1 LUFS; zero gaps/out-of-rule windows. Nineteen real clicks with synchronized soft effects; no keyboard events invented for fill(). Full multilingual final ASR and VTT: zero viewer tutoiement; no stray instruction identified.
+Description: 108 UTF-8 bytes. Types, video tests, lint and catalog/SEO/reference tests pass. Real-time subjective listening unavailable; automated audiovisual observation and frame inspection are not presented as human listening.
+Publication: preview then APPLY=1 on context default succeeded; five files sent. Catalog revision 1, dates 2026-11-16; guide and FEATURES links added.

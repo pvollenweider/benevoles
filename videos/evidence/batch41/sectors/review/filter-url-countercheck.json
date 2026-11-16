@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-11-16T21:34:57.737Z",
+  "product": {
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
+  },
+  "actualUrl": "https://www.benevol.app/admin/events/video-beta-event/registrations?secteur=cmwjs0h5r00m8m9a593qpzhco",
+  "selectedSector": "Parking",
+  "sectorId": "cmwjs0h5r00m8m9a593qpzhco",
+  "selectedAfterReopening": true,
+  "actualCount": 5,
+  "browserChromeFilmed": false,
+  "note": "Independent read-only check of the explanatory URL statement. The final video shows the filter and persistence; it does not promise to display browser chrome. Raw AV observation remains preserved."
+}

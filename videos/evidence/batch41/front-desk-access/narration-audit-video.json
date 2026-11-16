@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-16T19:33:02.173Z",
+  "revalidatedAt": "2026-11-16T19:33:02.174Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "a51b2e532eee99aabcbd7062588179bff8c2d577e7c1c6b8ff671e3a41656409",
+      "recognized": "Le jour de la fête, Colette tient l'entrée. Vous pouvez lui donner un accès accueil, sans l'ajouter aux organisateurs. Elle pourra suivre et marquer les présences d'un seul événement. Vous gardez la main sur cet accès.",
+      "expected": "Le jour de la fête, Colette tient l'entrée. Vous pouvez lui donner un accès accueil, sans l'ajouter aux organisateurs. Elle pourra suivre et marquer les présences d'un seul événement. Vous gardez la main sur cet accès.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invite",
+      "audioSha256": "a9bf1bf4bc3dc0df381b64a8ee46280eec6c7d0dfb3fb138ae8305ba1b0b36f8",
+      "recognized": "Avec le compte propriétaire, ouvrons la page Jour J. En bas, ouvrons la gestion des accès accueil. Indiquons Colette Jensen et son adresse email, puis choisissons Invité. La liste affiche Invitation envoyée et la date de fin. Cette personne reste extérieure à votre équipe d'organisation.",
+      "expected": "Avec le compte propriétaire, ouvrons la page Jour J. En bas, ouvrons la gestion des accès accueil. Indiquons Colette Jensen et son adresse email, puis choisissons Inviter. La liste affiche Invitation envoyée et la date de fin. Cette personne reste extérieure à votre équipe d'organisation.",
+      "wordErrorRate": 0.021739130434782608,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "email",
+      "audioSha256": "764573983ee5dce7add74d4737050ad2fcaec02eb13c920204da4b5b6ba3597b",
+      "recognized": "Colette reçoit cet email d'invitation. Il nomme l'organisation et l'événement concerné. Son lien d'activation est valable sept jours. Ouvrons ce lien pour activer son compte. Gardez cet email pour la personne invitée, sans transférer son lien à quelqu'un d'autre.",
+      "expected": "Colette reçoit cet email d'invitation. Il nomme l'organisation et l'événement concernés. Son lien d'activation est valable sept jours. Ouvrons ce lien pour activer son compte. Gardez cet email pour la personne invitée, sans transférer son lien à quelqu'un d'autre.",
+      "wordErrorRate": 0.022222222222222223,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "activate",
+      "audioSha256": "a1554d6c2ce7ecf57b136b130af197de9d423634d70e01a57f3877f06994426e",
+      "recognized": "Colette choisit son mot de passe, le confirme et l'enregistre. Son compte est maintenant actif. Connectons-nous avec son adresse et ce mot de passe. La page accès accueil donne le lien ouvrir le pointage pour cet événement.",
+      "expected": "Colette choisit son mot de passe, le confirme et l'enregistre. Son compte est maintenant actif. Connectons-nous avec son adresse et ce mot de passe. La page Accès accueil donne le lien Ouvrir le pointage pour cet événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "scope",
+      "audioSha256": "b76c2bd8a43f1be66c9a8e90259939183bacc6b6c0f7b0c81d95ec734f59c253",
+      "recognized": "Ouvrons le pointage. Colette voit les créneaux, le nom et le téléphone des bénévoles attendus, elle ne voit ni leurs emails, ni les réponses aux questions, ni les notes. Elle n'a accès ni aux membres, ni aux autres événements, ni aux paramètres. Ajouter un besoin est réservé aux organisateurs.",
+      "expected": "Ouvrons le pointage. Colette voit les créneaux, le nom et le téléphone des bénévoles attendus. Elle ne voit ni leurs emails, ni les réponses aux questions, ni les notes. Elle n'a accès ni aux membres, ni aux autres événements, ni aux paramètres. Ajouter un besoin est réservé aux organisateurs.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "marks",
+      "audioSha256": "75acfe2ba7c56d0aa63905169f907e43f8477e0571f94c64b10e3b9a990b0e37",
+      "recognized": "Marquons l'arrivée de Zoé. Son état devient présent. Colette peut aussi noter une absence, jamais déduite automatiquement, ou un départ avant la fin. Marquons ce départ. Annuler le départ retrouve la présence. Ces marques sont les mêmes que celles des organisateurs sur Jour J.",
+      "expected": "Marquons l'arrivée de Zoé. Son état devient Présent. Colette peut aussi noter une absence, jamais déduite automatiquement, ou un départ avant la fin. Marquons ce départ. Annuler le départ retrouve la présence. Ces marques sont les mêmes que celles des organisateurs sur Jour J.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "end",
+      "audioSha256": "b4ef713fe47d5b71fc48f2c7641589be8139b3ac9e2c713ef64c54d5c38231b7",
+      "recognized": "L'accès se termine après l'événement, à la fin de son dernier jour dans le fuseau de l'organisation. Un créneau de nuit peut le prolonger jusqu'à six heures le lendemain. Le compte sera effacé quatre-vingt-dix jours après la fin de son dernier accès. Pour un prochain événement, invitez la personne de nouveau.",
+      "expected": "L'accès se termine après l'événement, à la fin de son dernier jour dans le fuseau de l'organisation. Un créneau de nuit peut le prolonger jusqu'à six heures le lendemain. Le compte sera effacé quatre-vingt-dix jours après la fin de son dernier accès. Pour un prochain événement, invitez la personne de nouveau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "revoke",
+      "audioSha256": "312d9b8c9ea14a3cf5b138fc76cd2b546ae820f07c21b4349e4e99cf810ad66d",
+      "recognized": "Revenons au compte propriétaire. Sur la ligne de Colette, choisissons Révoquer et confirmons. L'accès est fermé tout de suite. Revenons au compte de Colette et ouvrons le pointage. Sa page Accès accueil indique qu'elle n'a plus d'accès en cours. Vous pouvez ainsi confier l'accueil sans ouvrir le reste de votre espace.",
+      "expected": "Revenons au compte propriétaire. Sur la ligne de Colette, choisissons Révoquer et confirmons. L'accès est fermé tout de suite. Revenons au compte de Colette et ouvrons le pointage. Sa page Accès accueil indique qu'elle n'a plus d'accès en cours. Vous pouvez ainsi confier l'accueil sans ouvrir le reste de votre espace.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

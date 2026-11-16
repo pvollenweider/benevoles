@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:11:13.362Z",
+  "videoSha256": "872e475225f098d2cdf1c930d0c56c0c98810970d34405ee7aea1faa7b2e0080",
+  "promptSha256": "c7a61631eada279567faf37f2e547f111e49b0abca8c99b3844d39feacad5921",
+  "clipSha256": "1449c20fd43f539e65f71b9cd2b710e9a555ec032b2bee70076a0e4f4a675687",
+  "scene": "overlap",
+  "review": {
+    "heardOpening": "Le serveur revérifie aussi tes horaires.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Essayons le vestiaire de onze à treize heures avec sa même adresse.",
+        "visibleSeconds": 5.5,
+        "visible": "Sélection du créneau Vestiaire 11h-13h puis clic sur Continuer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Remplissons le formulaire et confirmons.",
+        "visibleSeconds": 11.2,
+        "visible": "Le formulaire avec les coordonnées d'Aline est complété puis le bouton Confirmer mon inscription est cliqué.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.9,
+        "spoken": "Demande d'inscription reçue.",
+        "visibleSeconds": 13,
+        "visible": "Affichage de la page de confirmation intitulée Demande d'inscription reçue.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.8,
+        "spoken": "Ouvrons sa boîte : l'email Demande d'inscription non enregistrée",
+        "visibleSeconds": 23,
+        "visible": "Affichage de l'email informant du chevauchement de créneaux avec le bouton Gérer mes inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

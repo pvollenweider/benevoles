@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour ajouter une consigne à cette relève, passez en Liste, puis",
+  "windowStart": 55.565,
+  "result": {
+    "found": true,
+    "startSeconds": 27.76,
+    "wordsHeard": "Pour ajouter une consigne à cette relève, passez en liste, puis"
+  },
+  "onset": 83.325,
+  "proposedCut": 82.8675,
+  "note": "Proposal only; recut then independently audit before capture"
+}

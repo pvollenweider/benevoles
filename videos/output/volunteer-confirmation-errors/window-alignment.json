@@ -1,0 +1,49 @@
+{
+  "locatedAt": "2026-11-16T20:20:29.140Z",
+  "masterSha256": "b102c77f68fc0b55491f3198fe23bd0d0c4e682d474e01daa23909f033e69fcd",
+  "totalSeconds": 287.56,
+  "cuts": [
+    {
+      "id": "form",
+      "seconds": 17.4662915
+    },
+    {
+      "id": "validation",
+      "seconds": 37.331103999999996
+    },
+    {
+      "id": "capacity",
+      "seconds": 56.95525000000001
+    },
+    {
+      "id": "network",
+      "seconds": 79.8396875
+    },
+    {
+      "id": "success",
+      "seconds": 99.098
+    },
+    {
+      "id": "email",
+      "seconds": 119.724896
+    },
+    {
+      "id": "overlap",
+      "seconds": 138.6776665
+    },
+    {
+      "id": "response-loss",
+      "seconds": 171.3710835
+    },
+    {
+      "id": "invitation-success",
+      "seconds": 204.2698125
+    },
+    {
+      "id": "result",
+      "seconds": 255.4294375
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

@@ -1,18 +1,18 @@
 {
   "slug": "volunteer-register-mobile",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-11T22:21:24.853Z",
+  "recordedAt": "2026-11-16T20:44:29.595Z",
   "video": "capture.webm",
   "product": {
-    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
-    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
-    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
-    "buildId": "y5HTtrg_9cOS9PQo5uo57",
-    "snapshot": "/tmp/benevoles-video-production.batch7",
-    "builtAt": "2026-10-11T21:29:41.103Z"
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "VOLUNTEER_REGISTER",
@@ -26,96 +26,96 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 17435
+      "atMs": 17958
     },
     {
       "kind": "click",
-      "atMs": 19150
+      "atMs": 19674
     },
     {
       "kind": "click",
-      "atMs": 23784
+      "atMs": 25074
     },
     {
       "kind": "click",
-      "atMs": 24766
+      "atMs": 26056
     },
     {
       "kind": "click",
-      "atMs": 25749
+      "atMs": 27057
     },
     {
       "kind": "click",
-      "atMs": 26734
+      "atMs": 28056
     },
     {
       "kind": "click",
-      "atMs": 30634
+      "atMs": 32641
     },
     {
       "kind": "click",
-      "atMs": 31416
+      "atMs": 33440
     },
     {
       "kind": "click",
-      "atMs": 32200
+      "atMs": 34240
     },
     {
       "kind": "click",
-      "atMs": 41833
+      "atMs": 43456
     }
   ],
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 9533
+      "endMs": 9670
     },
     {
       "id": "discover",
-      "startMs": 9987,
-      "endMs": 16489
+      "startMs": 10122,
+      "endMs": 17011
     },
     {
       "id": "choose",
-      "startMs": 16942,
-      "endMs": 22830
+      "startMs": 17464,
+      "endMs": 24127
     },
     {
       "id": "details",
-      "startMs": 23284,
-      "endMs": 29678
+      "startMs": 24578,
+      "endMs": 31662
     },
     {
       "id": "preferences",
-      "startMs": 30131,
-      "endMs": 36714
+      "startMs": 32116,
+      "endMs": 38912
     },
     {
       "id": "confirm",
-      "startMs": 37167,
-      "endMs": 42678
+      "startMs": 39364,
+      "endMs": 44597
     },
     {
       "id": "success",
-      "startMs": 43129,
-      "endMs": 53333
+      "startMs": 45048,
+      "endMs": 55608
     }
   ],
   "anchors": [
     {
       "segmentId": "confirm",
       "phrase": "Un dernier coup d’œil au",
-      "startMs": 333,
-      "endMs": 3630,
-      "cueMs": 37502
+      "startMs": 459,
+      "endMs": 3390,
+      "cueMs": 39826
     },
     {
       "segmentId": "confirm",
       "phrase": "confirme ton inscription.",
-      "startMs": 4163,
-      "endMs": 5184,
-      "cueMs": 41334
+      "startMs": 3585,
+      "endMs": 4783,
+      "cueMs": 42949
     }
   ]
 }

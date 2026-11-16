@@ -182,3 +182,7 @@ Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unre
 Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.
 
 WAITING TTS — revue finale du 2026-10-16 : le WAV restauré prononce « Votre sélection n’est plus disponible », alors que le manifeste et le produit disent « Ta sélection n’est plus disponible ». Le score WER initial avait laissé passer ce mot ; cet écart de citation invalide la réutilisation. Phrase à produire : « La confirmation répond Ta sélection n'est plus disponible. » Toute la narration Kore doit être régénérée en une passe, `continuousPauseTags: false`, sans mélange de phrases. Aucun appel TTS sous le plafond mensuel. La répétition est propre ; la prise avec cet audio est rejetée et conservée comme preuve, sans livraison.
+
+## Lot 41 — 16 novembre 2026
+
+Nouvelle narration Kore intégrale sur les sources du 1er novembre : demande publique reçue, suite par email et lien personnel seulement après preuve de l'adresse. Les anciennes notes de restauration sont historiques.

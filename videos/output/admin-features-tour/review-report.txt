@@ -1,8 +1,8 @@
 STATUS: READY
-ADMIN_FEATURES_OVERVIEW — batch 23-2 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 331.24 s; music 14.1–19.6 LU below voice. Music-only floor and real click/key effects validated.
-Whole narration reused after text/hash and independent audit verification.
-Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
-Sixteen chapters, all eight chapter sheets and both anchor sheets reviewed. Restricted document links are centered before the named phrase at 295.36 s (exact MP4 frame saved); prior late reveal fixed. Members passage describes available profile features without promising to open a profile; list and current profile capabilities verified. Full soundtrack transcriptions agree, no stray words or informal viewer address.
-No product edit, commit, push or publication in batch 23-2. Real-time subjective listening unavailable as permitted.
+ADMIN_FEATURES_OVERVIEW — batch 41, 16 November 2026
+292.680 s, 1280×800, one narrated take after a complete passing rehearsal.
+Product e8ed666a48294d77213f8bf64fe35898314b0ed9; BUILD_ID HO6mRRAZuOevekAmdhN_C.
+Whole fresh continuous Kore narration including the added per-event reminder-delay sentence; fifteen boundaries aligned, all sixteen source/final ASR checks pass, whole-master one consistent voice. Multilingual full soundtrack and VTT: zero register candidates and zero literal tu. Description 153 UTF-8 bytes.
+Sixteen AV chapters / 54 checkpoints, zero issues. Thirty-two representative actual final images inspected, including an enlarged actual Messages frame showing Délais habituels / Délais propres à cet événement and Enregistrer les rappels during the new explanation. Current organization/team, lifecycle, appearance, duplication, shift methods/fields, registrations, members, questions, information pages, messages/reminders, reports and journal shown. Exact synthetic duplicate legacy owner removed under ownership guard before the rehearsal; no org-admin@localhost appears in the filmed team. No product modification.
+Music 15.3–19.7 LU under voice, quietest music-only -33.8 LUFS, no gaps/issues. Twenty real clicks and eight real key presses with soft synchronized effects. Technical validation, video suite, types, touched-source lint and catalogue checks pass. No subjective human listening claimed.
+Publication: preview then APPLY=1 on default, five changed files sent. Revision 6, dates 2026-11-16.

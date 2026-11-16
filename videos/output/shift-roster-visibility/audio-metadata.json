@@ -1,47 +1,47 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-22T09:17:36.072Z",
+  "generatedAt": "2026-11-16T20:30:34.875Z",
   "segments": {
     "roster-setting": {
       "file": "audio/roster-setting.wav",
-      "durationMs": 32882,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 33719,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     },
     "roster-publication": {
       "file": "audio/roster-publication.wav",
-      "durationMs": 23138,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 23759,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     },
     "roster-signup": {
       "file": "audio/roster-signup.wav",
-      "durationMs": 36564,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 38755,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     },
     "roster-confirm": {
       "file": "audio/roster-confirm.wav",
-      "durationMs": 29496,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 31453,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     },
     "roster-event": {
       "file": "audio/roster-event.wav",
-      "durationMs": 34456,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 38157,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     },
     "roster-invite": {
       "file": "audio/roster-invite.wav",
-      "durationMs": 15347,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 17034,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     },
     "roster-existing": {
       "file": "audio/roster-existing.wav",
-      "durationMs": 21445,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 23093,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     },
     "roster-withdraw": {
       "file": "audio/roster-withdraw.wav",
-      "durationMs": 28272,
-      "generationSha256": "3fead6f49e3f3989b383731d98b98eb29e103ddae2d9b2f64c9600afcfa8a696"
+      "durationMs": 31790,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
     }
   }
 }

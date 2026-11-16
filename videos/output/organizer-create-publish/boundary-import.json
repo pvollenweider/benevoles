@@ -1,0 +1,12 @@
+{
+  "anchor": "Si c’est la première fois que vous utilisez l’application, l’import permet",
+  "windowStart": 100.01299999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30.9,
+    "wordsHeard": "Si c’est la première fois que vous utilisez l’application, l’import permet"
+  },
+  "onset": 130.91299999999998,
+  "proposedCut": 130.783646,
+  "note": "Proposal only; recut then independently audit before capture"
+}

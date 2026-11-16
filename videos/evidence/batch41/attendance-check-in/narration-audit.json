@@ -1,0 +1,160 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-16T19:14:14.953Z",
+  "revalidatedAt": "2026-11-16T19:14:14.954Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "e6a9bc7787f5c02d0022b04c57c052252651317c62d47b3c886f3967cc82fa7b",
+      "recognized": "Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à suivre les présences et les absences notées. Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres. Chaque ligne correspond à une inscription sur un créneau. Être inscrit, c'est ce qui était prévu. Être marqué présent, c'est une autre information. Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
+      "expected": "Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à suivre les présences et les absences notées. Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres. Chaque ligne correspond à une inscription sur un créneau. Être inscrit, c'est ce qui était prévu. Être marqué présent, c'est une autre information. Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "one",
+      "audioSha256": "9e84a2c90450cbd697d5ba338aec109fe70be1bc2795c6a7bf74bfc4a808899d",
+      "recognized": "Aline vient d'arriver. Sélectionnons uniquement sa ligne, puis lisons le nombre indiqué avant de marquer sa présence. La marque apparaît sur son inscription. Rechargeons la page, elle est toujours là. Ce contrôle évite de confondre une sélection à l'écran avec une donnée réellement enregistrée. Le nombre d'inscriptions affiché décrit la liste filtrée, pas le nombre de personnes présentes.",
+      "expected": "Aline vient d'arriver. Sélectionnons uniquement sa ligne, puis lisons le nombre indiqué avant de marquer sa présence. La marque apparaît sur son inscription. Rechargeons la page : elle est toujours là. Ce contrôle évite de confondre une sélection à l'écran avec une donnée réellement enregistrée. Le nombre d'inscriptions affichées décrit la liste filtrée, pas le nombre de personnes présentes.",
+      "wordErrorRate": 0.01639344262295082,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "group",
+      "audioSha256": "473fb58b7a29f5f4997f0d4652ddcdf94efab959044c842a8253ee8e51cd55eb",
+      "recognized": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur marquer présent. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transformez pas en présence simplement pour compléter votre bilan. Traitez d'abord sa demande selon les règles de l'événement.",
+      "expected": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transformez pas en présence simplement pour compléter votre bilan : traitez d'abord sa demande selon les règles de l'événement.",
+      "wordErrorRate": 0.014492753623188406,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "correction",
+      "audioSha256": "95bd0a427483ba7aeb6e255941a826ab662af1919d186f784fe8f85edd126ee8",
+      "recognized": "Vous avez pointé Léa par erreur ? Sélectionnons sa ligne et annulons la présence. La marque disparaît, mais son inscription et sa place restent. Ce n'est pas la même action que retirer quelqu'un de son créneau. Quand la bonne personne arrive, vous pouvez enregistrer sa présence à nouveau. Relisez le nom et l'horaire avant chaque correction, c'est plus simple que de reconstruire une inscription supprimée par mégarde.",
+      "expected": "Vous avez pointé Léa par erreur ? Sélectionnons sa ligne et annulons la présence. La marque disparaît, mais son inscription et sa place restent. Ce n'est pas la même action que retirer quelqu'un de son créneau. Quand la bonne personne arrive, vous pouvez enregistrer sa présence à nouveau. Relisez le nom et l'horaire avant chaque correction : c'est plus simple que de reconstruire une inscription supprimée par mégarde.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "multiple",
+      "audioSha256": "d398277fb114c4a4243c33b2c0d72b3ae3574056fea712f47533049ec84bf777",
+      "recognized": "Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver ses deux inscriptions. Elle aide le matin, puis à la buvette. Le pointage concerne la ligne sélectionnée, pas toute sa journée. Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second. Regardons les deux lignes côte à côte, l'une est pointée et l'autre ne l'est pas. Vous gardez ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.",
+      "expected": "Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver ses deux inscriptions. Elle aide le matin, puis à la buvette. Le pointage concerne la ligne sélectionnée, pas toute sa journée. Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second. Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas. Vous gardez ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "absence-departure",
+      "audioSha256": "ab32fee5d4518ec14327b1025ac0ba63078b88cc92b043d9debc86ba0c2cfce5",
+      "recognized": "Noah ne viendra pas. Sélectionnons sa ligne et choisissons marquer absent. Une absence est toujours notée par un organisateur, jamais déduite d'un pointage manquant. Annuler l'absence permet de corriger cette note. Notons à nouveau son absence pour le bilan. Aline, elle, est arrivée puis repart avant la fin. Sélectionnons sa ligne présente et choisissons marquer parti avant la fin. Le badge parti avant la fin distingue ce départ d'une absence. Annuler le départ corrige une erreur et retrouve sa présence. Notons à nouveau son départ pour le bilan. Cette participation reste enregistrée, mais elle n'ajoute aucune heure attestée. Sa durée réellement effectuée est inconnue.",
+      "expected": "Noah ne viendra pas. Sélectionnons sa ligne et choisissons Marquer absent. Une absence est toujours notée par un organisateur, jamais déduite d'un pointage manquant. Annuler l'absence permet de corriger cette note. Notons à nouveau son absence pour le bilan. Aline, elle, est arrivée puis repart avant la fin. Sélectionnons sa ligne présente et choisissons Marquer parti avant la fin. Le badge Parti avant la fin distingue ce départ d'une absence. Annuler le départ corrige une erreur et retrouve sa présence. Notons à nouveau son départ pour le bilan. Cette participation reste enregistrée, mais elle n'ajoute aucune heure attestée : sa durée réellement effectuée est inconnue.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "limits",
+      "audioSha256": "9c7665a9c772402e1ae84096cb9345478358d06191d0813861e0336178459979",
+      "recognized": "Le pointage enregistre une arrivée. Il ne mesure pas la durée réellement travaillée. Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir. Les heures attestées reprennent les créneaux passés avec présence, sauf les participations terminées avant la fin. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard. Gardez cette différence en tête quand vous lisez le bilan.",
+      "expected": "Le pointage enregistre une arrivée. Il ne mesure pas la durée réellement travaillée. Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir. Les heures attestées reprennent les créneaux passés avec présence, sauf les participations terminées avant la fin. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard : gardez cette différence en tête quand vous lisez le bilan.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "cancelled",
+      "audioSha256": "6f9f756cb2942e2dcc1ea30d4f7d2b342fd5ebd33ed4688ba70f5cb05bda17e9",
+      "recognized": "Un cas à regarder de près : Sarah est arrivée, mais son créneau doit finalement être annulé. Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste. Lisons le récapitulatif et confirmons la suppression. Revenons aux inscriptions, sa ligne a disparu. Téléchargeons le fichier pour vérifier le bilan. Sarah n'y figure pas, car cet export ne retient que les inscriptions actives. Pourtant, le pointage enregistré avant l'annulation est conservé. Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé. Avant d'annuler un créneau déjà commencé, vérifiez avec l'organisation comment garder une trace utile.",
+      "expected": "Un cas à regarder de près : Sarah est arrivée, mais son créneau doit finalement être annulé. Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste. Lisons le récapitulatif et confirmons la suppression. Revenons aux inscriptions : sa ligne a disparu. Téléchargeons le fichier pour vérifier le bilan. Sarah n'y figure pas, car cet export ne retient que les inscriptions actives. Pourtant, le pointage enregistré avant l'annulation est conservé. Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé. Avant d'annuler un créneau déjà commencé, vérifiez avec l'organisation comment garder une trace utile.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "export",
+      "audioSha256": "c246c6e047b8c73338868d1b52611ecfae3c9ca95f2010ecc226ecca7d6f9fd8",
+      "recognized": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée. Leur créneau et les colonnes présent et pointé le. Les colonnes absence notée et partie avant la fin distinguent aussi les notes de Noa et d'Aline. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions. Partagez seulement ce qui est nécessaire. Voyons maintenant un écran plus simple à utiliser sur le terrain depuis son téléphone.",
+      "expected": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Les colonnes Absence notée et Parti avant la fin distinguent aussi les notes de Noah et d’Aline. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partagez seulement ce qui est nécessaire. Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
+      "wordErrorRate": 0.04819277108433735,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "dayof-window",
+      "audioSha256": "cc1386d59ec25f21afd0401d7e8037ca895dc91a06983cb488327ffca1d97557",
+      "recognized": "La page Jour J se concentre sur les personnes attendues maintenant. La vue En cours regroupe les créneaux qui ont commencé, y compris une veille commencée hier et pas encore terminée. Dans les trois prochaines heures montre les prochaines relèves. Plus tôt aujourd'hui permet de retrouver les créneaux terminés, par exemple pour corriger une arrivée oubliée. Les horaires suivent le fuseau de l'organisation. Ici, nous montrons cette page dans une fenêtre de la taille d'un téléphone, pas sur un appareil physique.",
+      "expected": "La page Jour J se concentre sur les personnes attendues maintenant. La vue En cours regroupe les créneaux qui ont commencé, y compris une veille commencée hier et pas encore terminée. Dans les trois prochaines heures montre les prochaines relèves. Plus tôt aujourd'hui permet de retrouver les créneaux terminés, par exemple pour corriger une arrivée oubliée. Les horaires suivent le fuseau de l'organisation. Ici, nous montrons cette page dans une fenêtre de la taille d'un téléphone, pas sur un appareil physique.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "dayof-search",
+      "audioSha256": "5b652c02d4390c3efa17e0e7f9e2012429b8c74633e756d09a65c6145c6cd624",
+      "recognized": "Vous cherchez Zoé ? Tapez son prénom sans accent. Sa ligne reste facile à retrouver. Vous pouvez aussi chercher un poste, comme accueil. Les personnes de ce poste restent ensemble, ce qui aide à coordonner l'équipe. Effaçons la recherche pour retrouver le planning du moment. Cette page montre les inscriptions confirmées. Une demande encore à valider n'est pas une personne attendue à pointer.",
+      "expected": "Vous cherchez Zoé ? Tapez son prénom sans accent : sa ligne reste facile à retrouver. Vous pouvez aussi chercher un poste, comme Accueil. Les personnes de ce poste restent ensemble, ce qui aide à coordonner l'équipe. Effaçons la recherche pour retrouver le planning du moment. Cette page montre les inscriptions confirmées : une demande encore à valider n'est pas une personne attendue à pointer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "dayof-phone",
+      "audioSha256": "4f4fdb28bb260d82711055764fb81866664645bb4926aa8cf476fddebd20e780",
+      "recognized": "Quand un téléphone est renseigné, un lien permet de préparer un appel à la personne concernée. Voici celui de Zoé. Le contact du créneau peut aussi figurer sur sa carte. Nous montrons le lien, sans appeler qui que ce soit. Cette page garde seulement les informations utiles sur place, les noms, les horaires, le téléphone et la présence. Elle ne distribue pas les e-mails, les réponses aux questions, ou les notes internes.",
+      "expected": "Quand un téléphone est renseigné, un lien permet de préparer un appel à la personne concernée. Voici celui de Zoé. Le contact du créneau peut aussi figurer sur sa carte. Nous montrons le lien, sans appeler qui que ce soit. Cette page garde seulement les informations utiles sur place : les noms, les horaires, le téléphone et la présence. Elle ne distribue pas les emails, les réponses aux questions ou les notes internes.",
+      "wordErrorRate": 0.027777777777777776,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "dayof-checkin",
+      "audioSha256": "5735d9cd7e0caefafdf54d94bfea95a0e9ba6638bf6c16c37268f9547063fd97",
+      "recognized": "Zoé arrive à l'accueil. Marquer Présent enregistre sa présence sur ce créneau et le bouton devient Annuler la présence. Rechargeons la page, la marque est conservée. C'est la même présence que depuis les inscriptions, pas un deuxième système de pointage. Si une personne aide sur plusieurs créneaux, son arrivée ici ne marque pas automatiquement tous les autres. Ce geste confirme une arrivée, il ne démarre pas un chronomètre.",
+      "expected": "Zoé arrive à l'accueil. Marquer présent enregistre sa présence sur ce créneau, et le bouton devient Annuler la présence. Rechargeons la page : la marque est conservée. C'est la même présence que depuis les inscriptions, pas un deuxième système de pointage. Si une personne aide sur plusieurs créneaux, son arrivée ici ne marque pas automatiquement tous les autres. Ce geste confirme une arrivée ; il ne démarre pas un chronomètre.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "dayof-refresh",
+      "audioSha256": "a4377ced2d02f3f9f58e110d4f225bc47a511da396b113f520843ef50814040f",
+      "recognized": "Avec actualiser, vous récupérez les informations enregistrées sur le serveur. La page indique l'heure de sa mise à jour. C'est utile quand plusieurs personnes accueillent les bénévoles avec des appareils différents. Dans cette démonstration, nous actualisons réellement la page. Nous ne prétendons pas qu'une autre personne vient de modifier une présence ailleurs. Relisez les noms et les compteurs avant d'agir, surtout quand une nouvelle relève arrive.",
+      "expected": "Avec Actualiser, vous récupérez les informations enregistrées sur le serveur. La page indique l'heure de sa mise à jour. C'est utile quand plusieurs personnes accueillent les bénévoles avec des appareils différents. Dans cette démonstration, nous actualisons réellement la page ; nous ne prétendons pas qu'une autre personne vient de modifier une présence ailleurs. Relisez les noms et les compteurs avant d'agir, surtout quand une nouvelle relève arrive.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "dayof-undo",
+      "audioSha256": "775ef105a0b983fb9a565ffc7ebc43f52aa1215ac8ae9b0e510c315206ddd398",
+      "recognized": "Une erreur de pointage ? Annuler la présence retire la marque, pas l'inscription. Vérifions après rechargement : Zoé conserve sa place et son arrivée n'est plus marquée. Si elle ne vient pas, marquer absent note cette absence. Le badge absent et le compteur le montrent. Annuler l'absence la remet parmi les personnes attendues. Marquons sa présence à nouveau. Si elle repart plus tôt, marquer parti avant la fin le note sur ce prénom. Le badge parti avant la fin et le compteur distinguent ce départ. Annuler le départ retrouve sa présence. Les quatre états sont distincts : pas encore marqué, présent, absent et parti avant la fin. Vérifiez toujours la personne et le créneau avant de corriger.",
+      "expected": "Une erreur de pointage ? Annuler la présence retire la marque, pas l'inscription. Vérifions après rechargement : Zoé conserve sa place, et son arrivée n'est plus marquée. Si elle ne vient pas, Marquer absent note cette absence. Le badge Absent et le compteur le montrent. Annuler l'absence la remet parmi les personnes attendues. Marquons sa présence à nouveau. Si elle repart plus tôt, Marquer parti avant la fin le note sur ce créneau. Le badge Parti avant la fin et le compteur distinguent ce départ. Annuler le départ retrouve sa présence. Les quatre états sont distincts : pas encore marqué, présent, absent et parti avant la fin. Vérifiez toujours la personne et le créneau avant de corriger.",
+      "wordErrorRate": 0.008547008547008548,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

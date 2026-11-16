@@ -3,6 +3,7 @@
 
 import type { PrismaClient } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
+import { PUBLIC_TRIGGERED, recipientWindowKey } from "../src/lib/notifications/send-limits"
 import { fullNameOf, surnameOf } from "../videos/lib/fixture-names"
 
 export async function seedVideoLastMinute(db: PrismaClient) {
@@ -24,6 +25,9 @@ export async function seedVideoLastMinute(db: PrismaClient) {
   // Reset only the observed loopback read/withdrawal/confirmation buckets in
   // this local test DB. Repeated rehearsals also exhaust confirmation reads.
   await db.rateLimit.deleteMany({ where: { key: { in: ["reg-token-delete:::1", "reg-token-read:::1", "waitlist-confirm:::1", "reg-token-delete:127.0.0.1", "reg-token-read:127.0.0.1", "waitlist-confirm:127.0.0.1"] } } })
+  // Fresh takes reuse only these reserved recipients; keep all real organization/global limits active.
+  const recipients = [...Array.from({ length: 6 }, (_, index) => `video.last-minute.person.${index}@example.org`), "video.last-minute.owner@example.org"]
+  await db.rateLimit.deleteMany({ where: { key: { in: recipients.flatMap(email => PUBLIC_TRIGGERED.map(kind => recipientWindowKey(email, kind))) } } })
   if (existing) await db.organization.delete({ where: { id: organizationId } })
   await db.volunteer.deleteMany({ where: { id: { in: fixtureIds } } })
   // Organization deletion retains administrators with a null organizationId.

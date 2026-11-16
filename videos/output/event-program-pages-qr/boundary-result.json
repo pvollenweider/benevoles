@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous avez un programme corrigé, des pages pratiques lisibles et deux",
+  "windowStart": 128.38400000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 31,
+    "wordsHeard": "Vous avez un programme corrigé des pages pratiques lisibles et deux"
+  },
+  "onset": 159.38400000000001,
+  "proposedCut": 159.236271,
+  "note": "Proposal only; recut then independently audit before capture"
+}

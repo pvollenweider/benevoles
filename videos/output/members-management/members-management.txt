@@ -1,6 +1,6 @@
 Construire et entretenir sa liste de membres
 
-La liste des membres rassemble les personnes que votre association souhaite retrouver facilement. Ici, soixante fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées. Ajouter un membre ne l'inscrit pas automatiquement à une fête. Sa fiche et ses inscriptions sont deux choses différentes. Voyons comment garder cette liste utile et à jour.
+La liste des membres rassemble les personnes que votre association souhaite retrouver facilement. Ici, plusieurs dizaines de fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées. Ajouter un membre ne l'inscrit pas automatiquement à une fête. Sa fiche et ses inscriptions sont deux choses différentes. Voyons comment garder cette liste utile et à jour.
 
 Pour ajouter une personne, cliquez sur Nouveau membre. Saisissez son prénom et son nom, puis son email et son téléphone si vous les connaissez. Nous ajoutons Maya Berger avec des coordonnées de démonstration. Prenez le temps de vérifier l'adresse avant de créer la fiche : une faute de frappe peut empêcher les prochains messages d'arriver. Après la création, Maya apparaît dans la liste.
 
@@ -10,9 +10,9 @@ Les disponibilités donnent une indication générale : matin, après-midi, soir
 
 Une personne peut avoir une fiche sans adresse email. Nous créons René Aubert avec son téléphone seulement. Vous pouvez ainsi garder un contact et organiser son inscription manuellement. En revanche, le système ne peut pas lui envoyer un email tant que l'adresse manque. Prévoyez avec lui une autre manière de communiquer les horaires et les changements.
 
-La recherchez aide à retrouver une personne par son nom, son email ou son téléphone. Les accents ne doivent pas compliquer la recherche. Attention aussi aux homonymes : ici, deux Stéphane Favre ont des coordonnées différentes. Le même prénom et le même nom ne prouvent pas qu'il s'agit d'un doublon. Vérifiez le contact et les inscriptions avant de modifier une fiche.
+La recherche aide à retrouver une personne par son nom, son email ou son téléphone. Les accents ne doivent pas compliquer la recherche. Attention aussi aux homonymes : ici, deux Stéphane Favre ont des coordonnées différentes. Le même prénom et le même nom ne prouvent pas qu'il s'agit d'un doublon. Vérifiez le contact et les inscriptions avant de modifier une fiche.
 
-Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes. Les en-têtes permettent aussi de trier la liste. Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent. Les heures attestées comptent les créneaux passés avec une présence enregistrée, sans chronométrer le travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.
+Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes. Les en-têtes permettent aussi de trier la liste. Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent. Les heures attestées comptent les créneaux passés avec une présence enregistrée, sauf les participations terminées avant la fin. Ces départs restent enregistrés, mais n'attestent aucune heure : leur durée est inconnue. Ce n'est pas un chronométrage du travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.
 
 Pour mettre une fiche de côté, vous pouvez la désactiver. Ici, Maya n'a aucune inscription : nous confirmons sa désactivation, puis elle disparaît de la liste habituelle. Avec Inclure inactifs, nous la retrouvons. Dans Modifier, la case Membre actif permet de la réactiver. Après enregistrement, elle revient parmi les membres affichés normalement.
 

@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:54:47.278Z",
-  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
-  "promptSha256": "1cefa6888735b83128ee7ebbe4d523e506ec47d5848def0d93b23d19d2242a93",
-  "clipSha256": "d7a9f6b4e0839fe8acab1cf6bbd336b3798916bcb39f660022e0b4e9d71101f1",
+  "reviewedAt": "2026-11-16T20:14:54.398Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
+  "promptSha256": "308954e0b025867466f44d3868217b7c77cdcd1dc5f04a787906f7d0952348d2",
+  "clipSha256": "5080e1c8a1114369847760c6834f5f3443aa61a690baa0f474b4707231f8ba12",
   "scene": "event-switch",
   "review": {
     "heardOpening": "Les trois cases que nous venons de voir",
     "checkpoints": [
       {
-        "spokenSeconds": 4,
-        "spoken": "Dans le formulaire de l'événement, vous pouvez aussi couper seulement ses rappels automatiques",
-        "visibleSeconds": 1.5,
-        "visible": "Défilement vers la section montrant la case Rappels automatiques dans les paramètres de l'événement",
+        "spokenSeconds": 8.8,
+        "spoken": "Décochons Rappels automatiques et attendons l'enregistrement",
+        "visibleSeconds": 10.2,
+        "visible": "La case « Rappels automatiques » est décochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "Décochons Rappels automatiques et attendons l'enregistrement",
-        "visibleSeconds": 10,
-        "visible": "La case Rappels automatiques reste cochée en continu, aucun clic n'est réalisé",
-        "sync": "missing",
-        "severity": "major"
+        "spokenSeconds": 13,
+        "spoken": "Réactivons-les pour poursuivre notre exemple",
+        "visibleSeconds": 13.2,
+        "visible": "La case « Rappels automatiques » est recochée",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 18,
+        "spokenSeconds": 18.2,
         "spoken": "Regardons maintenant notre événement en brouillon",
         "visibleSeconds": 18,
-        "visible": "Transition vers la fiche de l'événement 'Atelier en brouillon'",
+        "visible": "Affichage de l'aperçu de l'événement « Atelier en brouillon » avec le bouton Publier",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "Entre 00:08 et 00:14, l'action annoncée de décocher puis réactiver la case 'Rappels automatiques' n'est pas réalisée à l'écran : la case reste cochée sans aucune interaction."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, sans parasite sonore."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

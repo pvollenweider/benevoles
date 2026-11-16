@@ -1,45 +1,77 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:23:37.678Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
-  "promptSha256": "4adf127226d4461970a4d0bda6f2e976c8207766c5a480d512e0d04c20dc2ea4",
-  "clipSha256": "130150a37dbc40920cbfab9331cd9c45dbb99fab329a87bb900e68047cdd341a",
+  "reviewedAt": "2026-11-16T19:49:38.049Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "586ff0968cadcc9e08e2169d40f29d769b6b39eb1eeb762faadf097f9124b68d",
+  "clipSha256": "d226fdf6af9e3b690055d9dc6cf19c39b656585f157244b7232a1afe53097293",
   "scene": "dayof-undo",
   "review": {
     "heardOpening": "Une erreur de pointage ?",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2,
         "spoken": "Annuler la présence retire la marque",
-        "visibleSeconds": 2.1,
-        "visible": "Clic sur le bouton 'Annuler la présence' pour Zoé Exemple, le statut passe à 'Pas encore marqué'",
+        "visibleSeconds": 2.3,
+        "visible": "Clic sur « Annuler la présence » sous Zoé Papadopoulos, qui repasse aux boutons « Marquer présent » et « Marquer absent »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 5.5,
         "spoken": "Vérifions après rechargement",
-        "visibleSeconds": 7,
-        "visible": "Aucun rechargement de la page n'est effectué (le bouton Actualiser n'est pas cliqué)",
+        "visibleSeconds": 6,
+        "visible": "Aucun rechargement de la page n'est effectué à l'écran",
         "sync": "missing",
         "severity": "minor"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Zoé conserve sa place, et son arrivée n'est plus marquée",
-        "visibleSeconds": 8,
-        "visible": "Zoé Exemple apparaît toujours inscrite sur le créneau avec le statut 'Pas encore marqué' et le bouton 'Marquer présent'",
+        "spokenSeconds": 10.5,
+        "spoken": "Marquer absent note cette absence",
+        "visibleSeconds": 10.8,
+        "visible": "Clic sur « Marquer absent » sous Zoé Papadopoulos, affichant le badge « Absent »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Annuler l'absence la remet parmi les personnes attendues",
+        "visibleSeconds": 16.8,
+        "visible": "Clic sur « Annuler l'absence », restaurant les boutons de pointage initiaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19,
+        "spoken": "Marquons sa présence à nouveau",
+        "visibleSeconds": 19.4,
+        "visible": "Clic sur « Marquer présent » pour Zoé Papadopoulos",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "Marquer parti avant la fin le note sur ce créneau",
+        "visibleSeconds": 21.8,
+        "visible": "Clic sur « Marquer parti avant la fin », le badge correspondant apparaît",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.3,
+        "spoken": "Annuler le départ retrouve sa présence",
+        "visibleSeconds": 29.8,
+        "visible": "Clic sur « Annuler le départ », rétablissant l'état présent avec les options associées",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "À 00:06, la voix annonce une vérification 'après rechargement', mais aucun rechargement ni clic sur 'Actualiser' n'a lieu à l'écran."
+      "00:05 - La voix annonce une vérification « après rechargement », mais la page n'est jamais actualisée."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, avec un fond musical léger."
+      "observation": "Voix de synthèse féminine fluide, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

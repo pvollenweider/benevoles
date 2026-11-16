@@ -1,20 +1,20 @@
 {
   "slug": "volunteer-confirmation-errors",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-12T01:00:44.307Z",
+  "recordedAt": "2026-11-16T21:08:45.262Z",
   "video": "capture.webm",
   "product": {
-    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
-    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
-    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
-    "buildId": "RnrUED_grQJ_YgINLz6Tf",
-    "snapshot": "/tmp/benevoles-video-production.batch9",
-    "builtAt": "2026-10-12T00:53:50.007Z"
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
-    "organization": "default",
+    "organization": "formation-erreurs",
     "scenario": "VOLUNTEER_CONFIRMATION_ERRORS",
     "viewport": {
       "width": 1280,
@@ -26,599 +26,427 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 22272
+      "atMs": 20244
     },
     {
       "kind": "click",
-      "atMs": 23072
+      "atMs": 21061
     },
     {
       "kind": "click",
-      "atMs": 23855
-    },
-    {
-      "kind": "key",
-      "atMs": 24163
-    },
-    {
-      "kind": "key",
-      "atMs": 24278
-    },
-    {
-      "kind": "key",
-      "atMs": 24393
-    },
-    {
-      "kind": "key",
-      "atMs": 24507
+      "atMs": 21876
     },
     {
       "kind": "click",
-      "atMs": 25089
-    },
-    {
-      "kind": "key",
-      "atMs": 25395
-    },
-    {
-      "kind": "key",
-      "atMs": 25509
-    },
-    {
-      "kind": "key",
-      "atMs": 25622
-    },
-    {
-      "kind": "key",
-      "atMs": 25736
-    },
-    {
-      "kind": "key",
-      "atMs": 25849
-    },
-    {
-      "kind": "key",
-      "atMs": 25964
-    },
-    {
-      "kind": "key",
-      "atMs": 26080
+      "atMs": 22692
     },
     {
       "kind": "click",
-      "atMs": 26655
-    },
-    {
-      "kind": "key",
-      "atMs": 26962
-    },
-    {
-      "kind": "key",
-      "atMs": 27076
-    },
-    {
-      "kind": "key",
-      "atMs": 27191
-    },
-    {
-      "kind": "key",
-      "atMs": 27306
-    },
-    {
-      "kind": "key",
-      "atMs": 27424
-    },
-    {
-      "kind": "key",
-      "atMs": 27542
-    },
-    {
-      "kind": "key",
-      "atMs": 27660
-    },
-    {
-      "kind": "key",
-      "atMs": 27777
-    },
-    {
-      "kind": "key",
-      "atMs": 27895
-    },
-    {
-      "kind": "key",
-      "atMs": 28016
-    },
-    {
-      "kind": "key",
-      "atMs": 28129
-    },
-    {
-      "kind": "key",
-      "atMs": 28248
-    },
-    {
-      "kind": "key",
-      "atMs": 28366
-    },
-    {
-      "kind": "key",
-      "atMs": 28479
-    },
-    {
-      "kind": "key",
-      "atMs": 28598
-    },
-    {
-      "kind": "key",
-      "atMs": 28716
-    },
-    {
-      "kind": "key",
-      "atMs": 28834
-    },
-    {
-      "kind": "key",
-      "atMs": 28954
-    },
-    {
-      "kind": "key",
-      "atMs": 29072
-    },
-    {
-      "kind": "key",
-      "atMs": 29191
-    },
-    {
-      "kind": "key",
-      "atMs": 29309
-    },
-    {
-      "kind": "key",
-      "atMs": 29429
-    },
-    {
-      "kind": "key",
-      "atMs": 29548
-    },
-    {
-      "kind": "key",
-      "atMs": 29664
-    },
-    {
-      "kind": "key",
-      "atMs": 29783
-    },
-    {
-      "kind": "key",
-      "atMs": 29902
-    },
-    {
-      "kind": "key",
-      "atMs": 30022
-    },
-    {
-      "kind": "key",
-      "atMs": 30135
-    },
-    {
-      "kind": "key",
-      "atMs": 30256
+      "atMs": 23492
     },
     {
       "kind": "click",
-      "atMs": 30838
-    },
-    {
-      "kind": "key",
-      "atMs": 31145
-    },
-    {
-      "kind": "key",
-      "atMs": 31259
-    },
-    {
-      "kind": "key",
-      "atMs": 31374
-    },
-    {
-      "kind": "key",
-      "atMs": 31488
-    },
-    {
-      "kind": "key",
-      "atMs": 31602
-    },
-    {
-      "kind": "key",
-      "atMs": 31717
-    },
-    {
-      "kind": "key",
-      "atMs": 31832
-    },
-    {
-      "kind": "key",
-      "atMs": 31946
-    },
-    {
-      "kind": "key",
-      "atMs": 32063
-    },
-    {
-      "kind": "key",
-      "atMs": 32191
-    },
-    {
-      "kind": "key",
-      "atMs": 32312
-    },
-    {
-      "kind": "key",
-      "atMs": 32431
-    },
-    {
-      "kind": "key",
-      "atMs": 32549
+      "atMs": 24292
     },
     {
       "kind": "click",
-      "atMs": 33154
+      "atMs": 25159
     },
     {
       "kind": "click",
-      "atMs": 33937
+      "atMs": 25959
     },
     {
       "kind": "click",
-      "atMs": 46788
+      "atMs": 46042
     },
     {
       "kind": "click",
-      "atMs": 53905
+      "atMs": 52542
     },
     {
       "kind": "click",
-      "atMs": 75170
+      "atMs": 73274
     },
     {
       "kind": "click",
-      "atMs": 91352
+      "atMs": 89457
     },
     {
       "kind": "click",
-      "atMs": 102952
+      "atMs": 101355
     },
     {
       "kind": "click",
-      "atMs": 164618
+      "atMs": 160822
     },
     {
       "kind": "click",
-      "atMs": 165401
+      "atMs": 161621
     },
     {
       "kind": "click",
-      "atMs": 166183
+      "atMs": 162421
     },
     {
       "kind": "click",
-      "atMs": 166967
+      "atMs": 163219
     },
     {
       "kind": "click",
-      "atMs": 167751
+      "atMs": 164004
     },
     {
       "kind": "click",
-      "atMs": 168534
+      "atMs": 164804
     },
     {
       "kind": "click",
-      "atMs": 169315
+      "atMs": 165602
     },
     {
       "kind": "click",
-      "atMs": 170100
+      "atMs": 166385
     },
     {
       "kind": "click",
-      "atMs": 170916
+      "atMs": 167219
     },
     {
       "kind": "click",
-      "atMs": 193900
+      "atMs": 192555
     },
     {
       "kind": "click",
-      "atMs": 194682
+      "atMs": 193369
     },
     {
       "kind": "click",
-      "atMs": 195465
+      "atMs": 194186
     },
     {
       "kind": "click",
-      "atMs": 196248
+      "atMs": 194986
     },
     {
       "kind": "click",
-      "atMs": 197033
+      "atMs": 195786
     },
     {
       "kind": "click",
-      "atMs": 197831
+      "atMs": 196586
     },
     {
       "kind": "click",
-      "atMs": 198615
+      "atMs": 197368
     },
     {
       "kind": "click",
-      "atMs": 199399
+      "atMs": 198152
     },
     {
       "kind": "click",
-      "atMs": 206265
+      "atMs": 198936
     },
     {
       "kind": "click",
-      "atMs": 211780
+      "atMs": 206653
     },
     {
       "kind": "click",
-      "atMs": 234714
+      "atMs": 229202
     },
     {
       "kind": "click",
-      "atMs": 235496
+      "atMs": 230011
     },
     {
       "kind": "click",
-      "atMs": 236281
+      "atMs": 230801
     },
     {
       "kind": "click",
-      "atMs": 237064
+      "atMs": 231617
     },
     {
       "kind": "click",
-      "atMs": 237847
+      "atMs": 232400
     },
     {
       "kind": "click",
-      "atMs": 238646
+      "atMs": 233650
     },
     {
       "kind": "click",
-      "atMs": 239430
+      "atMs": 234434
     },
     {
       "kind": "click",
-      "atMs": 240213
+      "atMs": 235221
     },
     {
       "kind": "click",
-      "atMs": 240998
+      "atMs": 236018
     },
     {
       "kind": "click",
-      "atMs": 254964
+      "atMs": 251368
     },
     {
       "kind": "click",
-      "atMs": 255747
+      "atMs": 252167
     },
     {
       "kind": "click",
-      "atMs": 258580
+      "atMs": 255632
     },
     {
       "kind": "click",
-      "atMs": 259362
+      "atMs": 256433
     },
     {
       "kind": "click",
-      "atMs": 260146
+      "atMs": 257233
     },
     {
       "kind": "click",
-      "atMs": 260946
+      "atMs": 258017
     },
     {
       "kind": "click",
-      "atMs": 271219
+      "atMs": 270088
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 42,
-      "endMs": 19515
+      "startMs": 20,
+      "endMs": 17487
     },
     {
       "id": "form",
-      "startMs": 21776,
-      "endMs": 40968
+      "startMs": 19750,
+      "endMs": 39619
     },
     {
       "id": "validation",
-      "startMs": 43232,
-      "endMs": 63005
+      "startMs": 41879,
+      "endMs": 61504
     },
     {
       "id": "capacity",
-      "startMs": 65268,
-      "endMs": 88553
+      "startMs": 63764,
+      "endMs": 86649
     },
     {
       "id": "network",
-      "startMs": 90815,
-      "endMs": 109875
+      "startMs": 88911,
+      "endMs": 108169
     },
     {
       "id": "success",
-      "startMs": 112138,
-      "endMs": 131656
+      "startMs": 110431,
+      "endMs": 131061
     },
     {
       "id": "email",
-      "startMs": 133916,
-      "endMs": 155283
+      "startMs": 133321,
+      "endMs": 152275
     },
     {
       "id": "overlap",
-      "startMs": 157548,
-      "endMs": 187926
+      "startMs": 154534,
+      "endMs": 187229
     },
     {
       "id": "response-loss",
-      "startMs": 190189,
-      "endMs": 228543
+      "startMs": 189496,
+      "endMs": 222397
     },
     {
       "id": "invitation-success",
-      "startMs": 230808,
-      "endMs": 276612
+      "startMs": 224658,
+      "endMs": 275819
     },
     {
       "id": "result",
-      "startMs": 278875,
-      "endMs": 308093
+      "startMs": 278077,
+      "endMs": 310209
     }
   ],
   "anchors": [
     {
+      "segmentId": "form",
+      "phrase": "puis acceptons la convention",
+      "startMs": 2366,
+      "endMs": 10317,
+      "cueMs": 24669
+    },
+    {
+      "segmentId": "form",
+      "phrase": "Avant d’envoyer, relis toujours",
+      "startMs": 10450,
+      "endMs": 12668,
+      "cueMs": 30203
+    },
+    {
       "segmentId": "validation",
       "phrase": "Confirmer affiche la question à",
-      "startMs": 3089,
-      "endMs": 7377,
-      "cueMs": 46323
+      "startMs": 3670,
+      "endMs": 7548,
+      "cueMs": 45551
     },
     {
       "segmentId": "validation",
       "phrase": "choisis une taille, puis tu",
-      "startMs": 10187,
-      "endMs": 12176,
-      "cueMs": 53420
+      "startMs": 10182,
+      "endMs": 11067,
+      "cueMs": 52062
     },
     {
       "segmentId": "capacity",
       "phrase": "La confirmation répond Ta sélection",
-      "startMs": 9424,
-      "endMs": 12424,
-      "cueMs": 74695
+      "startMs": 9042,
+      "endMs": 12432,
+      "cueMs": 72806
     },
     {
       "segmentId": "capacity",
       "phrase": "Une place visible quelques minutes",
-      "startMs": 17265,
-      "endMs": 22861,
-      "cueMs": 82535
+      "startMs": 17234,
+      "endMs": 22402,
+      "cueMs": 81000
     },
     {
       "segmentId": "network",
       "phrase": "Après retour de la connexion,",
-      "startMs": 11663,
-      "endMs": 15589,
-      "cueMs": 102480
+      "startMs": 11978,
+      "endMs": 15821,
+      "cueMs": 100891
     },
     {
       "segmentId": "success",
-      "phrase": "il n’est pas affiché simplement",
-      "startMs": 11779,
-      "endMs": 14734,
-      "cueMs": 123917
+      "phrase": "n'affiche pas le lien de gestion",
+      "startMs": 10746,
+      "endMs": 14633,
+      "cueMs": 121177
     },
     {
       "segmentId": "overlap",
       "phrase": "Essayons le vestiaire",
-      "startMs": 6580,
-      "endMs": 10095,
-      "cueMs": 164130
+      "startMs": 5781,
+      "endMs": 9291,
+      "cueMs": 160317
     },
     {
       "segmentId": "overlap",
       "phrase": "Remplissons le formulaire et confirmons.",
-      "startMs": 10509,
-      "endMs": 12594,
-      "cueMs": 170436
+      "startMs": 9619,
+      "endMs": 11684,
+      "cueMs": 166719
     },
     {
       "segmentId": "overlap",
-      "phrase": "Pour continuer, reviens au planning",
-      "startMs": 25579,
-      "endMs": 29950,
-      "cueMs": 183129
+      "phrase": "Aucune nouvelle inscription n'a été ajoutée",
+      "startMs": 20788,
+      "endMs": 22557,
+      "cueMs": 175325
+    },
+    {
+      "segmentId": "overlap",
+      "phrase": "Ouvrons sa boîte",
+      "startMs": 23222,
+      "endMs": 24019,
+      "cueMs": 177759
     },
     {
       "segmentId": "response-loss",
       "phrase": "Nicolas choisit la logistique",
-      "startMs": 3229,
-      "endMs": 5996,
-      "cueMs": 193419
+      "startMs": 2563,
+      "endMs": 4039,
+      "cueMs": 192061
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Cette fois, la requête arrive réellement",
+      "startMs": 4315,
+      "endMs": 7843,
+      "cueMs": 198459
     },
     {
       "segmentId": "response-loss",
       "phrase": "Le formulaire affiche Connexion interrompue",
-      "startMs": 15585,
-      "endMs": 20970,
-      "cueMs": 205775
+      "startMs": 11625,
+      "endMs": 16234,
+      "cueMs": 201123
     },
     {
       "segmentId": "response-loss",
       "phrase": "Rétablissons la connexion et confirmons",
-      "startMs": 21126,
-      "endMs": 22696,
-      "cueMs": 211316
+      "startMs": 16661,
+      "endMs": 19330,
+      "cueMs": 206159
     },
     {
       "segmentId": "response-loss",
       "phrase": "Vérifions côté organisation",
-      "startMs": 28916,
-      "endMs": 31203,
-      "cueMs": 219106
+      "startMs": 26135,
+      "endMs": 27850,
+      "cueMs": 215632
     },
     {
       "segmentId": "invitation-success",
       "phrase": "Zoé choisit le vestiaire",
-      "startMs": 3413,
-      "endMs": 6211,
-      "cueMs": 234224
+      "startMs": 4037,
+      "endMs": 8217,
+      "cueMs": 228696
     },
     {
       "segmentId": "invitation-success",
       "phrase": "Après ses informations et les consentements",
-      "startMs": 6646,
-      "endMs": 10509,
-      "cueMs": 238157
+      "startMs": 8523,
+      "endMs": 12223,
+      "cueMs": 233183
     },
     {
       "segmentId": "invitation-success",
       "phrase": "Aline a ensuite reçu une",
-      "startMs": 18194,
-      "endMs": 22094,
-      "cueMs": 249004
+      "startMs": 20451,
+      "endMs": 25035,
+      "cueMs": 245110
     },
     {
       "segmentId": "invitation-success",
       "phrase": "Ouvrons ce lien pour choisir la logistique",
-      "startMs": 22452,
-      "endMs": 24727,
-      "cueMs": 253261
+      "startMs": 25566,
+      "endMs": 28403,
+      "cueMs": 250224
     },
     {
       "segmentId": "invitation-success",
       "phrase": "vérifions-les, choisissons sa taille",
-      "startMs": 27292,
-      "endMs": 31681,
-      "cueMs": 258102
+      "startMs": 30508,
+      "endMs": 35982,
+      "cueMs": 255168
     },
     {
       "segmentId": "invitation-success",
       "phrase": "Aline retrouve ses deux créneaux",
-      "startMs": 39932,
-      "endMs": 41632,
-      "cueMs": 270741
+      "startMs": 44964,
+      "endMs": 46424,
+      "cueMs": 269623
     }
-  ]
+  ],
+  "mailpitFocusFrames": [
+    {
+      "startMs": 133440,
+      "endMs": 154640
+    },
+    {
+      "startMs": 177840,
+      "endMs": 189600
+    }
+  ],
+  "mailpitHolds": [],
+  "mailpitBodyOnly": true
 }

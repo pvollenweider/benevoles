@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T15:13:58.396Z",
-  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
-  "promptSha256": "1793e3390f50d8cd2b51032b8ce2e16c3a5542b89ca4f31056abcca60d3f414a",
-  "clipSha256": "c6fc37d664da47f824c101a9142a9111c55d66c7832216a7ae3d55ba659cd921",
+  "reviewedAt": "2026-11-16T20:16:04.940Z",
+  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "promptSha256": "16fbb0e697ea9b35d474d1e6a4af14c0725321ccc531a6d7c3291bcaa8d7627c",
+  "clipSha256": "3176dc8e6152c658aa135c341187c317bafa0af01c89d4bf0e793f2a64ea910b",
   "scene": "reply-to",
   "review": {
-    "heardOpening": "L'adresse de réponse indique où arrive un message",
+    "heardOpening": "L'adresse de réponse",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme.",
-        "visibleSeconds": 0,
-        "visible": "Page Paramètres > Emails affichant la section 'Réglages des emails' avec le champ 'Adresse de réponse'",
+        "spoken": "L'adresse de réponse indique où arrive un message",
+        "visibleSeconds": 0.5,
+        "visible": "Champ Adresse de réponse visible dans les paramètres d'emails",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.7,
-        "spoken": "Saisissons benevoles arobase example point org.",
-        "visibleSeconds": 6.3,
-        "visible": "Saisie de l'adresse benevoles@example.org dans le champ Adresse de réponse",
+        "spokenSeconds": 6.2,
+        "spoken": "Saisissons benevoles arobase example point org",
+        "visibleSeconds": 6.6,
+        "visible": "Saisie de benevoles@example.org dans le champ Adresse de réponse",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "Si le champ reste vide, l’adresse par défaut est utilisée.",
-        "visibleSeconds": 9.2,
-        "visible": "Écran stable affichant le champ renseigné et le texte explicatif d'aide sous le champ",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12.8,
-        "spoken": "Cette adresse apparaît aussi sur la page personnelle des bénévoles.",
-        "visibleSeconds": 12.8,
-        "visible": "Écran stable sur la page des réglages d'emails mentionnant cette règle dans le texte d'aide",
+        "spokenSeconds": 10.5,
+        "spoken": "Si le champ reste vide, l’adresse par défaut est utilisée",
+        "visibleSeconds": 10.5,
+        "visible": "Texte d'aide sous le champ précisant le comportement si laissé vide",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et posée, bien synchronisée avec la démonstration à l'écran."
+      "observation": "Voix féminine naturelle, claire et rythmée, bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

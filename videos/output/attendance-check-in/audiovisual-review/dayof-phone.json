@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:23:27.160Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
+  "reviewedAt": "2026-11-16T19:49:11.440Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
   "promptSha256": "b2bfd779867dcf8c9ce5fe0e75e86b072e111a19a5df0b0a1abc390247f39633",
-  "clipSha256": "c8b58dfafc34ebe6c717ca06f64f2e2f8b40b64f5672b9964ef616dbb41b5bf6",
+  "clipSha256": "7290db8d79a04e4294850cd217062cab68001fcbf2bde4c6ec02ec1a8a086a1e",
   "scene": "dayof-phone",
   "review": {
     "heardOpening": "Quand un téléphone est renseigné",
     "checkpoints": [
       {
-        "spokenSeconds": 5.8,
-        "spoken": "Voici celui de Zoé.",
-        "visibleSeconds": 0,
-        "visible": "La fiche de Zoé Exemple avec son lien de numéro de téléphone (079 000 00 01) est visible à l'écran.",
+        "spokenSeconds": 4.8,
+        "spoken": "Voici celui de Zoé",
+        "visibleSeconds": 4.8,
+        "visible": "La fiche de Zoé Papadopoulos avec le numéro 079 000 00 01 sous forme de lien est affichée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Le contact du créneau peut aussi figurer sur sa carte.",
-        "visibleSeconds": 0,
-        "visible": "La mention « Contact du créneau : Elodie Exemple » avec son numéro apparaît sur la carte Buvette.",
+        "spokenSeconds": 6.8,
+        "spoken": "Le contact du créneau peut aussi figurer sur sa carte",
+        "visibleSeconds": 6.8,
+        "visible": "L'encadré du créneau Buvette affiche la mention Contact du créneau : Élodie Novikova avec son numéro cliquable",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
-        "spoken": "Cette page garde seulement les informations utiles sur place : les noms, les horaires, le téléphone et la présence.",
-        "visibleSeconds": 0,
-        "visible": "L'interface liste les noms, plages horaires, liens téléphoniques et boutons de pointage de présence.",
+        "spokenSeconds": 13.2,
+        "spoken": "Cette page garde seulement les informations utiles sur place",
+        "visibleSeconds": 13.2,
+        "visible": "L'écran présente une vue d'ensemble épurée avec noms, horaires, statuts de présence et téléphones",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, sans bruits parasites."
+      "observation": "Voix féminine calme, claire et bien articulée, avec un débit adapté à la formation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

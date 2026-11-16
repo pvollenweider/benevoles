@@ -142,9 +142,10 @@
         "organisateur"
       ],
       "feature": "Réglages des emails",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "EVENT_CREATE_BLANK",
@@ -291,9 +292,10 @@
         "organisateur"
       ],
       "feature": "Pages d'information et QR code",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "EVENT_MILESTONES",
@@ -413,9 +415,10 @@
         "organisateur"
       ],
       "feature": "Créneaux : création et détail",
-      "updatedAt": "2026-10-16",
-      "revision": 5,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 6,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "SHIFT_CREATE_SERIES",
@@ -438,9 +441,10 @@
         "organisateur"
       ],
       "feature": "Séries de créneaux",
-      "updatedAt": "2026-10-16",
-      "revision": 6,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 7,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "SHIFT_RECURRENCE",
@@ -488,9 +492,10 @@
         "organisateur"
       ],
       "feature": "Frise du planning",
-      "updatedAt": "2026-10-16",
-      "revision": 5,
-      "level": "avance"
+      "updatedAt": "2026-11-16",
+      "revision": 6,
+      "level": "avance",
+      "updated": "2026-11-16"
     },
     {
       "id": "SHIFT_NIGHT_DST",
@@ -839,9 +844,10 @@
         "benevole"
       ],
       "feature": "Inscription bénévole",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
-      "level": "decouverte"
+      "updatedAt": "2026-11-16",
+      "revision": 4,
+      "level": "decouverte",
+      "updated": "2026-11-16"
     },
     {
       "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
@@ -885,9 +891,10 @@
         "organisateur"
       ],
       "feature": "Vue d'ensemble de l'administration",
-      "updatedAt": "2026-10-16",
-      "revision": 5,
-      "level": "decouverte"
+      "updatedAt": "2026-11-16",
+      "revision": 6,
+      "level": "decouverte",
+      "updated": "2026-11-16"
     },
     {
       "id": "REGISTRATION_MONITOR_FOLLOWUP",
@@ -1009,11 +1016,11 @@
         "organisateur"
       ],
       "feature": "Secteurs",
-      "updatedAt": "2026-11-10",
-      "revision": 2,
+      "updatedAt": "2026-11-16",
+      "revision": 3,
       "level": "avance",
       "added": "2026-10-29",
-      "updated": "2026-11-10"
+      "updated": "2026-11-16"
     },
     {
       "id": "SHIFT_SWAPS",
@@ -1145,9 +1152,10 @@
         "organisateur"
       ],
       "feature": "Liste des membres",
-      "updatedAt": "2026-10-16",
-      "revision": 7,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 8,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "DATA_EXPORTS_ARCHIVES",
@@ -1245,9 +1253,35 @@
         "organisateur"
       ],
       "feature": "Pointage des présences",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
+    },
+    {
+      "id": "FRONT_DESK_ACCESS",
+      "manifest": "front-desk-access",
+      "category": "registrations-followup",
+      "tags": [
+        "accueil",
+        "jour-j",
+        "présences",
+        "accès"
+      ],
+      "published": true,
+      "seedScenario": "front-desk-access",
+      "themes": [
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Accès accueil limité à un événement",
+      "updatedAt": "2026-11-16",
+      "revision": 1,
+      "level": "essentiel",
+      "updated": "2026-11-16",
+      "added": "2026-11-16"
     },
     {
       "id": "EVENT_REPORTS",
@@ -1317,9 +1351,10 @@
         "organisateur"
       ],
       "feature": "Rappels et messages de changement",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "TARGETED_MESSAGES",
@@ -1540,9 +1575,10 @@
         "organisateur"
       ],
       "feature": "Heures de bénévolat et attestation",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 4,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "ACCESSIBILITY_KEYBOARD_DISPLAY",
@@ -1638,10 +1674,10 @@
         "organisateur"
       ],
       "feature": "Liens publics, personnels et de responsables",
-      "updatedAt": "2026-10-29",
-      "revision": 5,
+      "updatedAt": "2026-11-16",
+      "revision": 6,
       "level": "essentiel",
-      "updated": "2026-10-29"
+      "updated": "2026-11-16"
     },
     {
       "id": "LAST_MINUTE_CHANGES",
@@ -1691,10 +1727,11 @@
         "benevole"
       ],
       "feature": "Qui est inscrit",
-      "updatedAt": "2026-10-22",
-      "revision": 2,
+      "updatedAt": "2026-11-16",
+      "revision": 3,
       "level": "essentiel",
-      "added": "2026-10-21"
+      "added": "2026-10-21",
+      "updated": "2026-11-16"
     }
   ]
 }

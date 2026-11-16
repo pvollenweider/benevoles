@@ -91,3 +91,7 @@ Révision du 2026-10-16 — une seule reprise autorisée, correction de repère 
 État du lot 22-8 : READY. Nouvelle prise sur le build `1InIy4bsCn5pPSXguvg5N`, 365.96 secondes ; l’écran de confirmation actuel est vérifié, le précédent défaut 404 ne se reproduit pas. Audio Kore restauré identique au texte et aux empreintes de son audit indépendant. ASR multilingue du MP4 entier, sous-titres, dix chapitres et actions, musique et sons de saisie contrôlés. Zéro « tu » adressé au public dans le VTT ; les noms de panneaux cités restent littéraux. Rien publié.
 
 La reprise autorisée cadre bien la colonne « Notes » sur sa phrase : [preuve du MP4 final](../evidence/privacy-personal-links/batch22-csv-notes.png).
+
+## Lot 41 — 16 novembre 2026
+
+Nouvelle narration Kore intégrale, une seule identité vocale pour les dix chapitres. Nouvelle capture du titre de demande reçue et des conditions datées du 15 novembre 2026. Aucun audio historique réutilisé.

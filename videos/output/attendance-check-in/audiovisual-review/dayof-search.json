@@ -1,43 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:23:24.208Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
+  "reviewedAt": "2026-11-16T19:49:21.074Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
   "promptSha256": "db531a1f232c05674f5b8608a889555acb3d95aa293ee4e884c8a8fa931a9eb7",
-  "clipSha256": "d553276092f0ff2cce597ead162e8d688328d4c23a641eccfedf6482f4cf192c",
+  "clipSha256": "e98c9a5031d5dba03e934d1c5ad1573d56e84fb83380c83ad559613897194c63",
   "scene": "dayof-search",
   "review": {
-    "heardOpening": "Vous cherchez Zoé ?",
+    "heardOpening": "Vous cherchez Zoé",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
-        "spoken": "Tapez son prénom sans accent : sa ligne reste facile à retrouver.",
-        "visibleSeconds": 1,
-        "visible": "Le prénom « zoe » est saisi dans la barre de recherche et la fiche correspondante s'affiche.",
+        "spokenSeconds": 1.5,
+        "spoken": "Tapez son prénom sans accent",
+        "visibleSeconds": 5.6,
+        "visible": "Le texte « zoe » n'apparaît dans la barre de recherche qu'à 05.6s après un défilement dans la liste",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "chercher un poste, comme Accueil",
+        "visibleSeconds": 7.8,
+        "visible": "« Accueil » est saisi dans le champ de recherche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
-        "spoken": "Vous pouvez aussi chercher un poste, comme Accueil.",
-        "visibleSeconds": 8,
-        "visible": "Le mot « Accueil » est saisi dans le champ de recherche filtrant les résultats.",
+        "spokenSeconds": 13,
+        "spoken": "Effaçons la recherche",
+        "visibleSeconds": 13.6,
+        "visible": "Clic sur la croix pour effacer le champ de recherche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "Effaçons la recherche pour retrouver le planning du moment.",
-        "visibleSeconds": 14,
-        "visible": "La recherche est effacée et la liste complète du planning réapparaît.",
+        "spokenSeconds": 16.5,
+        "spoken": "Cette page montre les inscriptions confirmées",
+        "visibleSeconds": 16.5,
+        "visible": "Vue Jour J réinitialisée affichant les créneaux et inscriptions",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "Désynchronisation à 00:01 : la voix demande de taper le prénom sans accent, mais l'écran montre un défilement vers le bas et la saisie de « zoe » n'intervient qu'à 00:05.6, au moment où la voix annonce déjà la recherche d'un poste."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+      "observation": "Voix féminine claire, naturelle et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

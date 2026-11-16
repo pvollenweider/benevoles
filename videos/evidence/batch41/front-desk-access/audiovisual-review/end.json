@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:33:45.253Z",
+  "videoSha256": "e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385",
+  "promptSha256": "4d039c0cfb50aa67215554ccffd02ef2cfbbe76081437e9e569d176ee7249780",
+  "clipSha256": "cec50f5a820635544b68e006b823f91decde88ec73cfbfcad5c345e86c19c57b",
+  "scene": "end",
+  "review": {
+    "heardOpening": "L'accès se termine après l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "L'accès se termine après l'événement",
+        "visibleSeconds": 0,
+        "visible": "Page 'Accès accueil' affichant les dates de l'événement (16 au 17 novembre 2026)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Un créneau de nuit peut le prolonger jusqu'à six heures le lendemain",
+        "visibleSeconds": 6.2,
+        "visible": "Écran stable pertinent sur les accès de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Le compte sera effacé quatre-vingt-dix jours après la fin de son dernier accès",
+        "visibleSeconds": 9.8,
+        "visible": "Écran stable de fin d'accès avec bouton Se déconnecter",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible, accompagnée d'un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Donnez-lui un nom clair, ajoutez une courte description, le lieu et",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 12.72,
+    "wordsHeard": "Donnez-lui un nom clair, ajoutez une courte description, le lieu et"
+  },
+  "onset": 12.72,
+  "proposedCut": 12.389187499999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

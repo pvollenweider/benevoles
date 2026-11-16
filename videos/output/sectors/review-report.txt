@@ -1,18 +1,9 @@
 STATUS: READY
-Batch: 32 (resume)
-ID: SECTORS
-Duration: 222.280 s
-Product commit: 9831e86e40ae3dd1ba60eb632b8e90951483a11c
-BUILD_ID: jJH5zvJlD2hQBFLXtZa0x
-Whole Puck track regenerated in one pass; silence-based same-master recut; all 11 source/final chapter audits PASS.
-Fresh seed quick rehearsal PASS; freshly reseeded narrated take PASS; first narrated take retained.
-validate PASS; 34 video files / 1142 tests and tools typecheck PASS.
-11 AV chapters / 41 checkpoints; one framing observation resolved in source-review.json, no unresolved defect.
-Actual MP4 chapter frames inspected, including export, filter after reload, and sector message count.
-Music gap 14.5–19.2 LU under voice; music-only minimum -34.1 LUFS; zero music rule violations.
-Soft synced effects: 28 actual clicks and 47 actual keys; no invented input.
-Whole final multilingual soundtrack ASR: no stray English/instructions; viewer tu 0; VTT 0.
-No localhost, dev overlay or outdated Timeline label found in inspected frames.
-Source changes: common public-host routing, beta fixture AV guard, whole-final-audio ASR. No editorial text change.
-Real-time subjective listening unavailable per standing rules.
-Evidence: videos/evidence/sectors/batch32/.
+SECTORS — batch 41, 16 November 2026
+226.080 s, 1280×800; one narrated take after a complete quick rehearsal.
+Product e8ed666a48294d77213f8bf64fe35898314b0ed9; BUILD_ID HO6mRRAZuOevekAmdhN_C.
+Fresh complete continuous Puck narration, ten boundaries aligned; all eleven source/final ASR checks pass, whole-master one consistent voice. Full multilingual soundtrack/VTT have zero register candidates and zero literal tu. Description 120 UTF-8 bytes.
+Eleven AV chapters / 39 checkpoints and 22 actual final representative images inspected. One raw observation remains factually true: browser chrome is absent, as throughout these application captures. This is not an incorrect action or promise to show the address bar: the narration explains URL persistence, the actual recorder waits for secteur=<Parking id> then genuinely reopens that address and asserts Parking remains selected. A separate read-only browser check against the identical main build independently records that actual URL, confirms the same five inscriptions and reopened selection, with screenshot (review/filter-url-countercheck.json). Raw AV report preserved; no claim that the URL bar was filmed.
+Actual released sectors work with no beta capability/consent. Enable, create, add/move roles, timeline, real complete printable export, filtered registrations/pages and prefilled sector audience all shown. Scenario metadata now identifies formation-beta accurately; internal fixture name does not appear as beta narration. No src change.
+Music 15.0–19.4 LU under voice, quietest music-only -33.9 LUFS, zero issues/gaps. 28 real clicks and 37 real key presses with soft synchronized effects. Technical validation, 1357 video tests, 228-file video type check and touched-file ESLint pass. No subjective human listening claimed.
+Publication: preview then APPLY=1 on default, four changed files sent and transcript unchanged; remote verification zero to send / five unchanged. Revision 3, dates 2026-11-16.

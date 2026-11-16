@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans les inscriptions, le statut distingue les personnes confirmées de celles",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 28.15,
+    "wordsHeard": "Dans les inscriptions, le statut distingue les personnes confirmées de celles"
+  },
+  "onset": 28.15,
+  "proposedCut": 27.871312500000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

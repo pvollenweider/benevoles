@@ -1,65 +1,65 @@
 {
   "id": "SHIFT_CREATE_EDIT_DETAIL",
   "slug": "shift-create-edit-detail",
-  "validatedAt": "2026-10-16T09:25:16.770Z",
+  "validatedAt": "2026-11-16T22:18:41.749Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 132200,
+  "captureMs": 134760,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 12855,
-      "audioMs": 12855,
-      "driftMs": 0
+      "visualMs": 13033,
+      "audioMs": 13032,
+      "driftMs": 1
     },
     {
       "id": "identity",
-      "visualMs": 18928,
-      "audioMs": 18928,
-      "driftMs": 0
-    },
-    {
-      "id": "availability",
-      "visualMs": 13608,
-      "audioMs": 13606,
+      "visualMs": 18994,
+      "audioMs": 18992,
       "driftMs": 2
     },
     {
-      "id": "practical",
-      "visualMs": 26664,
-      "audioMs": 26663,
+      "id": "availability",
+      "visualMs": 14503,
+      "audioMs": 14502,
       "driftMs": 1
+    },
+    {
+      "id": "practical",
+      "visualMs": 25458,
+      "audioMs": 25456,
+      "driftMs": 2
     },
     {
       "id": "save",
-      "visualMs": 12297,
-      "audioMs": 12296,
-      "driftMs": 1
+      "visualMs": 13843,
+      "audioMs": 13843,
+      "driftMs": 0
     },
     {
       "id": "change",
-      "visualMs": 17027,
-      "audioMs": 17026,
-      "driftMs": 1
+      "visualMs": 16917,
+      "audioMs": 16914,
+      "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 14267,
-      "audioMs": 14266,
+      "visualMs": 15342,
+      "audioMs": 15341,
       "driftMs": 1
     }
   ],
   "anchorsChecked": 12,
   "music": {
-    "voicedWindows": 111,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 14.8,
-    "largestGapLu": 18.6,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.5
+    "voicedWindows": 112,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 15.4,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": -34.4,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.2
   },
   "issues": []
 }

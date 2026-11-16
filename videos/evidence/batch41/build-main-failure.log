@@ -1,0 +1,17 @@
+Verified 2438 product inputs against main f9fcec47d32af10b0837b2de87beb61535d30888; building locally
+Command failed: /Users/pol/.nvm/versions/node/v26.9.0/bin/node --import tsx videos/tools/local-production.ts build /tmp/benevoles-video-production.vcD9Pkrs
+Failed to type check.
+
+
+▲ Next.js 16.4.5 (webpack)
+✓ Running next.config.ts took 181ms
+- Experiments (use with caution):
+  · clientTraceMetadata
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 38.8s
+  Running TypeScript ...
+.next/types/app/api/public/doc-index/route.ts(14,13): error TS2344: Type 'OmitWithTag<typeof import("/private/tmp/benevoles-video-production.vcD9Pkrs/src/app/api/public/doc-index/route"), "DELETE" | "POST" | "PATCH" | "instant" | "GET" | "HEAD" | "PUT" | "config" | ... 11 more ... | "maxDuration", "">' does not satisfy the constraint '{ [x: string]: never; }'.
+  Property 'buildDocIndexJson' is incompatible with index signature.
+    Type '() => string' is not assignable to type 'never'.
+

@@ -1,22 +1,12 @@
 STATUS: READY
-Batch 17 — VOLUNTEER_HOURS_CERTIFICATE
-Product commit: 8b124a696edcfacc5a60879eb2b45eee110e93a6
-Verified BUILD_ID: xYE1IdGm9lLkGSWKqeLjk
-Duration: 310.76 s. Two narrated takes, one rehearsal, no third take.
-
-Real PDF: documents/attestation-aline.pdf, one A4 page. Entire page visually inspected. It starts with the grey certificate logo and Attestation de bénévolat; no admin navigation. All five table columns fit inside the page margins, with complete event rows and total 3 créneaux / 6 h attestées / 2 h sans présence. Aline Mercier, May–September dates, remark and both signature areas are complete. Final MP4 frame review/certificate-pdf-222.423.png verifies the formerly defective scene. No print interception, fabricated PDF, CSS workaround or product edit.
-
-Narration: existing audited continuous Kore audio reused, no TTS regeneration. All eight final-MP4 chapter audits pass, including opening and ending fidelity. Take 1's summary ASR pluralized the ending; a fresh independent recognition of identical audio returned 0% word difference. Take 2 passes without that flag.
-Music: 12.5–19.3 LU below narration; all voiced and music-only windows pass, final-video hash tied to measurements.
-Effects: 17 clicks and 42 keys match real recorded markers and audio-mix.json; generated soft input effects are included.
-Subtitles: all 58 actual VTT cues equal current formatter output; spoken transcript independently checked.
-
-Cues and frames: all eight full-chapter audiovisual reports reviewed and six final frames per chapter inspected, plus exact sort and print frames. Current UI labels, French dates, totals, two real CSV downloads, live preview, planned/attested columns and event summary pass. No localhost address, old admin email or dev overlay visible; Frise wording is current wherever visible.
-Take 1 found a date-sort click about 4 s late. Only videos/lib/record-volunteer-hours.ts changed: first sort anchored to Un clic, second and reset held to their mid-sentence phrases, date sort anchored to Cliquons enfin. Take 2 click times within last-participation: ascending 17.237 s, descending 20.020 s, reset 22.621 s, date 23.954 s. Date sentence starts 23.464 s, giving 0.490 s action latency.
-Automated take-2 last-participation missing-click flag is disproved: sort-17.3.png has the upward Heures attestées arrow; sort-20.3.png has the downward arrow and Aline first; sort-23.15.png shows the reset; sort-24.2.png and sort-25.0.png show the upward Dernière participation arrow. Recorder verifies actual aria-sort=ascending. Equal dates make line order stable after date sorting. Raw flagged report retained, not overwritten.
-
-Prior artifacts archived in previous-20261013T112425Z (batch 15) and previous-20261013T113503Z (batch 17 take 1, including rehearsal). Owned fixture reset before both narrated takes. No Mailpit screen or notifications in this scenario; preparation explicitly sends no emails. No fake messages.
-Posters written with --metadata-output review/renders-generated.json. videos/renders.json and src/ unchanged.
-Type check passes (189 explicit sources), all 861 sentence-anchor tests pass, git diff --check passes.
-Real-time subjective listening unavailable; independent actual MP4 audio/video audits and visual inspection performed.
-No commits, pushes, publication, product source changes, or third take.
+VOLUNTEER_HOURS_CERTIFICATE — batch 41, 16 November 2026
+Duration: 311.360 s; second and final narrated take. First rejected for late CSV viewer; preserved in previous-batch41-take1-csv-late.
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71
+One complete new Kore master, all seven boundaries aligned; all eight source and final audio chapters pass, whole voice consistent. Full multilingual final soundtrack and VTT: zero register candidates, no stray instruction identified.
+Eight AV chapters / 33 checkpoints. Two raw observations are resolved: sorting may preserve an already sorted order (actual aria states, clicks, final images and unmodified main comparator agree); the screen logo is colored while the real printed PDF is grey, as narrated. Raw reports retained, no product state or pixels rewritten.
+Real guarded positive early-departure fixture: 12 planned / 6 attested hours; certificate May–September 6 attested, one ended-early participation, zero planned-without-presence hours. Actual current column is Participations terminées avant la fin, conditional on a positive count. Two actual seven-column CSV downloads, Clara zero row, summary two recorded presences including one early departure, 6 planned / 2 attested hours verified.
+Actual one-page A4 PDF fully inspected: grey logo, all columns, 6h/1/0min total, period, note and signatures intact. Genuine product print button and log invoked. Headless window.print remains pending: a second genuine product preview with identical UI settings uses Chromium's real print engine; no print interception, copied HTML or fake server download. Native print dialog not claimed verified; the narration explicitly calls this a local demonstration PDF.
+Music 14.5–19.2 LU under voice; no out-of-rule windows or gaps, no full music-only analysis window. 18 real clicks and 42 real keys with synchronized soft effects. Description 134 UTF-8 bytes. Types, lint, 1455 video/catalog/reference tests pass. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent; revision 4, dates 2026-11-16.

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:27:37.372Z",
+  "videoSha256": "d90fc4dc3ea1b555486a8cfdf2237ed5c9bd2165e5f500e9633e083f23fca586",
+  "promptSha256": "d76b6155e0690f473fb073678ebecc7fa143c1bac389659057abe55ce3baa31e",
+  "clipSha256": "0d0ca940350e2ff779f276aed2c02af1f46cbfc0dd91c94d573d83bcb90a6b55",
+  "scene": "program-edit",
+  "review": {
+    "heardOpening": "Vous pouvez corriger le programme sans le recréer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ouvrons le concert avec Modifier",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur l'icône de modification (crayon) du spectacle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "puis avançons sa fin à treize heures",
+        "visibleSeconds": 6,
+        "visible": "L'heure de fin est modifiée à 13:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "et confirmons",
+        "visibleSeconds": 7.3,
+        "visible": "Clic sur le bouton Confirmer et mise à jour de la plage horaire à 11:00-13:00",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, dynamique et bien calée sur les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

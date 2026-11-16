@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:55:17.317Z",
-  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "reviewedAt": "2026-11-16T20:15:10.367Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
   "promptSha256": "5e50bbd4144e2e05878c48ef65359b3d9658e64e9dd2b9c2cf54c5abd2e5f359",
-  "clipSha256": "60e68a94d550394ecc98a2b5252165050a850431f8d2161784dbb63025415d01",
+  "clipSha256": "13b41108c03dc5fde7c36f414ec35ec5eb33cf5c9803ca38cf043e518d9771c3",
   "scene": "changed",
   "review": {
-    "heardOpening": "Si un horaire change, ouvrez le créneau concerné",
+    "heardOpening": "Si un horaire change, ouvrez le créneau concerné.",
     "checkpoints": [
       {
         "spokenSeconds": 1.2,
-        "spoken": "Si un horaire change, ouvrez le créneau concerné.",
+        "spoken": "ouvrez le créneau concerné",
         "visibleSeconds": 1,
-        "visible": "Ouverture du formulaire « Modifier le créneau ».",
+        "visible": "Ouverture du formulaire de modification du créneau de préparation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 3.2,
         "spoken": "Nous décalons son début et sa fin, puis enregistrons.",
         "visibleSeconds": 4.8,
-        "visible": "Modification des heures de début (13:19) et de fin (15:19) puis enregistrement de la modification.",
+        "visible": "Modification des heures de début et de fin à 21:38 et 23:38, puis clic sur Enregistrer",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.5,
+        "spokenSeconds": 12.3,
         "spoken": "Voici l'email réellement reçu avec le nouvel horaire.",
-        "visibleSeconds": 12,
-        "visible": "Affichage de la boîte de réception Mailpit montrant l'e-mail de notification avec l'horaire mis à jour (13:19 - 15:19).",
+        "visibleSeconds": 12.2,
+        "visible": "Affichage de l'email de notification indiquant le changement d'horaire pour jeudi 19 novembre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.3,
-        "spoken": "Vérifions donc le résultat dans le planning et dans la boîte mail",
-        "visibleSeconds": 20.1,
-        "visible": "Retour à la vue planning (frise puis liste des créneaux).",
+        "spokenSeconds": 21,
+        "spoken": "Vérifions donc le résultat dans le planning",
+        "visibleSeconds": 21,
+        "visible": "Retour à l'affichage des créneaux montrant l'horaire mis à jour",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix off féminine naturelle, claire et posée, bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

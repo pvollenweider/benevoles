@@ -1,0 +1,12 @@
+{
+  "anchor": "Une fois les secteurs en place, le champ Secteur limite plusieurs",
+  "windowStart": 93.547,
+  "result": {
+    "found": true,
+    "startSeconds": 30.34,
+    "wordsHeard": "Une"
+  },
+  "onset": 123.887,
+  "proposedCut": 123.546875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

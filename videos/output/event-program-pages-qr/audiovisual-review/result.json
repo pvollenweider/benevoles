@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T14:11:05.258Z",
-  "videoSha256": "b304932f76da7a0bf400c12ecd584a9f53b8c567bb0219a32394004c9fd55c37",
+  "reviewedAt": "2026-11-16T20:28:00.244Z",
+  "videoSha256": "d90fc4dc3ea1b555486a8cfdf2237ed5c9bd2165e5f500e9633e083f23fca586",
   "promptSha256": "f84d2e3315578c9ee088932857c4195925fa0abe09d3d67a045a1d14f2c37040",
-  "clipSha256": "ba704b4892b132c903925ebe97367dae50d3a4c5306610e3c895e39db731ada7",
+  "clipSha256": "575939bb9adcded3b9615344881689c0657123fe257c02da16328d1fb7c20a04",
   "scene": "result",
   "review": {
     "heardOpening": "Vous avez un programme corrigé",
@@ -12,23 +12,23 @@
         "spokenSeconds": 0.5,
         "spoken": "Vous avez un programme corrigé, des pages pratiques lisibles et deux fichiers QR téléchargés",
         "visibleSeconds": 0.5,
-        "visible": "Page affichant le QR code de l'événement Fête du village de Montvert avec les boutons d'export",
+        "visible": "Onglet Partage avec la sous-rubrique QR code et les boutons Télécharger PNG et Télécharger SVG",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
-        "spoken": "scannez le code avec un vrai téléphone",
-        "visibleSeconds": 7,
-        "visible": "QR code bien visible à l'écran servant de support à la consigne externe",
+        "spokenSeconds": 5.7,
+        "spoken": "scannez le code avec un vrai téléphone : ce contrôle reste à faire sur votre appareil",
+        "visibleSeconds": 5.7,
+        "visible": "Aperçu du QR code généré pour la Fête du village de Montvert au centre de l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
+        "spokenSeconds": 11.2,
         "spoken": "Vérifiez que la page attendue s’ouvre et que les inscriptions sont ouvertes au bon moment",
-        "visibleSeconds": 13.5,
-        "visible": "Écran stable présentant le QR code et le lien d'inscription",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage au bas de l'encadré de la mention Scanner pour s'inscrire avec l'URL de redirection",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, fluide et naturelle, adaptée à une conclusion de formation."
+      "observation": "Voix féminine naturelle, claire, fluide et posée, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

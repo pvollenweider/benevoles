@@ -26,12 +26,13 @@
     "dayof-phone": "Le bon numéro, au bon endroit",
     "dayof-checkin": "Une arrivée, une inscription",
     "dayof-refresh": "Actualiser les présences",
-    "dayof-undo": "Corriger sans retirer la place"
+    "dayof-undo": "Corriger sans retirer la place",
+    "absence-departure": "Noter une absence ou un départ"
   },
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à repérer les absences. Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres. Chaque ligne correspond à une inscription sur un créneau. Être inscrit, c'est ce qui était prévu. Être marqué présent, c'est une autre information. Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
+      "transcript": "Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à suivre les présences et les absences notées. Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres. Chaque ligne correspond à une inscription sur un créneau. Être inscrit, c'est ce qui était prévu. Être marqué présent, c'est une autre information. Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
       "fallbackDurationMs": 42000
     },
     {
@@ -55,8 +56,13 @@
       "fallbackDurationMs": 48000
     },
     {
+      "id": "absence-departure",
+      "transcript": "Noah ne viendra pas. Sélectionnons sa ligne et choisissons Marquer absent. Une absence est toujours notée par un organisateur, jamais déduite d'un pointage manquant. Annuler l'absence permet de corriger cette note. Notons à nouveau son absence pour le bilan. Aline, elle, est arrivée puis repart avant la fin. Sélectionnons sa ligne présente et choisissons Marquer parti avant la fin. Le badge Parti avant la fin distingue ce départ d'une absence. Annuler le départ corrige une erreur et retrouve sa présence. Notons à nouveau son départ pour le bilan. Cette participation reste enregistrée, mais elle n'ajoute aucune heure attestée : sa durée réellement effectuée est inconnue.",
+      "fallbackDurationMs": 65000
+    },
+    {
       "id": "limits",
-      "transcript": "Le pointage enregistre une arrivée. Il ne mesure pas l'heure de départ ni la durée réellement travaillée. Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir. Les heures attestées reprennent les créneaux passés où une présence a été enregistrée. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard : gardez cette différence en tête quand vous lisez le bilan.",
+      "transcript": "Le pointage enregistre une arrivée. Il ne mesure pas la durée réellement travaillée. Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir. Les heures attestées reprennent les créneaux passés avec présence, sauf les participations terminées avant la fin. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard : gardez cette différence en tête quand vous lisez le bilan.",
       "fallbackDurationMs": 44000
     },
     {
@@ -66,7 +72,7 @@
     },
     {
       "id": "export",
-      "transcript": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partagez seulement ce qui est nécessaire. Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
+      "transcript": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Les colonnes Absence notée et Parti avant la fin distinguent aussi les notes de Noah et d’Aline. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partagez seulement ce qui est nécessaire. Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
       "fallbackDurationMs": 45000
     },
     {
@@ -96,23 +102,24 @@
     },
     {
       "id": "dayof-undo",
-      "transcript": "Une erreur de pointage ? Annuler la présence retire la marque, pas l'inscription. Vérifions après rechargement : Zoé conserve sa place, et son arrivée n'est plus marquée. Vous pouvez recommencer lorsqu'elle sera vraiment là. Sur le terrain, le plus utile reste ce petit réflexe : vérifier la personne et le créneau, marquer une arrivée, et corriger sans désinscrire. Vous gardez ainsi un planning juste et une équipe accueillie sereinement.",
+      "transcript": "Une erreur de pointage ? Annuler la présence retire la marque, pas l'inscription. Vérifions après rechargement : Zoé conserve sa place, et son arrivée n'est plus marquée. Si elle ne vient pas, Marquer absent note cette absence. Le badge Absent et le compteur le montrent. Annuler l'absence la remet parmi les personnes attendues. Marquons sa présence à nouveau. Si elle repart plus tôt, Marquer parti avant la fin le note sur ce créneau. Le badge Parti avant la fin et le compteur distinguent ce départ. Annuler le départ retrouve sa présence. Les quatre états sont distincts : pas encore marqué, présent, absent et parti avant la fin. Vérifiez toujours la personne et le créneau avant de corriger.",
       "fallbackDurationMs": 41000
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous enregistrez l'arrivée des bénévoles depuis les inscriptions ou la page Jour J, corrigez une erreur de pointage et vérifiez le bilan dans l'export des présences.",
+    "summary": "Enregistrez les présences, les absences et les départs avant la fin depuis les inscriptions et Jour J, corrigez chaque note et relisez l'export.",
     "steps": [
       "Dans les inscriptions, filtrez sur le créneau concerné, par exemple l'accueil du matin.",
       "Sélectionnez la ligne de la personne arrivée, vérifiez le nombre sélectionné, puis cliquez sur « Marquer présents ».",
       "Pour un groupe, cochez plusieurs lignes avant de marquer leur présence en une fois. Pour une personne inscrite sur plusieurs horaires, pointez chaque créneau séparément.",
       "En cas d'erreur, sélectionnez la ligne et annulez sa présence : l'inscription et la place restent.",
-      "Téléchargez l'export des présences et relisez les colonnes « Présent » et « Pointé le » avant de le transmettre.",
+      "Pour une personne attendue qui ne vient pas, utilisez « Marquer absent ». Pour une personne présente qui repart, utilisez « Marquer parti avant la fin ». Corrigez avec « Annuler l'absence » ou « Annuler le départ ».",
+      "Téléchargez l'export et relisez « Présent », « Pointé le », « Absence notée » et « Parti avant la fin ».",
       "Sur le terrain, ouvrez la page Jour J : cherchez une personne par son prénom ou son poste, cliquez sur « Marquer présent », puis sur « Actualiser » pour voir les dernières présences."
     ],
     "remember": [
       "Être inscrit et être marqué présent sont deux informations différentes.",
-      "Le pointage enregistre une arrivée, pas une heure de départ ni une durée travaillée.",
+      "Une absence est toujours notée par un organisateur, jamais déduite. Un départ avant la fin reste enregistré et n'ajoute aucune heure attestée. Le pointage ne chronomètre pas la durée travaillée.",
       "L'export ne retient que les inscriptions actives : une inscription annulée après pointage n'y figure plus.",
       "Une demande en attente de validation se traite d'abord comme une demande, pas comme une présence."
     ]

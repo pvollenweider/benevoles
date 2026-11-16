@@ -1,0 +1,11 @@
+STATUS: READY
+MEMBERS_MANAGEMENT — batch 41, 16 November 2026
+Duration: 238.840 s; second and final narrated take. First rejected because narration said sixty records while the current fixture has 63; preserved, no third take.
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51
+Complete new Puck master regenerated again after correcting the count sentence to plusieurs dizaines de fiches. Nine measured boundaries aligned, all ten source and final chapter ASR checks pass, whole-master voice consistent. Full multilingual final soundtrack and VTT: zero register candidates, no stray instruction identified. No sentence splicing or old audio reuse.
+Ten AV chapters / 38 checkpoints, zero issues. Final frames inspected, including hours nuance: an ended-early participation stays recorded, adds no attested hour because its duration is unknown. The fixture has no early-departure participation; this is accurately a general explanation alongside the current hours columns.
+Current 63-record initial list, real creation of Maya and René without email, saves and reopening, availability, accented search and homonyms, filters and sorting, genuine deactivation/reactivation and Camille's factual activity verified. Exact current counts and labels replace stale recorder expectations.
+Music 13.9–19.0 LU under voice; quietest music-only −34.1 LUFS, no gaps/out-of-rule windows. 36 real clicks and 132 real keys with synchronized soft effects. Description 105 UTF-8 bytes. Types, lint and 1456 video/catalog/reference tests pass. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent; revision 8, dates 2026-11-16.

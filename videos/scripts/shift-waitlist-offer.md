@@ -33,3 +33,9 @@ Narration à régénérer intégralement en une passe avec la même voix, `conti
 Narration `volunteer` : Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place. Le lien Prendre la place ouvre une page qui présente l’offre, sans l’accepter. Seul le bouton Prendre la place de cette page confirme le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.
 
 Narration complète régénérée en une passe Kore, sans balises de pause. La démonstration garde volontairement l’offre active pour expliquer son expiration.
+
+## Lot 41, phase 2 — 16 novembre 2026
+
+La première nouvelle génération paraphrase l’ouverture du chapitre `admin`, constatée par deux ASR indépendants ; son master entier et les diagnostics sont conservés. La narration écrite reste inchangée. Nouvelle génération complète avec la même voix Kore et une consigne de lecture exacte, sans assemblage de phrases issues de générations différentes.
+
+La seconde génération complète échoue encore au contrôle de l’ouverture de `admin`. Cette ouverture est reformulée pour décrire précisément la colonne de l’écran actuel : « Dans les inscriptions, le statut distingue les personnes confirmées de celles qui attendent une place. » La suite ne change pas. Troisième master entièrement nouveau, même voix Kore ; les mots indésirables ne sont pas repris et aucun son des deux générations précédentes n’est monté.

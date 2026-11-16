@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:32:38.154Z",
+  "videoSha256": "e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385",
+  "promptSha256": "e8b8e8ab4e146ea35aabe0b102fdb25c61aa1700b3c4e7b41ead90fca9cc8f0e",
+  "clipSha256": "56d6038d943c2479af9a68d5bd196b81b160af6dae7b5e2033257c2e2a106d3e",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour de la fête",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le jour de la fête, Colette tient l'entrée.",
+        "visibleSeconds": 0,
+        "visible": "Titre superposé « Donner un accès accueil pour le jour J » sur la page de l'événement « Fête du parc — accueil ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Vous pouvez lui donner un accès accueil, sans l'ajouter aux organisateurs.",
+        "visibleSeconds": 3,
+        "visible": "Affichage complet de l'onglet « Jour J » de l'événement avec les options de gestion.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Elle pourra suivre et marquer les présences d'un seul événement.",
+        "visibleSeconds": 8,
+        "visible": "Visualisation de la liste des bénévoles du créneau d'accueil avec les boutons « Marquer présent » et « Marquer absent ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

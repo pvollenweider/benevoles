@@ -1,0 +1,77 @@
+{
+  "id": "EVENT_PROGRAM_PAGES_QR",
+  "slug": "event-program-pages-qr",
+  "validatedAt": "2026-11-16T20:26:37.428Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 194280,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 11697,
+      "audioMs": 11696,
+      "driftMs": 1
+    },
+    {
+      "id": "program",
+      "visualMs": 18391,
+      "audioMs": 18389,
+      "driftMs": 2
+    },
+    {
+      "id": "program-edit",
+      "visualMs": 16409,
+      "audioMs": 16407,
+      "driftMs": 2
+    },
+    {
+      "id": "pages",
+      "visualMs": 21570,
+      "audioMs": 21568,
+      "driftMs": 2
+    },
+    {
+      "id": "page-order",
+      "visualMs": 19387,
+      "audioMs": 19385,
+      "driftMs": 2
+    },
+    {
+      "id": "post-pages",
+      "visualMs": 34464,
+      "audioMs": 34461,
+      "driftMs": 3
+    },
+    {
+      "id": "public",
+      "visualMs": 19816,
+      "audioMs": 19814,
+      "driftMs": 2
+    },
+    {
+      "id": "qr",
+      "visualMs": 17518,
+      "audioMs": 17516,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 19407,
+      "audioMs": 19404,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 17,
+  "music": {
+    "voicedWindows": 181,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -34.4,
+    "loudestMusicOnlyLufs": -32.1,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}

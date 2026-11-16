@@ -1,0 +1,169 @@
+{
+  "checkedAt": "2026-11-16T22:27:17.000Z",
+  "model": "gemini-3.8-flash",
+  "scope": "Independent diagnostic of source audio only; no timing applied, no additional narrated take, no final audiovisual readiness claim. Repeated clause anchors may intentionally share a sentence start; review actual planned actions before changing source.",
+  "results": [
+    {
+      "segmentId": "basics",
+      "audioSha256": "1d3975e09d64628c9dde71ead2315fd9d38f88614896247016463d57a8957e09",
+      "durationMs": 11185,
+      "phrases": [
+        {
+          "phrase": "Donnez-lui un nom clair",
+          "found": true,
+          "startSeconds": 0.05,
+          "wordsHeard": "Donnez-lui un nom clair",
+          "estimatedSentenceStartMs": 376,
+          "deltaMs": -326,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "series",
+      "audioSha256": "93785b311c5fffd150d305f155b087ed566ca9c9b65253c8e5f4341a3c640a4e",
+      "durationMs": 14572,
+      "phrases": [
+        {
+          "phrase": "Quand les horaires se répètent",
+          "found": true,
+          "startSeconds": 4.18,
+          "wordsHeard": "Quand les horaires se répètent",
+          "estimatedSentenceStartMs": 4476,
+          "deltaMs": -296,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "delivery",
+      "audioSha256": "1f490ec84f6eee88509a838cb4e78c8fef923c7c4fc5df7d1ca140b9ac6e1e6d",
+      "durationMs": 12013,
+      "phrases": [
+        {
+          "phrase": "Il faut avoir au moins",
+          "found": true,
+          "startSeconds": 3.03,
+          "wordsHeard": "Il faut avoir au moins",
+          "estimatedSentenceStartMs": 3426,
+          "deltaMs": -396,
+          "review": false
+        },
+        {
+          "phrase": "posséder un permis B valide",
+          "found": true,
+          "startSeconds": 5.06,
+          "wordsHeard": "posséder un permis B valide",
+          "estimatedSentenceStartMs": 3426,
+          "deltaMs": 1634,
+          "review": true
+        },
+        {
+          "phrase": "Ces conditions sont visibles par les bénévoles",
+          "found": true,
+          "startSeconds": 6.84,
+          "wordsHeard": "Ces conditions sont visibles par les bénévoles",
+          "estimatedSentenceStartMs": 7212,
+          "deltaMs": -372,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "preview",
+      "audioSha256": "91a56790591f32abd78259ed5acd0744c376bae2df9982a97703860a31c1bad7",
+      "durationMs": 14993,
+      "phrases": [
+        {
+          "phrase": "Choisissez un créneau",
+          "found": true,
+          "startSeconds": 5.15,
+          "wordsHeard": "Choisissez un créneau",
+          "estimatedSentenceStartMs": 5457,
+          "deltaMs": -307,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "preview-result",
+      "audioSha256": "03862134e133bfbb5a59daca02b2537d70f7443709cfee8dd761b6baacd6d7c6",
+      "durationMs": 12436,
+      "phrases": [
+        {
+          "phrase": "Rien n’est réellement enregistré",
+          "found": true,
+          "startSeconds": 8.88,
+          "wordsHeard": "Rien n'est réellement enregistré",
+          "estimatedSentenceStartMs": 9246,
+          "deltaMs": -366,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "publish",
+      "audioSha256": "de276d6127c9b6c23284387cf6729494a620dba0fd6a9e771f8751a4013319cd",
+      "durationMs": 9923,
+      "phrases": [
+        {
+          "phrase": "Quand tout est prêt, publiez le planning",
+          "found": true,
+          "startSeconds": 0.04,
+          "wordsHeard": "Quand tout est prêt publiez le planning",
+          "estimatedSentenceStartMs": 596,
+          "deltaMs": -556,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "qr",
+      "audioSha256": "4ec33e884eae817936bad5f8ec7bff5ffb50730f2a3cfa67888a3a92d0f01ebe",
+      "durationMs": 11425,
+      "phrases": [
+        {
+          "phrase": "ouvrez le QR code",
+          "found": true,
+          "startSeconds": 3.52,
+          "wordsHeard": "ouvrez le QR code",
+          "estimatedSentenceStartMs": 187,
+          "deltaMs": 3333,
+          "review": true
+        }
+      ]
+    },
+    {
+      "segmentId": "import",
+      "audioSha256": "c7bff1d06fb647788fe1fd279fba90a50a79707fb01adf7e7a73e39552f7560b",
+      "durationMs": 15058,
+      "phrases": [
+        {
+          "phrase": "L’application analyse les colonnes",
+          "found": true,
+          "startSeconds": 8.24,
+          "wordsHeard": "L'application analyse les colonnes",
+          "estimatedSentenceStartMs": 8285,
+          "deltaMs": -45,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "invite",
+      "audioSha256": "db97118782f69bdb3ce1159c3d8d3424ac08adf446b7f4d5739a28c05f747f51",
+      "durationMs": 14784,
+      "phrases": [
+        {
+          "phrase": "Filtrez les membres par étiquette",
+          "found": true,
+          "startSeconds": 3.16,
+          "wordsHeard": "Filtrez les membres par étiquette",
+          "estimatedSentenceStartMs": 3505,
+          "deltaMs": -345,
+          "review": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+
+> benevoles@2.7.0 screenshots
+> node scripts/screenshots.mjs
+
+Public pages…
+Administration…
+  ✓ admin-print.png
+  ✓ admin-members.png
+  ✓ admin-members-bulk-delete.png
+  ✓ admin-reminders.png
+  ✓ admin-event-archive.png
+
+Done — /private/tmp/benevoles-video-production.DjebK9ng/public/doc-img

@@ -1,9 +1,8 @@
 STATUS: READY
-SHIFT_CREATE_EDIT_DETAIL — batch 23-1 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 132.2 s. Music 14.8–18.6 LU under voice.
-Whole narration regenerated in one consistent pass, original voice; paragraph cuts verified independently.
-Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
-Final VTT viewer « tu » count 0.
-Rappel des réglages du poste Accueil visible sous le champ ; dates françaises, horaires 18h–21h30, trois places, liste d’attente et validation, lieu/consigne/contact/carte puis fiche enregistrée vérifiés. Sept chapitres audiovisuels sans signalement ; deux ASR complets concordent avec la narration, sans consigne ajoutée ni tutoiement.
-Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.
+SHIFT_CREATE_EDIT_DETAIL — batch 41 phase 2, 16 November 2026
+134.760 s, 1280×800; one narrated take after two complete quick rehearsals.
+Product e8ed666a48294d77213f8bf64fe35898314b0ed9; BUILD_ID HO6mRRAZuOevekAmdhN_C.
+Fresh whole continuous Kore master; six chapter cuts corrected before capture, seven source/final ASR checks pass, whole-master one consistent voice. Actual phrase onsets checked; native hour-entry pauses shortened before the first take so all dates/hours are complete during their sentence. Final unconstrained ASR correctly recognizes portail nord; earlier source homophone porte A was not a narration rewrite. Full soundtrack/VTT: zero register candidates and literal tu. Description 120 UTF-8 bytes.
+Seven AV chapters / 25 checkpoints, zero issues. Fourteen representative actual final images inspected. The current Minimum (optionnel), role-parameter help, Messages/Paramètres labels and real form layout shown. Actual Accueil des artistes saved 18:00–21:30 with three places, waiting list and approval, rendezvous, instruction, contact and map coordinates; reopened editor retains actual values. Historical minimum/labels image gaps resolved. Written narration already current, so no sentence change was needed. No src change.
+Music 15.4–19.1 LU under voice, quietest music-only -34.4 LUFS, zero gaps/issues. Nineteen real clicks with soft synchronized effects, no invented key presses for fill(). Technical validation, video/catalogue tests, source types and touched-file lint pass. No subjective human listening claimed.
+Publication: preview then APPLY=1 on default, five changed files sent; verification zero to send / five unchanged. Revision 6, dates 2026-11-16. Published MP4 remotely measured at 134760 ms, 1280×800; renders.json updated from this remote probe.

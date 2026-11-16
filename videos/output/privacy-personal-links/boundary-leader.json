@@ -1,0 +1,12 @@
+{
+  "anchor": "Le responsable a lui aussi un accès destiné à sa mission.",
+  "windowStart": 133.147,
+  "result": {
+    "found": true,
+    "startSeconds": 29.88,
+    "wordsHeard": "Le responsable a lui aussi un accès destiné à sa mission."
+  },
+  "onset": 163.027,
+  "proposedCut": 162.4026875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:14:54.278Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
+  "promptSha256": "0685e60d87ecce2e7a21003198ca9553e98693feac35f09887bbd44efbeb33c7",
+  "clipSha256": "d03861ff615db7900ad13f8aa962eb8f4dbdaef27e9b98cbeb88d0578f56349e",
+  "scene": "event-delays",
+  "review": {
+    "heardOpening": "Un événement peut avoir ses propres délais",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "choisissons Délais propres à cet événement",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection du bouton radio « Délais propres à cet événement »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Préparons un rappel 3 jours avant, puis un autre 2 heures avant, et enregistrons les rappels",
+        "visibleSeconds": 8.5,
+        "visible": "Saisie de 3 jours, ajout d'un rappel de 2 heures puis clic sur « Enregistrer les rappels »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "La ligne Prochain envoi indique le jour, l'heure et les personnes concernées",
+        "visibleSeconds": 21,
+        "visible": "Affichage de la ligne « Prochain rappel : lundi 16 novembre à 22:08, pour 1 personne »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.5,
+        "spoken": "Revenons aux délais habituels et enregistrons",
+        "visibleSeconds": 29.5,
+        "visible": "Sélection du bouton radio « Délais habituels » puis clic sur « Enregistrer les rappels »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement articulée, en adéquation avec les manipulations affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

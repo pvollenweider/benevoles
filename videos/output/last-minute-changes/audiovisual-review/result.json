@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-11T12:56:09.183Z",
-  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "reviewedAt": "2026-11-16T21:48:56.572Z",
+  "videoSha256": "4653dc79571706a49eeec87491213f683a99fc0d87f06d5568d9f74cf1d2c5da",
   "promptSha256": "8c6a526acf2977743d9f2858505ccde324866dfd9e2f84f8db941ead53260ab9",
-  "clipSha256": "f91c375bd167a8dbe2c5b95f8610683381e0edde6edbdb3c2b7047a43b49edab",
+  "clipSha256": "a177e255e0b73c9cfb0f7cc8b2c73e31ba49ade9a510f4b936e3eb9f1972a9e1",
   "scene": "result",
   "review": {
-    "heardOpening": "Terminons dans la vue de couverture et les inscriptions à jour",
+    "heardOpening": "Terminons dans la vue de couverture",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.8,
         "spoken": "Terminons dans la vue de couverture et les inscriptions à jour.",
-        "visibleSeconds": 1,
-        "visible": "Affichage de la page de couverture puis bascule vers l'onglet Inscriptions.",
+        "visibleSeconds": 1.1,
+        "visible": "Affichage de la page Inscriptions avec la liste des bénévoles et statuts.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 5.4,
         "spoken": "Nicolas a accepté sa place,",
-        "visibleSeconds": 5.5,
-        "visible": "Défilement de la liste des inscriptions montrant Nicolas Peeters.",
+        "visibleSeconds": 5.6,
+        "visible": "Nicolas Peeters apparaît dans la liste des inscriptions validées.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
+        "spokenSeconds": 7.4,
         "spoken": "Zoé est sur le créneau convenu,",
-        "visibleSeconds": 7,
-        "visible": "Zoé Papadopoulos visible dans la liste avec ses affectations.",
+        "visibleSeconds": 7.4,
+        "visible": "Zoé Papadopoulos est positionnée sur les créneaux mentionnés.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.2,
-        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir.",
+        "spokenSeconds": 11.9,
+        "spoken": "et la mission annulée n'est plus à pourvoir.",
         "visibleSeconds": 12.8,
-        "visible": "Navigation vers l'onglet Créneaux montrant la frise puis la vue en liste.",
+        "visible": "Bascule sur l'onglet Créneaux montrant l'état des postes et créneaux complets.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.6,
-        "spoken": "Nous avons vérifié les résultats,",
-        "visibleSeconds": 17.5,
-        "visible": "Retour sur la vue de couverture « Où manque-t-il du monde ? » pour le récapitulatif final.",
+        "spokenSeconds": 19.3,
+        "spoken": "En cas d'imprévu : un besoin précis,",
+        "visibleSeconds": 18.9,
+        "visible": "Retour à la vue de synthèse « Où manque-t-il du monde ? » pour le récapitulatif.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine fluide, claire et chaleureuse, parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchrone avec les différentes vérifications visuelles."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

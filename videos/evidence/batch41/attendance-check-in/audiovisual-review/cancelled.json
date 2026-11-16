@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:48:56.525Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "e651907690a81f7056a6247d5530f3d2b527df1e9dfbc41e2cb80c531b8bc478",
+  "clipSha256": "871b1627e5163facb77cfd47e6190f2c50423240cb6c27faa1d7ed8174c3a67b",
+  "scene": "cancelled",
+  "review": {
+    "heardOpening": "Un cas à regarder de près",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Enregistrons d'abord sa présence",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection de Sarah Smith et validation de sa présence",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "ouvrons son créneau dans la liste",
+        "visibleSeconds": 11.2,
+        "visible": "Accès à l'onglet Créneaux puis basculement sur la vue Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.6,
+        "spoken": "confirmons la suppression",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur Supprimer pour le créneau Logistique puis confirmation dans la boîte de dialogue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Revenons aux inscriptions : sa ligne a disparu",
+        "visibleSeconds": 15,
+        "visible": "Retour à l'onglet Inscriptions où Sarah Smith n'est plus listée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.1,
+        "spoken": "Téléchargeons le fichier pour vérifier le bilan",
+        "visibleSeconds": 19.3,
+        "visible": "Clic sur Exporter les présences (CSV) puis affichage du fichier CSV",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Sarah n'y figure pas",
+        "visibleSeconds": 20,
+        "visible": "Visualisation du tableau exporté ne contenant que les inscriptions actives",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement articulée, accompagnant chaque action sans décalage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:42:14.780Z",
-  "videoSha256": "c8c50d5ecbb68de5885580bfa9c891694a0c2e7762a817dc55621eb9ad835241",
-  "promptSha256": "8ff5fc319cdc1f59ac94e7ba0c460929c91b9e1f665a2675807b9bd19c6c7a07",
-  "clipSha256": "31c83277bc0ae51cde14ac950369dd97d9195849f2294d3d7897b8cd64371b60",
+  "reviewedAt": "2026-11-16T20:33:29.759Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "promptSha256": "1747b64c3922c6fd3d59db1713ad367efa03a9bf5a3d0e34b574c3227133c39c",
+  "clipSha256": "281efe40c4161e7a158616babb1ce1a5e3e8e6442bd8acc581fcbce04417bbfe",
   "scene": "certificate-presence",
   "review": {
     "heardOpening": "Par défaut, l'attestation met en avant",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
-        "spoken": "Par défaut, l'attestation met en avant les heures attestées.",
-        "visibleSeconds": 1,
-        "visible": "L'attestation affiche le tableau récapitulatif avec la seule colonne « Heures attestées ».",
+        "spokenSeconds": 4.1,
+        "spoken": "Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie.",
+        "visibleSeconds": 4.5,
+        "visible": "Défilement vers les paramètres où la case « Inclure les heures prévues sans présence saisie » est cochée.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "puis cochons Inclure les heures planifiées sans présence saisie.",
-        "visibleSeconds": 4.5,
-        "visible": "Défilement vers la section des réglages où la case « Inclure les heures planifiées sans présence saisie » apparaît cochée.",
+        "spokenSeconds": 10.6,
+        "spoken": "cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres.",
+        "visibleSeconds": 15.6,
+        "visible": "Retour sur l'attestation affichant la nouvelle colonne « Heures prévues (sans présence) ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.5,
-        "spoken": "Pour Aline, nous retrouvons six heures attestées et deux heures planifiées sans présence.",
-        "visibleSeconds": 16,
-        "visible": "L'attestation mise à jour présente les colonnes « Heures attestées » (total 6 h) et « Heures planifiées (sans présence) » (total 2 h).",
+        "spoken": "Pour Aline, nous retrouvons six heures attestées, une participation terminée avant la fin et aucune heure prévue sans présence",
+        "visibleSeconds": 17,
+        "visible": "Ligne Total du tableau montrant 6 h attestées, 1 participation terminée avant la fin et 0 min d'heures prévues sans présence.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec le déroulement de la démonstration."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

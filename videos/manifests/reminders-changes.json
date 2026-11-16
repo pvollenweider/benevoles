@@ -14,7 +14,8 @@
     "timing": "Trois échéances, des horaires locaux",
     "exclusions": "Qui reçoit un rappel ?",
     "changed": "Prévenir d'un nouvel horaire",
-    "cancelled": "Annuler un créneau et prévenir"
+    "cancelled": "Annuler un créneau et prévenir",
+    "event-delays": "Des délais propres à un événement"
   },
   "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep one consistent voice throughout.",
   "viewport": {
@@ -49,6 +50,11 @@
       "fallbackDurationMs": 40000
     },
     {
+      "id": "event-delays",
+      "transcript": "Un événement peut avoir ses propres délais. Dans Messages, section Rappels, choisissons Délais propres à cet événement. Préparons un rappel trois jours avant, puis un autre deux heures avant, et enregistrons les rappels. Vous pouvez en définir jusqu'à trois. Ils remplacent les rappels habituels et les choix de l'organisation pour cet événement. La ligne Prochain envoi indique le jour, l'heure et les personnes concernées. Chaque délai part du premier créneau de la journée du bénévole. Revenons aux délais habituels et enregistrons, pour regarder les trois échéances de notre exemple.",
+      "fallbackDurationMs": 48000
+    },
+    {
       "id": "timing",
       "transcript": "Les rappels partent autour de deux jours avant, autour de la veille, puis entre deux et quatre heures avant le début du créneau. Ce n'est pas une promesse d'envoi à une minute fixe. Les heures sont lues dans le fuseau de l'organisation, Europe Zurich ici. Voici les trois emails réellement reçus pour nos trois échéances : chacun retrouve son horaire local, le point de rendez-vous et les informations utiles à son poste.",
       "fallbackDurationMs": 47000
@@ -75,12 +81,13 @@
       "Dans les paramètres de l'événement, écrivez le message de rappel et attendez la confirmation de l'enregistrement automatique.",
       "Dans Messages, cliquez sur « Envoyer le rappel », puis confirmez l'envoi.",
       "Dans Paramètres, puis Emails, choisissez les rappels automatiques de l'organisation et enregistrez.",
+      "Dans Messages, section Rappels, choisissez Délais propres à cet événement, préparez jusqu'à trois délais et enregistrez les rappels ; Prochain envoi en donne l'aperçu.",
       "Modifiez l'horaire d'un créneau : les bénévoles confirmés reçoivent un message avec le nouvel horaire.",
       "Pour annuler un créneau entier, lisez le récapitulatif avant de confirmer."
     ],
     "remember": [
       "Seules les inscriptions confirmées reçoivent les rappels, pas les demandes ni la liste d'attente.",
-      "Les rappels automatiques ne partent que pour un événement publié, aux échéances choisies, dans le fuseau de l'organisation.",
+      "Les délais propres à un événement remplacent les rappels habituels et les choix de l'organisation ; seuls les événements publiés reçoivent des rappels automatiques.",
       "Fermer un créneau aux nouvelles inscriptions ne l'annule pas.",
       "Envoyé ne veut pas dire lu : gardez un contact direct pour une consigne urgente."
     ]

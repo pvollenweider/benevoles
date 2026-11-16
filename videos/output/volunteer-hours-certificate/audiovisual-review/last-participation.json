@@ -1,45 +1,54 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:41:57.539Z",
-  "videoSha256": "c8c50d5ecbb68de5885580bfa9c891694a0c2e7762a817dc55621eb9ad835241",
+  "reviewedAt": "2026-11-16T20:33:18.888Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
   "promptSha256": "13b5f76c321f1436f78c212f278851f78a617092bc3a5310c86caf595fb96099",
-  "clipSha256": "3835cc700d18c2dc797b0375833b9b41ec87de76c610330441db1500d9dfa786",
+  "clipSha256": "023511e5a5c807b949bdc8885de9bac499d4ceae8fb2b6e7d5b44d09f6ede68a",
   "scene": "last-participation",
   "review": {
     "heardOpening": "La dernière participation apporte un autre repère",
     "checkpoints": [
       {
-        "spokenSeconds": 4,
+        "spokenSeconds": 3.5,
         "spoken": "Pour Aline, la date du dernier créneau confirmé apparaît au-dessus de celle de sa dernière présence enregistrée.",
-        "visibleSeconds": 4.5,
-        "visible": "Dans la colonne Dernière participation, la ligne d'Aline Mercier affiche bien le 12 septembre 2026 au-dessus de la mention de présence.",
+        "visibleSeconds": 3.5,
+        "visible": "Dans la colonne Dernière participation d'Aline Mercier, la date du créneau apparaît au-dessus de 'Présence le 12 septembre 2026'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Pour Benoît, aucune présence n'a été saisie : ce n'est pas une preuve d'absence.",
+        "visibleSeconds": 9.2,
+        "visible": "Dans la ligne de Benoît Favre, la mention 'Aucune présence saisie' est visible sous la date.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.5,
-        "spoken": "Un clic les classe par ordre croissant, un deuxième inverse cet ordre, et le troisième rétablit la liste initiale.",
-        "visibleSeconds": 17.5,
-        "visible": "Clics sur l'en-tête de colonne « Heures attestées » modifiant l'ordre des lignes puis rétablissant l'ordre de départ.",
-        "sync": "aligned",
-        "severity": "none"
+        "spoken": "Un clic les classe par ordre croissant, un deuxième inverse cet ordre",
+        "visibleSeconds": 20,
+        "visible": "Un premier clic à 00:16 ne modifie pas le tableau ; le tri ne s'applique qu'au deuxième clic vers 00:20.",
+        "sync": "late",
+        "severity": "minor"
       },
       {
-        "spokenSeconds": 23.5,
+        "spokenSeconds": 23,
         "spoken": "Cliquons enfin sur Dernière participation pour trier cette date.",
-        "visibleSeconds": 25,
-        "visible": "Aucun clic n'est réalisé sur l'en-tête « Dernière participation » et aucun tri n'est appliqué.",
+        "visibleSeconds": 23.3,
+        "visible": "Le clic sur l'en-tête 'Dernière participation' est visible, mais le tri annoncé ne s'effectue pas et la liste reste inchangée.",
         "sync": "missing",
         "severity": "major"
       }
     ],
     "issues": [
-      "À partir de 00:23, l'action annoncée (« Cliquons enfin sur Dernière participation pour trier cette date ») n'est pas effectuée à l'écran : le curseur reste immobile et la colonne n'est pas triée."
+      "À 00:16, le premier clic sur 'Heures attestées' n'a aucun effet visible sur l'ordre des lignes ; le tableau ne réagit qu'au deuxième clic à 00:20.",
+      "À 00:23, le clic sur 'Dernière participation' ne trie pas le tableau : l'ordre des membres et l'affichage restent strictement identiques jusqu'à la fin de l'extrait."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et posée, bien synchronisée avec le débit général."
+      "observation": "Voix claire, posée et bien articulée, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

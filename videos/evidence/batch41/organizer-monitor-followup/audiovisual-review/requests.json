@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:28:46.829Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
+  "promptSha256": "6c1276ec01c925a7e74e8d7868ca288f102bc519b500a60d207485bbc56ca494",
+  "clipSha256": "a0db202b2bba280eff9044f0460cfbaca4e4935317a816536cf7db9806da19e0",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Les postes sur validation sont clairement signalés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Les postes sur validation sont clairement signalés.",
+        "visibleSeconds": 1,
+        "visible": "Le tableau des inscriptions affiche les statuts 'Demande à traiter' avec les boutons Accepter et Refuser.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Ouvrez une demande pour vérifier la personne",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture d'une fenêtre modale intitulée 'Accepter la demande de Marc Duc ?' avec le récapitulatif.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Ici, on referme simplement la fenêtre",
+        "visibleSeconds": 7.8,
+        "visible": "La fenêtre modale est déjà refermée via le bouton Annuler dès 00:08.",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:07.8, la fenêtre modale est refermée avant que la voix n'annonce à 00:09.5 'Ici, on referme simplement la fenêtre'."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, fluide et claire, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

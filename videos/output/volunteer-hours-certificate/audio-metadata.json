@@ -1,47 +1,47 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-13T11:25:33.199Z",
+  "generatedAt": "2026-11-16T20:09:07.145Z",
   "segments": {
     "hours-list": {
       "file": "audio/hours-list.wav",
-      "durationMs": 28264,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 36799,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     },
     "last-participation": {
       "file": "audio/last-participation.wav",
-      "durationMs": 32555,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 31821,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     },
     "activity": {
       "file": "audio/activity.wav",
-      "durationMs": 24033,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 25904,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     },
     "period-export": {
       "file": "audio/period-export.wav",
-      "durationMs": 36390,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 37920,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     },
     "certificate-settings": {
       "file": "audio/certificate-settings.wav",
-      "durationMs": 40344,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 39701,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     },
     "certificate-presence": {
       "file": "audio/certificate-presence.wav",
-      "durationMs": 28465,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 40306,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     },
     "certificate-pdf": {
       "file": "audio/certificate-pdf.wav",
-      "durationMs": 34095,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 35522,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     },
     "event-summary": {
       "file": "audio/event-summary.wav",
-      "durationMs": 33694,
-      "generationSha256": "57fda6c7027708f763f0946e98463816dba87faa9e57fefa8660ffa870b8ef9e"
+      "durationMs": 42267,
+      "generationSha256": "0abb96feab32fb8e07252a7302d29ce67ea66cba394b797dadd90f0a0ff3938b"
     }
   }
 }

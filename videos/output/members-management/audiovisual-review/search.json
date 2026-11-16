@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T15:34:14.725Z",
-  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
-  "promptSha256": "c5dd1d4fa7ca621f8fe51b627cbd8646ddb67d17868babded37d068e0b5c1644",
-  "clipSha256": "a2e5c7e6b553c2fa94cc765a2720a9afd78832e14146ca8abe4f8d2ac228b72d",
+  "reviewedAt": "2026-11-16T20:37:46.176Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
+  "promptSha256": "240d32cce88957936577de916788f84239be6199ea38086d3dcf6d41fb8c9d11",
+  "clipSha256": "998e41a53a45b5060b8149a3cc40397d34270e41a513e2e606704520c3b9ef1b",
   "scene": "search",
   "review": {
     "heardOpening": "La recherche aide à retrouver une personne",
     "checkpoints": [
       {
-        "spokenSeconds": 5.5,
-        "spoken": "Les accents ne doivent pas compliquer la recherche.",
+        "spokenSeconds": 0.5,
+        "spoken": "La recherche aide à retrouver une personne",
         "visibleSeconds": 1,
-        "visible": "Saisie de « Emilie » sans accent dans le champ de recherche filtrant sur les membres prénommés « Émilie ».",
+        "visible": "Saisie du terme 'Emilie' dans la barre de recherche et filtrage de la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
-        "spoken": "ici, deux Stéphane Favre ont des coordonnées différentes.",
+        "spokenSeconds": 5.5,
+        "spoken": "Les accents ne doivent pas compliquer la recherche",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage des résultats 'Émilie' accentués malgré la saisie sans accent 'Emilie'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "ici, deux Stéphane Favre ont des coordonnées différentes",
         "visibleSeconds": 11,
-        "visible": "Recherche de « Stéphane Favre » affichant deux profils homonymes aux adresses email et téléphones distincts.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 17,
-        "spoken": "Vérifiez le contact et les inscriptions avant de modifier une fiche.",
-        "visibleSeconds": 17,
-        "visible": "Vue du tableau des membres permettant de comparer les coordonnées et étiquettes des fiches affichées.",
+        "visible": "Saisie de 'Stéphane Favre' et affichage des deux fiches homonymes aux coordonnées distinctes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+      "observation": "Voix off masculine claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

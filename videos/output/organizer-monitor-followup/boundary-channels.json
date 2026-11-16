@@ -1,0 +1,12 @@
+{
+  "anchor": "L’email part à toutes les personnes ciblées. Pour une information urgente,",
+  "windowStart": 73.56400000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 33.24,
+    "wordsHeard": "L'email"
+  },
+  "onset": 106.804,
+  "proposedCut": 106.717479,
+  "note": "Proposal only; recut then independently audit before capture"
+}

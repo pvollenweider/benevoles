@@ -1,0 +1,17 @@
+{
+  "slug": "volunteer-confirmation-errors",
+  "pattern": "^video\\.errors\\.(?:aline|alex|nicolas|zoe|owner)@example\\.org$",
+  "deletedIds": [
+    "2sYTjBRldBXfxsfdQrDPPn",
+    "2XJztc7yZ0b5VgVDZnyaL3",
+    "2z5VR2Zvx1tLWHmegLTzy8",
+    "0DX45phDMGF11lNYxAm8Yr",
+    "5fgGG7EFwt84KJRL842pqh",
+    "617tfKjjvvFbPOgm2JUc9s",
+    "372iYLeNAWW1HO814Kelvu",
+    "3rmBLi0rC0hDPXUK9es6BO",
+    "0QvE9HRLrHNE9m0kt0xLXX",
+    "35sw4VsW7HCAc0PeLCSW5h"
+  ],
+  "unrelatedMessagesPreserved": true
+}

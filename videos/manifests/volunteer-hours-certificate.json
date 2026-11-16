@@ -16,7 +16,7 @@
     ],
     "remember": [
       "Les heures attestées font partie des heures prévues : elles ne s'y ajoutent pas.",
-      "Les heures reposent sur la durée des créneaux et la présence saisie, pas sur un temps chronométré.",
+      "Une participation terminée avant la fin reste enregistrée et comptée à part, mais n'atteste aucune heure : sa durée est inconnue.",
       "Une présence non saisie n'est pas une preuve d'absence, et aucun de ces repères ne désactive un membre à votre place.",
       "Les créneaux à venir et les inscriptions ou créneaux annulés ne comptent pas, sauf dates futures incluses dans la période choisie."
     ]
@@ -44,7 +44,7 @@
   "segments": [
     {
       "id": "hours-list",
-      "transcript": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair. Dans la liste des membres, regardons les heures prévues et les heures attestées. Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six correspondent à une présence saisie. Ces six heures font partie des douze : elles ne s'ajoutent pas. Les inscriptions annulées et les créneaux annulés sont exclus, et les horaires qui se chevauchent ne sont comptés qu’une fois. Toutes les personnes et les données de cette démonstration sont fictives.",
+      "transcript": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair. Dans la liste des membres, regardons les heures prévues et les heures attestées. Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six sont attestées après une présence saisie. Une participation terminée avant la fin reste enregistrée, mais n'atteste aucune heure : sa durée réellement effectuée est inconnue. Ces six heures font partie des douze : elles ne s'ajoutent pas. Les inscriptions annulées et les créneaux annulés sont exclus, et les horaires qui se chevauchent ne sont comptés qu’une fois. Toutes les personnes et les données de cette démonstration sont fictives.",
       "fallbackDurationMs": 44000
     },
     {
@@ -54,7 +54,7 @@
     },
     {
       "id": "activity",
-      "transcript": "Ouvrons l'activité d'Aline. Vous retrouvez les faits enregistrés, leur date et l'événement concerné. C'est utile pour comprendre son parcours et vérifier ce qui s'est passé. Ce journal ne mesure pas le temps réellement travaillé : les heures attestées reposent sur une présence saisie et sur la durée du créneau. L'absence de présence saisie ne permet pas, à elle seule, de conclure qu'une personne était absente.",
+      "transcript": "Ouvrons l'activité d'Aline. Vous retrouvez les faits enregistrés, leur date et l'événement concerné. C'est utile pour comprendre son parcours et vérifier ce qui s'est passé. Ce journal ne mesure pas le temps réellement travaillé : les heures attestées reposent sur une présence saisie et sur la durée du créneau, sauf les participations terminées avant la fin, qui n'attestent aucune heure. L'absence de présence saisie ne permet pas, à elle seule, de conclure qu'une personne était absente.",
       "fallbackDurationMs": 38000
     },
     {
@@ -69,17 +69,17 @@
     },
     {
       "id": "certificate-presence",
-      "transcript": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie. Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres. Pour Aline, nous retrouvons six heures attestées et deux heures prévues sans présence. Ce document ne prétend pas mesurer un temps de travail chronométré. Une présence non saisie n'est pas non plus une preuve d'absence.",
+      "transcript": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie. Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres. Pour Aline, nous retrouvons six heures attestées, une participation terminée avant la fin et aucune heure prévue sans présence sur cette période. La colonne Participations terminées avant la fin compte ces participations enregistrées, sans leur attribuer des heures. Ce document ne prétend pas mesurer un temps de travail chronométré. Une présence non saisie n'est pas non plus une preuve d'absence.",
       "fallbackDurationMs": 44000
     },
     {
       "id": "certificate-pdf",
-      "transcript": "Quand le contenu vous convient, cliquons sur Générer et imprimer l'attestation. L'application lance l'impression du navigateur : vous pouvez l'enregistrer en PDF. Pour cette démonstration, nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur, pas un téléchargement proposé par le serveur. Relisons le nom, la période, les deux colonnes et la remarque. Les zones Signature et Nom du signataire restent à compléter. Vérifiez le document avant de le signer et de le remettre à la personne.",
+      "transcript": "Quand le contenu vous convient, cliquons sur Générer et imprimer l'attestation. L'application lance l'impression du navigateur : vous pouvez l'enregistrer en PDF. Pour cette démonstration, nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur, pas un téléchargement proposé par le serveur. Relisons le nom, la période, les colonnes d'heures, les participations terminées avant la fin et la remarque. Les zones Signature et Nom du signataire restent à compléter. Vérifiez le document avant de le signer et de le remettre à la personne.",
       "fallbackDurationMs": 47000
     },
     {
       "id": "event-summary",
-      "transcript": "Enfin, ouvrons Documents pour la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau. Le bilan le signale : les autres ne sont pas déclarés absents. Nous retrouvons six heures prévues, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
+      "transcript": "Enfin, ouvrons Documents pour la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Deux participations ont une présence enregistrée, dont une terminée avant la fin. Le bilan compte ce départ à part, sans lui attribuer d'heure attestée. Une présence non saisie n'est pas déclarée absente. Nous retrouvons six heures prévues, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
       "fallbackDurationMs": 50000
     }
   ],

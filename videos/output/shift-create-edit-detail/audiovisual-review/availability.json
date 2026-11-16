@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:40:57.592Z",
-  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
+  "reviewedAt": "2026-11-16T22:18:09.831Z",
+  "videoSha256": "dbdce05a725e66cf7060c109dbbb8e42556113b6c43ec21c65581c15c62bf33f",
   "promptSha256": "0045e5556f593bd051f6ea028684f39e030a9b54ed6280354a199489d59aba45",
-  "clipSha256": "b3ebb32a812f4b137c67bc03e8360f72fe05e481be9fafb6a29ef67580c8e18d",
+  "clipSha256": "fce38f32fe2ed46bd20a611e40deed26029404765c357e9e2abc486f2fc35310",
   "scene": "availability",
   "review": {
-    "heardOpening": "Deux options complètent le fonctionnement du créneau",
+    "heardOpening": "Deux options complètent",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Deux options complètent le fonctionnement du créneau",
-        "visibleSeconds": 0.8,
-        "visible": "Affichage des options 'Activer la liste d'attente' et 'Sur validation' dans le formulaire",
+        "spokenSeconds": 1.2,
+        "spoken": "Deux options complètent le fonctionnement du créneau.",
+        "visibleSeconds": 1,
+        "visible": "Affichage du formulaire présentant les options de liste d'attente et de validation.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.8,
-        "spoken": "La liste d'attente recueille les volontaires quand toutes les places sont prises",
-        "visibleSeconds": 3.6,
-        "visible": "Cochage de la case 'Activer la liste d'attente'",
+        "spokenSeconds": 3.5,
+        "spoken": "La liste d’attente recueille les volontaires quand toutes les places sont prises.",
+        "visibleSeconds": 3.5,
+        "visible": "Option 'Activer la liste d'attente (si complet, les bénévoles peuvent s'y inscrire)' visible à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 7,
         "spoken": "Le mode Sur validation transforme chaque inscription en demande",
-        "visibleSeconds": 7.5,
-        "visible": "Cochage de la case 'Sur validation'",
+        "visibleSeconds": 7,
+        "visible": "La case à cocher 'Sur validation' est cochée par le curseur.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et bien articulée, accompagnée d'un fond musical discret."
+      "observation": "Voix claire, posée et bien synchronisée avec l'action à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

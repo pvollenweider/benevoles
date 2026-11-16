@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:28:52.990Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
+  "promptSha256": "7015e58eb2be6000ebc3b24d911106caaafc90e1aa26584284be32acb6f04369",
+  "clipSha256": "9e69e291f82c82aad1c0ac34a4c1dd8ee5ee249eabd55cdacaea1de80a75b421",
+  "scene": "filters",
+  "review": {
+    "heardOpening": "Quand la liste grandit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "filtrez par poste",
+        "visibleSeconds": 1.2,
+        "visible": "Le menu déroulant 'Tous les créneaux' est ouvert et un créneau est sélectionné au lieu du filtre par poste",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "par créneau",
+        "visibleSeconds": 1.8,
+        "visible": "Le filtre par créneau a déjà été appliqué puis est réinitialisé",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "ou par statut",
+        "visibleSeconds": 3.5,
+        "visible": "Activation de la case à cocher 'Demandes à traiter (2)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "puis utilisez la recherche pour retrouver un nom ou une adresse",
+        "visibleSeconds": 5.2,
+        "visible": "Saisie de 'Camille' dans la barre de recherche filtrant les inscriptions de Camille Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "vous isolez exactement le groupe qui vous intéresse",
+        "visibleSeconds": 8.8,
+        "visible": "La liste filtrée affiche les trois inscriptions correspondant à Camille Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:01-00:03, le filtre par poste n'est pas manipulé : la manipulation porte sur le filtre par créneau en avance sur la narration."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle, bon enregistrement sans bruit de fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

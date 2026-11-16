@@ -1,0 +1,132 @@
+{
+  "command": "ONLY=admin-reminders,admin-print,admin-event-archive,admin-members,admin-members-bulk-delete npm run screenshots",
+  "database": "Disposable branch video database, owned Postgres 45433, default synthetic fixture guarded and freshly seeded; other organizations preserved",
+  "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+  "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+  "altTextsReread": true,
+  "captures": [
+    {
+      "capture": "admin-reminders",
+      "originMainSha256": "edb4cd0d539d249c9c1e26d6250d56923413e172a4d431de7901c77b76df661c",
+      "generatedSha256": "edb4cd0d539d249c9c1e26d6250d56923413e172a4d431de7901c77b76df661c",
+      "changedFromMain": false,
+      "sameAsEarlierBranchCapture": true,
+      "pixelDifference": null,
+      "originMainSize": [
+        672,
+        173
+      ],
+      "generatedSize": [
+        672,
+        173
+      ],
+      "kept": false
+    },
+    {
+      "capture": "admin-print",
+      "originMainSha256": "89a1e2d8f09327ae16945095427fa3cb099619fa6196c57c15ac58d5dda37180",
+      "generatedSha256": "1b3eeabbd108b5125bf095a7e54dfc7955020abbf2561561b62684536f8843e9",
+      "changedFromMain": true,
+      "sameAsEarlierBranchCapture": true,
+      "pixelDifference": [
+        144,
+        101,
+        534,
+        166
+      ],
+      "originMainSize": [
+        1280,
+        800
+      ],
+      "generatedSize": [
+        1280,
+        800
+      ],
+      "kept": true
+    },
+    {
+      "capture": "admin-event-archive",
+      "originMainSha256": "581e1819ed77d7561c9c14df47b8d54de92923e19b43926a93cc01990c6e4044",
+      "generatedSha256": "581e1819ed77d7561c9c14df47b8d54de92923e19b43926a93cc01990c6e4044",
+      "changedFromMain": false,
+      "sameAsEarlierBranchCapture": true,
+      "pixelDifference": null,
+      "originMainSize": [
+        672,
+        122
+      ],
+      "generatedSize": [
+        672,
+        122
+      ],
+      "kept": false
+    },
+    {
+      "capture": "admin-members",
+      "originMainSha256": "a9d44ad80f77105219671918cd118e818153b191d4aa9f50d32336d5d90ba75b",
+      "generatedSha256": "71ab66272e3017420612358698b50ca2ddd7a651c01dd5a61bed0479db1d5203",
+      "changedFromMain": true,
+      "sameAsEarlierBranchCapture": false,
+      "pixelDifference": [
+        17,
+        113,
+        1263,
+        796
+      ],
+      "originMainSize": [
+        1280,
+        800
+      ],
+      "generatedSize": [
+        1280,
+        800
+      ],
+      "kept": false,
+      "reason": "Unchanged interface: residual recorder-owned member rows/count",
+      "canonicalRepeatSha256": "442b5a7b19bb9aed70d2100528805c662c3b457f1c38c2c36b52cd49f3bc002c",
+      "canonicalRepeatPixelDifference": [
+        17,
+        113,
+        1263,
+        796
+      ],
+      "canonicalRepeatSameBytesAsMain": false
+    },
+    {
+      "capture": "admin-members-bulk-delete",
+      "originMainSha256": "238d96fb019123866236db3c06b601b5cbdeb2da15763b552095ab722d515f3e",
+      "generatedSha256": "336cc11dd25a9413d29853042323546d312bdd8758a1a7127670110c6b22ab47",
+      "changedFromMain": true,
+      "sameAsEarlierBranchCapture": false,
+      "pixelDifference": [
+        0,
+        490,
+        512,
+        499
+      ],
+      "originMainSize": [
+        512,
+        504
+      ],
+      "generatedSize": [
+        512,
+        504
+      ],
+      "kept": false,
+      "reason": "Only bottom button focus/shadow pixels differ; no interface change",
+      "canonicalRepeatSha256": "668630bc717bf4f74059a1b9620ee126f60a277b27ad44727a978b60ac0cd578",
+      "canonicalRepeatPixelDifference": [
+        0,
+        490,
+        512,
+        491
+      ],
+      "canonicalRepeatSameBytesAsMain": false
+    }
+  ],
+  "keptCaptures": [
+    "admin-print"
+  ],
+  "note": "Preliminary shared-fixture runs showed residual recorder people and a subsequent live signup. They are superseded by the fully isolated 27-member canonical database in doc-captures-isolated.json; no claim of byte identity is made for these preliminary runs.",
+  "secondRun": "ONLY=admin-members,admin-members-bulk-delete npm run screenshots after exact ledger-backed cleanup of empty recorder-created no-email records"
+}

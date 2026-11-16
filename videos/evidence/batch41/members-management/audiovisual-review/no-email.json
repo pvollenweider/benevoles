@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:37:44.270Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
+  "promptSha256": "f0747e17bc88f0ec179e90f82d7275f0d9d782037f306b953887da13304fb50b",
+  "clipSha256": "5a659203793564082f6e3eb56a945551646726a8178f28d7149faad1e46cc624",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Une personne peut avoir une fiche sans adresse email.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Nous créons René Aubert",
+        "visibleSeconds": 2.2,
+        "visible": "Saisie de « René » et « Aubert » dans les champs Prénom et Nom du formulaire Nouveau membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "avec son téléphone seulement.",
+        "visibleSeconds": 5.4,
+        "visible": "Saisie du numéro de téléphone sans renseigner le champ Email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "En revanche, le système ne peut pas lui envoyer un email",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur « Créer » et apparition de René Aubert dans le tableau des membres avec son numéro de téléphone uniquement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation naturelle avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

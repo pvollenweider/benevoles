@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
 import { launchVideoBrowser, PUBLIC_URL_PROBE_PATH, servedWithPublicUrl, videoAdminEmail, videoRequestProxy } from "../lib/public-hosts"
@@ -16,8 +16,11 @@ if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
 
 const localBaseUrl = (process.env.VIDEO_BASE_URL ?? "http://localhost:43100").replace(/\/$/, "")
 const batch40Public = ["LAST_MINUTE_CHANGES", "SHIFT_ELIGIBILITY_RULES", "MEMBERS_IMPORT"].includes(reference)
-const publicOperator = batch40Public || ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"].includes(reference) || reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
-const baseUrl = batch40Public ? `https://${reference === "LAST_MINUTE_CHANGES" ? "formation-imprevus" : "default"}.benevol.app` : publicOperator ? "https://www.benevol.app" : localBaseUrl
+const attendancePublic = reference === "ATTENDANCE_CHECK_IN"
+const frontDeskPublic = reference === "FRONT_DESK_ACCESS"
+const batch41Public = process.env.VIDEO_PUBLIC_CAPTURE === "1"
+const publicOperator = batch41Public || frontDeskPublic || attendancePublic || batch40Public || ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"].includes(reference) || reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
+const baseUrl = frontDeskPublic ? "https://formation-accueil.benevol.app" : attendancePublic ? "https://formation-jour-j.benevol.app" : batch41Public ? `https://${process.env.VIDEO_ORG ?? "default"}.benevol.app` : batch40Public ? `https://${reference === "LAST_MINUTE_CHANGES" ? "formation-imprevus" : "default"}.benevol.app` : publicOperator ? "https://www.benevol.app" : localBaseUrl
 const host = new URL(localBaseUrl).hostname
 if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
   throw new Error(`Refusing to record against non-local host ${host}`)
@@ -226,11 +229,12 @@ async function main() {
   const durations = new Map(manifest.segments.map((segment) => [segment.id, fallbackTiming ? segment.fallbackDurationMs : audio?.segments[segment.id]?.durationMs ?? segment.fallbackDurationMs]))
   await mkdir(dir, { recursive: true })
   await (await import("../lib/prepare-settings-mailbox")).prepareSettingsMailbox(slug, dir)
-  await rm(rawVideo, { force: true })
+  const archivedCapture = await (await import("../lib/archive-capture")).archiveCapture(dir)
+  if (archivedCapture) console.log(`Previous capture preserved: ${archivedCapture}`)
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const batch22French = ["shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
+  const batch22French = ["front-desk-access", "shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
   const frenchChromiumRevision = batch22French || slug === "members-import" ? "1254" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
@@ -325,7 +329,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["privacy-personal-links", "volunteer-confirmation-errors", "event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -592,11 +596,11 @@ async function main() {
       await page.getByRole("heading", { name: "Tes informations" }).waitFor()
     })
 
-    const stamp = Date.now()
+    const registrationEmail = "alex.martin@example.org"
     await scene("details", async () => {
       await fillVisibly(page, page.getByRole("textbox", { name: "Prénom", exact: true }), "Alex", 180)
       await fillVisibly(page, page.getByRole("textbox", { name: "Nom", exact: true }), "Martin", 180)
-      await fillVisibly(page, page.getByRole("textbox", { name: "Email", exact: true }), `alex.martin.video.${stamp}@example.org`, 180)
+      await fillVisibly(page, page.getByRole("textbox", { name: "Email", exact: true }), registrationEmail, 180)
       await fillVisibly(page, page.getByRole("textbox", { name: /Téléphone/, exact: true }), "079 000 12 34", 180)
     })
 
@@ -618,7 +622,7 @@ async function main() {
       await submit.scrollIntoViewIfNeeded()
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
-      await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
+      await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
     })
 
     await scene("success", async () => {
@@ -1241,7 +1245,8 @@ async function main() {
         await page.getByRole("dialog").waitFor()
         createdBar = await newBarAfter(before)
         drawnEnd = await page.getByRole("dialog").getByLabel("Fin", { exact: true }).inputValue()
-        await at("Donnez-lui un libellé")
+        await at("Le créneau est créé")
+        await at(0.58) /* source-audio onset: « Donnez-lui » is 10.72 s; the silence-only sentence estimate was 2 s late */
         await typeQuickAction(page.getByRole("dialog").getByLabel("Libellé", { exact: true }), drawnLabel)
         await at("Donnez-lui un libellé, ajustez les")
         await tap(page, page.getByRole("dialog").getByLabel("Places", { exact: true }))
@@ -1441,10 +1446,11 @@ async function main() {
         const rows = page.locator("tr").filter({ hasText: "Buvette série" })
         if (await rows.count() !== 6) throw new Error("Series result must contain exactly six actual shifts")
         const first = rows.first()
+        await first.evaluate(element => element.scrollIntoView({ block: "center" }))
         await first.getByText("0/4", { exact: true }).waitFor()
         for (let index = 1; index < 6; index++) await rows.nth(index).getByText("0/3", { exact: true }).waitFor()
         await at("quatre places pour la première relève")
-        await first.evaluate(element => element.scrollIntoView({ block: "center" }))
+        await first.getByText("0/4", { exact: true }).waitFor()
         await at("Une série bien découpée facilite")
         await rows.last().scrollIntoViewIfNeeded()
       })
@@ -1575,12 +1581,11 @@ async function main() {
         if (await date.count()) {
           await tap(page, date)
           await date.selectOption({ index: 1 })
-          await page.waitForTimeout(500)
         }
         await at("La date, l’heure de début")
-        await fillVisibly(page, page.getByLabel(/^Début(?: \*)?$/), "18:00", 850)
+        await fillVisibly(page, page.getByLabel(/^Début(?: \*)?$/), "18:00", 150)
         await at("La date, l’heure de début")
-        await fillVisibly(page, page.getByLabel(/^Fin(?: \*)?$/), "21:30", 850)
+        await fillVisibly(page, page.getByLabel(/^Fin(?: \*)?$/), "21:30", 150)
         await at("La capacité indique combien de")
         await enterDetailText(page.getByLabel(/^Places(?: \*)?$/), "3")
         if (await page.getByLabel(/^Début(?: \*)?$/).inputValue() !== "18:00" || await page.getByLabel(/^Fin(?: \*)?$/).inputValue() !== "21:30") throw new Error("Detailed shift hours must match the visible actual form values")
@@ -1751,10 +1756,10 @@ async function main() {
       await scene("release", async (at) => {
         await page.goto(`${baseUrl}/my/demo-waitlist-release-zoe-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
-        await at(0.28) /* mid-sentence */
+        await at("Quand une personne confirmée se désinscrit")
         await tap(page, page.getByRole("button", { name: `Annuler le créneau ${waitlistShift.label}` }))
         await page.getByRole("alertdialog").waitFor()
-        await at(0.52) /* mid-sentence */
+        await at("Une offre est envoyée à la première personne en attente")
         await tap(page, page.getByRole("button", { name: "Oui, annuler" }))
         await page.getByText(/annulée/i).first().waitFor()
         await at(0.78) /* mid-sentence */
@@ -2551,13 +2556,16 @@ async function main() {
     } else if (slug === "event-activity-log") {
       const { recordEventLog } = await import("../lib/record-event-log")
       await recordEventLog({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "front-desk-access") {
+      const { recordFrontDesk } = await import("../lib/record-front-desk")
+      await recordFrontDesk({ page, base: baseUrl, directory: dir, title: manifest.title, scene, tap, settle })
     } else if (slug === "attendance-check-in") {
       const { recordAttendance } = await import("../lib/record-attendance")
       const { recordDayOf } = await import("../lib/record-day-of")
       const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
       const { pgAdapter } = await import("../../src/lib/prisma-adapter")
-      if (baseUrl !== "http://localhost:43108") throw new Error("Attendance requires its independent Jour J server")
+      if (localBaseUrl !== "http://localhost:43108" || baseUrl !== "https://formation-jour-j.benevol.app") throw new Error("Attendance requires its independent Jour J server and local public gateway")
       const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       try {
         await verifyDayOfReviewFixture(db)
@@ -3630,7 +3638,7 @@ async function main() {
       const { execFile } = await import("node:child_process")
       const { promisify } = await import("node:util")
       const execute = promisify(execFile)
-      if (baseUrl !== "http://localhost:43114" || org !== "formation-heures" || process.env.ORG_ADMIN_EMAIL !== HOURS_OWNER) throw new Error("Hours require their dedicated owned local server")
+      if (localBaseUrl !== "http://localhost:43114" || baseUrl !== "https://formation-heures.benevol.app" || org !== "formation-heures" || process.env.ORG_ADMIN_EMAIL !== HOURS_OWNER) throw new Error("Hours require their dedicated owned local server")
       const { db, product: hoursProduct, unregister } = await loadCurrentVideoPrisma("http://localhost:43114")
       try {
         const preparation = JSON.parse(await readFile(path.join(dir, "preparation.json"), "utf8"))
@@ -3649,13 +3657,32 @@ async function main() {
           },
           preparePrintedPdf: async current => {
             const printedFrom = current.url()
+            const printSettings = {
+              from: await current.getByLabel("Du", { exact: true }).inputValue(),
+              to: await current.getByLabel("Au", { exact: true }).inputValue(),
+              note: await current.getByLabel("Texte libre (facultatif)", { exact: true }).inputValue(),
+              includePlanned: await current.getByRole("checkbox", { name: "Inclure les heures prévues sans présence saisie", exact: true }).isChecked(),
+            }
             const folder = path.join(dir, "documents"); await mkdir(folder, { recursive: true })
             return async () => {
               // The product button has already invoked its genuine window.print.
               // Headless Chromium has no visible print dialog; use its actual
               // print engine afterwards, without intercepting or replacing it.
               const file = path.join(folder, "attestation-aline.pdf")
-              await current.pdf({ path: file, format: "A4", printBackground: true, preferCSSPageSize: true })
+              // Headless Chromium leaves the real window.print pending. A second
+              // genuine product preview uses the same UI settings and its print
+              // engine; no print interception or copied HTML is involved.
+              const printPage = await current.context().newPage()
+              try {
+                await printPage.goto(printedFrom); await settle(printPage)
+                await printPage.getByLabel("Du", { exact: true }).fill(printSettings.from)
+                await printPage.getByLabel("Au", { exact: true }).fill(printSettings.to)
+                await printPage.getByLabel("Texte libre (facultatif)", { exact: true }).fill(printSettings.note)
+                await printPage.getByRole("checkbox", { name: "Inclure les heures prévues sans présence saisie", exact: true }).setChecked(printSettings.includePlanned)
+                const logo = printPage.getByRole("article", { name: "Attestation de bénévolat", exact: true }).locator("img")
+                await logo.evaluate((image: HTMLImageElement) => image.decode())
+                await printPage.pdf({ path: file, format: "A4", printBackground: true, preferCSSPageSize: true })
+              } finally { await printPage.close() }
               const bytes = await readFile(file)
               const extracted = await execute("pdftotext", ["-layout", file, "-"])
               const info = await execute("pdfinfo", [file])
@@ -3755,7 +3782,7 @@ async function main() {
       }
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Des fiches utiles, sans complication", duration: 2_300 })
-        await page.getByText("60 membres", { exact: true }).waitFor()
+        await page.getByText("63 membres", { exact: true }).waitFor()
       })
       await scene("create", async at => {
         await tap(page, page.getByRole("button", { name: "+ Nouveau membre", exact: true }))
@@ -3771,7 +3798,7 @@ async function main() {
         await form.waitFor({ state: "hidden" })
         await page.getByRole("button", { name: "Modifier Maya Berger", exact: true }).waitFor()
         await mayaRow().getByText("maya.berger@example.org", { exact: true }).waitFor()
-        await page.getByText("61 membres", { exact: true }).waitFor()
+        await page.getByText("64 membres", { exact: true }).waitFor()
       })
       await scene("edit", async at => {
         await editMaya()
@@ -4350,6 +4377,35 @@ async function main() {
         await tap(page, confirmation.getByRole("button", { name: "Annuler", exact: true }))
       })
 
+      await scene("post-pages", async at => {
+        await at("Rattachons maintenant cette page au poste Accueil")
+        await tap(page, page.getByRole("button", { name: "Modifier la page « Ce qu’il faut apporter »", exact: true }))
+        const form = page.getByRole("dialog", { name: "Modifier la page", exact: true })
+        await form.getByText(/Cette page est publique/).waitFor()
+        const group = form.getByRole("group", { name: "Pour les bénévoles de ces postes", exact: true })
+        await at("Dans Modifier, le groupe Pour les bénévoles")
+        await group.scrollIntoViewIfNeeded()
+        await tap(page, group.getByRole("checkbox", { name: "Accueil", exact: true }))
+        await tap(page, form.getByRole("button", { name: "Enregistrer", exact: true }))
+        await form.waitFor({ state: "hidden" })
+        await page.getByRole("listitem").filter({ hasText: "Ce qu’il faut apporter" }).getByText("Pour le poste Accueil", { exact: true }).waitFor()
+        await at("L'avertissement le rappelle")
+        await tap(page, page.getByRole("button", { name: "Modifier la page « Ce qu’il faut apporter »", exact: true }))
+        await form.getByText(/Cette page est publique/).scrollIntoViewIfNeeded()
+        await at("Voici la vraie page Mes inscriptions d'Aline")
+        const { PAGES_PERSONAL_TOKEN } = await import("../lib/foundation-pages-fixture")
+        await page.goto(`https://formation-pages.benevol.app/my/${PAGES_PERSONAL_TOKEN}`); await settle(page)
+        await page.getByRole("link", { name: /À lire avant ton créneau.*Ce qu.il faut apporter/ }).first().scrollIntoViewIfNeeded()
+        const link = page.getByRole("link", { name: /À lire avant ton créneau.*Ce qu.il faut apporter/ }).first()
+        await link.waitFor()
+        await at("Ouvrons-le")
+        const destination = await link.getAttribute("href")
+        if (!destination) throw new Error("Actual poste page link missing")
+        await tap(page, link)
+        await page.goto(new URL(destination, "https://formation-pages.benevol.app").href); await settle(page)
+        await page.getByText("Une gourde", { exact: true }).waitFor()
+      })
+
       await scene("public", async (at) => {
         // The public page links are relative. A host carrying the organization is
         // required, just as in production; ?org= on localhost isn't propagated by
@@ -4914,7 +4970,7 @@ async function main() {
         await page.screencast.showChapter("Une équipe autonome et maîtrisée", { description: "Des comptes nominatifs, des droits adaptés", duration: 2_300 })
       })
     } else if (slug === "org-email-settings") {
-      if (baseUrl !== "http://localhost:43102" || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
+      if (localBaseUrl !== "http://localhost:43102" || (baseUrl !== "http://localhost:43102" && baseUrl !== "https://formation-email.benevol.app") || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
       const emailEventId = "video-foundation-email-event-0"
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
@@ -4944,22 +5000,19 @@ async function main() {
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/edit`); await settle(page)
         const enabled = page.getByRole("checkbox", { name: "Rappels automatiques", exact: true })
         await enabled.scrollIntoViewIfNeeded()
-        await at(0.19)
-        if (!await enabled.isChecked()) {
-          const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
-          await tap(page, enabled)
-          if (!(await saved).ok()) throw new Error("Event reminder enable was not saved")
-          await page.getByText(/^Modifications enregistrées à/).waitFor()
-        }
-        await at(0.35)
+        if (!await enabled.isChecked()) throw new Error("Fresh email fixture must start with event reminders enabled")
+        await at(0.22) /* mid-sentence: turn off the switch while explaining that it cuts this event's reminders */
         const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
         await tap(page, enabled)
         if (!(await saved).ok()) throw new Error("Event reminder disable was not saved")
         await page.getByText(/^Modifications enregistrées à/).waitFor()
-        await at("Son onglet Messages")
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/message`); await settle(page)
-        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
-        await page.getByText("Rappels automatiques coupés pour cet événement", { exact: true }).waitFor()
+        const actualSummary = page.getByText("Rappels automatiques coupés pour cet événement", { exact: true })
+        await actualSummary.waitFor(); await actualSummary.scrollIntoViewIfNeeded()
+        await page.waitForTimeout(500)
+        const summaryBox = await actualSummary.boundingBox()
+        if (!summaryBox || summaryBox.y < 0 || summaryBox.y + summaryBox.height > 800) throw new Error("Actual reminder summary is outside the captured viewport")
+        await at("Son onglet Messages")
       })
 
       await scene("admin-alert", async (at) => {
@@ -5033,15 +5086,13 @@ async function main() {
         await at("Ouvrons le message reçu")
         await page.goto(`http://localhost:48026/view/${mailId}`); await settle(page)
         await page.frameLocator("iframe").locator("body").getByText(/Cet email vérifie l'envoi/).filter({ visible: true }).waitFor()
-        const detailStart = Math.round(performance.now() - startedAt)
-        detailFrames.push({ startMs: detailStart, endMs: detailStart + 1, x: 300, y: 0, width: 960, height: 600 })
+        // The assembler frames the real sender/reply-to rows and body together, excluding the client date and technical controls.
       })
 
       await scene("result", async (at) => {
-        await at("Les paramètres sont enregistrés")
+        await at("Dans Emails envoyés")
         await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
         await page.getByRole("heading", { name: "Paramètres des emails" }).waitFor()
-        await at("Dans Emails envoyés")
         await page.getByRole("heading", { name: "Emails envoyés", exact: true }).scrollIntoViewIfNeeded()
         await page.getByRole("row").filter({ hasText: "video.email.owner@example.org" }).first().waitFor()
       })
@@ -5085,16 +5136,21 @@ async function main() {
         await page.getByRole("status").filter({ hasText: /2 créneaux créés/ }).waitFor()
       })
 
-      await scene("delivery", async () => {
+      await scene("delivery", async at => {
         await tap(page, page.getByRole("button", { name: "+ Ajouter un créneau" }))
         const editor = page.getByRole("group", { name: "Nouveau créneau" })
-        await typeNaturally(page, editor.getByLabel("Poste *"), "Livraison")
-        await fillVisibly(page, editor.getByLabel("Libellé"), "Livraison — permis B requis", 400)
-        await fillVisibly(page, editor.getByLabel("Début *"), "09:00", 400)
-        await fillVisibly(page, editor.getByLabel("Fin *"), "12:00", 400)
-        await fillVisibly(page, editor.getByLabel("Âge minimum (optionnel)"), "18", 400)
-        await fillVisibly(page, editor.getByLabel("Description"), "Permis B valide obligatoire", 400)
-        await fillVisibly(page, editor.getByLabel("Consigne pratique"), "Permis de conduire valide obligatoire. Véhicule fourni.", 400)
+        await editor.getByLabel("Poste *").fill("Livraison")
+        await editor.getByLabel("Libellé").fill("Livraison — permis B requis")
+        await editor.getByLabel("Début *").fill("09:00")
+        await editor.getByLabel("Fin *").fill("12:00")
+        await at("Il faut avoir au moins")
+        await fillVisibly(page, editor.getByLabel("Âge minimum (optionnel)"), "18", 150)
+        await at("posséder un permis B valide")
+        await at(0.40) /* mid-sentence: named licence, after the visible age */
+        await fillVisibly(page, editor.getByLabel("Description"), "Permis B valide obligatoire", 150)
+        await at("Ces conditions sont visibles par les bénévoles")
+        await fillVisibly(page, editor.getByLabel("Consigne pratique"), "Permis de conduire valide obligatoire. Véhicule fourni.", 150)
+        await at(0.97) /* mid-sentence: retain the real instructions through the last words « véhicule fourni » */
         await tap(page, editor.getByRole("button", { name: "Ajouter", exact: true }))
         await page.getByRole("status").filter({ hasText: /Créneau ajouté : Livraison/ }).waitFor()
       })
@@ -5136,9 +5192,9 @@ async function main() {
         await tap(page, previewShift)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-        await fillVisibly(page, page.getByRole("textbox", { name: "Prénom", exact: true }), "Alex", 180)
-        await fillVisibly(page, page.getByRole("textbox", { name: "Nom", exact: true }), "Martin", 180)
-        await fillVisibly(page, page.getByRole("textbox", { name: "Email", exact: true }), "alex.martin@example.org", 180)
+        await page.getByRole("textbox", { name: "Prénom", exact: true }).fill("Alex")
+        await page.getByRole("textbox", { name: "Nom", exact: true }).fill("Martin")
+        await page.getByRole("textbox", { name: "Email", exact: true }).fill("alex.martin@example.org")
         const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
         await tap(page, charter)
         const privacy = page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ })
@@ -5157,15 +5213,19 @@ async function main() {
         await settle(page)
       })
 
-      await scene("publish", async () => {
+      await scene("publish", async at => {
+        await at("Quand tout est prêt, publiez le planning")
+        await at(0.18) /* mid-sentence: the actual publication verb */
         await tap(page, page.getByRole("button", { name: "Publier" }))
         await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()
         organizerPublicUrl = (await page.getByText("Lien à partager :", { exact: false }).locator("span").textContent())?.trim() ?? ""
         if (!organizerPublicUrl) throw new Error("Published event has no public URL")
       })
 
-      await scene("qr", async () => {
+      await scene("qr", async at => {
         await tap(page, page.getByRole("link", { name: "Partage", exact: true }))
+        await at("ouvrez le QR code")
+        await at(0.30) /* mid-sentence: after the examples of where to share it */
         await tap(page, page.getByRole("link", { name: "QR code", exact: true }))
         await page.getByRole("heading", { name: "QR code", exact: true }).waitFor()
         await page.getByText("Scanner pour s'inscrire").scrollIntoViewIfNeeded()
@@ -5193,7 +5253,7 @@ async function main() {
         await at("L’application analyse les colonnes")
         await tap(page, page.getByRole("button", { name: "Analyser le fichier" }))
         await page.getByText("Analyse du fichier, rien n'est encore enregistré.").waitFor()
-        await at(0.86) /* mid-sentence: confirm after the analysis explanation */
+        await at(0.96) /* mid-sentence: let the complete analysis explanation finish before confirmation */
         await tap(page, page.getByRole("button", { name: "Importer 12 membres" }))
         await page.getByText(/Import terminé :/).waitFor()
         await tap(page, page.getByRole("button").filter({ hasText: /^Fermer$/ }))
@@ -5398,6 +5458,8 @@ async function main() {
         await page.getByRole("group", { name: "Quand l'envoyer ?", exact: true }).scrollIntoViewIfNeeded()
         await at("La section Messages programmés permet")
         await page.getByRole("heading", { name: "Messages programmés", exact: true }).scrollIntoViewIfNeeded()
+        await at("Des délais propres à l'événement")
+        await page.getByRole("form", { name: "Délais des rappels automatiques", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
@@ -5507,11 +5569,17 @@ async function main() {
         await page.getByRole("heading", { name: "Écrire aux bénévoles" }).waitFor()
         await at("tous les inscrits, un poste")
         await tap(page, page.getByLabel("Les bénévoles d'un poste"))
-        await at(0.38) /* mid-sentence */
         await page.getByLabel("Poste", { exact: true }).selectOption("Buvette")
+        await at("un créneau")
+        await at(0.42) /* the named option inside the same enumerating sentence */
+        const shiftAudience = page.getByLabel("Les bénévoles d'un créneau", { exact: true })
+        await tap(page, shiftAudience)
+        if (!(await shiftAudience.isChecked())) throw new Error("Actual shift audience must be selected while it is named")
         await at("la liste d’attente")
+        await at(0.50) /* next named option in this sentence */
         await tap(page, page.getByLabel("Les personnes en liste d'attente"))
         await at("ou les invités qui n’ont encore aucun créneau confirmé")
+        await at(0.58) /* last named option in this sentence */
         await tap(page, page.getByLabel("Les invités sans créneau confirmé"))
         await at(0.88) /* mid-sentence */
         await tap(page, page.getByLabel("Les personnes en liste d'attente"))

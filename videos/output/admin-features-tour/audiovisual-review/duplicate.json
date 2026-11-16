@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:36:35.530Z",
-  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
-  "promptSha256": "725608f110f4d3059ce2737b641d5dd4b04cbab81f05f25a24491cde78f262dd",
-  "clipSha256": "910fa59b306e99b87d13a5247e6e921c082df23a44bca112bd296013bdd69a97",
+  "reviewedAt": "2026-11-16T21:43:59.043Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "938056435b855e201047041c29f030b0be6435deaff1f7d1a0f6e7b34a7315bb",
+  "clipSha256": "29b1897f5e456f36c73db4cd94c16f86f971c6b3759d9d09a0c3ec875bace9e5",
   "scene": "duplicate",
   "review": {
     "heardOpening": "Pour repartir d'une édition précédente",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 0.5,
         "spoken": "dupliquez l'événement",
-        "visibleSeconds": 2,
-        "visible": "Page « Dupliquer l'événement » affichée",
+        "visibleSeconds": 0.5,
+        "visible": "Page 'Dupliquer l'événement' affichée avec le champ de titre pour la copie",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "décalez toutes les dates",
-        "visibleSeconds": 5,
-        "visible": "Saisie de la nouvelle date dans « Premier jour de la copie » (24/10/2026)",
+        "spokenSeconds": 2.5,
+        "spoken": "et décalez toutes les dates",
+        "visibleSeconds": 2.5,
+        "visible": "Champ 'Premier jour de la copie' avec mention du décalage de toutes les dates",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.7,
-        "spoken": "Vous choisissez ce qui est repris : les créneaux, les réglages",
-        "visibleSeconds": 6.5,
-        "visible": "Section « Ce qui est copié » affichant les cases à cocher « Les créneaux » et « Les messages et réglages d'inscription »",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 9.4,
-        "spoken": "les pages d'information et les responsables",
-        "visibleSeconds": 9,
-        "visible": "Options « Les pages personnalisées » et « Les responsables de secteur » visibles dans la liste",
+        "spokenSeconds": 5.2,
+        "spoken": "Vous choisissez ce qui est repris : les créneaux, les paramètres, les pages d'information et les responsables.",
+        "visibleSeconds": 5.5,
+        "visible": "Section 'Ce qui est copié' visible avec les options pour les créneaux, paramètres, pages et responsables",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
+      "observation": "Voix féminine naturelle, claire et bien articulée, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

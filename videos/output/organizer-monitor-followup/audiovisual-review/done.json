@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T09:06:23.445Z",
-  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
+  "reviewedAt": "2026-11-16T21:29:36.988Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
   "promptSha256": "69e0aef05af8a282ebf85adfa296202c4d699599e7b89fc49c9a9433df43b80b",
-  "clipSha256": "785c7fe6e2ef6e8b57c096eca69769c0b7b14dee0eb369d9ab6d57f62022c44d",
+  "clipSha256": "3608cf02389ad199e3c92f63071e029b77b71fbb720b6aa11796dc04dbdd6cbb",
   "scene": "done",
   "review": {
-    "heardOpening": "Le résultat, c’est un suivi simple",
+    "heardOpening": "Le résultat, c'est un suivi simple",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Le résultat, c’est un suivi simple",
-        "visibleSeconds": 0.5,
-        "visible": "Encart central affichant « Un suivi clair jusqu'au jour J » avec le sous-titre « voir, cibler, préparer »",
+        "spokenSeconds": 0.6,
+        "spoken": "Le résultat, c'est un suivi simple",
+        "visibleSeconds": 0,
+        "visible": "Cartouche central « Un suivi clair jusqu'au jour J » affiché au premier plan",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.7,
-        "spoken": "retrouver l’historique sans jongler entre plusieurs outils",
-        "visibleSeconds": 3,
-        "visible": "Affichage complet de la liste d'historique des actions (modifications de paramètres, inscriptions, invitations, créneaux)",
+        "spokenSeconds": 6,
+        "spoken": "retrouver l'historique sans jongler entre plusieurs outils",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du cartouche et affichage de l'historique chronologique dans l'onglet Récit",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "Votre planning reste lisible jusqu’au jour de l’événement",
-        "visibleSeconds": 9,
-        "visible": "Page d'historique des événements et interventions toujours affichée en vue récapitulative",
+        "spokenSeconds": 8.8,
+        "spoken": "Votre planning reste lisible jusqu'au jour de l'événement",
+        "visibleSeconds": 8.8,
+        "visible": "Écran stable de conclusion présentant la vue globale des événements et inscriptions",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, fluide et posée, accompagnée d'une musique de fond discrète."
+      "observation": "Voix off féminine naturelle, posée et chaleureuse, avec un débit régulier et un son propre."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

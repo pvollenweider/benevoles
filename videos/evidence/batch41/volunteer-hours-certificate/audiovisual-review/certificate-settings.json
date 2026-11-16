@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:33:35.609Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "promptSha256": "ada642a1229d9cc4c5c7cd094d05fb052805aabc0ef92842a57df4c50c781dcd",
+  "clipSha256": "13a7deef05fad02b2a7d77444c08d9ac85f6f83d481e0459518031bb61d5fa7e",
+  "scene": "certificate-settings",
+  "review": {
+    "heardOpening": "Préparons maintenant une attestation pour Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "ouvrons Attestation de bénévolat",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur le lien 'Attestation de bénévolat' et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Choisissons une période du premier mai au trente septembre",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie des dates 01/05/2026 et 30/09/2026 dans les champs de période",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "écrivons Accueil du public et rangement du matériel",
+        "visibleSeconds": 12,
+        "visible": "Texte saisi dans le champ 'Texte libre (facultatif)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "L'aperçu reprend le nom du bénévole, celui de l'organisation",
+        "visibleSeconds": 18,
+        "visible": "Défilement vers le bas révélant l'aperçu de l'attestation avec le nom, l'organisation et le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.5,
+        "spoken": "Il est imprimé en gris pour garder un document adapté au noir et blanc",
+        "visibleSeconds": 26,
+        "visible": "Le logo visible dans l'aperçu comporte des couleurs vives (vert, jaune, orange) et n'est pas affiché en gris",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:29, la voix indique que le logo est imprimé en gris, mais le logo affiché sur l'attestation apparaît en couleurs (vert, jaune et orange)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et régulière, avec un accompagnement musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

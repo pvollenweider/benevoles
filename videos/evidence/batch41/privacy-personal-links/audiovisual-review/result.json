@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:19:01.711Z",
+  "videoSha256": "fa5cbf11e7a2bb4c84da497238502ca0be8e1e0dc3d0c0aac637284e2c1496ed",
+  "promptSha256": "3897ad9ef40c1fd2ca3fe25647b4c5bac12203dc8686ff2fd1c932269ed6e28b",
+  "clipSha256": "daf73bae5abbbd3a5bc5689742744dc281b8e13088161097e590c8de7231e118",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Revenons à la page Mes inscriptions et à son avertissement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons à la page Mes inscriptions et à son avertissement",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la page d'inscription avec la section « Ton lien personnel » et son avertissement de confidentialité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Pour recruter, partagez la page d’inscription",
+        "visibleSeconds": 3.6,
+        "visible": "Transition vers la vue publique de la page d'inscription montrant le planning et les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "Pour gérer une inscription, gardez le lien personnel pour son destinataire",
+        "visibleSeconds": 6.8,
+        "visible": "Retour à la page personnelle avec l'encadré « Ton lien personnel »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Pour coordonner un poste, remettez le lien du responsable à la personne désignée",
+        "visibleSeconds": 10.8,
+        "visible": "Affichage de l'espace « Responsable - Accueil » avec la liste des bénévoles inscrits",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Si un accès a été diffusé par erreur, contactez l'organisation",
+        "visibleSeconds": 15.8,
+        "visible": "Retour sur la vue de gestion d'inscription personnelle montrant le bouton « Écrire à l'organisation »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les changements d'écran récapitulatifs."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,15 @@
+npm run video:publish -- --context "default" --apply  ATTENDANCE_CHECK_IN 
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply ATTENDANCE_CHECK_IN
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + attendance-check-in/attendance-check-in-og.jpg
+  + attendance-check-in/attendance-check-in.jpg
+  + attendance-check-in/attendance-check-in.mp4
+  + attendance-check-in/attendance-check-in.txt
+  + attendance-check-in/attendance-check-in.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 574
+Envoyé : 5 fichier(s).

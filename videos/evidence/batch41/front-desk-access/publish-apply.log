@@ -1,0 +1,15 @@
+npm run video:publish -- --context "default" --apply  FRONT_DESK_ACCESS 
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply FRONT_DESK_ACCESS
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + front-desk-access/front-desk-access-og.jpg
+  + front-desk-access/front-desk-access.jpg
+  + front-desk-access/front-desk-access.mp4
+  + front-desk-access/front-desk-access.txt
+  + front-desk-access/front-desk-access.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 574
+Envoyé : 5 fichier(s).

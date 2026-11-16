@@ -1,0 +1,12 @@
+{
+  "anchor": "Un événement suit un cycle clair : brouillon pendant la préparation,",
+  "windowStart": 17.753,
+  "result": {
+    "found": true,
+    "startSeconds": 26.12,
+    "wordsHeard": "Un"
+  },
+  "onset": 43.873000000000005,
+  "proposedCut": 43.577833,
+  "note": "Proposal only; recut then independently audit before capture"
+}

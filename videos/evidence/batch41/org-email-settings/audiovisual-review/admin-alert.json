@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:15:51.241Z",
+  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "promptSha256": "db6c480e161e4233506e437bab427928c8b732a7db4e152ee924a9660032d8d2",
+  "clipSha256": "665ec51052ad3d68702938e9191427e9604712733cc1f194fa4f3cc173b43872",
+  "scene": "admin-alert",
+  "review": {
+    "heardOpening": "L'option Prévenir les organisateurs",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'option Prévenir les organisateurs à chaque inscription",
+        "visibleSeconds": 0.5,
+        "visible": "L'option 'Prévenir les organisateurs à chaque inscription' est bien visible dans la liste des paramètres d'emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "envoie un email à chaque organisateur actif",
+        "visibleSeconds": 4.5,
+        "visible": "Le curseur clique sur la case à cocher 'Prévenir les organisateurs à chaque inscription' et la décoche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Elle facilite le suivi d’un petit événement",
+        "visibleSeconds": 9,
+        "visible": "L'écran reste stable sur la page des paramètres d'emails avec la case décochée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:04 : La case 'Prévenir les organisateurs à chaque inscription' est décochée à l'écran alors que la narration explique simplement son utilité sans donner de consigne de désactivation."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, bien rythmée et intelligible, avec un léger fond musical d'accompagnement."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

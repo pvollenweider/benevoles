@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:38:02.120Z",
-  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
+  "reviewedAt": "2026-11-16T21:44:25.768Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
   "promptSha256": "527bc44048f4f80755fc106fc5dd9d196e3d6513be3d85d17e8d6afb5fef66ab",
-  "clipSha256": "3f0bd5c4b674315fca936f2789c3f192472b3db2e0570e98054998668384e907",
+  "clipSha256": "420eb2dcd859f5ab2fbabd30ee21491faa24487730a72e83b7cc6aae8124505b",
   "scene": "questions",
   "review": {
     "heardOpening": "Le formulaire peut poser quelques questions utiles",
     "checkpoints": [
       {
-        "spokenSeconds": 2.9,
+        "spokenSeconds": 2.8,
         "spoken": "taille de t-shirt, régime alimentaire ou permis de conduire",
-        "visibleSeconds": 2.5,
-        "visible": "Liste des trois questions déjà existantes affichée à l'écran (Taille de t-shirt, Régime alimentaire, Permis de conduire)",
+        "visibleSeconds": 0.5,
+        "visible": "Liste des questions déjà configurées affichant Taille de t-shirt, Régime alimentaire et Permis de conduire",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7,
         "spoken": "sous forme de texte, de nombre, de choix unique ou de cases à cocher",
-        "visibleSeconds": 7,
-        "visible": "Formulaire 'Nouvelle question' avec le champ déroulant 'Type de réponse' (initialement Texte court)",
+        "visibleSeconds": 10.5,
+        "visible": "Le champ Type de réponse est modifié et passe à Choix unique avec les options de taille",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.3,
+        "spokenSeconds": 11.2,
         "spoken": "Une question de suivi peut s’afficher seulement pour certaines réponses",
-        "visibleSeconds": 12,
-        "visible": "Section 'Afficher seulement si...' visible sous la liste des choix proposés",
+        "visibleSeconds": 11,
+        "visible": "Paramètre Afficher seulement si... visible dans le formulaire de question",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.1,
+        "spokenSeconds": 15.8,
         "spoken": "Vous décidez si la réponse est obligatoire",
-        "visibleSeconds": 17,
-        "visible": "Case à cocher 'Réponse obligatoire' bien visible dans le formulaire",
+        "visibleSeconds": 15,
+        "visible": "Case à cocher Réponse obligatoire visible au-dessus de la condition d'affichage",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, dynamique et bien synchronisée avec le contenu affiché."
+      "observation": "Voix off fluide, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

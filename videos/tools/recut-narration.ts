@@ -17,7 +17,8 @@ async function main() {
   const previousEnd = cuts.at(-1)!
   for (const arg of process.argv.slice(3)) {
     const [id, seconds] = arg.split("=")
-    const index = id === "end" ? manifest.segments.length : manifest.segments.findIndex(s => s.id === id)
+    // Explicit segment: prefix disambiguates a chapter literally named "end".
+    const index = id.startsWith("segment:") ? manifest.segments.findIndex(s => s.id === id.slice(8)) : id === "end" ? manifest.segments.length : manifest.segments.findIndex(s => s.id === id)
     if (index < 1 || !Number.isFinite(Number(seconds)) || Number(seconds) > previousEnd) throw new Error(`Invalid boundary: ${arg}`)
     cuts[index] = Number(seconds)
   }

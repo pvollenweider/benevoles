@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:22:59.441Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
+  "reviewedAt": "2026-11-16T19:48:30.814Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
   "promptSha256": "5e20c59e9f1479ee96512d51811bc9b3c9a8ffbc22d6ea50564168cf53ccdc78",
-  "clipSha256": "6da44a4af814d0f8ea586fec0d923726f54576e699a91d55a487e749a698fc82",
+  "clipSha256": "7b660ae41fe183b81da43bbaf99bb901fa969ec104179b77a0da67cf3704badc",
   "scene": "multiple",
   "review": {
-    "heardOpening": "Une personne peut aider sur plusieurs horaires.",
+    "heardOpening": "Une personne peut t'aider sur plusieurs horaires.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 3.2,
         "spoken": "Recherchons Léa pour retrouver ses deux inscriptions.",
-        "visibleSeconds": 3.8,
-        "visible": "Saisie dans la barre de recherche et affichage des deux lignes d'inscription de Léa Exemple",
+        "visibleSeconds": 5.4,
+        "visible": "Saisie dans le champ de recherche filtrant la liste sur les deux inscriptions de Léa Müller.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 6.6,
         "spoken": "Elle aide le matin, puis à la buvette.",
-        "visibleSeconds": 5,
-        "visible": "Affichage des deux créneaux : Accueil du matin et Buvette de midi",
+        "visibleSeconds": 6.6,
+        "visible": "Affichage des deux créneaux respectifs : Buvette de midi et Accueil du matin.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "l'une est pointée et l'autre ne l'est pas.",
-        "visibleSeconds": 16.5,
-        "visible": "Statut Présent avec coche verte affiché uniquement sur la ligne Accueil du matin",
+        "spokenSeconds": 16.8,
+        "spoken": "Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas.",
+        "visibleSeconds": 16.8,
+        "visible": "Les deux lignes sont visibles : la deuxième mentionne Présent alors que la première reste vierge de pointage.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
+      "observation": "Voix off féminine claire, posée et bien articulée, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

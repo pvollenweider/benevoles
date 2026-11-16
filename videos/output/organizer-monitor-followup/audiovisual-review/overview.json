@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T09:03:47.206Z",
-  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
+  "reviewedAt": "2026-11-16T21:28:31.295Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
   "promptSha256": "661d5e515058c0516f910b668dcfe3862e9762ccf616b8642237949f7c044a7e",
-  "clipSha256": "5a669eea4cfa1a9550b36802ef017116dc9528af87b96c55836ddec5ceee83dd",
+  "clipSha256": "3a11e670a9cc6ce463dcfd128c919273e6be6539f6917e65ccc9c27557a5f469",
   "scene": "overview",
   "review": {
     "heardOpening": "Une fois le planning publié",
     "checkpoints": [
       {
         "spokenSeconds": 1.5,
-        "spoken": "suivre les inscriptions et relancer au bon moment",
+        "spoken": "voici comment suivre les inscriptions et relancer au bon moment",
         "visibleSeconds": 1,
-        "visible": "Titre affiché au centre : « Suivre les inscriptions et relancer au bon moment »",
+        "visible": "Encart titre 'Suivre les inscriptions et relancer au bon moment' affiché au centre de l'écran sur la page de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 5.5,
         "spoken": "Depuis l’événement, vous retrouvez tout de suite son état",
-        "visibleSeconds": 5,
-        "visible": "Onglet Aperçu de l'événement avec les blocs « Où manque-t-il du monde ? » et « À traiter »",
+        "visibleSeconds": 4,
+        "visible": "L'encart disparaît et révèle la vue générale de l'événement 'Fête du village de Montvert' avec les alertes et points à traiter",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.4,
-        "spoken": "les prochaines étapes",
-        "visibleSeconds": 7,
-        "visible": "Défilement vers la section « Prochaines étapes » et « Jalons »",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 8.8,
-        "spoken": "et les accès utiles pour garder une vue claire",
-        "visibleSeconds": 8.5,
-        "visible": "Affichage des raccourcis et liens d'action comme « Ouvrir la communication » et « Modifier »",
+        "spokenSeconds": 7.8,
+        "spoken": "les prochaines étapes et les accès utiles pour garder une vue claire",
+        "visibleSeconds": 7.5,
+        "visible": "Légère descente sur la page affichant les sections 'Prochaines étapes', 'Jalons' et 'Messages'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et posée, parfaitement synchronisée avec la présentation."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

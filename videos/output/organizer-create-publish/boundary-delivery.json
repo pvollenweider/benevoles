@@ -1,0 +1,12 @@
+{
+  "anchor": "Ajoutez ensuite manuellement un poste Livraison. Il faut avoir au moins",
+  "windowStart": 8.146,
+  "result": {
+    "found": true,
+    "startSeconds": 30,
+    "wordsHeard": "Ajoutez ensuite manuellement un poste Livraison. Il faut avoir au moins"
+  },
+  "onset": 38.146,
+  "proposedCut": 38.1456455,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:32:54.442Z",
+  "videoSha256": "86a4bcb42c4580809057d00a4eeb12006123685b94cf05d3d83fc764791365a7",
+  "promptSha256": "29aeaedf227592f7bd1c0c97f06166e5be89cadc75e5b069f15e4388bde9d09c",
+  "clipSha256": "5d1ba428f12ef2a3b5e8a15973f80874a63e1ddd5744c20aa6f214da8fe45c4c",
+  "scene": "sectors-welcome",
+  "review": {
+    "heardOpening": "Quand un événement compte beaucoup de postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver.",
+        "visibleSeconds": 0,
+        "visible": "Titre superposé « Organiser les postes par secteurs - Regrouper les postes sans rien changer pour les bénévoles ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Un secteur Parking regroupe par exemple Parking Nord et Parking Mairie.",
+        "visibleSeconds": 3.3,
+        "visible": "L'encart de titre disparaît, laissant visible l'onglet Paramètres > Informations du Festival de Montvert.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "L'option se choisit pour chaque événement, désactivée par défaut.",
+        "visibleSeconds": 9,
+        "visible": "L'écran reste fixe sur les informations générales sans faire défiler jusqu'à l'option des secteurs.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Les bénévoles ne voient jamais les secteurs : leur page d'inscription, leurs emails et leur page Mes inscriptions ne changent pas.",
+        "visibleSeconds": 13,
+        "visible": "L'écran reste statique en introduction sur la page de configuration.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine posée, claire et bien articulée, parfaitement conforme au texte de référence."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

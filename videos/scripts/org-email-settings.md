@@ -28,7 +28,7 @@ faire revenir les réponses vers la bonne boîte.
 
 ## Points d’attention
 
-- Les rappels sont globaux, mais chaque événement peut tous les désactiver.
+- Les rappels habituels suivent les choix de l'organisation. Des délais propres à un événement les remplacent ; sa case Rappels automatiques peut toujours tous les couper.
 - L’alerte par inscription peut devenir bruyante sur un gros événement.
 - Le test n’envoie rien aux bénévoles.
 - Une modification non enregistrée n’est pas utilisée par l’email de test.
@@ -47,3 +47,10 @@ WAITING TTS — plafond mensuel connu, aucun appel : régénérer la narration E
 
 Bilan final du lot 22-6 (2026-10-16) : WAITING TTS ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Répétition complète réussie, anciens WAV entiers archivés ; aucun tournage final avec une narration obsolète. Régénération continue intégrale requise avant les étapes finales.
 
+
+
+## Lot 41 — narration de la scène event-reminders
+
+Dans les paramètres d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent. Le fuseau de l'organisation reste utilisé.
+
+Nouvelle narration entière avec une seule voix, puis refilmage : les anciennes paroles ne suffisent pas à expliquer les délais propres à un événement.

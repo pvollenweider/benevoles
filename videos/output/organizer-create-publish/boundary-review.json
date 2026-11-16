@@ -1,0 +1,12 @@
+{
+  "anchor": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux",
+  "windowStart": 42.43599999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 30.3,
+    "wordsHeard": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux"
+  },
+  "onset": 72.73599999999999,
+  "proposedCut": 72.43587500000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

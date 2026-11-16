@@ -1,0 +1,12 @@
+{
+  "anchor": "Revenons à la frise. Chaque secteur y a sa ligne d'en-tête,",
+  "windowStart": 66.691,
+  "result": {
+    "found": true,
+    "startSeconds": 30.5,
+    "wordsHeard": "Revenons à la frise"
+  },
+  "onset": 97.191,
+  "proposedCut": 96.69081249999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

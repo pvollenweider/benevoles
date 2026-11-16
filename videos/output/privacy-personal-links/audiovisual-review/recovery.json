@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:18:31.710Z",
+  "videoSha256": "fa5cbf11e7a2bb4c84da497238502ca0be8e1e0dc3d0c0aac637284e2c1496ed",
+  "promptSha256": "16c8078ff8adc6cada03f88df8907ed36701a7694658069bbdacf80fd3685faa",
+  "clipSha256": "f82aa7376de1646b13cbf7b7cee4d76a597c160962c76f788e67851ed3211ae0",
+  "scene": "recovery",
+  "review": {
+    "heardOpening": "Le lien est perdu ? Depuis la page de récupération",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.4,
+        "spoken": "saisissons l'adresse utilisée pour l'inscription",
+        "visibleSeconds": 2.8,
+        "visible": "Saisie de l'adresse email et clic sur Recevoir un nouveau lien",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Vérifions le message reçu dans la boîte de Léa",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de l'email Hello Léa avec le bouton Gérer mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.4,
+        "spoken": "Recommençons avec une adresse fictive inconnue",
+        "visibleSeconds": 14.9,
+        "visible": "Retour au formulaire et saisie d'une adresse inconnue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B",
+        "visibleSeconds": 20.4,
+        "visible": "Saisie de l'adresse membre B sur le formulaire de récupération de l'organisation A",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Alternance fluide de deux voix claires, sans décalage ni artefact."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

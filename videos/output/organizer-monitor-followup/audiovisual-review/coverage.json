@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T09:03:56.571Z",
-  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
+  "reviewedAt": "2026-11-16T21:28:31.765Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
   "promptSha256": "f5b59a2e0ff16af74d86b2830809fcd18d472d0190d6f62c8ba86023d8f5ef16",
-  "clipSha256": "619f19a3d1eb01a562ddb65b402df58eea5dd82c58a095cfa526ef94f01717aa",
+  "clipSha256": "f4f3a2d888aa4cde210cb696012a5701b3808b5f448df3b5b091df59616007dc",
   "scene": "coverage",
   "review": {
-    "heardOpening": "Commencez par regarder la couverture du planning",
+    "heardOpening": "Commencez par regarder la couverture",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 1,
         "spoken": "Commencez par regarder la couverture du planning",
-        "visibleSeconds": 0,
-        "visible": "Affichage de la page 'Où manque-t-il du monde ?' avec le résumé des places pourvues et des créneaux",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la vue d'ensemble 'Où manque-t-il du monde ?' avec le résumé des places pourvues (30/44) et des créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
-        "spoken": "Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places",
-        "visibleSeconds": 3,
-        "visible": "Liste des 'Créneaux à compléter' avec les jauges d'inscriptions et places manquantes (Montage, Accueil, etc.)",
+        "spokenSeconds": 4.5,
+        "spoken": "montrent les créneaux déjà bien remplis, ceux où il reste des places",
+        "visibleSeconds": 4.5,
+        "visible": "Section 'Créneaux à compléter' montrant les jauges et ratios de remplissage par créneau (4/6, 1/3, 2/4)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
+        "spokenSeconds": 8.5,
         "spoken": "et les personnes placées en liste d’attente",
-        "visibleSeconds": 8.5,
-        "visible": "Défilement vers le bas révélant la section 'Personnes en liste d'attente' (Buvette)",
+        "visibleSeconds": 8,
+        "visible": "Défilement vers le bas révélant le bloc 'Personnes en liste d'attente' (Buvette : 3 personnes en attente)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement synchronisée avec le défilement de l'écran."
+      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec le défilement de l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,15 +1,15 @@
 {
   "model": "gemini-3.8-flash",
   "promptVersion": 2,
-  "auditedAt": "2026-10-15T21:23:05.447Z",
-  "revalidatedAt": "2026-10-16T08:24:46.717Z",
+  "auditedAt": "2026-11-16T22:18:42.291Z",
+  "revalidatedAt": "2026-11-16T22:18:42.292Z",
   "source": "generated narration WAV",
   "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "overview",
-      "audioSha256": "5b2cefc20a4b1861e222ed0af83794363835b969dab32cc38bf07e82b2cd1009",
-      "recognized": "Voici comment préparer et partager un planning bénévole. Pour démarrer, vous pouvez choisir un modèle déjà prêt avec ses postes et ses horaires ou partir d'une page blanche. Ici, on va tout créer depuis le début.",
+      "audioSha256": "9d96b1c068dd7e5f8b243d9e892fb49f85b2b08e62d630e0833b39a9cb6a548e",
+      "recognized": "Voici comment préparer et partager un planning bénévole. Pour démarrer, vous pouvez choisir un modèle déjà prêt avec ses postes et ses horaires, ou partir d'une page blanche. Ici, on va tout créer depuis le début.",
       "expected": "Voici comment préparer et partager un planning bénévole. Pour démarrer, vous pouvez choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche. Ici, on va tout créer depuis le début.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -18,7 +18,7 @@
     },
     {
       "id": "basics",
-      "audioSha256": "66f76ad3f52ba74cfa8ab10ffada78b29d3fb6a9292c66b09edde34086f80999",
+      "audioSha256": "1d3975e09d64628c9dde71ead2315fd9d38f88614896247016463d57a8957e09",
       "recognized": "Donnez-lui un nom clair, ajoutez une courte description, le lieu et les dates. L'événement reste en brouillon. Rien n'est visible tant que vous n'avez pas terminé votre planning.",
       "expected": "Donnez-lui un nom clair, ajoutez une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que vous n’avez pas terminé votre planning.",
       "wordErrorRate": 0,
@@ -28,8 +28,8 @@
     },
     {
       "id": "series",
-      "audioSha256": "c7ceaef7eeab73f19d7776a245faf29587c66d9475b40ca31c352e091a496e01",
-      "recognized": "Les postes et leurs créneaux peuvent être ajoutés un par un manuellement. Quand les horaires se répètent, la création en série va plus vite. Pour l'accueil, indiquez la plage horaire, la durée et le nombre de places et les créneaux sont préparés automatiquement.",
+      "audioSha256": "93785b311c5fffd150d305f155b087ed566ca9c9b65253c8e5f4341a3c640a4e",
+      "recognized": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite. Pour l'accueil, indiquez la plage horaire, la durée et le nombre de places, et les créneaux sont préparés automatiquement.",
       "expected": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indiquez la plage horaire, la durée et le nombre de places, et les créneaux sont préparés automatiquement.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -38,8 +38,8 @@
     },
     {
       "id": "delivery",
-      "audioSha256": "f78f73b45137f16db7705fc0d77fc7ddc741cb34a2a52f81bd52b52908f8d252",
-      "recognized": "Ajoutez ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles avec la consigne précisant que le véhicule est fourni.",
+      "audioSha256": "1f490ec84f6eee88509a838cb4e78c8fef923c7c4fc5df7d1ca140b9ac6e1e6d",
+      "recognized": "Ajoutez ensuite manuellement un poste livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles avec la consigne précisant que le véhicule est fourni.",
       "expected": "Ajoutez ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -48,7 +48,7 @@
     },
     {
       "id": "cash",
-      "audioSha256": "f39a7616b9b007a19405497060c15611c2bbde3469e5ef22f3386c9eb321184c",
+      "audioSha256": "42b3b379ad835589e986da5f5e4ee9bc32d6eb4bff9bfaf9b78766d002bb9811",
       "recognized": "Pour un poste sensible comme la caisse, activez l'inscription sur validation. Chaque personne peut proposer son aide, mais l'organisateur accepte ou refuse la demande avant de la confirmer.",
       "expected": "Pour un poste sensible comme la Caisse, activez l’inscription sur validation. Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
       "wordErrorRate": 0,
@@ -58,7 +58,7 @@
     },
     {
       "id": "registration",
-      "audioSha256": "7b383d73b83257344191e29e72c2eb0b2d434b872128913269424c183a76c0f1",
+      "audioSha256": "0e1bfff38feb55931668152202c5d45280cdaa201069cde8c53ac02fa3535d55",
       "recognized": "Vous pouvez aussi décider quand les inscriptions commenceront et quand elles se termineront dans le fuseau horaire de votre organisation. Si vous ne programmez pas de date d'ouverture, elles seront disponibles dès la publication.",
       "expected": "Vous pouvez aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de votre organisation. Si vous ne programmez pas de date d’ouverture, elles seront disponibles dès la publication.",
       "wordErrorRate": 0,
@@ -68,7 +68,7 @@
     },
     {
       "id": "review",
-      "audioSha256": "ba4732f66fdd7d2830e8c0cc457ca364910ada6a5146d224b91d174fb2fe6655",
+      "audioSha256": "dd6711a26be95d151da351ce21f21df5e3a421b5e50792354e2e698e41805a1e",
       "recognized": "L'écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Vous pouvez encore revenir corriger un horaire, un effectif ou une consigne.",
       "expected": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Vous pouvez encore revenir corriger un horaire, un effectif ou une consigne.",
       "wordErrorRate": 0,
@@ -78,17 +78,17 @@
     },
     {
       "id": "preview",
-      "audioSha256": "0347b480caaa0041925a5d44242de82eba3eb647590354f39a9bcc75cd231a51",
-      "recognized": "Avant de publier, ouvrez l'aperçu bénévole et simulez une vraie inscription. Choisissez un créneau, renseignez les coordonnées du bénévole et confirmez ses choix. Vous pouvez ainsi vérifier tout le parcours qu'il verra, sans créer de véritables inscriptions.",
+      "audioSha256": "91a56790591f32abd78259ed5acd0744c376bae2df9982a97703860a31c1bad7",
+      "recognized": "Avant de publier, ouvrez l'aperçu bénévole et simulez une vraie inscription. Choisissez un créneau, renseignez les coordonnées du bénévole et confirmez ses choix. Vous pouvez ainsi vérifier tout le parcours qu'il verra sans créer de véritable inscription.",
       "expected": "Avant de publier, ouvrez l’aperçu bénévole et simulez une vraie inscription. Choisissez un créneau, renseignez les coordonnées du bénévole et confirmez ses choix. Vous pouvez ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
-      "wordErrorRate": 0.05128205128205128,
+      "wordErrorRate": 0,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
     },
     {
       "id": "preview-result",
-      "audioSha256": "cc7f97cec5bf42280e7dafccdcf237b691eca85f792180e80936ace69f1df39b",
+      "audioSha256": "03862134e133bfbb5a59daca02b2537d70f7443709cfee8dd761b6baacd6d7c6",
       "recognized": "L'aperçu montre aussi le message affiché après l'inscription et l'e-mail automatique qui serait envoyé avec son objet, son contenu et son lien personnel. Rien n'est réellement enregistré ni expédié pendant ce test.",
       "expected": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel. Rien n’est réellement enregistré ni expédié pendant ce test.",
       "wordErrorRate": 0,
@@ -98,8 +98,8 @@
     },
     {
       "id": "publish",
-      "audioSha256": "db9b1326b4721b853fb89140add6101ad3b5ea72393158aaf554259ee9c34b10",
-      "recognized": "Quand tout est prêt, publiez le planning, la page d'inscription devient accessible. Mais aucun message n'est envoyé automatiquement, vous gardez la main sur sa diffusion.",
+      "audioSha256": "de276d6127c9b6c23284387cf6729494a620dba0fd6a9e771f8751a4013319cd",
+      "recognized": "Quand tout est prêt, publiez le planning. La page d'inscription devient accessible, mais aucun message n'est envoyé automatiquement. Vous gardez la main sur sa diffusion.",
       "expected": "Quand tout est prêt, publiez le planning. La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : vous gardez la main sur sa diffusion.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -108,8 +108,8 @@
     },
     {
       "id": "qr",
-      "audioSha256": "949c256db27181e76fe23a9f9e2bf8d0bb0d1653e2aa3c9272c0f10fd3359d28",
-      "recognized": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le QR code. Vous pouvez le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+      "audioSha256": "4ec33e884eae817936bad5f8ec7bff5ffb50730f2a3cfa67888a3a92d0f01ebe",
+      "recognized": "pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le QR code. Vous pouvez le télécharger en PNG ou en SVG ou imprimer directement cette fiche prête à être scannée.",
       "expected": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le QR code. Vous pouvez le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -118,7 +118,7 @@
     },
     {
       "id": "import",
-      "audioSha256": "ce58d5e91ae9ba50df232e273bb6d38e9032ecdcaf63430ff7c35d46c6392595",
+      "audioSha256": "c7bff1d06fb647788fe1fd279fba90a50a79707fb01adf7e7a73e39552f7560b",
       "recognized": "Si c'est la première fois que vous utilisez l'application, l'import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel. L'application analyse les colonnes, les étiquettes et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
       "expected": "Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les étiquettes et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
       "wordErrorRate": 0,
@@ -128,7 +128,7 @@
     },
     {
       "id": "invite",
-      "audioSha256": "a31b3eb5a47047ceb6403905ff60b85530b863aeabcec1b026381fc4d673881b",
+      "audioSha256": "db97118782f69bdb3ce1159c3d8d3424ac08adf446b7f4d5739a28c05f747f51",
       "recognized": "Retournez ensuite dans les invitations de l'événement, filtrez les membres par étiquette et sélectionnez les personnes concernées. Vous pouvez envoyer les invitations par lot ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.",
       "expected": "Retournez ensuite dans les invitations de l’événement. Filtrez les membres par étiquette et sélectionnez les personnes concernées. Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.",
       "wordErrorRate": 0,
@@ -138,8 +138,8 @@
     },
     {
       "id": "public",
-      "audioSha256": "6c62afe3d37f3e976aa3c6f36517356ce7940c0aba1796529637541fe3db32c4",
-      "recognized": "Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation.",
+      "audioSha256": "5fdd583a2a79be46a3b94b2028c1b502cac5c184c102781694f7a09cb01fe2b4",
+      "recognized": "Et voilà le résultat côté bénévoles, plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation.",
       "expected": "Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !",
       "wordErrorRate": 0,
       "needsReview": false,

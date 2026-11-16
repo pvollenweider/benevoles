@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:40:47.744Z",
-  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
-  "promptSha256": "dc1fae1999b45f93c424070cf4d8893402c38036ed042c3c8877b19fd7146d5f",
-  "clipSha256": "f3941bf0a8b10f01c34caee24b5ab3284337c2dfc30597bae3cf158b7b368408",
+  "reviewedAt": "2026-11-16T22:18:10.294Z",
+  "videoSha256": "dbdce05a725e66cf7060c109dbbb8e42556113b6c43ec21c65581c15c62bf33f",
+  "promptSha256": "2fdcbda9935aff5a45785a68536426539d3d58e933202dd6f2968d0e3b47c74b",
+  "clipSha256": "7c343b6fe08279c2d00eb7baa629da01e58ad8c46232c0ca286706b81593c456",
   "scene": "identity",
   "review": {
-    "heardOpening": "Choisissez d'abord le poste",
+    "heardOpening": "Choisissez d’abord le poste",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
-        "spoken": "Choisissez d'abord le poste",
-        "visibleSeconds": 1.6,
-        "visible": "Sélection du poste « Accueil » dans le formulaire Nouveau créneau",
+        "spokenSeconds": 0.5,
+        "spoken": "Choisissez d’abord le poste",
+        "visibleSeconds": 1.5,
+        "visible": "Le formulaire Nouveau créneau s'ouvre avec le poste Accueil sélectionné",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "et, si nécessaire, un libellé plus précis",
-        "visibleSeconds": 3.4,
-        "visible": "Saisie du libellé « Accueil des artistes »",
+        "spokenSeconds": 2.1,
+        "spoken": "et, si nécessaire, un libellé plus précis.",
+        "visibleSeconds": 3,
+        "visible": "Saisie du libellé Accueil des artistes",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "le texte sous le champ rappelle que ses réglages s'appliquent",
-        "visibleSeconds": 5.5,
-        "visible": "Mention explicative sous le poste « Accueil » visible à l'écran",
+        "spokenSeconds": 6,
+        "spoken": "le texte sous le champ rappelle que ses paramètres s’appliquent aux nouveaux créneaux.",
+        "visibleSeconds": 6,
+        "visible": "Texte explicatif affiché sous le menu déroulant du poste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.7,
-        "spoken": "La date, l'heure de début et l'heure de fin",
-        "visibleSeconds": 11.2,
-        "visible": "Sélection de la date (samedi 24 octobre), saisie de 18:00 et 21:30",
+        "spokenSeconds": 10.3,
+        "spoken": "La date, l’heure de début et l’heure de fin placent la barre dans le planning.",
+        "visibleSeconds": 11.5,
+        "visible": "Sélection de la date Samedi 21 Novembre, puis saisie de 18:00 et 21:30",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 15,
-        "spoken": "La capacité indique combien de personnes",
-        "visibleSeconds": 15.8,
-        "visible": "Modification du champ Places (capacité) avec la valeur 3",
+        "spoken": "La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+        "visibleSeconds": 15.5,
+        "visible": "Saisie de la valeur 3 dans le champ Places",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme et intelligible, bon mixage avec la musique de fond."
+      "observation": "Enregistrement studio clair, voix posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

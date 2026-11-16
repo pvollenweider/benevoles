@@ -1,6 +1,6 @@
 {
   "admin-features-tour": {
-    "durationMs": 331240,
+    "durationMs": 292680,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -24,7 +24,7 @@
     "poster": true
   },
   "attendance-check-in": {
-    "durationMs": 407920,
+    "durationMs": 461680,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -84,7 +84,7 @@
     "poster": true
   },
   "event-program-pages-qr": {
-    "durationMs": 165080,
+    "durationMs": 194280,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -109,6 +109,12 @@
   },
   "event-visibility-registration-window": {
     "durationMs": 127000,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "front-desk-access": {
+    "durationMs": 170160,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -150,7 +156,7 @@
     "poster": true
   },
   "members-management": {
-    "durationMs": 235360,
+    "durationMs": 238840,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -162,7 +168,7 @@
     "poster": true
   },
   "org-email-settings": {
-    "durationMs": 199120,
+    "durationMs": 202960,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -210,7 +216,7 @@
     "poster": true
   },
   "privacy-personal-links": {
-    "durationMs": 365360,
+    "durationMs": 358560,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -228,7 +234,7 @@
     "poster": true
   },
   "reminders-changes": {
-    "durationMs": 252080,
+    "durationMs": 288640,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -240,7 +246,7 @@
     "poster": true
   },
   "sectors": {
-    "durationMs": 220480,
+    "durationMs": 226080,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -252,13 +258,13 @@
     "poster": true
   },
   "shift-create-edit-detail": {
-    "durationMs": 132200,
+    "durationMs": 134760,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-create-series": {
-    "durationMs": 105360,
+    "durationMs": 103040,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -282,7 +288,7 @@
     "poster": true
   },
   "shift-roster-visibility": {
-    "durationMs": 244920,
+    "durationMs": 260000,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -294,7 +300,7 @@
     "poster": true
   },
   "shift-timeline-quick-actions": {
-    "durationMs": 128120,
+    "durationMs": 126360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -366,7 +372,7 @@
     "poster": true
   },
   "volunteer-hours-certificate": {
-    "durationMs": 280320,
+    "durationMs": 311360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -378,7 +384,7 @@
     "poster": true
   },
   "volunteer-register-mobile": {
-    "durationMs": 50640,
+    "durationMs": 56080,
     "width": 390,
     "height": 844,
     "poster": true

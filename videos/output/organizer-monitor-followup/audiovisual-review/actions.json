@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T09:04:57.672Z",
-  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
+  "reviewedAt": "2026-11-16T21:28:43.123Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
   "promptSha256": "c9b658073de91193b7f422fe50a6b4a4cb51738dc4c01e5da9dfdc3124222698",
-  "clipSha256": "f05668c4fce7cc8e8106fe70d2110b0ff75c355253ed55dca2ea8e4c54336312",
+  "clipSha256": "a00bdeb8947104bccebb53ba5e681f4c0f2cfbe0800b2ad23ecd20220a37b640",
   "scene": "actions",
   "review": {
     "heardOpening": "Vous pouvez agir sur une inscription",
@@ -11,16 +11,16 @@
       {
         "spokenSeconds": 0.8,
         "spoken": "agir sur une inscription",
-        "visibleSeconds": 0.9,
-        "visible": "Une case à cocher est sélectionnée sur la première ligne et la barre d'actions apparaît avec « 1 sélectionnée »",
+        "visibleSeconds": 1,
+        "visible": "Une première case est cochée sur la ligne d'inscription, affichant la barre d'actions pour 1 sélectionnée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.3,
+        "spokenSeconds": 2.8,
         "spoken": "renvoyer son lien personnel",
-        "visibleSeconds": 2,
-        "visible": "Le bouton d'action « Renvoyer le lien » est visible dans la barre contextuelle",
+        "visibleSeconds": 2.8,
+        "visible": "L'option Renvoyer le lien est visible dans la barre d'actions contextuelle",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,7 +28,7 @@
         "spokenSeconds": 4.8,
         "spoken": "sélectionner plusieurs lignes pour appliquer une action groupée",
         "visibleSeconds": 5.6,
-        "visible": "Une deuxième ligne est cochée, affichant « 2 sélectionnées » avec les actions groupées disponibles",
+        "visible": "Une deuxième ligne est cochée, la barre passe à 2 sélectionnées avec actions groupées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, posée et claire, parfaitement audible."
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:55:31.957Z",
-  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "reviewedAt": "2026-11-16T20:15:31.792Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
   "promptSha256": "e7f4add303b233e3d4e11c46275c838515ebdc3af29623ce9f0d982d9c6b0a88",
-  "clipSha256": "b012fac157aada20de8ea865befb384f62e504112d730851b3a1bc2203141acc",
+  "clipSha256": "486889daeb548b0563005a8889e7b83fbd229bfd26d0f559b5f413d69ca327dd",
   "scene": "cancelled",
   "review": {
     "heardOpening": "Pour annuler un créneau entier",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
-        "spoken": "lisez bien le récapitulatif avant de confirmer",
+        "spokenSeconds": 0.5,
+        "spoken": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer.",
         "visibleSeconds": 3,
-        "visible": "Affichage de la modale de récapitulatif avant suppression du créneau",
+        "visible": "Affichage de la boîte modale « Supprimer le créneau » détaillant le récapitulatif de suppression.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "Dans notre exemple, une inscription confirmée et une demande sont annulées",
-        "visibleSeconds": 9.2,
-        "visible": "Clic sur le bouton Supprimer dans la boîte de dialogue",
+        "spokenSeconds": 9.2,
+        "spoken": "Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la notification par e-mail d'annulation pour Aline (puis pour Lucas).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.1,
-        "spoken": "Ouvrons les messages reçus",
-        "visibleSeconds": 15.5,
-        "visible": "Affichage de la boîte de messagerie Mailpit avec les notifications d'annulation",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 16.8,
-        "spoken": "puis revenons au planning",
-        "visibleSeconds": 18.8,
-        "visible": "Retour à l'onglet du planning des créneaux",
+        "spokenSeconds": 16,
+        "spoken": "puis revenons au planning.",
+        "visibleSeconds": 18.5,
+        "visible": "Retour à la vue planning (frise des créneaux de l'Atelier des rappels).",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix pédagogique claire et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+      "observation": "Voix féminine claire, posée et expressive, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

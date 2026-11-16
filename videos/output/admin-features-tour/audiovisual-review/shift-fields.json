@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:37:21.278Z",
-  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
+  "reviewedAt": "2026-11-16T21:44:13.058Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
   "promptSha256": "112dc5b2a0c9c646d75be2dff4db9bd6174958f2b1621cc4297ef4ecda6e5a70",
-  "clipSha256": "a32fb2fc2641d14fdd795bbd477ce8d5e88c4b0445e57eb1244fe1fe29405a3a",
+  "clipSha256": "ca559bf5901203ee0e49af3a315c0e2e868209c39cd233a04c6802755d9e582a",
   "scene": "shift-fields",
   "review": {
-    "heardOpening": "Chaque créneau peut préciser",
+    "heardOpening": "Chaque créneau peut préciser le poste",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
-        "spoken": "le poste, le libellé, la date, les horaires et le nombre de places",
+        "spokenSeconds": 0.5,
+        "spoken": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et le nombre de places",
         "visibleSeconds": 1,
-        "visible": "Affichage du formulaire Nouveau créneau avec les champs Poste, Libellé, Date, Début, Fin et Places",
+        "visible": "Affichage du formulaire « Nouveau créneau » présentant les champs Poste, Libellé, Date, Début, Fin et Places",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
+        "spokenSeconds": 7,
+        "spoken": "mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne",
+        "visibleSeconds": 7,
+        "visible": "Les champs Description, Lieu de rendez-vous, Coordonnées GPS ou lien de carte, Personne de contact et Consigne pratique sont visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
         "spoken": "des notes internes et un âge minimum",
-        "visibleSeconds": 15.5,
-        "visible": "Défilement vers le bas révélant les champs Notes internes et Âge minimum",
+        "visibleSeconds": 12.5,
+        "visible": "Défilement vers le bas découvrant les champs Notes internes et Âge minimum",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18,
+        "spokenSeconds": 14.8,
         "spoken": "La liste d’attente et l’inscription sur validation s’activent ici.",
-        "visibleSeconds": 16.5,
-        "visible": "Les cases à cocher Activer la liste d'attente et Sur validation sont visibles à l'écran",
+        "visibleSeconds": 15,
+        "visible": "Les cases à cocher « Activer la liste d'attente » et « Validation » sont clairement affichées au-dessus du bouton Ajouter",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la présentation des champs du formulaire."
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec le défilement du formulaire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

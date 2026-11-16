@@ -1,0 +1,12 @@
+{
+  "anchor": "Deux options complètent le fonctionnement du créneau. La liste d’attente recueille",
+  "windowStart": 9.168999999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 23.3,
+    "wordsHeard": "Deux options complètent le fonctionnement du créneau. La liste d'attente recueille"
+  },
+  "onset": 32.468999999999994,
+  "proposedCut": 32.0235415,
+  "note": "Proposal only; recut then independently audit before capture"
+}

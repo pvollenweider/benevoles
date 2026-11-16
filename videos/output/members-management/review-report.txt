@@ -1,14 +1,11 @@
 STATUS: READY
-MEMBERS_MANAGEMENT — Batch 24 — 2026-10-16
-Product commit: 50561e134531eb29b3d2898023cb7a7086ec8305
-BUILD_ID: GzjaqGbiwveYILVuRvQv7
-Duration: 235.360 s; SHA256: 564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8
-Two complete narrated takes after separate guarded reseeds; quick rehearsal before filming. Take 1 preserved in take-1/. Second take assembled. Previous artifacts archived under previous-20261016T*/; retained audio unchanged.
-Narration sentences unchanged. Same original voice (Puck), no TTS regeneration or sentence mixing. Independent source narration and final chapter ASR pass; whole final MP4 soundtrack transcribed in all languages, including chapter gaps. Final transcription reviewed against narration; no stray technical/English speech or viewer-directed informal address. Raw final VTT « tu » count: 0. Informal transcription matches needing quotation context: [].
-Final chapter contact sheet and sentence/action evidence frames inspected alongside every audiovisual chapter report. Current labels, identities, counts, real results and French dates checked. No localhost, org-admin@localhost, Timeline or dev overlay observed. All chapter audiovisual reports match final hash and pass. No product bug or blocker observed. Real-time subjective listening unavailable as permitted by batch rules.
-Music: 13.3–19.3 LU below voice; 7 music-only windows, floor -34 LUFS. Music rules pass, no music gap; real recorded click/key events receive soft synced effects. Posters generated with review/renders-generated.json; videos/renders.json untouched.
-video:validate passes; videos suite 1024/1024 passes; explicit video TypeScript check passes. Evidence: validation.json, audio-levels.json, audio-mix.json, narration-audit-video.json, review/gemini-full-final-asr.json, review/sentence-action-evidence.json, review-frames/, audiovisual-review/.
-Source changes: guarded historical no-email fixture reset and old hashed-receipt compatibility with tests; exact fixture mailbox cleanup accepts invitations/reminders; batch review helpers. No src/ edits. No commit, push or publication. doc-img: unchanged
-Verified Doublons possibles (1), both Stéphane Favre addresses and name-only fixture signal.
-
-Capture server stopped by PID 84572; listener absence verified. Evidence review/server-stop-proof.json. Final delivery check: 1024 video tests pass; 198 explicit video TypeScript sources pass; npm run video:validate passes for all four (technical validation does not clear the documented NOT READY findings).
+MEMBERS_MANAGEMENT — batch 41, 16 November 2026
+Duration: 238.840 s; second and final narrated take. First rejected because narration said sixty records while the current fixture has 63; preserved, no third take.
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51
+Complete new Puck master regenerated again after correcting the count sentence to plusieurs dizaines de fiches. Nine measured boundaries aligned, all ten source and final chapter ASR checks pass, whole-master voice consistent. Full multilingual final soundtrack and VTT: zero register candidates, no stray instruction identified. No sentence splicing or old audio reuse.
+Ten AV chapters / 38 checkpoints, zero issues. Final frames inspected, including hours nuance: an ended-early participation stays recorded, adds no attested hour because its duration is unknown. The fixture has no early-departure participation; this is accurately a general explanation alongside the current hours columns.
+Current 63-record initial list, real creation of Maya and René without email, saves and reopening, availability, accented search and homonyms, filters and sorting, genuine deactivation/reactivation and Camille's factual activity verified. Exact current counts and labels replace stale recorder expectations.
+Music 13.9–19.0 LU under voice; quietest music-only −34.1 LUFS, no gaps/out-of-rule windows. 36 real clicks and 132 real keys with synchronized soft effects. Description 105 UTF-8 bytes. Types, lint and 1456 video/catalog/reference tests pass. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent; revision 8, dates 2026-11-16.

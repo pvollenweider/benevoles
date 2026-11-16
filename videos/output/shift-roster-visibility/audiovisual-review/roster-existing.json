@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-22T09:37:56.595Z",
-  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
-  "promptSha256": "d776b6c74a9547da9eec1e33a12f10564ec553ad06c7144f3ccdfe9b102a91bb",
-  "clipSha256": "57ce926824bbcae7d97a9e40d07581cfc28a43f2b275681f1531ec0f33f64e7f",
+  "reviewedAt": "2026-11-16T21:38:13.221Z",
+  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "promptSha256": "2e3e7e464f5e6b7ac27f8eccd82818ce9233722f14e7338fbd02256295dd991b",
+  "clipSha256": "0309352cd079338a9ecd4d5c7f279ff493bd5ee5450de4b7ce56deb4671fcf2b",
   "scene": "roster-existing",
   "review": {
     "heardOpening": "Bruno avait accepté l'ancien texte",
     "checkpoints": [
       {
-        "spokenSeconds": 5,
-        "spoken": "la mention Les membres invités ne le voient pas encore accompagne le bouton Le leur montrer aussi",
-        "visibleSeconds": 5,
-        "visible": "La mention et le bouton 'Le leur montrer aussi' sont affichés sous les options de visibilité",
+        "spokenSeconds": 4.5,
+        "spoken": "Sur sa page Mes inscriptions, la mention Les membres invités ne le voient pas encore accompagne le bouton Le leur montrer aussi",
+        "visibleSeconds": 4.5,
+        "visible": "Dans la section Qui est inscrit de la page Mes inscriptions, la mention et le lien Le leur montrer aussi sont visibles",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
+        "spokenSeconds": 13.5,
         "spoken": "Cliquez sur ce bouton pour élargir cet accord",
-        "visibleSeconds": 13.8,
-        "visible": "Clic sur 'Le leur montrer aussi', qui valide l'élargissement et actualise le statut en 'Visible'",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur Le leur montrer aussi, l'affichage passe à Visible : Bruno F.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16,
+        "spokenSeconds": 16.5,
         "spoken": "Sur le lien d’invitation, Bruno devient visible",
-        "visibleSeconds": 17.5,
-        "visible": "Affichage de la page de créneaux avec le bouton bascule 'Voir qui est inscrit' activé et mention 'Sur ce créneau : Bruno F.'",
+        "visibleSeconds": 18,
+        "visible": "Basculement vers la vue du planning invité et affichage de Bruno F. sur le créneau après activation du filtre",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix fluide, claire et bien articulée, synchronisée avec les démonstrations visuelles."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:22:43.931Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
+  "reviewedAt": "2026-11-16T19:48:11.349Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
   "promptSha256": "1e51c240ed50598c78d73f43af506c473062e2f4a3b5602a03991aba476c7667",
-  "clipSha256": "3c47d2478556d3da11311e53e6c978ec86cca90dfaee65c400f25d6182bb48bf",
+  "clipSha256": "177589ef9efbb30bb17077bb182e8bb26e4acd204f8aff9ac79009783b7edc4b",
   "scene": "group",
   "review": {
     "heardOpening": "Nicolas et Léa arrivent ensemble.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.9,
         "spoken": "Sélectionnons leurs deux lignes",
         "visibleSeconds": 3.7,
-        "visible": "Sélection par case à cocher des lignes de Léa Exemple et Nicolas Exemple",
+        "visible": "Les cases à cocher en face de Léa Müller puis de Nicolas Peeters sont sélectionnées",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.4,
-        "spoken": "avant de cliquer sur Marquer présents",
-        "visibleSeconds": 6.5,
-        "visible": "Clic sur le bouton d'action groupée Marquer présents (2)",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 7.3,
-        "spoken": "Voici les deux marques",
+        "spoken": "et vérifions le nombre avant de cliquer sur Marquer présents.",
         "visibleSeconds": 8,
-        "visible": "Apparition de la mention verte Présent à côté de Léa et Nicolas",
+        "visible": "Clic sur le bouton bleu « Marquer présents (2) »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.3,
-        "spoken": "Une demande en attente de validation n'est pas une inscription confirmée",
-        "visibleSeconds": 16,
-        "visible": "Défilement vers le bas révélant la ligne de Lucas avec le statut Demande à traiter et boutons d'action",
+        "spokenSeconds": 8.8,
+        "spoken": "Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque.",
+        "visibleSeconds": 9.8,
+        "visible": "Notification « 2 personnes marquées présentes », statut « Présent » vert affiché pour Léa et Nicolas, Sarah Smith reste sans statut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Une demande en attente de validation n'est pas une inscription confirmée à pointer.",
+        "visibleSeconds": 17.5,
+        "visible": "Défilement vers le bas révélant la ligne de Lucas Silva avec le statut « Demande à traiter » et les boutons Accepter/Refuser",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,15 +1,15 @@
 {
   "slug": "shift-create-edit-detail",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-16T08:39:54.047Z",
+  "recordedAt": "2026-11-16T22:17:05.785Z",
   "video": "capture.webm",
   "product": {
-    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
-    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
-    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
-    "buildId": "gHYEjPtpdQYUNytuIhMkh",
-    "snapshot": "/tmp/benevoles-video-production.Batch231",
-    "builtAt": "2026-10-16T08:22:06.973Z"
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
   },
   "captureEnvironment": {
     "locale": "fr-CH",
@@ -26,202 +26,202 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 16822
+      "atMs": 17003
     },
     {
       "kind": "click",
-      "atMs": 18359
+      "atMs": 18535
     },
     {
       "kind": "click",
-      "atMs": 19638
+      "atMs": 19835
     },
     {
       "kind": "click",
-      "atMs": 27272
+      "atMs": 27418
     },
     {
       "kind": "click",
-      "atMs": 28588
+      "atMs": 28268
     },
     {
       "kind": "click",
-      "atMs": 30254
+      "atMs": 29251
     },
     {
       "kind": "click",
-      "atMs": 31921
+      "atMs": 31784
     },
     {
       "kind": "click",
-      "atMs": 41054
+      "atMs": 41817
     },
     {
       "kind": "click",
-      "atMs": 44770
+      "atMs": 45767
     },
     {
       "kind": "click",
-      "atMs": 54120
+      "atMs": 55217
     },
     {
       "kind": "click",
-      "atMs": 59220
+      "atMs": 59233
     },
     {
       "kind": "click",
-      "atMs": 63619
+      "atMs": 63698
     },
     {
       "kind": "click",
-      "atMs": 64835
+      "atMs": 64915
     },
     {
       "kind": "click",
-      "atMs": 70752
+      "atMs": 71248
     },
     {
       "kind": "click",
-      "atMs": 83769
+      "atMs": 83815
     },
     {
       "kind": "click",
-      "atMs": 90185
+      "atMs": 91015
     },
     {
       "kind": "click",
-      "atMs": 90985
+      "atMs": 91832
     },
     {
       "kind": "click",
-      "atMs": 98553
+      "atMs": 100083
     },
     {
       "kind": "click",
-      "atMs": 103201
+      "atMs": 104265
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1202,
-      "endMs": 14057
+      "startMs": 1203,
+      "endMs": 14236
     },
     {
       "id": "identity",
-      "startMs": 16319,
-      "endMs": 35247
+      "startMs": 16498,
+      "endMs": 35492
     },
     {
       "id": "availability",
-      "startMs": 37518,
-      "endMs": 51126
+      "startMs": 37753,
+      "endMs": 52256
     },
     {
       "id": "practical",
-      "startMs": 53384,
-      "endMs": 80048
+      "startMs": 54520,
+      "endMs": 79978
     },
     {
       "id": "save",
-      "startMs": 82313,
-      "endMs": 94610
+      "startMs": 82239,
+      "endMs": 96082
     },
     {
       "id": "change",
-      "startMs": 96868,
-      "endMs": 113895
+      "startMs": 98337,
+      "endMs": 115254
     },
     {
       "id": "result",
-      "startMs": 116152,
-      "endMs": 130419
+      "startMs": 117520,
+      "endMs": 132862
     }
   ],
   "anchors": [
     {
       "segmentId": "identity",
       "phrase": "Choisissez d’abord le poste",
-      "startMs": 289,
-      "endMs": 4384,
-      "cueMs": 19139
+      "startMs": 420,
+      "endMs": 4258,
+      "cueMs": 19312
     },
     {
       "segmentId": "identity",
       "phrase": "La date, l’heure de début",
-      "startMs": 10456,
-      "endMs": 14513,
-      "cueMs": 26801
+      "startMs": 10450,
+      "endMs": 14630,
+      "cueMs": 26951
     },
     {
       "segmentId": "identity",
       "phrase": "La date, l’heure de début",
-      "startMs": 10456,
-      "endMs": 14513,
-      "cueMs": 28085
+      "startMs": 10450,
+      "endMs": 14630,
+      "cueMs": 27730
     },
     {
       "segmentId": "identity",
       "phrase": "La date, l’heure de début",
-      "startMs": 10456,
-      "endMs": 14513,
-      "cueMs": 29749
+      "startMs": 10450,
+      "endMs": 14630,
+      "cueMs": 28730
     },
     {
       "segmentId": "identity",
       "phrase": "La capacité indique combien de",
-      "startMs": 14790,
-      "endMs": 18650,
-      "cueMs": 31415
+      "startMs": 14760,
+      "endMs": 18627,
+      "cueMs": 31261
     },
     {
       "segmentId": "availability",
       "phrase": "La liste d’attente recueille les",
-      "startMs": 3049,
-      "endMs": 6345,
-      "cueMs": 40583
+      "startMs": 3572,
+      "endMs": 6780,
+      "cueMs": 41327
     },
     {
       "segmentId": "availability",
       "phrase": "Le mode Sur validation transforme",
-      "startMs": 6740,
-      "endMs": 13376,
-      "cueMs": 44260
+      "startMs": 7512,
+      "endMs": 14363,
+      "cueMs": 45266
     },
     {
       "segmentId": "practical",
       "phrase": "Renseignons d’abord le lieu de rendez-vous",
-      "startMs": 230,
-      "endMs": 2586,
-      "cueMs": 53615
+      "startMs": 184,
+      "endMs": 1576,
+      "cueMs": 54705
     },
     {
       "segmentId": "practical",
       "phrase": "Ajoutons une consigne",
-      "startMs": 5338,
-      "endMs": 6644,
-      "cueMs": 58725
+      "startMs": 4213,
+      "endMs": 5591,
+      "cueMs": 58735
     },
     {
       "segmentId": "practical",
       "phrase": "Le contact opérationnel indique",
-      "startMs": 9722,
-      "endMs": 12434,
-      "cueMs": 63107
+      "startMs": 8665,
+      "endMs": 11755,
+      "cueMs": 63186
     },
     {
       "segmentId": "practical",
       "phrase": "Les coordonnées GPS placent",
-      "startMs": 16874,
-      "endMs": 18384,
-      "cueMs": 70256
+      "startMs": 16213,
+      "endMs": 19246,
+      "cueMs": 70734
     },
     {
       "segmentId": "change",
       "phrase": "Rouvrir l’éditeur permet de corriger",
-      "startMs": 5860,
-      "endMs": 9540,
-      "cueMs": 102729
+      "startMs": 5437,
+      "endMs": 9528,
+      "cueMs": 103776
     }
   ]
 }

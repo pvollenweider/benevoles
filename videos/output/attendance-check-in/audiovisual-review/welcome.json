@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:22:46.048Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
-  "promptSha256": "ab27ebac66a3bb5c502e1f539746d78767d3dd9a7ac5e33e589c34e02b5af730",
-  "clipSha256": "65700e19229c9a8e293eaf396734fbe94fc6c5df24006da5f06b630a767a5ea0",
+  "reviewedAt": "2026-11-16T19:48:11.662Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "93eb0898d370fc54fb24b9afe03e9d8ceda12fc1ad331ded7554aa61929ae1a7",
+  "clipSha256": "ce8ec44abf8ae915a6e0cfa0c03108bfd39adf6e4431ded87c6b8bd918ca74a9",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Le jour J, savoir qui est arrivé",
+    "heardOpening": "Le jour J",
     "checkpoints": [
       {
-        "spokenSeconds": 6.2,
-        "spoken": "choisissons l'accueil du matin avec les filtres",
-        "visibleSeconds": 7,
-        "visible": "Sélection du filtre de poste Accueil puis sélection du créneau Accueil du matin",
+        "spokenSeconds": 7.3,
+        "spoken": "Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres.",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection du poste « Accueil » puis du créneau « Accueil du matin » dans les filtres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.8,
-        "spoken": "Chaque ligne correspond à une inscription sur un créneau",
-        "visibleSeconds": 12,
-        "visible": "Affichage du tableau filtré avec les lignes de bénévoles inscrits",
+        "spokenSeconds": 11.2,
+        "spoken": "Chaque ligne correspond à une inscription sur un créneau.",
+        "visibleSeconds": 12.8,
+        "visible": "Affichage de la liste filtrée avec une ligne par bénévole inscrit sur le créneau sélectionné",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.2,
-        "spoken": "Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel",
-        "visibleSeconds": 19.2,
-        "visible": "Écran stable sur la liste des inscriptions en vue des actions futures",
+        "spokenSeconds": 20.3,
+        "spoken": "Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
+        "visibleSeconds": 21,
+        "visible": "Écran stable sur la liste des inscriptions pour le créneau d'accueil du matin (annonce d'actions futures)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

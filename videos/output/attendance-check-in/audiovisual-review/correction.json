@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:22:57.839Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
+  "reviewedAt": "2026-11-16T19:48:30.413Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
   "promptSha256": "7e715d81bf403b087d3ef974d3e4b183813501e0baef4e243c9f63164fda5736",
-  "clipSha256": "a38d3c7c22da677e131da93a90a3d6116d3d86f757319bd4f78ee172b893fc7f",
+  "clipSha256": "14d74eb987c72e0b20ce21e2069f911fb3fceb95fd4b1d40654d50239133ffee",
   "scene": "correction",
   "review": {
     "heardOpening": "Vous avez pointé Léa par erreur ?",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
-        "spoken": "Sélectionnons sa ligne",
-        "visibleSeconds": 2.1,
-        "visible": "La case à cocher de la ligne de Léa Exemple est sélectionnée",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 3.1,
-        "spoken": "et annulons la présence",
+        "spokenSeconds": 3,
+        "spoken": "Sélectionnons sa ligne et annulons la présence.",
         "visibleSeconds": 3.5,
-        "visible": "Clic sur le bouton Annuler la présence dans la barre d'actions",
+        "visible": "La case de Léa Müller est cochée et le bouton « Annuler la présence » est cliqué dans la barre d'actions.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
+        "spokenSeconds": 6,
         "spoken": "La marque disparaît, mais son inscription et sa place restent.",
-        "visibleSeconds": 4.5,
-        "visible": "La mention Présent disparaît de la ligne de Léa tandis que son inscription reste listée",
+        "visibleSeconds": 5.8,
+        "visible": "Le badge de présence vert disparaît de la ligne de Léa Müller tandis que son inscription et son créneau restent affichés.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "vous pouvez enregistrer sa présence à nouveau.",
-        "visibleSeconds": 13.5,
-        "visible": "La case de Noah est cochée et le bouton Marquer présent est cliqué",
+        "spokenSeconds": 13.5,
+        "spoken": "Quand la bonne personne arrive, vous pouvez enregistrer sa présence à nouveau.",
+        "visibleSeconds": 15,
+        "visible": "La ligne est de nouveau cochée puis le bouton « Marquer présent » est sélectionné, enregistrant la présence.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine calme, naturelle et claire, parfaitement intelligible et synchronisée avec la vidéo."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

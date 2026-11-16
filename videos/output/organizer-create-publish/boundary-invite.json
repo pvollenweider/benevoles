@@ -1,0 +1,12 @@
+{
+  "anchor": "Retournez ensuite dans les invitations de l’événement. Filtrez les membres par",
+  "windowStart": 115.84099999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30,
+    "wordsHeard": "Retournez ensuite dans les invitations de l’événement. Filtrez les membres par"
+  },
+  "onset": 145.84099999999998,
+  "proposedCut": 145.84141649999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

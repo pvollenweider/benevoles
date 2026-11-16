@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-11T12:55:53.049Z",
-  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "reviewedAt": "2026-11-16T21:48:56.658Z",
+  "videoSha256": "4653dc79571706a49eeec87491213f683a99fc0d87f06d5568d9f74cf1d2c5da",
   "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
-  "clipSha256": "63f5c2380c1e745fefd17a61174fe3205a5354eccb28b4abc28da000028a2afa",
+  "clipSha256": "6336e21a68aa5fdc9187570dca9cf3f98e4526654bf79a48a4ac2ba4c5a662db",
   "scene": "journal",
   "review": {
     "heardOpening": "Pour comprendre l'imprévu après coup",
     "checkpoints": [
       {
-        "spokenSeconds": 2.6,
+        "spokenSeconds": 2.5,
         "spoken": "ouvrons le journal de l'événement",
-        "visibleSeconds": 2,
-        "visible": "L'onglet Journal de l'événement est déjà ouvert et affiché à l'écran",
+        "visibleSeconds": 2.5,
+        "visible": "L'onglet Journal de l'événement est déjà ouvert avec les filtres et les entrées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Retrouvons le retrait, l'offre et son acceptation, puis le changement d'horaire et l'annulation",
+        "spokenSeconds": 5,
+        "spoken": "Retrouvons le retrait, l'offre et son acceptation",
         "visibleSeconds": 8,
-        "visible": "Défilement de la liste des événements du journal présentant les différentes étapes et statuts",
+        "visible": "Défilement vers le bas révélant la libération de place et la confirmation par Nicolas Peeters",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.9,
+        "spokenSeconds": 12,
         "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
-        "visibleSeconds": 14.5,
-        "visible": "Clic sur l'onglet Récit sous la section Journal",
+        "visibleSeconds": 13.8,
+        "visible": "Clic sur le sous-onglet Récit affichant la sélection des enchaînements",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.2,
-        "spoken": "Le journal aide l'équipe à se coordonner",
-        "visibleSeconds": 18.5,
-        "visible": "Sélection de l'enchaînement Aline Martin et affichage du détail du récit d'annulation et proposition",
+        "spokenSeconds": 17.5,
+        "spoken": "ne suffisent pas à prouver un lien de cause",
+        "visibleSeconds": 19.5,
+        "visible": "Sélection du récit d'Aline Martin montrant les étapes enchaînées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+      "observation": "Voix de synthèse claire, posée et sans artefact sonore."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

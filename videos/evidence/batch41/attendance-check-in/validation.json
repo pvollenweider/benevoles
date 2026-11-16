@@ -1,0 +1,113 @@
+{
+  "id": "ATTENDANCE_CHECK_IN",
+  "slug": "attendance-check-in",
+  "validatedAt": "2026-11-16T19:48:09.467Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 461680,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 25549,
+      "audioMs": 25541,
+      "driftMs": 8
+    },
+    {
+      "id": "one",
+      "visualMs": 23528,
+      "audioMs": 23526,
+      "driftMs": 2
+    },
+    {
+      "id": "group",
+      "visualMs": 24448,
+      "audioMs": 24447,
+      "driftMs": 1
+    },
+    {
+      "id": "correction",
+      "visualMs": 23171,
+      "audioMs": 23170,
+      "driftMs": 1
+    },
+    {
+      "id": "multiple",
+      "visualMs": 27429,
+      "audioMs": 27427,
+      "driftMs": 2
+    },
+    {
+      "id": "absence-departure",
+      "visualMs": 42313,
+      "audioMs": 42312,
+      "driftMs": 1
+    },
+    {
+      "id": "limits",
+      "visualMs": 24510,
+      "audioMs": 24508,
+      "driftMs": 2
+    },
+    {
+      "id": "cancelled",
+      "visualMs": 38668,
+      "audioMs": 38664,
+      "driftMs": 4
+    },
+    {
+      "id": "export",
+      "visualMs": 33679,
+      "audioMs": 33677,
+      "driftMs": 2
+    },
+    {
+      "id": "dayof-window",
+      "visualMs": 28337,
+      "audioMs": 28335,
+      "driftMs": 2
+    },
+    {
+      "id": "dayof-search",
+      "visualMs": 22310,
+      "audioMs": 22309,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-phone",
+      "visualMs": 23469,
+      "audioMs": 23468,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-checkin",
+      "visualMs": 24371,
+      "audioMs": 24370,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-refresh",
+      "visualMs": 22415,
+      "audioMs": 22414,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-undo",
+      "visualMs": 41273,
+      "audioMs": 41272,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 40,
+  "music": {
+    "voicedWindows": 412,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": -34,
+    "loudestMusicOnlyLufs": -32.7,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

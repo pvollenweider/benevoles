@@ -1,43 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:41:55.267Z",
-  "videoSha256": "c8c50d5ecbb68de5885580bfa9c891694a0c2e7762a817dc55621eb9ad835241",
-  "promptSha256": "71a0cf84cddf067dd6432a91408e52f7cbcab585f5f2caa0a3611a09d409bc77",
-  "clipSha256": "30126164f5b67c161be3c67d3350dd66de6c0abf951af83cc9d0eadba92e91e1",
+  "reviewedAt": "2026-11-16T20:33:07.933Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "promptSha256": "03a9fb05cea9ec4da1f3d55d0aa338d2b0cd8e56a8c82af6cca1164b1142dfed",
+  "clipSha256": "dd5ee837d1dc49d990697160b7270b3c565d0084c459ddd6ebc488508d0b0320",
   "scene": "hours-list",
   "review": {
-    "heardOpening": "Reconnaître l'engagement, c'est aussi disposer",
+    "heardOpening": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair.",
     "checkpoints": [
       {
-        "spokenSeconds": 5,
-        "spoken": "regardons les heures planifiées et les heures attestées",
-        "visibleSeconds": 0,
+        "spokenSeconds": 4.5,
+        "spoken": "Dans la liste des membres, regardons les heures prévues et les heures attestées.",
+        "visibleSeconds": 4.5,
+        "visible": "Le tableau affiche les colonnes « Heures prévues » et « Heures attestées ».",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Colonnes « Heures planifiées » et « Heures attestées » visibles dans le tableau des membres"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "Pour Aline, huit heures étaient prévues",
-        "visibleSeconds": 0,
+        "spokenSeconds": 8.5,
+        "spoken": "Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six sont attestées",
+        "visibleSeconds": 8.5,
+        "visible": "Ligne d'Aline Mercier affichant 12h en heures prévues et 6h en heures attestées.",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Ligne d'Aline Mercier affichant 8h dans la colonne Heures planifiées"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "et six correspondent à une présence saisie",
-        "visibleSeconds": 0,
+        "spokenSeconds": 16,
+        "spoken": "Une participation terminée avant la fin reste enregistrée, mais n'atteste aucune heure",
+        "visibleSeconds": 16,
+        "visible": "Mention « 1 participation terminée avant la fin » visible sous le total de 6h pour Aline.",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Valeur de 6h visible dans la colonne Heures attestées pour Aline Mercier"
+        "severity": "none"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off fluide, claire et bien articulée, parfaitement synchronisée avec les données affichées à l'écran."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-11T12:53:27.590Z",
-  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "reviewedAt": "2026-11-16T21:47:59.171Z",
+  "videoSha256": "4653dc79571706a49eeec87491213f683a99fc0d87f06d5568d9f74cf1d2c5da",
   "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
-  "clipSha256": "2f3154ca552686b89871fd38504ac2ed2b7d0f180a527a11d6660c6ec5820003",
+  "clipSha256": "88976d202480a4ab9919ba7df5aba3323beac2d77459ee276e73a75987d0beab",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Un désistement, un horaire qui bouge",
+    "heardOpening": "Un désistement",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
+        "spokenSeconds": 8.5,
+        "spoken": "vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
         "visibleSeconds": 0,
-        "visible": "Titre superposé au centre de l'écran : « Gérer un imprévu sans perdre le fil - Vérifier, prévenir, contrôler le résultat »",
+        "visible": "Encart d'introduction affichant « Gérer un imprévu sans perdre le fil - Vérifier, prévenir, contrôler le résultat »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "prévenir les bonnes personnes et regarder le résultat.",
+        "spokenSeconds": 14,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
         "visibleSeconds": 11.5,
-        "visible": "L'encadré central disparaît pour afficher l'onglet « Aperçu » de l'événement « Fête des imprévus – démonstration »",
+        "visible": "Disparition de l'encart et affichage complet de la page de l'événement « Fête des imprévus – démonstration »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
-        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un.",
-        "visibleSeconds": 15,
-        "visible": "Écran d'aperçu de l'événement affichant les sections « Où manque-t-il du monde ? » et « À traiter »",
+        "spokenSeconds": 25,
+        "spoken": "Chaque changement sera réellement enregistré dans notre environnement de formation",
+        "visibleSeconds": 12,
+        "visible": "Interface du tableau de bord de formation avec l'événement fictif",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, calme et dynamique, accompagnée d'un léger fond musical sans gêne pour la compréhension."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec le déroulement visuel."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

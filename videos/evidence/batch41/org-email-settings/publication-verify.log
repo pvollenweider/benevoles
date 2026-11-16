@@ -1,0 +1,9 @@
+npm run video:publish -- --context "default"   ORG_EMAIL_SETTINGS 
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default ORG_EMAIL_SETTINGS
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (0) :
+Inchangés : 5
+Présents seulement sur le serveur (laissés tels quels) : 574

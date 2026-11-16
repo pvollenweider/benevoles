@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   VOLUNTEER_HOURS_CERTIFICATE 
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default VOLUNTEER_HOURS_CERTIFICATE
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + volunteer-hours-certificate/volunteer-hours-certificate-og.jpg
+  + volunteer-hours-certificate/volunteer-hours-certificate.jpg
+  + volunteer-hours-certificate/volunteer-hours-certificate.mp4
+  + volunteer-hours-certificate/volunteer-hours-certificate.txt
+  + volunteer-hours-certificate/volunteer-hours-certificate.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 574
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

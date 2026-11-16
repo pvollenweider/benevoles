@@ -1,0 +1,12 @@
+{
+  "anchor": "Le planning imprimé suit le même ordre. Dans Documents, ouvrons l'export",
+  "windowStart": 81.297,
+  "result": {
+    "found": true,
+    "startSeconds": 30.28,
+    "wordsHeard": "Le"
+  },
+  "onset": 111.577,
+  "proposedCut": 111.29675,
+  "note": "Proposal only; recut then independently audit before capture"
+}

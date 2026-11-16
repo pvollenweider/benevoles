@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous pouvez aussi décider quand les inscriptions commenceront et quand elles",
+  "windowStart": 30.775,
+  "result": {
+    "found": true,
+    "startSeconds": 30.44,
+    "wordsHeard": "Vous pouvez aussi décider quand les inscriptions commenceront et quand elles"
+  },
+  "onset": 61.215,
+  "proposedCut": 60.775146,
+  "note": "Proposal only; recut then independently audit before capture"
+}

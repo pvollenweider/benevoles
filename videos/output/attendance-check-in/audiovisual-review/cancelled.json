@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:23:09.527Z",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
+  "reviewedAt": "2026-11-16T19:48:56.525Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
   "promptSha256": "e651907690a81f7056a6247d5530f3d2b527df1e9dfbc41e2cb80c531b8bc478",
-  "clipSha256": "ce1749a57fe01831c44e2ecd1203abd184c67a7250f16527ddfd680b5871b44a",
+  "clipSha256": "871b1627e5163facb77cfd47e6190f2c50423240cb6c27faa1d7ed8174c3a67b",
   "scene": "cancelled",
   "review": {
     "heardOpening": "Un cas à regarder de près",
     "checkpoints": [
       {
-        "spokenSeconds": 5.7,
+        "spokenSeconds": 5.4,
         "spoken": "Enregistrons d'abord sa présence",
-        "visibleSeconds": 6.9,
-        "visible": "Sarah est cochée puis marquée présente sur la page Inscriptions",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection de Sarah Smith et validation de sa présence",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.9,
-        "spoken": "puis ouvrons son créneau dans la liste",
+        "spokenSeconds": 7.8,
+        "spoken": "ouvrons son créneau dans la liste",
         "visibleSeconds": 11.2,
-        "visible": "Navigation vers les créneaux et passage en vue Liste",
+        "visible": "Accès à l'onglet Créneaux puis basculement sur la vue Liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.3,
-        "spoken": "Lisons le récapitulatif et confirmons la suppression",
-        "visibleSeconds": 12.7,
-        "visible": "Boîte de dialogue de confirmation puis clic sur Supprimer",
+        "spokenSeconds": 11.6,
+        "spoken": "confirmons la suppression",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur Supprimer pour le créneau Logistique puis confirmation dans la boîte de dialogue",
         "sync": "aligned",
         "severity": "none"
       },
@@ -36,23 +36,23 @@
         "spokenSeconds": 14.1,
         "spoken": "Revenons aux inscriptions : sa ligne a disparu",
         "visibleSeconds": 15,
-        "visible": "Retour sur la liste des inscriptions sans la ligne de Sarah",
+        "visible": "Retour à l'onglet Inscriptions où Sarah Smith n'est plus listée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.3,
+        "spokenSeconds": 17.1,
         "spoken": "Téléchargeons le fichier pour vérifier le bilan",
-        "visibleSeconds": 19.4,
-        "visible": "Clic sur Exporter les présences (CSV)",
+        "visibleSeconds": 19.3,
+        "visible": "Clic sur Exporter les présences (CSV) puis affichage du fichier CSV",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.4,
+        "spokenSeconds": 19.5,
         "spoken": "Sarah n'y figure pas",
-        "visibleSeconds": 21.2,
-        "visible": "Affichage du tableau CSV téléchargé où Sarah n'apparaît pas",
+        "visibleSeconds": 20,
+        "visible": "Visualisation du tableau exporté ne contenant que les inscriptions actives",
         "sync": "aligned",
         "severity": "none"
       }
@@ -61,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+      "observation": "Voix claire, posée et parfaitement articulée, accompagnant chaque action sans décalage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

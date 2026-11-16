@@ -1,0 +1,6 @@
+{
+  "slug": "sectors",
+  "pattern": "^video\\.beta\\.[a-z]+@example\\.org$",
+  "deletedIds": [],
+  "unrelatedMessagesPreserved": true
+}

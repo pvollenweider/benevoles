@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:38:15.403Z",
+  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "promptSha256": "8492ef1ec227ae3e34751b75f60805f1e2d53c3e0cfd678162f80bcbdb0c1e37",
+  "clipSha256": "ad7978e9187e0c4b84752b2cd49b3ff735ca7c613a1d8d93f87d37e95fc89870",
+  "scene": "roster-withdraw",
+  "review": {
+    "heardOpening": "Revenons sur la page Mes inscriptions d'Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Désactivez Afficher mon nom aux autres bénévoles",
+        "visibleSeconds": 3.8,
+        "visible": "L'interrupteur 'Afficher mon nom aux autres bénévoles' est désactivé par un clic",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "L'état Masqué confirme le retrait",
+        "visibleSeconds": 4.5,
+        "visible": "La mention 'Masqué' apparaît à côté du curseur désactivé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Sur la page ouverte par l'invitation, Aline a disparu ; sa place reste comptée",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage de la liste des créneaux indiquant 'Sur ce créneau : 3 autres bénévoles, sans nom affiché'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "voici la même page sans identification",
+        "visibleSeconds": 16,
+        "visible": "Transition vers la vue publique non identifiée avec le lien '+ J'ai perdu mon lien personnel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "L'interrupteur et les noms ont disparu",
+        "visibleSeconds": 17.5,
+        "visible": "L'interrupteur 'Voir qui est inscrit' et les détails des bénévoles ne figurent plus sur l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, naturelle et parfaitement intelligible tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

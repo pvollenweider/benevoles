@@ -1,9 +1,9 @@
 {
   "effectsPreset": "soft-input-v2",
   "music": "mixkit-tech-house-vibes-130.mp3",
-  "clicks": 29,
+  "clicks": 46,
   "keys": 46,
-  "effectsSha256": "08c218537facc5dcb4e5057e88bcb1982a318355affe9c1bdda99156497378d1",
-  "timelineSha256": "27d6e8b16c52cb106bb9ea6573a8c2c671303c601328a164b229d8f3d1b38c47",
-  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9"
+  "effectsSha256": "72a0c5b294f1d4c7b753b68a5f66fb62982ea7f59ced5d17f8819007ff8c410b",
+  "timelineSha256": "70c1ed2f38021eaaf743511e8811275f67714a8db1039f3d011292e42e952d65",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335"
 }

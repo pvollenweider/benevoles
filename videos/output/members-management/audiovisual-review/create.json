@@ -1,15 +1,15 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T15:33:19.767Z",
-  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
+  "reviewedAt": "2026-11-16T20:37:30.115Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
   "promptSha256": "43910318e8ad4e1a7be281eccbb12207a37565536eb866eb1c07556a8f6d4ad8",
-  "clipSha256": "6a03c2688feb8eaacb7e3443e679ec684e42bbdd2f79106a4d66f2d2c26e1f0c",
+  "clipSha256": "051032f8017f113184ae049135169bfef6c3a71fbf749921994a0aec3332f89d",
   "scene": "create",
   "review": {
-    "heardOpening": "Pour ajouter une personne, cliquez",
+    "heardOpening": "Pour ajouter une personne, cliquez sur Nouveau membre.",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 1.5,
         "spoken": "cliquez sur Nouveau membre",
         "visibleSeconds": 1,
         "visible": "Ouverture du formulaire modal Nouveau membre",
@@ -17,26 +17,26 @@
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.4,
         "spoken": "Saisissez son prénom et son nom",
         "visibleSeconds": 2.5,
-        "visible": "Saisie des champs Prénom (Maya) et Nom (Berger)",
+        "visible": "Saisie de Maya dans Prénom puis Berger dans Nom",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.6,
+        "spokenSeconds": 5.4,
         "spoken": "puis son email et son téléphone",
-        "visibleSeconds": 6,
-        "visible": "Renseignement des champs Email et Téléphone",
+        "visibleSeconds": 5.2,
+        "visible": "Saisie de l'adresse email puis du numéro de téléphone",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
+        "spokenSeconds": 18.3,
         "spoken": "Après la création, Maya apparaît dans la liste",
-        "visibleSeconds": 20,
-        "visible": "Validation du formulaire et apparition de la nouvelle ligne Maya Berger dans la liste",
+        "visibleSeconds": 19.8,
+        "visible": "Clic sur Créer et apparition de la ligne Maya Berger dans le tableau des membres",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et parfaitement synchronisée avec les actions affichées."
+      "observation": "Voix off posée, claire et parfaitement intelligible, bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

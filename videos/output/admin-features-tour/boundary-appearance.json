@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans ses paramètres, vous réglez le titre, les dates, les messages",
+  "windowStart": 30.92,
+  "result": {
+    "found": true,
+    "startSeconds": 30.14,
+    "wordsHeard": "Dans ses paramètres, vous réglez le titre, les dates, les messages"
+  },
+  "onset": 61.06,
+  "proposedCut": 60.9202085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

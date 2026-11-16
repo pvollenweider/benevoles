@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:33:53.525Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "promptSha256": "562c5ed2de45aa565fb011e385d79197c454ade24fa549653f30533344db7b99",
+  "clipSha256": "69d7185e1d9a0f90dc3eb09b7307d824cabe404a533145ed82d8932aef7e85f6",
+  "scene": "event-summary",
+  "review": {
+    "heardOpening": "Enfin, ouvrons Documents",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "ouvrons Documents pour la Fête de septembre",
+        "visibleSeconds": 1,
+        "visible": "Affichage de l'onglet Documents avec les sections Badges et Résumé de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "deux bénévoles occupent trois créneaux confirmés",
+        "visibleSeconds": 1,
+        "visible": "Section Bénévoles : 2 bénévoles distincts avec un créneau confirmé, 1 première fois et 1 retour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Deux participations ont une présence enregistrée, dont une terminée avant la fin",
+        "visibleSeconds": 1,
+        "visible": "Sections Présences et Heures détaillant les participations saisies et le départ anticipé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30,
+        "spoken": "six heures prévues, dont deux attestées, puis le remplissage par poste",
+        "visibleSeconds": 1,
+        "visible": "Lignes '6 h prévues, dont 2 h attestées' et section 'Remplissage par poste : Accueil 3 sur 15'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, calme, claire et bien synchronisée avec le contenu affiché."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,15 +1,15 @@
 {
   "model": "gemini-3.8-flash",
   "promptVersion": 2,
-  "auditedAt": "2026-10-17T09:49:55.047Z",
-  "revalidatedAt": "2026-10-17T09:49:55.048Z",
+  "auditedAt": "2026-11-16T22:26:57.878Z",
+  "revalidatedAt": "2026-11-16T22:26:57.879Z",
   "source": "generated narration WAV",
   "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "48fd1c6c6822a83e902346ace8d2023df3592afce41cff8f2a5856c319eacacf",
-      "recognized": "Une capacité protège l'organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d'attente conserve leur intérêt, dans un ordre clair, et automatise la proposition lorsqu'une place se libère.",
+      "audioSha256": "0b23e7568fe61ad336c8c76ad3d751ca278957f36fcf3c4af22d72925ec66adc",
+      "recognized": "Une capacité protège l'organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d'attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu'une place se libère.",
       "expected": "Une capacité protège l’organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d’attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu’une place se libère.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -18,8 +18,8 @@
     },
     {
       "id": "setup",
-      "audioSha256": "f474e0dc3695fc82e8a40fc1cabce411ff0b08e037453fe66443acf4dcb30e38",
-      "recognized": "La liste d'attente s'active sur le créneau. Tant que la capacité n'est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l'attente et voit sa position au lieu de recevoir une fausse confirmation.",
+      "audioSha256": "b068c70dbceb1f7560d691bff040b043554548b9564935ae31320df4884669d5",
+      "recognized": "La liste d'attente s'active sur le créneau. Tant que la capacité n'est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l'attente et voit sa position, au lieu de recevoir une fausse confirmation.",
       "expected": "La liste d’attente s’active sur le créneau. Tant que la capacité n’est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l’attente et voit sa position au lieu de recevoir une fausse confirmation.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -28,9 +28,9 @@
     },
     {
       "id": "admin",
-      "audioSha256": "f991b40369646ae031dc9d03e4218781c546a7a2c8bc42f72b796c0840ee6388",
-      "recognized": "Dans l'administration, les inscriptions confirmées et les personnes en attente restent distinctes. L'ordre dépend du moment d'inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l'historique.",
-      "expected": "Dans l’administration, les inscriptions confirmées et les personnes en attente restent distinctes. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.",
+      "audioSha256": "6b59a1cdf83efac6ac2b950e273328ececaacadbe317546c75f1793ec5e70c9c",
+      "recognized": "Dans les inscriptions, le statut distingue les personnes confirmées de celles qui attendent une place. L'ordre dépend du moment d'inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes, ni perdre l'historique.",
+      "expected": "Dans les inscriptions, le statut distingue les personnes confirmées de celles qui attendent une place. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.",
       "wordErrorRate": 0,
       "needsReview": false,
       "unexpectedInstructions": [],
@@ -38,7 +38,7 @@
     },
     {
       "id": "release",
-      "audioSha256": "5522ee019771017634ac3a8ab3beff2a62ff970e1c69e29d20f521481138ea3d",
+      "audioSha256": "2943b0ee0e08826b418416e1e666972d00353f18a84d6f5be05f447d7df37260",
       "recognized": "Quand une personne confirmée se désinscrit, la place n'est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures au maximum, sans dépasser le début du créneau, pour accepter depuis son lien personnel. Une place libérée moins d'une heure avant le début n'est plus proposée.",
       "expected": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures au maximum, sans dépasser le début du créneau, pour accepter depuis son lien personnel. Une place libérée moins d’une heure avant le début n’est plus proposée.",
       "wordErrorRate": 0,
@@ -48,8 +48,8 @@
     },
     {
       "id": "volunteer",
-      "audioSha256": "ea927a3a14d42ad56593b0979dfaf9bb349b5b5c3ec044adff7a0a6079579fdf",
-      "recognized": "Sur sa page, la personne voit l'offre, son expiration et les actions prendre la place ou refuser la place. Le lien prendre la place ouvre une page qui présente l'offre sans l'accepter. Seul le bouton prendre la place de cette page confirme le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
+      "audioSha256": "984a003aea8008662bbcb936f9ccca2ff0b22b28e2c1188fa4e6750fb4e253ea",
+      "recognized": "Sur sa page, la personne voit l'offre, son expiration et les actions Prendre la place ou Refuser la place. Le lien Prendre la place ouvre une page qui présente l'offre sans l'accepter. Seul le bouton Prendre la place de cette page confirme le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
       "expected": "Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place. Le lien Prendre la place ouvre une page qui présente l’offre, sans l’accepter. Seul le bouton Prendre la place de cette page confirme le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -58,7 +58,7 @@
     },
     {
       "id": "expiry",
-      "audioSha256": "a9e6425c6cece13f6a47ed072eaf31d602b90c955459438fb0731402ae549f44",
+      "audioSha256": "6074327ec76e3ead0af1297de6e26b821eb8e0c5ce34f0826cd1f2b6f26a39f7",
       "recognized": "Si l'offre expire sans réponse, elle ne bloque pas la place indéfiniment. La promotion passe à la personne suivante. Dans l'administration, on peut suivre l'offre active et la position des personnes encore en attente.",
       "expected": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. Dans l’administration, on peut suivre l’offre active et la position des personnes encore en attente.",
       "wordErrorRate": 0,
@@ -68,7 +68,7 @@
     },
     {
       "id": "result",
-      "audioSha256": "2791732640017848b0f36ca94a2ba8d49ac68f9ba5a3012e4dfc2c8015203553",
+      "audioSha256": "ea7e6479327ce83143b89d5a1dee1bec4509c5fa2b099e3a7cddcba6dd14d6f5",
       "recognized": "La liste d'attente est utile pour l'émission demandée, mais elle doit rester compréhensible. Vérifiez la capacité, l'ordre, l'offre en cours et les délais avant de promettre une place à quelqu'un par un autre canal.",
       "expected": "La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifiez la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.",
       "wordErrorRate": 0.07692307692307693,

@@ -1,53 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:29:49.152Z",
-  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
+  "reviewedAt": "2026-11-16T22:01:24.337Z",
+  "videoSha256": "6feb042986d93210662dc97cf7e6e0ed4b0f8fae6810f1e3b19bb58112dd2437",
   "promptSha256": "e694aadaefccbf035303c02f970e39eefd739eab3a3bbbe243228920b0284457",
-  "clipSha256": "04772984008adb5885ebfeea78f0376c26a303a7c38e42e9f60f2e016c19103b",
+  "clipSha256": "7d36d83e4256640358911fe87280f6c913df4f2555436b82514c97c75d509cb6",
   "scene": "resize",
   "review": {
-    "heardOpening": "Pour corriger une durée",
+    "heardOpening": "Pour corriger une durée, attrapez le bord droit",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
+        "spokenSeconds": 1.6,
         "spoken": "attrapez le bord droit du créneau et déplacez-le.",
-        "visibleSeconds": 2,
-        "visible": "Le bord droit du créneau orange est étiré vers la droite jusqu'à 07h45.",
+        "visibleSeconds": 1.8,
+        "visible": "Le curseur étire l'extrémité droite du créneau Buvette orange vers la droite.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 4.8,
         "spoken": "Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes.",
-        "visibleSeconds": 2.5,
-        "visible": "L'allongement du créneau de 07h00 à 07h45 a été réalisé juste avant.",
+        "visibleSeconds": 3.2,
+        "visible": "Le créneau orange s'est allongé pour se terminer à 07h45 au lieu de 07h00.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Rouvrez ensuite les actions rapides",
+        "visibleSeconds": 4,
+        "visible": "Le volet d'actions rapides du créneau s'ouvre avec plusieurs secondes d'avance.",
         "sync": "early",
         "severity": "minor"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "Rouvrez ensuite les actions rapides : l’heure de fin a bien changé.",
-        "visibleSeconds": 9.5,
-        "visible": "Le panneau latéral du créneau s'ouvre, affichant l'heure de fin à 07:45.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12,
-        "spoken": "Vérifiez-la avant de fermer.",
-        "visibleSeconds": 12,
-        "visible": "Le volet reste ouvert avec l'horaire de fin affiché.",
+        "spokenSeconds": 10.3,
+        "spoken": "l’heure de fin a bien changé. Vérifiez-la avant de fermer.",
+        "visibleSeconds": 10.8,
+        "visible": "L'horaire de fin affiché à 07:45 est visible dans le volet qui se referme à 00:11.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "Entre 00:03 et 00:07, le volet des actions rapides s'ouvre brièvement puis est refermé pendant l'explication sur l'allongement de la barre, avant d'être rouvert à 00:09."
+      "À 00:04, le volet des actions rapides s'ouvre 4 secondes avant que la voix ne demande de le rouvrir (00:08)."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off claire, fluide et posée, bien synchronisée avec les actions principales."
+      "observation": "Voix off féminine claire, posée et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

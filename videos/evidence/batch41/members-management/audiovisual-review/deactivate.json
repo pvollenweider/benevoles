@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:38:00.731Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
+  "promptSha256": "702a26d43a1a5cef1a34ea312ae25815144aa6b8040246aa890d4983dacd58af",
+  "clipSha256": "148f9a0177dc336aa544a20d300a56cc967ba1e3ee2d01aff174c5f9d54f8532",
+  "scene": "deactivate",
+  "review": {
+    "heardOpening": "Pour mettre une fiche de côté, vous pouvez la désactiver.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6,
+        "spoken": "nous confirmons sa désactivation",
+        "visibleSeconds": 6,
+        "visible": "Clic sur le bouton rouge Désactiver dans la fenêtre de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "puis elle disparaît de la liste habituelle.",
+        "visibleSeconds": 7.5,
+        "visible": "La liste se vide avec le message Aucun membre ne correspond aux filtres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Avec Inclure inactifs, nous la retrouvons.",
+        "visibleSeconds": 10.5,
+        "visible": "Coche de l'option Inclure inactifs et réapparition de Maya Berger avec la mention Inactif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Dans Modifier, la case Membre actif permet de la réactiver.",
+        "visibleSeconds": 14.5,
+        "visible": "Fenêtre Modifier le membre ouverte et coche de la case Membre actif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Après enregistrement, elle revient parmi les membres affichés normalement.",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur Enregistrer puis décochage de Inclure inactifs : Maya reste affichée normalement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

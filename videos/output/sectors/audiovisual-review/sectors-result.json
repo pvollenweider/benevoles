@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:33:39.613Z",
+  "videoSha256": "86a4bcb42c4580809057d00a4eeb12006123685b94cf05d3d83fc764791365a7",
+  "promptSha256": "2d9178611c5e6d56f41f3a1a5befcf812003cce108e1327d4ca429cbbd873b3a",
+  "clipSha256": "502978d8baa32ac759c4b728107708dd6767165983837359c1b64ee49b2c9219",
+  "scene": "sectors-result",
+  "review": {
+    "heardOpening": "Votre événement est maintenant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Votre événement est maintenant organisé par secteurs",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage des créneaux organisés par secteurs (Parking, Backline Scène)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Créez d'abord les secteurs, ajoutez-y les postes",
+        "visibleSeconds": 3,
+        "visible": "Écran stable montrant la structure par secteurs et l'option 'Gérer les secteurs et postes'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "voyez la vidéo sur les responsables de secteur",
+        "visibleSeconds": 11.5,
+        "visible": "Écran stable de fin de vidéo renvoyant vers un autre tutoriel",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et professionnelle avec une légère musique d'ambiance en fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

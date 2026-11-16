@@ -1,0 +1,12 @@
+{
+  "anchor": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis.",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 13.46,
+    "wordsHeard": "Choisissez"
+  },
+  "onset": 13.46,
+  "proposedCut": 13.031749999999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

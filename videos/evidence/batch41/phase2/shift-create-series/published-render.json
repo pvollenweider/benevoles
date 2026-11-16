@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-16T22:13:59.721023+00:00",
+  "url": "https://medias.benevol.app/shift-create-series/shift-create-series.mp4",
+  "ffprobe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 800
+      }
+    ],
+    "format": {
+      "duration": "103.040000"
+    }
+  },
+  "render": {
+    "durationMs": 103040,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "posters": "Both actually published and SHA-256 verified"
+}

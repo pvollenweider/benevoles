@@ -1,0 +1,12 @@
+{
+  "anchor": "Les rappels automatiques prennent ensuite le relais avant les créneaux. Vous",
+  "windowStart": 86.4,
+  "result": {
+    "found": true,
+    "startSeconds": 33.34,
+    "wordsHeard": "Les rappels automatiques prennent ensuite le relais avant les créneaux. Vous"
+  },
+  "onset": 119.74000000000001,
+  "proposedCut": 119.359375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

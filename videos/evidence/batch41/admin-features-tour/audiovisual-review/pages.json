@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:44:24.938Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "036c473b52b5607609c177becdd924bbc2c89cdf5990eb44df73a439afd5a68a",
+  "clipSha256": "6ac2630ac78357d01d7c48f51346194c8b1c955c2c1b5ab486bb6a8db70fa971",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Vous pouvez aussi créer des pages publiques",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "créer des pages publiques",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur le bouton '+ Ajouter une page' et ouverture de la fenêtre modale 'Nouvelle page'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Donnez un titre et rédigez le contenu",
+        "visibleSeconds": 6,
+        "visible": "Saisie du titre 'Accès bénévoles' puis du texte dans le champ contenu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "puis enregistrez la page",
+        "visibleSeconds": 8.8,
+        "visible": "Validation et fermeture de la modale, la nouvelle page apparaît dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.6,
+        "spoken": "organisez leur ordre avec les flèches",
+        "visibleSeconds": 10.3,
+        "visible": "Clic sur la flèche vers le haut pour repositionner la page 'Accès bénévoles'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

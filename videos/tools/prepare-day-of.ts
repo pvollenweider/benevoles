@@ -42,7 +42,7 @@ async function main() {
       if (existing) {
         await tx.event.deleteMany({ where: { organizationId: orgId, id: { in: [eventId, liveId] } } })
         // Bases seeded before the surname cast keep their rows; only the display name moves.
-        await tx.adminUser.update({ where: { id: `${orgId}-owner` }, data: { name: fullNameOf("Élodie") } })
+        await tx.adminUser.update({ where: { id: `${orgId}-owner` }, data: { name: fullNameOf("Élodie"), role: "admin" } })
       }
       else {
         await tx.organization.create({ data: { id: orgId, slug: "formation-jour-j", name: "Formation — accueil et jour J", timeZone: "Europe/Zurich", active: true, replyToEmail: "video.dayof.owner@example.org" } })

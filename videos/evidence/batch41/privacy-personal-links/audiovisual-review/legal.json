@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:18:44.795Z",
+  "videoSha256": "fa5cbf11e7a2bb4c84da497238502ca0be8e1e0dc3d0c0aac637284e2c1496ed",
+  "promptSha256": "e06d0d7377ff0269b90965ff8cea8bc90a0d06c94d50de9ac2daa471d70f980f",
+  "clipSha256": "8dd38ee9a22f45eca0f2902d8376cae2125cec2984cb75deca7a98e055bec3d8",
+  "scene": "legal",
+  "review": {
+    "heardOpening": "Les informations publiques se trouvent aussi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Ouvrons Confidentialité.",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la page Politique de confidentialité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Repérons aussi les indications de conservation et les moyens de contact.",
+        "visibleSeconds": 9.2,
+        "visible": "Défilement vers la section 7. Conservation des données, puis vers les droits et contacts",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.7,
+        "spoken": "Ouvrons maintenant les conditions d'utilisation",
+        "visibleSeconds": 21.8,
+        "visible": "Affichage de la page Conditions générales d'utilisation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

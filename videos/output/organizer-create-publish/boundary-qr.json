@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le",
+  "windowStart": 89.35899999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30.16,
+    "wordsHeard": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le"
+  },
+  "onset": 119.51899999999998,
+  "proposedCut": 119.3586455,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-11-16T20:48:06.329Z",
+  "captureRecordedAt": "2026-11-16T20:44:29.595Z",
+  "mailId": "2wbYds2re1InZuJUX6ll9j",
+  "subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+  "created": "2026-11-16T20:44:16.465Z",
+  "recipient": "alex.martin@example.org",
+  "actualPersonalLinkInEmail": true,
+  "actualPersonalApiReturnedCorrectVolunteer": true,
+  "activeRegistration": true,
+  "tokenStored": false
+}

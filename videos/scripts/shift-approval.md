@@ -34,3 +34,7 @@ Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partag�
 Narration à régénérer intégralement en une passe avec la même voix, `continuousPauseTags: false`. En attente du TTS (plafond mensuel connu), sans monter l’ancienne voix. Phrases modifiées :
 
 - `setup` : Dans le créneau, activez Sur validation. Ajoutez aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.
+
+## Lot 41, phase 2 — 16 novembre 2026
+
+Le scénario vérifie un créneau déjà sur validation, avec une vraie demande existante. La première phrase de `setup` devient « Dans le créneau, vérifiez que l’option Sur validation est activée. » ; aucune activation fictive n’est montrée. Le bloc viewer suit cette vérification. Nouvelle génération complète Puck, avec une consigne de lecture exacte ; aucune prise narrée avant ces contrôles.

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:48:51.220Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "3f9e13b2981fb8e011d779bef9ba20dab5e88901410a0e58a5c69210a07b39a8",
+  "clipSha256": "ff799beaef63844318e3ea52a22e7e9140d0c2b3647196d81144281d25716db1",
+  "scene": "export",
+  "review": {
+    "heardOpening": "Téléchargeons maintenant le véritable export des présences.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Téléchargeons maintenant le véritable export des présences.",
+        "visibleSeconds": 3.4,
+        "visible": "Affichage de la page « Lecture du CSV téléchargé » avec le tableau des présences.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "leurs créneaux et les colonnes Présent et Pointé le.",
+        "visibleSeconds": 10.3,
+        "visible": "Le tableau défile horizontalement pour afficher les colonnes Présent, Pointé le, Absence notée et Parti avant la fin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Les colonnes Absence notée et Parti avant la fin distinguent aussi les notes de Noah et d’Aline.",
+        "visibleSeconds": 14.5,
+        "visible": "Visualisation de la mention « oui » pour Noah sous Absence notée et pour Aline sous Parti avant la fin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.9,
+        "spoken": "Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
+        "visibleSeconds": 29.5,
+        "visible": "Bascule vers l'affichage responsive mobile « Jour J — équipé sur le terrain ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, au débit régulier et parfaitement audible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

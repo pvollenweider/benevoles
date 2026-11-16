@@ -1,0 +1,12 @@
+{
+  "anchor": "À l’approche du jour J, les rapports préparent les listes à",
+  "windowStart": 100.095,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "À l’approche du jour J, les rapports préparent les listes à"
+  },
+  "onset": 130.295,
+  "proposedCut": 130.09525000000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

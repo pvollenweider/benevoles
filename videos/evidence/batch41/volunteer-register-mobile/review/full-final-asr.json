@@ -1,0 +1,38 @@
+{
+  "auditedAt": "2026-11-16T20:46:50.675Z",
+  "model": "gemini-3.8-flash",
+  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "audioSha256": "d19c5bbad42c153abbebf5436e349513642e59f0ad012be388661429e889d82c",
+  "recognized": "Envie de donner un coup de main ? Ouvre le lien reçu ou scanne le QR code affiché par l'association. Tu peux choisir ton créneau directement depuis ton téléphone. Sur la page de l'événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles. Choisis simplement le créneau qui te convient. Ici, on rejoint l'équipe d'accueil de 15h à 18h. Ajoute ensuite tes coordonnées. Elles servent uniquement à l'organisation de l'événement et à l'envoi des informations utiles. Réponds aux quelques questions pratiques, puis accepte la convention et l'utilisation de tes données pour cet événement. Un dernier coup d'œil au récapitulatif, et c'est parti, confirme ton inscription. Et voilà, ta demande est envoyée. Regarde tes e-mails, la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+  "registerTokens": [
+    "Tu",
+    "ton",
+    "ton",
+    "tu",
+    "te",
+    "tes",
+    "tes",
+    "ton",
+    "ta",
+    "tes",
+    "ta",
+    "ton",
+    "ton"
+  ],
+  "subtitleRegisterTokens": [
+    "Tu",
+    "ton",
+    "ton",
+    "tu",
+    "te",
+    "tes",
+    "tes",
+    "ton",
+    "ta",
+    "tes",
+    "ta",
+    "ton",
+    "ton"
+  ],
+  "note": "Unconstrained entire final soundtrack; register matches require context review, music vocals must be compared with narration-only audio"
+}

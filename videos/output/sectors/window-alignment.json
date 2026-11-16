@@ -1,0 +1,49 @@
+{
+  "locatedAt": "2026-11-16T20:30:42.719Z",
+  "masterSha256": "54d465a9b369906a13ab6b84ee6c374d09fa8e1a54e0991c24806bdc48d2221a",
+  "totalSeconds": 191.96,
+  "cuts": [
+    {
+      "id": "sectors-enable",
+      "seconds": 19.2806875
+    },
+    {
+      "id": "sectors-create",
+      "seconds": 33.7333335
+    },
+    {
+      "id": "sectors-poste",
+      "seconds": 56.7166455
+    },
+    {
+      "id": "sectors-move",
+      "seconds": 77.2031045
+    },
+    {
+      "id": "sectors-timeline",
+      "seconds": 96.69081249999999
+    },
+    {
+      "id": "sectors-pdf",
+      "seconds": 111.29675
+    },
+    {
+      "id": "sectors-filter",
+      "seconds": 123.546875
+    },
+    {
+      "id": "sectors-pages",
+      "seconds": 144.381146
+    },
+    {
+      "id": "sectors-message",
+      "seconds": 156.4307085
+    },
+    {
+      "id": "sectors-result",
+      "seconds": 176.52047900000002
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

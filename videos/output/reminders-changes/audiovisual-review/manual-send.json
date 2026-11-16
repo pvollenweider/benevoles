@@ -1,59 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:54:18.634Z",
-  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
-  "promptSha256": "efcf735aa4ea5a874a3694a7a2a880150f7e0b8c6d2e76af14d70408c98cbf76",
-  "clipSha256": "e38748c1091be4f8ffb629ee0261521c1c372d36fd514b995fa66ce230037c69",
+  "reviewedAt": "2026-11-16T20:14:39.996Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
+  "promptSha256": "a1d04bc93ecd46e359164541430b596f874651f3f194aefa1ec85f04e5f0f425",
+  "clipSha256": "1c11b7e853f37f14b5e6eda632672156f0cc09c29f2b29693641009fc759deba",
   "scene": "manual-send",
   "review": {
-    "heardOpening": "Dans Communication, Envoyer le rappel",
+    "heardOpening": "Dans Messages,",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Envoyer le rappel demande une confirmation",
-        "visibleSeconds": 2,
-        "visible": "Ouverture de la fenêtre modale « Envoyer le rappel ? »",
+        "spokenSeconds": 2.2,
+        "spoken": "Envoyer le rappel demande une confirmation.",
+        "visibleSeconds": 2.1,
+        "visible": "Ouverture de la fenêtre modale de confirmation « Envoyer le rappel ? ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Nous annulons une première fois",
-        "visibleSeconds": 5.3,
-        "visible": "Clic sur Annuler et fermeture de la modale",
-        "sync": "aligned",
-        "severity": "none"
+        "spokenSeconds": 5,
+        "spoken": "Nous annulons une première fois, puis reprenons et confirmons le véritable envoi.",
+        "visibleSeconds": 5.5,
+        "visible": "L'annulation puis la réouverture et confirmation ne sont pas effectuées : la fenêtre reste figée avec un clic dans le vide à droite.",
+        "sync": "missing",
+        "severity": "major"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "puis reprenons et confirmons le véritable envoi",
-        "visibleSeconds": 7.9,
-        "visible": "Réouverture de la modale et clic sur le bouton Envoyer",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 9.4,
+        "spokenSeconds": 10.1,
         "spoken": "Ouvrons l'email de Léa",
-        "visibleSeconds": 9.2,
-        "visible": "Affichage de la boîte Mailpit avec l'e-mail ouvert adressé à Léa",
+        "visibleSeconds": 9,
+        "visible": "Transition vers l'aperçu du courriel adressé à Léa (« Hello Léa ! »).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "ses deux créneaux sont regroupés dans un seul message",
-        "visibleSeconds": 11.5,
-        "visible": "Détail de l'e-mail montrant les créneaux Accueil et Préparation ainsi que la consigne",
+        "spokenSeconds": 12.3,
+        "spoken": "ses deux créneaux sont regroupés dans un seul message, avec notre consigne.",
+        "visibleSeconds": 12,
+        "visible": "Le corps du mail affiche la consigne personnalisée suivie des deux créneaux (« Accueil » et « Préparation »).",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "De 00:05 à 00:08, l'action annoncée (« Nous annulons une première fois, puis reprenons et confirmons ») n'est pas réalisée à l'écran : la boîte de dialogue reste ouverte sans clic sur « Annuler » ni sur « Envoyer » avant la transition directe vers le mail."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine claire, posée et bien audible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

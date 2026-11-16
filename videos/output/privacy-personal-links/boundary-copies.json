@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur le terrain, une liste bien choisie peut suffire. Ouvrons le",
+  "windowStart": 237.66499999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 30.3,
+    "wordsHeard": "Sur le terrain, une liste bien choisie peut suffire. Ouvrons le"
+  },
+  "onset": 267.965,
+  "proposedCut": 267.6649375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

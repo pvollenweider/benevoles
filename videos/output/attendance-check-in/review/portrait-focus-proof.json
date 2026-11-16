@@ -1,0 +1,14 @@
+{
+  "sourceSha256": "d60a52bceec5c1cd83590ea49133088bf404cbc73522222598e04a3aef7e5061",
+  "portraitFrames": [
+    {
+      "startMs": 278720,
+      "endMs": 461680,
+      "width": 370,
+      "height": 800
+    }
+  ],
+  "sampledFrames": 4574,
+  "sampling": "All four actual RGB pixels at x1000/y400 every frame at 25 fps; continuous native grey padding 126–130",
+  "note": "Only the measured physical viewport (390×844 CSS pixels scaled by the native recorder to 800px height) is centred on the page background. No product pixels or state rewritten; raw capture retained."
+}

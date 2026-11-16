@@ -9,6 +9,7 @@
       "Ajoutez chaque spectacle au programme avec son nom, sa date et ses horaires, et corrigez-le avec Modifier si besoin.",
       "Créez des pages comme Accès, Foire aux questions ou Règlement, en Markdown.",
       "Changez l'ordre des pages avec Monter et Descendre : il est enregistré aussitôt.",
+      "Dans Modifier, rattachez la page aux postes concernés ; les bénévoles confirmés retrouvent son lien dans Mes inscriptions.",
       "Vérifiez que le programme et les pages apparaissent correctement sur la page d'inscription.",
       "Téléchargez le QR code en PNG ou en SVG, ou imprimez la fiche prête à poser.",
       "Scannez le code avec un vrai téléphone avant de le diffuser."
@@ -16,7 +17,8 @@
     "remember": [
       "Le QR code pointe directement vers la page d'inscription de l'événement.",
       "Les pages d'information évitent d'alourdir le formulaire d'inscription.",
-      "Relisez toujours les pages publiques avant de diffuser le code."
+      "Relisez toujours les pages publiques avant de diffuser le code.",
+      "Une page rattachée reste publique : son titre et son contenu sont lisibles par tout le monde."
     ]
   },
   "language": "fr-CH",
@@ -53,6 +55,11 @@
       "id": "page-order",
       "transcript": "Les flèches Monter et Descendre changent l’ordre des pages et l’enregistrent aussitôt. Faisons monter Ce qu’il faut apporter. Ouvrons ensuite Modifier pour ajouter une gourde à sa liste, puis enregistrons. Pour supprimer une page, une confirmation permet encore d’annuler : vérifions-la sans perdre notre contenu.",
       "fallbackDurationMs": 28000
+    },
+    {
+      "id": "post-pages",
+      "transcript": "Rattachons maintenant cette page au poste Accueil. Dans Modifier, le groupe Pour les bénévoles de ces postes permet de cocher Accueil, puis d'enregistrer. L'avertissement le rappelle : cette page reste publique. N'y écrivez aucun code d'accès. Voici la vraie page Mes inscriptions d'Aline, qui a une place confirmée à l'accueil. Sous À lire avant ton créneau, elle retrouve le lien Ce qu'il faut apporter. Ouvrons-le : les consignes restent les mêmes. Sans poste coché, la page reste accessible depuis la page d'inscription, sans ce rappel lié au poste.",
+      "fallbackDurationMs": 47000
     },
     {
       "id": "public",

@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T14:10:33.133Z",
-  "videoSha256": "b304932f76da7a0bf400c12ecd584a9f53b8c567bb0219a32394004c9fd55c37",
-  "promptSha256": "cca736c1159dee61585f1a0bd322d1762184c9aeaf8e33a0800f7ea0154d1a38",
-  "clipSha256": "164b231b5280db732bb6604ba138a3e8a5bd45b639d03f8a3db01b34302facd7",
+  "reviewedAt": "2026-11-16T20:28:05.230Z",
+  "videoSha256": "d90fc4dc3ea1b555486a8cfdf2237ed5c9bd2165e5f500e9633e083f23fca586",
+  "promptSha256": "5af7162e64e83948c87ea83b9242cefc7b0f30392ebdf4bcbb8a4107c85bbd30",
+  "clipSha256": "d3490817207d1a3156c4931f77133811cea21988a9289e142bd8d82829b8fc0e",
   "scene": "public",
   "review": {
-    "heardOpening": "Ouvrons maintenant la page publique.",
+    "heardOpening": "Ouvrons maintenant la page d'inscription",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
-        "spoken": "Ouvrons maintenant la page publique.",
+        "spokenSeconds": 2.1,
+        "spoken": "Le concert apparaît en repère sur le planning",
         "visibleSeconds": 0,
-        "visible": "Affichage de la page publique de l'événement Fête du village de Montvert.",
+        "visible": "Le repère violet 'Concert du village' est visible à 11h sur la frise chronologique",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2,
-        "spoken": "Le concert apparaît en repère sur le planning.",
-        "visibleSeconds": 2,
-        "visible": "Le repère violet 'Concert du village' est visible sur la frise chronologique.",
+        "spokenSeconds": 5.2,
+        "spoken": "Les liens d’information reprennent l’ordre choisi",
+        "visibleSeconds": 0,
+        "visible": "Les boutons 'Questions fréquentes', 'Ce qu'il faut apporter' et 'Accès et parking' apparaissent dans l'ordre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Les liens d’information reprennent l’ordre choisi.",
-        "visibleSeconds": 5.4,
-        "visible": "Les boutons 'Questions fréquentes', 'Ce qu'il faut apporter' et 'Accès et parking' sont affichés en haut de la page.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 7.8,
+        "spokenSeconds": 7.4,
         "spoken": "Ouvrons Ce qu’il faut apporter",
-        "visibleSeconds": 8.5,
-        "visible": "Affichage de la page d'information 'Ce qu'il faut apporter'.",
+        "visibleSeconds": 8.1,
+        "visible": "Affichage de la page 'Ce qu’il faut apporter'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "le titre, le gras et la liste sont mis en forme, et la gourde est bien présente.",
-        "visibleSeconds": 10.5,
-        "visible": "Titre en gras 'Bien préparer sa mission' et liste à puces incluant 'Une gourde' affichés à l'écran.",
+        "spokenSeconds": 10.3,
+        "spoken": "le titre, le gras et la liste sont mis en forme, et la gourde est bien présente",
+        "visibleSeconds": 8.5,
+        "visible": "Le titre, l'en-tête en gras 'Bien préparer sa mission' et la liste à puces contenant 'Une gourde' sont affichés",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec les éléments affichés à l'écran."
+      "observation": "Voix fluide, claire et parfaitement synchronisée avec les éléments affichés."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:10:56.973Z",
+  "videoSha256": "872e475225f098d2cdf1c930d0c56c0c98810970d34405ee7aea1faa7b2e0080",
+  "promptSha256": "95de9a0ed9975144ccfa183bbef6da46c8aa2acb05f4060e4ebeef33236c20d4",
+  "clipSha256": "a2ae19795a53fa5fdf0336fc9f2278be91b1b12a86991f9873881598542bec28",
+  "scene": "network",
+  "review": {
+    "heardOpening": "Nous rétablissons maintenant la place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Le message dit que l’inscription n’a peut-être pas été reçue",
+        "visibleSeconds": 1,
+        "visible": "Le message rouge 'Connexion interrompue - Ton inscription n'a peut-être pas été reçue' s'affiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Tes champs sont toujours là",
+        "visibleSeconds": 10,
+        "visible": "Les champs du formulaire restent visibles et préremplis à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "clique à nouveau sur Confirmer mon inscription",
+        "visibleSeconds": 11.7,
+        "visible": "Le bouton passe à 'Envoi en cours...' dès 11.7s puis la page 'Demande d'inscription reçue' s'affiche à 13.0s",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "La consigne de cliquer sur 'Confirmer mon inscription' est prononcée à 13.6s alors que le clic a eu lieu à 11.7s et que la page de confirmation est déjà affichée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

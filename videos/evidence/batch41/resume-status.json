@@ -1,0 +1,431 @@
+{
+  "productCommit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+  "buildId": "HO6mRRAZuOevekAmdhN_C",
+  "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+  "phase1": [
+    {
+      "id": "ATTENDANCE_CHECK_IN",
+      "slug": "attendance-check-in",
+      "status": "READY",
+      "published": true,
+      "duration": 461.68,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 5,
+      "problems": "Take 1 raw lost during rehearsal startup; final raw preserved. Five AV observations resolved with final evidence."
+    },
+    {
+      "id": "FRONT_DESK_ACCESS",
+      "slug": "front-desk-access",
+      "status": "READY",
+      "published": true,
+      "duration": 170.16,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 1,
+      "commit": "683dd554"
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "slug": "reminders-changes",
+      "status": "READY",
+      "published": true,
+      "duration": 290.8,
+      "musicGaps": 0,
+      "tu": 0,
+      "quotedRegister": 2,
+      "revision": 5,
+      "problems": "Take 1 rejected; two AV no-action findings resolved with actual frames and inputs."
+    },
+    {
+      "id": "ORG_EMAIL_SETTINGS",
+      "slug": "org-email-settings",
+      "status": "READY",
+      "published": true,
+      "duration": 202.96,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 5,
+      "problems": "Incomplete first TTS rejected. Take 1 early transition fixed in take 2. Optional checkbox AV observation resolved."
+    },
+    {
+      "id": "VOLUNTEER_HOURS_CERTIFICATE",
+      "slug": "volunteer-hours-certificate",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 2,
+      "problems": "First take late CSV corrected; final sorting and printed-logo AV observations resolved with actual frames and main comparator.",
+      "duration": 311.36,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 4
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "slug": "members-management",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 2,
+      "problems": "First take obsolete sixty-record count corrected with a full new Puck master; final AV has no issue.",
+      "duration": 238.84,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 8
+    },
+    {
+      "id": "EVENT_PROGRAM_PAGES_QR",
+      "slug": "event-program-pages-qr",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "duration": 194.28,
+      "musicGaps": 0,
+      "tu": 0,
+      "quotedRegister": 1,
+      "problems": "Rehearsal link selector corrected; one narrated take, no final AV issue.",
+      "revision": 5
+    },
+    {
+      "id": "VOLUNTEER_REGISTER",
+      "slug": "volunteer-register-mobile",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "None; tutoiement allowed for the exclusively volunteer audience.",
+      "duration": 56.08,
+      "musicGaps": 0,
+      "tu": 2,
+      "registerCandidates": 13,
+      "revision": 4
+    },
+    {
+      "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+      "slug": "volunteer-confirmation-errors",
+      "status": "NOT READY",
+      "published": false,
+      "narratedTakes": 2,
+      "problems": "Final retry click 1.9 s early and unrelated real Mailpit toast; two-take limit.",
+      "duration": 310.68,
+      "musicGaps": 0,
+      "tu": 5
+    },
+    {
+      "id": "PRIVACY_PERSONAL_LINKS",
+      "slug": "privacy-personal-links",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "One raw ending observation resolved by independent final MP4 ASR and trailing silence.",
+      "duration": 358.56,
+      "musicGaps": 0,
+      "tu": 0,
+      "quotedRegister": 1,
+      "revision": 6
+    },
+    {
+      "id": "REGISTRATION_MONITOR_FOLLOWUP",
+      "slug": "organizer-monitor-followup",
+      "status": "NOT READY",
+      "published": false,
+      "narratedTakes": 2,
+      "problems": "Request modal closes 1.7 s early; role/shift filters too fast. Two-take limit.",
+      "duration": 191.48,
+      "musicGaps": 0,
+      "tu": 0
+    },
+    {
+      "id": "LAST_MINUTE_CHANGES",
+      "slug": "last-minute-changes",
+      "status": "NOT READY",
+      "published": false,
+      "narratedTakes": 2,
+      "problems": "Schedule fixed in take 2, but manual-registration typing/result remains 5\u20137 s late; two-take limit.",
+      "duration": 403.28,
+      "musicGaps": 0,
+      "tu": 0
+    },
+    {
+      "id": "SECTORS",
+      "slug": "sectors",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "duration": 226.08,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 3,
+      "problems": "Browser chrome absent; explanatory URL persistence independently checked with actual reopened filter."
+    },
+    {
+      "id": "SHIFT_ROSTER_VISIBILITY",
+      "slug": "shift-roster-visibility",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "Raw missing \u00c0 confirmer observation directly refuted by exact final frame.",
+      "duration": 260.0,
+      "musicGaps": 0,
+      "tu": 0,
+      "quotedRegister": 1,
+      "revision": 3
+    },
+    {
+      "id": "ADMIN_FEATURES_OVERVIEW",
+      "slug": "admin-features-tour",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "No final AV issue; exact synthetic duplicate legacy owner removed before rehearsal.",
+      "duration": 292.68,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 6
+    }
+  ],
+  "phase2": [
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "slug": "shift-timeline-quick-actions",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "Two raw AV observations resolved by actual typed/saved label and automatic-open/close/reopen sequence.",
+      "duration": 126.36,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 6,
+      "sourceChanges": "New whole Kore master and six cuts; source-word onset diagnostic and earlier label cue; current Minimum/labels captured."
+    },
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "slug": "shift-create-series",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "No final AV issue.",
+      "duration": 103.04,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 7,
+      "sourceChanges": "Fresh whole Puck narration; source-word onsets checked; result first row positioned early; current optional minimum fields captured."
+    },
+    {
+      "id": "SHIFT_CREATE_EDIT_DETAIL",
+      "slug": "shift-create-edit-detail",
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "No final AV issue.",
+      "duration": 134.76,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 6,
+      "sourceChanges": "Fresh whole Kore master and six aligned cuts; actual word onsets checked; shorter native hour-entry pauses; current Minimum/labels captured."
+    },
+    {
+      "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+      "slug": "organizer-create-publish",
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Source narration/rehearsal preparation; no narrated take yet."
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "slug": "shift-approval",
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Source narration/rehearsal preparation; no narrated take yet."
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "slug": "shift-waitlist-offer",
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Source narration/rehearsal preparation; no narrated take yet."
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "slug": "staffing-gaps",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_FIRST_STEPS",
+      "slug": "masterclass-03-first-steps",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ACCESSIBILITY_KEYBOARD_DISPLAY",
+      "slug": "accessibility-keyboard-display",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_CHOOSE_SHIFTS",
+      "slug": "volunteer-choose-shifts",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+      "slug": "platform-internal-administration",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "MEMBERS_DUPLICATES_MERGE",
+      "slug": "members-duplicates-merge",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "DATA_EXPORTS_ARCHIVES",
+      "slug": "data-exports-archives",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EMAIL_DELIVERY_FAILURES",
+      "slug": "email-delivery-failures",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ADMIN_NAVIGATION",
+      "slug": "admin-navigation",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_SESSION_AVAILABILITY",
+      "slug": "volunteer-session-availability",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_QUESTIONS",
+      "slug": "event-questions",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFTS_ROLES_VIEWS",
+      "slug": "shifts-roles-views",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "slug": "targeted-messages",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "slug": "shift-night-dst",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_CALENDAR",
+      "slug": "volunteer-calendar",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+      "slug": "volunteer-personal-registrations",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_PHONE_NOTIFICATIONS",
+      "slug": "volunteer-phone-notifications",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+      "slug": "event-visibility-registration-window",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_REVIEW_PUBLISH",
+      "slug": "event-review-publish",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_TEAM_PERMISSIONS",
+      "slug": "org-team-permissions",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_FORM_RECAP",
+      "slug": "volunteer-form-recap",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "REGISTRATIONS_MANAGEMENT",
+      "slug": "registrations-management",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORGANIZATION_ACTIVITY_LOG",
+      "slug": "organization-activity-log",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_ACTIVITY_LOG",
+      "slug": "event-activity-log",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_CREATE_BLANK",
+      "slug": "event-create-blank",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_DUPLICATE",
+      "slug": "event-duplicate",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_PUBLIC_IDENTITY",
+      "slug": "org-public-identity",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_TIMEZONE_CHARTER",
+      "slug": "org-timezone-charter",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_RECURRENCE",
+      "slug": "shift-recurrence",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_ARCHIVE_DELETE",
+      "slug": "event-archive-delete",
+      "status": "NOT DONE",
+      "published": false
+    }
+  ],
+  "phase1Complete": true
+}

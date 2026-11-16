@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-16T22:05:33.552133+00:00",
+  "url": "https://medias.benevol.app/shift-timeline-quick-actions/shift-timeline-quick-actions.mp4",
+  "ffprobe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 800
+      }
+    ],
+    "format": {
+      "duration": "126.360000"
+    }
+  },
+  "render": {
+    "durationMs": 126360,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "posters": "Both actually published and SHA-256 verified by publication verification"
+}

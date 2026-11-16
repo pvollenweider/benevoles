@@ -1,0 +1,12 @@
+{
+  "anchor": "La liste des membres rassemble inscrits et personnes importées, avec coordonnées,",
+  "windowStart": 103.86600000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.5,
+    "wordsHeard": "La"
+  },
+  "onset": 134.366,
+  "proposedCut": 133.8656875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

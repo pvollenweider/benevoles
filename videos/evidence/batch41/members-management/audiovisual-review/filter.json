@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:37:57.061Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
+  "promptSha256": "3ff7cc2b0f8642e478da523469e20dfcc8d7e6de724b61b5e0c9e1ec74c6f111",
+  "clipSha256": "2bc3b0134e85788c72852b5c2b0dca44c8825f8d6bfa62b1cafa0c95753beb78",
+  "scene": "filter",
+  "review": {
+    "heardOpening": "Avec le filtre d'étiquettes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "afficher seulement les personnes d'une catégorie",
+        "visibleSeconds": 2.8,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Sélection de l'étiquette 'accueil' qui filtre la liste des membres"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "puis revenir à Toutes les étiquettes",
+        "visibleSeconds": 7,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Le filtre est réinitialisé sur 'Toutes les étiquettes'"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Les en-têtes permettent aussi de trier la liste",
+        "visibleSeconds": 9.8,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Clic sur l'en-tête 'Nom' pour réordonner alphabétiquement la liste"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Les heures prévues comptent les créneaux confirmés",
+        "visibleSeconds": 10.8,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Le curseur survole et met en évidence la colonne 'Heures prévues'"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Les heures attestées comptent les créneaux passés",
+        "visibleSeconds": 17.5,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Le curseur survole et met en évidence la colonne 'Heures attestées'"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

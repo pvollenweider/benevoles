@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:33:10.827Z",
+  "videoSha256": "86a4bcb42c4580809057d00a4eeb12006123685b94cf05d3d83fc764791365a7",
+  "promptSha256": "6fcb54458dfb4d7beada167a99d0ca8f16a81abe03db3c585b88d63ee78be5ce",
+  "clipSha256": "a643c2990fc254a8bc7876d96404fd4e906344f2ed20d1862c1d15df998ef21e",
+  "scene": "sectors-timeline",
+  "review": {
+    "heardOpening": "Revenons à la frise.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Revenons à la frise.",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage de la vue Créneaux sous forme de frise chronologique.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Chaque secteur y a sa ligne d'en-tête, avec son nom et son nombre de postes.",
+        "visibleSeconds": 2.2,
+        "visible": "Lignes d'en-tête visibles avec les intitulés de secteur et le nombre de postes associés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Un clic sur cette ligne replie ses postes, un autre les déplie.",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur l'en-tête Parking repliant les postes, puis second clic les dépliant à nouveau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Les postes sans secteur sont regroupés à la fin, sous Autres postes.",
+        "visibleSeconds": 9.2,
+        "visible": "Défilement vers le bas affichant le groupe Autres postes.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   VOLUNTEER_REGISTER 
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default VOLUNTEER_REGISTER
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + volunteer-register-mobile/volunteer-register-mobile-og.jpg
+  + volunteer-register-mobile/volunteer-register-mobile.jpg
+  + volunteer-register-mobile/volunteer-register-mobile.mp4
+  + volunteer-register-mobile/volunteer-register-mobile.txt
+  + volunteer-register-mobile/volunteer-register-mobile.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 574
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

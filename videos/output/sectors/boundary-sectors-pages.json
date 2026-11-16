@@ -1,0 +1,12 @@
+{
+  "anchor": "Le même champ existe dans Où manque-t-il du monde, dans Jour",
+  "windowStart": 114.381,
+  "result": {
+    "found": true,
+    "startSeconds": 30.3,
+    "wordsHeard": "Le même champ existe dans Où manque-t-il du monde, dans Jour"
+  },
+  "onset": 144.681,
+  "proposedCut": 144.381146,
+  "note": "Proposal only; recut then independently audit before capture"
+}

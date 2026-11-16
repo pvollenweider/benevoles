@@ -1,0 +1,12 @@
+{
+  "anchor": "Chaque créneau peut préciser le poste, le libellé, la date, les",
+  "windowStart": 73.416,
+  "result": {
+    "found": true,
+    "startSeconds": 26.7,
+    "wordsHeard": "Chaque créneau peut préciser le poste le libellé la date les"
+  },
+  "onset": 100.116,
+  "proposedCut": 99.895375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

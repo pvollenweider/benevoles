@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   EVENT_PROGRAM_PAGES_QR 
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default EVENT_PROGRAM_PAGES_QR
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + event-program-pages-qr/event-program-pages-qr-og.jpg
+  + event-program-pages-qr/event-program-pages-qr.jpg
+  + event-program-pages-qr/event-program-pages-qr.mp4
+  + event-program-pages-qr/event-program-pages-qr.txt
+  + event-program-pages-qr/event-program-pages-qr.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 574
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

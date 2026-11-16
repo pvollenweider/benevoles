@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:48:30.413Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "7e715d81bf403b087d3ef974d3e4b183813501e0baef4e243c9f63164fda5736",
+  "clipSha256": "14d74eb987c72e0b20ce21e2069f911fb3fceb95fd4b1d40654d50239133ffee",
+  "scene": "correction",
+  "review": {
+    "heardOpening": "Vous avez pointé Léa par erreur ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Sélectionnons sa ligne et annulons la présence.",
+        "visibleSeconds": 3.5,
+        "visible": "La case de Léa Müller est cochée et le bouton « Annuler la présence » est cliqué dans la barre d'actions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "La marque disparaît, mais son inscription et sa place restent.",
+        "visibleSeconds": 5.8,
+        "visible": "Le badge de présence vert disparaît de la ligne de Léa Müller tandis que son inscription et son créneau restent affichés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Quand la bonne personne arrive, vous pouvez enregistrer sa présence à nouveau.",
+        "visibleSeconds": 15,
+        "visible": "La ligne est de nouveau cochée puis le bouton « Marquer présent » est sélectionné, enregistrant la présence.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, naturelle et claire, parfaitement intelligible et synchronisée avec la vidéo."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

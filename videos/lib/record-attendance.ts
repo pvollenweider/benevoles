@@ -37,7 +37,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
     })
     await recordAttendanceActions(options)
     await scene("limits", async at => {
-      await at("Il ne mesure pas l'heure"); await go(`${base}/admin/members?q=video.attendance.2%40example.org`)
+      await at("Il ne mesure pas la durée"); await go(`${base}/admin/members?q=video.attendance.2%40example.org`)
       const member = page.getByRole("row").filter({ hasText: "video.attendance.2@example.org" })
       if (await member.count() !== 1) throw new Error("Member fixture ambiguous")
       await page.getByRole("columnheader", { name: /Heures prévues/ }).scrollIntoViewIfNeeded()
@@ -91,6 +91,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
       await at("Comparons une ligne pointée et")
       const csv = await showDownloadedCsv(page, file)
       const email = csv.headers.indexOf("Email"), present = csv.headers.indexOf("Présent"), time = csv.headers.indexOf("Pointé le")
+      if (!csv.headers.includes("Absence notée") || !csv.headers.includes("Parti avant la fin")) throw new Error("Missing four-state export columns")
       const active = await db.registration.findMany({ where: { eventId, status: "active" } })
       if (csv.rows.length !== active.length || active.length !== 5 || csv.people !== 4) throw new Error("Wrong active export scope")
       if (csv.rows.some(row => /video\.attendance\.[456]@example\.org/.test(row[email]))) throw new Error("Cancelled/request/waitlist person leaked into active export")
@@ -98,13 +99,13 @@ export async function recordAttendance(options: { page: Page; base: string; even
       const marked = csv.rows.find(row => row[email] === "video.attendance.0@example.org")!
       const absent = csv.rows.find(row => row[email] === "video.attendance.3@example.org")!
       if (!marked[present] || marked[present] === absent[present]) throw new Error("Presence column does not distinguish arrivals")
-      await at(0.28) /* mid-sentence */; await page.locator(".scroll").evaluate(el => { el.scrollLeft = el.scrollWidth })
+      await at("Les colonnes Absence notée"); await page.locator(".scroll").evaluate(el => { el.scrollLeft = el.scrollWidth })
       await at("partagez seulement ce qui est")
       await page.getByLabel("Lecture d’une personne dans le fichier :", { exact: true }).selectOption("video.attendance.2@example.org")
       if (await page.locator("tbody tr:visible").count() !== 2) throw new Error("Léa's two export rows missing")
       // The concluding sentence introduces this screen now, not only in the
       // following chapter. Show the genuine dedicated Jour J route in time.
-      if (base === "http://localhost:43108") {
+      if (base === "https://formation-jour-j.benevol.app") {
         await at("Voyons maintenant un écran plus")
         await page.setViewportSize({ width: 390, height: 844 })
         await go(`${base}/admin/events/video-dayof-event-live/day-of`)

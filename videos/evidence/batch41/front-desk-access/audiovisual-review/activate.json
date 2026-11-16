@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:33:09.332Z",
+  "videoSha256": "e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385",
+  "promptSha256": "0c8b953a1c3ed4aad287f3cf1b682fbdf10bd94600475ff9be8cb7f178827ad3",
+  "clipSha256": "542e7c782d76a76f25c1112f327c40a7d429c6f30f4fbabddcb4e678ca34af5e",
+  "scene": "activate",
+  "review": {
+    "heardOpening": "Colette choisit son mot de passe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Colette choisit son mot de passe, le confirme et l'enregistre.",
+        "visibleSeconds": 0.8,
+        "visible": "Saisie du mot de passe dans les deux champs puis clic sur le bouton de création.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Son compte est maintenant actif.",
+        "visibleSeconds": 3.4,
+        "visible": "Écran de confirmation indiquant que le compte est actif avec le bouton Se connecter.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Connectons-nous avec son adresse et ce mot de passe.",
+        "visibleSeconds": 7,
+        "visible": "Page Espace organisateur avec saisie de l'adresse email et du mot de passe puis clic sur Se connecter.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "La page Accès accueil donne le lien Ouvrir le pointage pour cet événement.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la page Accès accueil avec le lien Ouvrir le pointage.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

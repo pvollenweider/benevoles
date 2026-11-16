@@ -1,0 +1,62 @@
+{
+  "capturedAt": "2026-11-16T20:46:32.294Z",
+  "product": {
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
+  },
+  "databaseName": "benevoles_video_docs_batch41",
+  "port": 43116,
+  "ownServerPid": 78126,
+  "command": "ONLY=admin-reminders,admin-print,admin-event-archive,admin-members,admin-members-bulk-delete npm run screenshots",
+  "note": "Canonical new database and isolated server: four captures are byte-identical to origin/main; only the print capture has visible current fixture header/date changes and exactly matches the earlier branch capture. All five alternative texts remain accurate. Own server stopped afterwards.",
+  "captures": [
+    {
+      "capture": "admin-reminders",
+      "originMainSha256": "edb4cd0d539d249c9c1e26d6250d56923413e172a4d431de7901c77b76df661c",
+      "generatedSha256": "edb4cd0d539d249c9c1e26d6250d56923413e172a4d431de7901c77b76df661c",
+      "pixelDifference": null,
+      "sameBytes": true
+    },
+    {
+      "capture": "admin-print",
+      "originMainSha256": "89a1e2d8f09327ae16945095427fa3cb099619fa6196c57c15ac58d5dda37180",
+      "generatedSha256": "1b3eeabbd108b5125bf095a7e54dfc7955020abbf2561561b62684536f8843e9",
+      "pixelDifference": [
+        144,
+        101,
+        534,
+        166
+      ],
+      "sameBytes": false
+    },
+    {
+      "capture": "admin-event-archive",
+      "originMainSha256": "581e1819ed77d7561c9c14df47b8d54de92923e19b43926a93cc01990c6e4044",
+      "generatedSha256": "581e1819ed77d7561c9c14df47b8d54de92923e19b43926a93cc01990c6e4044",
+      "pixelDifference": null,
+      "sameBytes": true
+    },
+    {
+      "capture": "admin-members",
+      "originMainSha256": "a9d44ad80f77105219671918cd118e818153b191d4aa9f50d32336d5d90ba75b",
+      "generatedSha256": "a9d44ad80f77105219671918cd118e818153b191d4aa9f50d32336d5d90ba75b",
+      "pixelDifference": null,
+      "sameBytes": true
+    },
+    {
+      "capture": "admin-members-bulk-delete",
+      "originMainSha256": "238d96fb019123866236db3c06b601b5cbdeb2da15763b552095ab722d515f3e",
+      "generatedSha256": "238d96fb019123866236db3c06b601b5cbdeb2da15763b552095ab722d515f3e",
+      "pixelDifference": null,
+      "sameBytes": true
+    }
+  ],
+  "keptCaptures": [
+    "admin-print"
+  ],
+  "altTextsReread": true
+}

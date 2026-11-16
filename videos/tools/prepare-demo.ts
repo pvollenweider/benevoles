@@ -77,14 +77,14 @@ try {
   assert(fixture.admins.every(admin => admin.email.endsWith("@example.org") || admin.email === "org-admin@localhost"), "Non-training administrator found")
   const team = await db.adminUser.findMany({ where: { email: { in: ["colette.owner@example.org", "sam.organizer@example.org", "lea.pending@example.org"] } }, select: { organizationId: true } })
   assert(team.every(admin => admin.organizationId === "default"), "Demo team belongs to another organization")
-  // seed-demo deletes email-bearing fixtures only. Remove prior import rows
-  // without email only by their actual ledger-backed global IDs and all fields.
-  const importedWithoutEmail = fixture.volunteers.filter(person => ownsImport(person))
-  for (const person of importedWithoutEmail) {
+  // seed-demo deletes email-bearing fixtures only. Remove prior imports and
+  // recorder-created no-email members by their ledger-backed IDs and all fields.
+  const ownedWithoutEmail = fixture.volunteers.filter(person => ownsImport(person) || ownsRecordedNoEmailMember(person, owned))
+  for (const person of ownedWithoutEmail) {
     const relations = await db.volunteer.findUniqueOrThrow({ where: { id: person.id }, include: { _count: { select: { registrations: true, invites: true, pushSubscriptions: true, questionAnswers: true } } } })
-    assert(Object.values(relations._count).every(count => count === 0), "Imported no-email fixture has relations; refuse automatic reset")
+    assert(Object.values(relations._count).every(count => count === 0), "Owned no-email fixture has relations; refuse automatic reset")
     const deleted = await db.volunteer.deleteMany({ where: { id: person.id, organizationId: "default", email: null, firstName: person.firstName, lastName: person.lastName, phone: person.phone, createdAt: person.createdAt } })
-    assert.equal(deleted.count, 1, "Exact owned imported no-email fixture changed before reset")
+    assert.equal(deleted.count, 1, "Exact owned no-email fixture changed before reset")
   }
   // First-steps changes the public slug. Common demo recorders use ?org=default;
   // restore that fixture address only after the complete synthetic-ownership guard.

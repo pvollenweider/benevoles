@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T15:33:01.122Z",
-  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
-  "promptSha256": "cbe2af25a82aee4bc3b0a48812ce16805d6bde9567e3463040c6a5cd7b190547",
-  "clipSha256": "b1978ba2c767638045fd0f12328fe1854d48beb6b7cbe46de929f2001825b5d6",
+  "reviewedAt": "2026-11-16T20:37:32.493Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
+  "promptSha256": "23f32e194f6c0df4fc9205da119f519b8af94d64328185290f79d3950a2434c7",
+  "clipSha256": "b5b7f566bdf186f24d7b00da9db766216a68f5e5498cbc3dcea0dfdf05edc298",
   "scene": "welcome",
   "review": {
     "heardOpening": "La liste des membres rassemble",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "La liste des membres rassemble les personnes",
-        "visibleSeconds": 0.5,
-        "visible": "Onglet Membres affiché avec bandeau d'introduction au premier plan",
+        "spokenSeconds": 0.6,
+        "spoken": "La liste des membres rassemble les personnes que votre association souhaite retrouver facilement.",
+        "visibleSeconds": 2.5,
+        "visible": "Le bandeau titre se dissipe, dévoilant la liste des membres de l'association.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
-        "spoken": "Ici, soixante fiches donnent un aperçu d'une vraie équipe",
+        "spokenSeconds": 5,
+        "spoken": "Ici, plusieurs dizaines de fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées.",
         "visibleSeconds": 5.2,
-        "visible": "Liste des membres visible en arrière-plan sous l'encart de titre",
+        "visible": "Affichage du tableau avec le compteur '53 membres', colonnes Contact et Étiquettes bien visibles.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.2,
-        "spoken": "Voyons comment garder cette liste utile et à jour",
-        "visibleSeconds": 18.2,
-        "visible": "Écran d'introduction stable annonçant la suite du module",
+        "spokenSeconds": 11.2,
+        "spoken": "Ajouter un membre ne l'inscrit pas automatiquement à une fête. Sa fiche et ses inscriptions sont deux choses différentes.",
+        "visibleSeconds": 11.5,
+        "visible": "Bouton '+ Nouveau membre' visible en haut à droite sur l'écran d'accueil des membres.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
+        "spoken": "Voyons comment garder cette liste utile et à jour.",
+        "visibleSeconds": 18,
+        "visible": "Vue stable de l'interface des membres prête pour la suite.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, naturelle et parfaitement articulée, sans bruits parasites."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec l'affichage de présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

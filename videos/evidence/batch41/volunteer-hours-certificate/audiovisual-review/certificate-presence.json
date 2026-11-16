@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:33:29.759Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "promptSha256": "1747b64c3922c6fd3d59db1713ad367efa03a9bf5a3d0e34b574c3227133c39c",
+  "clipSha256": "281efe40c4161e7a158616babb1ce1a5e3e8e6442bd8acc581fcbce04417bbfe",
+  "scene": "certificate-presence",
+  "review": {
+    "heardOpening": "Par défaut, l'attestation met en avant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie.",
+        "visibleSeconds": 4.5,
+        "visible": "Défilement vers les paramètres où la case « Inclure les heures prévues sans présence saisie » est cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres.",
+        "visibleSeconds": 15.6,
+        "visible": "Retour sur l'attestation affichant la nouvelle colonne « Heures prévues (sans présence) ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Pour Aline, nous retrouvons six heures attestées, une participation terminée avant la fin et aucune heure prévue sans présence",
+        "visibleSeconds": 17,
+        "visible": "Ligne Total du tableau montrant 6 h attestées, 1 participation terminée avant la fin et 0 min d'heures prévues sans présence.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

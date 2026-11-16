@@ -1,0 +1,12 @@
+{
+  "anchor": "Le pointage enregistre une arrivée. Il ne mesure pas la durée",
+  "windowStart": 148.773,
+  "result": {
+    "found": true,
+    "startSeconds": 17.65,
+    "wordsHeard": "Le pointage enregistre une arrivée. Il ne mesure pas la durée réellement travaillée"
+  },
+  "onset": 166.423,
+  "proposedCut": 166.42291699999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

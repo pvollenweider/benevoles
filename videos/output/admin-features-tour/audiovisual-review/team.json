@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:35:56.107Z",
-  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
+  "reviewedAt": "2026-11-16T21:43:48.482Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
   "promptSha256": "6cc9c04240f3f77c26e542fe8fd153eb4b929442ceb2dbe8e499cc8b1a2454bb",
-  "clipSha256": "4668c3e60e7688f448357fb950eedbeeac6d8f5bf1e6a53cd982a5ea539e1d93",
+  "clipSha256": "c70014288d4cfdca95978f9b793cd5a6a4c8b5999de34bba35c24f4253aa0179",
   "scene": "team",
   "review": {
-    "heardOpening": "Côté équipe, le propriétaire administre",
+    "heardOpening": "Côté équipe, le propriétaire",
     "checkpoints": [
       {
-        "spokenSeconds": 1.3,
-        "spoken": "le propriétaire administre l'organisation et ses accès",
+        "spokenSeconds": 0.5,
+        "spoken": "le propriétaire administre l’organisation et ses accès",
         "visibleSeconds": 1,
-        "visible": "Section Administrateurs affichant les rôles Propriétaire et Organisateur",
+        "visible": "Section Organisateurs affichant le rôle Propriétaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
+        "spokenSeconds": 4.5,
         "spoken": "Les organisateurs préparent les événements, les membres et les communications",
-        "visibleSeconds": 5.5,
-        "visible": "Liste des administrateurs avec le rôle Organisateur affiché pour Samira Diallo",
+        "visibleSeconds": 4.5,
+        "visible": "Rôles Organisateur affichés dans la liste d'équipe",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.8,
+        "spokenSeconds": 9,
         "spoken": "Les responsables de secteur reçoivent un lien personnel limité à leur poste",
-        "visibleSeconds": 9.8,
-        "visible": "Changement d'écran vers l'onglet Responsables de secteur dans les réglages de l'événement",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15,
-        "spoken": "avec les noms et coordonnées des inscrits, sans accès au reste de l'administration",
-        "visibleSeconds": 15,
-        "visible": "Texte d'aide et liste des responsables par secteur (Accueil, Buvette)",
+        "visibleSeconds": 9,
+        "visible": "Affichage de la page Paramètres > Responsables de secteur",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix pédagogique claire, fluide et parfaitement synchronisée avec les changements d'écran."
+      "observation": "Voix claire, posée et naturelle, parfaitement synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

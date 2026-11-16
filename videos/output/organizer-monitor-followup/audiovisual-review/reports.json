@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T09:06:00.096Z",
-  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
+  "reviewedAt": "2026-11-16T21:29:22.096Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
   "promptSha256": "55267fff3420123d1c7bd01d81241b6f7741030057951b6926c92255693b5699",
-  "clipSha256": "e03119b28663ad487b380f7646fb5dff90a336dff67108106ab222d8c2cbb670",
+  "clipSha256": "49157dbfff5cf9896b1be6141982450653a2359045ae28f1764d7dbf77098f48",
   "scene": "reports",
   "review": {
-    "heardOpening": "À l'approche du jour J",
+    "heardOpening": "À l'approche du jour J, les rapports préparent",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.1,
         "spoken": "les listes à afficher sur les stands",
-        "visibleSeconds": 0.5,
-        "visible": "Section 'À afficher ou à remettre aux bénévoles' avec Planning par jour et Planning par poste",
+        "visibleSeconds": 1,
+        "visible": "Section « À afficher ou à remettre aux bénévoles » avec les plannings par jour et par poste",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.2,
         "spoken": "les plannings individuels",
-        "visibleSeconds": 0.5,
-        "visible": "Option 'Planning individuel' affichée à l'écran",
+        "visibleSeconds": 1,
+        "visible": "Lien « Planning individuel » affiché sous la même section",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.8,
         "spoken": "les réponses aux questions et les badges",
-        "visibleSeconds": 7.5,
-        "visible": "Défilement vers le bas dévoilant 'Synthèse des réponses' et la section 'Badges'",
+        "visibleSeconds": 7.3,
+        "visible": "Défilement vers le bas révélant la synthèse des réponses et la section Badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Vous générez seulement les documents dont votre équipe a besoin",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la page de sélection et personnalisation des documents et badges",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, fluide et posée, parfaitement synchronisée avec l'écran."
+      "observation": "Voix claire, posée et bien articulée, conforme au ton pédagogique attendu."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

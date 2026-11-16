@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:11:16.430Z",
+  "videoSha256": "872e475225f098d2cdf1c930d0c56c0c98810970d34405ee7aea1faa7b2e0080",
+  "promptSha256": "a9ababfe4123beb36116af5cd1fd070d611388d6b59e1bda35509c6c63308481",
+  "clipSha256": "bac39a6515d4db3e4291fbcc8b3b9ea076cc1d90e7dfa12eeb7007da4810d102",
+  "scene": "response-loss",
+  "review": {
+    "heardOpening": "Une coupure peut arriver après l'enregistrement.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Nicolas choisit la logistique.",
+        "visibleSeconds": 2.8,
+        "visible": "Sélection du créneau Logistique 14h-16h sur la frise puis clic sur Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.1,
+        "spoken": "Le formulaire affiche Connexion interrompue",
+        "visibleSeconds": 10.5,
+        "visible": "Message d'erreur rouge « Connexion interrompue » sous le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Rétablissons la connexion et confirmons à nouveau.",
+        "visibleSeconds": 16.4,
+        "visible": "Nouveau clic sur le bouton Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "La page affiche de nouveau Demande d'inscription reçue",
+        "visibleSeconds": 17.5,
+        "visible": "Écran de confirmation « Demande d'inscription reçue »",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Vérifions côté organisation : une seule ligne de Nicolas apparaît sur ce créneau.",
+        "visibleSeconds": 26.2,
+        "visible": "Tableau des inscriptions côté organisation avec une unique ligne pour Nicolas Peeters en Logistique",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

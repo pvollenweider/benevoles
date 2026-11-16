@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:33:21.685Z",
+  "videoSha256": "86a4bcb42c4580809057d00a4eeb12006123685b94cf05d3d83fc764791365a7",
+  "promptSha256": "99c74621da06c1279b6211b885f163df898828447e750dcd87276a1cf2476c69",
+  "clipSha256": "9422a85bc34c0977e2d2ca05500d4080a22dfca1e690a953551e5e0720521a41",
+  "scene": "sectors-pages",
+  "review": {
+    "heardOpening": "Le même champ existe dans",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le même champ existe dans Où manque-t-il du monde",
+        "visibleSeconds": 0.8,
+        "visible": "Sélection du secteur dans l'onglet « Où manque-t-il du monde ? »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.4,
+        "spoken": "dans Jour J",
+        "visibleSeconds": 2.7,
+        "visible": "Passage sur l'onglet Jour J avec le filtre Secteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "et dans Documents",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage de l'onglet Documents avec le champ Secteur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions entre les onglets."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
