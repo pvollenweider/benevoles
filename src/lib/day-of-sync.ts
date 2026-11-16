@@ -118,6 +118,18 @@ export function answerMark(marks: LocalMarks, id: string, server: ShownAttendanc
   return { ...marks, [id]: { state: server.state, checkedInAt: server.checkedInAt, at } }
 }
 
+/**
+ * The mark a successful attendance answer installs (#1141): the state the server wrote and the
+ * arrival it returned. A departure keeps the arrival — it is a recorded presence — and undoing it
+ * restores that same presence; an absence or a cleared presence has none. A check-in without a
+ * returned arrival falls back to the local clock, so the row still shows a presence.
+ */
+export function answeredAttendance(state: AttendanceState, checkedInAt: string | null | undefined, fallbackNow: string): ShownAttendance {
+  if (state === "present") return { state, checkedInAt: checkedInAt ?? fallbackNow }
+  if (state === "left_early") return { state, checkedInAt: checkedInAt ?? null }
+  return { state, checkedInAt: null }
+}
+
 /** Whether a poll answer sent at `sentAt` comes after the last applied one (`appliedAt`). */
 export function isFreshAnswer(sentAt: number, appliedAt: number): boolean {
   return sentAt > appliedAt
@@ -156,7 +168,10 @@ export type BoardChanges = { arrived: number; undone: number; absent: number; ab
  * states (#1141): someone present here and absent there is one presence undone and one absence
  * marked, never a silent change. A presence turning into a departure is one departure only, and
  * the departure turning back into a presence one undone departure only: neither is said as a
- * presence undone or marked. Shifts moving from « à venir » to « en cours » with time are not a
+ * presence undone or marked. A departure the poll shows directly back as expected is one presence
+ * undone (the person is no longer present), one that appeared already departed is one departure
+ * only, and one that becomes absent is counted exactly like present → absent (presence undone and
+ * absence marked). Shifts moving from « à venir » to « en cours » with time are not a
  * change: the page shows them where they are.
  */
 export function boardChanges(before: DayOfBoard, marksBefore: LocalMarks, after: DayOfBoard, marksAfter: LocalMarks): BoardChanges {
@@ -170,9 +185,14 @@ export function boardChanges(before: DayOfBoard, marksBefore: LocalMarks, after:
     const a = shownState(old, marksBefore)
     const b = shownState(p, marksAfter)
     if (a === b) continue
+    // A person who was present (or had left) is no longer so: one presence undone. The move to
+    // « parti avant la fin » is the departure itself, and the move back to present its undo.
     if (a === "present" && b !== "left_early") c.undone += 1
-    if (a === "left_early") c.departureUndone += 1
-    if (a === "absent") c.absenceUndone += 1
+    if (a === "left_early" && b !== "present") c.undone += 1
+    if (a === "left_early" && b === "present") c.departureUndone += 1
+    // An absence the poll shows undone is one absence undone, unless the person already appears
+    // gone before the end: the absence then led to a departure, said as that departure only.
+    if (a === "absent" && b !== "left_early") c.absenceUndone += 1
     if (b === "present" && a !== "left_early") c.arrived += 1
     if (b === "left_early") c.leftEarly += 1
     if (b === "absent") c.absent += 1

@@ -39,6 +39,11 @@ describe("CertificateView", () => {
     for (const col of ["Événement", "Postes", "Créneaux", "Heures attestées"]) {
       expect(within(table).getByRole("columnheader", { name: col })).toBeInTheDocument()
     }
+    // No participation ended before the end: the table is exactly as before this PR, with no
+    // extra column, and scrolls in its own region instead of widening the page (#1141).
+    expect(within(table).queryByRole("columnheader", { name: /terminées avant la fin/ })).toBeNull()
+    expect(table.parentElement).toHaveClass("overflow-x-auto")
+    expect(table.parentElement).toHaveClass("print:overflow-visible")
   })
 
   it("shows attested hours only by default, and labels planned hours separately once the checkbox is checked", () => {
@@ -92,13 +97,19 @@ describe("CertificateView", () => {
     expect(table.compareDocumentPosition(shown) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     // It is not in the warning about shifts without a recorded presence.
     expect(screen.queryByText(/n'a pas de présence enregistrée/)).toBeNull()
+    // A clear column header: a bare number between two hours columns could be read as hours.
+    expect(within(table).getByRole("columnheader", { name: "Participations terminées avant la fin" })).toBeInTheDocument()
     // The event's attested column says nothing was attested, but the count column says 1.
     const row = screen.getByText("Marché").closest("tr")!
     const cells = within(row).getAllByRole("cell")
     expect(cells[4]).toHaveTextContent("1")
+    // An event with none shows « 0 », never an empty cell, once the column exists.
+    const other = within(screen.getByText("Fête du village").closest("tr")!).getAllByRole("cell")
+    expect(other[4]).toHaveTextContent("0")
     // The total row carries the count too.
     const total = screen.getByRole("rowheader", { name: "Total" }).closest("tr")!
-    expect(total).toHaveTextContent("1")
+    const totalCells = within(total).getAllByRole("cell")
+    expect(totalCells[2]).toHaveTextContent("1")
   })
 
   it("says nothing about early departures when there is none", () => {

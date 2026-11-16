@@ -6,6 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor, within, act } from "@testing-library/react"
 
 import DayOfBoard from "../admin/DayOfBoard"
+import { SETTLE_MS } from "@/lib/day-of-sync"
 import type { DayOfBoard as Board, DayOfShift } from "@/lib/day-of"
 
 // « Jour J » (#561).
@@ -668,11 +669,6 @@ describe("DayOfBoard, absent state (#1141)", () => {
     await waitFor(() => expect(undo).toHaveFocus())
     await waitFor(() => expect(status()).toHaveTextContent("Départ enregistré pour Léon Favre. Bar, Soir : 0 présent sur 2 attendus, 1 parti avant la fin."))
     expect(within(barCard()).getByText("Parti avant la fin")).toBeInTheDocument()
-    // The row settles for a moment: both buttons stay inert, so a second tap does nothing.
-    expect(undo).toHaveAttribute("aria-disabled", "true")
-    const calls = fetchMock.mock.calls.length
-    fireEvent.click(undo)
-    expect(fetchMock).toHaveBeenCalledTimes(calls)
   })
 
   it("« Annuler le départ » restores the presence on the same button, which keeps the focus", async () => {
@@ -811,5 +807,118 @@ describe("DayOfBoard, absent state (#1141)", () => {
     fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
     await screen.findByRole("button", { name: "Marquer présent, Zoé Müller" })
     expect(within(row).queryByText(/^Une absence est déjà enregistrée/)).toBeNull()
+  })
+})
+
+// The settle guard (#1141), on controlled timers: real-time waits made the old test fail on a
+// slow machine, and never showed the buttons becoming usable again.
+describe("DayOfBoard, settle guard (#1141)", () => {
+  const fetchMock = vi.fn()
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+    vi.useFakeTimers()
+  })
+  // Same jsdom timer issue as the polling block above: unmount, let the pending fake timers run
+  // (jsdom's own interval fires and stops itself), then bring the real timers back.
+  afterEach(() => {
+    cleanup()
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  const flush = () => act(async () => { await vi.advanceTimersByTimeAsync(50) })
+  // Resolves the fetch chain without moving the clock: the settle delay must be measured from it.
+  const flushMicro = () => act(async () => { await vi.advanceTimersByTimeAsync(0) })
+  const bulk = (id: string, state: "present" | "left_early" | "expected", checkedInAt: string | null) => jsonOk({
+    done: 1, changedIds: [id], skipped: 0, results: [{ id, changed: true, state, checkedInAt }],
+  })
+  const isDisabled = (el: HTMLElement) => el.getAttribute("aria-disabled") === "true"
+
+  it("(a) during the settle period both buttons of the row are aria-disabled and a press does nothing", async () => {
+    fetchMock.mockResolvedValue(bulk("r1", "present", "2026-07-04T12:03:00.000Z"))
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    await flush()
+    const undo = screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })
+    const left = screen.getByRole("button", { name: "Marquer parti avant la fin, Zoé Müller" })
+    expect(isDisabled(undo)).toBe(true)
+    expect(isDisabled(left)).toBe(true)
+    const calls = fetchMock.mock.calls.length
+    fireEvent.click(undo)
+    fireEvent.click(left)
+    expect(fetchMock).toHaveBeenCalledTimes(calls)
+  })
+
+  it("(b) after SETTLE_MS they are enabled again and a press works", async () => {
+    fetchMock.mockImplementation(async (_url: string, init: RequestInit) => JSON.parse(String(init.body)).action === "check_in"
+      ? bulk("r1", "present", "2026-07-04T12:03:00.000Z")
+      : bulk("r1", "expected", null))
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    await flushMicro()
+    const undo = screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })
+    // One millisecond before the delay, still inert.
+    await act(async () => { await vi.advanceTimersByTimeAsync(SETTLE_MS - 1) })
+    expect(isDisabled(undo)).toBe(true)
+    await act(async () => { await vi.advanceTimersByTimeAsync(1) })
+    expect(isDisabled(undo)).toBe(false)
+    fireEvent.click(undo)
+    await flush()
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ action: "undo_check_in", registrationIds: ["r1"] })
+  })
+
+  it("(c) a poll that changes nothing starts no settle period", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ board, today: "2026-07-04", refreshedAt: "14h05" }))
+    renderBoard()
+    await act(async () => { await vi.advanceTimersByTimeAsync(25_000) })
+    await flush()
+    expect(fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/day-of"))).toHaveLength(1)
+    for (const button of screen.getAllByRole("button")) expect(isDisabled(button)).toBe(false)
+  })
+
+  it("(d) another row is not delayed while one row settles", async () => {
+    fetchMock.mockImplementation(async (_url: string, init: RequestInit) => {
+      const body = JSON.parse(String(init.body))
+      return body.action === "mark_left_early"
+        ? bulk("r2", "left_early", "2026-07-04T11:05:00.000Z")
+        : bulk("r1", "present", "2026-07-04T12:03:00.000Z")
+    })
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" }))
+    await flush()
+    expect(isDisabled(screen.getByRole("button", { name: "Annuler le départ, Léon Favre" }))).toBe(true)
+    // The other row is usable at once.
+    const zoe = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+    expect(isDisabled(zoe)).toBe(false)
+    fireEvent.click(zoe)
+    await flush()
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ action: "check_in", registrationIds: ["r1"] })
+  })
+
+  it("(e) a row that leaves the board and comes back is not left disabled", async () => {
+    const withoutLeon: Board = { ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: [bar.people[0]] }] }] }
+    let dayOfCalls = 0
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url.endsWith("/bulk")) return bulk("r2", "left_early", "2026-07-04T11:05:00.000Z")
+      dayOfCalls += 1
+      return jsonOk({ board: dayOfCalls === 1 ? withoutLeon : board, today: "2026-07-04", refreshedAt: "14h06" })
+    })
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" }))
+    await flush()
+    // A read removes the row while its settle period has not elapsed.
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await flush()
+    expect(screen.queryByRole("button", { name: /Léon Favre/ })).toBeNull()
+    await act(async () => { await vi.advanceTimersByTimeAsync(SETTLE_MS + 50) })
+    // It comes back: the settle period of a row that had left does not keep it inert.
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await flush()
+    expect(isDisabled(screen.getByRole("button", { name: "Annuler la présence, Léon Favre" }))).toBe(false)
+    expect(isDisabled(screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" }))).toBe(false)
   })
 })

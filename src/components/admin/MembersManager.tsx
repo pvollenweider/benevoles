@@ -911,7 +911,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                     {/* A left-early participation is a recorded participation whose duration is
                         unknown: counted here, never turned into hours (#1141). */}
                     {(m.participationsEndedEarly ?? 0) > 0 && (
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-700">
                         {m.participationsEndedEarly} participation{m.participationsEndedEarly! > 1 ? "s" : ""} terminée{m.participationsEndedEarly! > 1 ? "s" : ""} avant la fin
                       </div>
                     )}

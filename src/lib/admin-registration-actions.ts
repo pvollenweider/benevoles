@@ -154,7 +154,11 @@ export type AttendanceTarget = {
   id: string; eventId: string; shiftId: string; status: string
   /** The shift the client showed this registration on, when it said so (`observedShifts`). */
   observedShiftId?: string | null
-  /** The arrival the caller read, kept by « marquer parti avant la fin » and « annuler le départ ». */
+  /**
+   * The arrival the caller read. Kept for callers that still send it, but a successful result
+   * always reports the arrival the write returned: this value may be stale once another device
+   * has undone and re-recorded the presence.
+   */
   checkedInAt?: Date | string | null
 }
 
@@ -173,14 +177,15 @@ export type AttendanceResult =
  * Lightweight attendance (#399, #1141): marks the given registrations present, undoes it, marks
  * them absent or undoes the absence, marks a present person as having left before the end or
  * undoes that departure. Only confirmed registrations, and only rows whose starting state matches
- * the transition: one conditional `updateMany` per row testing `status`, the shift the caller read
- * (`shiftId`) and the attendance columns, so a stale request changes nothing instead of
+ * the transition: one conditional `updateManyAndReturn` per row testing `status`, the shift the
+ * caller read (`shiftId`) and the attendance columns, so a stale request changes nothing instead of
  * overwriting a state recorded meanwhile on another device, a swap committed since the caller's
  * read is never marked on the wrong shift, and a row selected twice isn't logged twice. A target
  * whose `observedShiftId` differs from its shift is not written at all. Logs each real change.
- * Returns one result per target, in the targets' order: a row that did not change (stale, moved,
- * or not confirmed) is read back and returned with its current state, so the client shows the
- * truth rather than a guess.
+ * Returns one result per target, in the targets' order: a changed row reports the state and the
+ * arrival its own write returned (never a possibly stale value read before it); a row that did not
+ * change (stale, moved, or not confirmed) is read back and returned with its current state, so the
+ * client shows the truth rather than a guess.
  */
 export async function setAttendance(
   db: OrgScopedPrisma,
@@ -192,18 +197,24 @@ export async function setAttendance(
   const plan = ATTENDANCE_TRANSITIONS[transition]
   const adminId = actor.type === "admin" ? actor.id ?? null : null
   const changed = new Set<string>()
+  /** The arrival each successful write left in the database, returned by that same statement. */
+  const writtenArrival = new Map<string, Date | null>()
   /** The shift each action was meant for: the one the client saw, else the one the caller read. */
   const intendedShift = (t: AttendanceTarget) => t.observedShiftId ?? t.shiftId
   for (const reg of targets) {
     if (reg.status !== "active" || changed.has(reg.id)) continue
     // The client acted on another shift than the one the registration holds now: nothing to write.
     if (intendedShift(reg) !== reg.shiftId) continue
-    const { count } = await db.registration.updateMany({
+    const written = await db.registration.updateManyAndReturn({
       where: { id: reg.id, status: "active", shiftId: reg.shiftId, ...startingStateWhere(plan.from) },
       data: attendanceData(transition, now, adminId),
+      // Returned atomically: the arrival a departure keeps is the database's, not the one the
+      // caller may have read before another device undid and re-recorded the presence.
+      select: { id: true, checkedInAt: true },
     })
-    if (count === 0) continue
+    if (written.length === 0) continue
     changed.add(reg.id)
+    writtenArrival.set(reg.id, written[0].checkedInAt)
     const shiftId = { from: reg.shiftId, to: reg.shiftId }
     await logEvent({
       eventId: reg.eventId,
@@ -223,25 +234,17 @@ export async function setAttendance(
   }
   // The rows that did not change, read once: their state and shift as they are now in the database.
   const unchangedIds = [...new Set(targets.filter((t) => !changed.has(t.id)).map((t) => t.id))]
-  // A departure action keeps the arrival: read it back too when the caller did not pass it.
-  const needArrival = transition === "mark_left_early" || transition === "undo_left_early"
-    ? targets.filter((t) => changed.has(t.id) && t.checkedInAt === undefined).map((t) => t.id)
-    : []
-  const toRead = [...new Set([...unchangedIds, ...needArrival])]
-  const current = toRead.length
-    ? await db.registration.findMany({ where: { id: { in: toRead } }, select: { id: true, shiftId: true, checkedInAt: true, attendanceStatus: true } })
+  const current = unchangedIds.length
+    ? await db.registration.findMany({ where: { id: { in: unchangedIds } }, select: { id: true, shiftId: true, checkedInAt: true, attendanceStatus: true } })
     : []
   const currentById = new Map(current.map((r) => [r.id, r]))
   const iso = (v: Date | string | null | undefined): string | null => (v == null ? null : typeof v === "string" ? v : v.toISOString())
   return targets.map((t): AttendanceResult => {
     if (changed.has(t.id)) {
-      // « Parti avant la fin » keeps the arrival the caller read, and « Annuler le départ »
-      // restores that same presence; the other actions either write now (check-in) or clear it.
-      const keptArrival = t.checkedInAt === undefined ? currentById.get(t.id)?.checkedInAt : t.checkedInAt
-      const checkedInAt = plan.to === "left_early" || transition === "undo_left_early"
-        ? iso(keptArrival)
-        : plan.to === "present" ? now.toISOString() : null
-      return { id: t.id, changed: true, state: plan.to, checkedInAt }
+      // The arrival is the one the write returned, never the caller's possibly stale read: a
+      // departure and the undo that restores the presence keep it, the other transitions write
+      // it now (check-in) or clear it. A left-early result therefore always carries an arrival.
+      return { id: t.id, changed: true, state: plan.to, checkedInAt: iso(writtenArrival.get(t.id)) }
     }
     const row = currentById.get(t.id)
     // Deleted between the caller's read and this one: said as such, no state invented.

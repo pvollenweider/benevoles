@@ -69,6 +69,12 @@ const fake = vi.hoisted(() => {
         for (const r of hit) Object.assign(r, data)
         return { count: hit.length }
       },
+      // The attendance writer reads the kept arrival from the same statement (#1141).
+      updateManyAndReturn: async ({ where, data }) => {
+        const hit = store.registrations.filter((r) => matches(registrationView(r), where))
+        for (const r of hit) Object.assign(r, data)
+        return hit.map((r) => ({ id: r.id, checkedInAt: r.checkedInAt }))
+      },
     },
   }
 
@@ -299,7 +305,7 @@ describe("POST registrations/bulk as a front-desk account (#1142)", () => {
   ])("mixed ids with %s: refused as a whole, nothing written", async (_label, foreign) => {
     const res = await bulk(EVENT, { action: "check_in", registrationIds: ["reg-nadia", foreign] })
     expect(res.status).toBe(404)
-    expect(calls()).not.toContain("registration.updateMany")
+    expect(calls()).not.toContain("registration.updateManyAndReturn")
     for (const r of fake.store.registrations) expect(r.checkedInAt).toBeNull()
     expect(logEvent).not.toHaveBeenCalled()
   })

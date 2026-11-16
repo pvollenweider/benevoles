@@ -5,6 +5,7 @@ import {
   NO_CHANGES,
   SETTLE_MS,
   addChanges,
+  answeredAttendance,
   answerMark,
   boardChanges,
   changedShownRows,
@@ -29,6 +30,7 @@ import {
   type LocalMarks,
 } from "../day-of-sync"
 import type { DayOfBoard, DayOfPerson, DayOfShift } from "../day-of"
+import type { AttendanceState } from "../attendance-state"
 
 // « Jour J » refreshes itself while open (#1141).
 const person = (id: string, checkedInAt: string | null = null): DayOfPerson => ({ registrationId: id, firstName: "Zoé", lastName: id, phone: null, checkedInAt })
@@ -225,6 +227,53 @@ describe("four states: departures marked or undone elsewhere (#1141)", () => {
 
   it("the settle delay is the short one the board uses", () => {
     expect(SETTLE_MS).toBe(600)
+  })
+})
+
+// Every pair a poll can show, so no two-step jump is left implicit (#1141).
+describe("boardChanges: the sixteen (from, to) pairs", () => {
+  const people: Record<AttendanceState, DayOfPerson> = {
+    expected: person("a"),
+    present: person("a", "x"),
+    absent: absentPerson("a"),
+    left_early: leftEarlyPerson("a"),
+  }
+  const expected: Record<AttendanceState, Record<AttendanceState, Partial<typeof NO_CHANGES>>> = {
+    expected: { expected: {}, present: { arrived: 1 }, absent: { absent: 1 }, left_early: { leftEarly: 1 } },
+    present: { expected: { undone: 1 }, present: {}, absent: { undone: 1, absent: 1 }, left_early: { leftEarly: 1 } },
+    absent: { expected: { absenceUndone: 1 }, present: { absenceUndone: 1, arrived: 1 }, absent: {}, left_early: { leftEarly: 1 } },
+    // A departure shown directly back as expected is a presence undone, not only « départ
+    // annulé »; one shown absent counts exactly like present → absent.
+    left_early: { expected: { undone: 1 }, present: { departureUndone: 1 }, absent: { undone: 1, absent: 1 }, left_early: {} },
+  }
+  for (const from of Object.keys(expected) as AttendanceState[]) {
+    for (const to of Object.keys(expected[from]) as AttendanceState[]) {
+      it(`${from} → ${to}`, () => {
+        const c = boardChanges(boardOf([people[from]]), {}, boardOf([people[to]]), {})
+        expect(c).toEqual({ ...NO_CHANGES, ...expected[from][to] })
+      })
+    }
+  }
+})
+
+describe("answeredAttendance: the local mark of a successful answer (#1141)", () => {
+  it("keeps the arrival the server returned for a departure and for the presence it restores", () => {
+    expect(answeredAttendance("left_early", "2026-07-04T11:05:00.000Z", "2026-07-04T14:00:00.000Z"))
+      .toEqual({ state: "left_early", checkedInAt: "2026-07-04T11:05:00.000Z" })
+    expect(answeredAttendance("present", "2026-07-04T11:05:00.000Z", "2026-07-04T14:00:00.000Z"))
+      .toEqual({ state: "present", checkedInAt: "2026-07-04T11:05:00.000Z" })
+  })
+
+  it("never invents an arrival for an absence or a cleared presence", () => {
+    expect(answeredAttendance("absent", "2026-07-04T11:05:00.000Z", "2026-07-04T14:00:00.000Z"))
+      .toEqual({ state: "absent", checkedInAt: null })
+    expect(answeredAttendance("expected", "2026-07-04T11:05:00.000Z", "2026-07-04T14:00:00.000Z"))
+      .toEqual({ state: "expected", checkedInAt: null })
+  })
+
+  it("falls back to the local clock only for a check-in whose answer carried no arrival", () => {
+    expect(answeredAttendance("present", null, "2026-07-04T14:00:00.000Z"))
+      .toEqual({ state: "present", checkedInAt: "2026-07-04T14:00:00.000Z" })
   })
 })
 

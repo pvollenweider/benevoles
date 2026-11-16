@@ -40,6 +40,7 @@ import AddNeedPanel from "./AddNeedPanel"
 import {
   NO_CHANGES,
   addChanges,
+  answeredAttendance,
   answerMark,
   boardChanges,
   changedShownRows,
@@ -525,8 +526,9 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       return
     }
     // The answer wins over any read sent before it; the next read sent after it confirms it.
-    const checkedInAt = plan.to === "present" ? own?.checkedInAt ?? new Date().toISOString() : null
-    updateMarks((m) => answerMark(m, id, { state: plan.to, checkedInAt }, ++tick.current))
+    // The server's arrival is kept for a departure and for the presence its undo restores, never
+    // dropped because the destination is not « présent » (#1141).
+    updateMarks((m) => answerMark(m, id, answeredAttendance(plan.to, own?.checkedInAt, new Date().toISOString()), ++tick.current))
     markSettling([id])
     done()
     say(attendanceAnnouncement(name, transition, shiftName(shift), countsNow()))
