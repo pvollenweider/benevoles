@@ -28,6 +28,8 @@ import { loadPastEventOrganizations, runPastEventBatch, sendPastEventNotice } fr
 import { inactivityMode } from "@/lib/org-inactivity"
 import { loadInactivityReport } from "@/lib/org-inactivity-data"
 import { runInactivityProcedure, type ProcedureCounts } from "@/lib/org-inactivity-procedure"
+import { purgeDueFrontDeskAccounts } from "@/lib/front-desk-purge"
+import { FRONT_DESK_ROLE } from "@/lib/permissions"
 
 export const dynamic = "force-dynamic"
 
@@ -116,14 +118,30 @@ async function run(req: Request) {
 
   // --- 3. Admin invitations never accepted (isActive stays false until then), and org accounts
   // left without an organization by a cleanup that predates step 1 deleting them.
+  // A front-desk account is left to step 3b even when it never activated: its own rule is 90 days
+  // after the end of its last access, not 30 days after its last modification.
   const deletedAdmins = await prisma.adminUser.deleteMany({
     where: {
       OR: [
-        { isActive: false, updatedAt: { lt: adminCutoff } },
+        { isActive: false, updatedAt: { lt: adminCutoff }, role: { not: FRONT_DESK_ROLE } },
         { organizationId: null, role: { not: "super_admin" } },
       ],
     },
   })
+
+  // --- 3b. Front-desk accounts whose accesses are all over (#1142): deleted 90 days after the
+  // latest end among them, their grants cascading away. One account's failure is reported and
+  // counted by the purge itself, which goes on with the others; a failure of the whole step (the
+  // candidate query) is reported here and never stops the following steps. The next night retries.
+  let deletedFrontDeskAccounts = 0
+  let failedFrontDeskAccounts = 0
+  try {
+    const result = await purgeDueFrontDeskAccounts(now)
+    deletedFrontDeskAccounts = result.deleted
+    failedFrontDeskAccounts = result.failed
+  } catch (e) {
+    reportError("cleanup.front_desk_accounts")(e)
+  }
 
   // --- 4. Expired password-reset tokens (housekeeping, not GDPR-critical) ---
   // Note: setup tokens (invite links) are deliberately NOT cleared here. Their
@@ -391,6 +409,8 @@ async function run(req: Request) {
       volunteers: deletedVolunteers.count,
       mergedMemberTombstones: deletedMergedTombstones.count,
       adminUsers: deletedOrgAdmins.count + deletedAdmins.count,
+      frontDeskAccounts: deletedFrontDeskAccounts,
+      frontDeskAccountsFailed: failedFrontDeskAccounts,
     },
     tokensCleaned: {
       passwordReset: clearedResetTokens.count,

@@ -39,6 +39,12 @@ describe("FrontDeskAccessPanel", () => {
     expect(screen.getByRole("heading", { level: 3, name: "Inviter une personne" })).toBeInTheDocument()
   })
 
+  it("shows an empty list and a zero count once a purged account's row has gone", () => {
+    renderPanel([])
+    expect(screen.getByRole("heading", { level: 2, name: "Accès accueil (0)" })).toBeInTheDocument()
+    expect(screen.getByText("Personne n'a encore d'accès accueil pour cet événement.")).toBeInTheDocument()
+  })
+
   it("asks for name and email, both required, without autofilling the owner's own identity", () => {
     renderPanel([])
     const name = screen.getByRole("textbox", { name: /^Prénom et nom/ })

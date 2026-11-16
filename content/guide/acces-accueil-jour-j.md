@@ -44,9 +44,11 @@ Si son accès se termine pendant qu'elle a la page ouverte, le tableau disparaî
 
 L'accès se termine à la fin du dernier jour de l'événement, dans le fuseau horaire de l'organisation. Un créneau de nuit qui se prolonge après minuit le dernier jour reste accessible jusqu'à 6 h le lendemain matin. Un événement archivé ferme l'accès immédiatement ; un événement déplacé à une autre date ne prolonge jamais l'accès au-delà de sa nouvelle fin.
 
+Le compte de la personne est effacé 90 jours après la fin de son dernier accès ; pour lui redonner un accès plus tard, invitez-la de nouveau.
+
 ## Révoquer un accès
 
-Dans **Accès accueil**, sur la ligne de la personne, **Révoquer** demande confirmation. L'accès est fermé tout de suite, même si la page est déjà ouverte. Le compte de la personne est conservé : vous pouvez lui redonner un accès au même événement en l'invitant de nouveau, avec le même email. Sa session reste ouverte : à la prochaine lecture ou action, la page Jour J lui indique que son accès a pris fin, et « Mes accès » ne montre plus aucun accès en cours.
+Dans **Accès accueil**, sur la ligne de la personne, **Révoquer** demande confirmation. L'accès est fermé tout de suite, même si la page est déjà ouverte. Le compte de la personne est conservé jusqu'à 90 jours après la fin de son dernier accès : pendant ce délai, vous pouvez lui redonner un accès au même événement en l'invitant de nouveau, avec le même email ; ensuite, invitez-la comme une nouvelle personne. Sa session reste ouverte : à la prochaine lecture ou action, la page Jour J lui indique que son accès a pris fin, et « Mes accès » ne montre plus aucun accès en cours.
 
 L'état de chaque ligne est écrit en toutes lettres : **Actif**, **Invitation envoyée**, **Révoqué** ou **Expiré**, avec la date de fin de l'événement.
 

@@ -29,6 +29,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Accès accueil** : le compte d'une personne dont tous les accès sont terminés est effacé 90 jours après la fin du dernier, avec ses droits ; sa ligne disparaît du panneau et le journal de l'organisation garde une entrée qui nomme l'événement, jamais la personne. Un compte jamais activé suit la même règle, et une invitation faite après l'effacement crée un nouveau compte. (#1142)
 - **Conditions d'utilisation** : si le service hébergé devait s'arrêter définitivement, les organisations sont prévenues au moins trois mois à l'avance, pour exporter leurs données ou préparer une autre solution (article 7) (#1357).
 - Les emails (expéditeur par défaut, invitation, bienvenue, nouvelle version), les titres d'onglet et le fichier NOTICE disent « benevol.app », ou le nom de l'instance, au lieu de l'ancien nom « Bénévoles » (#1340).
 - Le README du dépôt s'ouvre sur le nom officiel « benevol.app », les liens vers le site et trois façons de se servir de l'outil ; son aperçu, raccourci, renvoie à la présentation publique des fonctionnalités. <!-- interne -->

@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest"
 
 vi.mock("../prisma", () => ({ prisma: {} }))
 
-import { FRONT_DESK_LAST_DAY_GRACE, formatFrontDeskDay, frontDeskAccessEnd, frontDeskAccessStatus, isGrantLive, listEventFrontDeskAccesses, loadFrontDeskAccesses, loadFrontDeskGrant } from "../front-desk-access"
+import { FRONT_DESK_LAST_DAY_GRACE, formatFrontDeskDay, frontDeskAccessEnd, frontDeskAccessEndAt, frontDeskAccountPurgeDecision, frontDeskAccessStatus, isGrantLive, listEventFrontDeskAccesses, loadFrontDeskAccesses, loadFrontDeskGrant } from "../front-desk-access"
 
 // Front-desk access limited to one event (#1142): when a grant counts.
 const NOW = new Date("2027-06-12T09:00:00Z")
@@ -32,6 +32,98 @@ describe("frontDeskAccessEnd", () => {
     expect(frontDeskAccessEnd({ endDate: new Date("2027-03-28T00:00:00Z"), timeZone: "Europe/Zurich" }).toISOString()).toBe("2027-03-29T04:00:00.000Z")
     // Back to winter time on 31 October 2027: 06:00 is +01:00 on 1 November.
     expect(frontDeskAccessEnd({ endDate: new Date("2027-10-31T00:00:00Z"), timeZone: "Europe/Zurich" }).toISOString()).toBe("2027-11-01T05:00:00.000Z")
+  })
+})
+
+describe("frontDeskAccountPurgeDecision", () => {
+  const day = (iso: string) => new Date(`${iso}T00:00:00Z`)
+  const at = (iso: string) => new Date(iso)
+  const access = (over: Record<string, unknown> = {}) => ({
+    revokedAt: null,
+    expiresAt: null,
+    event: { endDate: day("2027-06-20") },
+    ...over,
+  })
+  const account = (over: Record<string, unknown> = {}) => ({
+    createdAt: at("2027-01-01T00:00:00Z"),
+    accesses: [access()],
+    ...over,
+  })
+  const zone = "Europe/Zurich"
+  // 21 June 2027 06:00 Zurich = 04:00 UTC; 90 days later = 19 September 2027 04:00 UTC.
+  const eventEnd = at("2027-06-21T04:00:00Z")
+  const deadline = at("2027-09-19T04:00:00Z")
+
+  it("ends an access at its event's end when it was neither revoked nor expired", () => {
+    expect(frontDeskAccessEndAt(access(), zone)).toEqual(eventEnd)
+    expect(frontDeskAccountPurgeDecision(account(), zone, deadline)).toEqual({ referenceAt: eventEnd, due: false })
+  })
+
+  it("uses the earliest end: a revocation or an expiry before the event ends it there", () => {
+    const revoked = at("2027-03-01T12:00:00Z")
+    const expired = at("2027-02-01T12:00:00Z")
+    expect(frontDeskAccessEndAt(access({ revokedAt: revoked }), zone)).toEqual(revoked)
+    expect(frontDeskAccessEndAt(access({ expiresAt: expired }), zone)).toEqual(expired)
+    // Both set: the earliest of the three wins, never the latest.
+    expect(frontDeskAccessEndAt(access({ revokedAt: revoked, expiresAt: expired }), zone)).toEqual(expired)
+    // An expiry later than the event never extends the access.
+    expect(frontDeskAccessEndAt(access({ expiresAt: at("2028-01-01T00:00:00Z") }), zone)).toEqual(eventEnd)
+  })
+
+  it("takes the latest end among several accesses, whatever ended each one", () => {
+    const mixed = account({
+      accesses: [
+        access({ revokedAt: at("2027-01-10T00:00:00Z"), event: { endDate: day("2027-05-01") } }),
+        access({ expiresAt: at("2027-04-01T00:00:00Z"), event: { endDate: day("2027-05-01") } }),
+        access({ event: { endDate: day("2027-06-20") } }),
+      ],
+    })
+    expect(frontDeskAccountPurgeDecision(mixed, zone, deadline)).toEqual({ referenceAt: eventEnd, due: false })
+  })
+
+  it("keeps an account with one live access among old ones", () => {
+    const stillLive = account({
+      accesses: [
+        access({ revokedAt: at("2027-01-01T00:00:00Z") }),
+        // An event far in the future: the account's reference date is the latest of its ends.
+        access({ event: { endDate: day("2028-06-20") } }),
+      ],
+    })
+    const decision = frontDeskAccountPurgeDecision(stillLive, zone, at("2027-12-31T00:00:00Z"))
+    expect(decision.referenceAt).toEqual(at("2028-06-21T04:00:00Z"))
+    expect(decision.due).toBe(false)
+  })
+
+  it("counts an account with no access at all from its creation", () => {
+    const empty = account({ accesses: [], createdAt: at("2027-01-01T00:00:00Z") })
+    expect(frontDeskAccountPurgeDecision(empty, zone, at("2027-04-01T00:00:00Z"))).toEqual({ referenceAt: at("2027-01-01T00:00:00Z"), due: false })
+    expect(frontDeskAccountPurgeDecision(empty, zone, at("2027-04-01T00:00:00.001Z")).due).toBe(true)
+  })
+
+  it("reads the organisation's zone, not the server's", () => {
+    const event = { endDate: day("2027-06-20") }
+    const zurich = frontDeskAccessEndAt(access({ event }), "Europe/Zurich")
+    const losAngeles = frontDeskAccessEndAt(access({ event }), "America/Los_Angeles")
+    const utc = frontDeskAccessEndAt(access({ event }), "UTC")
+    expect(zurich.toISOString()).toBe("2027-06-21T04:00:00.000Z")
+    expect(losAngeles.toISOString()).toBe("2027-06-21T13:00:00.000Z")
+    expect(utc.toISOString()).toBe("2027-06-21T06:00:00.000Z")
+    expect(frontDeskAccountPurgeDecision(account({ accesses: [access({ event })] }), "Europe/Zurich", deadline).referenceAt).toEqual(zurich)
+  })
+
+  it("lands on 06:00 local across a daylight-saving change", () => {
+    // Zurich switches to summer time on 28 March 2027.
+    const before = frontDeskAccountPurgeDecision(account({ accesses: [access({ event: { endDate: day("2027-03-27") } })] }), zone, at("2027-06-01T00:00:00Z"))
+    const after = frontDeskAccountPurgeDecision(account({ accesses: [access({ event: { endDate: day("2027-03-28") } })] }), zone, at("2027-06-01T00:00:00Z"))
+    expect(before.referenceAt.toISOString()).toBe("2027-03-28T04:00:00.000Z")
+    expect(after.referenceAt.toISOString()).toBe("2027-03-29T04:00:00.000Z")
+  })
+
+  it("stays due only strictly after 90 days, to the millisecond", () => {
+    expect(frontDeskAccountPurgeDecision(account(), zone, new Date(deadline.getTime() - 1)).due).toBe(false)
+    // Exactly 90 days: still kept.
+    expect(frontDeskAccountPurgeDecision(account(), zone, deadline).due).toBe(false)
+    expect(frontDeskAccountPurgeDecision(account(), zone, new Date(deadline.getTime() + 1)).due).toBe(true)
   })
 })
 
@@ -204,6 +296,11 @@ describe("listEventFrontDeskAccesses", () => {
     expect(rows.map((r) => [r.id, r.status])).toEqual([
       ["g-active", "active"], ["g-invited", "invitation_sent"], ["g-revoked", "revoked"], ["g-expired", "expired"],
     ])
+  })
+
+  it("lists nothing once a purged account's grant has cascaded away, so the panel's count is zero", async () => {
+    const db = listReader([]) as never
+    await expect(listEventFrontDeskAccesses(db, "evt-fete", NOW)).resolves.toEqual([])
   })
 })
 

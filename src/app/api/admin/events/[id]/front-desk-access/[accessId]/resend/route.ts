@@ -13,7 +13,7 @@ import { enqueueNotifications, deliverAfterResponse } from "@/lib/notifications/
 import { hashToken } from "@/lib/token-hash"
 import { apexBaseUrl } from "@/lib/urls"
 import { NEVER_ACTIVATED_WHERE } from "@/lib/admin-invitation"
-import { FRONT_DESK_INVITES_PER_DAY, formatFrontDeskDay, isGrantLive } from "@/lib/front-desk-access"
+import { FRONT_DESK_INVITES_PER_DAY, formatFrontDeskDay, frontDeskInviteDedupeKey, isGrantLive } from "@/lib/front-desk-access"
 import { rateLimit } from "@/lib/rate-limit"
 import { orgTimeZone } from "@/lib/time-zone"
 
@@ -77,6 +77,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   }
 
   const setupToken = randomBytes(32).toString("hex")
+  const setupTokenHash = hashToken(setupToken)
   const setupTokenExpiresAt = new Date(now.getTime() + SETUP_TOKEN_MS)
   const inviteUrl = `${apexBaseUrl()}/admin/accept-invite?token=${setupToken}`
   const organizationName = access.event.organization?.name ?? ""
@@ -90,12 +91,15 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     // account, and nothing is queued or logged.
     const { count } = await tx.adminUser.updateMany({
       where: { id: access.adminUser!.id, organizationId: guard.organizationId, ...NEVER_ACTIVATED_WHERE },
-      data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt, receiveProductUpdates: false },
+      data: { setupTokenHash, setupTokenExpiresAt, receiveProductUpdates: false },
     })
     if (count === 0) return null
     return enqueueNotifications([{
       kind: "front_desk_invite",
       organizationId: guard.organizationId,
+      // The purge deletes this account's queued invitations by this key (#1142); each resend has
+      // its own nonce, so it is a new row rather than a duplicate skipped by the outbox.
+      dedupeKey: frontDeskInviteDedupeKey(guard.organizationId, access.adminUser!.id, setupTokenHash),
       recipient: { email: access.adminUser!.email, name: access.adminUser!.name },
       data: {
         adminName: access.adminUser!.name,
