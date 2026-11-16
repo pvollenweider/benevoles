@@ -6,6 +6,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 //
 // #672: reminders are now grouped by volunteer, event and local day — one email (and one push)
 // per group, marking every included registration in the same pass.
+//
+// The group is marked before the send and given back when the send fails
+// (src/lib/reminder-claims.ts): a call running at the same time finds it taken and sends nothing.
 
 vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s3cret" } }))
 vi.mock("@/lib/job-runs", () => ({ recordJobRun: async (_job: string, fn: () => Promise<unknown>) => fn() }))
@@ -26,7 +29,11 @@ vi.mock("@/lib/reminder-rules-server", () => ({ queueCustomRuleReminders: vi.fn(
 const sendNotificationMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications", () => ({ sendNotification: sendNotificationMock }))
 
-const registrationUpdateMany = vi.hoisted(() => vi.fn().mockResolvedValue({ count: 0 }))
+// Every statement finds its rows free: a claim (one registration per statement) marks its row.
+type UpdateManyArgs = { where: { id?: string | { in: string[] }; reminderDdSent?: null }; data: Record<string, Date | null> }
+const everyRow = async ({ where }: UpdateManyArgs) => ({ count: typeof where.id === "string" ? 1 : (where.id?.in.length ?? 0) })
+const calls = () => registrationUpdateMany.mock.calls.map((c) => c[0] as UpdateManyArgs)
+const registrationUpdateMany = vi.hoisted(() => vi.fn())
 const registrationFindMany = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
   prisma: {
@@ -78,7 +85,7 @@ function post() {
 describe("POST /api/cron/reminders", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    registrationUpdateMany.mockResolvedValue({ count: 0 })
+    registrationUpdateMany.mockImplementation(everyRow)
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2026-01-10T00:00:00Z"))
     // Only the J-day window (2-4h) matches this shift (starts at 03:00 the same day); the other
@@ -108,7 +115,75 @@ describe("POST /api/cron/reminders", () => {
     const res = await POST(post())
     const data = await res.json()
     expect(data.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 0, failed: 1 })
-    expect(registrationUpdateMany).not.toHaveBeenCalled()
+    // Claimed, then given back: the field ends empty and the next run retries.
+    expect(calls()).toEqual([
+      { where: { id: "reg-1", reminderDdSent: null }, data: { reminderDdSent: expect.any(Date) } },
+      { where: { id: { in: ["reg-1"] } }, data: { reminderDdSent: null } },
+    ])
+  })
+
+  it("marks the group before the send, so a call running at the same time finds it taken", async () => {
+    const order: string[] = []
+    registrationUpdateMany.mockImplementation(async (args: UpdateManyArgs) => {
+      order.push("claim")
+      return everyRow(args)
+    })
+    sendNotificationMock.mockImplementation(async () => {
+      order.push("send")
+      return { ok: true }
+    })
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    await POST(post())
+    expect(order).toEqual(["claim", "send"])
+  })
+
+  it("sends nothing for a group another call already holds, and counts it neither sent nor failed", async () => {
+    registrationUpdateMany.mockResolvedValue({ count: 0 })
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    const res = await POST(post())
+    const data = await res.json()
+    expect(sendNotificationMock).not.toHaveBeenCalled()
+    expect(data.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 0, failed: 0 })
+    // Nothing was marked by this call, so nothing is given back.
+    expect(registrationUpdateMany).toHaveBeenCalledTimes(1)
+  })
+
+  it("gives back its part of a group another call holds in part, and sends nothing", async () => {
+    const regs = [
+      { ...baseReg(), id: "reg-1", shift: shift({ startTime: "03:00" }) },
+      { ...baseReg(), id: "reg-2", shift: shift({ startTime: "02:30" }) },
+    ]
+    registrationFindMany.mockImplementation(async ({ where }: { where: { status: string } }) =>
+      where.status === "active" ? regs : [],
+    )
+    // The first registration is free, the second is held by another call.
+    registrationUpdateMany.mockResolvedValueOnce({ count: 1 }).mockResolvedValueOnce({ count: 0 }).mockResolvedValueOnce({ count: 1 })
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    await POST(post())
+    expect(sendNotificationMock).not.toHaveBeenCalled()
+    const [first, second, release] = calls()
+    // Only the row this call marked is given back: the other call's mark is never touched.
+    expect(release).toEqual({ where: { id: { in: [first.where.id] } }, data: { reminderDdSent: null } })
+    expect(second.where.id).not.toBe(first.where.id)
+    expect(registrationUpdateMany).toHaveBeenCalledTimes(3)
+  })
+
+  it("gives the group back when the send throws, and lets the error through", async () => {
+    sendNotificationMock.mockRejectedValue(new Error("boom"))
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    await expect(POST(post())).rejects.toThrow("boom")
+    expect(calls().at(-1)).toEqual({ where: { id: { in: ["reg-1"] } }, data: { reminderDdSent: null } })
+  })
+
+  it("gives the group back when building the email throws, before any send", async () => {
+    // A registration without its volunteer: reading the address throws while the payload is built.
+    registrationFindMany.mockImplementation(async ({ where }: { where: { status: string } }) =>
+      where.status === "active" ? [{ ...baseReg(), volunteer: null }] : [],
+    )
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    await expect(POST(post())).rejects.toThrow()
+    expect(sendNotificationMock).not.toHaveBeenCalled()
+    expect(calls().at(-1)).toEqual({ where: { id: { in: ["reg-1"] } }, data: { reminderDdSent: null } })
   })
 
   it("counts a successful send as sent and marks every registration of the group", async () => {
@@ -117,7 +192,7 @@ describe("POST /api/cron/reminders", () => {
     const res = await POST(post())
     const data = await res.json()
     expect(data.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 1, failed: 0 })
-    expect(registrationUpdateMany).toHaveBeenCalledWith({ where: { id: { in: ["reg-1"] } }, data: { reminderDdSent: expect.any(Date) } })
+    expect(calls()).toEqual([{ where: { id: "reg-1", reminderDdSent: null }, data: { reminderDdSent: expect.any(Date) } }])
   })
 
   it("sends one email for several shifts of the same volunteer, event and day, and marks all of them", async () => {
@@ -137,10 +212,9 @@ describe("POST /api/cron/reminders", () => {
     const payload = sendNotificationMock.mock.calls[0][0]
     // Sorted by start: "Bar" (02:30) before "Accueil" (03:00).
     expect(payload.data.shifts.map((s: { label: string }) => s.label)).toEqual(["Bar", "Accueil"])
-    expect(registrationUpdateMany).toHaveBeenCalledWith(
-      { where: { id: { in: expect.arrayContaining(["reg-1", "reg-2"]) } }, data: { reminderDdSent: expect.any(Date) } },
-    )
-    expect(registrationUpdateMany.mock.calls[0][0].where.id.in).toHaveLength(2)
+    // One claim per registration, nothing given back.
+    expect(calls().map((c) => c.where.id).sort()).toEqual(["reg-1", "reg-2"])
+    expect(calls().every((c) => c.where.reminderDdSent === null && c.data.reminderDdSent instanceof Date)).toBe(true)
   })
 
   it("does not mark any registration of a group when the send fails (retried as a whole)", async () => {
@@ -154,7 +228,10 @@ describe("POST /api/cron/reminders", () => {
     )
     const { POST } = await import("@/app/api/cron/reminders/route")
     await POST(post())
-    expect(registrationUpdateMany).not.toHaveBeenCalled()
+    // Both were claimed, both are given back in one statement.
+    const last = calls().at(-1)!
+    expect(last.data).toEqual({ reminderDdSent: null })
+    expect((last.where.id as { in: string[] }).in.sort()).toEqual(["reg-1", "reg-2"])
   })
 
   it("is idempotent: a re-run with the same registrations (now excluded by the DB query) sends nothing more", async () => {

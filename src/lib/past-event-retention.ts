@@ -55,6 +55,15 @@ export function pastEventStep(
   return { kind: "batch" }
 }
 
+/**
+ * The first instant of `now`'s calendar month, UTC. A batch dated before it is last month's or
+ * older, so this month's batch is still to run: the same rule as `pastEventStep`, as a date the
+ * database can compare when a run claims the batch.
+ */
+export function batchMonthStart(now: Date): Date {
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
+}
+
 /** What one batch did in an organisation, for the cleanup's answer and the event log. */
 export type PastEventBatchCounts = {
   events: number

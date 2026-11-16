@@ -23,6 +23,7 @@ import { REMINDER_WINDOW_HOURS } from "@/lib/automatic-reminders"
 import { sendMilestoneOwnerReminders } from "@/lib/milestone-reminders"
 import { expireSwapRequests } from "@/lib/shift-swap-server"
 import { queueCustomRuleReminders } from "@/lib/reminder-rules-server"
+import { claimReminderGroup, releaseReminderGroup } from "@/lib/reminder-claims"
 
 export const dynamic = "force-dynamic"
 
@@ -115,7 +116,12 @@ async function run(req: Request) {
         // by name: reminders go to confirmed volunteers only.
         ...withSectorLeaders(withDayContact(pickShiftInfo(r.shift, r.event), r.event), r.shift.roleName, r.event.sectorLeaders),
       }))
-      const result = await sendNotification({
+      // Claimed before the send: two calls running together never both write to the volunteer.
+      // A group another call holds is neither sent nor failed here (src/lib/reminder-claims.ts).
+      const ids = group.registrations.map((r) => r.id)
+      if (!(await claimReminderGroup(ids, win.field, now))) continue
+      // Anything that throws from here, building the email or sending it, gives the group back.
+      const result = await (async () => sendNotification({
         kind: win.kind,
         recipient: { email: first.volunteer.email, name: first.volunteer.firstName },
         volunteerId: first.volunteerId,
@@ -135,15 +141,12 @@ async function run(req: Request) {
           cancelNotice: reminderCancelNotice(first.shift, first.event, orgTimeZone(first.event.organization), now),
           cancelClosed: hasEarlierDeadline(first.event) && now >= selfCancelDeadline(first.shift, first.event, orgTimeZone(first.event.organization)),
         },
+      }))().catch(async (e) => {
+        await releaseReminderGroup(ids, win.field)
+        throw e
       })
       if (result.ok) {
-        // Every shift of the group is marked in the same pass: a later run never re-sends any of
-        // them, and a send that failed (below) leaves all of them unmarked, so the whole group is
-        // retried together next time (#672).
-        await prisma.registration.updateMany({
-          where: { id: { in: group.registrations.map((r) => r.id) } },
-          data: { [win.field]: now },
-        })
+        // Every shift of the group stays marked: a later run never re-sends any of them (#672).
         const hoursLabel =
           win.kind === "reminder_j2" ? "dans 2 jours" :
           win.kind === "reminder_j1" ? "demain" : "aujourd'hui"
@@ -158,6 +161,8 @@ async function run(req: Request) {
         }).catch(reportError("push.reminder"))
         sent++
       } else {
+        // The whole group is given back, so it is retried together next time (#672).
+        await releaseReminderGroup(ids, win.field)
         failed++
       }
     }

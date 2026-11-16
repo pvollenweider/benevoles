@@ -6,7 +6,8 @@
 # The scheduled tasks of a Docker Compose install (#761), run by the `cron` service of
 # docker-compose.yml: the same calls and times (UTC) as the Kubernetes CronJobs (k8s/cronjob-*.yaml).
 # A call is cut after 280 seconds, under the shortest period: a task never overlaps itself, as
-# with `concurrencyPolicy: Forbid` on Kubernetes.
+# with `concurrencyPolicy: Forbid` on Kubernetes. The routes also exclude each other in the
+# database (#1362), so another scheduler calling them at the same time sends nothing twice.
 #   every 5 minutes  POST /api/cron/outbox         emails waiting in the outbox
 #   every hour       POST /api/cron/reminders      reminders before each shift
 #   02:00            POST /api/cron/cleanup        daily cleanup and retention

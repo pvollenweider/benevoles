@@ -14,7 +14,7 @@ vi.mock("next/server", async (importOriginal) => ({ ...(await importOriginal<typ
 import { prisma } from "@/lib/prisma"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { observePastEvents } from "@/lib/past-event-retention-data"
-import { loadPastEventOrganizations, runPastEventBatch, sendPastEventNotice } from "@/lib/past-event-anonymisation"
+import { anonymisePastEvent, loadPastEventOrganizations, runPastEventBatch, sendPastEventNotice } from "@/lib/past-event-anonymisation"
 import { ERASED_FIRST_NAME } from "@/lib/member-erasure"
 
 const url = process.env.DATABASE_URL
@@ -121,7 +121,80 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
     // Done: nothing left to observe or to anonymise.
     expect((await observePastEvents(NOW)).find((r) => r.organizationId === orgId)).toBeUndefined()
     expect((await loadPastEventOrganizations(NOW)).find((o) => o.id === orgId)).toBeUndefined()
-    expect(await runPastEventBatch(orgId, NOW)).toMatchObject({ events: 0, registrations: 0 })
+    // This month's batch is recorded: a second call in the same month leaves the organisation alone.
+    expect(await runPastEventBatch(orgId, NOW)).toBeNull()
+  })
+
+  it("gives the month's batch to one of two cleanups running together: one anonymous record per member", async () => {
+    const org = await prisma.organization.create({ data: { name: `Deux lots ${tag}`, slug: `${tag}-overlap` } })
+    try {
+      const member = await prisma.volunteer.create({ data: { organizationId: org.id, firstName: "Chloé", lastName: "Rochat", email: `${tag}-c@example.org` } })
+      const eventIds: string[] = []
+      for (const [slug, day] of [["fete-2021", "2021-06-01"], ["fete-2022", "2022-06-01"]] as const) {
+        const e = await prisma.event.create({ data: { organizationId: org.id, slug, title: slug, startDate: new Date(day), endDate: new Date(day), publicStatus: "published" } })
+        const sh = await prisma.shift.create({ data: { eventId: e.id, roleName: "Bar", label: "Bar", date: new Date(day), startTime: "18:00", endTime: "20:00", capacity: 5 } })
+        await prisma.registration.create({ data: { eventId: e.id, shiftId: sh.id, volunteerId: member.id, status: "active", ...registrationToken.data(`${tag}-overlap-${slug}`) } })
+        eventIds.push(e.id)
+      }
+
+      // Two runs a moment apart, as two overlapping calls of the nightly job would be.
+      const results = await Promise.all([runPastEventBatch(org.id, NOW), runPastEventBatch(org.id, new Date(NOW.getTime() + 1))])
+
+      expect(results.filter((r) => r === null)).toHaveLength(1)
+      expect(results.find((r) => r !== null)).toMatchObject({ events: 2, registrations: 2, anonymousRecords: 1 })
+      // The member who came to both old events is one anonymous volunteer in both, not two.
+      const regs = await prisma.registration.findMany({ where: { eventId: { in: eventIds } }, select: { volunteerId: true } })
+      expect(new Set(regs.map((r) => r.volunteerId)).size).toBe(1)
+      expect(await prisma.volunteer.count({ where: { organizationId: org.id, erasedAt: { not: null } } })).toBe(1)
+      expect(await prisma.eventLog.count({ where: { eventId: { in: eventIds }, action: "event.personal_data_anonymized" } })).toBe(2)
+    } finally {
+      await prisma.registration.deleteMany({ where: { event: { organizationId: org.id } } })
+      await prisma.organization.delete({ where: { id: org.id } }).catch(() => {})
+    }
+  })
+
+  it("anonymises an event once when two batches reach it together (a batch still running across the month's end)", async () => {
+    const org = await prisma.organization.create({ data: { name: `Fin de mois ${tag}`, slug: `${tag}-monthend` } })
+    try {
+      const member = await prisma.volunteer.create({ data: { organizationId: org.id, firstName: "Luca", lastName: "Favre", email: `${tag}-l@example.org` } })
+      const e = await prisma.event.create({ data: { organizationId: org.id, slug: "fete-2021", title: "Fête 2021", startDate: new Date("2021-06-01"), endDate: new Date("2021-06-01"), publicStatus: "published" } })
+      const sh = await prisma.shift.create({ data: { eventId: e.id, roleName: "Bar", label: "Bar", date: new Date("2021-06-01"), startTime: "18:00", endTime: "20:00", capacity: 5 } })
+      await prisma.registration.create({ data: { eventId: e.id, shiftId: sh.id, volunteerId: member.id, status: "active", ...registrationToken.data(`${tag}-monthend`) } })
+
+      // Each batch has its own map of anonymous records, as two separate runs would.
+      const results = await Promise.all([
+        anonymisePastEvent(e.id, org.id, new Map(), NOW),
+        anonymisePastEvent(e.id, org.id, new Map(), new Date(NOW.getTime() + 1)),
+      ])
+
+      expect(results.filter((r) => r === null)).toHaveLength(1)
+      expect(results.find((r) => r !== null)).toMatchObject({ registrations: 1, anonymousRecords: 1 })
+      expect(await prisma.volunteer.count({ where: { organizationId: org.id, erasedAt: { not: null } } })).toBe(1)
+      expect(await prisma.eventLog.count({ where: { eventId: e.id, action: "event.personal_data_anonymized" } })).toBe(1)
+    } finally {
+      await prisma.registration.deleteMany({ where: { event: { organizationId: org.id } } })
+      await prisma.organization.delete({ where: { id: org.id } }).catch(() => {})
+    }
+  })
+
+  it("gives the batch date back when the batch fails, so the next night tries again", async () => {
+    const previous = new Date("2026-09-03T02:00:00Z")
+    const org = await prisma.organization.create({ data: { name: `Échec ${tag}`, slug: `${tag}-fail`, pastEventBatchAt: previous } })
+    try {
+      const e = await prisma.event.create({ data: { organizationId: org.id, slug: "fete-2021", title: "Fête 2021", startDate: new Date("2021-06-01"), endDate: new Date("2021-06-01"), publicStatus: "published" } })
+      // The claim's own transaction goes through; the first event's transaction fails.
+      const real = prisma.$transaction.bind(prisma) as (...args: unknown[]) => Promise<unknown>
+      const failing = vi.spyOn(prisma, "$transaction").mockImplementationOnce(((...args: unknown[]) => real(...args)) as never).mockRejectedValueOnce(new Error("connection lost"))
+      await expect(runPastEventBatch(org.id, NOW)).rejects.toThrow("connection lost")
+      failing.mockRestore()
+      expect((await prisma.organization.findUniqueOrThrow({ where: { id: org.id } })).pastEventBatchAt).toEqual(previous)
+
+      // The next night: the batch is due again and runs.
+      expect(await runPastEventBatch(org.id, new Date(NOW.getTime() + 24 * 3600 * 1000))).toMatchObject({ events: 1 })
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).personalDataAnonymizedAt).not.toBeNull()
+    } finally {
+      await prisma.organization.delete({ where: { id: org.id } }).catch(() => {})
+    }
   })
 
   it("enqueues the notice once per active administrator and marks the organisation", async () => {

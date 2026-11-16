@@ -107,6 +107,40 @@ describe.skipIf(!url)("cron reminders grouping on Postgres (#672)", () => {
     expect(data2.totals.reminder_dd).toEqual({ eligible: 0, groups: 0, sent: 0, failed: 0 })
   })
 
+  it("two calls running at the same time send the reminder once", async () => {
+    const { reg: reg1 } = await makeShiftAndRegistration("10:00")
+    const { reg: reg2 } = await makeShiftAndRegistration("11:30")
+    // A slow mail server: the first call is still sending when the second reads its candidates.
+    sendNotificationMock.mockImplementation(async () => {
+      await prisma.$queryRaw`SELECT 1 FROM pg_sleep(0.3)`
+      return { ok: true }
+    })
+
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    const [a, b] = await Promise.all([POST(post()), POST(post())])
+    const totals = [(await a.json()).totals.reminder_dd, (await b.json()).totals.reminder_dd]
+
+    expect(sendNotificationMock).toHaveBeenCalledTimes(1)
+    expect(totals.map((t) => t.sent).sort()).toEqual([0, 1])
+    expect(totals.every((t) => t.failed === 0)).toBe(true)
+    const marked = await prisma.registration.findMany({ where: { id: { in: [reg1.id, reg2.id] } } })
+    expect(marked.every((r) => r.reminderDdSent !== null)).toBe(true)
+  })
+
+  it("gives a group back when its send fails, and the next run sends it", async () => {
+    const { reg } = await makeShiftAndRegistration("10:00")
+    sendNotificationMock.mockResolvedValue({ ok: false, reason: "smtp down" })
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    const failed = await (await POST(post())).json()
+    expect(failed.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 0, failed: 1 })
+    expect((await prisma.registration.findUniqueOrThrow({ where: { id: reg.id } })).reminderDdSent).toBeNull()
+
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    const retried = await (await POST(post())).json()
+    expect(retried.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 1, failed: 0 })
+    expect((await prisma.registration.findUniqueOrThrow({ where: { id: reg.id } })).reminderDdSent).not.toBeNull()
+  })
+
   it("excludes a cancelled shift from the group but still reminds the rest of the day", async () => {
     const { reg: active } = await makeShiftAndRegistration("10:00")
     await makeShiftAndRegistration("11:00", "cancelled")
