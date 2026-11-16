@@ -199,7 +199,7 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
             <h3 id={`${id}-form-title`} className="text-sm font-semibold text-gray-900">Inviter une personne</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor={`${id}-name`} className="block text-sm font-medium text-gray-700 mb-1">Nom<RequiredMark /></label>
+                <label htmlFor={`${id}-name`} className="block text-sm font-medium text-gray-700 mb-1">Prénom et nom<RequiredMark /></label>
                 <input
                   id={`${id}-name`}
                   ref={nameRef}
