@@ -168,6 +168,18 @@ describe("GET /api/public/organizations/[id]/logo", () => {
     expect((await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))).status).toBe(200)
   })
 
+  // #1142: a front-desk account is not one of the space's administrators, nor is an unknown role.
+  it("does not serve a pending space's logo to a front-desk account of that space", async () => {
+    findFirst.mockResolvedValue({ data: new Uint8Array([1]), mimeType: "image/png", hash: HASH, organization: { publicationApprovedAt: null } })
+    const { GET } = await import("@/app/api/public/organizations/[id]/logo/route")
+    authMock.mockResolvedValueOnce({ user: { role: "front_desk", organizationId: "org-a" } })
+    expect((await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))).status).toBe(404)
+    authMock.mockResolvedValueOnce({ user: { role: "volunteer", organizationId: "org-a" } })
+    expect((await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))).status).toBe(404)
+    authMock.mockResolvedValueOnce({ user: { role: "organizer", organizationId: "org-a" } })
+    expect((await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))).status).toBe(200)
+  })
+
   it("is a 404 for an organization without a logo, deactivated, deleted or unknown", async () => {
     findFirst.mockResolvedValue(null)
     const { GET } = await import("@/app/api/public/organizations/[id]/logo/route")

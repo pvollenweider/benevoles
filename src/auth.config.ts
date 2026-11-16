@@ -4,6 +4,8 @@
 import type { NextAuthConfig } from "next-auth"
 import { newSessionClaims, sessionCookieOverride, sessionWithinLifetime, SESSION_IDLE_SECONDS } from "@/lib/session-lifetime"
 import { applySecondFactor, signInClaims } from "@/lib/second-factor-session"
+import { isFrontDeskRole } from "@/lib/permissions"
+import { frontDeskRedirect } from "@/lib/front-desk-pages"
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -20,6 +22,12 @@ export const authConfig: NextAuthConfig = {
       const isLoginPage = nextUrl.pathname === "/admin/login"
 
       if (isAdminPath && !isLoginPage && !isLoggedIn) return false
+      // Front desk (#1142): signed in, but no admin page other than its landing page
+      // (src/lib/front-desk-pages.ts). Same rule as in src/proxy.ts, which runs it too.
+      if (isLoggedIn && isFrontDeskRole((auth?.user as { role?: string } | undefined)?.role)) {
+        const target = frontDeskRedirect(nextUrl.pathname)
+        if (target) return Response.redirect(new URL(target, nextUrl))
+      }
       return true
     },
     jwt({ token, user }) {

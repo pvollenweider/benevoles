@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { INVALID_REACTIVATION_LINK, SELF_REACTIVATION_WHERE, reactivationLinkValid, reactivationUpdate } from "@/lib/org-reactivation"
+import { isOrgAdminRole } from "@/lib/permissions"
 
 /**
  * « Réactiver mon espace » (#811), step 2: the link's token, sent by the button of the link page
@@ -32,7 +33,7 @@ export async function POST(req: Request) {
     const admin = await tx.adminUser.findUnique({
       where: { orgReactivationTokenHash: tokenHash },
       select: {
-        id: true, isActive: true, orgReactivationExpiresAt: true, organizationId: true,
+        id: true, isActive: true, role: true, orgReactivationExpiresAt: true, organizationId: true,
         organization: { select: { name: true, active: true, suspendedAt: true, inactivityDeactivatedAt: true } },
       },
     })
@@ -41,7 +42,8 @@ export async function POST(req: Request) {
     // finds it spent and changes nothing, so the reactivation is logged once.
     const spent = await tx.adminUser.updateMany({ where: { id: admin.id, orgReactivationTokenHash: tokenHash }, data: { orgReactivationTokenHash: null, orgReactivationExpiresAt: null } })
     if (spent.count === 0) return null
-    if (!admin.organizationId || !reactivationLinkValid(admin, now)) return null
+    // Only an administrator's link reactivates (#1142: never a front-desk account's).
+    if (!admin.organizationId || !isOrgAdminRole(admin.role) || !reactivationLinkValid(admin, now)) return null
     const orgId = admin.organizationId
     // Conditional on the state that allows it (defence in depth with the lock above): never an
     // organisation suspended, active already, or no longer deactivated for inactivity.

@@ -96,12 +96,15 @@ describe("milestone owner (#985)", () => {
   })
 
   it("accepts only an active admin account of the same organisation", () => {
-    expect(isEligibleMilestoneOwner({ organizationId: "org-a", isActive: true }, "org-a")).toBe(true)
-    expect(isEligibleMilestoneOwner({ organizationId: "org-b", isActive: true }, "org-a")).toBe(false)
-    expect(isEligibleMilestoneOwner({ organizationId: "org-a", isActive: false }, "org-a")).toBe(false)
-    expect(isEligibleMilestoneOwner({ organizationId: null, isActive: true }, "org-a")).toBe(false)
+    expect(isEligibleMilestoneOwner({ organizationId: "org-a", isActive: true, role: "admin" }, "org-a")).toBe(true)
+    expect(isEligibleMilestoneOwner({ organizationId: "org-a", isActive: true, role: "organizer" }, "org-a")).toBe(true)
+    expect(isEligibleMilestoneOwner({ organizationId: "org-b", isActive: true, role: "admin" }, "org-a")).toBe(false)
+    expect(isEligibleMilestoneOwner({ organizationId: "org-a", isActive: false, role: "admin" }, "org-a")).toBe(false)
+    expect(isEligibleMilestoneOwner({ organizationId: null, isActive: true, role: "admin" }, "org-a")).toBe(false)
     expect(isEligibleMilestoneOwner(null, "org-a")).toBe(false)
-    expect(eligibleOwnerWhere("org-a")).toEqual({ organizationId: "org-a", isActive: true })
+    // A front-desk account (#1142) is not a member of the team: never an owner of a milestone.
+    expect(isEligibleMilestoneOwner({ organizationId: "org-a", isActive: true, role: "front_desk" }, "org-a")).toBe(false)
+    expect(eligibleOwnerWhere("org-a")).toEqual({ organizationId: "org-a", isActive: true, role: { in: ["admin", "organizer"] } })
   })
 
   it("lists the team by name and keeps a deactivated current owner at the end", () => {

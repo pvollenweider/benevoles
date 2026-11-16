@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { isOrgAdminRole, ORG_ADMIN_ROLE_WHERE } from "./permissions"
+
 /**
  * Milestone form logic shared by creation and edition (#989): the same checks and messages for
  * both, the date input value of a stored due date, and the list order; the owner (#985), and when
@@ -71,14 +73,15 @@ export function replaceMilestone<T extends { id: string; dueDate: string }>(mile
  * organisation, a deactivated or a pending account is refused even if the read were not scoped.
  */
 export function eligibleOwnerWhere(organizationId: string) {
-  return { organizationId, isActive: true }
+  // Owners and organisers: a front-desk account (#1142) is not a member of the team.
+  return { organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE }
 }
 
 export function isEligibleMilestoneOwner(
-  candidate: { organizationId: string | null; isActive: boolean } | null | undefined,
+  candidate: { organizationId: string | null; isActive: boolean; role: string } | null | undefined,
   organizationId: string,
 ): boolean {
-  return !!candidate && candidate.isActive && candidate.organizationId === organizationId
+  return !!candidate && candidate.isActive && candidate.organizationId === organizationId && isOrgAdminRole(candidate.role)
 }
 
 /** Answer of the API (422) to an owner that is not, or no longer, an active admin of the organisation. */

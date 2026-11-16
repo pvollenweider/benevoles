@@ -23,6 +23,7 @@ import {
   ANSWER_CHANGE_DIGEST_DELAY_MS, answerChangeAudience, answerChangeGroupKey, answerChangeItem, answerChangeMergeKey,
   answerChangeRoles, leaderAnswerChangeGroupKey, mergeAnswerChangeItems, type AnswerChange,
 } from "./answer-changes"
+import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
 
 export async function queueAnswerChangeNotifications(input: {
   event: { id: string; title: string; organizationId: string }
@@ -37,8 +38,9 @@ export async function queueAnswerChangeNotifications(input: {
   const org = await prisma.organization.findUnique({ where: { id: event.organizationId }, select: { notificationSettings: true, slug: true } })
   if (!parseNotificationSettings(org?.notificationSettings).signupAdminEmail) return []
 
+  // The organisation's administrators only: never a front-desk account (#1142).
   const admins = await prisma.adminUser.findMany({
-    where: { organizationId: event.organizationId, isActive: true },
+    where: { organizationId: event.organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE },
     select: { email: true, name: true },
   })
   // The leaders of the postes concerned (#186: keyed by event and role name), with their link.

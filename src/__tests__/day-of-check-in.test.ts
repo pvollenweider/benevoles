@@ -5,7 +5,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 // entries. Runs the real bulk route and the real setAttendance on a fake org-scoped client.
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
+vi.mock("@/lib/auth-guard", () => ({
+  requireOrgSession: requireOrgSessionMock,
+  // The day-of and bulk routes ask requireFrontDeskOrOrganizer (#1142): for an organiser it is the
+  // same session, marked as such. The front-desk side is tested in security/front-desk-*.test.ts.
+  requireFrontDeskOrOrganizer: async () => { const g = await requireOrgSessionMock(); return g instanceof Response ? g : { ...g, access: "organizer", grant: null } },
+}))
 vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 const logEvent = vi.hoisted(() => vi.fn().mockResolvedValue("log-1"))
 vi.mock("@/lib/event-log", () => ({ logEvent, adminActor: () => ({ type: "admin", id: "adm-1" }) }))

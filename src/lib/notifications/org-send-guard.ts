@@ -5,6 +5,7 @@ import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
 import { ORG_PENDING_REASON } from "@/lib/outbox-org-pending-reason"
 import { canEmailThirdParties, pendingRecipientAllowed, signupOwnerEmails } from "@/lib/org-approval"
 import { prisma } from "@/lib/prisma"
+import { ORG_ADMIN_ROLE_WHERE } from "../permissions"
 
 export { ORG_INACTIVE_REASON, ORG_PENDING_REASON }
 
@@ -54,7 +55,7 @@ export function sendingVerdict(organizationId: string | null | undefined, org: O
 
 type OrgReader = {
   organization: {
-    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; createdAt: true; admins: { where: { isActive: true }; select: { email: true; createdAt: true } } } }): Promise<OrgSendState | null>
+    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; createdAt: true; admins: { where: { isActive: true; role: { in: string[] } }; select: { email: true; createdAt: true } } } }): Promise<OrgSendState | null>
   }
 }
 
@@ -63,7 +64,7 @@ export async function organizationSendingVerdict(organizationId: string | null |
   if (!organizationId) return null
   const org = await db.organization.findUnique({
     where: { id: organizationId },
-    select: { active: true, outboundEmailApprovedAt: true, createdAt: true, admins: { where: { isActive: true }, select: { email: true, createdAt: true } } },
+    select: { active: true, outboundEmailApprovedAt: true, createdAt: true, admins: { where: { isActive: true, ...ORG_ADMIN_ROLE_WHERE }, select: { email: true, createdAt: true } } },
   })
   return sendingVerdict(organizationId, org, recipientEmail)
 }

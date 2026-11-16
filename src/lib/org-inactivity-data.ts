@@ -9,6 +9,7 @@ import { adminReachability, type AdminReachability } from "@/lib/admin-reachabil
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { env } from "@/lib/env"
 import { RETENTION_DAYS } from "@/lib/retention"
+import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
 
 /**
  * The organisations the periodic check of #811 would deal with soon, read only: what
@@ -97,7 +98,8 @@ export async function assessActiveOrganizations(now: Date = new Date(), only?: s
       inactivityNoticeAt: true, inactivityPlannedAt: true, timeZone: true,
       inactivitySteps: { select: STEP_FIELDS },
       events: { select: { endDate: true, publicStatus: true }, orderBy: { endDate: "desc" }, take: 1 },
-      admins: { where: { isActive: true }, select: { email: true } },
+      // Owners and organisers, the people the procedure writes to (never a front-desk account, #1142).
+      admins: { where: { isActive: true, ...ORG_ADMIN_ROLE_WHERE }, select: { email: true } },
     },
   })
   if (orgs.length === 0) return []

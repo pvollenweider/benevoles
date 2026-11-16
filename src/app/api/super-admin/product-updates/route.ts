@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
+import { PRODUCT_UPDATE_RECIPIENT_WHERE } from "@/lib/product-update-recipients"
 
 // List past broadcasts (history, not a queue) and how many admins are currently opted in — see
 // issue #200.
@@ -13,7 +14,7 @@ export async function GET() {
 
   const [sends, recipientCount] = await Promise.all([
     db.productUpdateSend.findMany({ orderBy: { createdAt: "desc" }, take: 50 }),
-    db.adminUser.count({ where: { isActive: true, receiveProductUpdates: true } }),
+    db.adminUser.count({ where: { isActive: true, receiveProductUpdates: true, ...PRODUCT_UPDATE_RECIPIENT_WHERE } }),
   ])
 
   return NextResponse.json({ sends, recipientCount })

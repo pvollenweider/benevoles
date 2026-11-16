@@ -3,6 +3,7 @@
 
 import type { Prisma } from "@/generated/prisma/client"
 import { invitationReleaseCutoff, isExpiredInvitation, isReleasableInvitation, type AdminEmailHolder } from "@/lib/admin-invitation"
+import { ORG_ADMIN_ROLE_WHERE } from "@/lib/permissions"
 
 /**
  * Database side of the expired-invitation rule (#1053, src/lib/admin-invitation.ts): finding the
@@ -27,7 +28,8 @@ export async function findAdminEmailHolder(db: AdminUserDb, email: string, now: 
   if (!row) return null
   const expired = isExpiredInvitation({ ...row, organizationHasActiveAdmin: false }, now)
   const organizationHasActiveAdmin = expired && row.organizationId != null
-    ? (await db.adminUser.count({ where: { organizationId: row.organizationId, isActive: true } })) > 0
+    // An administrator, not a front-desk account (#1142): only an owner or organiser administers it.
+    ? (await db.adminUser.count({ where: { organizationId: row.organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE } })) > 0
     : false
   return { ...row, organizationHasActiveAdmin }
 }

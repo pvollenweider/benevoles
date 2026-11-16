@@ -13,6 +13,7 @@ vi.mock("../notifications/digest", () => ({ queueDigestItem, digestDelayMs: (ms:
 
 import { queueAnswerChangeNotifications } from "../answer-change-notifications"
 import { mergeAnswerChangeItems } from "../answer-changes"
+import { COLETTE, ELODIE, SAMI, adminsMatching, teamOf } from "@/__tests__/helpers/front-desk-accounts"
 
 const input = {
   event: { id: "e1", title: "Fête", organizationId: "org-1" },
@@ -35,7 +36,7 @@ describe("queueAnswerChangeNotifications", () => {
 
   it("queues one item per active admin of the organisation, grouped per event and address, merged per volunteer", async () => {
     await queueAnswerChangeNotifications(input, now)
-    expect(adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org-1", isActive: true }, select: { email: true, name: true } })
+    expect(adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org-1", isActive: true, role: { in: ["admin", "organizer"] } }, select: { email: true, name: true } })
     expect(queueDigestItem).toHaveBeenCalledTimes(2)
     expect(queueDigestItem.mock.calls[0][0]).toMatchObject({
       kind: "answers_changed",
@@ -110,5 +111,20 @@ describe("queueAnswerChangeNotifications", () => {
   it("nothing to say, nothing read", async () => {
     expect(await queueAnswerChangeNotifications({ ...input, changes: [] }, now)).toEqual([])
     expect(orgFindUnique).not.toHaveBeenCalled()
+  })
+})
+
+// Front desk (#1142): an account limited to one event is not told about changed answers.
+describe("queueAnswerChangeNotifications and a front-desk account", () => {
+  it("queues for the owner and the organiser, never for the front-desk account of the organisation", async () => {
+    vi.clearAllMocks()
+    orgFindUnique.mockResolvedValue({ notificationSettings: null, slug: "fete" })
+    leaderFindMany.mockResolvedValue([])
+    queueDigestItem.mockResolvedValue(null)
+    adminFindMany.mockImplementation(async ({ where }: { where: unknown }) => adminsMatching(where, teamOf("org-1")))
+    await queueAnswerChangeNotifications(input, now)
+    const recipients = queueDigestItem.mock.calls.map(([item]) => item.recipient.email)
+    expect(recipients).toEqual([ELODIE.email, SAMI.email])
+    expect(recipients).not.toContain(COLETTE.email)
   })
 })

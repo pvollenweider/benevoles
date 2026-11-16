@@ -19,7 +19,8 @@ import { touchOrgActivity } from "./org-activity"
  *   the operation refused (findUnique: null; others: TenantAccessError) if it belongs elsewhere —
  *   a unique `where` (e.g. a compound key) can't always be combined with an arbitrary filter;
  * - create/createMany: direct models get `organizationId` forced; event-owned models must point
- *   to an event of this org.
+ *   to an event of this org. A front-desk grant (adminEventAccess, #1142) is a direct model that
+ *   also names an event and an admin account: both must be this organisation's, or it is refused.
  *
  * A row of another org therefore behaves exactly like a row that doesn't exist.
  *
@@ -34,7 +35,7 @@ import { touchOrgActivity } from "./org-activity"
  */
 
 /** Models carrying organizationId themselves. */
-const DIRECT = ["event", "volunteer", "orgLog", "orgSlugHistory", "targetedMessage", "scheduledMessage", "sendBatch", "messageTemplate", "duplicateDismissal", "organizationLogo", "erasureRecord"] as const
+const DIRECT = ["event", "volunteer", "orgLog", "orgSlugHistory", "targetedMessage", "scheduledMessage", "sendBatch", "messageTemplate", "duplicateDismissal", "organizationLogo", "erasureRecord", "adminEventAccess"] as const
 /** Models owned through their event (eventId → Event.organizationId). */
 const EVENT_OWNED = ["shift", "shiftRecurrence", "registration", "memberInvite", "eventPage", "sectorLeader", "eventMilestone", "eventLog", "eventQuestion", "questionAnswer", "eventGroupLink", "rosterConsent", "sector", "shiftSwapRequest", "eventPlace", "eventVolunteerLimit", "availabilityRequest", "availabilityDay", "availabilityRange", "draftAssignment", "draftPublication", "proposalRun", "eventVolunteerTarget", "eventReminderRule", "reminderOccurrence"] as const
 
@@ -88,6 +89,19 @@ async function assertEventsOwned(eventIds: (string | undefined)[], organizationI
   if (count !== ids.length) throw new TenantAccessError(model, operation)
 }
 
+/**
+ * A front-desk grant (#1142) carries `organizationId` like any direct model, and points to an
+ * event and an admin account besides: a grant of this organisation on another one's event, or
+ * for another one's account, must not be creatable through this client.
+ */
+async function assertGrantTargetsOwned(rows: AnyArgs[], organizationId: string, model: string, operation: string) {
+  await assertEventsOwned(rows.map(eventIdOf), organizationId, model, operation)
+  const adminIds = [...new Set(rows.map((d): string | undefined => d.adminUserId ?? d.adminUser?.connect?.id))]
+  if (adminIds.some((id) => !id)) throw new TenantAccessError(model, operation)
+  const count = await prisma.adminUser.count({ where: { id: { in: adminIds as string[] }, organizationId } })
+  if (count !== adminIds.length) throw new TenantAccessError(model, operation)
+}
+
 export function getOrgClient(organizationId: string) {
   return prisma.$extends({
     name: "org-scoped",
@@ -123,6 +137,7 @@ export function getOrgClient(organizationId: string) {
       if (owner === organizationId) return query(a)
       if (owner === undefined && operation === "upsert") {
         // Row doesn't exist yet: the upsert will create it — same rules as create.
+        if (m === "adminEventAccess") await assertGrantTargetsOwned([a.create ?? {}], organizationId, model, operation)
         if (isDirect(m)) a.create = { ...a.create, organizationId }
         else await assertEventsOwned([eventIdOf(a.create)], organizationId, model, operation)
         return query(a)
@@ -133,6 +148,7 @@ export function getOrgClient(organizationId: string) {
 
     if (CREATE_OPS.includes(operation)) {
       const rows: AnyArgs[] = Array.isArray(a.data) ? a.data : [a.data]
+      if (m === "adminEventAccess") await assertGrantTargetsOwned(rows, organizationId, model, operation)
       if (isDirect(m)) {
         const forced = rows.map((d) => ({ ...d, organizationId }))
         a.data = Array.isArray(a.data) ? forced : forced[0]

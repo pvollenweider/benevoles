@@ -9,6 +9,7 @@ import { sendNotification } from "@/lib/notifications"
 import { generateToken } from "@/lib/utils"
 import { hashToken } from "@/lib/token-hash"
 import { configuredAppUrl } from "@/lib/urls"
+import { ORG_ADMIN_ROLE_WHERE } from "@/lib/permissions"
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
@@ -24,7 +25,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     select: {
       name: true,
       admins: {
-        where: { isActive: false, setupTokenHash: { not: null }, ...(adminId ? { id: adminId } : {}) },
+        // An administrator's invitation: a front-desk account (#1142) is never invited from here.
+        where: { isActive: false, setupTokenHash: { not: null }, ...ORG_ADMIN_ROLE_WHERE, ...(adminId ? { id: adminId } : {}) },
         select: { id: true, email: true, name: true },
         take: 1,
       },

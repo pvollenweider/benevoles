@@ -20,6 +20,7 @@ import { inactivityCopyVerdict } from "../org-inactivity-steps"
 import { outboxFailureGroup } from "./outbox-failure"
 import { isCustomRuleReminder, resolveCustomRuleReminder, sendCustomReminderPush } from "../reminder-occurrence-delivery"
 import { nextReminderAttemptAt } from "../reminder-rules"
+import { ORG_ADMIN_ROLE_WHERE } from "../permissions"
 
 /**
  * Notification outbox (#293).
@@ -560,7 +561,8 @@ async function inactivityCopyBlocked(stepId: string, recipientEmail: string, now
       organization: {
         select: {
           active: true, inactivityExempt: true, inactivityPostponedUntil: true, lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true,
-          admins: { where: { isActive: true }, select: { email: true } },
+          // Same set as the procedure's recipients (adminsOf, org-inactivity-procedure.ts).
+          admins: { where: { isActive: true, ...ORG_ADMIN_ROLE_WHERE }, select: { email: true } },
         },
       },
     },

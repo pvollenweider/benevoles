@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma"
 import { decideReview } from "@/lib/org-review"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { logOperator, organizationTarget } from "@/lib/operator-log"
+import { ORG_ADMIN_ROLE_WHERE } from "@/lib/permissions"
 
 /**
  * Review of a space awaiting validation (#810, part 4c), from its super admin page, never from a
@@ -46,7 +47,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       data: { organizationId: id, actorType: "admin", actorId: guard.session.user?.id ?? null, action: "organization.approved", entityType: "Organization", entityId: id },
     })
     await logOperator(tx, { action: "organization.approved", actor: guard.session.user, entityType: "Organization", entityId: id, target: organizationTarget(org) })
-    const admins = await tx.adminUser.findMany({ where: { organizationId: id }, select: { email: true, name: true } })
+    // The administrators are told, not a front-desk account (#1142).
+    const admins = await tx.adminUser.findMany({ where: { organizationId: id, ...ORG_ADMIN_ROLE_WHERE }, select: { email: true, name: true } })
     return enqueueNotifications(admins.map((a) => ({
       kind: "space_approved" as const,
       organizationId: id,

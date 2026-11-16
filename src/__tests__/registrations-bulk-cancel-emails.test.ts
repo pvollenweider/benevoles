@@ -8,7 +8,12 @@ vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: 
 // removed). Waitlist promotion still runs once per freed spot.
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
+vi.mock("@/lib/auth-guard", () => ({
+  requireOrgSession: requireOrgSessionMock,
+  // The day-of and bulk routes ask requireFrontDeskOrOrganizer (#1142): for an organiser it is the
+  // same session, marked as such. The front-desk side is tested in security/front-desk-*.test.ts.
+  requireFrontDeskOrOrganizer: async () => { const g = await requireOrgSessionMock(); return g instanceof Response ? g : { ...g, access: "organizer", grant: null } },
+}))
 
 const m = vi.hoisted(() => ({
   queued: [] as { kind: string; dedupeKey?: string; recipient: { email?: string | null }; volunteerId?: string; data: Record<string, unknown> }[],

@@ -9,6 +9,8 @@ const m = vi.hoisted(() => ({
   shiftFindUnique: vi.fn(),
   volunteerFindUnique: vi.fn(),
   logoFindUnique: vi.fn(),
+  grantFindUnique: vi.fn(),
+  adminCount: vi.fn(),
 }))
 
 vi.mock("../prisma", () => ({
@@ -21,6 +23,8 @@ vi.mock("../prisma", () => ({
     shift: { findUnique: m.shiftFindUnique },
     volunteer: { findUnique: m.volunteerFindUnique },
     organizationLogo: { findUnique: m.logoFindUnique },
+    adminEventAccess: { findUnique: m.grantFindUnique },
+    adminUser: { count: m.adminCount },
   },
 }))
 
@@ -160,6 +164,77 @@ describe("getOrgClient", () => {
       m.eventCount.mockResolvedValue(1) // only one of the two distinct events is in the org
       const { promise } = run("org-A", "MemberInvite", "createMany", { data: [{ eventId: "e1" }, { eventId: "e2" }] })
       await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+    })
+  })
+
+  // Front-desk grants (#1142): organisation-owned like any direct model, and pointing to an event
+  // and an admin account that must be the organisation's too.
+  describe("front-desk grant (adminEventAccess), a direct model", () => {
+    it("reads only this organisation's grants", async () => {
+      const { promise, query } = run("org-A", "AdminEventAccess", "findFirst", { where: { adminUserId: "adm-1", eventId: "e1" } })
+      await promise
+      expect(query).toHaveBeenCalledWith({ where: { AND: [{ adminUserId: "adm-1", eventId: "e1" }, { organizationId: "org-A" }] } })
+      const many = run("org-A", "AdminEventAccess", "updateMany", { where: { eventId: "e1" }, data: { revokedAt: new Date(0) } })
+      await many.promise
+      expect(many.query).toHaveBeenCalledWith({ where: { AND: [{ eventId: "e1" }, { organizationId: "org-A" }] }, data: { revokedAt: new Date(0) } })
+    })
+
+    it("another organisation's grant behaves like a missing one: null on read, refused on update and delete", async () => {
+      m.grantFindUnique.mockResolvedValue({ organizationId: "org-B" })
+      const read = run("org-A", "AdminEventAccess", "findUnique", { where: { id: "g1" } })
+      expect(await read.promise).toBeNull()
+      expect(read.query).not.toHaveBeenCalled()
+      for (const op of ["update", "delete"]) {
+        const write = run("org-A", "AdminEventAccess", op, { where: { id: "g1" }, data: { revokedAt: null } })
+        await expect(write.promise).rejects.toBeInstanceOf(TenantAccessError)
+        expect(write.query).not.toHaveBeenCalled()
+      }
+    })
+
+    it("creates a grant for this organisation's event and account, forcing organizationId", async () => {
+      m.eventCount.mockResolvedValue(1)
+      m.adminCount.mockResolvedValue(1)
+      const { promise, query } = run("org-A", "AdminEventAccess", "create", { data: { adminUserId: "adm-1", eventId: "e1", organizationId: "ATTACKER" } }, {})
+      await promise
+      expect(m.eventCount).toHaveBeenCalledWith({ where: { id: { in: ["e1"] }, organizationId: "org-A" } })
+      expect(m.adminCount).toHaveBeenCalledWith({ where: { id: { in: ["adm-1"] }, organizationId: "org-A" } })
+      expect(query).toHaveBeenCalledWith({ data: { adminUserId: "adm-1", eventId: "e1", organizationId: "org-A" } })
+    })
+
+    it("refuses a grant on another organisation's event", async () => {
+      m.eventCount.mockResolvedValue(0)
+      m.adminCount.mockResolvedValue(1)
+      const { promise, query } = run("org-A", "AdminEventAccess", "create", { data: { adminUserId: "adm-1", eventId: "e-of-B" } })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(query).not.toHaveBeenCalled()
+    })
+
+    it("refuses a grant for another organisation's account, or without an account or an event", async () => {
+      m.eventCount.mockResolvedValue(1)
+      m.adminCount.mockResolvedValue(0)
+      const foreign = run("org-A", "AdminEventAccess", "create", { data: { adminUserId: "adm-of-B", eventId: "e1" } })
+      await expect(foreign.promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(foreign.query).not.toHaveBeenCalled()
+      m.adminCount.mockResolvedValue(1)
+      for (const data of [{ eventId: "e1" }, { adminUserId: "adm-1" }]) {
+        const missing = run("org-A", "AdminEventAccess", "create", { data })
+        await expect(missing.promise).rejects.toBeInstanceOf(TenantAccessError)
+        expect(missing.query).not.toHaveBeenCalled()
+      }
+    })
+
+    it("checks every row of a createMany, and the row an upsert would create", async () => {
+      m.eventCount.mockResolvedValue(2)
+      m.adminCount.mockResolvedValue(1) // two distinct accounts asked, one is the organisation's
+      const many = run("org-A", "AdminEventAccess", "createMany", { data: [{ adminUserId: "adm-1", eventId: "e1" }, { adminUserId: "adm-of-B", eventId: "e2" }] })
+      await expect(many.promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(many.query).not.toHaveBeenCalled()
+
+      m.grantFindUnique.mockResolvedValue(null)
+      m.eventCount.mockResolvedValue(0)
+      const upsert = run("org-A", "AdminEventAccess", "upsert", { where: { adminUserId_eventId: { adminUserId: "adm-1", eventId: "e-of-B" } }, create: { adminUserId: "adm-1", eventId: "e-of-B" }, update: {} })
+      await expect(upsert.promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(upsert.query).not.toHaveBeenCalled()
     })
   })
 

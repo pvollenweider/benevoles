@@ -13,7 +13,7 @@ import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
-import { ORG_ROLES, ORGANIZER_ROLE } from "@/lib/permissions"
+import { ORG_ADMIN_ROLE_WHERE, ORG_ROLES, ORGANIZER_ROLE } from "@/lib/permissions"
 import { apexBaseUrl } from "@/lib/urls"
 import { ADMIN_INVITE_PENDING_ERROR, canInviteAdmins } from "@/lib/org-approval"
 import { ADMIN_INVITE_SAME_ORG_ERROR, ADMIN_INVITES_PER_DAY, adminInviteCheck } from "@/lib/admin-invitation"
@@ -48,8 +48,9 @@ export async function GET() {
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
+  // The team: owners and organisers. Front-desk accounts (#1142) are not listed here.
   const admins = await db.adminUser.findMany({
-    where: { organizationId },
+    where: { organizationId, ...ORG_ADMIN_ROLE_WHERE },
     select: {
       id: true,
       name: true,

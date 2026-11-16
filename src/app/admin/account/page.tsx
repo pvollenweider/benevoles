@@ -6,6 +6,8 @@ import Link from "next/link"
 import { auth } from "@/auth"
 import ChangePasswordForm from "@/components/admin/ChangePasswordForm"
 import HelpLink from "@/components/admin/HelpLink"
+import { hasLevel, isFrontDeskRole } from "@/lib/permissions"
+import { FRONT_DESK_HOME } from "@/lib/front-desk-pages"
 
 export const dynamic = "force-dynamic"
 
@@ -16,6 +18,10 @@ export default async function AccountPage() {
   const session = await auth()
   if (!session) redirect("/admin/login")
   if (session.user?.role === "super_admin") redirect("/super-admin/profile")
+  // Front desk (#1142): its landing page is the only admin page it opens. Any other role that is
+  // no admin level has no account page either.
+  if (isFrontDeskRole(session.user?.role)) redirect(FRONT_DESK_HOME)
+  if (!hasLevel(session.user?.role, "organizer")) redirect("/admin/login")
 
   return (
     <div className="space-y-5 max-w-xl">

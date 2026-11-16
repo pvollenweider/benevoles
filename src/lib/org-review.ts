@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { orgStatus, type OrgState } from "@/lib/org-suspension"
+import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
 
 /**
  * The operator's review of a space created by self-service sign-up (#810, part 4c): validate it
@@ -45,7 +46,8 @@ export function abandonedSignupSpaceWhere(cutoff: Date) {
     publicationApprovedAt: null,
     outboundEmailApprovedAt: null,
     createdAt: { lt: cutoff },
-    admins: { none: { isActive: true } },
+    // No active administrator: a front-desk account (#1142) does not count as one.
+    admins: { none: { isActive: true, ...ORG_ADMIN_ROLE_WHERE } },
   } as const
 }
 

@@ -6,6 +6,7 @@ import { env } from "./env"
 import { IMPORTANT_NOTIFICATION_KINDS } from "./delivery-summary"
 import { loadAddressStatuses } from "./delivery-outcomes-data"
 import { addressHash } from "./notifications/smtp-outcome"
+import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
 
 export type OrgAddressSummary = { organizationId: string; members: { id: string; name: string }[] }
 
@@ -66,11 +67,12 @@ export async function loadOrganizationsWithNewAddressesToVerify(
 
 export type SummaryRecipient = { email: string; name: string }
 
-/** Active admins of the organization, falling back to ADMIN_NOTIFICATION_EMAIL when it has none
- * (same rule as sendAdminNotification, notification-helpers.ts). */
+/** Active admins of the organization (owners and organisers, never a front-desk account, #1142),
+ * falling back to ADMIN_NOTIFICATION_EMAIL when it has none (same rule as sendAdminNotification,
+ * notification-helpers.ts). */
 export async function loadSummaryRecipients(organizationId: string): Promise<SummaryRecipient[]> {
   const admins = await prisma.adminUser.findMany({
-    where: { organizationId, isActive: true },
+    where: { organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE },
     select: { email: true, name: true },
   })
   if (admins.length > 0) return admins

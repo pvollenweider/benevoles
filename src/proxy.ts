@@ -19,6 +19,8 @@ import { reportError } from "@/lib/report-error"
 import { REQUEST_PATH_HEADER } from "@/lib/admin-next"
 import { isAuthEndpoint } from "@/lib/auth-endpoints"
 import { SECOND_FACTOR_PATH, secondFactorUrl } from "@/lib/second-factor-session"
+import { isFrontDeskRole } from "@/lib/permissions"
+import { frontDeskRedirect } from "@/lib/front-desk-pages"
 
 const { auth } = NextAuth(authConfig)
 
@@ -93,6 +95,14 @@ function handle(req: NextAuthRequest): Response {
   // such a session). The pages and API routes check it again on the server (auth-guard.ts). ---
   if (req.auth?.secondFactor?.pending && (isSuperAdminPath || isAdminPath) && !isLoginPage && !isPublicAdminPage && pathname !== SECOND_FACTOR_PATH) {
     return Response.redirect(new URL(secondFactorUrl(`${pathname}${req.nextUrl.search}`), req.url))
+  }
+
+  // --- Front desk (#1142): an account limited to one event opens its own landing page and
+  // nothing else of the admin or super-admin spaces (src/lib/front-desk-pages.ts). From the token
+  // as issued; the pages check the role again on the server (auth-guard.ts, admin layout). ---
+  if (isFrontDeskRole(req.auth?.user?.role)) {
+    const frontDeskTarget = frontDeskRedirect(pathname)
+    if (frontDeskTarget) return Response.redirect(new URL(frontDeskTarget, req.url))
   }
 
   if (isSuperAdminPath) {
