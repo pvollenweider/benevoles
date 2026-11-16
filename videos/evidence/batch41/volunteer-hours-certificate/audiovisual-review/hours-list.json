@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:33:07.933Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "promptSha256": "03a9fb05cea9ec4da1f3d55d0aa338d2b0cd8e56a8c82af6cca1164b1142dfed",
+  "clipSha256": "dd5ee837d1dc49d990697160b7270b3c565d0084c459ddd6ebc488508d0b0320",
+  "scene": "hours-list",
+  "review": {
+    "heardOpening": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Dans la liste des membres, regardons les heures prévues et les heures attestées.",
+        "visibleSeconds": 4.5,
+        "visible": "Le tableau affiche les colonnes « Heures prévues » et « Heures attestées ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six sont attestées",
+        "visibleSeconds": 8.5,
+        "visible": "Ligne d'Aline Mercier affichant 12h en heures prévues et 6h en heures attestées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Une participation terminée avant la fin reste enregistrée, mais n'atteste aucune heure",
+        "visibleSeconds": 16,
+        "visible": "Mention « 1 participation terminée avant la fin » visible sous le total de 6h pour Aline.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

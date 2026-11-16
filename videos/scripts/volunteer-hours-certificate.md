@@ -60,7 +60,7 @@ Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG 
 WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narration ENTIÈRE, même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
 
 - Dans la liste des membres, regardons les heures prévues et les heures attestées.
-- Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six correspondent à une présence saisie.
+- Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six sont attestées après une présence saisie ; le départ anticipé reste enregistré sans ajouter d’heures.
 - Ces six heures font partie des douze : elles ne s'ajoutent pas.
 - Les inscriptions annulées et les créneaux annulés sont exclus, et les horaires qui se chevauchent ne sont comptés qu’une fois.
 - Il compte les créneaux confirmés non annulés de cette période, avec les heures prévues et attestées séparées.

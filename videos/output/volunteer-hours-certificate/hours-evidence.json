@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-16T20:20:12.940Z",
+  "checkedAt": "2026-11-16T20:31:02.195Z",
   "product": {
     "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
     "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
@@ -38,5 +38,27 @@
     "actualNoteEntered": true,
     "actualLogoLoaded": true,
     "actualPrintGrayscaleComputed": true
+  },
+  "certificate-presence": {
+    "attestedHours": 6,
+    "additionalPlannedWithoutPresenceHours": 0,
+    "endedEarlyCount": 1,
+    "notEightPlusSix": true,
+    "noClockedWorkedHoursClaim": true
+  },
+  "certificate-pdf": {
+    "actualPdfSha256": "5eb5bbb197931ffefcce709acce38ba8aae75b2ea319fa954e0673ab8e67d221",
+    "actualPdfPages": 1,
+    "method": "browser-print-engine",
+    "realProductPrintActionLogged": true,
+    "serverPdfDownloadFeature": false,
+    "stillRequiresHumanReviewAndSignature": true
+  },
+  "event-summary": {
+    "distinctPeopleNotRegistrations": true,
+    "partialCheckInNotAbsenceClaim": true,
+    "plannedHours": 6,
+    "attestedHours": 2,
+    "currentRealReportsSummary": true
   }
 }

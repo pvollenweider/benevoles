@@ -1,9 +1,0 @@
-STATUS: READY
-REGISTRATION_MONITOR_FOLLOWUP — batch 23-1 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 197.48 s. Music 14.7–19.8 LU under voice.
-Existing whole narration reused after text/hash checks.
-Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
-Final VTT viewer « tu » count 0.
-Treize chapitres revus sans signalement : couverture, réponses visibles dans les inscriptions, demande ouverte puis annulée sans décision, filtres poste/créneau/recherche, sélection groupée, audiences, modèle et aperçu, option de notification et confirmation, rappels, documents et journal. Nouvelle disposition Communication relue ; narration inchangée, deux ASR complets sans ajout ni tutoiement.
-Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.

@@ -1,12 +1,12 @@
 {
-  "anchor": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une",
-  "windowStart": 1.5180000000000007,
+  "anchor": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine",
+  "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 11.96,
-    "wordsHeard": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une"
+    "startSeconds": 12.82,
+    "wordsHeard": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine"
   },
-  "onset": 13.478000000000002,
-  "proposedCut": 13.3397295,
+  "onset": 12.82,
+  "proposedCut": 12.6311875,
   "note": "Proposal only; recut then independently audit before capture"
 }

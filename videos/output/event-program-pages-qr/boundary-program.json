@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans les paramètres de l’événement, ajoutons un spectacle au programme. Saisissons",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 11.82,
+    "wordsHeard": "Dans"
+  },
+  "onset": 11.82,
+  "proposedCut": 11.6955,
+  "note": "Proposal only; recut then independently audit before capture"
+}

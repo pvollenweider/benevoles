@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous pouvez corriger le programme sans le recréer. Ouvrons le concert",
+  "windowStart": 0.08500000000000085,
+  "result": {
+    "found": true,
+    "startSeconds": 30.6,
+    "wordsHeard": "Vous pouvez corriger le programme sans le recréer. Ouvrons le concert"
+  },
+  "onset": 30.685000000000002,
+  "proposedCut": 30.0847915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:27:35.376Z",
+  "videoSha256": "d90fc4dc3ea1b555486a8cfdf2237ed5c9bd2165e5f500e9633e083f23fca586",
+  "promptSha256": "af2885867808234017405c7abf0fd9d8f7736baa67d9387cf9e37626de9b5537",
+  "clipSha256": "c52ced30523c48e8262a9f9f30f008ec930bd8c030cd70f11e723f243c7053c8",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une bonne page d'inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Une bonne page d'inscription ne montre pas seulement des créneaux.",
+        "visibleSeconds": 0.5,
+        "visible": "Encart introductif affichant « Programme, pages d'information et QR code » par-dessus l'onglet Paramètres.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Le programme, les informations pratiques",
+        "visibleSeconds": 3,
+        "visible": "Disparition de l'encart d'introduction, révélant la page des paramètres généraux de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "et un QR code simple à afficher",
+        "visibleSeconds": 5.4,
+        "visible": "Écran stable sur les informations de l'événement servant de support à l'introduction générale.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, bien synchronisée avec l'introduction du chapitre."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

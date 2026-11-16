@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons maintenant la page d’inscription. Le concert apparaît en repère sur",
+  "windowStart": 91.906,
+  "result": {
+    "found": true,
+    "startSeconds": 30.05,
+    "wordsHeard": "Ouvrons"
+  },
+  "onset": 121.956,
+  "proposedCut": 121.9058335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

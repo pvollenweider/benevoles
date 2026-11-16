@@ -1,0 +1,12 @@
+{
+  "anchor": "Le QR code mène à la page d’inscription de cet événement.",
+  "windowStart": 110.65,
+  "result": {
+    "found": true,
+    "startSeconds": 30.9,
+    "wordsHeard": "Le"
+  },
+  "onset": 141.55,
+  "proposedCut": 141.7202085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

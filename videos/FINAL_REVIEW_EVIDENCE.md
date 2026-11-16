@@ -1090,6 +1090,9 @@ renders.json inchangé ; `doc-img: unchanged`. Aucun push, merge ni message ntfy
 
 ## Pages rattachées à un poste (#1324), 14 novembre 2026
 
+**Résolu pour EVENT_PROGRAM_PAGES_QR (lot 41, 16 novembre 2026)** : nouveau segment, narration entière, rattachement réel et lien personnel filmés, revue READY puis publication révision 5.
+
+
 Le formulaire d'une page d'information affiche désormais un avertissement « Cette page est
 publique » et un groupe de cases « Pour les bénévoles de ces postes » ; la liste des pages peut
 porter une troisième ligne « Pour le poste … ». Vidéo à revoir, image seulement (narration et
@@ -1306,3 +1309,23 @@ Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport complet](evid
 Rappels : dix chapitres AV / 35 points, deux signalements de clics absents contredits par les images et les événements réels ; les rapports bruts et les contre-preuves restent conservés. Deux véritables courriels d’annulation lisibles. Réglages : dix chapitres AV / 30 points, une observation sur la démonstration d’une case facultative, sans contradiction avec la phrase conditionnelle ; le passage final de la boîte aux envois est corrigé dans la deuxième prise. Musique respectivement 14,1–19,8 et 14,8–19,5 LU sous la voix, aucun trou. 31 clics / 132 touches et 12 clics / 22 touches réels sonorisés. Aperçu puis APPLY=1 sur default pour chacune, cinq fichiers envoyés. [Rapport des rappels](evidence/batch41/reminders-changes/review-report.txt), [rapport des réglages](evidence/batch41/org-email-settings/review-report.txt).
 
 Les écarts historiques d’image pour ces deux vidéos (libellés, navigation, réglages d’e-mail et aide) sont résolus par ces nouvelles prises du produit actuel ; l’historique et les écarts des autres vidéos restent ouverts. Aucun changement du produit, aucune écoute subjective humaine revendiquée.
+
+## Lot 41 — heures et attestation publiées, 16 novembre 2026
+
+**VOLUNTEER_HOURS_CERTIFICATE : READY, publiée, révision 4, 311,360 s.** Même main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Nouvelle narration entière Kore et huit coupes vérifiées ; huit chapitres ASR finaux et bande entière, zéro tutoiement. Deux prises narrées : le CSV trop tardif de la première est corrigé sur « Dans ce vrai fichier » dans la seconde.
+
+La fixture montre un vrai départ anticipé et le libellé actuel « Participations terminées avant la fin », conditionnel à un nombre positif. Douze heures prévues et six attestées, une participation terminée avant la fin et zéro heure prévue sans présence dans l’attestation. Deux vrais CSV à sept colonnes, puis le vrai PDF A4 d’une page : logo gris, colonnes et signatures complets. Le bouton produit d’impression est réellement actionné ; la démonstration headless produit le PDF depuis une seconde vraie prévisualisation avec les mêmes contrôles, sans intercepter print ni recopier le HTML. La fenêtre native n’est pas présentée comme vérifiée.
+
+Huit chapitres AV / 33 points ; deux observations brutes conservées et résolues par les images, les états ARIA réellement vérifiés, le comparateur inchangé de main et le PDF : un tri peut garder l’ordre déjà correct, et le logo coloré à l’écran est bien gris à l’impression. Musique 14,5–19,2 LU, aucun trou ; 18 clics et 42 touches réels sonorisés. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport et contre-preuves](evidence/batch41/volunteer-hours-certificate/review-report.txt). Les écarts historiques de cette vidéo sont résolus par cette prise du produit actuel ; ceux des autres vidéos restent ouverts. Aucun changement produit, aucune écoute subjective humaine revendiquée.
+
+## Lot 41 — membres et pages par poste publiés, 16 novembre 2026
+
+**MEMBERS_MANAGEMENT : READY, publiée, révision 8, 238,840 s. EVENT_PROGRAM_PAGES_QR : READY, publiée, révision 5, 194,280 s.** Même main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`.
+
+Membres : la première prise annonçait soixante fiches face au compteur 63. Le texte dit désormais plusieurs dizaines de fiches ; toute la voix Puck a été régénérée avant la seconde et dernière prise. La nuance du départ anticipé sans heure attestée est prononcée. Dix chapitres ASR et AV / 38 points, aucune observation, zéro tutoiement ; musique 13,9–19,0 LU et minimum seule −34,1 LUFS, aucun trou. 36 clics et 132 touches réels sonorisés. [Rapport](evidence/batch41/members-management/review-report.txt).
+
+Pages : un nouveau segment rattache la vraie page à Accueil, montre l’avertissement public et le lien « À lire avant ton créneau » sur la page personnelle d’Aline Mercier réellement confirmée, puis ouvre le même contenu public. Nouvelle voix Kore entière, neuf chapitres ASR et AV / 31 points sans observation, un seul « ton » qui cite le lien affiché et aucun tutoiement du spectateur. Musique 14,7–19,6 LU, minimum seule −34,4 LUFS, aucun trou ; 30 clics et 115 touches réels sonorisés. Une prise narrée. La date d’exemple du 14 novembre reste celle prononcée ; le produit indique correctement que cet événement et son créneau sont terminés. [Rapport](evidence/batch41/event-program-pages-qr/review-report.txt).
+
+Pour chacune : aperçu puis APPLY=1 sur default, cinq fichiers envoyés, vérification distante sans fichier à renvoyer. Les écarts historiques de ces deux vidéos sont résolus par ces images actuelles ; ceux des autres vidéos restent ouverts. Aucun changement du produit, aucune écoute subjective humaine revendiquée.
+
+Les cinq captures documentaires demandées ont été régénérées par `ONLY=admin-reminders,admin-print,admin-event-archive,admin-members,admin-members-bulk-delete npm run screenshots`, sur une nouvelle base canonique indépendante des vidéos et le même build vérifié. Quatre sont identiques octet pour octet à main ; seule `admin-print`, déjà mise à jour dans ce lot, conserve les dates et l’en-tête du scénario actuel. Les textes alternatifs ont été relus et restent exacts. Les essais préliminaires sur la base vidéo avaient conservé des personnes de tournage ; ils sont remplacés par cette exécution isolée, sans effacer leur historique de preuve. [Preuve et empreintes](evidence/batch41/doc-captures-isolated.json).

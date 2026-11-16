@@ -24,7 +24,7 @@ const force = process.argv.includes("--force")
 const concurrencyFlag = process.argv.find(arg => arg.startsWith("--concurrency="))
 const concurrency = concurrencyFlag ? Number(concurrencyFlag.split("=")[1]) : 1
 if (![1, 2, 3].includes(concurrency)) throw new Error("Audiovisual concurrency must be 1, 2 or 3")
-const commonDemoVideos = ["SHIFT_RECURRENCE", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "REGISTRATION_MONITOR_FOLLOWUP", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
+const commonDemoVideos = ["VOLUNTEER_REGISTER", "SHIFT_RECURRENCE", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "REGISTRATION_MONITOR_FOLLOWUP", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
 const betaVideos = ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS"]
 const memberDemoVideos = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
 type Member = Parameters<typeof ownsRecordedNoEmailMember>[0]
@@ -65,7 +65,7 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["FRONT_DESK_ACCESS", "SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["VOLUNTEER_CONFIRMATION_ERRORS", "FRONT_DESK_ACCESS", "SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
@@ -73,7 +73,13 @@ async function main() {
   const currentMerge = manifest.id === "SHIFT_ROSTER_VISIBILITY" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : manifest.id === "DATA_EXPORTS_ARCHIVES" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : null
   const db = currentMerge?.db ?? new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   try {
-    if (memberDemoVideos.includes(manifest.id)) {
+    if (manifest.id === "VOLUNTEER_CONFIRMATION_ERRORS") {
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-errors" }, include: { volunteers: true, admins: true, events: { include: { registrations: true } } } })
+      assert(fixture.slug === "formation-erreurs" && fixture.admins.length === 1 && fixture.admins[0].email === "video.errors.owner@example.org")
+      assert(fixture.events.length === 1 && fixture.events[0].id === "video-errors-event" && fixture.volunteers.length >= 1 && fixture.volunteers.length <= 4)
+      assert(fixture.volunteers.every(v => /^video\.errors\.(aline|alex|nicolas|zoe)@example\.org$/.test(v.email ?? "")))
+      assert(fixture.events[0].registrations.every(r => fixture.volunteers.some(v => v.id === r.volunteerId)))
+    } else if (memberDemoVideos.includes(manifest.id)) {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { volunteers: true, admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
       validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership("owned-import-members-v2.json"), await readSeedProofV2())
     }

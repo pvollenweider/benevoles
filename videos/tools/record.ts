@@ -329,7 +329,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["privacy-personal-links", "volunteer-confirmation-errors", "event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -596,11 +596,11 @@ async function main() {
       await page.getByRole("heading", { name: "Tes informations" }).waitFor()
     })
 
-    const stamp = Date.now()
+    const registrationEmail = "alex.martin@example.org"
     await scene("details", async () => {
       await fillVisibly(page, page.getByRole("textbox", { name: "Prénom", exact: true }), "Alex", 180)
       await fillVisibly(page, page.getByRole("textbox", { name: "Nom", exact: true }), "Martin", 180)
-      await fillVisibly(page, page.getByRole("textbox", { name: "Email", exact: true }), `alex.martin.video.${stamp}@example.org`, 180)
+      await fillVisibly(page, page.getByRole("textbox", { name: "Email", exact: true }), registrationEmail, 180)
       await fillVisibly(page, page.getByRole("textbox", { name: /Téléphone/, exact: true }), "079 000 12 34", 180)
     })
 
@@ -622,7 +622,7 @@ async function main() {
       await submit.scrollIntoViewIfNeeded()
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
-      await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
+      await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
     })
 
     await scene("success", async () => {
@@ -5448,6 +5448,8 @@ async function main() {
         await page.getByRole("group", { name: "Quand l'envoyer ?", exact: true }).scrollIntoViewIfNeeded()
         await at("La section Messages programmés permet")
         await page.getByRole("heading", { name: "Messages programmés", exact: true }).scrollIntoViewIfNeeded()
+        await at("Des délais propres à l'événement")
+        await page.getByRole("form", { name: "Délais des rappels automatiques", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)

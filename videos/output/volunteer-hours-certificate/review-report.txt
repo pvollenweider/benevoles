@@ -1,0 +1,12 @@
+STATUS: READY
+VOLUNTEER_HOURS_CERTIFICATE — batch 41, 16 November 2026
+Duration: 311.360 s; second and final narrated take. First rejected for late CSV viewer; preserved in previous-batch41-take1-csv-late.
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71
+One complete new Kore master, all seven boundaries aligned; all eight source and final audio chapters pass, whole voice consistent. Full multilingual final soundtrack and VTT: zero register candidates, no stray instruction identified.
+Eight AV chapters / 33 checkpoints. Two raw observations are resolved: sorting may preserve an already sorted order (actual aria states, clicks, final images and unmodified main comparator agree); the screen logo is colored while the real printed PDF is grey, as narrated. Raw reports retained, no product state or pixels rewritten.
+Real guarded positive early-departure fixture: 12 planned / 6 attested hours; certificate May–September 6 attested, one ended-early participation, zero planned-without-presence hours. Actual current column is Participations terminées avant la fin, conditional on a positive count. Two actual seven-column CSV downloads, Clara zero row, summary two recorded presences including one early departure, 6 planned / 2 attested hours verified.
+Actual one-page A4 PDF fully inspected: grey logo, all columns, 6h/1/0min total, period, note and signatures intact. Genuine product print button and log invoked. Headless window.print remains pending: a second genuine product preview with identical UI settings uses Chromium's real print engine; no print interception, copied HTML or fake server download. Native print dialog not claimed verified; the narration explicitly calls this a local demonstration PDF.
+Music 14.5–19.2 LU under voice; no out-of-rule windows or gaps, no full music-only analysis window. 18 real clicks and 42 real keys with synchronized soft effects. Description 134 UTF-8 bytes. Types, lint, 1455 video/catalog/reference tests pass. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent; revision 4, dates 2026-11-16.

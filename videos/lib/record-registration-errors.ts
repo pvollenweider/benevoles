@@ -31,7 +31,7 @@ export async function validateRegistrationErrorNarration(directory: string) {
 }
 
 export async function prepareRegistrationErrorRecording(page: Page, base: string, directory: string) {
-  assert.equal(base, "http://localhost:43102")
+  assert.equal(base, "https://formation-erreurs.benevol.app")
   const db = database()
   try {
     const proof = await prepareRegistrationErrorFixture(db, true)
@@ -51,7 +51,7 @@ export async function prepareRegistrationErrorRecording(page: Page, base: string
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 export async function recordRegistrationErrors(options: { page: Page; base: string; directory: string; title: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, directory, title, scene, tap, settle } = options
-  assert.equal(base, "http://localhost:43102")
+  assert.equal(base, "https://formation-erreurs.benevol.app")
   const db = database()
   try {
     const checks: Record<string, unknown> = {}
@@ -97,7 +97,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       for (let n = 0; n < 40; n++) {
         const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
         const mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorIds.has(item.ID) && item.Subject.includes(subject) && item.To.some((to: { Address: string }) => to.Address === recipient))
-        if (mail) { await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page); return mail.ID }
+        if (mail) { await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page); await page.frameLocator("iframe").locator("body").waitFor({ state: "visible" }); await page.waitForTimeout(600); return mail.ID }
         await page.waitForTimeout(250)
       }
       throw new Error(`New actual email « ${subject} » required`)
@@ -158,7 +158,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       assert.equal(await db.registration.count({ where: { eventId } }), before)
       await at("Ouvrons sa boîte")
       checks.overlapNoticeMailId = await mailFor("video.errors.aline@example.org", "Demande d'inscription non enregistrée")
-      await page.getByText(/chevauche ton créneau/).first().waitFor()
+      await page.frameLocator("iframe").getByText(/chevauche ton créneau/).first().waitFor()
       await page.waitForTimeout(1800)
       checks.actualOverlapRefused = true
     })

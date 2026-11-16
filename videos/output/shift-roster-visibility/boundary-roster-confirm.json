@@ -1,12 +1,12 @@
 {
   "anchor": "Ouvrez le véritable email de confirmation. Suivez son lien personnel. La",
-  "windowStart": 74.06899999999999,
+  "windowStart": 66.233,
   "result": {
     "found": true,
-    "startSeconds": 18.72,
+    "startSeconds": 30.74,
     "wordsHeard": "Ouvrez le véritable email de confirmation. Suivez son lien personnel. La"
   },
-  "onset": 92.78899999999999,
-  "proposedCut": 92.5838545,
+  "onset": 96.973,
+  "proposedCut": 96.232875,
   "note": "Proposal only; recut then independently audit before capture"
 }

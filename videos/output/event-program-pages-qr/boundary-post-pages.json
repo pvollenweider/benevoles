@@ -1,0 +1,12 @@
+{
+  "anchor": "Rattachons maintenant cette page au poste Accueil. Dans Modifier, le groupe",
+  "windowStart": 60.738,
+  "result": {
+    "found": true,
+    "startSeconds": 26.96,
+    "wordsHeard": "Rattachons maintenant cette page au poste Accueil"
+  },
+  "onset": 87.69800000000001,
+  "proposedCut": 87.4451045,
+  "note": "Proposal only; recut then independently audit before capture"
+}

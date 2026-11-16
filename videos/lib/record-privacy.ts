@@ -60,7 +60,10 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
   const { page, base, directory, title, setup, scene, tap, settle } = options
   const db = localDatabase()
   const eventId = "video-privacy-a-event"
-  const go = async (route: string) => { await page.goto(route.startsWith(`${MAILPIT}/`) ? route : `${base}${route}`); await settle(page) }
+  const go = async (route: string) => {
+    const origin = /^\/(?:fete-des-liens|my\/|leader\/)/.test(route) ? "https://formation-confidentialite-a.benevol.app" : base
+    await page.goto(route.startsWith(`${MAILPIT}/`) ? route : `${origin}${route}`); await settle(page)
+  }
   const session = async (cookies: Cookie[] | null) => { await page.context().clearCookies(); if (cookies) await page.context().addCookies(cookies) }
   const write = async (field: Locator, value: string, delay = 110) => { await field.scrollIntoViewIfNeeded(); await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay }) }
   const inbox = async (): Promise<Mail[]> => (await (await page.request.get(`${MAILPIT}/api/v1/messages?limit=1000`)).json()).messages
@@ -178,7 +181,11 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await dialog.waitFor({ state: "hidden" })
       // Zoé is a different viewer, not Jules returning on his already-selected shift.
       // Reset this event's remembered session on the application's origin, before Mailpit.
-      await page.evaluate(() => localStorage.removeItem("benevoles_token_fete-des-liens"))
+      const separateViewer = await page.context().newPage()
+      try {
+        await separateViewer.goto("https://formation-confidentialite-a.benevol.app/fete-des-liens")
+        await separateViewer.evaluate(() => { localStorage.removeItem("benevoles_token_fete-des-liens"); localStorage.removeItem("benevoles_contact") })
+      } finally { await separateViewer.close() }
       const mail = await openMail(before, "video.privacy.a.member.3@example.org", "invitation")
       checks.invitationMail = mail.mailId
       await at("Son lien conduit au formulaire"); await session(null)
@@ -231,6 +238,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("Pour une question ou une"); await page.getByRole("heading", { name: "6. Droits des personnes concernées", exact: true }).scrollIntoViewIfNeeded()
       await at("Ouvrons maintenant les conditions d'utilisation"); await go(personalPath); await page.getByRole("link", { name: "CGU", exact: true }).scrollIntoViewIfNeeded(); await tap(page, page.getByRole("link", { name: "CGU", exact: true }))
       await page.getByRole("heading", { name: "Conditions générales d'utilisation", exact: true }).waitFor()
+      await page.getByText(/Dernière mise à jour.*15 novembre 2026/).waitFor()
       await at("elle ne remplace pas une"); await page.getByRole("heading", { name: "5. Données personnelles", exact: true }).scrollIntoViewIfNeeded()
       checks.actualPublicLegalPages = true
     })

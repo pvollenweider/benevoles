@@ -149,7 +149,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     const first = await download(false)
     await at("Cochons maintenant l'option pour inclure"); await tap(page, include)
     const second = await download(true)
-    await at("Le total indique six heures"); await showDownloadedCsv(page, second, true)
+    await at("Dans ce vrai fichier"); await showDownloadedCsv(page, second, true)
     await evidence("period-export", { actualDownloads: 2, firstFileChecked: Boolean(first), includeZeroMemberVerified: true, plannedHours: 6, attestedHours: 2, period: "September2026" })
   })
   await scene("certificate-settings", async at => {

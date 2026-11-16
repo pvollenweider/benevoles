@@ -1,0 +1,11 @@
+STATUS: READY
+EVENT_PROGRAM_PAGES_QR — batch 41, 16 November 2026
+Duration: 194.280 s; one narrated take after two quick rehearsals (combined link accessible name corrected before filming).
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: d90fc4dc3ea1b555486a8cfdf2237ed5c9bd2165e5f500e9633e083f23fca586
+New complete Kore master, eight chapter cuts aligned, nine source and final chapter ASR checks pass; whole-master one consistent voice. Nine AV chapters / 31 checkpoints, zero issues. Final chapter frames and six extra poste-link frames inspected.
+One new post-pages segment: real form with public warning, actual Accueil checkbox and save, actual attached-poste label, Aline Mercier's real confirmed registration and actual personal-page read-before link; actual public page opened. Fixed synthetic registration token is training-only. No fabricated UI or email. The example's 14 November date is retained as narrated; the current product correctly labels the finished event and shift.
+Actual PNG and SVG downloads, order changes, edit and cancelled deletion verified. Phone scan and native print dialog remain expressly unverified in the narration.
+Music 14.7–19.6 LU under voice; quietest music-only −34.4 LUFS, no gaps/out-of-rule windows. 30 real clicks and 115 real keys with synchronized soft effects. Entire multilingual final ASR and VTT contain one literal ton in the displayed link À lire avant ton créneau, zero viewer tutoiement. Description 108 UTF-8 bytes. No stray instruction identified. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent; revision 5, dates 2026-11-16.

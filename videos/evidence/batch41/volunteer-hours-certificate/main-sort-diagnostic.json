@@ -1,0 +1,73 @@
+{
+  "source": "Unmodified main sortMembers; inputs transcribed from the independently guarded real fixture and final frames",
+  "sourceSha256": "3bece5c2da9db7c2c8abd4a92dc13e2fa525195bd18e52ada82dce9f1a41157b",
+  "input": [
+    {
+      "id": "video-hours-clara",
+      "firstName": "Clara",
+      "lastName": "Besson",
+      "hoursAttested": 0,
+      "lastShiftDate": null
+    },
+    {
+      "id": "video-hours-benoit",
+      "firstName": "Benoît",
+      "lastName": "Favre",
+      "hoursAttested": 0,
+      "lastShiftDate": "2026-09-12"
+    },
+    {
+      "id": "video-hours-aline",
+      "firstName": "Aline",
+      "lastName": "Mercier",
+      "hoursAttested": 6,
+      "lastShiftDate": "2026-09-12"
+    }
+  ],
+  "orders": [
+    {
+      "state": {
+        "col": "hoursAttested",
+        "dir": "asc"
+      },
+      "ids": [
+        "video-hours-clara",
+        "video-hours-benoit",
+        "video-hours-aline"
+      ]
+    },
+    {
+      "state": {
+        "col": "hoursAttested",
+        "dir": "desc"
+      },
+      "ids": [
+        "video-hours-aline",
+        "video-hours-clara",
+        "video-hours-benoit"
+      ]
+    },
+    {
+      "state": {
+        "col": null,
+        "dir": "asc"
+      },
+      "ids": [
+        "video-hours-clara",
+        "video-hours-benoit",
+        "video-hours-aline"
+      ]
+    },
+    {
+      "state": {
+        "col": "lastShiftDate",
+        "dir": "asc"
+      },
+      "ids": [
+        "video-hours-clara",
+        "video-hours-benoit",
+        "video-hours-aline"
+      ]
+    }
+  ]
+}

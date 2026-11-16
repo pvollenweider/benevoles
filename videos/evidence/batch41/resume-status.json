@@ -51,38 +51,63 @@
     {
       "id": "VOLUNTEER_HOURS_CERTIFICATE",
       "slug": "volunteer-hours-certificate",
-      "status": "NOT DONE",
-      "published": false
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 2,
+      "problems": "First take late CSV corrected; final sorting and printed-logo AV observations resolved with actual frames and main comparator.",
+      "duration": 311.36,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 4
     },
     {
       "id": "MEMBERS_MANAGEMENT",
       "slug": "members-management",
-      "status": "NOT DONE",
-      "published": false
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "First take obsolete sixty-record count corrected with a full new Puck master; final AV has no issue.",
+      "duration": 238.84,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 8
     },
     {
       "id": "EVENT_PROGRAM_PAGES_QR",
       "slug": "event-program-pages-qr",
-      "status": "NOT DONE",
-      "published": false
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "duration": 194.28,
+      "musicGaps": 0,
+      "tu": 0,
+      "quotedRegister": 1,
+      "problems": "Rehearsal link selector corrected; one narrated take, no final AV issue.",
+      "revision": 5
     },
     {
       "id": "VOLUNTEER_REGISTER",
       "slug": "volunteer-register-mobile",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "New full master and rehearsal passed; awaiting preceding publications."
     },
     {
       "id": "VOLUNTEER_CONFIRMATION_ERRORS",
       "slug": "volunteer-confirmation-errors",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Fresh narration/source audits and rehearsal passed; public host, future fixture date, iframe selector updated."
     },
     {
       "id": "PRIVACY_PERSONAL_LINKS",
       "slug": "privacy-personal-links",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Full new Kore master and all source ASR pass. Rehearsal public-origin and persona-storage fixes; no narrated take yet."
     },
     {
       "id": "REGISTRATION_MONITOR_FOLLOWUP",

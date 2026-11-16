@@ -1,12 +1,12 @@
 {
-  "anchor": "Revenons sur la page personnelle d’Aline. Cliquez sur Masquer mon nom.",
-  "windowStart": 162.648,
+  "anchor": "Revenons sur la page Mes inscriptions d’Aline. Désactivez Afficher mon nom",
+  "windowStart": 175.294,
   "result": {
     "found": true,
-    "startSeconds": 18.24,
-    "wordsHeard": "Revenons sur la page personnelle d’Aline. Cliquez sur Masquer mon nom."
+    "startSeconds": 30.6,
+    "wordsHeard": "Revenons sur la page Mes inscriptions d’Aline. Désactivez Afficher mon nom"
   },
-  "onset": 180.888,
-  "proposedCut": 180.9425625,
+  "onset": 205.894,
+  "proposedCut": 205.969646,
   "note": "Proposal only; recut then independently audit before capture"
 }

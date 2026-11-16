@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:33:37.021Z",
+  "videoSha256": "7449371a6954d385d1f552a5f4b09fdb45a6b59fc3c90df1b0f207f19ccf7b71",
+  "promptSha256": "c867e321d17cf0ac40bc8b67fa365c132e90560557ad62afa040608a5ac803b1",
+  "clipSha256": "425a3a69f3ba413b11ea3c0a10dc9d25d7ebeb5049968ea5524563a48a061032",
+  "scene": "period-export",
+  "review": {
+    "heardOpening": "Pour préparer un bilan, revenons aux membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "et ouvrons Heures par bénévole, pour une période.",
+        "visibleSeconds": 1.8,
+        "visible": "Déploiement du volet 'Heures par bénévole, pour une période (CSV)' affichant les champs de date.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.7,
+        "spoken": "Choisissons le premier et le 30 septembre.",
+        "visibleSeconds": 4.8,
+        "visible": "Saisie des dates 01/09/2026 et 30/09/2026 dans les champs Du et Au.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Téléchargeons le CSV.",
+        "visibleSeconds": 7.4,
+        "visible": "Clic sur le lien de téléchargement 'Télécharger (CSV)'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Cochons maintenant l'option pour inclure les membres sans créneau confirmé",
+        "visibleSeconds": 18,
+        "visible": "Coche de la case 'Inclure les membres sans créneau confirmé sur la période'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.6,
+        "spoken": "puis téléchargeons à nouveau.",
+        "visibleSeconds": 22.2,
+        "visible": "Second clic sur 'Télécharger (CSV)'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25,
+        "spoken": "Dans ce vrai fichier, Clara apparaît avec des zéros.",
+        "visibleSeconds": 24.2,
+        "visible": "Affichage du tableau récapitulatif du CSV montrant la ligne de Clara Besson avec des zéros.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.8,
+        "spoken": "Le total indique 6 heures prévues, dont 2 attestées.",
+        "visibleSeconds": 25,
+        "visible": "Ligne de total visible avec 6 heures prévues et 2 heures attestées.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et pédagogique, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

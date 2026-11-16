@@ -15,47 +15,47 @@
     },
     "validation": {
       "file": "audio/validation.wav",
-      "durationMs": 12637,
+      "durationMs": 19624,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "capacity": {
       "file": "audio/capacity.wav",
-      "durationMs": 29872,
+      "durationMs": 22884,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "network": {
       "file": "audio/network.wav",
-      "durationMs": 22456,
+      "durationMs": 19258,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "success": {
       "file": "audio/success.wav",
-      "durationMs": 21118,
+      "durationMs": 20627,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "email": {
       "file": "audio/email.wav",
-      "durationMs": 18093,
+      "durationMs": 18953,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "overlap": {
       "file": "audio/overlap.wav",
-      "durationMs": 34055,
+      "durationMs": 32693,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "response-loss": {
       "file": "audio/response-loss.wav",
-      "durationMs": 39702,
+      "durationMs": 32899,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "invitation-success": {
       "file": "audio/invitation-success.wav",
-      "durationMs": 44510,
+      "durationMs": 51160,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 27786,
+      "durationMs": 32131,
       "generationSha256": "2d8951a46b8fc4b1af04d052cafe00b1e12e2d8eeeb4fcc47963145c2fe5db51"
     }
   }

@@ -292,9 +292,10 @@
         "organisateur"
       ],
       "feature": "Pages d'information et QR code",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "EVENT_MILESTONES",
@@ -1146,9 +1147,10 @@
         "organisateur"
       ],
       "feature": "Liste des membres",
-      "updatedAt": "2026-10-16",
-      "revision": 7,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 8,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "DATA_EXPORTS_ARCHIVES",
@@ -1568,9 +1570,10 @@
         "organisateur"
       ],
       "feature": "Heures de bénévolat et attestation",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 4,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "ACCESSIBILITY_KEYBOARD_DISPLAY",

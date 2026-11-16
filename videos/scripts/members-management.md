@@ -6,7 +6,7 @@ La narration vouvoie les organisateurs. Les heures prévues comptent les crénea
 
 ## Jeu de données
 
-Scénario `members-management`, après le seed de démonstration : 60 membres fictifs. Deux Stéphane Favre avec adresses distinctes, noms accentués, tags, disponibilités, une personne sans email et une personne inactive. Camille possède déjà plusieurs inscriptions et une activité consultable. Aucun score d'engagement n'est ajouté.
+Scénario `members-management`, après le seed de démonstration : 63 membres fictifs. Deux Stéphane Favre avec adresses distinctes, noms accentués, tags, disponibilités, une personne sans email et une personne inactive. Camille possède déjà plusieurs inscriptions et une activité consultable. Aucun score d'engagement n'est ajouté.
 
 ## Parcours
 
@@ -24,7 +24,7 @@ Scénario `members-management`, après le seed de démonstration : 60 membres fi
 ## Contrôles avant livraison
 
 - Le seed ne s'exécute que dans la base vidéo ; il est idempotent sur ses 36 fiches dédiées.
-- Vérifier que le jeu de données comporte effectivement 60 membres et des inscriptions visibles pour Camille.
+- Vérifier que le jeu de données comporte effectivement 63 membres et des inscriptions visibles pour Camille.
 - Chaque création, modification, désactivation et réactivation doit être réelle et vérifiée après rechargement.
 - Confirmer les conséquences de désactivation dans le produit avant de commenter autre chose que la fiche sans inscription filmée.
 - Les champs Notes n'existent que dans l'édition actuelle : ne pas chercher à les remplir dans le formulaire de création.
@@ -66,3 +66,5 @@ READY : narration Puck complète régénérée en une passe sans balises, fronti
 ## Lot 41 — nuance des heures attestées
 
 Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes. Les en-têtes permettent aussi de trier la liste. Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent. Les heures attestées comptent les créneaux passés avec une présence enregistrée, sauf les participations terminées avant la fin. Ces départs restent enregistrés, mais n'attestent aucune heure : leur durée est inconnue. Ce n'est pas un chronométrage du travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.
+
+Lot 41 : le compteur courant est 63 puis 64 après ajout. La narration parle de plusieurs dizaines de fiches ; une seconde narration entière remplace le premier master qui annonçait soixante.

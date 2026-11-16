@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:38:15.106Z",
+  "videoSha256": "9279e8e634df31a10160d3022ec78d3565232479e961f0c44c8ecd8963f69c51",
+  "promptSha256": "8f635a9d3e9c42da6116cb6029caa0bb57bb647d902198e552e1daa7e8dd9c07",
+  "clipSha256": "07931fe52aa0a46f12eeb470565cb31a21bb52080dd767b7133b298cee9aca74",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Une liste bien entretenue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une liste bien entretenue, ce sont les bonnes coordonnées",
+        "visibleSeconds": 0.5,
+        "visible": "Tableau de la liste des membres affichant les noms, adresses e-mail et numéros de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "quelques catégories utiles",
+        "visibleSeconds": 3.4,
+        "visible": "Colonne Étiquettes visible avec les catégories associées aux membres (habitat, accueil)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Utilisez les disponibilités pour dialoguer",
+        "visibleSeconds": 10.3,
+        "visible": "Notes et disponibilités renseignées sous les coordonnées des membres (ex. Soir - Pas le vendredi)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, expressive et bien articulée, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

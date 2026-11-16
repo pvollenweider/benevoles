@@ -15,7 +15,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "La liste des membres rassemble les personnes que votre association souhaite retrouver facilement. Ici, soixante fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées. Ajouter un membre ne l'inscrit pas automatiquement à une fête. Sa fiche et ses inscriptions sont deux choses différentes. Voyons comment garder cette liste utile et à jour.",
+      "transcript": "La liste des membres rassemble les personnes que votre association souhaite retrouver facilement. Ici, plusieurs dizaines de fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées. Ajouter un membre ne l'inscrit pas automatiquement à une fête. Sa fiche et ses inscriptions sont deux choses différentes. Voyons comment garder cette liste utile et à jour.",
       "fallbackDurationMs": 32000
     },
     {

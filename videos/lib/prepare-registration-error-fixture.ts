@@ -33,7 +33,7 @@ export async function prepareRegistrationErrorFixture(db: PrismaClient, reset = 
     const payload = openPayload(row.payload)
     assert(/^video\.errors\.(aline|alex|nicolas|zoe|owner)@example\.org$/.test(payload.recipient?.email ?? ""), "Unknown recipient in fixture outbox")
   }
-  const day = new Date("2026-11-14T00:00:00Z")
+  const day = new Date(`${new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10)}T00:00:00Z`)
   await db.$transaction(async tx => {
     // The application still enforces its real 20/hour limit. Only the exact
     // recorder-owned test bucket is reset, never loopback/shared counters.
