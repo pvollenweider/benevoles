@@ -14,7 +14,7 @@ import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 import { replyToOnActivation } from "@/lib/org-reply-to"
-import { isOwnerRole } from "@/lib/permissions"
+import { isOwnerRole, FRONT_DESK_ROLE } from "@/lib/permissions"
 import { activationAllowed } from "@/lib/activation-budget"
 
 const schema = z.object({
@@ -88,12 +88,14 @@ export async function POST(req: Request) {
   // Activation and welcome email commit together (#352).
   const organization = admin.organization
   const outboxIds = await prisma.$transaction(async (tx) => {
-    // Consumes the link atomically: the update only matches while the account still carries this
-    // token, unexpired. A concurrent request that consumed it first, a link replaced by a new
-    // invitation or one expired during bcrypt match no row, and nothing else happens.
+    // Consumes the link atomically: the update only matches while the account is still inactive
+    // and carries this token, unexpired. A concurrent request that activated it first, a link
+    // replaced by a new invitation or one expired during bcrypt match no row, and nothing else
+    // happens: a setup token can never replace the password of an already active account (#1142).
     const { count } = await tx.adminUser.updateMany({
       where: {
         id: admin.id,
+        isActive: false,
         setupTokenHash: hashToken(token),
         OR: [{ setupTokenExpiresAt: null }, { setupTokenExpiresAt: { gt: new Date() } }],
       },
@@ -102,9 +104,15 @@ export async function POST(req: Request) {
         isActive: true,
         setupTokenHash: null,
         setupTokenExpiresAt: null,
+        // A front-desk account never receives the organisation's product-update emails (#1142):
+        // they are off by default for it, and no later path turns them on.
+        ...(admin.role === FRONT_DESK_ROLE ? { receiveProductUpdates: false } : {}),
       },
     })
     if (count === 0) return null
+    // A front-desk account (#1142) is no organiser: the welcome email's links point to pages it
+    // cannot open. Its invitation already said everything it needs, and it lands on its own page.
+    if (admin.role === FRONT_DESK_ROLE) return []
     if (!organization || !admin.organizationId) return []
     // An owner's now-confirmed address becomes the reply-to of an organization that has none
     // (#1077), only while it is still null: never over a value an owner set, nor after an owner

@@ -97,6 +97,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 ### Le jour J
 
 - [Présences le jour J](presences-le-jour-j.md) : Le jour J, suivre sur téléphone les créneaux en cours et à venir, et marquer les présences à l'arrivée comme les départs avant la fin. Pour : organisateurs.
+- [Donner un accès accueil pour le jour J](acces-accueil-jour-j.md) : Inviter une personne de l'accueil à marquer les présences d'un seul événement le jour J, puis révoquer son accès. Pour : organisateurs.
 - [Documents à imprimer, badges et résumé](rapports-badges-et-resume.md) : Les plannings et listes à imprimer, les badges des bénévoles, le résumé pour faire le bilan et l'archive complète d'un événement. Pour : organisateurs.
 
 ### Membres et invitations

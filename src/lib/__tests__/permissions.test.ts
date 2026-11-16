@@ -46,9 +46,13 @@ describe("front-desk role", () => {
       return cond && typeof cond === "object" ? ((cond as { in: unknown[] }).in).includes(value) : value === cond
     }))
 
-    it("ORG_ACCOUNT_ROLE_WHERE lists exactly the roles the database accepts today, never front desk", () => {
+    it("ORG_ACCOUNT_ROLE_WHERE lists exactly the roles the database accepts except front desk, which is left out on purpose", () => {
+      expect([...ADMIN_ROLES].sort()).toEqual(["admin", "front_desk", "organizer", "super_admin"])
       expect(ORG_ACCOUNT_ROLE_WHERE).toEqual({ role: { in: ["admin", "organizer", "super_admin"] } })
-      expect([...ORG_ACCOUNT_ROLE_WHERE.role.in].sort()).toEqual([...ADMIN_ROLES].sort())
+      // The database now also accepts front_desk (statuses.ts, CHECK constraint), and this filter
+      // deliberately leaves it out: it is not one of the organisation's administrators.
+      expect(ADMIN_ROLES).toContain(FRONT_DESK_ROLE)
+      expect([...ORG_ACCOUNT_ROLE_WHERE.role.in].sort()).toEqual([...ADMIN_ROLES].filter((r) => r !== FRONT_DESK_ROLE).sort())
       expect(ORG_ACCOUNT_ROLE_WHERE.role.in).not.toContain(FRONT_DESK_ROLE)
     })
 
@@ -67,8 +71,8 @@ describe("front-desk role", () => {
       expect(select(withNew, { ...ORG_ACCOUNT_ROLE_WHERE })).toEqual(existing)
     })
 
-    it("isOrgAccountRole is true for each existing role and agrees with the fragment on every role", () => {
-      for (const role of ADMIN_ROLES) expect(isOrgAccountRole(role), role).toBe(true)
+    it("isOrgAccountRole is true for each existing admin role, false for front desk, and agrees with the fragment on every role", () => {
+      for (const role of ADMIN_ROLES) expect(isOrgAccountRole(role), role).toBe(role !== FRONT_DESK_ROLE)
       for (const role of [...ADMIN_ROLES, "front_desk", "some_future_role", ""]) {
         expect(isOrgAccountRole(role), role).toBe(ORG_ACCOUNT_ROLE_WHERE.role.in.includes(role))
       }

@@ -33,8 +33,9 @@ import {
  * - Availability requests (`availability_request`, #1146, `data.token`): the request must still hold
  *   this link (renewed on an address change, revoked when collection is turned off), then the
  *   member's address is checked as for every member email.
- * - Account emails with a single-use link (password_reset, admin_invite, signup_account_link,
- *   org_reactivation): the link must still be the account's current one, for this address.
+ * - Account emails with a single-use link (password_reset, admin_invite, front_desk_invite,
+ *   signup_account_link, org_reactivation): the link must still be the account's current one, for
+ *   this address.
  * - Inactivity messages: their own check (inactivityCopyBlocked in outbox.ts).
  * - Organiser-facing emails (admin_notification, registration_cancelled, digests, answers_changed, availability_changed,
  *   addresses_to_verify_summary, milestone_owner_reminder, past_event_notice), platform emails
@@ -96,6 +97,7 @@ export function accountLink(payload: Pick<NotificationPayload, "kind" | "data">)
   switch (payload.kind) {
     case "password_reset": return pick("resetUrl", "passwordResetTokenHash")
     case "admin_invite":
+    case "front_desk_invite":
     case "signup_account_link": return pick("inviteUrl", "setupTokenHash")
     case "org_reactivation": return pick("reactivateUrl", "orgReactivationTokenHash")
     default: return null

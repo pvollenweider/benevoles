@@ -1231,3 +1231,19 @@ Les captures `admin-day-of`, `admin-registrations`, `admin-registrations-request
 `admin-print` et `admin-event-archive` sont déclarées sur des écrans dont la source a changé et
 restent à régénérer avec une base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans
 ce travail.
+
+## #1142, second lot : accès accueil limité à un événement
+
+La page Jour J des organisateurs gagne, pour un propriétaire seulement, une section repliée
+« Accès accueil » en bas de page (invitation, renvoi, révocation). Aucune vidéo n'est régénérée
+dans ce travail. Les vidéos dont un chapitre montre la page Jour J ou son bas de page sont à
+relire au prochain passage :
+
+- `ATTENDANCE_CHECK_IN` : chapitres `dayof-*` ; la section « Accès accueil » apparaît sous le
+  tableau pour un propriétaire. La narration ne la mentionne pas.
+- `LAST_MINUTE_CHANGES` : chapitre qui ouvre Jour J pour « Ajouter un besoin » ; même section
+  ajoutée sous le tableau.
+- `SECTORS` : chapitre `sectors-pages`, qui affiche Jour J un instant ; même section ajoutée.
+
+Les sélecteurs de capture ne changent pas (la section est un `<details>` fermé, sans incidence sur
+les boutons et les champs déjà filmés). Aucun fichier de `public/doc-img/` n'est modifié.

@@ -91,8 +91,7 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
 
 // ── Invitation d'un admin ────────────────────────────────────────────────────
 
-export function renderAdminInvite(p: NotificationPayload): RenderedEmail {
-  const d = p.data as {
+export function renderAdminInvite(p: NotificationPayload): RenderedEmail {  const d = p.data as {
     adminName: string
     organizationName: string
     inviteUrl: string
@@ -114,6 +113,52 @@ export function renderAdminInvite(p: NotificationPayload): RenderedEmail {
     <p style="margin-top:1.5em">${btn(d.inviteUrl, "Créer mon compte")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
   `, `Créez votre compte en un clic — lien valable 7 jours.`)
+
+  return { subject, html, text }
+}
+
+// ── Invitation à un accès accueil, limité à un événement (#1142) ─────────────
+
+export function renderFrontDeskInvite(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    adminName: string
+    organizationName: string
+    eventTitle: string
+    /** « du 12 au 14 juin 2026 » or « le 14 juin 2026 », in the organisation's calendar. */
+    eventDates: string
+    /** « 14 juin 2026 »: the event's last day. */
+    untilLabel: string
+    inviterName: string
+    inviteUrl: string
+  }
+  const subject = `${d.organizationName} : votre accès accueil pour ${d.eventTitle}`
+  const allows = "Il vous permet de marquer les présences le jour de l'événement et de voir le nom et le téléphone des bénévoles attendus."
+  const until = `Il est valable jusqu'à la fin de l'événement, le ${d.untilLabel} inclus.`
+  const only = "Aucune autre partie de l'espace de l'organisation ne vous est ouverte : vous ne verrez ni ses autres événements, ni ses membres, ni ses réglages."
+
+  const text = [
+    `Bonjour ${d.adminName},`,
+    ``,
+    `${d.inviterName} vous invite à un accès accueil pour ${d.eventTitle}, ${d.eventDates}, sur ${siteName()}.`,
+    ``,
+    allows,
+    until,
+    ``,
+    `Pour l'activer, choisissez votre mot de passe avec ce lien (valable 7 jours) :`,
+    d.inviteUrl,
+    ``,
+    only,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(d.adminName)},</h2>
+    <p><strong>${escapeHtml(d.inviterName)}</strong> vous invite à un accès accueil pour <strong>${escapeHtml(d.eventTitle)}</strong>, ${escapeHtml(d.eventDates)}, sur ${escapeHtml(siteName())}.</p>
+    <p>${escapeHtml(allows)}</p>
+    <p>${escapeHtml(until)}</p>
+    <p style="margin-top:1.5em">${btn(d.inviteUrl, "Choisir mon mot de passe")}</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
+    <p>${escapeHtml(only)}</p>
+  `, `Votre accès accueil pour ${d.eventTitle}, ${d.eventDates} — lien valable 7 jours.`)
 
   return { subject, html, text }
 }

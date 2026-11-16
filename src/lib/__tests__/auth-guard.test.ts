@@ -299,7 +299,11 @@ describe("front-desk account", () => {
   const grantRow = (over: Record<string, unknown> = {}) => ({
     id: "grant-1", adminUserId: "adm-colette", eventId: "evt-fete", organizationId: "org-fete", expiresAt: null, revokedAt: null,
     adminUser: { organizationId: "org-fete", isActive: true, role: "front_desk" },
-    event: { id: "evt-fete", organizationId: "org-fete", publicStatus: "published" },
+    event: {
+      id: "evt-fete", organizationId: "org-fete", publicStatus: "published", title: "Fête du village",
+      startDate: new Date("2027-06-12T00:00:00Z"), endDate: new Date("2027-06-14T00:00:00Z"),
+      organization: { name: "Fête du village", timeZone: "Europe/Zurich" },
+    },
     ...over,
   })
 

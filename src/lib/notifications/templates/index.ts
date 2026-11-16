@@ -12,7 +12,7 @@ import type { NotificationPayload } from "../types"
 import { withOrgLogo, type RenderedEmail } from "./shared"
 import { emailLogoHtml, type OrgLogo } from "../../org-logo"
 import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend, renderRegistrationRemoved, renderRegistrationWithdrawn, renderRegistrationRestored, renderRegistrationAddedByOrganizer, renderSignupEmailConfirmation } from "./registration"
-import { renderMemberInvite, renderAdminInvite } from "./invitations"
+import { renderMemberInvite, renderAdminInvite, renderFrontDeskInvite } from "./invitations"
 import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderReminderRule, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-leaders"
@@ -63,6 +63,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderAdminNotification(payload)
     case "admin_invite":
       return renderAdminInvite(payload)
+    case "front_desk_invite":
+      return renderFrontDeskInvite(payload)
     case "admin_welcome":
       return renderAdminWelcome(payload)
     case "password_reset":

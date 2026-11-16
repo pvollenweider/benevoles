@@ -10,6 +10,7 @@ import { generateToken } from "@/lib/utils"
 import { hashToken } from "@/lib/token-hash"
 import { configuredAppUrl } from "@/lib/urls"
 import { ORG_ACCOUNT_ROLE_WHERE } from "@/lib/permissions"
+import { NEVER_ACTIVATED_WHERE } from "@/lib/admin-invitation"
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
@@ -41,10 +42,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // Only the hash is stored (#269), so a resend issues a fresh link (and a fresh 7-day window);
   // the previous link stops working.
   const setupToken = generateToken()
-  await prisma.adminUser.update({
-    where: { id: admin.id },
+  // Conditional on the never-activated state in the write itself (#1142): if the account was
+  // activated since the read, no row matches and nothing is sent, rather than installing a setup
+  // link on an active account.
+  const { count } = await prisma.adminUser.updateMany({
+    where: { id: admin.id, ...NEVER_ACTIVATED_WHERE },
     data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
   })
+  if (count === 0) return NextResponse.json({ error: "Aucun compte en attente d'activation." }, { status: 404 })
 
   // Read at request time: Next inlines direct NEXT_PUBLIC_* accesses at build time.
   const inviteUrl = inviteLink(configuredAppUrl(), setupToken)
