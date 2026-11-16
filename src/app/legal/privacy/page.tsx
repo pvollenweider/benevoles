@@ -90,8 +90,8 @@ export default function PrivacyPage() {
       <p>
         Un <strong>accès accueil</strong> est un compte créé par un propriétaire pour une personne
         extérieure à l&apos;équipe, limité à un événement. Il contient son nom, son adresse e-mail et
-        un mot de passe, ainsi que le lien vers l&apos;événement auquel elle a accès, et il est
-        supprimé avec l&apos;Organisation ou avec le compte.
+        un mot de passe, ainsi que l&apos;événement auquel elle a accès. Il est conservé jusqu&apos;à
+        la suppression de l&apos;Organisation.
       </p>
 
       <h3 id="donnees-demandes-espace">2.2 Demandes d&apos;espace et prévention des abus</h3>
