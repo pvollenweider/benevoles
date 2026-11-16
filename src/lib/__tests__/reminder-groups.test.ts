@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { groupRemindersByDay, groupsInWindow, remindersDue, shiftLocalDay, shiftStartInstant, type GroupableRegistration } from "../reminder-groups"
+import { groupRemindersByDay, groupsInWindow, reminderCandidateDates, remindersDue, shiftLocalDay, shiftStartInstant, type GroupableRegistration } from "../reminder-groups"
 
 const TZ = "Europe/Zurich"
 
@@ -156,5 +156,43 @@ describe("remindersDue", () => {
     const candidates = [reg("a", { startTime: "16:00" })]
     const [lower, upper] = window(at("08:00"))
     expect(remindersDue(candidates, allTz, lower, upper)).toHaveLength(0)
+  })
+})
+
+describe("reminderCandidateDates", () => {
+  const HOUR = 3_600_000
+
+  it("covers two calendar days either side of the window, at midnight UTC", () => {
+    const { gte, lte } = reminderCandidateDates(new Date("2026-11-16T12:00:00Z"), new Date("2026-11-16T14:00:00Z"))
+    expect(gte.toISOString()).toBe("2026-11-14T00:00:00.000Z")
+    expect(lte.toISOString()).toBe("2026-11-18T00:00:00.000Z")
+  })
+
+  // Every shift whose real start falls in the window must have its stored date inside the bound,
+  // whatever the organisation's zone and the hour of the shift: otherwise a reminder would be lost.
+  it.each(["Pacific/Kiritimati", "Europe/Zurich", "UTC", "America/Los_Angeles", "Pacific/Pago_Pago"])("never leaves out a shift starting in the window (%s)", (timeZone) => {
+    for (const now of [new Date("2026-11-16T10:00:00Z"), new Date("2026-03-29T00:30:00Z"), new Date("2026-12-31T23:10:00Z")]) {
+      for (const [minHours, maxHours] of [[2, 4], [23, 25], [47, 49]]) {
+        const lower = new Date(now.getTime() + minHours * HOUR)
+        const upper = new Date(now.getTime() + maxHours * HOUR)
+        const { gte, lte } = reminderCandidateDates(lower, upper)
+        // Every stored day from a week before to a week after, every half hour of the day.
+        for (let day = Date.parse(`${now.toISOString().slice(0, 10)}T00:00:00Z`) - 7 * 24 * HOUR; day <= now.getTime() + 7 * 24 * HOUR; day += 24 * HOUR) {
+          for (let half = 0; half < 48; half++) {
+            const startTime = `${String(Math.floor(half / 2)).padStart(2, "0")}:${half % 2 ? "30" : "00"}`
+            const shift = { date: new Date(day), startTime }
+            const start = shiftStartInstant(shift, timeZone)
+            if (start < lower || start > upper) continue
+            expect(shift.date >= gte && shift.date <= lte, `${timeZone} ${shift.date.toISOString()} ${startTime}`).toBe(true)
+          }
+        }
+      }
+    }
+  })
+
+  it("leaves out the days far from the window: last month's shifts are not loaded", () => {
+    const { gte, lte } = reminderCandidateDates(new Date("2026-11-16T12:00:00Z"), new Date("2026-11-16T14:00:00Z"))
+    expect(new Date("2026-10-16T00:00:00Z") < gte).toBe(true)
+    expect(new Date("2026-11-20T00:00:00Z") > lte).toBe(true)
   })
 })

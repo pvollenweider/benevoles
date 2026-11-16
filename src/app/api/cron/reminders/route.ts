@@ -18,7 +18,7 @@ import { deliverOutbox, outboxHealth } from "@/lib/notifications/outbox"
 import * as Sentry from "@sentry/nextjs"
 import { registrationToken } from "@/lib/token-vault"
 import { orgTimeZone } from "@/lib/time-zone"
-import { remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
+import { reminderCandidateDates, remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
 import { REMINDER_WINDOW_HOURS } from "@/lib/automatic-reminders"
 import { sendMilestoneOwnerReminders } from "@/lib/milestone-reminders"
 import { expireSwapRequests } from "@/lib/shift-swap-server"
@@ -73,7 +73,8 @@ async function run(req: Request) {
     const lower = new Date(now.getTime() + win.minHours * 3600 * 1000)
     const upper = new Date(now.getTime() + win.maxHours * 3600 * 1000)
 
-    // Pull every active registration that has not received this reminder yet. The window is
+    // Pull the active registrations of the days around the window that have not received this
+    // reminder yet. The window is
     // computed on the candidate set in JS (cheap with index + status filter), per *group*
     // (#672): several shifts of the same volunteer, event and local day are sent as one email,
     // triggered once the earliest of them enters the window — see groupRemindersByDay.
@@ -84,7 +85,9 @@ async function run(req: Request) {
         // An event whose rules are all archived is back in default mode: an archived row is
         // history, not a custom delay, so the legacy windows apply again.
         event: { remindersEnabled: true, publicStatus: "published", reminderRules: { none: { archivedAt: null } } },
-        shift: { status: { not: "cancelled" } },
+        // Only the days around this window: never the whole history of registrations that did
+        // not get this reminder (src/lib/reminder-groups.ts, reminderCandidateDates).
+        shift: { status: { not: "cancelled" }, date: reminderCandidateDates(lower, upper) },
       },
       include: {
         volunteer: true,
