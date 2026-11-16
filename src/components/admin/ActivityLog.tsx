@@ -60,6 +60,9 @@ export const ACTION_LABEL: Record<string, string> = {
   "organization.beta_opted_out": "a arrêté la participation à la bêta : aucune nouvelle fonction bêta ne sera activée",
   "adminuser.removed": "a retiré un organisateur",
   "adminuser.role_changed": "a changé le rôle d'un organisateur",
+  // #1142: an account whose accesses are all over, deleted by the nightly cleanup. The person's
+  // name and address are never written; the event's title is in `changes`.
+  "frontdesk.account_purged": "a supprimé un compte d'accès accueil après la fin de son dernier accès",
   "member.merged": "a fusionné deux membres",
   "member.deleted": "a supprimé un membre",
   "member.duplicate_dismissed": "a ignoré un doublon possible",

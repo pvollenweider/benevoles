@@ -25,7 +25,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 10 novembre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 16 novembre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -90,8 +90,9 @@ export default function PrivacyPage() {
       <p>
         Un <strong>accès accueil</strong> est un compte créé par un propriétaire pour une personne
         extérieure à l&apos;équipe, limité à un événement. Il contient son nom, son adresse e-mail et
-        un mot de passe, ainsi que l&apos;événement auquel elle a accès. Il est conservé jusqu&apos;à
-        la suppression de l&apos;Organisation.
+        un mot de passe, ainsi que l&apos;événement auquel elle a accès. Il est effacé{" "}
+        {RETENTION_DAYS.frontDeskAccount} jours après la fin de son dernier accès, ou avec
+        l&apos;Organisation.
       </p>
 
       <h3 id="donnees-demandes-espace">2.2 Demandes d&apos;espace et prévention des abus</h3>

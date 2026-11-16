@@ -54,6 +54,7 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 | Messages ciblés (objet, texte, public, nombres) | 365 jours, ou avec l'événement |
 | Messages programmés (objet, texte, public, heure prévue) | 365 jours après l'heure prévue, ou avec l'événement |
 | Invitations d'organisateur non acceptées | effacées 30 jours après leur dernier envoi |
+| Compte d'accès accueil d'un événement (nom, adresse email, mot de passe haché) et son droit, une fois tous ses accès terminés | effacé 90 jours après la fin de son dernier accès (le plus tardif de ses droits) ; la fin d'un droit est la première de sa révocation, de son échéance et de la fin de l'événement, et un compte sans accès est effacé 90 jours après sa création ; un compte jamais activé suit la même règle |
 | Organisateur retiré de l'équipe | effacé immédiatement |
 | Bénévoles sans organisation ni inscription | effacés au nettoyage suivant |
 | Sauvegardes chiffrées de la base | 30 jours sur le serveur, 90 jours en copie hors site |
