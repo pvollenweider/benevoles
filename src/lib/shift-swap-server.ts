@@ -27,7 +27,7 @@ import { rosterDisplayName } from "./shift-roster-text"
 import { checkDutyChange, lockWorkloadShared, readWorkloadGate, type WorkloadVerdict } from "./workload-guard"
 import { AvailabilityAckError, checkAvailabilityAcksFor, logAvailabilityAcks, readAvailabilityGate } from "./availability-assist-data"
 import { FIT_LABELS, type AckGiven, type AckMissing } from "./availability-assist"
-import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
+import { ORG_ACCOUNT_ROLE_WHERE } from "./permissions"
 
 /** The swap code of a workload refusal (#1171): the first rule broken, never whose plan. */
 function workloadSwapCode(v: Exclude<WorkloadVerdict, { ok: true }>): SwapRefusalCode {
@@ -635,8 +635,8 @@ export async function confirmSwap(db: SwapDbLike, input: { requestId: string; vo
       })
       // The organisers are told: nothing changes until one of them approves, before the deadline.
       const deadline = swapDeadline({ expiresAt: req.expiresAt, given: [mine!.shift, theirs!.shift], setting: event, timeZone: orgTimeZone(event.organization) })
-      // Owners and organisers: a front-desk account (#1142) approves nothing and is not written to.
-      const admins = await tx.adminUser.findMany({ where: { organizationId: event.organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE }, select: { email: true, name: true } })
+      // The administrators as before: a front-desk account (#1142) approves nothing and is not written to.
+      const admins = await tx.adminUser.findMany({ where: { organizationId: event.organizationId, isActive: true, ...ORG_ACCOUNT_ROLE_WHERE }, select: { email: true, name: true } })
       outboxIds = await queue(tx, event, admins.map((a) => approvalPayload(event, req, a, mine!, theirs!, deadline)))
       return { ok: true, requestId: req.id, status: "approval" }
     }

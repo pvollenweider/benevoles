@@ -22,7 +22,7 @@ import {
   BLOCK_REASONS, decideProcedure, deadlineDay, STEP_LABELS, STEP_ORDER,
   type ProcedureDecision, type ProcedureInput, type StepKey, type StepRow,
 } from "@/lib/org-inactivity-steps"
-import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
+import { ORG_ACCOUNT_ROLE_WHERE } from "./permissions"
 
 /**
  * The periodic check of inactive organisations with `ORG_INACTIVITY=on` (#811, #1114), run by the
@@ -200,10 +200,10 @@ async function queueCopies(
   return enqueueNotifications(payloads, tx, { inactivityStepId: step.id })
 }
 
-// The organisation's administrators (owners and organisers): a front-desk account (#1142) gets no
+// The organisation's administrators, as before: a front-desk account (#1142) gets no
 // notice and no « Conserver mon organisation » link.
 const adminsOf = (db: Tx, organizationId: string): Promise<Admin[]> =>
-  db.adminUser.findMany({ where: { organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE }, select: { id: true, email: true, name: true } })
+  db.adminUser.findMany({ where: { organizationId, isActive: true, ...ORG_ACCOUNT_ROLE_WHERE }, select: { id: true, email: true, name: true } })
     .then((all) => all.filter((a) => a.email.trim() !== ""))
 
 const hashOf = (email: string) => addressHash(email, env.AUTH_SECRET)

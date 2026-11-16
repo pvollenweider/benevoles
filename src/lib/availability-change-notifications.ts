@@ -6,7 +6,6 @@ import { digestDelayMs, queueDigestItem } from "./notifications/digest"
 import type { AvailabilityChangeItem } from "./notifications/templates/availability-changed"
 import { spokenShift } from "./spoken-time"
 import type { Mission } from "./availability-correction"
-import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
 
 /**
  * The organisers' email when a person with a published mission corrects their availability
@@ -40,7 +39,7 @@ export async function queueAvailabilityChangeNotifications(input: {
   changeId: string
 }, now: Date = new Date()): Promise<string[]> {
   const admins = await prisma.adminUser.findMany({
-    where: { organizationId: input.event.organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE },
+    where: { organizationId: input.event.organizationId, isActive: true, role: { in: ["admin", "organizer"] } },
     select: { email: true, name: true },
   })
   const delayMs = digestDelayMs(AVAILABILITY_CHANGE_DIGEST_DELAY_MS)

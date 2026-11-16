@@ -3,7 +3,7 @@
 
 // AdminUser isn't tenant-scoped: every read and write below is filtered by organizationId.
 import { prisma } from "./prisma"
-import { isOwnerRole, lastOwnerProblem, ORG_ADMIN_ROLE_WHERE, OWNER_ROLE, type OrgRole } from "./permissions"
+import { isOwnerRole, lastOwnerProblem, ORG_ACCOUNT_ROLE_WHERE, OWNER_ROLE, type OrgRole } from "./permissions"
 
 /**
  * Changes to an organisation's team that can take away an owner (#469): a level change and a
@@ -41,7 +41,7 @@ export async function changeAdminRole(
     await lockOrganization(tx, organizationId)
     // An administrator of the team only: a front-desk account (#1142) is not one, and its role is
     // never changed from here (it reads as an unknown account).
-    const target = await tx.adminUser.findFirst({ where: { id, organizationId, ...ORG_ADMIN_ROLE_WHERE }, select: { id: true, role: true, isActive: true } })
+    const target = await tx.adminUser.findFirst({ where: { id, organizationId, ...ORG_ACCOUNT_ROLE_WHERE }, select: { id: true, role: true, isActive: true } })
     if (!target) return { ok: false, status: 404, error: ADMIN_NOT_FOUND }
     if (target.role === role) return { ok: true, from: target.role, changed: false }
     const problem = lastOwnerProblem({ targetIsActiveOwner: target.isActive && isOwnerRole(target.role), nextRole: role, owners: await countOwners(tx, organizationId) })
@@ -59,10 +59,10 @@ export async function removeOrgAdmin(
   return prisma.$transaction(async (tx: Tx): Promise<RemovalResult> => {
     await lockOrganization(tx, organizationId)
     // Same: the team's removal never deletes a front-desk account (#1142).
-    const target = await tx.adminUser.findFirst({ where: { id, organizationId, ...ORG_ADMIN_ROLE_WHERE }, select: { id: true, email: true, role: true, isActive: true } })
+    const target = await tx.adminUser.findFirst({ where: { id, organizationId, ...ORG_ACCOUNT_ROLE_WHERE }, select: { id: true, email: true, role: true, isActive: true } })
     if (!target) return { ok: false, status: 404, error: ADMIN_NOT_FOUND }
     if (actorEmail && target.email === actorEmail) return { ok: false, status: 400, error: CANNOT_REMOVE_SELF }
-    if (target.isActive && (await tx.adminUser.count({ where: { organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE } })) <= 1) {
+    if (target.isActive && (await tx.adminUser.count({ where: { organizationId, isActive: true, ...ORG_ACCOUNT_ROLE_WHERE } })) <= 1) {
       return { ok: false, status: 400, error: LAST_ACTIVE_ADMIN }
     }
     const problem = lastOwnerProblem({ targetIsActiveOwner: target.isActive && isOwnerRole(target.role), nextRole: null, owners: await countOwners(tx, organizationId) })

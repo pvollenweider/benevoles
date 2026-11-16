@@ -20,7 +20,8 @@ import { touchOrgActivity } from "./org-activity"
  *   a unique `where` (e.g. a compound key) can't always be combined with an arbitrary filter;
  * - create/createMany: direct models get `organizationId` forced; event-owned models must point
  *   to an event of this org. A front-desk grant (adminEventAccess, #1142) is a direct model that
- *   also names an event and an admin account: both must be this organisation's, or it is refused.
+ *   also names an event and an admin account: both must be this organisation's, or it is refused;
+ *   and no update may name its organisation, event or account afterwards (assertGrantDataImmutable).
  *
  * A row of another org therefore behaves exactly like a row that doesn't exist.
  *
@@ -102,6 +103,25 @@ async function assertGrantTargetsOwned(rows: AnyArgs[], organizationId: string, 
   if (count !== adminIds.length) throw new TenantAccessError(model, operation)
 }
 
+/** What a front-desk grant is about: its organisation, its event, its account. Never rewritten. */
+const GRANT_IMMUTABLE = ["organizationId", "eventId", "adminUserId", "organization", "event", "adminUser"] as const
+
+/**
+ * A front-desk grant (#1142) is immutable in its organisation, event and account: only
+ * `revokedAt` and `expiresAt` change. An update that names one of them, as a scalar or through
+ * its relation (`event: { connect }`, `adminUser: { connect }`, `organization: { connect }`, or
+ * any other nested write there), is refused whatever the value, even the current one: otherwise
+ * organisation A's client could move its own grant to organisation B, or point it at another
+ * tenant's event or account, past the checks made when the grant was created.
+ */
+function assertGrantDataImmutable(data: unknown, model: string, operation: string) {
+  const rows = Array.isArray(data) ? data : [data]
+  for (const row of rows) {
+    if (!row || typeof row !== "object") continue
+    if (GRANT_IMMUTABLE.some((field) => Object.hasOwn(row, field))) throw new TenantAccessError(model, operation)
+  }
+}
+
 export function getOrgClient(organizationId: string) {
   return prisma.$extends({
     name: "org-scoped",
@@ -126,6 +146,12 @@ export function getOrgClient(organizationId: string) {
     const model = m.charAt(0).toUpperCase() + m.slice(1)
     if (!isDirect(m) && !isEventOwned(m)) return query(args)
     const a = (args ?? {}) as AnyArgs
+
+    if (m === "adminEventAccess") {
+      if (operation === "update" || operation === "updateMany" || operation === "updateManyAndReturn") assertGrantDataImmutable(a.data, model, operation)
+      // The update side of an upsert, checked whether or not the row exists yet.
+      if (operation === "upsert") assertGrantDataImmutable(a.update, model, operation)
+    }
 
     if (MULTI_ROW_OPS.includes(operation)) {
       a.where = a.where ? { AND: [a.where, orgFilter(m, organizationId)] } : orgFilter(m, organizationId)

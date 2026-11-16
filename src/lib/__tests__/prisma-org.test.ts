@@ -238,6 +238,83 @@ describe("getOrgClient", () => {
     })
   })
 
+  // A grant is immutable in its organisation, event and account: only revokedAt and expiresAt change.
+  describe("front-desk grant: no update may name its organisation, event or account", () => {
+    const FORBIDDEN: [string, Record<string, unknown>][] = [
+      ["organizationId", { organizationId: "org-B" }],
+      ["eventId", { eventId: "e-of-B" }],
+      ["adminUserId", { adminUserId: "adm-of-B" }],
+      ["organization: { connect }", { organization: { connect: { id: "org-B" } } }],
+      ["event: { connect }", { event: { connect: { id: "e-of-B" } } }],
+      ["adminUser: { connect }", { adminUser: { connect: { id: "adm-of-B" } } }],
+      ["event: { update } (any nested write)", { event: { update: { title: "x" } } }],
+      ["its current organisation again", { organizationId: "org-A" }],
+    ]
+
+    it.each(FORBIDDEN)("update refuses %s, before reading or writing anything", async (_label, data) => {
+      m.grantFindUnique.mockResolvedValue({ organizationId: "org-A" })
+      const { promise, query } = run("org-A", "AdminEventAccess", "update", { where: { id: "g1" }, data: { revokedAt: new Date(0), ...data } })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(query).not.toHaveBeenCalled()
+      expect(m.grantFindUnique).not.toHaveBeenCalled()
+    })
+
+    it.each(FORBIDDEN)("updateMany refuses %s", async (_label, data) => {
+      for (const op of ["updateMany", "updateManyAndReturn"]) {
+        const { promise, query } = run("org-A", "AdminEventAccess", op, { where: { eventId: "e1" }, data })
+        await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+        expect(query).not.toHaveBeenCalled()
+      }
+    })
+
+    it.each(FORBIDDEN)("upsert on an existing grant refuses %s in its update branch", async (_label, data) => {
+      m.grantFindUnique.mockResolvedValue({ organizationId: "org-A" })
+      m.eventCount.mockResolvedValue(1)
+      m.adminCount.mockResolvedValue(1)
+      const { promise, query } = run("org-A", "AdminEventAccess", "upsert", { where: { adminUserId_eventId: { adminUserId: "adm-1", eventId: "e1" } }, create: { adminUserId: "adm-1", eventId: "e1" }, update: data })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(query).not.toHaveBeenCalled()
+    })
+
+    it("the same update branch is refused when the row does not exist yet", async () => {
+      m.grantFindUnique.mockResolvedValue(null)
+      m.eventCount.mockResolvedValue(1)
+      m.adminCount.mockResolvedValue(1)
+      const { promise, query } = run("org-A", "AdminEventAccess", "upsert", { where: { id: "g1" }, create: { adminUserId: "adm-1", eventId: "e1" }, update: { eventId: "e-of-B" } })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(query).not.toHaveBeenCalled()
+    })
+
+    it("revoking, restoring and changing the expiry go through, on this organisation's grant only", async () => {
+      m.grantFindUnique.mockResolvedValue({ organizationId: "org-A" })
+      const expiresAt = new Date("2027-06-13T00:00:00Z")
+      const update = run("org-A", "AdminEventAccess", "update", { where: { id: "g1" }, data: { revokedAt: new Date(0), expiresAt } }, {})
+      await update.promise
+      expect(update.query).toHaveBeenCalledWith({ where: { id: "g1" }, data: { revokedAt: new Date(0), expiresAt } })
+
+      const many = run("org-A", "AdminEventAccess", "updateMany", { where: { eventId: "e1" }, data: { revokedAt: null } })
+      await many.promise
+      expect(many.query).toHaveBeenCalledWith({ where: { AND: [{ eventId: "e1" }, { organizationId: "org-A" }] }, data: { revokedAt: null } })
+
+      const upsert = run("org-A", "AdminEventAccess", "upsert", { where: { id: "g1" }, create: { adminUserId: "adm-1", eventId: "e1" }, update: { revokedAt: null, expiresAt } }, {})
+      await upsert.promise
+      expect(upsert.query).toHaveBeenCalled()
+
+      // Another organisation's grant stays out of reach, even for an allowed field.
+      m.grantFindUnique.mockResolvedValue({ organizationId: "org-B" })
+      const foreign = run("org-A", "AdminEventAccess", "update", { where: { id: "g2" }, data: { revokedAt: null } })
+      await expect(foreign.promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(foreign.query).not.toHaveBeenCalled()
+    })
+
+    it("other models are not concerned: an event's own update still goes through", async () => {
+      m.eventFindUnique.mockResolvedValue({ organizationId: "org-A" })
+      const { promise, query } = run("org-A", "Event", "update", { where: { id: "e1" }, data: { organizationId: "org-A", title: "F" } }, {})
+      await promise
+      expect(query).toHaveBeenCalled()
+    })
+  })
+
   describe("organization logo (#300), a direct model", () => {
     it("upsert of a missing logo creates it for the org, whatever the caller sent", async () => {
       m.logoFindUnique.mockResolvedValue(null)

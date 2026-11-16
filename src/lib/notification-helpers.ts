@@ -16,7 +16,7 @@ import { prisma } from "./prisma"
 import { sendNotification, type Send } from "./notifications"
 import type { NotificationPayload } from "./notifications/types"
 import type { ShiftInfo } from "./shift-info"
-import { ORG_ADMIN_ROLE_WHERE } from "./permissions"
+import { ORG_ACCOUNT_ROLE_WHERE } from "./permissions"
 
 type RegistrationEmailData = {
   to: string
@@ -115,7 +115,7 @@ export async function sendAdminNotification(data: {
 
   // The organisation's administrators only: never a front-desk account (#1142).
   const orgAdmins = await prisma.adminUser.findMany({
-    where: { organizationId, isActive: true, ...ORG_ADMIN_ROLE_WHERE },
+    where: { organizationId, isActive: true, ...ORG_ACCOUNT_ROLE_WHERE },
     select: { email: true, name: true },
   })
 

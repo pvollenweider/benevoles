@@ -51,7 +51,7 @@ describe("abandonedSignupSpaceWhere (#810)", () => {
       publicationApprovedAt: null,
       outboundEmailApprovedAt: null,
       createdAt: { lt: cutoff },
-      admins: { none: { isActive: true, role: { in: ["admin", "organizer"] } } },
+      admins: { none: { isActive: true, role: { in: ["admin", "organizer", "super_admin"] } } },
     })
   })
 })

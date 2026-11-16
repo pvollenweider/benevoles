@@ -148,7 +148,7 @@ describe("buildSignupNotifications", () => {
         { label: "Créneau s2", roleName: "Caisse", date: "14/07/2026", startTime: "10:00", endTime: "12:00" },
       ],
     })
-    expect(m.adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org1", isActive: true, role: { in: ["admin", "organizer"] } }, select: { email: true, name: true } })
+    expect(m.adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org1", isActive: true, role: { in: ["admin", "organizer", "super_admin"] } }, select: { email: true, name: true } })
   })
 
   it("sends no admin notification when the organization switched it off (#381)", async () => {

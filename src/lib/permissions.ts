@@ -41,18 +41,27 @@ export const FRONT_DESK_ROLE = "front_desk"
 export const isFrontDeskRole = (role: string | null | undefined) => role === FRONT_DESK_ROLE
 
 /**
- * Whether a stored role is one of the organisation's administrators (owner or organiser): the
- * people who receive its automatic emails and appear as its team. An allow-list, so a front-desk
- * account, or any role added later, is left out until someone decides otherwise.
+ * The stored roles that count as one of the organisation's own accounts: every role that existed
+ * before the front-desk one (#1142), that is the owner, the organiser and `super_admin` (the
+ * schema lets a super admin account be attached to an organisation). An allow-list on purpose:
+ * for a database holding only those three values it selects exactly what an unfiltered query
+ * selected before, it never includes a front-desk account, and a role added later stays out
+ * until someone decides otherwise.
  */
-export const isOrgAdminRole = (role: string | null | undefined): role is OrgRole => role === OWNER_ROLE || role === ORGANIZER_ROLE
+const ORG_ACCOUNT_ROLES: readonly string[] = [OWNER_ROLE, ORGANIZER_ROLE, "super_admin"]
+
+/**
+ * Whether a stored role is one of those: the accounts that receive the organisation's automatic
+ * emails, appear as its team and count as its administrators, as opposed to a front-desk account.
+ */
+export const isOrgAccountRole = (role: string | null | undefined): boolean => typeof role === "string" && ORG_ACCOUNT_ROLES.includes(role)
 
 /**
  * The same rule as a Prisma `where` fragment on AdminUser: spread it into every query that selects
  * « the administrators » of an organisation (recipients, team lists, counts). A plain object, no
  * Prisma import: this module is also loaded by client components.
  */
-export const ORG_ADMIN_ROLE_WHERE = { role: { in: [OWNER_ROLE, ORGANIZER_ROLE] as string[] } }
+export const ORG_ACCOUNT_ROLE_WHERE = { role: { in: [...ORG_ACCOUNT_ROLES] } }
 
 type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
 

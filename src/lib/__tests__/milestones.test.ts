@@ -104,7 +104,7 @@ describe("milestone owner (#985)", () => {
     expect(isEligibleMilestoneOwner(null, "org-a")).toBe(false)
     // A front-desk account (#1142) is not a member of the team: never an owner of a milestone.
     expect(isEligibleMilestoneOwner({ organizationId: "org-a", isActive: true, role: "front_desk" }, "org-a")).toBe(false)
-    expect(eligibleOwnerWhere("org-a")).toEqual({ organizationId: "org-a", isActive: true, role: { in: ["admin", "organizer"] } })
+    expect(eligibleOwnerWhere("org-a")).toEqual({ organizationId: "org-a", isActive: true, role: { in: ["admin", "organizer", "super_admin"] } })
   })
 
   it("lists the team by name and keeps a deactivated current owner at the end", () => {

@@ -52,31 +52,43 @@ describe("frontDeskRedirect", () => {
     expect(proxy.slice(rule, rule + 300)).toContain("frontDeskRedirect(pathname)")
     expect(rule).toBeLessThan(proxy.indexOf("if (isSuperAdminPath) {"))
   })
+
+  it("that redirect is inside handle(), after the canonical-host redirects and the origin check, and built like the role redirects next to it", () => {
+    const proxy = fs.readFileSync(path.join(__dirname, "..", "..", "proxy.ts"), "utf-8")
+    const handle = proxy.slice(proxy.indexOf("function handle(req: NextAuthRequest): Response {"), proxy.indexOf("// Typed with the event"))
+    const rule = handle.indexOf("isFrontDeskRole(req.auth?.user?.role)")
+    expect(rule).toBeGreaterThan(-1)
+    for (const earlier of ["if (apexTarget) return", "if (orgHostTarget) return", "if (refused) return"]) {
+      expect(handle.indexOf(earlier), earlier).toBeGreaterThan(-1)
+      expect(handle.indexOf(earlier), earlier).toBeLessThan(rule)
+    }
+    // Same construction as the super-admin role redirect: Response.redirect on the request's own URL.
+    expect(handle).toContain("if (frontDeskTarget) return Response.redirect(new URL(frontDeskTarget, req.url))")
+    expect(handle).toContain('return Response.redirect(new URL("/admin", req.url))')
+  })
 })
 
-// The edge-safe `authorized` callback (src/auth.config.ts), which the proxy's wrapper runs first.
-describe("authConfig.callbacks.authorized as a front-desk account", () => {
+// The edge-safe `authorized` callback (src/auth.config.ts) has no role rule: a Response returned
+// there is sent by the next-auth wrapper without the proxy's handle(), so it would skip the
+// canonical-host redirects and the security headers. The front-desk redirect is in handle() only.
+describe("authConfig.callbacks.authorized has no front-desk rule", () => {
   const authorized = authConfig.callbacks!.authorized!
   const run = (role: string | undefined, pathname: string) =>
     authorized({ auth: role === undefined ? null : ({ user: { role } } as never), request: { nextUrl: new URL(`https://fete.example.org${pathname}`) } as never })
 
-  it("redirects to the landing page from any other admin page", async () => {
-    for (const page of ["/admin/dashboard", "/admin/events/evt-1/day-of", "/admin/account", "/super-admin/organizations"]) {
-      const res = await run("front_desk", page)
-      expect(res, page).toBeInstanceOf(Response)
-      expect((res as Response).status).toBeGreaterThanOrEqual(300)
-      expect((res as Response).headers.get("location")).toBe("https://fete.example.org/admin/front-desk")
+  it("never answers with a Response, whatever the role and the page", async () => {
+    for (const role of ["front_desk", "admin", "organizer", "super_admin"]) {
+      for (const page of ["/admin/dashboard", "/admin/events/evt-1/day-of", "/admin/front-desk", "/admin/login", "/super-admin/organizations", "/"]) {
+        expect(await run(role, page), `${role} ${page}`).toBe(true)
+      }
     }
-  })
-
-  it("lets its landing page and the session-less pages through", async () => {
-    for (const page of ["/admin/front-desk", "/admin/login", "/admin/reset-password"]) expect(await run("front_desk", page), page).toBe(true)
-  })
-
-  it("changes nothing for the other roles, nor for a signed-out visitor", async () => {
-    for (const role of ["admin", "organizer", "super_admin"]) expect(await run(role, "/admin/dashboard"), role).toBe(true)
     expect(await run(undefined, "/admin/dashboard")).toBe(false)
     expect(await run(undefined, "/admin/login")).toBe(true)
     expect(await run(undefined, "/")).toBe(true)
+  })
+
+  it("its source does not mention the role or build a redirect", () => {
+    const source = fs.readFileSync(path.join(__dirname, "..", "..", "auth.config.ts"), "utf-8")
+    expect(source).not.toMatch(/isFrontDeskRole|frontDeskRedirect|Response\.redirect/)
   })
 })

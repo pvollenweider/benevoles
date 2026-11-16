@@ -3,19 +3,27 @@
 
 /**
  * Which pages a front-desk session (#1142) may open. Pure, no Prisma: also imported by
- * src/proxy.ts. The role has no admin level (src/lib/permissions.ts): of the admin, it opens its
- * own landing page and nothing else. The rule is applied three times, each on its own: the proxy
- * (from the token, before any render), the admin layout (no navigation, no organisation data),
- * and every page's own loader (getOrgContext in src/lib/auth-guard.ts, the account page).
+ * src/proxy.ts. The role has no admin level (src/lib/permissions.ts). It opens exactly two kinds
+ * of page under /admin, nothing else:
+ * - its own landing page (FRONT_DESK_HOME);
+ * - the pages that need no session (SESSIONLESS_ADMIN_PAGES): sign-in and the single-use links
+ *   sent by email. Each asks for its own credentials or token and answers the same to a
+ *   signed-out visitor, so being signed in as front desk gains nothing there; sending such a
+ *   session away would only stop the person from following a password-reset link.
+ * Every other page of the admin and super-admin spaces is refused. The rule is applied three
+ * times, each on its own: the proxy (from the token, before any render), the admin layout (no
+ * navigation, no organisation data), and every page's own loader (getOrgContext in
+ * src/lib/auth-guard.ts, the account page).
  */
 
 /** The one admin page of a front-desk session. */
 export const FRONT_DESK_HOME = "/admin/front-desk"
 
 /**
- * Pages that need no session at all (sign-in, and the single-use links sent by email): they work
- * the same signed out, so a signed-in front-desk account is not sent away from them. The admin
- * layout still renders them without navigation for that role.
+ * Pages that need no session at all (sign-in, and the single-use links sent by email): kept
+ * reachable for a signed-in front-desk account on purpose, see above. The same list as the
+ * proxy's public admin pages plus the login page (a test compares them). The admin layout still
+ * renders them without navigation for that role.
  */
 export const SESSIONLESS_ADMIN_PAGES: readonly string[] = [
   "/admin/login",

@@ -115,7 +115,7 @@ describe("PATCH/DELETE /api/admin/events/[id]/milestones/[milestoneId]", () => {
     const res = await PATCH(patch({ ownerId: "adm-2" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
     expect(res.status).toBe(200)
     expect((await res.json()).owner).toEqual({ id: "adm-2", name: "Samira Diallo" })
-    expect(adminFindFirst).toHaveBeenCalledWith({ where: { id: "adm-2", organizationId: "org-a", isActive: true, role: { in: ["admin", "organizer"] } }, select: { organizationId: true, isActive: true, role: true } })
+    expect(adminFindFirst).toHaveBeenCalledWith({ where: { id: "adm-2", organizationId: "org-a", isActive: true, role: { in: ["admin", "organizer", "super_admin"] } }, select: { organizationId: true, isActive: true, role: true } })
     expect(update).toHaveBeenCalledWith(expect.objectContaining({ data: { ownerId: "adm-2", ownerRemindedAt: null } }))
     expect(logCreate).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({ action: "eventmilestone.updated", changes: { ownerId: { from: null, to: "adm-2" } } }),

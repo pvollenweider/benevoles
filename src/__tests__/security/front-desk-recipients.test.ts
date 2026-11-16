@@ -1,7 +1,8 @@
 /**
  * Front-desk access limited to one event (#1142): a front-desk account is not one of the
  * organisation's administrators. It receives none of their automatic emails and is not listed or
- * counted among them.
+ * counted among them. The filter that does it (ORG_ACCOUNT_ROLE_WHERE) keeps every role that
+ * existed before: for the existing accounts, each site selects what it selected before.
  *
  * Two kinds of proof:
  * - structural: every place of src/ that selects admin accounts (AdminUser.findMany / count /
@@ -74,7 +75,7 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
   /** A read of several admin accounts, or of an organisation's `admins` relation. */
   const SELECTION = /adminUser\.(?:findMany|count|groupBy)\(|\badmins: (?:true\b|\{\s*(?:where|select|none|some|every)\b)/g
   /** What makes such a read leave the front-desk role out (or name one precise role). */
-  const FILTERED = /ORG_ADMIN_ROLE_WHERE|PRODUCT_UPDATE_RECIPIENT_WHERE|eligibleOwnerWhere\(|role: OWNER_ROLE|role: "super_admin"|role: \{ in: string\[\] \}/
+  const FILTERED = /ORG_ACCOUNT_ROLE_WHERE|PRODUCT_UPDATE_RECIPIENT_WHERE|eligibleOwnerWhere\(|role: OWNER_ROLE|role: "super_admin"|role: \{ in: string\[\] \}|role: \{ in: \["admin", "organizer"\] \}/
 
   /**
    * Reads of every account, whatever its role, with the reason. The number is how many such
@@ -126,7 +127,6 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
     "lib/delivery-summary-data.ts",
     "lib/shift-swap-server.ts",
     "lib/org-inactivity-procedure.ts",
-    "lib/availability-change-notifications.ts",
     "lib/org-inactivity-data.ts",
     "lib/notifications/outbox.ts",
     "lib/notifications/org-send-guard.ts",
@@ -139,8 +139,13 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
     "app/api/super-admin/organizations/[id]/send-invite/route.ts",
     "app/api/super-admin/organizations/[id]/review/route.ts",
   ])("%s uses the shared role filter", (file) => {
-    expect(fs.readFileSync(path.join(src, file), "utf-8")).toContain("ORG_ADMIN_ROLE_WHERE")
+    expect(fs.readFileSync(path.join(src, file), "utf-8")).toContain("ORG_ACCOUNT_ROLE_WHERE")
     expect(unfiltered.has(file)).toBe(false)
+  })
+
+  it("lib/availability-change-notifications.ts keeps the filter it had before (owners and organisers)", () => {
+    expect(fs.readFileSync(path.join(src, "lib/availability-change-notifications.ts"), "utf-8")).toContain('role: { in: ["admin", "organizer"] }')
+    expect(unfiltered.has("lib/availability-change-notifications.ts")).toBe(false)
   })
 
   it.each(["app/api/super-admin/product-updates/send/route.ts", "app/api/super-admin/product-updates/route.ts", "app/super-admin/product-updates/page.tsx"])("%s uses the product-update recipients filter", (file) => {
@@ -185,6 +190,19 @@ describe("recipients and team lists leave the front-desk account out (#1142)", (
     const emails = ((await res.json()) as { email: string }[]).map((a) => a.email)
     expect(emails).toEqual([ELODIE.email, SAMI.email])
     expect(emails).not.toContain(COLETTE.email)
+  })
+
+  it("a super admin account attached to the organisation is still listed and still counts, as before the filter", async () => {
+    const attached = { ...ELODIE, id: "adm-morgane", name: "Morgane Blanc", email: "morgane.blanc@example.org", role: "super_admin", organizationId: ORG }
+    accounts = [...accounts, attached]
+    auth.mockResolvedValue({ user: { id: ELODIE.id, email: ELODIE.email, role: "admin", organizationId: ORG } })
+    const { GET } = await import("@/app/api/admin/settings/admins/route")
+    const emails = ((await (await GET()).json()) as { email: string }[]).map((a) => a.email)
+    expect(emails).toEqual([ELODIE.email, SAMI.email, attached.email])
+    const { eligibleOwnerWhere } = await import("@/lib/milestones")
+    expect(adminsMatching(eligibleOwnerWhere(ORG), accounts).map((a) => a.email)).toEqual([ELODIE.email, SAMI.email, attached.email])
+    const { changeAdminRole } = await import("@/lib/admin-team-changes")
+    expect(await changeAdminRole(ORG, attached.id, "organizer")).toMatchObject({ ok: true, changed: true })
   })
 
   it("the team's role change does not reach a front-desk account: unknown account, nothing written", async () => {

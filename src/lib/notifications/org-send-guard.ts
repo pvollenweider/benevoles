@@ -5,7 +5,7 @@ import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
 import { ORG_PENDING_REASON } from "@/lib/outbox-org-pending-reason"
 import { canEmailThirdParties, pendingRecipientAllowed, signupOwnerEmails } from "@/lib/org-approval"
 import { prisma } from "@/lib/prisma"
-import { ORG_ADMIN_ROLE_WHERE } from "../permissions"
+import { ORG_ACCOUNT_ROLE_WHERE } from "../permissions"
 
 export { ORG_INACTIVE_REASON, ORG_PENDING_REASON }
 
@@ -64,7 +64,7 @@ export async function organizationSendingVerdict(organizationId: string | null |
   if (!organizationId) return null
   const org = await db.organization.findUnique({
     where: { id: organizationId },
-    select: { active: true, outboundEmailApprovedAt: true, createdAt: true, admins: { where: { isActive: true, ...ORG_ADMIN_ROLE_WHERE }, select: { email: true, createdAt: true } } },
+    select: { active: true, outboundEmailApprovedAt: true, createdAt: true, admins: { where: { isActive: true, ...ORG_ACCOUNT_ROLE_WHERE }, select: { email: true, createdAt: true } } },
   })
   return sendingVerdict(organizationId, org, recipientEmail)
 }

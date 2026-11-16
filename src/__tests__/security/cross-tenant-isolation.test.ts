@@ -1616,7 +1616,7 @@ describe("Admin settings — cross-tenant isolation", () => {
 
     const res = await DELETE(makeRequest("/api/admin/settings/admins/adm-b", "DELETE"), params("adm-b"))
     expect(res.status).toBe(404)
-    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer"] } })
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer", "super_admin"] } })
     expect(prismaMock.adminUser.delete).not.toHaveBeenCalled()
   })
 
@@ -1819,7 +1819,7 @@ describe("Milestones — cross-tenant isolation", () => {
       params("evt-a"),
     )
     expect(res.status).toBe(422)
-    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true, role: { in: ["admin", "organizer"] } } }))
+    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true, role: { in: ["admin", "organizer", "super_admin"] } } }))
     expect(create).not.toHaveBeenCalled()
   })
 
@@ -1836,7 +1836,7 @@ describe("Milestones — cross-tenant isolation", () => {
       { params: Promise.resolve({ id: "evt-a", milestoneId: "m-a" }) },
     )
     expect(res.status).toBe(422)
-    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true, role: { in: ["admin", "organizer"] } } }))
+    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true, role: { in: ["admin", "organizer", "super_admin"] } } }))
     expect(db.eventMilestone.update).not.toHaveBeenCalled()
     expect(prismaMock.adminUser.findUnique).not.toHaveBeenCalled()
   })
@@ -3069,7 +3069,7 @@ describe("Members, templates, team, password, invitation — cross-tenant isolat
     Object.assign(prismaMock.adminUser, { update })
     const res = await PATCH(makeRequest("/api/admin/settings/admins/adm-b", "PATCH", { role: "organizer" }), params("adm-b"))
     expect(res.status).toBe(404)
-    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer"] } })
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer", "super_admin"] } })
     expect(update).not.toHaveBeenCalled()
   })
 

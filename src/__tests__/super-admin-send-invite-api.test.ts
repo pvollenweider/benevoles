@@ -64,6 +64,6 @@ describe("POST /api/super-admin/organizations/[id]/send-invite", () => {
     sendNotificationMock.mockResolvedValue({ ok: true })
     const { POST } = await import("@/app/api/super-admin/organizations/[id]/send-invite/route")
     await POST(post(), { params: Promise.resolve({ id: "org-1" }) })
-    expect(orgFindUnique.mock.calls[0][0].select.admins.where).toEqual({ isActive: false, setupTokenHash: { not: null }, role: { in: ["admin", "organizer"] } })
+    expect(orgFindUnique.mock.calls[0][0].select.admins.where).toEqual({ isActive: false, setupTokenHash: { not: null }, role: { in: ["admin", "organizer", "super_admin"] } })
   })
 })

@@ -36,7 +36,7 @@ describe("queueAnswerChangeNotifications", () => {
 
   it("queues one item per active admin of the organisation, grouped per event and address, merged per volunteer", async () => {
     await queueAnswerChangeNotifications(input, now)
-    expect(adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org-1", isActive: true, role: { in: ["admin", "organizer"] } }, select: { email: true, name: true } })
+    expect(adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org-1", isActive: true, role: { in: ["admin", "organizer", "super_admin"] } }, select: { email: true, name: true } })
     expect(queueDigestItem).toHaveBeenCalledTimes(2)
     expect(queueDigestItem.mock.calls[0][0]).toMatchObject({
       kind: "answers_changed",
