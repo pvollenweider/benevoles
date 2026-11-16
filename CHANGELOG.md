@@ -53,6 +53,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Les tests unitaires vérifient aussi les phrases annoncées par un lecteur d'écran virtuel (une approximation, ni VoiceOver ni NVDA) (#739) ; la limite de créneaux d'un ajout manuel n'a plus qu'une définition, et `CONTRIBUTING.md` décrit les paramètres et limites par organisation et les trois axes de labels des issues (#653). <!-- interne -->
 - Dépendances : le webhook Gandi de cert-manager passe à OpenTelemetry 1.47.0 (deux alertes de sécurité) et se construit avec Go 1.26, image déployée le 14 novembre 2026 ; `basic-ftp`, dépendance indirecte de Lighthouse CI, passe à la 6.2.x (une alerte de sécurité) ; le build webpack des vidéos garde `isomorphic-dompurify` hors du bundle. <!-- interne -->
 - La route de l'index de recherche de la documentation n'exporte plus que son gestionnaire : le build webpack (celui des vidéos) refusait l'export de `buildDocIndexJson`, déplacé dans `src/lib/doc-index-json.ts` ; un test vérifie les exports de chaque fichier de route. <!-- interne -->
+- Le test de l'accès accueil prend la date du jour à Zurich : il échouait entre minuit et 1 h, heure de Zurich. <!-- interne -->
 
 ## [2.7.0] — 2026-11-10
 
