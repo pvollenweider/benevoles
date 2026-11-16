@@ -53,7 +53,7 @@ export async function checkShiftOverrides(
     where: { id: { in: [...shiftIds] } },
     select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true, capacity: true },
   })
-  // One count per shift: a manual add takes at most a person's programme (MAX_SHIFTS).
+  // One count per shift: a manual add takes at most a person's programme (MANUAL_ADD_MAX_SHIFTS).
   const occupiedOf = new Map<string, number>()
   for (const id of shiftIds) {
     occupiedOf.set(id, await tx.registration.count({

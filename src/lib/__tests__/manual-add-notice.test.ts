@@ -33,3 +33,17 @@ describe("manualAddNotice", () => {
     expect(manualAddNoticeLog({ send: false, reason: "past" })).toBe("non envoyé : créneau déjà commencé")
   })
 })
+
+describe("manual add limit (#653)", () => {
+  it("has one definition, imported by the two routes that apply it", async () => {
+    const { readFileSync } = await import("node:fs")
+    const { MANUAL_ADD_MAX_SHIFTS } = await import("../manual-add-notice")
+    expect(MANUAL_ADD_MAX_SHIFTS).toBe(30)
+    for (const route of ["src/app/api/admin/registrations/route.ts", "src/app/api/admin/events/[id]/availability/fit/route.ts"]) {
+      const source = readFileSync(route, "utf8")
+      expect(source).toContain("MANUAL_ADD_MAX_SHIFTS")
+      // No private copy of the number beside the import.
+      expect(source).not.toMatch(/const MAX_SHIFTS\s*=/)
+    }
+  })
+})

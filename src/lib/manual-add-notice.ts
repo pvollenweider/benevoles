@@ -45,3 +45,9 @@ export function manualAddNoticeLog(notice: ManualAddNotice): string {
     case "past": return "non envoyé : créneau déjà commencé"
   }
 }
+
+/**
+ * Shifts at most in one manual addition (#918): a person's whole programme, not a bulk import.
+ * One value for the form's submit and for the availability read that goes with it.
+ */
+export const MANUAL_ADD_MAX_SHIFTS = 30
