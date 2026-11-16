@@ -55,7 +55,7 @@ async function main() {
     if (mode === "serve-merge") Object.assign(env, { PORT: "43110", NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-questions") Object.assign(env, { PORT: "43112", NEXTAUTH_URL: "http://localhost:43112", VIDEO_BASE_URL: "http://localhost:43112", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-hours") Object.assign(env, { PORT: "43114", NEXTAUTH_URL: "http://localhost:43114", VIDEO_BASE_URL: "http://localhost:43114", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
-    if (mode === "serve-public") env.NEXTAUTH_URL = PUBLIC_APP_URL
+    if (mode === "serve-public" || mode === "serve-dayof") env.NEXTAUTH_URL = PUBLIC_APP_URL
     serving = { proof, port: Number(env.PORT) }
     commandArgs = [server]
   } else if (mode === "run" || mode === "run-delivery") {
@@ -85,6 +85,7 @@ async function main() {
     allowed.add("videos/tools/prepare-foundation.ts")
     allowed.add("videos/tools/prepare-first-steps.ts")
     allowed.add("videos/tools/prepare-demo.ts")
+    allowed.add("scripts/seed-video-front-desk.ts")
     allowed.add("videos/tools/verify-badges.ts")
     allowed.add("videos/tools/prepare-registration-mailbox.ts")
     allowed.add("videos/tools/verify-last-minute.ts")
@@ -109,7 +110,8 @@ async function main() {
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
       const commonTake = ["VOLUNTEER_BADGES", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "SHIFT_RECURRENCE", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_REGISTER", "VOLUNTEER_SESSION_AVAILABILITY", ...memberTakes].includes(rest[0])
       if (batch35Takes.includes(rest[0]) && !["45439", "45441"].includes(url.port)) throw new Error("Batch35 requires its dedicated database")
-      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : [...batch35Takes, "SHIFT_ROSTER_VISIBILITY", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
+      const validTake = rest[0] === "FRONT_DESK_ACCESS" || (mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : [...batch35Takes, "SHIFT_ROSTER_VISIBILITY", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0]))
+      if (rest[0] === "FRONT_DESK_ACCESS") Object.assign(env, { ORG_ADMIN_EMAIL: "video.frontdesk.owner@example.org", VIDEO_ORG: "formation-accueil", VIDEO_EVENT_SLUG: "fete-du-parc" })
       if (rest[0] === "SHIFT_ROSTER_VISIBILITY") Object.assign(env, { ORG_ADMIN_EMAIL: "video.roster.owner@example.org", VIDEO_ORG: "formation-roster", VIDEO_EVENT_SLUG: "fete-du-parc" })
       if (rest[0] === "ORG_FIRST_STEPS") Object.assign(env, { ORG_ADMIN_EMAIL: "video.firststeps.owner@example.org", VIDEO_ORG: "formation-premiers-pas" })
       if (rest[0] === "ADMIN_NAVIGATION") Object.assign(env, { ORG_ADMIN_EMAIL: "video.navigation.owner@example.org", VIDEO_ORG: "formation-navigation", VIDEO_EVENT_SLUG: "rencontre-0" })
@@ -134,6 +136,9 @@ async function main() {
       const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && ["--quick-rehearse", "--audio-timing"].includes(rest[2]))
       if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS" || rest[0] === "EVENT_REPORTS" || rest[0] === "EVENT_ACTIVITY_LOG" || rest[0] === "ATTENDANCE_CHECK_IN" || rest[0] === "MEMBERS_DUPLICATES_MERGE" || rest[0] === "EVENT_QUESTIONS" || rest[0] === "VOLUNTEER_HOURS_CERTIFICATE" || rest[0] === "DATA_EXPORTS_ARCHIVES" || rest[0] === "ORGANIZATION_ACTIVITY_LOG") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
       if (memberTakes.includes(rest[0])) Object.assign(env, { VIDEO_ORG: "default", VIDEO_EVENT_SLUG: rest[0] === "REMINDERS_CHANGES" ? "atelier-rappels" : "fete-du-village" })
+    } else if (script === "scripts/seed-video-front-desk.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length > 1 || rest.length === 1 && rest[0] !== "--reset-owned") throw new Error("Only the exact front-desk fixture reset accepted")
+      await verifyProductBuild("http://localhost:43102")
     } else if (script === "videos/tools/migrate-private-identities.ts") {
       if (mode !== "run" || url.port !== "45433" || rest.length !== 2 || !["delivery", "merge"].includes(rest[0]) || !["--check-only", "--apply-exact-owned"].includes(rest[1])) throw new Error("Only exact private identity migration or read-only preflight accepted")
       await verifyProductBuild(rest[0] === "delivery" ? "http://localhost:43106" : "http://localhost:43110")

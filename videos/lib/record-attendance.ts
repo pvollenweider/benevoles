@@ -105,7 +105,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
       if (await page.locator("tbody tr:visible").count() !== 2) throw new Error("Léa's two export rows missing")
       // The concluding sentence introduces this screen now, not only in the
       // following chapter. Show the genuine dedicated Jour J route in time.
-      if (base === "http://localhost:43108") {
+      if (base === "https://formation-jour-j.benevol.app") {
         await at("Voyons maintenant un écran plus")
         await page.setViewportSize({ width: 390, height: 844 })
         await go(`${base}/admin/events/video-dayof-event-live/day-of`)

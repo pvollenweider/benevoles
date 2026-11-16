@@ -48,8 +48,8 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
       evidence.push({ action, changedIds: changed, unchangedStatuses: true, nonSelectedUnchanged: true })
     }
     await scene("one", async at => {
-      await go(); await at(0.15) /* mid-sentence */; await select(0)
-      await at("La marque apparaît sur son inscription"); await apply([find(0).id], true)
+      await go(); await at("Sélectionnons uniquement sa ligne"); await select(0)
+      await at(0.31) /* mid-sentence: mark at the end of the instruction, before the result sentence */; await apply([find(0).id], true)
       const aline = page.getByRole("row").filter({ hasText: "video.attendance.0@example.org" })
       await aline.scrollIntoViewIfNeeded()
       await at("Rechargeons la page"); await page.reload(); await settle(page)
@@ -65,6 +65,7 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
     })
     await scene("correction", async at => {
       await go(); await at("Sélectionnons sa ligne et annulons"); await select(2)
+      await page.waitForTimeout(600) // Hold the actual selected row/action bar before confirming the correction.
       await at("Sélectionnons sa ligne et annulons"); await apply([find(2).id], false)
       // The real manager clears its selection after every presence action.
       await at("Quand la bonne personne arrive"); await go(); await select(2); await apply([find(2).id], true)

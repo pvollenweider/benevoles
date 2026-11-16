@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons le pointage. Colette voit les créneaux, le nom et le",
+  "windowStart": 50.782,
+  "result": {
+    "found": true,
+    "startSeconds": 15.15,
+    "wordsHeard": "Ouvrons"
+  },
+  "onset": 65.932,
+  "proposedCut": 65.7825,
+  "note": "Proposal only; recut then independently audit before capture"
+}

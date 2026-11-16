@@ -33,7 +33,7 @@ export type DayOfRecordingOptions = {
 export async function recordDayOf(options: DayOfRecordingOptions) {
   const { page, base, fixture: f, scene, settle, tap, typeNaturally, evidence } = options
   validateDayOfFixture(f)
-  assert.equal(base, "http://localhost:43108", "Dedicated verified local Jour J product server required")
+  assert.equal(base, "https://formation-jour-j.benevol.app", "Dedicated Jour J host through the verified local gateway required")
   assert(/^[a-f0-9]{40}$/.test(options.productCommit), "Caller must verify current clean product provenance")
   const original = await options.verifyFixture()
   assert(original.eventId === f.eventId && original.registrationId === f.registrationId && original.email === f.volunteerEmail && original.status === "active" && original.checkedInAt === null && original.syntheticOnly && original.timeCasesPreparedForActualServerNow, "Actual owned active fixture and real server-time cases required before mutation")
@@ -78,7 +78,10 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
     await go()
     await scene("dayof-search", async at => {
       await typeNaturally(page, search(), f.accentSearch)
-      await page.getByText(f.expectedAccentName, { exact: true }).first().waitFor()
+      const found = page.getByText(f.expectedAccentName, { exact: true }).first()
+      await found.waitFor(); await found.scrollIntoViewIfNeeded()
+      const foundBox = await found.boundingBox()
+      assert(foundBox && foundBox.y >= 0 && foundBox.y + foundBox.height <= page.viewportSize()!.height, "The actual matching volunteer must be inside the recorded viewport")
       await at("Vous pouvez aussi chercher un poste"); await replaceSearch(f.roleSearch)
       await page.locator('[id^="dayof-shift-"]').filter({ hasText: f.roleSearch }).first().waitFor({ state: "visible" })
       await at("Effaçons la recherche pour retrouver"); await replaceSearch("")

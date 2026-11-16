@@ -1,0 +1,12 @@
+{
+  "anchor": "L'accès se termine après l'événement, à la fin de son dernier",
+  "windowStart": 87.053,
+  "result": {
+    "found": true,
+    "startSeconds": 14.88,
+    "wordsHeard": "L'accès se termine après l'événement"
+  },
+  "onset": 101.93299999999999,
+  "proposedCut": 102.053458,
+  "note": "Proposal only; recut then independently audit before capture"
+}

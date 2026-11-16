@@ -1256,3 +1256,17 @@ Le build neuf du main épinglé `f9fcec47d32af10b0837b2de87beb61535d30888` véri
 Les sources du pointage sont préparées pour les quatre états, leurs annulations, les deux colonnes de l'export et l'exclusion des départs anticipés des heures attestées. La narration continue complète a été générée ; son audit indépendant signale douze frontières de chapitres à revoir. Ni le découpage ni une capture ne sont validés. Tous les écarts restent ouverts : aucun n'est marqué résolu sans nouveau film contrôlé.
 
 Catalogue, dates, révisions, `renders.json`, guides et captures inchangés. [Rapport, inventaire NOT DONE et contrôles](evidence/batch41/review-report.md), [journal de l'échec du build](evidence/batch41/build-main-failure.log). Aucune annonce de livraison au CHANGELOG. Aucun push, merge ni message ntfy.
+
+
+### Lot 41 — reprise après #1381, 16 novembre 2026 (en cours)
+
+Le blocage du premier build est résolu par main : `e8ed666a48294d77213f8bf64fe35898314b0ed9` (#1381) déplace le helper hors de la route. Rebase sans conflit, contenu du commit `5c659750` conservé sous `f7f6fa5a`. Un seul nouveau build propre, 2 440 entrées vérifiées, BUILD_ID `HO6mRRAZuOevekAmdhN_C` ; [preuve](evidence/batch41/product-build-resume.json) et [journal](evidence/batch41/build-main-resume.log). Le premier échec ci-dessus reste historique. Aucun fichier produit modifié.
+
+Les douze frontières signalées du pointage sont corrigées sur les silences mesurés du même master ; les quinze chapitres passent leur nouvel audit indépendant. La répétition publique locale complète réussit. Le rôle propriétaire de la fixture est corrigé en `admin` (rôle produit), et les écritures passent par la passerelle publique locale vérifiée ; la compilation et ses protections restent intactes. La prise et les revues finales sont en cours : aucun nouvel écart déclaré résolu, aucune publication à ce stade.
+
+
+### FRONT_DESK_ACCESS — nouvelle vidéo du lot 41, 16 novembre 2026
+
+**READY et publiée**, révision 1, 170,160 s, main `e8ed666a`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Une prise narrée après répétition ; huit chapitres AV / 30 points sans signalement, huit ASR source et finales réussies. Le master Kore est une génération entière, frontières corrigées sur les silences ; sa revue signale une variation naturelle d'intonation tout en concluant explicitement à une seule voix constante (rapport initial et résolution conservés).
+
+Invitation, véritable email et activation, connexion accueil, pointage et révocation vérifiés ; aucune expiration simulée. Corps réel de l'email cadré x320/y312/960×488, sans écran technique. Musique 14,8–19,5 LU, minimum seule −34,1 LUFS, aucun trou ; 19 clics réels sonorisés. ASR multilingue complète et VTT : zéro tutoiement du spectateur. Description 108 octets. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. Lien du guide et de FEATURES ajouté. [Rapport et preuves](evidence/batch41/front-desk-access/review-report.txt). Aucun défaut produit constaté ; aucune écoute subjective humaine revendiquée.

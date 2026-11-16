@@ -1,0 +1,12 @@
+{
+  "anchor": "Colette reçoit cet email d'invitation. Il nomme l'organisation et l'événement concernés.",
+  "windowStart": 11.908000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 23.3,
+    "wordsHeard": "Colette reçoit cet email d'invitation. Il nomme l'organisation et l'événement concernés."
+  },
+  "onset": 35.208,
+  "proposedCut": 35.180375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

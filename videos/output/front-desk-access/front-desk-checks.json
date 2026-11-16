@@ -1,0 +1,31 @@
+{
+  "syntheticOnly": true,
+  "audiovisualValidated": false,
+  "realCron": {
+    "scheduled": {
+      "sent": 0,
+      "skipped": 0,
+      "failed": 0
+    },
+    "outbox": {
+      "sent": 0,
+      "retried": 0,
+      "failed": 0,
+      "cancelled": 0,
+      "held": 0,
+      "autoApproval": {
+        "candidates": 0,
+        "approved": 0,
+        "skipped": 0,
+        "failed": 0,
+        "cutOff": 0,
+        "expired": 0
+      }
+    }
+  },
+  "invitationQueuedByProduct": true,
+  "realAttendancePersisted": true,
+  "revocationRefusedPointage": true,
+  "checkedAt": "2026-11-16T19:31:27.852Z",
+  "realMailId": "2gu2BFbMk0FTGIGESCd3iG"
+}

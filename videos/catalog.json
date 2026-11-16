@@ -1250,6 +1250,31 @@
       "level": "essentiel"
     },
     {
+      "id": "FRONT_DESK_ACCESS",
+      "manifest": "front-desk-access",
+      "category": "registrations-followup",
+      "tags": [
+        "accueil",
+        "jour-j",
+        "présences",
+        "accès"
+      ],
+      "published": true,
+      "seedScenario": "front-desk-access",
+      "themes": [
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Accès accueil limité à un événement",
+      "updatedAt": "2026-11-16",
+      "revision": 1,
+      "level": "essentiel",
+      "updated": "2026-11-16",
+      "added": "2026-11-16"
+    },
+    {
       "id": "EVENT_REPORTS",
       "manifest": "event-reports",
       "category": "registrations-followup",

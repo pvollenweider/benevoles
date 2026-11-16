@@ -42,11 +42,11 @@ async function main() {
       if (existing) {
         await tx.event.deleteMany({ where: { organizationId: orgId, id: { in: [eventId, liveId] } } })
         // Bases seeded before the surname cast keep their rows; only the display name moves.
-        await tx.adminUser.update({ where: { id: `${orgId}-owner` }, data: { name: fullNameOf("Élodie"), role: "owner" } })
+        await tx.adminUser.update({ where: { id: `${orgId}-owner` }, data: { name: fullNameOf("Élodie"), role: "admin" } })
       }
       else {
         await tx.organization.create({ data: { id: orgId, slug: "formation-jour-j", name: "Formation — accueil et jour J", timeZone: "Europe/Zurich", active: true, replyToEmail: "video.dayof.owner@example.org" } })
-        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.dayof.owner@example.org", name: fullNameOf("Élodie"), passwordHash: source.passwordHash, role: "owner", isActive: true } })
+        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.dayof.owner@example.org", name: fullNameOf("Élodie"), passwordHash: source.passwordHash, role: "admin", isActive: true } })
       }
       const firstNames = ["Aline", "Nicolas", "Léa", "Noah", "Sarah", "Lucas", "Camille", "Zoé"]
       for (const [index, firstName] of firstNames.entries()) await tx.volunteer.upsert({ where: { id: `video-dayof-attendance-person-${index}` }, create: { id: `video-dayof-attendance-person-${index}`, organizationId: orgId, firstName, lastName: surnameOf(firstName), email: `video.attendance.${index}@example.org`, phone: index === 7 ? "079 000 00 01" : null }, update: { lastName: surnameOf(firstName) } })

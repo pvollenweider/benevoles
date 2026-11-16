@@ -1,0 +1,12 @@
+{
+  "anchor": "Avec le compte propriétaire, ouvrons la page Jour J. En bas,",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 13.4,
+    "wordsHeard": "Avec"
+  },
+  "onset": 13.4,
+  "proposedCut": 13.427125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

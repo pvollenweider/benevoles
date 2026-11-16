@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:33:21.004Z",
+  "videoSha256": "e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385",
+  "promptSha256": "02cbe6964da060aac82494f60c94b147120946b64553a5e792465ae1e997bbd6",
+  "clipSha256": "8766dd7765ddbefb6cff4fc42cf794a35d75870c15fd1378a139a7735a4ebc0a",
+  "scene": "scope",
+  "review": {
+    "heardOpening": "Ouvrons le pointage.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons le pointage.",
+        "visibleSeconds": 1,
+        "visible": "Clic sur le bouton et affichage de la page de pointage « Fête du parc — accueil ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Colette voit les créneaux, le nom et le téléphone des bénévoles attendus.",
+        "visibleSeconds": 2,
+        "visible": "Affichage du créneau horaire, des noms des bénévoles attendus et de leurs numéros de téléphone.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Elle n'a accès ni aux membres, ni aux autres événements, ni aux paramètres.",
+        "visibleSeconds": 10.5,
+        "visible": "L'interface restreinte ne propose aucun menu de navigation vers les membres, les événements ou les paramètres.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

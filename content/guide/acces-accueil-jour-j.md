@@ -14,6 +14,8 @@ aliases: []
 >
 > Sacha, président d'un comité des fêtes
 
+<!-- video: FRONT_DESK_ACCESS -->
+
 Un **accès accueil** donne à une personne extérieure à votre équipe le droit de marquer les présences sur la page Jour J d'un seul événement. Elle n'a pas de compte organisateur : elle ne voit ni les autres événements, ni les membres, ni les réglages de l'organisation.
 
 ## Ce que l'accès permet

@@ -33,7 +33,7 @@ export async function recordReminders(options: { page: Page; base: string; event
     // not the first textual match, before allowing the capture to continue.
     await page.frameLocator("iframe").getByText(expected[0], { exact: false }).filter({ visible: true }).first().waitFor()
   }
-  const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 95 }) }
+  const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); if (await field.getAttribute("type") === "time") { await field.fill(value); if (await field.inputValue() !== value) throw new Error("Native time not filled exactly") } else await field.pressSequentially(value, { delay: 95 }) }
   const checks: Record<string, unknown> = { audiovisualValidation: false, pushReceptionVerified: false, perEventToggleAvailableInForm: true }
   try {
     const event = await db.event.findUniqueOrThrow({ where: { id: eventId }, include: { registrations: { include: { shift: true, volunteer: true } } } })
@@ -113,6 +113,34 @@ export async function recordReminders(options: { page: Page; base: string; event
       checks.perEventSavedOffThenOn = true
       await at("Regardons maintenant notre événement en brouillon"); await go(`${base}/admin/events/${draft.id}`)
       await page.getByRole("heading", { name: "Atelier en brouillon", exact: true }).waitFor()
+    })
+    await scene("event-delays", async at => {
+      await go(`${eventUrl}/message`)
+      const form = page.getByRole("form", { name: "Délais des rappels automatiques", exact: true })
+      await at("Dans Messages, section Rappels")
+      await tap(page, form.getByRole("radio", { name: "Délais propres à cet événement", exact: true }))
+      await at("Préparons un rappel trois jours avant")
+      const first = form.getByRole("group", { name: "Rappel 1", exact: true })
+      await write(first.getByLabel("Délai", { exact: true }), "3")
+      await tap(page, first.getByLabel("Unité", { exact: true })); await first.getByLabel("Unité", { exact: true }).selectOption("days")
+      await tap(page, form.getByRole("button", { name: "Ajouter un rappel", exact: true }))
+      const second = form.getByRole("group", { name: "Rappel 2", exact: true })
+      await write(second.getByLabel("Délai", { exact: true }), "2")
+      await tap(page, second.getByLabel("Unité", { exact: true })); await second.getByLabel("Unité", { exact: true }).selectOption("hours")
+      const saveRules = async () => {
+        const pending = page.waitForResponse(r => r.url().endsWith(`/events/${eventId}/reminder-rules`) && r.request().method() === "PUT")
+        await tap(page, form.getByRole("button", { name: "Enregistrer les rappels", exact: true }))
+        if (!(await pending).ok()) throw new Error("Event reminder delays not persisted")
+      }
+      await saveRules()
+      await at("La ligne Prochain envoi indique")
+      await page.getByRole("heading", { name: "Prochain envoi", exact: true }).scrollIntoViewIfNeeded()
+      const rules = await db.eventReminderRule.findMany({ where: { eventId, archivedAt: null } })
+      if (rules.length !== 2 || !rules.some(r => r.unit === "days" && r.value === 3) || !rules.some(r => r.unit === "hours" && r.value === 2)) throw new Error("Custom reminder rules differ from the example")
+      await at("Revenons aux délais habituels et enregistrons")
+      await tap(page, form.getByRole("radio", { name: /^Délais habituels/ })); await saveRules()
+      if (await db.eventReminderRule.count({ where: { eventId, archivedAt: null } })) throw new Error("Habitual reminder delays not restored")
+      checks.eventDelays = { threeDaysAndTwoHoursSaved: true, previewShown: true, restoredHabitual: true }
     })
     await scene("timing", async at => {
       await go(`${base}/admin/settings/notifications`)

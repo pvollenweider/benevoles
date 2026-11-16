@@ -1,13 +1,2 @@
 STATUS: NOT READY
-ID: ATTENDANCE_CHECK_IN
-Batch: 41, 2026-11-16
-Duration: no new MP4
-BUILD_ID: none verified
-Commit filmed: none; requested product commit f9fcec47d32af10b0837b2de87beb61535d30888
-Music gaps: not measured (no new MP4)
-Tu count: 0 in source narration; final ASR/VTT not available
-Published: no
-Problems: clean main product build fails Next.js route-export type validation (buildDocIndexJson). New full Kore master generated; independent ASR flags 12 chapter boundaries, so narration is not validated. Existing 14-cue timeline is historical and does not match the 15 current segments. No rehearsal or narrated take. Previous READY report does not certify batch 41; its historical copy is retained in previous-batch41-before-narration/.
-Source changes: manifest narration, viewer, one absence-departure segment, script, registration/Jour J recorders, owner fixture. Not product-tested; rehearse after an authorized working main build.
-Checks: 1334 video tests, 220-tool typecheck, checkout tsc and touched-file eslint pass. video:validate fails (14 historical cues, 15 current segments).
-Full evidence: videos/evidence/batch41/review-report.md
+Batch 41 resume: take 1 rejected for the matching volunteer remaining below the search viewport. Corrected rehearsal passed; second and last narrated take in progress. No updated attendance video published. First-take reports and archival incident preserved in previous-batch41-take1-not-ready and videos/evidence/batch41/attendance-check-in/archive-incident.json.

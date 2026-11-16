@@ -1,0 +1,12 @@
+{
+  "anchor": "Colette choisit son mot de passe, le confirme et l'enregistre. Son",
+  "windowStart": 31.472,
+  "result": {
+    "found": true,
+    "startSeconds": 20.14,
+    "wordsHeard": "Colette"
+  },
+  "onset": 51.612,
+  "proposedCut": 51.694,
+  "note": "Proposal only; recut then independently audit before capture"
+}

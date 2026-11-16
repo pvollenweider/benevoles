@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:32:48.110Z",
+  "videoSha256": "e0d364d7332635ef9e8cef20b32acccfbd715cdfea05984beed1b523e947b385",
+  "promptSha256": "079c7754a404cc9d32f61477a1b4686b0a5117d757210b682e4ca03375470c8c",
+  "clipSha256": "c64e7a7285cccf76dcba9959d2b45a21828554a241d386c93b7d520281209bad",
+  "scene": "invite",
+  "review": {
+    "heardOpening": "Avec le compte propriétaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "ouvrons la page Jour J",
+        "visibleSeconds": 0,
+        "visible": "L'onglet Jour J est déjà sélectionné et affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "En bas, ouvrons la gestion des accès accueil",
+        "visibleSeconds": 4,
+        "visible": "Défilement vers le bas et clic sur « Gérer les accès accueil de cet événement »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Indiquons Colette Jensen et son adresse email",
+        "visibleSeconds": 9,
+        "visible": "Saisie de « Colette Jensen » et de l'adresse email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "puis choisissons Inviter",
+        "visibleSeconds": 10,
+        "visible": "Clic sur le bouton « Inviter »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "La liste affiche Invitation envoyée et la date de fin",
+        "visibleSeconds": 14.5,
+        "visible": "Affichage de la mention « Invitation envoyée » et de la date « Jusqu'au 17 novembre 2026 inclus » sous le nom de Colette Jensen",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

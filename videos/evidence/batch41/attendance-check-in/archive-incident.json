@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-16T19:35:08.686198+00:00",
+  "action": "Second quick rehearsal started before archiving take 1 raw capture",
+  "effect": "record.ts startup removed capture.webm; first raw is no longer available",
+  "preserved": [
+    "first-take MP4s",
+    "chapter AV clips and reports",
+    "timeline",
+    "narration master and chapters",
+    "independent ASR",
+    "selected frame evidence"
+  ],
+  "correction": "Archive all current artifacts before the narrated second take; no third narrated take and no fabricated replacement raw."
+}

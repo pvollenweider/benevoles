@@ -1,0 +1,7 @@
+{
+  "review": "whole-voice-review.json",
+  "masterSha256": "effe68ee98cfd38ee51c72313f269ebcae233c521de920c6ca7111669539d226",
+  "resolution": "The report explicitly finds one speaker and a constant voice identity. Its sole change describes a slight natural variation of rhythm and smiling intonation, not another speaker; the wording about a new take is a model inference contradicted by the one-generation master provenance. Preserve the original report; final film AV review remains required.",
+  "consistentVoiceReported": true,
+  "speakersReported": 1
+}

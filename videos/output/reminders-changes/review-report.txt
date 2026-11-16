@@ -1,8 +1,2 @@
-STATUS: READY
-REMINDERS_CHANGES — batch 23-2 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 252.08 s; music 15.4–19.2 LU below voice. Music-only floor and real click/key effects validated.
-Whole narration reused after text/hash and independent audit verification.
-Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
-Allowed cue retake passes: changed start and end edited on their measured sentence, real email shows old/new hours. All nine audiovisual chapters, five chapter sheets and two anchor sheets reviewed. Exact off/on frames and real click/autosave checks disprove both automated toggle flags. Quotes ton horaire/ton aide exactly match volunteer message; no informal viewer address or stray words in either full final ASR.
-No product edit, commit, push or publication in batch 23-2. Real-time subjective listening unavailable as permitted.
+STATUS: NOT READY
+Batch 41: sources updated for event-specific reminder delays. New complete narration generated; chapter boundaries require correction and independent re-audit. Rehearsal in progress. No narrated take, no publication.

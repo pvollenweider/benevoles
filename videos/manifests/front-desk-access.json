@@ -1,0 +1,81 @@
+{
+  "id": "FRONT_DESK_ACCESS",
+  "slug": "front-desk-access",
+  "title": "Donner un accès accueil pour le jour J",
+  "description": "Inviter une personne à pointer les présences d'un événement, activer son compte et révoquer son accès.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep one consistent voice throughout.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "invite": "Inviter une personne",
+    "email": "Le véritable email d’invitation",
+    "activate": "Activer puis se connecter",
+    "scope": "Seulement le pointage de cet événement",
+    "marks": "Noter une arrivée ou une absence",
+    "end": "Un accès qui se termine",
+    "revoke": "Révoquer immédiatement"
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Le jour de la fête, Colette tient l'entrée. Vous pouvez lui donner un accès accueil, sans l'ajouter aux organisateurs. Elle pourra suivre et marquer les présences d'un seul événement. Vous gardez la main sur cet accès.",
+      "fallbackDurationMs": 14400
+    },
+    {
+      "id": "invite",
+      "transcript": "Avec le compte propriétaire, ouvrons la page Jour J. En bas, ouvrons la gestion des accès accueil. Indiquons Colette Jensen et son adresse email, puis choisissons Inviter. La liste affiche Invitation envoyée et la date de fin. Cette personne reste extérieure à votre équipe d'organisation.",
+      "fallbackDurationMs": 18000
+    },
+    {
+      "id": "email",
+      "transcript": "Colette reçoit cet email d'invitation. Il nomme l'organisation et l'événement concernés. Son lien d'activation est valable sept jours. Ouvrons ce lien pour activer son compte. Gardez cet email pour la personne invitée, sans transférer son lien à quelqu'un d'autre.",
+      "fallbackDurationMs": 15600
+    },
+    {
+      "id": "activate",
+      "transcript": "Colette choisit son mot de passe, le confirme et l'enregistre. Son compte est maintenant actif. Connectons-nous avec son adresse et ce mot de passe. La page Accès accueil donne le lien Ouvrir le pointage pour cet événement.",
+      "fallbackDurationMs": 14800
+    },
+    {
+      "id": "scope",
+      "transcript": "Ouvrons le pointage. Colette voit les créneaux, le nom et le téléphone des bénévoles attendus. Elle ne voit ni leurs emails, ni les réponses aux questions, ni les notes. Elle n'a accès ni aux membres, ni aux autres événements, ni aux paramètres. Ajouter un besoin est réservé aux organisateurs.",
+      "fallbackDurationMs": 19600
+    },
+    {
+      "id": "marks",
+      "transcript": "Marquons l'arrivée de Zoé. Son état devient Présent. Colette peut aussi noter une absence, jamais déduite automatiquement, ou un départ avant la fin. Marquons ce départ. Annuler le départ retrouve la présence. Ces marques sont les mêmes que celles des organisateurs sur Jour J.",
+      "fallbackDurationMs": 17600
+    },
+    {
+      "id": "end",
+      "transcript": "L'accès se termine après l'événement, à la fin de son dernier jour dans le fuseau de l'organisation. Un créneau de nuit peut le prolonger jusqu'à six heures le lendemain. Le compte sera effacé quatre-vingt-dix jours après la fin de son dernier accès. Pour un prochain événement, invitez la personne de nouveau.",
+      "fallbackDurationMs": 20400
+    },
+    {
+      "id": "revoke",
+      "transcript": "Revenons au compte propriétaire. Sur la ligne de Colette, choisissons Révoquer et confirmons. L'accès est fermé tout de suite. Revenons au compte de Colette et ouvrons le pointage. Sa page Accès accueil indique qu'elle n'a plus d'accès en cours. Vous pouvez ainsi confier l'accueil sans ouvrir le reste de votre espace.",
+      "fallbackDurationMs": 20000
+    }
+  ],
+  "viewer": {
+    "summary": "Un propriétaire invite une personne extérieure à l'équipe à pointer les présences d'un seul événement, puis révoque cet accès.",
+    "steps": [
+      "Ouvrez Jour J, puis la gestion des accès accueil en bas de page.",
+      "Indiquez le nom et l'email, puis choisissez Inviter.",
+      "La personne active son compte depuis le véritable email et ouvre le pointage.",
+      "Pour fermer l'accès immédiatement, choisissez Révoquer et confirmez."
+    ],
+    "remember": [
+      "Seuls les propriétaires gèrent les accès accueil.",
+      "La personne voit les noms et téléphones des bénévoles attendus et marque les présences, absences et départs anticipés.",
+      "L'accès se termine après l'événement ; le compte est effacé 90 jours après son dernier accès."
+    ]
+  }
+}

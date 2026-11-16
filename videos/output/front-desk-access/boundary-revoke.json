@@ -1,0 +1,12 @@
+{
+  "anchor": "Revenons au compte propriétaire. Sur la ligne de Colette, choisissons Révoquer",
+  "windowStart": 110.44,
+  "result": {
+    "found": true,
+    "startSeconds": 8.88,
+    "wordsHeard": "Revenons au compte propriétaire. Sur la ligne de Colette, choisissons Révoquer"
+  },
+  "onset": 119.32,
+  "proposedCut": 119.1163335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

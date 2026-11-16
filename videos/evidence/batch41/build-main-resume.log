@@ -1,0 +1,333 @@
+Verified 2440 product inputs against main e8ed666a48294d77213f8bf64fe35898314b0ed9; building locally
+▲ Next.js 16.4.5 (webpack)
+✓ Running next.config.ts took 188ms
+- Experiments (use with caution):
+  · clientTraceMetadata
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 39.4s
+  Running TypeScript ...
+  Finished TypeScript in 24.0s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/165) ...
+  Generating static pages using 9 workers (41/165) 
+  Generating static pages using 9 workers (82/165) 
+  Generating static pages using 9 workers (123/165) 
+✓ Generating static pages using 9 workers (165/165) in 1780ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[eventSlug]
+├ ƒ /[eventSlug]/[pageSlug]
+├ ƒ /[eventSlug]/success
+├ ƒ /accessibilite
+├ ƒ /admin
+├ ƒ /admin/accept-invite
+├ ƒ /admin/account
+├ ƒ /admin/dashboard
+├ ƒ /admin/events
+├ ƒ /admin/events/[id]
+├ ƒ /admin/events/[id]/availability
+├ ƒ /admin/events/[id]/availability/assign
+├ ƒ /admin/events/[id]/availability/drafts
+├ ƒ /admin/events/[id]/availability/proposal
+├ ƒ /admin/events/[id]/day-of
+├ ƒ /admin/events/[id]/duplicate
+├ ƒ /admin/events/[id]/edit
+├ ƒ /admin/events/[id]/invitations
+├ ƒ /admin/events/[id]/log
+├ ƒ /admin/events/[id]/message
+├ ƒ /admin/events/[id]/pages
+├ ƒ /admin/events/[id]/preview
+├ ƒ /admin/events/[id]/print
+├ ƒ /admin/events/[id]/qr
+├ ƒ /admin/events/[id]/questions
+├ ƒ /admin/events/[id]/registrations
+├ ƒ /admin/events/[id]/review
+├ ƒ /admin/events/[id]/sector-leaders
+├ ƒ /admin/events/[id]/share
+├ ƒ /admin/events/[id]/shifts
+├ ƒ /admin/events/[id]/staffing
+├ ƒ /admin/events/[id]/staffing/search
+├ ƒ /admin/events/new
+├ ƒ /admin/forgot-password
+├ ƒ /admin/front-desk
+├ ƒ /admin/front-desk/events/[id]
+├ ƒ /admin/keep
+├ ƒ /admin/login
+├ ƒ /admin/members
+├ ƒ /admin/members/[id]
+├ ƒ /admin/members/[id]/certificate
+├ ƒ /admin/members/[id]/merge
+├ ƒ /admin/members/duplicates
+├ ƒ /admin/reactivate
+├ ƒ /admin/reactivate/confirm
+├ ƒ /admin/reset-password
+├ ƒ /admin/search
+├ ƒ /admin/settings/activity
+├ ƒ /admin/settings/admins
+├ ƒ /admin/settings/message-templates
+├ ƒ /admin/settings/notifications
+├ ƒ /admin/two-factor
+├ ƒ /api/admin/accept-invite
+├ ƒ /api/admin/events
+├ ƒ /api/admin/events/[id]
+├ ƒ /api/admin/events/[id]/availability
+├ ƒ /api/admin/events/[id]/availability/[volunteerId]
+├ ƒ /api/admin/events/[id]/availability/[volunteerId]/review
+├ ƒ /api/admin/events/[id]/availability/fit
+├ ƒ /api/admin/events/[id]/availability/mode
+├ ƒ /api/admin/events/[id]/availability/remind
+├ ƒ /api/admin/events/[id]/day-of
+├ ƒ /api/admin/events/[id]/drafts
+├ ƒ /api/admin/events/[id]/drafts/[draftId]
+├ ƒ /api/admin/events/[id]/drafts/[draftId]/lock
+├ ƒ /api/admin/events/[id]/drafts/options
+├ ƒ /api/admin/events/[id]/drafts/publish
+├ ƒ /api/admin/events/[id]/duplicate
+├ ƒ /api/admin/events/[id]/export/answers
+├ ƒ /api/admin/events/[id]/export/archive
+├ ƒ /api/admin/events/[id]/export/attendance
+├ ƒ /api/admin/events/[id]/export/badges
+├ ƒ /api/admin/events/[id]/export/pdf
+├ ƒ /api/admin/events/[id]/export/sheets/[view]
+├ ƒ /api/admin/events/[id]/front-desk-access
+├ ƒ /api/admin/events/[id]/front-desk-access/[accessId]
+├ ƒ /api/admin/events/[id]/front-desk-access/[accessId]/resend
+├ ƒ /api/admin/events/[id]/group-links
+├ ƒ /api/admin/events/[id]/group-links/[linkId]
+├ ƒ /api/admin/events/[id]/invitations
+├ ƒ /api/admin/events/[id]/invitations/remind
+├ ƒ /api/admin/events/[id]/invitations/test-email
+├ ƒ /api/admin/events/[id]/log
+├ ƒ /api/admin/events/[id]/log/baseline
+├ ƒ /api/admin/events/[id]/log/candidates
+├ ƒ /api/admin/events/[id]/message
+├ ƒ /api/admin/events/[id]/messages/[messageId]/resend-failed
+├ ƒ /api/admin/events/[id]/milestones
+├ ƒ /api/admin/events/[id]/milestones/[milestoneId]
+├ ƒ /api/admin/events/[id]/open-shifts
+├ ƒ /api/admin/events/[id]/pages
+├ ƒ /api/admin/events/[id]/pages/[pageId]
+├ ƒ /api/admin/events/[id]/pages/reorder
+├ ƒ /api/admin/events/[id]/places
+├ ƒ /api/admin/events/[id]/places/[placeId]
+├ ƒ /api/admin/events/[id]/preview
+├ ƒ /api/admin/events/[id]/proposal-targets
+├ ƒ /api/admin/events/[id]/proposals
+├ ƒ /api/admin/events/[id]/proposals/[runId]
+├ ƒ /api/admin/events/[id]/proposals/[runId]/cancel
+├ ƒ /api/admin/events/[id]/proposals/[runId]/write
+├ ƒ /api/admin/events/[id]/publication-request
+├ ƒ /api/admin/events/[id]/qr
+├ ƒ /api/admin/events/[id]/questions
+├ ƒ /api/admin/events/[id]/questions/[questionId]
+├ ƒ /api/admin/events/[id]/questions/reorder
+├ ƒ /api/admin/events/[id]/registrations/bulk
+├ ƒ /api/admin/events/[id]/reminder-rules
+├ ƒ /api/admin/events/[id]/reorder-roles
+├ ƒ /api/admin/events/[id]/roles/[roleName]
+├ ƒ /api/admin/events/[id]/scheduled-messages
+├ ƒ /api/admin/events/[id]/scheduled-messages/[scheduledId]/cancel
+├ ƒ /api/admin/events/[id]/sector-leaders
+├ ƒ /api/admin/events/[id]/sector-leaders/[leaderId]
+├ ƒ /api/admin/events/[id]/sectors
+├ ƒ /api/admin/events/[id]/sectors/[sectorId]
+├ ƒ /api/admin/events/[id]/sectors/mode
+├ ƒ /api/admin/events/[id]/sectors/reorder
+├ ƒ /api/admin/events/[id]/send-reminder
+├ ƒ /api/admin/events/[id]/swaps
+├ ƒ /api/admin/events/[id]/swaps/[requestId]
+├ ƒ /api/admin/events/[id]/swaps/mode
+├ ƒ /api/admin/events/[id]/workload-limits
+├ ƒ /api/admin/events/[id]/workload-limits/[volunteerId]
+├ ƒ /api/admin/events/[id]/workload-policy
+├ ƒ /api/admin/events/[id]/workload-policy/preview
+├ ƒ /api/admin/events/from-template
+├ ƒ /api/admin/members
+├ ƒ /api/admin/members/[id]
+├ ƒ /api/admin/members/[id]/certificate
+├ ƒ /api/admin/members/[id]/delete
+├ ƒ /api/admin/members/[id]/erase
+├ ƒ /api/admin/members/[id]/merge
+├ ƒ /api/admin/members/[id]/merge-preview
+├ ƒ /api/admin/members/bulk-deactivate
+├ ƒ /api/admin/members/bulk-delete
+├ ƒ /api/admin/members/duplicates/dismiss
+├ ƒ /api/admin/members/export
+├ ƒ /api/admin/members/export-hours
+├ ƒ /api/admin/members/import
+├ ƒ /api/admin/members/import/preview
+├ ƒ /api/admin/registrations
+├ ƒ /api/admin/registrations/[id]
+├ ƒ /api/admin/registrations/[id]/decision
+├ ƒ /api/admin/registrations/[id]/resend-link
+├ ƒ /api/admin/registrations/[id]/restore
+├ ƒ /api/admin/settings/activity
+├ ƒ /api/admin/settings/activity/export
+├ ƒ /api/admin/settings/admins
+├ ƒ /api/admin/settings/admins/[id]
+├ ƒ /api/admin/settings/message-templates
+├ ƒ /api/admin/settings/message-templates/[id]
+├ ƒ /api/admin/settings/notifications
+├ ƒ /api/admin/settings/notifications/[id]/retry
+├ ƒ /api/admin/settings/notifications/test
+├ ƒ /api/admin/settings/organization
+├ ƒ /api/admin/settings/organization/beta
+├ ƒ /api/admin/settings/organization/logo
+├ ƒ /api/admin/settings/organization/slugs
+├ ƒ /api/admin/settings/password
+├ ƒ /api/admin/shifts
+├ ƒ /api/admin/shifts/[id]
+├ ƒ /api/admin/shifts/[id]/duplicate
+├ ƒ /api/admin/shifts/recurrence
+├ ƒ /api/admin/shifts/recurrence/[id]/change
+├ ƒ /api/admin/shifts/recurrence/[id]/stop
+├ ƒ /api/admin/shifts/series
+├ ƒ /api/admin/two-factor
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/cron/cleanup
+├ ƒ /api/cron/heartbeat
+├ ƒ /api/cron/outbox
+├ ƒ /api/cron/release-check
+├ ƒ /api/cron/reminders
+├ ƒ /api/health
+├ ƒ /api/health/ready
+├ ƒ /api/public/[eventSlug]
+├ ƒ /api/public/availability/[token]
+├ ƒ /api/public/confirmations/[token]/confirm
+├ ○ /api/public/doc-index
+├ ƒ /api/public/events
+├ ƒ /api/public/forgot-password
+├ ƒ /api/public/leader/[token]
+├ ƒ /api/public/member-invite/[token]
+├ ƒ /api/public/member-invite/[token]/decline
+├ ƒ /api/public/member-invite/[token]/roster
+├ ƒ /api/public/member-invite/[token]/shift-declines/[shiftId]
+├ ƒ /api/public/org-keep
+├ ƒ /api/public/org-reactivation/confirm
+├ ƒ /api/public/org-reactivation/request
+├ ƒ /api/public/organizations/[id]/logo
+├ ƒ /api/public/product-updates/unsubscribe
+├ ƒ /api/public/push
+├ ƒ /api/public/registrations
+├ ƒ /api/public/registrations/[token]
+├ ƒ /api/public/registrations/[token]/answers
+├ ƒ /api/public/registrations/[token]/availability
+├ ƒ /api/public/registrations/[token]/calendar
+├ ƒ /api/public/registrations/[token]/calendar.ics
+├ ƒ /api/public/registrations/[token]/resend-link
+├ ƒ /api/public/registrations/[token]/roster
+├ ƒ /api/public/registrations/[token]/shift-declines/[shiftId]
+├ ƒ /api/public/registrations/[token]/swaps
+├ ƒ /api/public/registrations/[token]/workload-limits
+├ ƒ /api/public/registrations/link
+├ ƒ /api/public/reset-password
+├ ƒ /api/public/signup
+├ ƒ /api/public/signup/confirm
+├ ƒ /api/public/video-feedback
+├ ƒ /api/public/waitlist/[token]/confirm
+├ ƒ /api/super-admin/auto-approval
+├ ƒ /api/super-admin/auto-approval/dismiss
+├ ƒ /api/super-admin/beta-capabilities
+├ ƒ /api/super-admin/blocklist
+├ ƒ /api/super-admin/blocklist/[id]
+├ ƒ /api/super-admin/organizations
+├ ƒ /api/super-admin/organizations/[id]
+├ ƒ /api/super-admin/organizations/[id]/inactivity
+├ ƒ /api/super-admin/organizations/[id]/review
+├ ƒ /api/super-admin/organizations/[id]/reviewed
+├ ƒ /api/super-admin/organizations/[id]/send-invite
+├ ƒ /api/super-admin/product-updates
+├ ƒ /api/super-admin/product-updates/send
+├ ƒ /api/super-admin/product-updates/test
+├ ƒ /api/super-admin/profile
+├ ƒ /api/super-admin/release-banner
+├ ƒ /api/super-admin/signup-switch
+├ ƒ /api/super-admin/two-factor/recovery-codes
+├ ƒ /api/super-admin/use-org/[id]
+├ ○ /apple-icon.png
+├ ƒ /benevoles-festival
+├ ƒ /benevoles-fete-de-village
+├ ƒ /benevoles-mairie-commune
+├ ƒ /benevoles-manifestation-sportive
+├ ƒ /blog
+├ ƒ /blog/[slug]
+├ ƒ /blog/feed.xml
+├ ƒ /citer
+├ ƒ /confirmation/[token]
+├ ƒ /continuite-du-service
+├ ƒ /disponibilites/[token]
+├ ƒ /doc
+├ ƒ /doc/[slug]
+├ ƒ /doc/admin
+├ ƒ /doc/benevole
+├ ƒ /fonctionnalites
+├ ○ /icon.svg
+├ ƒ /inscription
+├ ƒ /inscription/confirmer
+├ ƒ /leader/[token]
+├ ƒ /legal/exploitant
+├ ƒ /legal/privacy
+├ ƒ /legal/sous-traitance
+├ ƒ /legal/sous-traitants
+├ ƒ /legal/terms
+├ ƒ /llms-full.txt
+├ ƒ /llms.txt
+├ ƒ /logiciel-libre-benevoles
+├ ƒ /logiciel-planning-benevoles
+├ ƒ /manifeste
+├ ƒ /monitoring
+├ ƒ /my/[token]
+├ ○ /my/manifest.webmanifest
+├ ƒ /ne-peux-pas/[kind]/[token]/[shiftId]
+├ ƒ /nouveautes
+├ ○ /og-image.png
+├   /og-image.png/[...page]
+│ ├ ● /og-image.png/legal/exploitant
+│ ├ ● /og-image.png/fonctionnalites
+│ ├ ● /og-image.png/logiciel-planning-benevoles
+│ └ ● [+79 more paths]
+├ ƒ /planning-permanences-benevoles
+├ ƒ /pour-qui
+├ ƒ /product-updates/unsubscribe
+├ ƒ /product-updates/unsubscribed
+├ ƒ /ressources
+├ ƒ /ressources/[slug]
+├ ƒ /robots.txt
+├ ƒ /sitemap-index.xml
+├ ƒ /sitemap.xml
+├ ƒ /super-admin
+├ ƒ /super-admin/beta
+├ ƒ /super-admin/blocklist
+├ ƒ /super-admin/health
+├ ƒ /super-admin/inactivity
+├ ƒ /super-admin/journal
+├ ƒ /super-admin/organizations
+├ ƒ /super-admin/organizations/[slug]
+├ ƒ /super-admin/organizations/new
+├ ƒ /super-admin/product-updates
+├ ƒ /super-admin/profile
+├ ƒ /super-admin/stats
+├ ƒ /super-admin/use-org/[id]
+├ ƒ /super-admin/video-feedback
+├ ƒ /tableur-ou-outil-dedie
+├ ƒ /tarifs
+├ ƒ /video-sitemap.xml
+├ ƒ /videos
+├ ƒ /videos/[id]
+├ ○ /videos/og-image.png
+└ ƒ /waitlist/[token]/confirm
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+Product build proof saved: /tmp/benevoles-video-production.DjebK9ng/.video-build.json
