@@ -175,7 +175,8 @@ describe.skipIf(!url)("automatic validation of new spaces on Postgres (#1371)", 
 
     const outbox = await prisma.notificationOutbox.findMany({ where: { organizationId: org.id } })
     expect(outbox).toHaveLength(1)
-    expect(outbox[0]).toMatchObject({ kind: "space_approved", dedupeKey: `space_approved:${org.id}:${owner.email}` })
+    // The kind is inside the sealed payload, not a column: the dedupe key names it.
+    expect(outbox[0].dedupeKey).toBe(`space_approved:${org.id}:${owner.email}`)
 
     const setting = await prisma.platformSetting.findUniqueOrThrow({ where: { key: AUTO_APPROVAL_SETTING_KEY } })
     expect(setting.value).toMatchObject({ budgetUsed: 1, totalSinceActivation: 1 })
