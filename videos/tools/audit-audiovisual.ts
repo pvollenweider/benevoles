@@ -101,9 +101,15 @@ async function main() {
       }
       const operator = await db.adminUser.findUniqueOrThrow({ where: { id: "video-beta-operator" } })
       assert(operator.email === "video.beta.operator@example.org" && operator.role === "super_admin" && operator.organizationId === null)
-      const setting = await db.platformSetting.findUniqueOrThrow({ where: { key: "beta.capabilities" } })
-      const open = (setting.value as { open?: unknown }).open
-      assert(Array.isArray(open) && open.every(id => ["sectors", "sectorLeaders", "shiftSwaps"].includes(id)), "Unrelated beta capability opened")
+      if (manifest.id === "SECTORS") {
+        const setting = await db.platformSetting.findUnique({ where: { key: "beta.capabilities" } })
+        assert(!setting || Array.isArray((setting.value as { open?: unknown }).open) && (setting.value as { open: unknown[] }).open.length === 0, "Sectors training must not open a beta gate")
+        assert.equal(fixture.betaOptInAt, null, "Released sectors work without organization beta consent")
+      } else {
+        const setting = await db.platformSetting.findUniqueOrThrow({ where: { key: "beta.capabilities" } })
+        const open = (setting.value as { open?: unknown }).open
+        assert(Array.isArray(open) && open.every(id => ["sectors", "sectorLeaders", "shiftSwaps"].includes(id)), "Unrelated beta capability opened")
+      }
     } else if (manifest.id === "SHIFT_ROSTER_VISIBILITY") {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-shift-roster" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
       assert(fixture.slug === "formation-roster" && fixture.name === "Les amis de Montvert")
@@ -136,7 +142,7 @@ async function main() {
     } else if (manifest.id === "ATTENDANCE_CHECK_IN") {
       const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")
       await verifyDayOfReviewFixture(db)
-    } else if (memberDemoVideos.includes(manifest.id) && manifest.id !== "REMINDERS_CHANGES") {
+    } else if (manifest.id === "VOLUNTEER_CONFIRMATION_ERRORS" || memberDemoVideos.includes(manifest.id) && manifest.id !== "REMINDERS_CHANGES") {
       // The whole organization, including every displayable volunteer, was checked above.
     } else if (commonDemoVideos.includes(manifest.id)) {
       const url = new URL(process.env.DATABASE_URL!)

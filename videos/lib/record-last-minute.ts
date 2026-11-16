@@ -22,7 +22,11 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
   const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const eventId = "video-last-minute-event", url = `${base}/admin/events/${eventId}`
   const go = async (target: string) => { await page.goto(target); await settle(page) }
-  const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 110 }) }
+  const write = async (field: Locator, value: string) => {
+    await tap(page, field)
+    if (["time", "date"].includes(await field.getAttribute("type") ?? "")) { await field.fill(value); if (await field.inputValue() !== value) throw new Error("Actual native date/time entry differs"); return }
+    await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 110 })
+  }
   const reg = (n: number) => db.registration.findUniqueOrThrow({ where: { id: `video-last-minute-registration-${n}` } })
   const inbox = async (): Promise<Mail[]> => (await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()).messages
   const openNewMail = async (prior: Set<string>, recipient: string, expected: string[]) => {
@@ -148,12 +152,13 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await tap(page, page.getByRole("button", { name: "Ajouter un besoin", exact: true }))
       await at("Indiquons le poste Renfort matériel")
       await write(page.getByLabel(/^Poste/).first(), "Renfort matériel")
-      const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Zurich", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date()).split(":").map(Number)
-      const start = parts[0] * 60 + Math.floor(parts[1] / 15) * 15
-      if (start > 22 * 60) throw new Error("Need capture must finish before midnight")
-      const clock = (minute: number) => `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`
-      await write(page.getByLabel(/^Début/), clock(start))
-      await write(page.getByLabel(/^Fin/), clock(start + 60))
+      // Keep the real form's proposed window, including its supported midnight
+      // crossing; never fabricate the clock or reject an otherwise valid hour.
+      const startClock = await page.getByLabel(/^Début/).inputValue()
+      const endClock = await page.getByLabel(/^Fin/).inputValue()
+      if (!/^\d{2}:\d{2}$/.test(startClock) || !/^\d{2}:\d{2}$/.test(endClock) || startClock === endClock) throw new Error("Actual need form must propose a valid nonzero window")
+      await write(page.getByLabel(/^Début/), startClock)
+      await write(page.getByLabel(/^Fin/), endClock)
       await write(page.getByLabel(/^Places/), "1")
       await at("Ajouter le créneau enregistre d'abord le besoin")
       await tap(page, page.getByRole("button", { name: "Ajouter le créneau", exact: true }))
@@ -170,7 +175,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await at("L'email propose le créneau")
       const need = await db.shift.findFirstOrThrow({ where: { eventId, roleName: "Renfort matériel" } })
       if (await db.registration.count({ where: { shiftId: need.id } })) throw new Error("Offering the need created an unexpected registration")
-      checks.dayOfNeed = { shiftId: need.id, createdBeforeSend: true, registeredToday: true, pushRequested: true }
+      checks.dayOfNeed = { shiftId: need.id, createdBeforeSend: true, registeredToday: true, pushRequested: true, actualProposedStart: startClock, actualProposedEnd: endClock }
     })
     await scene("schedule", async at => {
       const prior = new Set((await inbox()).map(mail => mail.ID))

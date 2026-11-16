@@ -1,0 +1,121 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-16T21:11:26.668Z",
+  "revalidatedAt": "2026-11-16T21:11:26.668Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "872e475225f098d2cdf1c930d0c56c0c98810970d34405ee7aea1faa7b2e0080",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "c05c3d8da4fef28f18b39e48a20277d2dec63b8e8194fcdb6a724f2617d28cc6",
+      "recognized": "Une inscription doit rester compréhensible, même quand quelque chose se passe mal. Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau. Les exemples utilisent un événement de démonstration. Tu verras les vrais messages du formulaire, puis une confirmation réelle.",
+      "expected": "Une inscription doit rester compréhensible même quand quelque chose se passe mal. Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau. Les exemples utilisent un événement de démonstration : tu verras les vrais messages du formulaire, puis une confirmation réelle.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "form",
+      "audioSha256": "957222d18f15bdd5445f2ce50b66afd495eed5e5c3e38ec846cd53fa62b26ffe",
+      "recognized": "Choisis accueil et continue. Nous remplissons le prénom, le nom, l'e-mail et le téléphone, puis acceptons la convention et l'utilisation des données. Avant d'envoyer, relis toujours l'adresse e-mail. Une faute peut empêcher le message d'arriver, même si l'inscription est enregistrée correctement.",
+      "expected": "Choisis Accueil et continue. Nous remplissons le prénom, le nom, l’email et le téléphone, puis acceptons la convention et l’utilisation des données. Avant d’envoyer, relis toujours l’adresse email : une faute peut empêcher le message d’arriver même si l’inscription est enregistrée correctement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "validation",
+      "audioSha256": "680a034ec1b25b423a48e1da2e6dfd728f408229f7dde00f714577989d34bcc8",
+      "recognized": "La taille du t-shirt n'a pas été renseignée. Confirmer affiche la question à corriger et conserve toutes les autres réponses. Le champ obligatoire est signalé. Choisis une taille, puis tu peux reprendre. Une adresse email au mauvais format est également refusée par le navigateur, mais il ne sait pas vérifier qu'une boîte existe vraiment.",
+      "expected": "La taille du t-shirt n’a pas été renseignée. Confirmer affiche la question à corriger et conserve toutes les autres réponses. Le champ obligatoire est signalé ; choisis une taille, puis tu peux reprendre. Une adresse email au mauvais format est également refusée par le navigateur, mais il ne sait pas vérifier qu’une boîte existe vraiment.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "capacity",
+      "audioSha256": "97bf32e1b73a2e85947d6c9b6b86b9b22d06366da57a87858952dc64b98db252",
+      "recognized": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration. La confirmation répond, ta sélection n'est plus disponible. Reviens au planning pour ajuster ton choix. Les informations saisies restent conservées. Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+      "expected": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration. La confirmation répond Ta sélection n'est plus disponible. Reviens au planning pour ajuster ton choix ; les informations saisies restent conservées. Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "network",
+      "audioSha256": "9d3dc72e978505207459ebec3f3f87a73a1c4bfe7c2498c6def9d69a975750c4",
+      "recognized": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d'envoi pour montrer une interruption réseau. Le message dit que l'inscription n'a peut-être pas été reçue. Tes champs sont toujours là. Après retour de la connexion, clique à nouveau sur confirmer mon inscription. Le système évite de créer deux engagements identiques.",
+      "expected": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d’envoi pour montrer une interruption réseau. Le message dit que l’inscription n’a peut-être pas été reçue. Tes champs sont toujours là. Après retour de la connexion, clique à nouveau sur Confirmer mon inscription : le système évite de créer deux engagements identiques.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "success",
+      "audioSha256": "47763aa32e206827d6e18209a1751527be109724c3c7ad0a9d2ec18bff69fee7",
+      "recognized": "La connexion est rétablie et la demande est envoyée. La page affiche demande d'inscription reçue et invite à regarder tes e-mails. C'est l'e-mail qui dit ce qui est enregistré. Avec un formulaire public ordinaire, la page n'affiche pas le lien de gestion. Saisir une adresse ne prouve pas qu'elle est la tienne. Garde le message pour retrouver ton planning ou annuler plus tard.",
+      "expected": "La connexion est rétablie et la demande est envoyée. La page affiche Demande d'inscription reçue et invite à regarder tes emails : c'est l'email qui dit ce qui est enregistré. Avec un formulaire public ordinaire, la page n'affiche pas le lien de gestion : saisir une adresse ne prouve pas qu'elle est la tienne. Garde le message pour retrouver ton planning ou annuler plus tard.",
+      "wordErrorRate": 0.029411764705882353,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "email",
+      "audioSha256": "02f4c7bd374f1db5e90c01aa013e272843c641d71005bcacd53a52fa00db2b31",
+      "recognized": "Voici le message réellement reçu dans la boîte de démonstration. Il contient le créneau et le lien personnel. Si tu ne le trouves pas, regarde les indésirables et vérifie l'adresse donnée. Une page de succès ne prouve pas qu'un fournisseur email a accepté le message. Contacte l'association si la boîte n'existe pas ou si tu as fait une faute.",
+      "expected": "Voici le message réellement reçu dans la boîte de démonstration. Il contient le créneau et le lien personnel. Si tu ne le trouves pas, regarde les indésirables et vérifie l’adresse donnée. Une page de succès ne prouve pas qu’un fournisseur email a accepté le message ; contacte l’association si la boîte n’existe pas ou si tu as fait une faute.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "overlap",
+      "audioSha256": "5841dd596d926fa1fe8335b975d7d0f7be53976b91d06534b867125a2b4b0d5b",
+      "recognized": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à l'accueil de dix heures à midi. Essayons le vestiaire de onze heures à treize heures avec sa même adresse. Remplissons le formulaire et confirmons. La page répond comme pour toute demande, demande d'inscription reçue. Elle ne dit rien des créneaux d'Aline, car rien ne prouve que c'est elle qui remplit le formulaire. Aucune nouvelle inscription n'a été ajoutée. Ouvrons sa boîte. L'email, demande d'inscription non enregistrée, nomme le créneau qui chevauche le sien et donne son lien personnel pour choisir un horaire compatible.",
+      "expected": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à l'accueil de dix heures à midi. Essayons le vestiaire de onze à treize heures avec sa même adresse. Remplissons le formulaire et confirmons. La page répond comme pour toute demande : Demande d'inscription reçue. Elle ne dit rien des créneaux d'Aline, car rien ne prouve que c'est elle qui remplit le formulaire. Aucune nouvelle inscription n'a été ajoutée. Ouvrons sa boîte : l'email Demande d'inscription non enregistrée nomme le créneau qui chevauche le sien et donne son lien personnel pour choisir un horaire compatible.",
+      "wordErrorRate": 0.01,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "response-loss",
+      "audioSha256": "d3c790b9389343f4efd13250d34491f625e4d730c1c6beb51df86ad7b74c2077",
+      "recognized": "Une coupure peut arriver après l'enregistrement. Nicolas choisit la logistique. Cette fois, la requête arrive réellement au serveur, qui crée son inscription, mais nous interrompons volontairement seulement la réponse au navigateur. Le formulaire affiche connexion interrompue, parce qu'il ne sait pas si l'envoi a abouti. Rétablissons la connexion et confirmons à nouveau. La page affiche de nouveau demande d'inscription reçue, et ses e-mails contiennent la confirmation de son premier envoi. Vérifions côté organisation, une seule ligne de Nicolas apparaît sur ce créneau. Le nouvel essai n'a pas créé une deuxième inscription.",
+      "expected": "Une coupure peut arriver après l'enregistrement. Nicolas choisit la logistique. Cette fois, la requête arrive réellement au serveur, qui crée son inscription ; nous interrompons volontairement seulement la réponse au navigateur. Le formulaire affiche Connexion interrompue parce qu'il ne sait pas si l'envoi a abouti. Rétablissons la connexion et confirmons à nouveau. La page affiche de nouveau Demande d'inscription reçue, et ses emails contiennent la confirmation de son premier envoi. Vérifions côté organisation : une seule ligne de Nicolas apparaît sur ce créneau. Le nouvel essai n'a pas créé une deuxième inscription.",
+      "wordErrorRate": 0.031578947368421054,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invitation-success",
+      "audioSha256": "b7521ef7550b98c93cf8addc56fc3ab9c0a0d19f6207d0c4bd526fff7d327b1f",
+      "recognized": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le formulaire public ordinaire. Après ses informations et les consentements, confirmons. La page affiche « Demande d'inscription reçue ». Sans son lien personnel, saisir une adresse ne prouve pas que l'on possède cette boîte. Aline a ensuite reçu une invitation personnelle envoyée par l'organisation. Ouvrons ce lien pour choisir la logistique. Ses informations sont préremplies, vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements. Cette confirmation peut afficher « Accéder à mon inscription », car l'invitation apporte la preuve d'adresse. Ouvrons ce lien. Aline retrouve ses deux créneaux. Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+      "expected": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le formulaire public ordinaire. Après ses informations et les consentements, confirmons. La page affiche Demande d'inscription reçue, sans son lien personnel : saisir une adresse ne prouve pas que l'on possède cette boîte. Aline a ensuite reçu une invitation personnelle envoyée par l'organisation. Ouvrons ce lien pour choisir la logistique. Ses informations sont préremplies ; vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements. Cette confirmation peut afficher Accéder à mon inscription, car l'invitation apporte la preuve d'adresse. Ouvrons ce lien : Aline retrouve ses deux créneaux. Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "61c138292b32398c72020a73833f5c9ddd10c9efdc12ab4b394b7294914f55a9",
+      "recognized": "Revenons côté organisation pour vérifier les inscriptions réellement présentes. Une erreur de chant se corrige sur place, une sélection indisponible se revoit dans le planning, une interruption réseau se retente après vérification de la connexion sans inventer une deuxième inscription. Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux. Dans cette démonstration, les personnes sont fictives mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+      "expected": "Revenons côté organisation pour vérifier les inscriptions réellement présentes. Une erreur de champ se corrige sur place. Une sélection indisponible se revoit dans le planning. Une interruption réseau se retente après vérification de la connexion, sans inventer une deuxième inscription. Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux. Dans cette démonstration, les personnes sont fictives, mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+      "wordErrorRate": 0.013157894736842105,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

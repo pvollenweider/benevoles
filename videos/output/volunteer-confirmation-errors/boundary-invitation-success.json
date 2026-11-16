@@ -1,0 +1,12 @@
+{
+  "anchor": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le",
+  "windowStart": 185.264,
+  "result": {
+    "found": true,
+    "startSeconds": 19.5,
+    "wordsHeard": "Comparons"
+  },
+  "onset": 204.764,
+  "proposedCut": 204.2698125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

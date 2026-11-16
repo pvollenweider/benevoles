@@ -58,7 +58,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
     const inboxBefore = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
     const priorIds = new Set(inboxBefore.messages.map((mail: { ID: string }) => mail.ID))
     const go = async (route: string) => { await page.goto(`${base}${route}`); await settle(page) }
-    const write = async (field: Locator, text: string) => { await tap(page, field); await field.pressSequentially(text, { delay: 110 }) }
+    const write = async (field: Locator, text: string) => { await tap(page, field); await field.fill(text); assert.equal(await field.inputValue(), text) }
     const agree = async () => {
       await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
       await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
@@ -83,6 +83,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       assert.equal(await page.getByText(/Coordonnées reprises/).count(), 0, "Autre appareil : aucun contact repris")
       await beforeConsent?.()
       await tap(page, page.getByRole("radio", { name: "M", exact: true }))
+      assert(await page.getByRole("radio", { name: "M", exact: true }).isChecked(), "Actual t-shirt choice must be selected")
       await agree()
     }
     const submit = page.getByRole("button", { name: "Confirmer mon inscription", exact: true })
@@ -105,19 +106,23 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
     // A public sign-up without proof of the address: one neutral page, whatever happened (AUTHZ-01).
     const receivedHeading = () => page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true })
     await scene("welcome", async () => { await page.screencast.showChapter(title, { description: "Comprendre l'erreur, reprendre et vérifier le résultat", duration: 2300 }) })
-    await scene("form", async () => {
+    await scene("form", async at => {
       await tap(page, page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       await write(page.getByLabel("Prénom *", { exact: true }), "Alex")
       await write(page.getByLabel("Nom *", { exact: true }), surnameOf("Alex"))
       await write(page.getByLabel("Email *", { exact: true }), "video.errors.alex@example.org")
       await write(page.getByLabel(/Téléphone/), "079 000 12 34")
+      await at("puis acceptons la convention")
       await agree()
+      await at("Avant d’envoyer, relis toujours")
+      await page.getByLabel("Email *", { exact: true }).scrollIntoViewIfNeeded()
     })
     await scene("validation", async at => {
       await at("Confirmer affiche la question à"); await tap(page, submit)
       await page.locator('[role="alert"]').first().waitFor()
       await at("choisis une taille, puis tu"); await tap(page, page.getByRole("radio", { name: "M", exact: true }))
+      assert(await page.getByRole("radio", { name: "M", exact: true }).isChecked())
     })
     await scene("capacity", async at => {
       const response = await page.request.patch(`${base}/api/admin/shifts/video-errors-shift-0`, { data: { capacity: 1 } })
@@ -201,6 +206,13 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await at("Aline retrouve ses deux créneaux"); await tap(page, link)
       await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).waitFor()
       await settle(page)
+      const actualCards = page.locator('section[aria-labelledby="shifts-title"]')
+      await actualCards.evaluate(element => element.scrollIntoView({ block: "start" }))
+      for (const label of ["Accueil — démonstration", "Logistique — démonstration"]) {
+        const text = actualCards.getByText(label, { exact: true })
+        await text.waitFor(); const box = await text.boundingBox()
+        assert(box && box.y >= 0 && box.y + box.height <= 800, "Both actual confirmed shift labels must be in the filmed viewport")
+      }
       await page.waitForTimeout(1800)
       checks.invitedSuccessHasPersonalLink = true
     })

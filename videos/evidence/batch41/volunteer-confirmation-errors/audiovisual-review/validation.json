@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:10:46.974Z",
+  "videoSha256": "872e475225f098d2cdf1c930d0c56c0c98810970d34405ee7aea1faa7b2e0080",
+  "promptSha256": "b453797ae6647115909cdae0f230038b001e68e32e29e11c3a4f56649a58f735",
+  "clipSha256": "ab1797bad5f17e5b4eb1eecfff3f2d259778ebef63a09d554f4c7ca36e4c756d",
+  "scene": "validation",
+  "review": {
+    "heardOpening": "La taille du t-shirt n'a pas été renseignée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "La taille du t-shirt n’a pas été renseignée",
+        "visibleSeconds": 0.5,
+        "visible": "Formulaire d'inscription affiché avec les options de taille du t-shirt (XS, S, M, L) non cochées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Confirmer affiche la question à corriger",
+        "visibleSeconds": 3.8,
+        "visible": "Défilement vers le bas et affichage du message de validation « Veuillez sélectionner l'une de ces options » au niveau de la taille du t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Le champ obligatoire est signalé",
+        "visibleSeconds": 4,
+        "visible": "Infobulle d'erreur signalant l'obligation de sélection",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "choisis une taille, puis tu peux reprendre",
+        "visibleSeconds": 12,
+        "visible": "Aucune sélection de taille n'est effectuée à l'écran, l'image reste immobile",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À partir de 00:04 et jusqu'à la fin de l'extrait, l'écran reste complètement statique sur le message d'erreur du t-shirt : aucune taille n'est choisie et aucune démonstration du format d'email n'est illustrée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

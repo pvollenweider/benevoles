@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:10:41.121Z",
+  "videoSha256": "872e475225f098d2cdf1c930d0c56c0c98810970d34405ee7aea1faa7b2e0080",
+  "promptSha256": "fe7e583a15aed9c13cf3dd6c8c6dfe5e7c72d678a100c0eb94af0c992b333dd5",
+  "clipSha256": "86c9bd85b4ab41e7a5c830f5a8449ef8762edb28d8e202b5f9e2a58c5e5ed844",
+  "scene": "form",
+  "review": {
+    "heardOpening": "Choisis Accueil et continue.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Choisis Accueil et continue.",
+        "visibleSeconds": 0.8,
+        "visible": "Sélection du créneau Accueil puis bascule vers la page du formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Nous remplissons le prénom, le nom, l’email et le téléphone,",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie successive des champs prénom, nom, email et téléphone.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "puis acceptons la convention et l’utilisation des données.",
+        "visibleSeconds": 5.8,
+        "visible": "Les deux cases à cocher de consentement sont cochées en bas de page.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Avant d’envoyer, relis toujours l’adresse email",
+        "visibleSeconds": 13,
+        "visible": "Écran stable montrant le formulaire complet avec l'adresse email saisie.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement compréhensible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

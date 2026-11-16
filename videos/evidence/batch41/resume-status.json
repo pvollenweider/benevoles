@@ -65,7 +65,7 @@
       "slug": "members-management",
       "status": "READY",
       "published": true,
-      "narratedTakes": 1,
+      "narratedTakes": 2,
       "problems": "First take obsolete sixty-record count corrected with a full new Puck master; final AV has no issue.",
       "duration": 238.84,
       "musicGaps": 0,
@@ -101,10 +101,13 @@
     {
       "id": "VOLUNTEER_CONFIRMATION_ERRORS",
       "slug": "volunteer-confirmation-errors",
-      "status": "IN PROGRESS",
+      "status": "NOT READY",
       "published": false,
-      "narratedTakes": 0,
-      "problems": "Fresh narration/source audits and rehearsal passed; public host, future fixture date, iframe selector updated."
+      "narratedTakes": 2,
+      "problems": "Final retry click 1.9 s early and unrelated real Mailpit toast; two-take limit.",
+      "duration": 310.68,
+      "musicGaps": 0,
+      "tu": 2
     },
     {
       "id": "PRIVACY_PERSONAL_LINKS",

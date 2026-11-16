@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:11:31.697Z",
+  "videoSha256": "872e475225f098d2cdf1c930d0c56c0c98810970d34405ee7aea1faa7b2e0080",
+  "promptSha256": "6338431d6467d6f3db90cfcd5ac140a4c39e83fde6e2a0d81d88d4cb12032d5d",
+  "clipSha256": "2d15e0238600ee68b970dd12323f0b00d22a9210606e7cf458ef50517eb65724",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Revenons côté organisation pour",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Revenons côté organisation pour vérifier les inscriptions réellement présentes",
+        "visibleSeconds": 0.5,
+        "visible": "Onglet Inscriptions affiché côté organisateur avec la liste des bénévoles inscrits",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Une erreur de champ se corrige sur place",
+        "visibleSeconds": 5.4,
+        "visible": "Écran fixe sur la liste des inscriptions servant de support récapitulatif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.6,
+        "spoken": "Dans cette démonstration, les personnes sont fictives",
+        "visibleSeconds": 24.6,
+        "visible": "Tableau récapitulatif avec des identités et adresses de test visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et rythmée, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
