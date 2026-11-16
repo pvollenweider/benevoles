@@ -53,7 +53,9 @@ export default function CertificateView({ memberId, memberName, organizationName
   const period = useMemo(() => (validRange ? { from, to } : { from: to, to: from }), [from, to, validRange])
   const filtered = useMemo(() => entries.filter((e) => withinPeriod(e.localDate, period)), [entries, period])
   const summaries = useMemo(() => eventHourSummaries(filtered), [filtered])
-  const unattested = useMemo(() => filtered.filter((e) => !e.attested), [filtered])
+  // A left-early shift is a recorded participation, not a shift with no presence: it has its own
+  // sentence after the total, never the "no presence recorded" warning (#1141).
+  const unattested = useMemo(() => filtered.filter((e) => !e.attested && !e.endedEarly), [filtered])
 
   // Time on two shifts at once (a role cumulable with another shift, #986) counts once, also
   // between two events: the totals are the union, not the sum of the rows.
@@ -63,6 +65,10 @@ export default function CertificateView({ memberId, memberName, organizationName
   const totalAttested = totals.attestedMinutes
   const totalPlanned = totals.plannedWithoutPresenceMinutes
   const totalShifts = summaries.reduce((n, s) => n + s.shiftsCount, 0)
+  // Participations ended before the end (#1141): a count, never hours. Its column exists only
+  // when there is at least one to show, like the optional planned-hours column.
+  const totalEndedEarly = totals.endedEarlyCount
+  const showEndedEarly = totalEndedEarly > 0
 
   // Announced after the period or the planned-hours checkbox changes, never on first render
   // (the document itself already shows these figures; this is only for screen-reader users who
@@ -216,39 +222,55 @@ export default function CertificateView({ memberId, memberName, organizationName
         {summaries.length === 0 ? (
           <p className="text-sm text-gray-800 mt-4">Aucun créneau confirmé sur cette période.</p>
         ) : (
-          <table className="w-full text-sm border-collapse mt-4">
-            <caption className="text-left text-sm font-semibold text-gray-900 mb-2">Détail par événement, du {fmtDay(period.from)} au {fmtDay(period.to)}</caption>
-            <thead>
-              <tr className="border-b-2 border-gray-400">
-                <th scope="col" className="text-left py-1 pr-2">Événement</th>
-                <th scope="col" className="text-left py-1 pr-2">Postes</th>
-                <th scope="col" className="text-right py-1 pr-2">Créneaux</th>
-                <th scope="col" className="text-right py-1 pr-2">Heures attestées</th>
-                {includePlanned && <th scope="col" className="text-right py-1">Heures prévues (sans présence)</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {summaries.map((s) => (
-                <tr key={s.eventId} className="border-b border-gray-200 align-top">
-                  <td className="py-1 pr-2">{s.eventTitle}</td>
-                  <td className="py-1 pr-2">{s.roles.join(", ")}</td>
-                  <td className="py-1 pr-2 text-right">{s.shiftsCount}</td>
-                  <td className="py-1 pr-2 text-right">
-                    {s.noCheckIn ? "présences non saisies pour cet événement" : fmtDuration(s.attestedMinutes)}
-                  </td>
-                  {includePlanned && <td className="py-1 text-right">{fmtDuration(s.plannedWithoutPresenceMinutes)}</td>}
+          // The table scrolls inside its own region instead of widening the page at 320 px; the
+          // print layout keeps the whole table.
+          <div className="overflow-x-auto print:overflow-visible">
+            <table className="w-full text-sm border-collapse mt-4">
+              <caption className="text-left text-sm font-semibold text-gray-900 mb-2">Détail par événement, du {fmtDay(period.from)} au {fmtDay(period.to)}</caption>
+              <thead>
+                <tr className="border-b-2 border-gray-400">
+                  <th scope="col" className="text-left py-1 pr-2">Événement</th>
+                  <th scope="col" className="text-left py-1 pr-2">Postes</th>
+                  <th scope="col" className="text-right py-1 pr-2">Créneaux</th>
+                  <th scope="col" className="text-right py-1 pr-2">Heures attestées</th>
+                  {showEndedEarly && <th scope="col" className="text-right py-1 pr-2">Participations terminées avant la fin</th>}
+                  {includePlanned && <th scope="col" className="text-right py-1">Heures prévues (sans présence)</th>}
                 </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="border-t-2 border-gray-400 font-semibold">
-                <th scope="row" className="py-1 pr-2 text-left font-semibold" colSpan={2}>Total</th>
-                <td className="py-1 pr-2 text-right">{totalShifts}</td>
-                <td className="py-1 pr-2 text-right">{fmtDuration(totalAttested)}</td>
-                {includePlanned && <td className="py-1 text-right">{fmtDuration(totalPlanned)}</td>}
-              </tr>
-            </tfoot>
-          </table>
+              </thead>
+              <tbody>
+                {summaries.map((s) => (
+                  <tr key={s.eventId} className="border-b border-gray-200 align-top">
+                    <td className="py-1 pr-2">{s.eventTitle}</td>
+                    <td className="py-1 pr-2">{s.roles.join(", ")}</td>
+                    <td className="py-1 pr-2 text-right">{s.shiftsCount}</td>
+                    <td className="py-1 pr-2 text-right">
+                      {s.noCheckIn ? "présences non saisies pour cet événement" : fmtDuration(s.attestedMinutes)}
+                    </td>
+                    {showEndedEarly && <td className="py-1 pr-2 text-right">{s.endedEarlyCount}</td>}
+                    {includePlanned && <td className="py-1 text-right">{fmtDuration(s.plannedWithoutPresenceMinutes)}</td>}
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="border-t-2 border-gray-400 font-semibold">
+                  <th scope="row" className="py-1 pr-2 text-left font-semibold" colSpan={2}>Total</th>
+                  <td className="py-1 pr-2 text-right">{totalShifts}</td>
+                  <td className="py-1 pr-2 text-right">{fmtDuration(totalAttested)}</td>
+                  {showEndedEarly && <td className="py-1 pr-2 text-right">{totalEndedEarly}</td>}
+                  {includePlanned && <td className="py-1 text-right">{fmtDuration(totalPlanned)}</td>}
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        )}
+        {summaries.length > 0 && totalEndedEarly > 0 && (
+          // Real text, in DOM order right after the total it qualifies and before the signature;
+          // never hidden in print (at least text-gray-700). The number is given (#1141).
+          <p className="text-sm text-gray-700 mt-3">
+            {totalEndedEarly === 1
+              ? "1 participation terminée avant la fin n'est pas comptée dans les heures attestées."
+              : `${totalEndedEarly} participations terminées avant la fin ne sont pas comptées dans les heures attestées.`}
+          </p>
         )}
         {summaries.length > 0 && parallel && (
           <p className="text-sm text-gray-800 mt-4">Certains créneaux se sont déroulés en même temps (missions assurées en parallèle) : ce temps n&apos;est compté qu&apos;une fois dans les heures.</p>

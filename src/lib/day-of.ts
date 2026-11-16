@@ -29,7 +29,7 @@ export type DayOfPerson = {
   phone: string | null
   /** ISO instant of the check-in, null when not marked present. */
   checkedInAt: string | null
-  /** "absent" when an organizer recorded the absence; null otherwise (#1141). */
+  /** "absent" or "left_early" when an organizer recorded it; null otherwise (#1141). */
   attendanceStatus?: string | null
 }
 
@@ -186,31 +186,36 @@ export function filterGroups(groups: DayOfGroup[], query: string): DayOfGroup[] 
     .filter((g) => g.shifts.length > 0)
 }
 
-export type ShiftCounts = { expected: number; present: number; absent: number; missing: number }
+export type ShiftCounts = { expected: number; present: number; absent: number; leftEarly: number; missing: number }
 
 /**
- * Expected (confirmed) people, those marked present, those marked absent, and the places nobody
- * has taken. `stateOf` lets the board apply the marks made on this phone over the server's board.
+ * Expected (confirmed) people, those marked present, those marked absent, those who left before
+ * the end, and the places nobody has taken. A person who left is not among the present ones here:
+ * the count line says what the shift holds now. `stateOf` lets the board apply the marks made on
+ * this phone over the server's board.
  */
 export function shiftCounts(shift: Pick<DayOfShift, "capacity" | "people">, stateOf: (p: DayOfPerson) => AttendanceState): ShiftCounts {
   const expected = shift.people.length
   let present = 0
   let absent = 0
+  let leftEarly = 0
   for (const p of shift.people) {
     const state = stateOf(p)
     if (state === "present") present += 1
     else if (state === "absent") absent += 1
+    else if (state === "left_early") leftEarly += 1
   }
-  return { expected, present, absent, missing: Math.max(0, shift.capacity - expected) }
+  return { expected, present, absent, leftEarly, missing: Math.max(0, shift.capacity - expected) }
 }
 
 const s = (n: number) => (n > 1 ? "s" : "")
 
-/** « 2 présents sur 4 attendus, 1 absent » for a shift card. */
+/** « 2 présents sur 4 attendus, 1 absent, 1 parti avant la fin » for a shift card. */
 export function presenceLine(c: ShiftCounts): string {
   if (c.expected === 0) return "Personne d'inscrit"
   const line = `${c.present} présent${s(c.present)} sur ${c.expected} attendu${s(c.expected)}`
-  return c.absent > 0 ? `${line}, ${c.absent} absent${s(c.absent)}` : line
+  const withAbsent = c.absent > 0 ? `${line}, ${c.absent} absent${s(c.absent)}` : line
+  return c.leftEarly > 0 ? `${withAbsent}, ${c.leftEarly} parti${s(c.leftEarly)} avant la fin` : withAbsent
 }
 
 /** « Il manque 1 personne. », or null when every place is taken. */
@@ -248,10 +253,16 @@ const ANNOUNCED: Record<AttendanceTransition, string> = {
   undo_check_in: "Présence annulée",
   mark_absent: "Absence enregistrée",
   undo_absent: "Absence annulée",
+  mark_left_early: "Départ enregistré",
+  undo_left_early: "Départ annulé",
 }
 
-/** « Absence enregistrée pour Léa Morel. Bar : 2 présents sur 4 attendus, 1 absent. » (#1141). */
+/**
+ * « Absence enregistrée pour Léa Morel. Bar : 2 présents sur 4 attendus, 1 absent. » (#1141).
+ * The departure undone says that the person is present again, not merely expected.
+ */
 export function attendanceAnnouncement(name: string, transition: AttendanceTransition, shift: string, c: ShiftCounts): string {
+  if (transition === "undo_left_early") return `Départ annulé pour ${name} : présence rétablie. ${shift} : ${presenceLine(c)}.`
   return `${ANNOUNCED[transition]} pour ${name}. ${shift} : ${presenceLine(c)}.`
 }
 
@@ -260,9 +271,16 @@ export function attendanceAnnouncement(name: string, transition: AttendanceTrans
  * a state meanwhile (#1141): the row takes the server's state, nothing is retried. Null when the
  * server says « attendu » (nothing recorded elsewhere to name): the caller keeps its plain message.
  */
+const CONFLICT: Record<Exclude<AttendanceState, "expected">, string> = {
+  present: "Une présence est déjà enregistrée",
+  absent: "Une absence est déjà enregistrée",
+  left_early: "Un départ est déjà enregistré",
+}
+
+/** The sentence of the state another device recorded first, per state (#1141). */
 export function conflictAnnouncement(name: string, state: AttendanceState, shift: string, c: ShiftCounts): string | null {
   if (state === "expected") return null
-  return `Une ${state === "absent" ? "absence" : "présence"} est déjà enregistrée pour ${name}, depuis un autre appareil. ${shift} : ${presenceLine(c)}.`
+  return `${CONFLICT[state]} pour ${name}, depuis un autre appareil. ${shift} : ${presenceLine(c)}.`
 }
 
 /** What the bulk route says about one requested registration after an attendance action (#1141). */
@@ -270,7 +288,7 @@ export type AttendanceAnswer =
   | { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null; moved?: boolean; gone?: boolean }
   | { id: string; changed: false; state: null; checkedInAt: null; moved?: boolean; gone: true }
 
-const ANSWER_STATES: readonly unknown[] = ["expected", "present", "absent"]
+const ANSWER_STATES: readonly unknown[] = ["expected", "present", "absent", "left_early"]
 
 /** The answer about `registrationId` in the route's `results`, or null (previous release, odd shape). */
 export function answerFor(results: unknown, registrationId: string): AttendanceAnswer | null {
@@ -311,6 +329,7 @@ export const PRIMARY_ACTION: Record<AttendanceState, { transition: AttendanceTra
   expected: { transition: "check_in", label: "Marquer présent" },
   present: { transition: "undo_check_in", label: "Annuler la présence" },
   absent: { transition: "undo_absent", label: "Annuler l'absence" },
+  left_early: { transition: "undo_left_early", label: "Annuler le départ" },
 }
 
 /** Said once typing has paused: how many shifts and people the search leaves. */

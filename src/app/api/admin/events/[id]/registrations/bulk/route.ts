@@ -14,15 +14,14 @@ import type { AttendanceTransition } from "@/lib/attendance-state"
 // Bulk actions on the registrations list (#292): one request for the whole selection instead
 // of one per row. All-or-nothing on ownership: every id must be a registration of this event,
 // in this organization, or nothing is done. Attendance actions (#1141) are check_in,
-// undo_check_in, mark_absent and undo_absent; "left_early" is reserved for a later PR and
-// therefore refused here as an unknown action.
+// undo_check_in, mark_absent, undo_absent, mark_left_early and undo_left_early.
 //
 // A front-desk account holding a live grant on this event (#1142) may use the attendance actions
 // only: any other action is refused with a 403 before the event or a registration is read. The
 // guard reads the grant for the event of the path, and the ownership check below is on that same
 // event, for every id, before any write.
 const schema = z.object({
-  action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in", "mark_absent", "undo_absent"]),
+  action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in", "mark_absent", "undo_absent", "mark_left_early", "undo_left_early"]),
   registrationIds: z.array(z.string().min(1)).min(1).max(500),
   // Attendance actions only (#1141), optional: registration id → the shift the page showed it
   // on. A registration that has moved to another shift since is not written and comes back as
@@ -89,9 +88,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     case "check_in":
     case "undo_check_in":
     case "mark_absent":
-    case "undo_absent": {
+    case "undo_absent":
+    case "mark_left_early":
+    case "undo_left_early": {
       const observed = parsed.data.observedShifts ?? {}
-      const targets = regs.map((r) => ({ id: r.id, eventId: r.eventId, shiftId: r.shiftId, status: r.status, observedShiftId: Object.hasOwn(observed, r.id) ? observed[r.id] : null }))
+      const targets = regs.map((r) => ({ id: r.id, eventId: r.eventId, shiftId: r.shiftId, status: r.status, checkedInAt: r.checkedInAt, observedShiftId: Object.hasOwn(observed, r.id) ? observed[r.id] : null }))
       const results = await setAttendance(db, actor, targets, parsed.data.action as AttendanceTransition)
       const changedIds = results.filter((r) => r.changed).map((r) => r.id)
       // `done` and `changedIds` stay for existing callers; `results` gives the state of every

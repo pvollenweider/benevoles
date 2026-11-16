@@ -69,6 +69,12 @@ const fake = vi.hoisted(() => {
         for (const r of hit) Object.assign(r, data)
         return { count: hit.length }
       },
+      // The attendance writer reads the kept arrival from the same statement (#1141).
+      updateManyAndReturn: async ({ where, data }) => {
+        const hit = store.registrations.filter((r) => matches(registrationView(r), where))
+        for (const r of hit) Object.assign(r, data)
+        return hit.map((r) => ({ id: r.id, checkedInAt: r.checkedInAt }))
+      },
     },
   }
 
@@ -226,8 +232,8 @@ describe("POST registrations/bulk as a front-desk account (#1142)", () => {
     expect(businessCalls()).toEqual([])
   })
 
-  it("accepts the four attendance actions with a live grant, and logs the front-desk account as the author", async () => {
-    expect([...FRONT_DESK_BULK_ACTIONS]).toEqual(["check_in", "undo_check_in", "mark_absent", "undo_absent"])
+  it("accepts the six attendance actions with a live grant, and logs the front-desk account as the author", async () => {
+    expect([...FRONT_DESK_BULK_ACTIONS]).toEqual(["check_in", "undo_check_in", "mark_absent", "undo_absent", "mark_left_early", "undo_left_early"])
 
     let res = await bulk(EVENT, { action: "check_in", registrationIds: ["reg-nadia"] })
     expect(res.status).toBe(200)
@@ -250,7 +256,23 @@ describe("POST registrations/bulk as a front-desk account (#1142)", () => {
     expect(res.json).toMatchObject({ done: 1 })
     expect(registrationRow("reg-luc").attendanceStatus).toBeNull()
 
-    expect(logEvent).toHaveBeenCalledTimes(4)
+    // A departure: the arrival is recorded first, kept by the departure, restored by its undo.
+    res = await bulk(EVENT, { action: "check_in", registrationIds: ["reg-nadia"] })
+    expect(res.status).toBe(200)
+    const arrival = registrationRow("reg-nadia").checkedInAt
+    res = await bulk(EVENT, { action: "mark_left_early", registrationIds: ["reg-nadia"] })
+    expect(res.status).toBe(200)
+    expect(res.json).toMatchObject({ done: 1, changedIds: ["reg-nadia"] })
+    expect(registrationRow("reg-nadia")).toMatchObject({ checkedInAt: arrival, attendanceStatus: "left_early", attendanceBy: "adm-colette" })
+    expect(logEvent).toHaveBeenLastCalledWith(expect.objectContaining({ action: "registration.marked_left_early", entityId: "reg-nadia" }))
+
+    res = await bulk(EVENT, { action: "undo_left_early", registrationIds: ["reg-nadia"] })
+    expect(res.status).toBe(200)
+    expect(res.json).toMatchObject({ done: 1 })
+    expect(registrationRow("reg-nadia")).toMatchObject({ checkedInAt: arrival, attendanceStatus: null, attendanceAt: null, attendanceBy: null })
+    expect(logEvent).toHaveBeenLastCalledWith(expect.objectContaining({ action: "registration.departure_undone", entityId: "reg-nadia" }))
+
+    expect(logEvent).toHaveBeenCalledTimes(7)
     expect(sent).not.toHaveBeenCalled()
   })
 
@@ -283,7 +305,7 @@ describe("POST registrations/bulk as a front-desk account (#1142)", () => {
   ])("mixed ids with %s: refused as a whole, nothing written", async (_label, foreign) => {
     const res = await bulk(EVENT, { action: "check_in", registrationIds: ["reg-nadia", foreign] })
     expect(res.status).toBe(404)
-    expect(calls()).not.toContain("registration.updateMany")
+    expect(calls()).not.toContain("registration.updateManyAndReturn")
     for (const r of fake.store.registrations) expect(r.checkedInAt).toBeNull()
     expect(logEvent).not.toHaveBeenCalled()
   })

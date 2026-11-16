@@ -187,6 +187,19 @@ describe("mergeConflicts — same shift", () => {
     expect(registrationRank(reg({ status: "waiting", attendanceStatus: "absent" }))).toBeGreaterThan(expected)
   })
 
+  it("the rank orders present over left_early over absent over expected (#1141)", () => {
+    const reg = (over: object) => ({ id: "r", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, ...over })
+    const present = registrationRank(reg({ checkedInAt: new Date() }))
+    const leftEarly = registrationRank(reg({ checkedInAt: new Date(), attendanceStatus: "left_early" }))
+    const absent = registrationRank(reg({ attendanceStatus: "absent" }))
+    const expected = registrationRank(reg({ attendanceStatus: null }))
+    expect(present).toBeGreaterThan(leftEarly)
+    expect(leftEarly).toBeGreaterThan(absent)
+    expect(absent).toBeGreaterThan(expected)
+    // A left-early row keeps its arrival, which the rank reads before the status.
+    expect(leftEarly).toBeLessThan(present)
+  })
+
   it("a row with both a check-in and « absent » (rolling deployment) ranks as present", () => {
     const reg = (over: object) => ({ id: "r", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, ...over })
     const mixed = registrationRank(reg({ checkedInAt: new Date(), attendanceStatus: "absent" }))

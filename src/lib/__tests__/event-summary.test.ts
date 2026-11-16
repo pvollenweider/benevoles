@@ -79,6 +79,21 @@ describe("eventSummary", () => {
     expect(summary.attestedMinutes).toBe(480)
   })
 
+  it("counts early departures apart: still planned, not attested, a recorded presence, never hours (#1141)", () => {
+    const registrations = [
+      reg({ id: "r1", checkedInAt: new Date("2026-05-02T19:00:00Z") }),
+      reg({ id: "r2", volunteerId: "vol-2", checkedInAt: new Date("2026-05-02T19:00:00Z"), attendanceStatus: "left_early", shift: { id: "shift-2" } }),
+    ]
+    const summary = eventSummary(registrations, new Set(), [shift(), shift({ id: "shift-2" })], [], TZ)
+    expect(summary.plannedMinutes).toBe(480)
+    expect(summary.attestedMinutes).toBe(240)
+    expect(summary.endedEarlyCount).toBe(1)
+    // An early departure is a recorded presence, not "sans présence enregistrée".
+    expect(summary.shiftsWithPresence).toBe(2)
+    expect(summary.shiftsWithoutPresence).toBe(0)
+    expect(summary.checkInUsage).toBe("full")
+  })
+
   it("reuses staffing.ts for the fill rate overall, per role and the underfilled list", () => {
     const shifts = [shift({ id: "s-bar", roleName: "Bar", active: 1, capacity: 2 }), shift({ id: "s-caisse", roleName: "Caisse", active: 3, capacity: 3 })]
     const summary = eventSummary([reg({ shift: { id: "s-bar" } })], new Set(), shifts, [], TZ)

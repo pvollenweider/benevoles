@@ -224,15 +224,16 @@ const LIVE_REGISTRATION_STATUSES = new Set(["active", "waiting", "offered", "req
 
 /**
  * Rank of a live registration for "who wins a same-shift conflict": attendance beats everything.
- * A present one wins over an absent one, an absent one over an expected one (#1141): what an
- * organizer recorded on site is kept. The winner keeps its own row, so its attendance columns stay
- * as they were written; the loser is cancelled, nothing is copied from one row to the other.
+ * A present one wins over a left-early one, which wins over an absent one, which wins over an
+ * expected one (#1141): what an organizer recorded on site is kept. The winner keeps its own row,
+ * so its attendance columns stay as they were written; the loser is cancelled, nothing is copied
+ * from one row to the other.
  */
 export function registrationRank(r: RegistrationLite): number {
   const base: Record<string, number> = { active: 3, offered: 2, requested: 1, waiting: 0 }
   const rank = base[r.status] ?? -1
   const state = attendanceStateOf(r)
-  return state === "present" ? rank + 10 : state === "absent" ? rank + 5 : rank
+  return state === "present" ? rank + 10 : state === "left_early" ? rank + 7 : state === "absent" ? rank + 5 : rank
 }
 
 const shiftById = (shifts: ShiftMeta[]) => new Map(shifts.map((s) => [s.id, s]))

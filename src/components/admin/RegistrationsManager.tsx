@@ -223,7 +223,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   // One request for the whole selection (#292): ownership checked for every row up front on the
   // server, all or nothing. Returns null on a request-level failure.
-  const BULK_LABELS = { cancel: "Retrait", make_leader: "Désignation des responsables", resend_link: "Renvoi des liens", check_in: "Présence", undo_check_in: "Présence", mark_absent: "Absence", undo_absent: "Absence" } as const
+  const BULK_LABELS = { cancel: "Retrait", make_leader: "Désignation des responsables", resend_link: "Renvoi des liens", check_in: "Présence", undo_check_in: "Présence", mark_absent: "Absence", undo_absent: "Absence", mark_left_early: "Départ", undo_left_early: "Départ" } as const
 
   /**
    * Runs a bulk action. On a whole-request failure (network, refused, server) it explains what
@@ -260,20 +260,24 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[]; changedIds?: string[]; results?: { id: string; changed: boolean; state: AttendanceState | null; checkedInAt: string | null; moved?: boolean; gone?: boolean }[] }>
   }
 
-  // Lightweight attendance (#399, #1141): mark the selected confirmed people present or absent,
-  // or undo it. Each action applies to the rows in its starting state only: present and absent
-  // never replace each other directly, the undo comes first.
+  // Lightweight attendance (#399, #1141): mark the selected confirmed people present, absent or
+  // gone before the end, or undo it. Each action applies to the rows in its starting state only:
+  // present and absent never replace each other directly, and a departure is undone before the
+  // presence, so the undo comes first.
   const attendanceOf = (r: Registration) => attendanceStateOf(r)
   const selectedToCheckIn = selectedActiveRegs.filter((r) => attendanceOf(r) === "expected")
   const selectedToUndo = selectedActiveRegs.filter((r) => attendanceOf(r) === "present")
   const selectedToUndoAbsent = selectedActiveRegs.filter((r) => attendanceOf(r) === "absent")
+  const selectedToUndoLeftEarly = selectedActiveRegs.filter((r) => attendanceOf(r) === "left_early")
   const activeRegs = registrations.filter((r) => r.status === "active")
   const presentCount = activeRegs.filter((r) => attendanceOf(r) === "present").length
   const absentCount = activeRegs.filter((r) => attendanceOf(r) === "absent").length
+  const leftEarlyCount = activeRegs.filter((r) => attendanceOf(r) === "left_early").length
   const activeCount = activeRegs.length
 
   const handlePresence = (present: boolean) => handleAttendance(present ? "check_in" : "undo_check_in")
   const handleAbsence = (absent: boolean) => handleAttendance(absent ? "mark_absent" : "undo_absent")
+  const handleDeparture = (leftEarly: boolean) => handleAttendance(leftEarly ? "mark_left_early" : "undo_left_early")
 
   async function handleAttendance(transition: AttendanceTransition) {
     const plan = ATTENDANCE_TRANSITIONS[transition]
@@ -293,12 +297,20 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     // The state of each requested row after the call, as the server read it: a row changed
     // meanwhile on another device shows what was recorded there, not what was asked here.
     const truth = new Map((result.results ?? []).map((r) => [r.id, r]))
+    // The attendance columns a state holds (#1141): a departure keeps the arrival that is still
+    // known, a presence has it, and the two states without one clear it.
+    const columns = (state: AttendanceState, checkedInAt: string | null, fallback: string | null) =>
+      state === "present"
+        ? { checkedInAt: checkedInAt ?? at, attendanceStatus: null }
+        : state === "left_early"
+          ? { checkedInAt: checkedInAt ?? fallback, attendanceStatus: "left_early" }
+          : { checkedInAt: null, attendanceStatus: state === "absent" ? "absent" : null }
     setRegistrations((prev) => prev.map((r) => {
       const t = truth.get(r.id)
       // No state for a row the server no longer finds (`gone`): left as shown until the next load.
-      if (t?.state) return { ...r, checkedInAt: t.state === "present" ? t.checkedInAt ?? at : null, attendanceStatus: t.state === "absent" ? "absent" : null }
+      if (t?.state) return { ...r, ...columns(t.state, t.checkedInAt, r.checkedInAt ?? at) }
       if (!changed.has(r.id)) return r
-      return { ...r, checkedInAt: plan.to === "present" ? at : null, attendanceStatus: plan.to === "absent" ? "absent" : null }
+      return { ...r, ...columns(plan.to, r.checkedInAt ?? at, r.checkedInAt ?? at) }
     }))
     setSelectedIds(new Set())
     const n = changed.size
@@ -308,6 +320,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       undo_check_in: `Présence annulée pour ${n} personne${s}.`,
       mark_absent: `${n} personne${s} marquée${s} absente${s}.`,
       undo_absent: `Absence annulée pour ${n} personne${s}.`,
+      mark_left_early: `${n} personne${s} marquée${s} partie${s} avant la fin.`,
+      undo_left_early: `Départ annulé pour ${n} personne${s}.`,
     }
     // Nothing changed: every row was already in another state, recorded elsewhere meanwhile.
     const text = n === 0 ? "Rien n'a changé : ces personnes ont déjà été marquées sur un autre appareil." : said[transition]
@@ -499,11 +513,17 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           )}
         </div>
       )}
-      <p ref={afterBulkRef} tabIndex={-1} className={`text-sm text-gray-700 focus:outline-none ${presentCount > 0 || absentCount > 0 ? "" : "sr-only"}`}>
+      {/* The title says who is present now. Someone who left before the end is not among the
+          présents, and the line never says « personne encore marqué présent » about them: their
+          count is named instead (#1141 a11y pre-review). */}
+      <p ref={afterBulkRef} tabIndex={-1} className={`text-sm text-gray-700 focus:outline-none ${presentCount > 0 || absentCount > 0 || leftEarlyCount > 0 ? "" : "sr-only"}`}>
         {presentCount > 0
           ? <><span className="font-medium text-green-800">{presentCount} présent{presentCount > 1 ? "s" : ""}</span> sur {activeCount} inscrit{activeCount > 1 ? "s" : ""}</>
-          : `${activeCount} inscrit${activeCount > 1 ? "s" : ""}, personne encore marqué présent`}
-        {absentCount > 0 ? `, ${absentCount} absent${absentCount > 1 ? "s" : ""}.` : "."}
+          : leftEarlyCount > 0
+            ? `${activeCount} inscrit${activeCount > 1 ? "s" : ""}, aucun présent`
+            : `${activeCount} inscrit${activeCount > 1 ? "s" : ""}, personne encore marqué présent`}
+        {absentCount > 0 ? `, ${absentCount} absent${absentCount > 1 ? "s" : ""}` : ""}
+        {leftEarlyCount > 0 ? `, ${leftEarlyCount} parti${leftEarlyCount > 1 ? "s" : ""} avant la fin` : ""}.
       </p>
 
       <div className="flex gap-3 flex-wrap">
@@ -614,12 +634,15 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           toUndoCount={selectedToUndo.length}
           toMarkAbsentCount={selectedToCheckIn.length}
           toUndoAbsentCount={selectedToUndoAbsent.length}
+          toMarkLeftEarlyCount={selectedToUndo.length}
+          toUndoLeftEarlyCount={selectedToUndoLeftEarly.length}
           activeCount={selectedCancellableRegs.length}
           noneWithEmail={selectedRegs.every((r) => !r.volunteer.email)}
           noActiveWithEmail={selectedActiveRegs.every((r) => !r.volunteer.email)}
           busy={bulkBusy}
           onPresence={handlePresence}
           onAbsence={handleAbsence}
+          onDeparture={handleDeparture}
           onMakeResponsible={handleMakeResponsibleClick}
           onResendLink={handleBulkResendLink}
           onCancelRegistrations={handleBulkCancel}

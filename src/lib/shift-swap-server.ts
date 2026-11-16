@@ -549,8 +549,9 @@ async function lockForStep(tx: Tx, requestId: string, organizationId?: string) {
 
 /**
  * What a swapped registration loses: it starts again on its new shift, with no reminder sent and
- * nobody present or absent. The three attendance columns of #1141 go with the check-in, so a row
- * never keeps « absent » (or its author and time) for a shift the person no longer holds.
+ * nobody present, absent or gone before the end. The three attendance columns of #1141 go with the
+ * check-in, so a row never keeps « absent » or « left_early » (nor its author and time) for a
+ * shift the person no longer holds.
  */
 export const SWAP_REGISTRATION_RESETS = {
   reminderJ2Sent: null, reminderJ1Sent: null, reminderDdSent: null,

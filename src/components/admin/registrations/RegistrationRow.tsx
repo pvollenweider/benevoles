@@ -34,7 +34,7 @@ type Props = {
 
 // ── One row of the registrations table ──────────────────────────────────────
 export default function RegistrationRow({ reg, selected, onToggleSelected, onDecision, answers, workload, workloadBlocks = false }: Props) {
-  // Presence and absence are shown for confirmed people only (#399, #1141).
+  // Presence, absence and an early departure are shown for confirmed people only (#399, #1141).
   const attendance = reg.status === "active" ? attendanceStateOf(reg) : "expected"
   return (
     <tr className={`hover:bg-gray-50 ${selected ? "bg-blue-50/60" : ""}`}>
@@ -69,6 +69,13 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
             // Amber, never the red pair (an absence is a fact, not an error); the sign differs from « ✓ ».
             <span className="inline-flex items-center rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-900">
               <span aria-hidden="true">✗ </span>Absent
+            </span>
+          )}
+          {attendance === "left_early" && (
+            // The blue pair of « Complet » (#1141 a11y pre-review), not the purple of « Place proposée ».
+            // The arrow is decorative: the words carry the state, never the colour nor the glyph alone.
+            <span className="inline-flex items-center rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-700">
+              <span aria-hidden="true">→ </span>Parti avant la fin
             </span>
           )}
         </p>

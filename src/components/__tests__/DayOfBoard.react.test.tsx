@@ -6,6 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor, within, act } from "@testing-library/react"
 
 import DayOfBoard from "../admin/DayOfBoard"
+import { SETTLE_MS } from "@/lib/day-of-sync"
 import type { DayOfBoard as Board, DayOfShift } from "@/lib/day-of"
 
 // « Jour J » (#561).
@@ -342,6 +343,8 @@ describe("DayOfBoard", () => {
       renderBoard()
       fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
       await flush()
+      // The row settled after its answer: wait for its buttons to act again (#1141).
+      await act(async () => { await vi.advanceTimersByTimeAsync(650) })
       fireEvent.click(screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" }))
       await flush()
       expect(screen.getByRole("alert")).toBeInTheDocument()
@@ -391,7 +394,7 @@ describe("DayOfBoard", () => {
   })
 })
 
-// The « absent » state on the day-of board (#1141): three states, one persistent button per row,
+// The « absent » state on the day-of board (#1141): four states, one persistent button per row,
 // and two devices that never overwrite each other.
 describe("DayOfBoard, absent state (#1141)", () => {
   const fetchMock = vi.fn()
@@ -407,6 +410,8 @@ describe("DayOfBoard, absent state (#1141)", () => {
   const barCard = () => screen.getByRole("heading", { level: 4, name: "Bar, Soir" }).closest("li")!
   const withZoe = (over: Record<string, unknown>): Board => ({ ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: [{ ...bar.people[0], ...over }, bar.people[1]] }] }] })
   const zoeAbsent = withZoe({ attendanceStatus: "absent" })
+  const zoeLeft = withZoe({ checkedInAt: "2026-07-04T11:55:00.000Z", attendanceStatus: "left_early" })
+  const withLeon = (over: Record<string, unknown>): Board => ({ ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: [bar.people[0], { ...bar.people[1], ...over }] }] }] })
   const renderWith = (b: Board) => render(
     <DayOfBoard eventId="evt-1" board={b} today="2026-07-04" refreshedAt="14h05" timeZone="Europe/Zurich" registrationWindow={{ publicStatus: "published", registrationsOpen: true }} roles={["Bar", "Accueil"]} />,
   )
@@ -576,6 +581,8 @@ describe("DayOfBoard, absent state (#1141)", () => {
     expect(within(undo.closest("li")!).getByText(/^Une absence est déjà enregistrée/)).toBeInTheDocument()
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
     await new Promise((r) => setTimeout(r, 20))
+    // The row settled after its conflict answer: wait for its buttons to act again (#1141).
+    await new Promise((r) => setTimeout(r, 650))
     fireEvent.click(undo)
     await screen.findByRole("button", { name: "Marquer présent, Zoé Müller" })
     expect(within(undo.closest("li")!).queryByText(/^Une absence est déjà enregistrée/)).toBeNull()
@@ -618,6 +625,97 @@ describe("DayOfBoard, absent state (#1141)", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
     await new Promise((r) => setTimeout(r, 30))
     expect(other).toHaveFocus()
+  })
+
+  // The left-early state (#1141): the four-state board, its second keyed button and the settle guard.
+  it("a present person gets « Marquer parti avant la fin » as a second button; a left-early row has « Annuler le départ » only", () => {
+    renderWith(zoeLeft)
+    const card = barCard()
+    const badge = within(card).getByText("Parti avant la fin")
+    expect(badge.className).toMatch(/bg-blue-100/)
+    expect(badge.className).toMatch(/text-blue-700/)
+    expect(within(badge).getByText(/→/)).toHaveAttribute("aria-hidden", "true")
+    const undo = within(card).getByRole("button", { name: "Annuler le départ, Zoé Müller" })
+    expect(undo).toBeInTheDocument()
+    const zoeRow = within(card).getByText("Zoé Müller").closest("li")!
+    expect(within(zoeRow).queryByRole("button", { name: /Marquer parti avant la fin/ })).toBeNull()
+    expect(card).toHaveTextContent("1 présent sur 2 attendus, 1 parti avant la fin.")
+    cleanup()
+    renderBoard()
+    const present = screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" })
+    expect(present).toBeInTheDocument()
+    expect(present.className).toMatch(/border-blue-600/)
+    // Two distinct second nodes: an expected row never offers the departure action.
+    expect(screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Marquer parti avant la fin, Zoé Müller" })).toBeNull()
+  })
+
+  it("« Marquer parti avant la fin » records the departure, the second button goes and the focus moves to « Annuler le départ »", async () => {
+    fetchMock.mockResolvedValue(jsonOk({
+      done: 1, changedIds: ["r2"], skipped: 0,
+      results: [{ id: "r2", changed: true, state: "left_early", checkedInAt: "2026-07-04T11:05:00.000Z" }],
+    }))
+    renderBoard()
+    const primary = screen.getByRole("button", { name: "Annuler la présence, Léon Favre" })
+    const left = screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" })
+    left.focus()
+    fireEvent.click(left)
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "mark_left_early", registrationIds: ["r2"], observedShifts: { r2: "s1" } })
+    const undo = await screen.findByRole("button", { name: "Annuler le départ, Léon Favre" })
+    expect(undo).toBe(primary)
+    expect(undo).toHaveTextContent("Annuler le départ")
+    expect(screen.queryByRole("button", { name: "Marquer parti avant la fin, Léon Favre" })).toBeNull()
+    await waitFor(() => expect(undo).toHaveFocus())
+    await waitFor(() => expect(status()).toHaveTextContent("Départ enregistré pour Léon Favre. Bar, Soir : 0 présent sur 2 attendus, 1 parti avant la fin."))
+    expect(within(barCard()).getByText("Parti avant la fin")).toBeInTheDocument()
+  })
+
+  it("« Annuler le départ » restores the presence on the same button, which keeps the focus", async () => {
+    fetchMock.mockResolvedValue(jsonOk({
+      done: 1, changedIds: ["r1"], skipped: 0,
+      results: [{ id: "r1", changed: true, state: "present", checkedInAt: "2026-07-04T11:05:00.000Z" }],
+    }))
+    renderWith(zoeLeft)
+    const undo = screen.getByRole("button", { name: "Annuler le départ, Zoé Müller" })
+    undo.focus()
+    fireEvent.click(undo)
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "undo_left_early", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
+    const mark = await screen.findByRole("button", { name: "Annuler la présence, Zoé Müller" })
+    expect(mark).toBe(undo)
+    expect(mark).toHaveFocus()
+    await waitFor(() => expect(status()).toHaveTextContent("Départ annulé pour Zoé Müller : présence rétablie. Bar, Soir : 2 présents sur 2 attendus."))
+    expect(within(barCard()).queryByText("Parti avant la fin")).toBeNull()
+  })
+
+  it("conflict: a departure recorded elsewhere first is named as a departure, taken by the row and said once", async () => {
+    fetchMock.mockImplementation(async (url: string) => url.endsWith("/bulk")
+      ? jsonOk({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r2", changed: false, state: "left_early", checkedInAt: "2026-07-04T11:05:00.000Z" }] })
+      : jsonOk({ board: withLeon({ checkedInAt: "2026-07-04T11:05:00.000Z", attendanceStatus: "left_early" }), today: "2026-07-04", refreshedAt: "14h06" }))
+    renderBoard()
+    const primary = screen.getByRole("button", { name: "Annuler la présence, Léon Favre" })
+    primary.focus()
+    fireEvent.click(primary)
+    const sentence = "Un départ est déjà enregistré pour Léon Favre, depuis un autre appareil. Bar, Soir : 0 présent sur 2 attendus, 1 parti avant la fin."
+    await waitFor(() => expect(status()).toHaveTextContent(sentence))
+    const undo = screen.getByRole("button", { name: "Annuler le départ, Léon Favre" })
+    expect(undo).toBe(primary)
+    expect(undo).toHaveFocus()
+    expect(screen.queryByRole("button", { name: "Marquer parti avant la fin, Léon Favre" })).toBeNull()
+    expect(within(undo.closest("li")!).getByText(sentence)).toBeInTheDocument()
+    expect(status()).not.toHaveTextContent("Liste mise à jour")
+  })
+
+  it("a poll that changes the row under the focused second button drops it and moves the focus to the row's first button", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ board: withZoe({ checkedInAt: "2026-07-04T12:00:00.000Z" }), today: "2026-07-04", refreshedAt: "14h06" }))
+    renderBoard()
+    const absent = screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })
+    absent.focus()
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await waitFor(() => expect(screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })).toHaveFocus())
+    expect(screen.queryByRole("button", { name: "Marquer absent, Zoé Müller" })).toBeNull()
   })
 
   it("the press says which shift the row was shown on", async () => {
@@ -709,5 +807,118 @@ describe("DayOfBoard, absent state (#1141)", () => {
     fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
     await screen.findByRole("button", { name: "Marquer présent, Zoé Müller" })
     expect(within(row).queryByText(/^Une absence est déjà enregistrée/)).toBeNull()
+  })
+})
+
+// The settle guard (#1141), on controlled timers: real-time waits made the old test fail on a
+// slow machine, and never showed the buttons becoming usable again.
+describe("DayOfBoard, settle guard (#1141)", () => {
+  const fetchMock = vi.fn()
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+    vi.useFakeTimers()
+  })
+  // Same jsdom timer issue as the polling block above: unmount, let the pending fake timers run
+  // (jsdom's own interval fires and stops itself), then bring the real timers back.
+  afterEach(() => {
+    cleanup()
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  const flush = () => act(async () => { await vi.advanceTimersByTimeAsync(50) })
+  // Resolves the fetch chain without moving the clock: the settle delay must be measured from it.
+  const flushMicro = () => act(async () => { await vi.advanceTimersByTimeAsync(0) })
+  const bulk = (id: string, state: "present" | "left_early" | "expected", checkedInAt: string | null) => jsonOk({
+    done: 1, changedIds: [id], skipped: 0, results: [{ id, changed: true, state, checkedInAt }],
+  })
+  const isDisabled = (el: HTMLElement) => el.getAttribute("aria-disabled") === "true"
+
+  it("(a) during the settle period both buttons of the row are aria-disabled and a press does nothing", async () => {
+    fetchMock.mockResolvedValue(bulk("r1", "present", "2026-07-04T12:03:00.000Z"))
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    await flush()
+    const undo = screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })
+    const left = screen.getByRole("button", { name: "Marquer parti avant la fin, Zoé Müller" })
+    expect(isDisabled(undo)).toBe(true)
+    expect(isDisabled(left)).toBe(true)
+    const calls = fetchMock.mock.calls.length
+    fireEvent.click(undo)
+    fireEvent.click(left)
+    expect(fetchMock).toHaveBeenCalledTimes(calls)
+  })
+
+  it("(b) after SETTLE_MS they are enabled again and a press works", async () => {
+    fetchMock.mockImplementation(async (_url: string, init: RequestInit) => JSON.parse(String(init.body)).action === "check_in"
+      ? bulk("r1", "present", "2026-07-04T12:03:00.000Z")
+      : bulk("r1", "expected", null))
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    await flushMicro()
+    const undo = screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })
+    // One millisecond before the delay, still inert.
+    await act(async () => { await vi.advanceTimersByTimeAsync(SETTLE_MS - 1) })
+    expect(isDisabled(undo)).toBe(true)
+    await act(async () => { await vi.advanceTimersByTimeAsync(1) })
+    expect(isDisabled(undo)).toBe(false)
+    fireEvent.click(undo)
+    await flush()
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ action: "undo_check_in", registrationIds: ["r1"] })
+  })
+
+  it("(c) a poll that changes nothing starts no settle period", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ board, today: "2026-07-04", refreshedAt: "14h05" }))
+    renderBoard()
+    await act(async () => { await vi.advanceTimersByTimeAsync(25_000) })
+    await flush()
+    expect(fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/day-of"))).toHaveLength(1)
+    for (const button of screen.getAllByRole("button")) expect(isDisabled(button)).toBe(false)
+  })
+
+  it("(d) another row is not delayed while one row settles", async () => {
+    fetchMock.mockImplementation(async (_url: string, init: RequestInit) => {
+      const body = JSON.parse(String(init.body))
+      return body.action === "mark_left_early"
+        ? bulk("r2", "left_early", "2026-07-04T11:05:00.000Z")
+        : bulk("r1", "present", "2026-07-04T12:03:00.000Z")
+    })
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" }))
+    await flush()
+    expect(isDisabled(screen.getByRole("button", { name: "Annuler le départ, Léon Favre" }))).toBe(true)
+    // The other row is usable at once.
+    const zoe = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+    expect(isDisabled(zoe)).toBe(false)
+    fireEvent.click(zoe)
+    await flush()
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ action: "check_in", registrationIds: ["r1"] })
+  })
+
+  it("(e) a row that leaves the board and comes back is not left disabled", async () => {
+    const withoutLeon: Board = { ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: [bar.people[0]] }] }] }
+    let dayOfCalls = 0
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url.endsWith("/bulk")) return bulk("r2", "left_early", "2026-07-04T11:05:00.000Z")
+      dayOfCalls += 1
+      return jsonOk({ board: dayOfCalls === 1 ? withoutLeon : board, today: "2026-07-04", refreshedAt: "14h06" })
+    })
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" }))
+    await flush()
+    // A read removes the row while its settle period has not elapsed.
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await flush()
+    expect(screen.queryByRole("button", { name: /Léon Favre/ })).toBeNull()
+    await act(async () => { await vi.advanceTimersByTimeAsync(SETTLE_MS + 50) })
+    // It comes back: the settle period of a row that had left does not keep it inert.
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await flush()
+    expect(isDisabled(screen.getByRole("button", { name: "Annuler la présence, Léon Favre" }))).toBe(false)
+    expect(isDisabled(screen.getByRole("button", { name: "Marquer parti avant la fin, Léon Favre" }))).toBe(false)
   })
 })

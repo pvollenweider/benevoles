@@ -29,6 +29,14 @@
  *      ("planned, as opposed to attested") for its own table — the field name says so, so the two
  *      are never confused by a shared `plannedMinutes` name.
  *
+ * Left before the end (#1141, second PR): a `left_early` registration is a recorded participation
+ * whose duration is unknown. It is never attested, and no worked duration is ever derived from its
+ * arrival (`checkedInAt`), from `attendanceAt` or from the shift's times; the shift's own duration
+ * stays the plan's (`minutes`), because it still counts in planned hours exactly as before. It is
+ * never counted as "planned without presence" either, and is reported apart as a count of
+ * participations ended before the end (`endedEarlyCount`). It IS a participation for "last
+ * participation" purposes.
+ *
  * Parallel time (#986): a role « Cumulable avec un autre créneau » lets one person hold two shifts
  * at the same time. Every per-person total here is the union of that person's shift instants, never
  * their sum (`personMinutes`), so the time is counted once; per-shift lines (one entry, one export
@@ -36,6 +44,7 @@
  */
 import { shiftInstants } from "./ics"
 import { unionLength, type Interval } from "./interval-union"
+import { attendanceStateOf } from "./attendance-state"
 
 export type HourRegistration = {
   id: string
@@ -43,6 +52,8 @@ export type HourRegistration = {
   volunteerId?: string
   status: string
   checkedInAt: Date | null
+  /** "left_early" when the person came and left before the end (#1141); null or missing otherwise. */
+  attendanceStatus?: string | null
   shift: {
     id: string
     roleName: string
@@ -70,8 +81,13 @@ export type HourEntry = {
   /** Local calendar day the shift starts on, "YYYY-MM-DD". */
   localDate: string
   minutes: number
-  /** A recorded presence (`checkedInAt`), as opposed to a confirmed shift with none. */
+  /** A recorded presence (`checkedInAt`), as opposed to a confirmed shift with none. A
+   * left-early participation is not attested: its duration is unknown. */
   attested: boolean
+  /** Came and left before the end (#1141): a participation whose duration is unknown. Counted in
+   * planned hours, never in attested ones nor in "planned without presence", and reported as a
+   * count of participations, never as hours. */
+  endedEarly: boolean
   /** The shift's real instants (ms since epoch), for the union of a person's time (#986). Set by
    * `volunteerHourEntries`; an entry without them counts its `minutes` as time of its own. */
   startMs?: number
@@ -90,7 +106,10 @@ export type EventHourSummary = {
    * differently from that one on purpose: the certificate's own table shows this as "heures
    * planifiées (sans présence)", a second, non-overlapping column next to attestedMinutes. */
   plannedWithoutPresenceMinutes: number
-  /** No shift of this event (within the entries given) has a recorded presence. */
+  /** Participations ended before the end (#1141): a count, never hours. */
+  endedEarlyCount: number
+  /** No shift of this event (within the entries given) has a recorded presence, early departure
+   * included (it is a recorded presence, even though its hours are not attested). */
   noCheckIn: boolean
 }
 
@@ -133,6 +152,7 @@ export function volunteerHourEntries(registrations: HourRegistration[], timeZone
     if (period && !withinPeriod(localDate, period)) continue
     const { start, end } = shiftInstants(r.shift, timeZone)
     const minutes = Math.round((end.getTime() - start.getTime()) / 60_000)
+    const endedEarly = attendanceStateOf(r) === "left_early"
     entries.push({
       registrationId: r.id,
       volunteerId: r.volunteerId,
@@ -143,7 +163,10 @@ export function volunteerHourEntries(registrations: HourRegistration[], timeZone
       label: r.shift.label,
       localDate,
       minutes,
-      attested: r.checkedInAt != null,
+      // A left-early participation keeps `checkedInAt` for the timeline and the export, but its
+      // duration is unknown: it attests no hour (owner decision, #1141).
+      attested: r.checkedInAt != null && !endedEarly,
+      endedEarly,
       startMs: start.getTime(),
       endMs: end.getTime(),
     })
@@ -167,6 +190,7 @@ export function eventHourSummaries(entries: HourEntry[]): EventHourSummary[] {
   return order.map((eventId) => {
     const list = byEvent.get(eventId)!
     const roles = [...new Set(list.map(shiftName))]
+    const withPresence = list.filter((e) => e.attested || e.endedEarly)
     return {
       eventId,
       eventTitle: list[0].eventTitle,
@@ -174,8 +198,12 @@ export function eventHourSummaries(entries: HourEntry[]): EventHourSummary[] {
       shiftsCount: list.length,
       // Parallel time once (#986): the attested union, then what the other shifts add to it.
       attestedMinutes: personMinutes(list.filter((e) => e.attested)),
-      plannedWithoutPresenceMinutes: personMinutes(list) - personMinutes(list.filter((e) => e.attested)),
-      noCheckIn: !list.some((e) => e.attested),
+      // Left-early shifts are excluded from this complement as well (#1141): they are recorded
+      // participations, reported by `endedEarlyCount`, never "planned without presence".
+      plannedWithoutPresenceMinutes: personMinutes(list) - personMinutes(withPresence),
+      endedEarlyCount: list.filter((e) => e.endedEarly).length,
+      // An early departure is a recorded presence: never "présences non saisies".
+      noCheckIn: withPresence.length === 0,
     }
   })
 }
@@ -203,10 +231,19 @@ export function personMinutes(entries: HourEntry[]): number {
 export const totalMinutes = (entries: HourEntry[], attestedOnly: boolean): number =>
   personMinutes(entries.filter((e) => !attestedOnly || e.attested))
 
-/** Totals of the certificate table (#556), parallel time once over all its events (#986). */
-export function certificateTotals(entries: HourEntry[]): { attestedMinutes: number; plannedWithoutPresenceMinutes: number } {
+/**
+ * Totals of the certificate table (#556), parallel time once over all its events (#986). A
+ * left-early participation attests no minute and is not "planned without presence" either: it is
+ * counted apart (`endedEarlyCount`) and named after the total (#1141).
+ */
+export function certificateTotals(entries: HourEntry[]): { attestedMinutes: number; plannedWithoutPresenceMinutes: number; endedEarlyCount: number } {
   const attestedMinutes = personMinutes(entries.filter((e) => e.attested))
-  return { attestedMinutes, plannedWithoutPresenceMinutes: personMinutes(entries) - attestedMinutes }
+  const withPresence = entries.filter((e) => e.attested || e.endedEarly)
+  return {
+    attestedMinutes,
+    plannedWithoutPresenceMinutes: personMinutes(entries) - personMinutes(withPresence),
+    endedEarlyCount: entries.filter((e) => e.endedEarly).length,
+  }
 }
 
 /** Some of these shifts of one person ran at the same time (#986): their totals count it once. */
@@ -240,12 +277,13 @@ export type LastParticipation = {
   lastPresenceDate: string | null
 }
 
-/** The most recent shift date and the most recent presence date among `entries` (#557). Null when
+/** The most recent shift date and the most recent presence date among `entries` (#557). A
+ * left-early shift IS a participation: the arrival was recorded, so it counts for both. Null when
  * there is none of either kind — distinct from "today", never confused with it by a caller. */
 export function lastParticipation(entries: HourEntry[]): LastParticipation {
   const maxDate = (list: HourEntry[]): string | null =>
     list.reduce<string | null>((max, e) => (max === null || e.localDate > max ? e.localDate : max), null)
-  return { lastShiftDate: maxDate(entries), lastPresenceDate: maxDate(entries.filter((e) => e.attested)) }
+  return { lastShiftDate: maxDate(entries), lastPresenceDate: maxDate(entries.filter((e) => e.attested || e.endedEarly)) }
 }
 
 /**
@@ -255,8 +293,9 @@ export function lastParticipation(entries: HourEntry[]): LastParticipation {
  * parallel shifts counted once (#986). « Dernière participation » stays on the past shifts only:
  * an upcoming shift is not a participation yet.
  */
-export function memberListHours(entries: HourEntry[], today: string): { plannedMinutes: number; attestedMinutes: number } & LastParticipation {
-  return { ...splitMinutes(entries), ...lastParticipation(pastEntries(entries, today)) }
+export function memberListHours(entries: HourEntry[], today: string): { plannedMinutes: number; attestedMinutes: number; endedEarlyCount: number } & LastParticipation {
+  const past = pastEntries(entries, today)
+  return { ...splitMinutes(entries), endedEarlyCount: past.filter((e) => e.endedEarly).length, ...lastParticipation(past) }
 }
 
 export type MemberHourTotals = {
@@ -265,6 +304,8 @@ export type MemberHourTotals = {
   shiftsCount: number
   plannedMinutes: number
   attestedMinutes: number
+  /** Participations ended before the end (#1141): a count, never hours. */
+  endedEarlyCount: number
 }
 
 /** Entries of several volunteers, grouped per `volunteerId` (#557: the "hours by volunteer" export).
@@ -285,7 +326,7 @@ export function memberHourTotals(entries: HourEntry[]): MemberHourTotals[] {
   return order.map((volunteerId) => {
     const list = byVolunteer.get(volunteerId)!
     const { plannedMinutes, attestedMinutes } = splitMinutes(list)
-    return { volunteerId, eventsCount: new Set(list.map((e) => e.eventId)).size, shiftsCount: list.length, plannedMinutes, attestedMinutes }
+    return { volunteerId, eventsCount: new Set(list.map((e) => e.eventId)).size, shiftsCount: list.length, plannedMinutes, attestedMinutes, endedEarlyCount: list.filter((e) => e.endedEarly).length }
   })
 }
 

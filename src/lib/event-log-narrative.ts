@@ -110,7 +110,7 @@ const FIELD_LABELS: Record<string, string> = {
   ownerId: "qui s'en occupe",
   // A check-in (#399): the time it was recorded, « enregistrée » for an undone one (stored as "set").
   checkedInAt: "présence",
-  // A recorded absence or its undo (#1141): the state before and after, in words.
+  // A recorded absence, departure or their undo (#1141): the state before and after, in words.
   attendance: "pointage",
   // A volunteer's answer changed from the personal page (#984); `question` names it in the sentence.
   answer: "réponse",
@@ -206,6 +206,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.check_in_undone": (a) => `${a} a annulé la présence`,
   "registration.marked_absent": (a) => `${a} a marqué la personne absente`,
   "registration.absence_undone": (a) => `${a} a annulé l'absence`,
+  "registration.marked_left_early": (a) => `${a} a marqué la personne partie avant la fin`,
+  "registration.departure_undone": (a) => `${a} a annulé le départ`,
   "registration.requested": (a) => `${a} a demandé une inscription`,
   "registration.confirmation_requested": (a) => `${a} a demandé une inscription à confirmer par email`,
   "registration.confirmed_by_email": (a) => `${a} a confirmé son inscription par email`,
@@ -298,6 +300,7 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
   "registration.marked_absent", "registration.absence_undone",
+  "registration.marked_left_early", "registration.departure_undone",
   "registration.requested", "registration.accepted", "registration.refused", "registration.swapped",
   "registration.confirmation_requested", "registration.confirmed_by_email",
   "registration.availability_acknowledged",

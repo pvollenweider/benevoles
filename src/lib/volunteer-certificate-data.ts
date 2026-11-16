@@ -25,6 +25,7 @@ export async function loadVolunteerHourData(
       id: true,
       status: true,
       checkedInAt: true,
+      attendanceStatus: true,
       shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true } },
       event: { select: { id: true, title: true } },
     },

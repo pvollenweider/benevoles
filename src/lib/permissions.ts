@@ -224,7 +224,7 @@ export const FRONT_DESK_ROUTES: Record<string, readonly Method[]> = {
 }
 
 /** The bulk actions open to a front-desk account: recording attendance, nothing else. */
-export const FRONT_DESK_BULK_ACTIONS = ["check_in", "undo_check_in", "mark_absent", "undo_absent"] as const
+export const FRONT_DESK_BULK_ACTIONS = ["check_in", "undo_check_in", "mark_absent", "undo_absent", "mark_left_early", "undo_left_early"] as const
 export const isFrontDeskBulkAction = (action: string): boolean => (FRONT_DESK_BULK_ACTIONS as readonly string[]).includes(action)
 
 /**

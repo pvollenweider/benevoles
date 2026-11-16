@@ -47,6 +47,13 @@ describe("memberTimeline, recorded absence (#1141)", () => {
     expect(t.map((f) => f.kind)).toEqual(["present", "registered"])
   })
 
+  it("shows the arrival and the departure of someone who left before the end (#1141)", () => {
+    const t = memberTimeline(only(reg({ checkedInAt: d("2026-07-04T18:10:00Z"), attendanceStatus: "left_early", attendanceAt: d("2026-07-04T19:40:00Z") })))
+    expect(t.map((f) => f.kind)).toEqual(["left_early", "present", "registered"])
+    expect(t[0]).toMatchObject({ at: d("2026-07-04T19:40:00Z"), text: "Parti avant la fin : Bar · Bar soir (sam. 4 juillet)" })
+    expect(t[1]).toMatchObject({ at: d("2026-07-04T18:10:00Z"), text: "Présent : Bar · Bar soir (sam. 4 juillet)" })
+  })
+
   it("an absence is not a check-in: the summary's count of presences leaves it out", () => {
     const s = only(reg({ attendanceStatus: "absent", attendanceAt: d("2026-07-04T18:20:00Z") }))
     expect(activitySummary(s)).toBe("1 événement avec une inscription confirmée, 0 présence pointée.")

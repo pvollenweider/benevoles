@@ -136,6 +136,19 @@ describe("RegistrationRow", () => {
     expect(screen.queryByText("Absent")).toBeNull()
   })
 
+  it("shows « Parti avant la fin » for someone who came and left: blue pair, arrow, never the amber of an absence", () => {
+    renderRow({ reg: reg({ checkedInAt: "2026-07-04T08:05:00.000Z", attendanceStatus: "left_early" }) })
+    const badge = screen.getByText("Parti avant la fin")
+    expect(badge.className).toMatch(/bg-blue-100/)
+    expect(badge.className).toMatch(/text-blue-700/)
+    expect(badge.className).not.toMatch(/amber-|purple-|red-|dark:/)
+    const glyph = badge.querySelector("[aria-hidden='true']")!
+    expect(glyph).toHaveTextContent("→")
+    expect(glyph).not.toHaveTextContent("↩")
+    expect(screen.queryByText(/Présent/)).toBeNull()
+    expect(screen.queryByText("Absent")).toBeNull()
+  })
+
   it("shows no attendance badge on a registration that is not confirmed", () => {
     renderRow({ reg: reg({ status: "cancelled", attendanceStatus: "absent" }) })
     expect(screen.queryByText("Absent")).toBeNull()

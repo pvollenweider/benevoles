@@ -18,6 +18,7 @@ const entry = (over: Partial<HourEntry> = {}): HourEntry => ({
   localDate: "2026-05-02",
   minutes: 240,
   attested: true,
+  endedEarly: false,
   ...over,
 })
 
@@ -38,6 +39,11 @@ describe("CertificateView", () => {
     for (const col of ["Événement", "Postes", "Créneaux", "Heures attestées"]) {
       expect(within(table).getByRole("columnheader", { name: col })).toBeInTheDocument()
     }
+    // No participation ended before the end: the table is exactly as before this PR, with no
+    // extra column, and scrolls in its own region instead of widening the page (#1141).
+    expect(within(table).queryByRole("columnheader", { name: /terminées avant la fin/ })).toBeNull()
+    expect(table.parentElement).toHaveClass("overflow-x-auto")
+    expect(table.parentElement).toHaveClass("print:overflow-visible")
   })
 
   it("shows attested hours only by default, and labels planned hours separately once the checkbox is checked", () => {
@@ -77,6 +83,38 @@ describe("CertificateView", () => {
     expect(screen.queryByText(/se sont déroulés en même temps/)).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures prévues/ }))
     expect(screen.getByText(/se sont déroulés en même temps/)).toBeInTheDocument()
+  })
+
+  it("counts an early departure apart, names it after the total and never warns about a missing presence (#1141)", () => {
+    const leftEarly = entry({ registrationId: "reg-2", eventId: "event-2", eventTitle: "Marché", shiftId: "shift-2", attested: false, endedEarly: true })
+    render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={[entry(), leftEarly]} defaultPeriod={period} generatedAt="4 octobre 2026" />)
+    const sentence = "1 participation terminée avant la fin n'est pas comptée dans les heures attestées."
+    const shown = screen.getByText(sentence)
+    // Real text, directly after the table's total, before the signature, and printed too.
+    expect(shown).toHaveClass("text-gray-700")
+    expect(shown.className).not.toMatch(/print:hidden|sr-only/)
+    const table = screen.getByRole("table")
+    expect(table.compareDocumentPosition(shown) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // It is not in the warning about shifts without a recorded presence.
+    expect(screen.queryByText(/n'a pas de présence enregistrée/)).toBeNull()
+    // A clear column header: a bare number between two hours columns could be read as hours.
+    expect(within(table).getByRole("columnheader", { name: "Participations terminées avant la fin" })).toBeInTheDocument()
+    // The event's attested column says nothing was attested, but the count column says 1.
+    const row = screen.getByText("Marché").closest("tr")!
+    const cells = within(row).getAllByRole("cell")
+    expect(cells[4]).toHaveTextContent("1")
+    // An event with none shows « 0 », never an empty cell, once the column exists.
+    const other = within(screen.getByText("Fête du village").closest("tr")!).getAllByRole("cell")
+    expect(other[4]).toHaveTextContent("0")
+    // The total row carries the count too.
+    const total = screen.getByRole("rowheader", { name: "Total" }).closest("tr")!
+    const totalCells = within(total).getAllByRole("cell")
+    expect(totalCells[2]).toHaveTextContent("1")
+  })
+
+  it("says nothing about early departures when there is none", () => {
+    render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={[entry()]} defaultPeriod={period} generatedAt="4 octobre 2026" />)
+    expect(screen.queryByText(/terminée avant la fin/)).toBeNull()
   })
 
   it("warns, on screen only, about confirmed shifts without a recorded presence", () => {

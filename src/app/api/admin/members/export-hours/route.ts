@@ -15,10 +15,12 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
 
 /**
  * Hours by volunteer for a period (#557): one line per member with at least one confirmed shift in
- * the period, events, shift count, planned and attested hours, and a total line. `includeAll=1`
- * also lists members without one, at zero — answers "who hasn't taken part since…" without a new
- * screen. Same counting rules as the certificate (#556): active registrations on a shift that was
- * never cancelled, a shift belongs to a period by its local start date. With an hourly rate set in
+ * the period, events, shift count, planned and attested hours, the count of participations ended
+ * before the end (#1141), and a total line. `includeAll=1` also lists members without one, at zero
+ * — answers "who hasn't taken part since…" without a new screen. Same counting rules as the
+ * certificate (#556): active registrations on a shift that was never cancelled, a shift belongs to
+ * a period by its local start date. A left-early participation attests no hour and is never
+ * "planned without presence": it is only counted in its own column. With an hourly rate set in
  * Paramètres (#867), the estimated value of the planned and attested hours, with the rate.
  */
 export async function GET(req: Request) {
@@ -50,7 +52,7 @@ export async function GET(req: Request) {
       registrations: {
         where: { status: "active", shift: { date: { gte: fromDate, lte: toDate } } },
         select: {
-          id: true, status: true, checkedInAt: true,
+          id: true, status: true, checkedInAt: true, attendanceStatus: true,
           shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true } },
           event: { select: { id: true, title: true } },
         },
@@ -78,6 +80,7 @@ export async function GET(req: Request) {
         attestedHours: Math.round(((t?.attestedMinutes ?? 0) / 60) * 100) / 100,
         plannedMinutes: t?.plannedMinutes ?? 0,
         attestedMinutes: t?.attestedMinutes ?? 0,
+        endedEarlyCount: t?.endedEarlyCount ?? 0,
       }
     })
     .filter((r) => includeAll || r.shiftsCount > 0)

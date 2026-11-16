@@ -641,13 +641,16 @@ async function run() {
     await spring.context.close()
   }
 
-  // « Jour J » on a phone, as on site: the first screen, the running shift with one person marked,
-  // and the « Ajouter un besoin » action (#1304).
+  // « Jour J » on a phone, as on site: the card of the running shift, with a person not marked
+  // yet and a person marked present, and the buttons each state offers (#1141). Framed on the
+  // card: the first screen of the page stops above the volunteers' rows.
   await shot("admin-day-of", async () => {
     const dayOf = await signIn(browser, { ...epicerie, device: MOBILE, title: "Inventaire d'automne", seed: "scripts/seed-demo-day-of.ts" })
     await dayOf.page.goto(`${BASE}/admin/events/${dayOf.eventId}/day-of`)
     await settle(dayOf.page)
-    await save(dayOf.page, "admin-day-of")
+    const card = dayOf.page.locator("li[data-shift-id]").filter({ has: dayOf.page.getByRole("heading", { name: "Comptage en rayon" }) }).first()
+    await card.scrollIntoViewIfNeeded()
+    await save(dayOf.page, "admin-day-of", { target: card })
     await dayOf.context.close()
   })
 

@@ -3,6 +3,7 @@
 
 import { describe, it, expect } from "vitest"
 import {
+  certificateTotals,
   defaultPeriod,
   eventHourSummaries,
   lastParticipation,
@@ -88,6 +89,17 @@ describe("volunteerHourEntries", () => {
     expect(entries.find((e) => e.registrationId === "reg-2")?.attested).toBe(false)
   })
 
+  it("a left-early participation is never attested, still planned, and gets no computed duration (#1141)", () => {
+    const left = reg({ checkedInAt: new Date("2026-05-02T18:30:00Z"), attendanceStatus: "left_early" })
+    const [entry] = volunteerHourEntries([left], TZ)
+    expect(entry).toMatchObject({ attested: false, endedEarly: true })
+    // The shift's own duration is still the plan's; nothing is derived from the arrival.
+    expect(entry.minutes).toBe(240)
+    const { plannedMinutes, attestedMinutes } = splitMinutes([entry])
+    expect(plannedMinutes).toBe(240)
+    expect(attestedMinutes).toBe(0)
+  })
+
   it("filters by period on the shift's local start date, inclusive bounds", () => {
     const inPeriod = reg({ shift: { date: "2026-05-02" } })
     const before = reg({ id: "reg-before", shift: { id: "s-before", date: "2026-04-30" } })
@@ -129,12 +141,32 @@ describe("eventHourSummaries", () => {
     expect(summary.attestedMinutes).toBe(0)
   })
 
+  it("reports a left-early participation apart: no attested minute, not « planned without presence », counted as one participation (#1141)", () => {
+    const left = reg({ id: "reg-left", checkedInAt: new Date("2026-05-02T18:30:00Z"), attendanceStatus: "left_early" })
+    const [summary] = eventHourSummaries(volunteerHourEntries([left], TZ))
+    expect(summary.attestedMinutes).toBe(0)
+    expect(summary.plannedWithoutPresenceMinutes).toBe(0)
+    expect(summary.endedEarlyCount).toBe(1)
+    // A recorded presence, so the event is not said to have none at all.
+    expect(summary.noCheckIn).toBe(false)
+  })
+
   it("distinguishes a role from its label, joined by a separator, and dedupes repeats", () => {
     const r1 = reg({ shift: { id: "s1", roleName: "Bar", label: "Bar soir" } })
     const r2 = reg({ id: "reg-2", shift: { id: "s2", roleName: "Bar", label: "Bar soir" } })
     const entries = volunteerHourEntries([r1, r2], TZ)
     const [summary] = eventHourSummaries(entries)
     expect(summary.roles).toEqual(["Bar (Bar soir)"])
+  })
+})
+
+describe("certificateTotals (#556, #1141)", () => {
+  it("keeps a left-early participation out of both the attested and the planned-without-presence minutes, and counts it", () => {
+    const attested = reg({ shift: { id: "s-attested" } })
+    const planned = reg({ id: "reg-planned", checkedInAt: null, shift: { id: "s-planned", date: "2026-05-03" } })
+    const left = reg({ id: "reg-left", checkedInAt: new Date("2026-05-04T18:30:00Z"), attendanceStatus: "left_early", shift: { id: "s-left", date: "2026-05-04" } })
+    const totals = certificateTotals(volunteerHourEntries([attested, planned, left], TZ))
+    expect(totals).toEqual({ attestedMinutes: 240, plannedWithoutPresenceMinutes: 240, endedEarlyCount: 1 })
   })
 })
 
@@ -183,7 +215,7 @@ describe("pastEntries (#557)", () => {
 describe("memberListHours", () => {
   it("counts upcoming confirmed shifts in « Heures prévues », never « — » for a member signed up ahead", () => {
     const entries = volunteerHourEntries([reg({ id: "reg-future", checkedInAt: null, shift: { id: "s-future", date: "2026-06-10" } })], TZ)
-    expect(memberListHours(entries, "2026-05-02")).toEqual({ plannedMinutes: 240, attestedMinutes: 0, lastShiftDate: null, lastPresenceDate: null })
+    expect(memberListHours(entries, "2026-05-02")).toEqual({ plannedMinutes: 240, attestedMinutes: 0, endedEarlyCount: 0, lastShiftDate: null, lastPresenceDate: null })
   })
 
   it("adds past and upcoming shifts; attested stays a subset; the last participation is a past one", () => {
@@ -192,8 +224,17 @@ describe("memberListHours", () => {
       reg({ id: "reg-future", checkedInAt: null, shift: { id: "s-future", date: "2026-06-10" } }),
     ], TZ)
     const hours = memberListHours(entries, "2026-05-20")
-    expect(hours).toEqual({ plannedMinutes: 480, attestedMinutes: 240, lastShiftDate: "2026-05-02", lastPresenceDate: "2026-05-02" })
+    expect(hours).toEqual({ plannedMinutes: 480, attestedMinutes: 240, endedEarlyCount: 0, lastShiftDate: "2026-05-02", lastPresenceDate: "2026-05-02" })
     expect(hours.attestedMinutes).toBeLessThanOrEqual(hours.plannedMinutes)
+  })
+
+  it("counts a past early departure as a participation, never as an attested hour (#1141)", () => {
+    const entries = volunteerHourEntries([
+      reg({ id: "reg-left", checkedInAt: new Date("2026-05-02T18:30:00Z"), attendanceStatus: "left_early" }),
+    ], TZ)
+    expect(memberListHours(entries, "2026-05-20")).toEqual({
+      plannedMinutes: 240, attestedMinutes: 0, endedEarlyCount: 1, lastShiftDate: "2026-05-02", lastPresenceDate: "2026-05-02",
+    })
   })
 
   it("counts two shifts held at the same time once (#986)", () => {
@@ -240,6 +281,12 @@ describe("lastParticipation (#557)", () => {
     expect(lastParticipation(entries)).toEqual({ lastShiftDate: "2026-06-01", lastPresenceDate: "2026-05-02" })
   })
 
+  it("a left-early shift IS a participation for « last participation » purposes (#1141)", () => {
+    const left = reg({ id: "reg-left", checkedInAt: new Date("2026-05-02T18:30:00Z"), attendanceStatus: "left_early", shift: { id: "s-left", date: "2026-05-04" } })
+    const planned = reg({ id: "reg-planned", checkedInAt: null, shift: { id: "s-planned", date: "2026-05-03" } })
+    expect(lastParticipation(volunteerHourEntries([planned, left], TZ))).toEqual({ lastShiftDate: "2026-05-04", lastPresenceDate: "2026-05-04" })
+  })
+
   it("is null for both without entries, and null for presence when none was recorded", () => {
     expect(lastParticipation([])).toEqual({ lastShiftDate: null, lastPresenceDate: null })
     const r = reg({ checkedInAt: null })
@@ -255,8 +302,15 @@ describe("memberHourTotals (#557)", () => {
       ...volunteerHourEntries([reg({ id: "reg-3", volunteerId: "vol-2", shift: { id: "s3" } })], TZ),
     ]
     const totals = memberHourTotals(entries)
-    expect(totals.find((t) => t.volunteerId === "vol-1")).toEqual({ volunteerId: "vol-1", eventsCount: 2, shiftsCount: 2, plannedMinutes: 480, attestedMinutes: 240 })
-    expect(totals.find((t) => t.volunteerId === "vol-2")).toEqual({ volunteerId: "vol-2", eventsCount: 1, shiftsCount: 1, plannedMinutes: 240, attestedMinutes: 240 })
+    expect(totals.find((t) => t.volunteerId === "vol-1")).toEqual({ volunteerId: "vol-1", eventsCount: 2, shiftsCount: 2, plannedMinutes: 480, attestedMinutes: 240, endedEarlyCount: 0 })
+    expect(totals.find((t) => t.volunteerId === "vol-2")).toEqual({ volunteerId: "vol-2", eventsCount: 1, shiftsCount: 1, plannedMinutes: 240, attestedMinutes: 240, endedEarlyCount: 0 })
+  })
+
+  it("counts early departures per volunteer, never as hours (#1141)", () => {
+    const entries = volunteerHourEntries([
+      reg({ id: "reg-left", volunteerId: "vol-1", checkedInAt: new Date("2026-05-02T18:30:00Z"), attendanceStatus: "left_early" }),
+    ], TZ)
+    expect(memberHourTotals(entries)).toEqual([{ volunteerId: "vol-1", eventsCount: 1, shiftsCount: 1, plannedMinutes: 240, attestedMinutes: 0, endedEarlyCount: 1 }])
   })
 
   it("skips entries without a volunteerId", () => {

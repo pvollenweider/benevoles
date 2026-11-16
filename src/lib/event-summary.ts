@@ -29,6 +29,9 @@ export type EventSummary = {
   plannedMinutes: number
   /** The recorded-presence subset of plannedMinutes: attestedMinutes <= plannedMinutes, always. */
   attestedMinutes: number
+  /** Participations ended before the end (#1141): a count, never hours, shown beside the attested
+   * figures. It is a recorded presence (it counts in `shiftsWithPresence`) but attests no hour. */
+  endedEarlyCount: number
   fillOverall: { filled: number; capacity: number }
   fillByRole: RoleFill[]
   underfilled: StaffingSummary["underfilled"]
@@ -54,7 +57,8 @@ export function eventSummary(
   const entries = volunteerHourEntries(registrations, timeZone)
   const volunteerIds = new Set(entries.map((e) => e.volunteerId!))
   const returningCount = [...volunteerIds].filter((id) => returningVolunteerIds.has(id)).length
-  const withPresence = entries.filter((e) => e.attested).length
+  // An early departure is a recorded presence: never "sans présence enregistrée".
+  const withPresence = entries.filter((e) => e.attested || e.endedEarly).length
   const { plannedMinutes, attestedMinutes } = splitMinutes(entries)
   const staffing = staffingSummary(shifts, leaderRoles)
 
@@ -68,6 +72,7 @@ export function eventSummary(
     checkInUsage: entries.length === 0 || withPresence === 0 ? "none" : withPresence === entries.length ? "full" : "partial",
     plannedMinutes,
     attestedMinutes,
+    endedEarlyCount: entries.filter((e) => e.endedEarly).length,
     fillOverall: { filled: staffing.totals.active, capacity: staffing.totals.capacity },
     fillByRole: byRoleFill(shifts),
     underfilled: staffing.underfilled,

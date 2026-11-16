@@ -1182,3 +1182,52 @@ Révisions du catalogue à incrémenter au rendu. Les captures `admin-day-of` et
 inscriptions (`admin-registrations`, `admin-registrations-requests`, `admin-refuse-request`,
 `admin-make-leader-modal`) sont déclarées sur des écrans modifiés et restent à régénérer avec une
 base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans ce travail.
+
+## État « parti avant la fin » (#1141, second lot), 16 novembre 2026
+
+Une inscription confirmée a désormais quatre états : attendue, présente, **absente** ou **partie
+avant la fin**. Une personne présente a un second bouton **Marquer parti avant la fin** ; une
+personne partie avant la fin porte le badge bleu « → Parti avant la fin », son premier bouton
+devient **Annuler le départ**, et le compteur du créneau ajoute « , K partis avant la fin ». Dans
+les inscriptions, la barre des actions gagne **Marquer partis avant la fin (n)** et, quand la
+sélection contient de tels départs, **Annuler le départ (n)** ; la ligne de résumé les compte à
+part. L'export des présences gagne une colonne « Parti avant la fin » après « Absence notée »,
+sans changer les autres colonnes. L'attestation et le bilan comptent ces participations à part,
+jamais en heures. Aucune vidéo n'est régénérée dans ce travail (voix et capture longues) ; aucun
+sélecteur de capture ne casse, la narration et les manifestes ne sont pas modifiés. Le test e2e
+mobile de Jour J attend désormais la fin du délai de stabilisation avant d'annuler une présence.
+
+- `ATTENDANCE_CHECK_IN` : **à refilmer au prochain passage**. Image : chapitres `one`, `group`,
+  `correction`, `multiple` (la barre de sélection montre en plus « Marquer parti avant la fin (n) »
+  quand une personne présente est sélectionnée) ; chapitre `export` (le visualiseur du CSV
+  téléchargé montre la colonne « Parti avant la fin ») ; chapitres `dayof-*` (bouton
+  « Marquer parti avant la fin » sur les lignes présentes, badge et compteur à quatre états).
+  Narration : elle reste juste sur la présence et son annulation, mais ne dit rien du départ avant
+  la fin. Sélecteurs relus, aucun ne casse : les boutons sont cherchés par leur nom exact
+  (« Marquer présent, Prénom Nom », « Annuler la présence, Prénom Nom », `^Marquer présents? \(n\)$`,
+  « Annuler la présence (n) »), et le contrôle du CSV lit les colonnes « Email », « Présent » et
+  « Pointé le » par leur nom, pas par leur position.
+- `VOLUNTEER_HOURS_CERTIFICATE` : **à refilmer au prochain passage**. Image : le tableau de
+  l'attestation gagne la colonne « Terminées avant la fin » (toujours visible) ; la liste des
+  membres peut afficher sous « Heures attestées » le nombre de participations terminées avant la
+  fin. Narration : « les heures attestées comptent les créneaux passés avec une présence
+  enregistrée » ne dit pas qu'un départ avant la fin, bien que sa présence soit enregistrée, ne
+  compte pas. Sélecteurs inchangés (noms de colonnes et de boutons).
+- `REGISTRATION_MONITOR_FOLLOWUP`, chapitre `actions` : image, la barre « Actions sur la sélection »
+  gagne « Marquer parti avant la fin (n) » si une personne présente est sélectionnée. Narration sans
+  rapport avec les présences ; sélecteurs inchangés (« Sélectionner l'inscription de … »,
+  « Désélectionner »).
+- `LAST_MINUTE_CHANGES`, chapitre qui ouvre Jour J pour « Ajouter un besoin » : image, les lignes
+  des personnes présentes ont le second bouton « Marquer parti avant la fin ». Narration sans
+  rapport avec les présences ; sélecteurs inchangés.
+- `SECTORS`, chapitre `sectors-pages` : Jour J est affichée un instant avec le filtre Secteur ;
+  même écart d'image sur les lignes présentes. Narration et sélecteurs inchangés.
+- `MEMBERS_MANAGEMENT` : image inchangée tant que la base de tournage n'a pas de départ avant la
+  fin ; narration à nuancer au prochain passage, car une présence enregistrée peut désormais être
+  un départ avant la fin, qui n'atteste aucune heure.
+
+Les captures `admin-day-of`, `admin-registrations`, `admin-registrations-requests`,
+`admin-refuse-request`, `admin-make-leader-modal`, `admin-members`, `admin-members-bulk-delete`,
+`admin-print` et `admin-event-archive` sont déclarées sur des écrans dont la source a changé et
+restent à régénérer avec une base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans
+ce travail.

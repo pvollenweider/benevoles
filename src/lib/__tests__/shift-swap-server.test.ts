@@ -54,10 +54,12 @@ describe("runSwapTransaction (#1174)", () => {
 describe("a swap resets attendance (#1141)", () => {
   it("clears the check-in and the three absence columns together, so the invariants hold on the new shift", () => {
     expect(SWAP_REGISTRATION_RESETS).toMatchObject({ checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null })
-    // Whatever the row was before (present, or absent with its author and time), it is expected after.
+    // Whatever the row was before (present, absent, or gone before the end with its author and
+    // time), it is expected after.
     const absent = { checkedInAt: null, attendanceStatus: "absent", attendanceAt: new Date("2026-07-04T08:05:00Z"), attendanceBy: "adm-1" }
     const present = { checkedInAt: new Date("2026-07-04T08:05:00Z"), attendanceStatus: null, attendanceAt: null, attendanceBy: null }
-    for (const before of [absent, present]) {
+    const leftEarly = { checkedInAt: new Date("2026-07-04T08:05:00Z"), attendanceStatus: "left_early", attendanceAt: new Date("2026-07-04T09:30:00Z"), attendanceBy: "adm-1" }
+    for (const before of [absent, present, leftEarly]) {
       const after = { ...before, ...SWAP_REGISTRATION_RESETS }
       expect(attendanceStateOf(after)).toBe("expected")
       expect(after).toMatchObject({ attendanceAt: null, attendanceBy: null })

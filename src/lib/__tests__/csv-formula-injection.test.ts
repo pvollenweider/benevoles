@@ -133,7 +133,7 @@ describe("attendance export", () => {
 
   it("leaves an ordinary sheet as it was", () => {
     const csv = attendanceCsv([{ ...base, checkedInAt: null, answers: ["M"] }], "Europe/Zurich", ["Taille"])
-    expect(csv).toBe("﻿Prénom;Nom;Email;Téléphone;Poste;Créneau;Date;Début;Fin;Présent;Pointé le;Absence notée;Taille\r\nAlice;Martin;a@x.ch;;Bar;;04.07.2026;10:00;12:00;non;;;M\r\n")
+    expect(csv).toBe("﻿Prénom;Nom;Email;Téléphone;Poste;Créneau;Date;Début;Fin;Présent;Pointé le;Absence notée;Parti avant la fin;Taille\r\nAlice;Martin;a@x.ch;;Bar;;04.07.2026;10:00;12:00;non;;;;M\r\n")
   })
 })
 
