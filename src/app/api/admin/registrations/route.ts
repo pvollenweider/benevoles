@@ -15,7 +15,7 @@ import { validationError } from "@/lib/api-error"
 import { roleLimitAdminMessage, roleLimitBreaches, roleLimits } from "@/lib/role-limit"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { queueAddedByOrganizer } from "@/lib/notifications/added-by-organizer"
-import { manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
+import { MANUAL_ADD_MAX_SHIFTS, manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 import { checkDutyChange, judgeDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
 import { lockShifts } from "@/lib/registration-capacity"
@@ -31,8 +31,6 @@ function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount
   return workloadRefusalBody(e.verdict, lead)
 }
 
-/** Shifts at most in one submit (#918): a person's whole programme, not a bulk import. */
-const MAX_SHIFTS = 30
 
 /** The person was erased or merged between the first read and the lock: nothing is created. */
 class TombstoneRefusal extends Error {}
@@ -42,7 +40,7 @@ const schema = z.object({
   /** One shift: the original API, still answered with the registration itself. */
   shiftId: z.string().optional(),
   /** Several shifts for the same person in one submit (#918), all or nothing. */
-  shiftIds: z.array(z.string()).max(MAX_SHIFTS).optional(),
+  shiftIds: z.array(z.string()).max(MANUAL_ADD_MAX_SHIFTS).optional(),
   /** A member already in the organization's list (#914): placed without retyping, email or not. */
   volunteerId: z.string().optional(),
   firstName: z.string().optional(),
@@ -57,13 +55,13 @@ const schema = z.object({
    * are not available for, each bound to their answer's revision and the shift's hours
    * (src/lib/availability-assist.ts). Never a way past the workload protection.
    */
-  availabilityAck: z.array(z.string().max(400)).max(MAX_SHIFTS).optional(),
+  availabilityAck: z.array(z.string().max(400)).max(MANUAL_ADD_MAX_SHIFTS).optional(),
   /**
    * A full or closed shift (AUTHZ-15): the organiser's confirmation, one key per shift, bound to
    * the person, the shift's status, places and spots taken (src/lib/shift-override.ts). A
    * cancelled shift is refused whatever is sent.
    */
-  shiftOverride: z.array(z.string().max(400)).max(MAX_SHIFTS).optional(),
+  shiftOverride: z.array(z.string().max(400)).max(MANUAL_ADD_MAX_SHIFTS).optional(),
   /**
    * Birth date (#1171, lot 2): asked when the event protects minors and the person has none on
    * file. Stored on a new person, or on a member without one; an existing date is never replaced.
