@@ -7,14 +7,12 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
-import { orgBaseUrl } from "@/lib/urls"
 import { passwordSchema } from "@/lib/password"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
-import { replyToOnActivation } from "@/lib/org-reply-to"
-import { isOwnerRole, FRONT_DESK_ROLE } from "@/lib/permissions"
+import { activateAccount } from "@/lib/account-activation-server"
 import { activationAllowed } from "@/lib/activation-budget"
 
 const schema = z.object({
@@ -85,78 +83,22 @@ export async function POST(req: Request) {
 
   const passwordHash = await bcrypt.hash(password, 12)
 
-  // Activation and welcome email commit together (#352).
+  // Activation and welcome email commit together (#352). The transactional part lives in
+  // src/lib/account-activation-server.ts, also called by the concurrency integration test; its
+  // lock order (the account's AdminUser row first, then the Organisation row) is documented there.
   const organization = admin.organization
-  const outboxIds = await prisma.$transaction(async (tx) => {
-    // Consumes the link atomically: the update only matches while the account is still inactive
-    // and carries this token, unexpired. A concurrent request that activated it first, a link
-    // replaced by a new invitation or one expired during bcrypt match no row, and nothing else
-    // happens: a setup token can never replace the password of an already active account (#1142).
-    const { count } = await tx.adminUser.updateMany({
-      where: {
-        id: admin.id,
-        isActive: false,
-        setupTokenHash: hashToken(token),
-        OR: [{ setupTokenExpiresAt: null }, { setupTokenExpiresAt: { gt: new Date() } }],
-      },
-      data: {
-        passwordHash,
-        isActive: true,
-        setupTokenHash: null,
-        setupTokenExpiresAt: null,
-        // A front-desk account never receives the organisation's product-update emails (#1142):
-        // they are off by default for it, and no later path turns them on.
-        ...(admin.role === FRONT_DESK_ROLE ? { receiveProductUpdates: false } : {}),
-      },
-    })
-    if (count === 0) return null
-    // A front-desk account (#1142) is no organiser: the welcome email's links point to pages it
-    // cannot open. Its invitation already said everything it needs, and it lands on its own page.
-    if (admin.role === FRONT_DESK_ROLE) return []
-    if (!organization || !admin.organizationId) return []
-    // An owner's now-confirmed address becomes the reply-to of an organization that has none
-    // (#1077), only while it is still null: never over a value an owner set, nor after an owner
-    // changed it in the email settings (a cleared value stays cleared). No address in the log.
-    // Row lock on the organization: a settings save that starts meanwhile waits for this fill and
-    // then writes the value the owner chose, so a clear saved at the same moment still wins.
-    if (isOwnerRole(admin.role)) await tx.$queryRaw`SELECT 1 FROM "Organization" WHERE "id" = ${admin.organizationId} FOR UPDATE`
-    const editedInSettings = isOwnerRole(admin.role) && (await tx.$queryRaw<unknown[]>`
-      SELECT 1 FROM "OrgLog"
-      WHERE "organizationId" = ${admin.organizationId}
-        AND "action" = 'organization.notifications_updated'
-        AND ("changes" -> 'replyToEmail') IS NOT NULL
-      LIMIT 1`).length > 0
-    const replyTo = replyToOnActivation(admin.role, admin.email, editedInSettings)
-    if (replyTo) {
-      const { count } = await tx.organization.updateMany({
-        where: { id: admin.organizationId, replyToEmail: null },
-        data: { replyToEmail: replyTo },
-      })
-      if (count > 0) {
-        await tx.orgLog.create({
-          data: {
-            organizationId: admin.organizationId,
-            actorType: "admin",
-            actorId: admin.id,
-            action: "organization.reply_to_defaulted",
-            entityType: "Organization",
-            entityId: admin.organizationId,
-          },
-        })
-      }
-    }
-    return enqueueNotifications([{
-      kind: "admin_welcome",
+  const outboxIds = await prisma.$transaction((tx) => activateAccount(tx, {
+    admin: {
+      id: admin.id,
+      name: admin.name,
+      email: admin.email,
+      role: admin.role,
       organizationId: admin.organizationId,
-      dedupeKey: `admin_welcome:${admin.id}`,
-      recipient: { email: admin.email, name: admin.name },
-      data: {
-        adminName: admin.name,
-        organizationName: organization.name,
-        adminUrl: `${orgBaseUrl(organization.slug)}/admin/events`,
-      },
-    }], tx)
-  })
+    },
+    organization,
+    token,
+    passwordHash,
+  }))
   if (outboxIds === null) {
     // Lost to another consumption, a replacement or the expiry: same answer as a fresh lookup.
     const now = await checkToken(token)

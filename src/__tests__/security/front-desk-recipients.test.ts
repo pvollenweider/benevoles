@@ -135,7 +135,7 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
     "app/admin/settings/admins/page.tsx",
     "app/api/admin/settings/admins/route.ts",
     "app/api/super-admin/organizations/[id]/send-invite/route.ts",
-    "app/api/super-admin/organizations/[id]/review/route.ts",
+    "lib/org-approval-server.ts",
     "app/super-admin/organizations/page.tsx",
     "app/super-admin/organizations/[slug]/page.tsx",
   ])("%s uses the shared role filter", (file) => {
