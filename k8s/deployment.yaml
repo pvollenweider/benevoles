@@ -231,13 +231,17 @@ spec:
               value: "3000"
             - name: HOSTNAME
               value: "0.0.0.0"
+          # Memory: the process sits near 300 Mi once warm. With a 512 Mi limit Node capped its heap
+          # around 256 MB, and one heavy request ended the process on « heap out of memory »
+          # (2026-11-16, hourly reminders). 1 Gi gives the heap about twice the room; the node has
+          # 32 Gi. No --max-old-space-size: Node sizes its heap from this limit.
           resources:
             requests:
               cpu: 100m
-              memory: 256Mi
+              memory: 384Mi
             limits:
               cpu: 500m
-              memory: 512Mi
+              memory: 1Gi
           # Ready only once the warm-up is over (docker-entrypoint.sh, scripts/warmup.mjs, capped at
           # 60 s): 503 until then, so with maxUnavailable 0 the old pod keeps the traffic meanwhile.
           # Then the same database check as /api/health. See src/lib/readiness.ts.
