@@ -5,14 +5,22 @@ import { useParams } from "next/navigation"
 import { fmtRange } from "@/lib/gantt-utils"
 import { slugify } from "@/lib/utils"
 import PublicFooter from "@/components/PublicFooter"
+import OrgUnavailableNotice from "@/components/public/OrgUnavailableNotice"
+import { isOrgUnavailable, orgUnavailableContact } from "@/lib/org-lifecycle"
 import { orgPageFooterSite } from "@/lib/urls"
 import { spokenStaffingState, staffingStateText, type StaffingState } from "@/lib/staffing"
+import { isTokenShaped, tokenPath } from "@/lib/token-path"
+import { mailtoHref } from "@/lib/email-address"
+import { telHref } from "@/lib/shift-info"
+import SectorLeaderRoster, { type RosterRegistration, type RosterStaffing } from "@/components/public/SectorLeaderRoster"
+import { titleWithSiteName } from "@/lib/document-title"
+import LinksToPages from "@/components/ReadBeforeLinks"
 
 type RegistrationItem = {
   id: string
   status: string
   comment: string | null
-  volunteer: { firstName: string; lastName: string; email: string; phone: string }
+  volunteer: { firstName: string; lastName: string; email: string | null; phone: string }
   shift: { label: string; date: string; startTime: string; endTime: string }
 }
 
@@ -25,12 +33,31 @@ type StaffingItem = {
 type PageData = {
   event: { title: string; slug: string }
   roleName: string
+  /** Since #1169: one poste or one sector, the h1, and the postes of the scope. */
+  scope?: { kind: "poste" | "sector"; name: string }
+  heading?: string
+  postes?: string[]
   leaderName: string
+  /** Pages attached to a poste of the scope (#1324): title and URL only. */
+  readBefore?: { title: string; url: string }[]
   registrations: RegistrationItem[]
   staffing?: StaffingItem[]
 }
 
 const shiftKey = (s: { label: string; date: string; startTime: string }) => `${s.label}__${s.date}__${s.startTime}`
+
+
+/** The pages attached to the postes the leader covers (#1324), one link per page. */
+function ReadBeforeLinks({ pages }: { pages?: { title: string; url: string }[] }) {
+  if (!pages || pages.length === 0) return null
+  return (
+    <section aria-labelledby="leader-read-before" className="bg-white rounded-xl border border-gray-200 p-4">
+      <h2 id="leader-read-before" className="text-sm font-semibold text-gray-900">À lire avant les créneaux</h2>
+      <p className="text-xs text-gray-600 mt-0.5">{pages.length > 1 ? "Les bénévoles de vos postes reçoivent ces liens avec leur confirmation et leurs rappels." : "Les bénévoles de vos postes reçoivent ce lien avec leur confirmation et leurs rappels."}</p>
+      <LinksToPages pages={pages} className="mt-1" />
+    </section>
+  )
+}
 
 /** « 2/4 · minimum atteint », « 1/4 · sous le minimum (2) » (#949), read « 2 inscrits sur 4, minimum atteint ». */
 function StaffingLine({ s }: { s: StaffingItem }) {
@@ -73,14 +100,20 @@ export default function SectorLeaderPage() {
   const token = params.token as string
 
   const [data, setData] = useState<PageData | null>(null)
-  const [loading, setLoading] = useState(true)
+  // Not shaped like a token: no request, the page says the link is invalid straight away.
+  const [loading, setLoading] = useState(() => isTokenShaped(token))
   const [error, setError] = useState<string | null>(null)
+  // The organisation is deactivated or suspended: a page of its own, without any of the roster.
+  const [orgUnavailable, setOrgUnavailable] = useState<{ contact: string | null } | null>(null)
 
   useEffect(() => {
-    fetch(`/api/public/leader/${token}`)
+    const url = tokenPath("/api/public/leader", token)
+    if (!url) return
+    fetch(url)
       .then((r) => r.json())
       .then((d) => {
-        if (d.error) setError(d.error)
+        if (isOrgUnavailable(d)) setOrgUnavailable({ contact: orgUnavailableContact(d) })
+        else if (d.error) setError(d.error)
         else setData(d)
         setLoading(false)
       })
@@ -91,10 +124,12 @@ export default function SectorLeaderPage() {
   }, [token])
 
   useEffect(() => {
-    if (data) document.title = `Responsable · ${data.roleName} — Bénévoles`
+    if (data) document.title = titleWithSiteName(data.heading ?? `Responsable · ${data.roleName}`)
   }, [data])
 
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
+
+  if (orgUnavailable) return <OrgUnavailableNotice audience="leader" contact={orgUnavailable.contact} />
 
   if (error || !data) {
     return (
@@ -104,6 +139,25 @@ export default function SectorLeaderPage() {
           <p className="text-sm text-gray-500">{error ?? "Ce lien n'est plus valide."}</p>
         </div>
       </main>
+    )
+  }
+
+  // A sector leader (#1169): every poste of the sector, grouped by poste, with a day filter.
+  if (data.scope?.kind === "sector") {
+    return (
+      <>
+      <main className="flex-1 bg-gray-50 px-4 py-10">
+        <SectorLeaderRoster
+          heading={data.heading ?? `Responsable · ${data.roleName}`}
+          eventTitle={data.event.title}
+          postes={data.postes ?? []}
+          registrations={data.registrations as unknown as RosterRegistration[]}
+          staffing={(data.staffing ?? []) as unknown as RosterStaffing[]}
+          readBefore={data.readBefore}
+        />
+      </main>
+      <div className="px-4"><PublicFooter site={orgPageFooterSite()} /></div>
+      </>
     )
   }
 
@@ -117,11 +171,13 @@ export default function SectorLeaderPage() {
       <div className="max-w-lg mx-auto space-y-4">
         <div>
           <p className="text-sm text-gray-500">{data.event.title}</p>
-          <h1 className="text-xl font-bold text-gray-900">Responsable · {data.roleName}</h1>
+          <h1 className="text-xl font-bold text-gray-900">{data.heading ?? `Responsable · ${data.roleName}`}</h1>
           <p className="text-sm text-gray-600 mt-1">
             {data.registrations.length} bénévole{data.registrations.length > 1 ? "s" : ""} inscrit{data.registrations.length > 1 ? "s" : ""}
           </p>
         </div>
+
+        <ReadBeforeLinks pages={data.readBefore} />
 
         {/* Shifts below their minimum (#949), those without anyone included: what to fill first. */}
         {belowMinimum.length > 0 && (
@@ -166,10 +222,12 @@ export default function SectorLeaderPage() {
                           )}
                         </div>
                         <div className="text-xs text-gray-500 mt-0.5 flex flex-wrap gap-x-3">
-                          <a href={`mailto:${reg.volunteer.email}`} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.email}</a>
-                          {reg.volunteer.phone && (
-                            <a href={`tel:${reg.volunteer.phone}`} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.phone}</a>
-                          )}
+                          {mailtoHref(reg.volunteer.email) ? (
+                            <a href={mailtoHref(reg.volunteer.email)!} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.email}</a>
+                          ) : reg.volunteer.email && <span>{reg.volunteer.email}</span>}
+                          {reg.volunteer.phone && (telHref(reg.volunteer.phone) !== "tel:" ? (
+                            <a href={telHref(reg.volunteer.phone)} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.phone}</a>
+                          ) : <span>{reg.volunteer.phone}</span>)}
                         </div>
                         {reg.comment && <p className="text-xs text-gray-600 mt-1 italic">{reg.comment}</p>}
                       </li>

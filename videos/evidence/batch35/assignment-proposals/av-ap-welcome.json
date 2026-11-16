@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:12:55.107Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "9e7642f497f9756f62bf9b69e6d0223c0516e6d517385e68bb8352a4eb646fe9",
+  "clipSha256": "671b0fe646cc19d7beb61905042806897b9ab3e482ce35e6f0c647f72413eb1a",
+  "scene": "ap-welcome",
+  "review": {
+    "heardOpening": "La proposition d'affectation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La proposition d'affectation en bêta prépare un planning en brouillon",
+        "visibleSeconds": 0,
+        "visible": "Encart central « Générer une proposition d'affectations » avec sous-titre explicatif sur le planning en brouillon, disparaissant à 00:02",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun",
+        "visibleSeconds": 3,
+        "visible": "Page de l'événement ouverte sur l'onglet Inscriptions > Disponibilités avec statistiques et liste des réponses",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Rien n'est publié, et aucun bénévole n'est prévenu, sans votre décision.",
+        "visibleSeconds": 9,
+        "visible": "Écran stable de consultation des disponibilités, aucune notification ni publication automatique déclenchée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, avec un débit régulier et sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

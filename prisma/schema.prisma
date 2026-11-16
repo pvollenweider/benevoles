@@ -21,6 +21,19 @@ model Organization {
   // « Qui est inscrit » (#1068): the value a NEW event of this organisation starts with
   // (Event.shiftRosterEnabled). On by default; existing events keep their own value.
   shiftRosterDefault Boolean @default(true)
+  // « Organiser les postes par secteurs » (#1147): the value a NEW event of this organisation starts
+  // with (Event.sectorsEnabled), applied by the creation routes while the organisation is active
+  // and not suspended. Off by default; existing events keep their own value.
+  sectorsDefault     Boolean @default(false)
+  // « Autoriser les demandes d'échange de créneaux » (#1174): the value a NEW event of this
+  // organisation starts with (Event.shiftSwapsEnabled), applied by the creation routes only while
+  // the beta capability « shiftSwaps » can be adopted. On by default; existing events keep theirs.
+  shiftSwapsDefault  Boolean @default(true)
+  // « Protection des pauses et de la charge » (#1171, beta capability « workloadProtection »): the
+  // values a NEW event of this organisation starts with ({ enabled, values }, src/lib/workload-policy.ts),
+  // copied by the creation routes only while the capability can be adopted, never inherited live.
+  // Null = new events start without protection. Existing events keep their own policy.
+  workloadPolicyDefault Json?
   publicTitle      String? // headline of the public events page; null = "Bénévoles"
   // IANA time zone of the organization's events (#344): shift times are local wall-clock times in
   // this zone (reminders, emails, event log, PDF export). null = deployment default (APP_TIME_ZONE).
@@ -44,6 +57,10 @@ model Organization {
   // What the association wrote about itself and its need when signing up (#810): helps the
   // operator validate the space. Shown only in the super admin space; null for other spaces.
   signupDescription String?
+  // « Comment avez-vous connu … ? » (#1094, src/lib/signup-source.ts), copied from the request:
+  // one of SIGNUP_SOURCES, and a short precision for « Autre ». Optional; super admin only.
+  signupSource       String?
+  signupSourceDetail String?
   // When the space was created by the self-service sign-up (#810): null for any other creation.
   // Feeds the sign-up indicators of the statistics (median validation delay, unused spaces).
   signupAt          DateTime?
@@ -66,9 +83,28 @@ model Organization {
   // upcoming event, postponement, exclusion).
   inactivityNoticeAt       DateTime?
   inactivityEmailsSent     Int       @default(0)
+  // Since #1114 each of the three messages is a row of OrgInactivityStep, confirmed once a copy
+  // is accepted by the relay. The planned date: start of the day (organisation's time zone) from
+  // which the space may be deactivated; it only moves later. `inactivityBlockedAt`: the procedure
+  // is blocked (a step not confirmed in time, or an older procedure without proof) and the
+  // operator was alerted, once; cleared when it is no longer blocked. All cleared when it stops.
+  inactivityPlannedAt      DateTime?
+  inactivityBlockedAt      DateTime?
   // Retention of past events (#813): the notice sent 30 days before the first batch, the last batch.
   pastEventNoticeAt DateTime?
   pastEventBatchAt  DateTime?
+  // Valuing volunteer work (#867, src/lib/volunteer-hour-value.ts): the hourly rate the association
+  // chooses (in cents) and its currency ("CHF" | "EUR"), set or cleared together, and when it was
+  // last set. All null = no valuation anywhere (event summary, hours export).
+  volunteerHourRateCents    Int?
+  volunteerHourRateCurrency String?
+  volunteerHourRateSetAt    DateTime?
+  // Beta access (#1168, src/lib/beta-capabilities.ts): when an owner turned on « Essayer les
+  // fonctions avancées en bêta » in Paramètres, and who (AdminUser.id, no relation: the account may
+  // be removed later; the OrgLog entry keeps the trace). Null = not taking part, the default.
+  // Leaving clears both and only blocks new adoptions: nothing already in use changes.
+  betaOptInAt   DateTime?
+  betaOptInById String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -76,9 +112,11 @@ model Organization {
   volunteers  Volunteer[]
   admins      AdminUser[]
   keepLinks   OrgKeepLink[]
+  inactivitySteps OrgInactivityStep[]
   slugHistory OrgSlugHistory[]
   logs        OrgLog[]
   targetedMessages TargetedMessage[]
+  sendBatches SendBatch[]
   scheduledMessages ScheduledMessage[]
   messageTemplates MessageTemplate[]
   duplicateDismissals DuplicateDismissal[]
@@ -86,6 +124,8 @@ model Organization {
   logo        OrganizationLogo?
   erasureRecords  ErasureRecord[]
   counters    OrganizationCounter[]
+  emailLimitHits EmailLimitHit[]
+  deliveryCounts NotificationDeliveryCount[]
 }
 
 // The organization's logo (#300), processed server-side (PNG or JPEG, at most 512 px on its longest
@@ -134,6 +174,10 @@ model Event {
   // Public sign-up form requires a phone number (asked by an organizer who calls volunteers on
   // the day). Only the public form: an admin adding someone by hand may not have it.
   requirePhone        Boolean   @default(false)
+  // Confirmation of public sign-ups by email (#1253). Off by default, existing events included:
+  // a public sign-up without proof of the address reserves its places provisionally and only
+  // becomes a registration once its email link is confirmed (src/lib/signup-confirmation.ts).
+  requireEmailConfirmation Boolean @default(false)
   // Accent colour of the public page (#300, part 1): a key of the curated palette
   // (src/lib/event-accent.ts), never a free value, so the header stays readable.
   accentColorKey      String?
@@ -163,6 +207,38 @@ model Event {
   // default stays false (existing events and seeds keep their value). Turning it on shows nobody
   // by itself, and nobody is opted in on their behalf.
   shiftRosterEnabled  Boolean   @default(false)
+  // Sectors grouping several postes (#1147, src/lib/sectors.ts). The option can be turned on while
+  // the organisation is active and not suspended, and off as long as no sector was saved.
+  // `sectorsAdoptedAt` is set in the same transaction as the first saved sector, under a row lock
+  // on this event (src/lib/sector-adoption.ts): from then on the event keeps the sector structure,
+  // even with every sector archived, and the option can no longer be turned off.
+  sectorsEnabled      Boolean   @default(false)
+  sectorsAdoptedAt    DateTime?
+  // Shift swaps between volunteers (#1174, beta capability « shiftSwaps », src/lib/shift-swaps.ts):
+  // two confirmed volunteers of the same poste trade their shifts. Off for every existing event
+  // (column default); a new event starts with Organization.shiftSwapsDefault while the capability
+  // can be adopted. `shiftSwapsApproval`: every swap waits for an organiser's approval, not only
+  // those involving a shift « sur validation ».
+  shiftSwapsEnabled   Boolean   @default(false)
+  shiftSwapsApproval  Boolean   @default(false)
+  // Protection des pauses et de la charge (#1171, beta capability « workloadProtection »,
+  // src/lib/workload-policy.ts): when on, every assignment path refuses a change that leaves a
+  // person over the event's limits. `workloadPolicy` is the versioned policy, the time zone
+  // snapshotted when protection was turned on; an enabled event whose policy does not parse refuses
+  // every new commitment (fail closed). Off for every existing event (column default).
+  workloadProtectionEnabled Boolean @default(false)
+  workloadPolicy            Json?
+  // Dated availability (#1146, lot A, beta capability « availability », src/lib/event-availability.ts):
+  // each person asked gives free time ranges per date of the event (AvailabilityRequest). Off for
+  // every existing event (column default). `availabilityAdoptedAt` is set when collection is first
+  // turned on; `availabilityTimeZone` is the zone snapshotted then, in which every range was entered
+  // and resolved to instants, so a later change of the organisation's zone never reinterprets the
+  // saved answers. `availabilityDeadline`: the answer deadline given to the people asked, an
+  // instant. None of these is copied with the event.
+  availabilityEnabled       Boolean   @default(false)
+  availabilityAdoptedAt     DateTime?
+  availabilityTimeZone      String?
+  availabilityDeadline      DateTime?
   // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
   personalDataAnonymizedAt DateTime?
   createdAt           DateTime  @default(now())
@@ -178,14 +254,401 @@ model Event {
   sectorLeaders SectorLeader[]
   milestones    EventMilestone[]
   targetedMessages TargetedMessage[]
+  sendBatches      SendBatch[]
   scheduledMessages   ScheduledMessage[]
   questions        EventQuestion[]
   questionAnswers  QuestionAnswer[]
   groupLinks       EventGroupLink[]
   rosterConsents   RosterConsent[]
+  signupConfirmations SignupConfirmation[]
+  sectors          Sector[]
+  places           EventPlace[]
+  volunteerLimits  EventVolunteerLimit[]
+  shiftSwapRequests ShiftSwapRequest[]
+  availabilityRequests AvailabilityRequest[]
+  availabilityDays     AvailabilityDay[]
+  availabilityRanges   AvailabilityRange[]
+  draftAssignments     DraftAssignment[]
+  draftPublications    DraftPublication[]
+  proposalRuns         ProposalRun[]
+  volunteerTargets     EventVolunteerTarget[]
+  reminderRules        EventReminderRule[]
+  reminderOccurrences  ReminderOccurrence[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
+}
+
+// Custom automatic reminder delays of one event (#1139). Additive: an event without any row keeps
+// exactly the legacy path (REMINDER_WINDOW_HOURS and the three organisation switches); an event
+// with rows (even all disabled) follows only its enabled rows, not the three switches.
+// `unit` is "hours" or "days" (a day is 24 elapsed hours, never calendar arithmetic);
+// `value` is bounded by REMINDER_RULE_BOUNDS in src/lib/reminder-rules.ts. At most three rows per
+// event, and two rows may not resolve to the same number of hours; checked by the pure validator.
+// `displayOrder` is the order the settings screen will show (PR 2); `id` stays stable across edits.
+model EventReminderRule {
+  id           String   @id @default(cuid())
+  eventId      String
+  unit         String // "hours" | "days"
+  value        Int
+  enabled      Boolean  @default(true)
+  displayOrder Int      @default(0)
+  // A removed rule that already sent at least one occurrence, or has one of its emails in flight
+  // (`sending`), is archived instead of deleted (#1139): the history keeps protecting those
+  // volunteers if the same delay is recreated. Null means active; an archived rule is hidden, never
+  // counted, sent or rescheduled.
+  archivedAt   DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  event       Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  occurrences ReminderOccurrence[]
+
+  @@index([eventId, displayOrder])
+}
+
+// Durable send state of one custom rule for one volunteer, event and stored local day (#1139):
+// unique on those four columns, so two cron runs can claim the same reminder only once. `dueAt` is
+// recomputed from the current registrations while the occurrence is unsent (a queued one too, so a
+// shift moved back earlier brings its outbox row forward); a sent occurrence is never reopened.
+// `status`: "pending" (never claimed), "queued" (outbox row created), "sent", "cancelled" (group
+// emptied, rule/event off, or delivery refused; the hourly run may recompute it), "failed" (final
+// delivery failure: retries exhausted or a permanent rejection; never reopened automatically).
+// `outboxId` is the NotificationOutbox row, or null once the nightly cleanup purged it; `lastError`
+// keeps the reason for the operator. No relation on `outboxId`: the outbox row is short-lived,
+// this table is not. No age-based cleanup yet: when one is wanted, add its window to
+// RETENTION_DAYS (src/lib/retention.ts) and purge it from the existing /api/cron/cleanup job.
+model ReminderOccurrence {
+  id          String    @id @default(cuid())
+  eventId     String
+  volunteerId String
+  // "YYYY-MM-DD": the shift's stored local day (shiftLocalDay), a night shift keeps its start day.
+  localDay    String
+  ruleId      String
+  dueAt       DateTime
+  status      String    @default("pending")
+  outboxId    String?
+  sentAt      DateTime?
+  lastError   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  event     Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  rule      EventReminderRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, volunteerId, localDay, ruleId])
+  @@index([status, dueAt])
+  @@index([outboxId])
+}
+
+// A sector groups several postes of one event (#1147): « Parking » for « Parking Nord » and
+// « Parking Mairie ». Optional (Event.sectorsEnabled). A poste belongs to zero or one sector
+// through Shift.sectorId, shared by every shift of the poste like colorKey. Never deleted: archived
+// (archivedAt), its postes moved to « Sans secteur » first, so the event keeps its history.
+// Places of an event (#1171, lot 2): where missions happen (a stage, a tent, a depot), for the
+// workload protection's travel margin between two places. Separate from sectors (mission types).
+// Per event, archivable, never deleted by the app. A shift points to one (Shift.placeId) or none:
+// a shift without a place is not checked for travel. Organisers only; volunteers see the shift's
+// own place text (locationDetails) as before.
+// A person's own workload limits on one event (#1171, lot 2): stricter than the event's
+// protection, never looser; set by an organiser or by the person from their personal link, without
+// any reason. `values` is versioned JSON ({ version: 1, maxDailyMinutes?, maxContinuousMinutes?,
+// minBreakMinutes?, maxEventMinutes?, minRestMinutes? }, src/lib/workload-personal.ts); a field
+// absent follows the event. One row per event and person; merged keeping the stricter value of
+// each field (src/lib/member-merge-transaction.ts), deleted with the person's data on erasure.
+model EventVolunteerLimit {
+  id          String   @id @default(cuid())
+  eventId     String
+  volunteerId String
+  values      Json
+  // "admin" or "volunteer": who saved it last. A person may loosen only what they set themselves.
+  updatedBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, volunteerId])
+  @@index([volunteerId])
+}
+
+// Dated availability of one person for one event (#1146, lot A, src/lib/event-availability.ts):
+// what they answered, date by date, apart from the general hints Volunteer.availabilityPeriods /
+// availabilityNote (« matin » is never certain availability on a date). A date with no
+// AvailabilityDay row is unknown (no answer); a day row with no range is « pas disponible » that
+// date; a day row with ranges is free during those ranges only. `revision` counts the saved
+// answers, so a later review can tell that an answer changed since it was read. `reviewNeededAt` /
+// `reviewReason` flag an answer the organisers should look at again ("merge": two member records
+// merged while both had answered differently, the kept record's answers kept). Personal data:
+// organisers only, never public; deleted with the person's data on erasure and with the event's
+// personal data (src/lib/past-event-anonymisation.ts). Never copied with an event.
+model AvailabilityRequest {
+  id             String    @id @default(cuid())
+  eventId        String
+  volunteerId    String
+  revision       Int       @default(0)
+  // Last saved answer, and who saved it: "volunteer" or "admin".
+  answeredAt     DateTime?
+  answeredBy     String?
+  reviewNeededAt DateTime?
+  reviewReason   String?
+  // The link « Indiquer mes disponibilités » (#1146), its own secret, never the invitation's. Looked
+  // up by `tokenHash` (SHA-256); re-sent from `tokenEnc` (AES-256-GCM, src/lib/token-vault.ts);
+  // `tokenLegacy` only while no key is configured, as for MemberInvite. All three null = no live
+  // link: never sent yet, or revoked (collection turned off). A new secret on every renewal.
+  tokenLegacy    String?   @map("token")
+  tokenHash      String?   @unique
+  tokenEnc       String?
+  // The request email: first sent, last re-sent (the 48 h reminder cooldown, src/lib/invitation-sending.ts).
+  sentAt         DateTime?
+  lastRemindedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  event     Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  days      AvailabilityDay[]
+
+  @@unique([eventId, volunteerId])
+  @@index([volunteerId])
+}
+
+// One answered date of an AvailabilityRequest (#1146): `date` is the civil date at UTC midnight, as
+// Shift.date. Its ranges start on that date; a range whose end is earlier than its start ends the
+// next morning (« 20:00 → 03:00 »), as for shifts. `eventId` is the request's, for tenant scoping.
+model AvailabilityDay {
+  id        String   @id @default(cuid())
+  requestId String
+  eventId   String
+  date      DateTime
+  createdAt DateTime @default(now())
+
+  request AvailabilityRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  event   Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  ranges  AvailabilityRange[]
+
+  @@unique([requestId, date])
+  @@index([eventId])
+}
+
+// One free range of an AvailabilityDay (#1146): the clock times the person entered ("HH:MM", in the
+// event's availabilityTimeZone) and the real instants they resolve to, [startsAt, endsAt). The check
+// "AvailabilityRange_order_check" (endsAt > startsAt) is created by the migration
+// 20261029180000_event_availability; it can't be declared here.
+model AvailabilityRange {
+  id        String   @id @default(cuid())
+  dayId     String
+  eventId   String
+  startTime String
+  endTime   String
+  startsAt  DateTime
+  endsAt    DateTime
+
+  day   AvailabilityDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  event Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([dayId])
+  @@index([eventId, startsAt])
+}
+
+// A draft assignment (#1146, lot C, src/lib/draft-assignments.ts): an organiser's « this person on
+// this shift », prepared on an event that uses dated availability and published later with others,
+// all at once (DraftPublication). Never a Registration: a draft holds no place, sends nothing, and no
+// count, export, reminder or public page reads it. `source` says who wrote it: "manual" (an
+// organiser) or "proposal" (a generated proposal, #1172, `proposalRunId` its run). `status`:
+// "draft" (pending), "published" (turned into `registrationId` by `publicationId`; the registration's
+// own status may change later, the draft never goes back) or "discarded". `revision` counts every
+// change, so a publication or an edit bound to an older one is refused. The review snapshot is what
+// the organiser last looked at: `shiftTerms` (the shift's material terms, draftShiftTerms) and
+// `availabilityStamp` (the person's answer, request id and revision, or "none"); a change of either
+// makes the draft « à revoir » and publication refuses it until reviewed again. `ackKey`: the
+// acknowledgement that the person is placed outside their declared availability (lot B's
+// availabilityAckKey, bound to that answer's revision and the shift's hours), checked again at
+// publication. Personal data of the organisation's planning: organisers only; deleted with the
+// person's data on erasure and with the event's personal data; never copied with an event.
+model DraftAssignment {
+  id                String    @id @default(cuid())
+  eventId           String
+  shiftId           String
+  volunteerId       String
+  source            String    @default("manual")
+  proposalRunId     String?
+  status            String    @default("draft")
+  revision          Int       @default(1)
+  note              String?
+  createdById       String?
+  shiftTerms        String
+  availabilityStamp String
+  reviewedAt        DateTime
+  reviewedById      String?
+  ackKey            String?
+  acknowledgedAt    DateTime?
+  acknowledgedById  String?
+  publicationId     String?
+  // The registration it became: no foreign key, the archive outlives a registration's changes.
+  registrationId    String?
+  discardedAt       DateTime?
+  // Locked by the organiser (#1172): a new proposal never replaces it. Reviewing a generated draft
+  // locks it too, so a later proposal never erases a correction. Manual drafts are never replaced.
+  locked            Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  event       Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shift       Shift             @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  volunteer   Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  publication DraftPublication? @relation(fields: [publicationId], references: [id], onDelete: SetNull)
+  proposalRun ProposalRun?      @relation(fields: [proposalRunId], references: [id], onDelete: SetNull)
+
+  // One pending draft per person and shift; published and discarded rows are kept as provenance.
+  @@unique([shiftId, volunteerId], map: "DraftAssignment_shift_volunteer_pending_key", where: raw("status = 'draft'"))
+  @@index([eventId, status])
+  @@index([eventId, volunteerId, status])
+  @@index([volunteerId])
+  @@index([publicationId])
+  @@index([proposalRunId])
+}
+
+// A generated assignment proposal (#1172, src/lib/proposal-runs-server.ts): one computation on an
+// event, from its frozen input (`snapshot`, src/lib/proposal-input.ts) to the drafts it wrote. Never
+// a publication: it writes draft assignments (`source: "proposal"`) and nothing else, no
+// registration, no email. `status`: "queued", "running" (an attempt holds the lease `leaseToken`
+// until `leaseExpiresAt`, renewed while it runs), "finished" (the search ran to its budget),
+// "interrupted" (deadline, cancellation, lost lease) or "failed". `writtenAt`: when its result became
+// drafts (a finished run at once, an interrupted one only on the organiser's request), once.
+// `configuration`: the organiser's choices (scope, reserve, night add-ons, rotation categories,
+// preferences, seed, budget); `replacement`: the earlier unlocked proposal drafts it may replace,
+// frozen with their revisions; `hashes`: the input's fingerprints, to tell when it is stale.
+// Personal data of the organisation's planning: organisers only; a person's entries are scrubbed
+// on erasure and merge; deleted with the event's personal data; never copied with an event.
+model ProposalRun {
+  id                String    @id @default(cuid())
+  eventId           String
+  createdById       String?
+  idempotencyKey    String
+  requestHash       String
+  status            String    @default("queued")
+  stopReason        String?
+  outcome           String?
+  seed              Int
+  configuration     Json
+  replacement       Json
+  snapshot          Json?
+  inputVersion      Int
+  inputHash         String
+  hashes            Json
+  solverVersion     String?
+  result            Json?
+  progress          Json?
+  attempt           Int       @default(0)
+  leaseToken        String?
+  leaseExpiresAt    DateTime?
+  cancelRequestedAt DateTime?
+  startedAt         DateTime?
+  finishedAt        DateTime?
+  writtenAt         DateTime?
+  writtenById       String?
+  writtenCount      Int       @default(0)
+  droppedCount      Int       @default(0)
+  written           Json?
+  baselineHashes    Json?
+  /// « Proposer une autre répartition »: its search tries further seeds until its result differs from the earlier ones with the same choices.
+  alternative       Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  event  Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  drafts DraftAssignment[]
+
+  @@unique([eventId, idempotencyKey])
+  // At most one run waiting or computing per event.
+  @@unique([eventId], map: "ProposalRun_one_active_per_event_key", where: raw("status IN ('queued', 'running')"))
+  @@index([eventId, createdAt])
+  @@index([status, createdAt])
+}
+
+// The organiser's hour target of a person for an event (#1172): what a proposal aims at for them,
+// in minutes (0: no target). A wish, never a limit (limits are EventVolunteerLimit). `revision`
+// counts saves. Personal data: organisers only; erased with the person, moved on a merge (the kept
+// record's target wins, never summed), deleted with the event's personal data; never copied.
+model EventVolunteerTarget {
+  id            String   @id @default(cuid())
+  eventId       String
+  volunteerId   String
+  targetMinutes Int
+  revision      Int      @default(1)
+  updatedById   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, volunteerId])
+  @@index([volunteerId])
+}
+
+// One publication of draft assignments (#1146, lot C): the exact drafts and revisions an organiser
+// published together, in one transaction, all or nothing. Written only when it succeeded, with the
+// registrations created; `idempotencyKey` (from the organiser's page) makes a retry return this
+// result instead of publishing twice, `requestHash` refuses the same key for another set of drafts.
+// `result`: ids only ({ drafts: [{ draftId, registrationId }] }), no personal data.
+model DraftPublication {
+  id             String   @id @default(cuid())
+  eventId        String
+  idempotencyKey String
+  requestHash    String
+  actorId        String?
+  draftCount     Int      @default(0)
+  personCount    Int      @default(0)
+  result         Json?
+  createdAt      DateTime @default(now())
+
+  event  Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  drafts DraftAssignment[]
+
+  @@unique([eventId, idempotencyKey])
+}
+
+model EventPlace {
+  id           String    @id @default(cuid())
+  eventId      String
+  name         String
+  displayOrder Int       @default(0)
+  archivedAt   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  event  Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shifts Shift[]
+
+  // Also unique case-insensitively among the places not archived: "EventPlace_eventId_name_ci_key" on
+  // (eventId, lower(trim(name))) WHERE archivedAt IS NULL, created by migration 20261029090000_event_places.
+  // Expression indexes can't be declared here; if `prisma migrate dev` ever proposes dropping it,
+  // remove that statement from the generated SQL.
+  @@index([eventId])
+}
+
+model Sector {
+  id           String    @id @default(cuid())
+  eventId      String
+  name         String
+  displayOrder Int       @default(0)
+  archivedAt   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  event   Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shifts  Shift[]
+  leaders SectorLeader[]
+
+  // Also unique case-insensitively among the sectors not archived: "Sector_eventId_name_ci_key" on
+  // (eventId, lower(trim(name))) WHERE archivedAt IS NULL, created by migration 20261026180000_sectors.
+  // Expression indexes can't be declared here; if `prisma migrate dev` ever proposes dropping it,
+  // remove that statement from the generated SQL.
+  @@index([eventId])
 }
 
 // Free-form extra content per event (rules, FAQ, practical info) beyond the single
@@ -200,6 +663,12 @@ model EventPage {
   title        String
   content      String
   displayOrder Int      @default(0)
+  // Postes whose confirmed volunteers are told to read this page before their shift (#1324),
+  // by name like EventGroupLink.roleNames: kept in step when a poste is renamed or deleted
+  // (src/app/api/admin/events/[id]/roles/[roleName]/route.ts), and a name no live shift
+  // carries is dropped when the page is saved. Empty: no poste, the page stays a general
+  // information page. The attachment is never public: see toPublicEvent (src/lib/public-event.ts).
+  roleNames    String[] @default([])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -209,16 +678,21 @@ model EventPage {
   @@index([eventId])
 }
 
-// "Sector leader" (responsable de secteur) — see issue #186. Scoped to a roleName within an
-// event (matches how shifts already group on the planning, not per-shift: finer-grained scope
-// wasn't a proven need). No login: a stable magic-link token, same pattern as MemberInvite,
-// opens a read-only roster of who's signed up for that role — name, email, phone — without
-// giving admin access to the rest of the event. v1 is read-only on purpose: no mutation surface
-// to secure yet. Several leaders can share a roleName, and one person can lead several.
+// "Sector leader" (responsable de secteur) — see issue #186. Scoped to one poste (`roleName`) or,
+// since #1169, to one sector of the event (`sectorId`): exactly one of the two is set
+// (check "SectorLeader_scope_check", migration 20261026200000_sector_scoped_leaders). A sector
+// leader covers the postes currently in their sector, resolved at each request
+// (src/lib/leader-scope.ts). No login: a stable magic-link token, same pattern as MemberInvite,
+// opens a read-only roster of who's signed up on the scope — name, email, phone — without
+// giving admin access to the rest of the event. Read-only on purpose: no mutation surface
+// to secure yet. Several leaders can share a scope, and one person can lead several (one row each).
 model SectorLeader {
   id        String   @id @default(cuid())
   eventId   String
-  roleName  String
+  roleName  String?
+  // NO ACTION: a sector is never deleted while it has leaders (the app archives sectors), and the
+  // event's cascade still removes both in one statement.
+  sectorId  String?
   name      String
   email     String
   // Access token of the personal link (#290). Looked up by `…Hash` (SHA-256); re-sent from
@@ -230,13 +704,17 @@ model SectorLeader {
   tokenEnc    String?
   createdAt DateTime @default(now())
 
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event  Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  sector Sector? @relation(fields: [sectorId], references: [id], onDelete: NoAction)
 
   // Also unique case-insensitively: "SectorLeader_eventId_roleName_email_ci_key" on lower(trim(email)), created by migration
-  // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
-  // if `prisma migrate dev` ever proposes dropping it, remove that statement from the generated SQL.
+  // 20260930110000_email_case_insensitive_unique (#342), and "SectorLeader_eventId_sectorId_email_ci_key"
+  // (#1169). Expression indexes and the check can't be declared here; if `prisma migrate dev` ever
+  // proposes dropping them, remove those statements from the generated SQL.
   @@unique([eventId, roleName, email])
+  @@unique([eventId, sectorId, email])
   @@index([eventId])
+  @@index([sectorId])
 }
 
 // Share link per group (#947): a club or a team of a festival gets its own link and QR code,
@@ -306,7 +784,7 @@ model EventLog {
   actorType     String // "admin" | "volunteer" | "system"
   actorId       String? // AdminUser.id or Volunteer.id depending on actorType; null for system actions
   action        String // dot-namespaced, e.g. "shift.created", "registration.cancelled"
-  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite" | "EventPage" | "SectorLeader" | "EventMilestone"
+  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite" | "ShiftDecline" | "EventPage" | "SectorLeader" | "EventMilestone"
   entityId      String
   changes       Json? // { field: { from, to } }, non-PII values only
   causedByLogId String? // set when this entry is a direct, known consequence of another one
@@ -343,6 +821,28 @@ model OrgKeepLink {
   createdAt      DateTime     @default(now())
 
   @@index([organizationId])
+}
+
+// One message of the inactivity procedure (#1114): queued once per organisation and step, confirmed
+// when the first administrator's copy is accepted by the relay (set with the outbox row's « sent »
+// status, in the same transaction: sent outbox rows are purged nightly). `recipientHashes`: HMAC of
+// the addresses already queued (no address in clear), so an administrator added later gets the
+// step once. `plannedAt`: the planned date its email announced. Deleted when the procedure stops.
+model OrgInactivityStep {
+  id              String       @id @default(cuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  step            String // "first" | "second" | "last"
+  queuedAt        DateTime
+  confirmedAt     DateTime?
+  recipients      Int          @default(0)
+  recipientHashes String[]     @default([])
+  plannedAt       DateTime
+  createdAt       DateTime     @default(now())
+
+  outbox NotificationOutbox[]
+
+  @@unique([organizationId, step])
 }
 
 model OrgLog {
@@ -448,7 +948,9 @@ model Shift {
   requiresApproval Boolean @default(false)
   // Practical info for the volunteers of this shift (#397), shown with the place
   // (locationDetails) in the confirmation email, the reminders, the personal page and the
-  // public sign-up recap. Short by design: no mission sheets, files or workflows.
+  // public sign-up recap. Short by design: no mission sheets, files or workflows. Longer
+  // practical content belongs to an EventPage (#1324), optionally attached to the shift's
+  // poste (EventPage.roleNames), which this field links to instead of holding it.
   contactName     String?
   contactPhone    String?
   instructions    String?
@@ -474,23 +976,58 @@ model Shift {
   // Role reserved to members with one of these tags (#470), checked from the member invitation at
   // sign-up. Shared per role like colorKey. Empty = open to everyone.
   reservedTags    String[] @default([])
+  // Role reserved to volunteers who answered one choice question of the event (#962): the question
+  // (an EventQuestion of the same event, asked to every volunteer, not a follow-up) and the accepted
+  // answers among its choices. Shared per role like colorKey, set on every shift by the role route.
+  // The sign-up compares the stored QuestionAnswer values, never the question label. The question
+  // cannot be deleted, narrowed to some postes or made free text while a poste depends on it; the
+  // API refuses those edits with the poste's name. SetNull is only the database's safety net for a
+  // direct delete, which the app never does.
+  reservedQuestionId String?
+  reservedAnswers    String[] @default([])
   // Role whose shifts may overlap any other shift of the same volunteer (#986), e.g. first aid while
   // serving coffee: two shifts overlap for one person only if neither allows it
   // (src/lib/shift-overlap.ts). Shared per role like colorKey: set on every shift of the role by the
   // role route, taken by a shift created in (or moved to) the role (src/lib/role-settings.ts, like
   // colorKey, maxPerVolunteer, reservedTags and displayOrder, #1002), and by event duplication.
   overlapAllowed  Boolean  @default(false)
+  // Role « Attribué par l'organisation uniquement » (#1145): its shifts are never offered publicly
+  // (public page and API, group links, embeds, invitations) and the public sign-up refuses them;
+  // organisers add people by hand. A role is assigned-only as soon as one of its live shifts is
+  // (src/lib/role-assignment.ts). Shared per role like colorKey (role route, src/lib/role-settings.ts,
+  // event and shift duplication). False = public behaviour unchanged.
+  assignedOnly    Boolean  @default(false)
+  // « Repas sur le pouce possible » (#1171, lot 2): the meal can be taken during this mission, so
+  // it does not take time out of a meal window of the workload protection; it still counts as work.
+  // Per shift (one poste can differ from one day to another); the poste screen sets it on all of
+  // its shifts at once. False = the meal needs time without this mission.
+  mealOnTheGo     Boolean  @default(false)
+  // Place of the mission (#1171, lot 2): an EventPlace of the same event, or null (not checked for
+  // the travel margin). Per shift (one poste can run on several stages). SetNull covers a manual
+  // cleanup only: the app archives places, an archived place stays on its shifts and is checked.
+  placeId         String?
   // Recurring permanence (#866) this shift was generated by; null for a shift created on its own.
   // Kept on the shift when the rule is deleted (SetNull): the shift and its registrations stay.
   recurrenceId    String?
+  // Sector of the poste (#1147): shared per role like colorKey (role route, src/lib/role-settings.ts,
+  // shift creation, event duplication), null = « Sans secteur ». Shown to organisers only.
+  sectorId        String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   event         Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  reservedQuestion EventQuestion? @relation(fields: [reservedQuestionId], references: [id], onDelete: SetNull)
   recurrence    ShiftRecurrence? @relation(fields: [recurrenceId], references: [id], onDelete: SetNull)
+  sector        Sector?          @relation(fields: [sectorId], references: [id], onDelete: SetNull)
+  place         EventPlace?      @relation(fields: [placeId], references: [id], onDelete: SetNull)
   registrations Registration[]
+  draftAssignments DraftAssignment[]
+  declines      ShiftDecline[]
 
   @@index([recurrenceId])
+  @@index([sectorId])
+  @@index([placeId])
+  @@index([reservedQuestionId])
 }
 
 // A recurring permanence (#866): one description (« every Wednesday 14:00–17:00 until June »)
@@ -561,11 +1098,18 @@ model Volunteer {
 
   organization  Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   registrations     Registration[]
+  reminderOccurrences ReminderOccurrence[]
+  signupConfirmations SignupConfirmation[]
   invites           MemberInvite[]
+  shiftDeclines     ShiftDecline[]
   pushSubscriptions PushSubscription[]
   questionAnswers   QuestionAnswer[]
   deliveryOutcomes  DeliveryOutcome[]
   rosterConsents    RosterConsent[]
+  workloadLimits    EventVolunteerLimit[]
+  availabilityRequests AvailabilityRequest[]
+  draftAssignments  DraftAssignment[]
+  proposalTargets   EventVolunteerTarget[]
   mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
   mergedFrom        Volunteer[]    @relation("VolunteerMerge")
   // Possible-duplicate dismissals (#601) naming this record as either side of the pair.
@@ -621,6 +1165,9 @@ model Registration {
   // The group link (#947) the public sign-up came through, set by the server from the link's code;
   // null for the main link, an admin addition, or once that group link is deleted.
   groupLinkId      String?
+  // Provisional reservation awaiting confirmation by email (#1253). Null for any other
+  // registration; set on the places held while the volunteer proves the address.
+  signupConfirmationId String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
@@ -628,17 +1175,128 @@ model Registration {
   shift     Shift           @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   volunteer Volunteer       @relation(fields: [volunteerId], references: [id])
   groupLink EventGroupLink? @relation(fields: [groupLinkId], references: [id], onDelete: SetNull)
+  signupConfirmation SignupConfirmation? @relation(fields: [signupConfirmationId], references: [id], onDelete: SetNull)
+  swapRequests      ShiftSwapRequest[] @relation("SwapRequester")
+  swapCounterOffers ShiftSwapRequest[] @relation("SwapCounterpart")
 
   // One live registration per volunteer and shift (#264). Partial: cancelled rows are kept for
   // history, and a volunteer may cancel then register again. Backstops the route-level check,
   // which alone can't stop a double submit racing itself.
-  @@unique([shiftId, volunteerId], map: "Registration_shift_volunteer_live_key", where: raw("status IN ('active', 'waiting', 'offered', 'requested')"))
+  @@unique([shiftId, volunteerId], map: "Registration_shift_volunteer_live_key", where: raw("status IN ('active', 'waiting', 'offered', 'requested', 'unconfirmed')"))
   @@index([status, reminderJ2Sent])
   @@index([status, reminderJ1Sent])
   @@index([status, reminderDdSent])
   @@index([status, shiftId])
   @@index([waitingPosition, shiftId])
   @@index([groupLinkId])
+  @@index([signupConfirmationId])
+}
+
+
+// A public sign-up waiting for its email address to be proven (#1253), when the event asks for it
+// (Event.requireEmailConfirmation). One row per request (address + event), covering every shift
+// chosen: the places it holds are Registration rows with status "unconfirmed" and this id; the
+// shifts that were full with a waitlist are only listed in `waitlistShiftIds` until the click
+// (nothing is reserved for them before). `tokenHash` is the SHA-256 of the 32-byte link token,
+// never the token itself; `expiresAt` is the deadline shown in the email (24 h, never past the
+// first shift's start). `cancelledAt` says the request was replaced, expired or withdrawn; a
+// confirmation is idempotent and keeps its recorded counts.
+model SignupConfirmation {
+  id              String    @id @default(cuid())
+  eventId         String
+  volunteerId     String
+  email           String
+  firstName       String
+  lastName        String
+  phone           String?
+  birthDate       DateTime?
+  comment         String?
+  tokenHash       String    @unique
+  expiresAt       DateTime
+  confirmedAt     DateTime?
+  cancelledAt     DateTime?
+  // "replaced" (a newer request for the same address), "expired" (the cron), "withdrawn" (an
+  // organiser cancelled every held place).
+  cancelReason    String?
+  // The statuses recorded at the click, so a repeated click shows the same result.
+  resultActive    Int?
+  resultRequested Int?
+  resultWaiting   Int?
+  // Proof of acceptance stored until the confirmation creates the registrations (#569).
+  charterAcceptedHash String
+  charterAcceptedAt   DateTime
+  groupLinkId     String?
+  source          String    @default("public_form")
+  // The shifts that were full with a waitlist at the request: only listed in the email, entered
+  // in the waitlist when the volunteer confirms (their rank is taken then).
+  waitlistShiftIds String[] @default([])
+  // Custom answers (#483) kept until the confirmation, by question id.
+  answers         Json?
+  rosterNameVisible   Boolean @default(false)
+  rosterNoticeVersion String?
+  createdAt       DateTime  @default(now())
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+
+  @@unique([eventId, email], map: "SignupConfirmation_pending_key", where: raw("confirmedAt IS NULL AND cancelledAt IS NULL"))
+  @@index([eventId, email])
+  @@index([expiresAt, confirmedAt, cancelledAt])
+}
+
+// A swap request between two volunteers (#1174, src/lib/shift-swaps.ts and shift-swap-server.ts):
+// Pierre publishes « Je cherche à échanger ce créneau » for one of his confirmed registrations; a
+// volunteer holding a compatible confirmed registration offers it in return (one offer at a time,
+// `revision` counts the offers, so a confirmation is bound to the terms it saw); Pierre confirms;
+// an organiser approves when needed; then one transaction swaps the two registrations' `shiftId`
+// (each person keeps their own registration, personal link and token). A pending request reserves
+// nothing. The shift ids and `termsHash` are what was agreed: an application that no longer finds
+// them ends the request as impossible. Never copied with an event; ids and states only, no PII.
+model ShiftSwapRequest {
+  id                    String    @id @default(cuid())
+  eventId               String
+  // "open" (published, no offer) | "offered" (an offer waits for the requester) | "approval"
+  // (both agreed, an organiser must approve) | "applied" | "withdrawn" | "refused" | "expired" |
+  // "impossible" | "cancelled" (by the organisation: option switched off).
+  status                String    @default("open")
+  registrationId        String
+  volunteerId           String
+  shiftId               String
+  counterRegistrationId String?
+  counterVolunteerId    String?
+  counterShiftId        String?
+  revision              Int       @default(0)
+  // Material terms of both shifts when the offer was made (src/lib/shift-swaps.ts, materialTerms).
+  termsHash             String?
+  // Material terms of the requester's shift at publication.
+  shiftHash             String
+  // Volunteers whose offer the requester declined: they cannot offer again on this request.
+  declinedVolunteerIds  String[]  @default([])
+  expiresAt             DateTime
+  offeredAt             DateTime?
+  confirmedAt           DateTime?
+  // The organiser who approved or refused (AdminUser.id, no relation: the account may go).
+  decidedById           String?
+  decidedAt             DateTime?
+  appliedAt             DateTime?
+  endedAt               DateTime?
+  // Why it ended, a code of SWAP_END_REASONS (src/lib/shift-swaps.ts).
+  endReason             String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  event        Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  registration Registration  @relation("SwapRequester", fields: [registrationId], references: [id], onDelete: Cascade)
+  counterRegistration Registration? @relation("SwapCounterpart", fields: [counterRegistrationId], references: [id], onDelete: SetNull)
+
+  // One open request per registration, on either side (the other side's exclusivity is checked
+  // under the volunteer lock): backstops a double submit racing itself.
+  @@unique([registrationId], map: "ShiftSwapRequest_registration_live_key", where: raw("status IN ('open', 'offered', 'approval')"))
+  @@unique([counterRegistrationId], map: "ShiftSwapRequest_counter_live_key", where: raw("status IN ('offered', 'approval')"))
+  @@index([eventId, status])
+  @@index([registrationId])
+  @@index([counterRegistrationId])
 }
 
 model MemberInvite {
@@ -658,11 +1316,34 @@ model MemberInvite {
   // from the admin side. Cleared when they register from the same link (change of mind), but a
   // later withdrawal of all their shifts does not set it back (product decision, #558).
   declinedAt  DateTime?
+  // When the invitation email was last sent again (#1105): a reminder (« Relancer les invités sans
+  // réponse ») or a new invitation of someone already invited. With `sentAt`, it keeps a reminder
+  // from emailing the same person twice within 48 h (src/lib/invitation-sending.ts).
+  lastRemindedAt DateTime?
 
   event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
 
   @@unique([eventId, volunteerId])
+}
+
+// « Je ne peux pas » for one precise shift (#1303): the volunteer's answer from the open-shifts
+// email, one row per (volunteer, shift), with the date it was given. It says nothing about the
+// event's other shifts nor about the event-level answer (MemberInvite.declinedAt, #558), and is
+// never a block: the organiser still sees the person in « Chercher des bénévoles », with the reason
+// and unchecked, and may choose to ask again. Taking the shift later deletes the row. Kept until
+// the event is anonymised, like the invitations; deleted with either side (cascade).
+model ShiftDecline {
+  id          String   @id @default(cuid())
+  shiftId     String
+  volunteerId String
+  declinedAt  DateTime @default(now())
+
+  shift     Shift     @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([shiftId, volunteerId])
+  @@index([volunteerId])
 }
 
 // Erasure register (#516): one row per member whose personal data was erased, so the erasure can
@@ -696,6 +1377,10 @@ model NotificationOutbox {
   status        String    @default("pending") // "pending" | "sending" | "sent" | "failed" | "cancelled" (#814)
   attempts      Int       @default(0)
   nextAttemptAt DateTime  @default(now())
+  // The delivery's own constraint (#1139): retry backoff or sending-limit hold. A custom reminder
+  // also has a shift deadline; nextAttemptAt is the later of the two, so a shift moved back earlier
+  // can advance the row without losing a retry or a hold. Null when there is no such constraint.
+  deliveryNotBefore DateTime?
   claimedAt     DateTime?
   lastError     String?
   // Optional business key (#315): the same notification enqueued twice (retried request,
@@ -709,10 +1394,23 @@ model NotificationOutbox {
   // The targeted message this email belongs to (#467), for its delivery summary.
   targetedMessageId String?
   targetedMessage   TargetedMessage? @relation(fields: [targetedMessageId], references: [id], onDelete: SetNull)
+  // Last time a sending limit held this email back (#1100); null = never held. Lets one email
+  // held several times count once per hour in EmailLimitHit, and tells « still held » apart.
+  lastHeldAt        DateTime?
+  // First time a sending limit held it (#1101): with sentAt, how long the limit delayed it.
+  firstHeldAt       DateTime?
+  // The batch it was sent with (#1101): invitations, a reminder, a message to volunteers.
+  sendBatchId       String?
+  sendBatch         SendBatch? @relation(fields: [sendBatchId], references: [id], onDelete: SetNull)
+  // The inactivity step this copy belongs to (#1114): its « sent » confirms the step.
+  inactivityStepId  String?
+  inactivityStep    OrgInactivityStep? @relation(fields: [inactivityStepId], references: [id], onDelete: SetNull)
 
   @@index([status, nextAttemptAt])
   @@index([targetedMessageId])
   @@index([organizationId, createdAt])
+  @@index([sendBatchId])
+  @@index([inactivityStepId])
 }
 
 // Per-recipient SMTP outcome of a send (#598): "accepted by our relay" is the only thing a
@@ -783,7 +1481,7 @@ model EventQuestion {
   // that role's sector leaders instead of the organisers. Roles have no table (they are the
   // roleName shared by shifts), so this is the name, kept in step like EventGroupLink.roleNames:
   // renamed with the role, cleared when the role is deleted (src/app/api/admin/events/[id]/roles/
-  // [roleName]/route.ts). Null = the organisers, as before. The question stays asked to everyone.
+  // [roleName]/route.ts). Null = the organisers, as before. Who is asked is displayScope's job.
   roleName   String?
   // Follow-up question (#1016): shown only when the volunteer's answer to the parent question (a
   // yes/no or choice question of the same event, itself not a follow-up) is one of showIfValues;
@@ -792,6 +1490,14 @@ model EventQuestion {
   // unanswered, archived otherwise), in the API: SetNull is only the database's safety net.
   parentId     String?
   showIfValues String[]  @default([])
+  // Display scope (#1140), apart from roleName (which only routes change emails): "event" = asked
+  // to every volunteer (default, every question created before); "roles" = asked only to volunteers
+  // whose live registrations include a shift of one of displayRoleNames (the role names of the
+  // event's shifts, kept in step on rename, dropped on deletion: "roles" with none left is asked to
+  // nobody rather than widened to everyone). A follow-up has no scope of its own: it follows its
+  // parent's (src/lib/question-scope.ts). Answers stay attached to the question, whatever the scope.
+  displayScope     String   @default("event")
+  displayRoleNames String[] @default([])
   archivedAt DateTime?
   createdAt  DateTime  @default(now())
 
@@ -799,6 +1505,8 @@ model EventQuestion {
   parent    EventQuestion?   @relation("QuestionFollowUps", fields: [parentId], references: [id], onDelete: SetNull)
   followUps EventQuestion[]  @relation("QuestionFollowUps")
   answers   QuestionAnswer[]
+  // Postes whose access depends on this question's answer (#962).
+  reservedByShifts Shift[]
 
   @@index([eventId, position])
 }
@@ -874,6 +1582,7 @@ model TargetedMessage {
   event        Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
   outbox       NotificationOutbox[]
   scheduled    ScheduledMessage?
+  sendBatch    SendBatch?
 
   @@index([eventId, createdAt])
   @@index([createdAt])
@@ -929,6 +1638,17 @@ model RateLimit {
   @@index([resetAt])
 }
 
+// Administration sessions ended by « Se déconnecter »: the session id (`sid` of the JWT, random,
+// src/lib/session-lifetime.ts), so a copy of the signed-out cookie is refused too
+// (refreshAdminToken). Nothing else about the session or the person. Kept until the session could
+// no longer be used anyway (30 days after its sign-in), then pruned by the cleanup cron.
+model RevokedSession {
+  sid       String   @id
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
 // Web push subscription, tied to one Volunteer (hence to one organization through it). Creating
 // one requires the volunteer's registration editToken, not just an email: the reminder payload
 // links to /my/<editToken>, so whoever owns the endpoint receives that link. Same browser can
@@ -980,14 +1700,39 @@ model AdminUser {
   // Release banner (#612): the version this super admin dismissed. A newer version makes the
   // banner reappear even though this field is unchanged — the comparison, not a reset, does it.
   releaseBannerDismissedVersion String?
+  // Second factor of the super admin (pentest F6): TOTP (RFC 6238) from an authenticator app.
+  // The secrets are AES-256-GCM with TOKEN_ENCRYPTION_KEY (src/lib/token-vault.ts), never in clear.
+  // `totpPendingSecretEnc` holds an enrolment not confirmed yet, bound to the sign-in that started
+  // it and short-lived; `totpLastUsedStep` is the last accepted 30-second step, so a code is never
+  // accepted twice. Reset by scripts/reset-two-factor.ts. See src/lib/second-factor-server.ts.
+  totpSecretEnc          String?
+  totpPendingSecretEnc   String?
+  totpEnabledAt          DateTime?
+  totpLastUsedStep       Int?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
-  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  milestones   EventMilestone[]
+  organization  Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  milestones    EventMilestone[]
+  recoveryCodes AdminRecoveryCode[]
 
   @@index([organizationId])
   @@index([setupTokenHash])
+}
+
+// One-time recovery codes of the second factor (pentest F6): ten per account, shown once, stored
+// as SHA-256 only (80 random bits each, so no salt is needed). A used code keeps its row with
+// `usedAt`, which makes the count of remaining codes and a reuse attempt both visible.
+model AdminRecoveryCode {
+  id          String    @id @default(cuid())
+  adminUserId String
+  codeHash    String    @unique
+  usedAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
 }
 
 // Last run of each scheduled job (#383): reminders and cleanup write it themselves, the backup
@@ -1040,6 +1785,103 @@ model VideoFeedback {
 // never lowered by a deletion. Incremented by AFTER INSERT triggers that Prisma does not model
 // (migration 20261008150000_usage_counters); the metrics are listed in src/lib/usage-counters.ts.
 // Read only by the app. Counts only, no personal data.
+// A sending limit reached (#1100, src/lib/notifications/limit-hits.ts): one row per limit,
+// organisation and UTC hour, with how many emails it held (queued, they leave when the window
+// ends) or refused (a direct send that failed, or a public-triggered email dropped). No address,
+// no content, no recipient: an organisation, a limit name, times and counts. Kept 90 days
+// (src/lib/retention.ts). `organizationId` null: platform emails, outside any organisation.
+// One batch of emails sent at once from an event (#1101, src/lib/send-batches.ts): invitations,
+// a reminder of the invitees, the manual reminder, a message to volunteers (now, scheduled, or
+// « créneaux à compléter »). Who and when, how many, and how it was delivered; no recipient, no
+// address, no content (a message's text stays in TargetedMessage, kept less long). The outbox rows
+// are purged every night, so the cleanup folds their outcome into the counters first, like
+// TargetedMessage (#467); the live summary is the counters plus the rows still queued.
+// Kept 3 years (src/lib/retention.ts), or until the event is deleted.
+model SendBatch {
+  id                String   @id @default(cuid())
+  organizationId    String
+  eventId           String
+  // "member_invite" | "invite_reminder" | "manual_reminder" | "targeted_message" | "scheduled_message" | "open_shifts"
+  kind              String
+  // AdminUser.id of who sent it (who scheduled it, for a scheduled message); the name is read at
+  // display, like OrgLog. Null: no administrator (removed meanwhile, or none).
+  actorId           String?
+  // Emails queued with the batch.
+  recipientCount    Int      @default(0)
+  // Outcomes of rows already purged from the outbox.
+  sentCount         Int      @default(0)
+  // Among them, sent after a sending limit held them back.
+  heldSentCount     Int      @default(0)
+  failedCount       Int      @default(0)
+  cancelledCount    Int      @default(0)
+  // Longest wait a limit caused among the purged rows, in seconds.
+  maxHeldWaitSec    Int      @default(0)
+  // The message history row (#467) for the message kinds; null once that one is deleted.
+  targetedMessageId String?  @unique
+  createdAt         DateTime @default(now())
+
+  organization    Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  event           Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  targetedMessage TargetedMessage?     @relation(fields: [targetedMessageId], references: [id], onDelete: SetNull)
+  outbox          NotificationOutbox[]
+
+  @@index([organizationId, eventId, createdAt])
+  @@index([organizationId, createdAt])
+  @@index([createdAt])
+}
+
+model EmailLimitHit {
+  id             String   @id @default(cuid())
+  // limit:organisation-or-"platform":UTC hour, the upsert key.
+  bucket         String   @unique
+  organizationId String?
+  limit          String
+  // The email kind held or refused (NotificationKind), for the operator to see what hit the
+  // limit. Null on rows recorded before the column existed.
+  kind           String?
+  hourStart      DateTime
+  heldCount      Int      @default(0)
+  refusedCount   Int      @default(0)
+  firstAt        DateTime @default(now())
+  lastAt         DateTime @default(now())
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([lastAt])
+  @@index([organizationId, lastAt])
+}
+
+// Per-kind delivery counts of the transactional emails (#1269), folded from the outbox rows the
+// nightly cleanup deletes: an aggregate survives the purge, without recipient, address, content or
+// member id. One row per organisation (or platform), UTC day the email was queued, kind and
+// outcome; a cancelled email also carries the class of its cancellation reason.
+//
+// `organizationKey` exists because of PostgreSQL: a unique index treats every NULL as distinct, so
+// (organizationId, day, kind, outcome, reason) would let two cleanups create two platform rows.
+// It holds the organisation id, or "platform" for emails without one, and is the column the unique
+// key uses; organizationId stays nullable for the foreign key and the cascade.
+model NotificationDeliveryCount {
+  id              String   @id @default(cuid())
+  organizationId  String?
+  organizationKey String
+  // UTC midnight of the day the email was queued (NotificationOutbox.createdAt), not the purge day:
+  // a late purge (a cleanup skipped, a row held) counts the email on the day it was sent.
+  day             DateTime
+  kind            String
+  outcome         String
+  // Class of the cancellation reason (cancelReasonClass): "" for sent and failed rows.
+  reason          String   @default("")
+  count           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationKey, day, kind, outcome, reason])
+  @@index([organizationId, day])
+  @@index([day])
+}
+
 model PlatformCounter {
   metric String @id
   value  BigInt @default(0)
@@ -1065,6 +1907,9 @@ model SignupRequest {
   contactName      String
   email            String
   description      String?
+  // Optional « Comment avez-vous connu … ? » answer (#1094), copied to the organisation.
+  source           String?
+  sourceDetail     String?
   tokenHash        String    @unique
   expiresAt        DateTime
   confirmedAt      DateTime?
@@ -1108,7 +1953,9 @@ model OperatorLog {
 }
 
 // A platform-wide setting changed from the super admin space, one row per key (#810): the
-// « Inscriptions fermées » switch (key "signup", value { closed }).
+// « Inscriptions fermées » switch (key "signup", value { closed }); the capabilities open for a
+// beta trial (#1168, key "beta.capabilities", value { open: string[] }, unknown or graduated ids
+// ignored).
 model PlatformSetting {
   key         String   @id
   value       Json

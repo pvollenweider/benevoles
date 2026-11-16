@@ -5,14 +5,16 @@ import assert from "node:assert/strict"
 import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { fullNameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
+import { OPERATOR_PLATFORM_EMAIL, passOperatorSecondFactor } from "../lib/operator-second-factor"
 
 async function main() {
   const base = "http://localhost:43104"
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video_operator" || process.env.VIDEO_BASE_URL !== base) throw new Error("Isolated operator environment required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const email = "video.operator.disposable.owner@example.org"
@@ -29,7 +31,8 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(email)
       await page.getByLabel("Mot de passe", { exact: true }).fill(loginPassword)
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-      await page.waitForURL(/\/(?:admin\/events|super-admin\/organizations)/)
+      if (email === OPERATOR_PLATFORM_EMAIL) await passOperatorSecondFactor(page)
+      await page.waitForURL(/\/(?:admin\/dashboard|super-admin\/organizations)/)
     }
     await login(platform, "video.operator.platform@example.org")
     if (cleanup) {
@@ -38,7 +41,7 @@ async function main() {
     }
     if (!resume) {
       assert.equal(await db.adminUser.count({ where: { email } }), 0)
-      const created = await platform.request.post(`${base}/api/super-admin/organizations`, { data: { name: "Formation Opérateur Jetable", adminName: "Lou Exemple", adminEmail: email } })
+      const created = await platform.request.post(`${base}/api/super-admin/organizations`, { data: { name: "Formation Opérateur Jetable", adminName: fullNameOf("Lou"), adminEmail: email } })
       assert.equal(created.status(), 201)
       assert.equal(typeof (await created.json()).inviteUrl, "string")
     }

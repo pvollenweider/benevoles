@@ -3,6 +3,8 @@
 
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { registrationToken } from "@/lib/token-vault"
 import { getClientIp, rateLimit } from "@/lib/rate-limit"
 import { linkTargetInclude, LIVE_STATUSES, sendPersonalLink } from "@/lib/personal-link-send"
@@ -16,9 +18,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
   const { token } = await params
   const reg = await prisma.registration.findFirst({
     where: { ...registrationToken.where(token), status: { in: [...LIVE_STATUSES] } },
-    include: linkTargetInclude,
+    include: { ...linkTargetInclude, event: { select: { ...linkTargetInclude.event.select, organization: { select: { slug: true, ...ORG_LIFECYCLE_SELECT } } } } },
   })
   if (!reg) return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
+  if (!orgLinksOpen(reg.event.organization)) return orgUnavailableResponse()
 
   const outcome = await sendPersonalLink(reg)
   if (outcome === "no_email") return NextResponse.json({ error: "Aucune adresse email n'est enregistrée pour cette inscription." }, { status: 400 })

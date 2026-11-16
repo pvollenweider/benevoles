@@ -46,12 +46,12 @@
     },
     {
       "id": "timezone",
-      "transcript": "Vérifiez ensuite le fuseau horaire. Il sert à calculer les rappels, l’expiration des offres de liste d’attente, le journal et les documents. Ici, l’association travaille en Europe Zurich. Changer ce réglage adapte les instants d’envoi sans déplacer les heures affichées sur les créneaux.",
+      "transcript": "Vérifiez ensuite le fuseau horaire. Il sert à calculer les rappels, l’expiration des offres de liste d’attente, le journal et les documents. Ici, l’association travaille en Europe Zurich. Changer ce paramètre adapte les instants d’envoi sans déplacer les heures affichées sur les créneaux.",
       "fallbackDurationMs": 18000
     },
     {
       "id": "event",
-      "transcript": "De retour aux Premiers pas, les réglages facultatifs sont maintenant cochés. Créons la Fête du parc depuis une page blanche. Saisissez un titre clair, le lieu, puis les dates de début et de fin. À la validation, l’événement naît en brouillon : les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.",
+      "transcript": "De retour aux Premiers pas, les paramètres facultatifs sont maintenant cochés. Créons la Fête du parc depuis une page blanche. Saisissez un titre clair, le lieu, puis les dates de début et de fin. À la validation, l’événement naît en brouillon : les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.",
       "fallbackDurationMs": 22000
     },
     {

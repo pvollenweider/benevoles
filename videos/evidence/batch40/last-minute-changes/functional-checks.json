@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-11-11T12:25:53.055Z",
+  "scope": "actual local routes and database only; inbox and audiovisual review still required",
+  "withdrawalPromotesOffer": true,
+  "offerConfirmed": true,
+  "targetedRecipients": 1,
+  "manualReplacementFillsShift": true,
+  "duplicateStatus": 409,
+  "duplicateMessage": "Cette personne est déjà inscrite sur ce créneau.",
+  "changedScheduleNotified": 1,
+  "cancelledActiveAndRequested": true,
+  "priorAttendancePreserved": true,
+  "actualCausalJournal": true,
+  "journalEntries": 9,
+  "fixtureMustBeResetBeforeCapture": true
+}

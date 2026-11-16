@@ -200,3 +200,55 @@ describe("PushSubscribeButton — availability and failure (#534)", () => {
     expect(screen.getByRole("button", { name: /Recevoir des rappels push/ })).toBeTruthy()
   })
 })
+
+// iPhone or iPad in a Safari tab: no Push API there, the steps to add the page to the Home Screen
+// instead (#593), only where the page asks for them and the site offers push.
+describe("PushSubscribeButton — iPhone in a tab (#593)", () => {
+  const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1"
+  let fetchMock: ReturnType<typeof vi.fn>
+
+  function iphoneTab(keyAnswer: Promise<FetchAnswer>) {
+    vi.spyOn(navigator, "userAgent", "get").mockReturnValue(IPHONE)
+    Object.defineProperty(navigator, "serviceWorker", { configurable: true, value: { getRegistration: vi.fn(), register: vi.fn() } })
+    delete (window as unknown as { PushManager?: unknown }).PushManager
+    fetchMock = vi.fn(() => keyAnswer)
+    vi.stubGlobal("fetch", fetchMock)
+  }
+
+  afterEach(() => {
+    cleanup()
+    vi.restoreAllMocks()
+    vi.unstubAllGlobals()
+  })
+
+  it("gives the steps under a heading, as an ordered list naming the button, with no live region", async () => {
+    iphoneTab(Promise.resolve({ ok: true, json: async () => ({ publicKey: "AAAA" }) }))
+    render(<PushSubscribeButton editToken="tok" installHint />)
+    const heading = await screen.findByRole("heading", { level: 2, name: "Recevoir les rappels sur iPhone ou iPad" })
+    expect(screen.getByRole("region", { name: heading.textContent! })).toBeTruthy()
+    const steps = screen.getAllByRole("listitem")
+    expect(steps).toHaveLength(3)
+    expect(steps[2].textContent).toContain("«\u00a0Recevoir des rappels push\u00a0»")
+    expect(screen.queryByRole("button")).toBeNull()
+    expect(screen.queryByRole("status")).toBeNull()
+  })
+
+  it("renders nothing when the site offers no push, or the key can't be fetched", async () => {
+    iphoneTab(Promise.resolve({ ok: true, json: async () => ({ publicKey: null }) }))
+    const { container } = render(<PushSubscribeButton editToken="tok" installHint />)
+    await waitFor(() => expect(container.innerHTML).toBe(""))
+    cleanup()
+    iphoneTab(Promise.reject(new Error("offline")))
+    const second = render(<PushSubscribeButton editToken="tok" installHint />)
+    await waitFor(() => expect(second.container.innerHTML).toBe(""))
+  })
+
+  it("renders nothing where the page doesn't ask (the sign-up confirmation)", async () => {
+    iphoneTab(Promise.resolve({ ok: true, json: async () => ({ publicKey: "AAAA" }) }))
+    const { container } = render(<PushSubscribeButton editToken="tok" />)
+    expect(container.innerHTML).toBe("")
+    await new Promise((r) => setTimeout(r, 20))
+    expect(container.innerHTML).toBe("")
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:13.602Z",
+  "revalidatedAt": "2026-11-01T08:03:13.608Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-drafts",
+      "audioSha256": "c424e8344b06ec61afa06aeeebf4ce51ef7fce8690c53a96730a92719d1769d1",
+      "recognized": "Aux rencontres du Val d'Orcel, onze personnes ont indiqué leurs disponibilités. Depuis la page disponibilités, ouvrons affectations en brouillon. Une ligne par personne, une colonne par date avec les places à pourvoir, et encore aucune affectation. Cliquons sur générer une proposition.",
+      "expected": "Aux Rencontres du Val d'Orsel, onze personnes ont indiqué leurs disponibilités. Depuis la page Disponibilités, ouvrons Affectations en brouillon : une ligne par personne, une colonne par date avec les places à pourvoir, et encore aucune affectation. Cliquons sur Générer une proposition.",
+      "wordErrorRate": 0.023809523809523808,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

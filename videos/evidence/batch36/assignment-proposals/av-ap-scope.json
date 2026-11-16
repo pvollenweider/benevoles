@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:13.136Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "53b340e3f3474fca48d9524087ff46efe5ec944f5bcefcd55aed24773a716406",
+  "clipSha256": "1608958b0653b1542ac35444a748ded6d7d4ec6eee6b0ff9d7c3105d3470dc72",
+  "scene": "ap-scope",
+  "review": {
+    "heardOpening": "Ce qui est vérifié rappelle les règles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ce qui est vérifié rappelle les règles toujours respectées, dont la protection des pauses et de la charge, ici activée.",
+        "visibleSeconds": 0.5,
+        "visible": "Section 'Ce qui est vérifié' affichée avec la mention 'Protection des pauses et de la charge : activée'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Dans Périmètre, les trois dates et les cinq postes sont cochés",
+        "visibleSeconds": 7,
+        "visible": "Défilement vers la section Périmètre où les 3 dates et les 5 postes apparaissent cochés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "quatorze créneaux, trente et une places à pourvoir.",
+        "visibleSeconds": 7.5,
+        "visible": "Texte '14 créneaux, 31 places à pourvoir' visible sous les cases à cocher des postes.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, naturelle et parfaitement synchronisée avec le défilement de la page."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

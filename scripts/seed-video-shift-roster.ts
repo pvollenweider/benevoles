@@ -7,6 +7,7 @@ import { mkdir, writeFile } from "node:fs/promises"
 import { loadCurrentVideoPrisma } from "../videos/lib/current-product-prisma"
 const id = "video-shift-roster", slug = "formation-roster"
 async function main() {
+  const mailpit = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
   const current = await loadCurrentVideoPrisma("http://localhost:43102"), db = current.db
   // Runtime models come from the verified main snapshot. The durable checkout's
   // generated Prisma typings may predate #1070; never regenerate files under src/.
@@ -47,7 +48,7 @@ async function main() {
     // Inspect and delete only this classroom's exact demo messages, never the inbox.
     const deleted: string[] = [], preserved: string[] = []
     for (let start = 0; ; start += 500) {
-      const response = await fetch(`http://localhost:48026/api/v1/messages?limit=500&start=${start}`); assert(response.ok)
+      const response = await fetch(`${mailpit}/api/v1/messages?limit=500&start=${start}`); assert(response.ok)
       const data = await response.json() as { messages: { ID: string; Subject: string; To: { Address: string }[] }[]; total: number }
       for (const m of data.messages) {
         if (m.Subject.includes("Fête du parc") && m.To.length && m.To.every(to => /^video\.roster\.(aline|bruno|claire|david|emma|owner)@example\.org$/.test(to.Address))) deleted.push(m.ID)
@@ -55,7 +56,7 @@ async function main() {
       }
       if (start + data.messages.length >= data.total) break
     }
-    for (const message of deleted) assert((await fetch("http://localhost:48026/api/v1/messages", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ IDs: [message] }) })).ok)
+    for (const message of deleted) assert((await fetch(`${mailpit}/api/v1/messages`, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ IDs: [message] }) })).ok)
     await mkdir("videos/output/shift-roster-visibility", { recursive: true })
     await writeFile("videos/output/shift-roster-visibility/mailbox-reset-proof.json", JSON.stringify({ at: new Date().toISOString(), deleted, preserved }, null, 2))
     console.log("Dedicated roster classroom reset: on (org default too), V1 Bruno and David, hidden Claire, invitation Gina, known minor; exact fixture mail cleared.")

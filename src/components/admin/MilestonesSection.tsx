@@ -65,7 +65,7 @@ function MilestoneForm({ eventId, milestone, team, onSaved, onCancel }: {
   const [ownerId, setOwnerId] = useState(milestone?.ownerId ?? "")
   // A deactivated current owner stays a choice (« compte désactivé »): saving keeps it unless changed.
   const options: OwnerOption[] = ownerOptions(team, milestone?.ownerId && milestone.ownerName ? { id: milestone.ownerId, name: milestone.ownerName } : null)
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
   const errorId = `${id}-error`
 
   useLayoutEffect(() => {
@@ -182,7 +182,7 @@ function MilestoneForm({ eventId, milestone, team, onSaved, onCancel }: {
           ))}
         </select>
       </div>
-      <FormStatus error={error} errorId={errorId} />
+      <FormStatus error={error} errorId={errorId} quiet={quiet} alertShown={alertShown} />
       <p role="status" className="sr-only">{busy ? "Enregistrement en cours…" : ""}</p>
       <div className="flex flex-wrap justify-end gap-2">
         <button type="button" onClick={cancel} aria-disabled={busy || undefined} className={quietButton}>
@@ -333,7 +333,7 @@ export default function MilestonesSection({
                   checked={m.done}
                   onChange={() => toggleDone(m)}
                   aria-describedby={m.ownerName ? `${checkboxId}-owner` : undefined}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
+                  className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                 />
                 {/* The owner under the title (#985): it wraps with it on a narrow screen. */}
                 <div className="flex-1 min-w-[10rem]">

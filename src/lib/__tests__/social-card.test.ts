@@ -16,7 +16,7 @@ describe("socialCardFor", () => {
   })
 
   it("shows a public page's section, title and summary", () => {
-    expect(socialCardFor("/doc/admin", [])).toMatchObject({ eyebrow: "Documentation", title: "Guide administrateur", footer: SOCIAL_CARD_FOOTER })
+    expect(socialCardFor("/doc/admin", [])).toMatchObject({ eyebrow: "Documentation", title: "Guide organisateur", footer: SOCIAL_CARD_FOOTER })
     expect(socialCardFor("/legal/privacy", [])).toMatchObject({ eyebrow: "Informations légales", title: "Politique de confidentialité" })
     expect(socialCardFor("/fonctionnalites", [])).toMatchObject({ eyebrow: "Présentation" })
   })

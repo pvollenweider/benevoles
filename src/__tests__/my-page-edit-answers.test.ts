@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Changing one's answers from the personal page (#984, part 2): PATCH
 // /api/public/registrations/[token]/answers. Who and which event come from the link only; only the
 // event's active questions are written; a required question can't be cleared; the withdrawals'
@@ -43,7 +46,7 @@ const database = (args: Args) => stored
   .filter((q) => q.eventId === args.where.eventId && q.archivedAt === null)
   .map((q) => ({ ...q, answers: q.answers.filter((a) => a.volunteerId === args.select.answers.where.volunteerId).map(({ values }) => ({ values })) }))
 
-const event = { id: "e1", title: "Fête", organizationId: "org-1", cancelDeadlineDays: null, cancelDeadlineHours: null, organization: { timeZone: "Europe/Zurich" } }
+const event = { id: "e1", title: "Fête", organizationId: "org-1", cancelDeadlineDays: null, cancelDeadlineHours: null, organization: { ...OPEN_ORG, timeZone: "Europe/Zurich" } }
 const linkRegistration = { volunteerId: "v1", eventId: "e1", volunteer: { firstName: "Julie", lastName: "Martin" }, event }
 // Sat 4 July 2026, 10:00 in Zurich.
 const liveShift = { status: "active", shift: { date: new Date("2026-07-04T00:00:00Z"), startTime: "10:00", endTime: "12:00" } }
@@ -95,6 +98,31 @@ describe("PATCH /api/public/registrations/[token]/answers", () => {
     expect(queued).toMatchObject({ event: { id: "e1", organizationId: "org-1" }, volunteerId: "v1", volunteerName: "Julie Martin", changes: [{ questionId: "meal", from: ["Oui"], to: ["Non"] }] })
     expect(typeof queued.changeId).toBe("string")
     expect(deliverAfterResponse).toHaveBeenCalledWith(["n1"])
+  })
+
+  it("a question asked to a poste the volunteer no longer holds (#1140): the answer sent is ignored, the stored one kept, and it is no longer required", async () => {
+    const bar = { id: "bar", eventId: "e1", label: "Caisse ?", type: "yesno", options: [], required: true, position: 3, archivedAt: null, displayScope: "roles", displayRoleNames: ["Bar"], answers: [{ values: ["Oui"] }] }
+    const kitchen = { id: "kitchen", eventId: "e1", label: "Allergies ?", type: "text", options: [], required: true, position: 4, archivedAt: null, displayScope: "roles", displayRoleNames: ["Cuisine"], answers: [] }
+    questionFindMany.mockImplementation(async (args: Args) => [...database(args), bar, kitchen])
+    findMany.mockResolvedValue([{ ...liveShift, shift: { ...liveShift.shift, roleName: "Accueil" } }])
+    const res = await patch({ answers: { meal: "Non", bar: "", kitchen: "" } })
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.changed).toBe(1)
+    expect(deleteMany).not.toHaveBeenCalled()
+    expect(upsert).toHaveBeenCalledTimes(1)
+    // Not among the rows the page edits.
+    expect(body.answers.map((r: { id: string }) => r.id)).toEqual(["meal", "size", "note"])
+  })
+
+  it("a question asked to a poste they hold (#1140) is required like any other", async () => {
+    const kitchen = { id: "kitchen", eventId: "e1", label: "Allergies ?", type: "text", options: [], required: true, position: 4, archivedAt: null, displayScope: "roles", displayRoleNames: ["Cuisine"], answers: [] }
+    questionFindMany.mockImplementation(async (args: Args) => [...database(args), kitchen])
+    findMany.mockResolvedValue([{ ...liveShift, shift: { ...liveShift.shift, roleName: "Cuisine" } }])
+    const res = await patch({ answers: { kitchen: "" } })
+    expect(res.status).toBe(400)
+    expect((await res.json()).questionErrors.map((e: { questionId: string }) => e.questionId)).toEqual(["kitchen"])
+    expect(upsert).not.toHaveBeenCalled()
   })
 
   it("a parent changed to « Non » clears its follow-up, sent or not, logged like any change (#1016)", async () => {

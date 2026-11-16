@@ -1,0 +1,30 @@
+---
+roles: [admin]
+group: demarrer
+order: 10
+summary: Se connecter à l'administration, activer son compte depuis une invitation, changer ou réinitialiser son mot de passe.
+meta_title: Se connecter à l'administration
+related: [premiers-pas, equipe-d-organisation]
+legacy: [admin#se-connecter]
+aliases: []
+---
+
+# Se connecter
+
+Cliquer sur **Espace organisateur**, en bas des pages publiques, et saisir vos identifiants d'organisateur. La connexion ouvre le [Tableau de bord](tableau-de-bord.md), qui commence par ce qui demande votre attention ; si vous aviez ouvert un lien vers une page de l'administration sans être connecté(e), elle s'ouvre directement après la connexion.
+
+![Page de connexion « Espace organisateur » : les champs Email et Mot de passe, le bouton « Se connecter », le lien « Mot de passe oublié ? » et le lien pour réactiver un espace désactivé](/doc-img/admin-login.png)
+
+Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre… »), cliquez sur le bouton « Créer mon compte » dans l'email pour définir votre mot de passe avant votre première connexion.
+
+**Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien du même nom et indiquez votre adresse. La page affiche « Demande enregistrée », la même réponse que l'adresse ait un compte ou non ; si elle en a un, un email contenant un lien de réinitialisation, valable une heure, vous est envoyé. Rien reçu ? Regardez dans vos indésirables. Seul le dernier lien reçu fonctionne. Au-delà de cinq demandes en une heure pour la même adresse, les suivantes n'envoient rien et ne changent rien : le dernier lien reçu reste valable. Changer votre mot de passe rend inutilisable un lien de réinitialisation encore en attente.
+
+Sur un téléphone ou un petit écran, les liens de la barre du haut (Tableau de bord, Événements, Membres, Paramètres, Aide) sont regroupés sous le bouton **Menu**.
+
+**Mon compte et déconnexion** : cliquez sur votre nom, en haut à droite de chaque page. Le menu propose **Mon compte**, où vous pouvez changer votre mot de passe, et **Se déconnecter**. Changer votre mot de passe, ou le réinitialiser via « mot de passe oublié », déconnecte toutes vos autres sessions (autres navigateurs ou appareils) ; vous restez connecté(e) là où vous l'avez changé. **Se déconnecter** ferme la session de ce navigateur sur le serveur, pas seulement dans le navigateur : vos sessions sur vos autres appareils restent ouvertes.
+
+**Durée de la connexion** : vous restez connecté(e) tant que vous utilisez l'administration au moins une fois par semaine. Après 7 jours sans l'ouvrir, ou au plus tard 30 jours après votre connexion même si vous l'utilisez tous les jours, il faut vous reconnecter.
+
+**Règles du mot de passe**, affichées sous le champ et cochées au fur et à mesure : 10 caractères minimum, une lettre majuscule, une lettre minuscule, un chiffre, un caractère spécial, et pas trop long : 72 signes au plus sans accents, une lettre accentuée comptant pour 2 signes et un emoji pour 4. Sur **Mon compte**, après 5 mots de passe actuels erronés (ou 20 depuis une même adresse IP) en 15 minutes, le changement est refusé pendant un quart d'heure.
+
+**Connexion refusée après plusieurs essais ?** Après 10 mots de passe erronés sur un même compte depuis une même adresse IP (ou 30 depuis cette adresse, tous comptes confondus) en 15 minutes, les tentatives suivantes depuis cette adresse sont refusées jusqu'à la fin de ce délai, même avec le bon mot de passe. Au-delà de 5 échecs sur un compte, chaque nouvel essai attend un peu plus longtemps (jusqu'à 8 secondes), d'où qu'il vienne, et un seul essai à la fois est vérifié : un essai envoyé pendant qu'un autre attend son tour est refusé avec le même message. Le compte n'est pas bloqué pour autant : attendez quelques secondes et réessayez. Si la connexion reste refusée, patientez un quart d'heure avant de réessayer.

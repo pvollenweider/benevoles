@@ -31,15 +31,15 @@ export function noReachableAdmin(r: AdminReachability): boolean {
 
 /** Sentence added to the operator's last-reminder alert when nobody can read it; empty otherwise. */
 export function unreachableNote(r: AdminReachability): string {
-  if (r.active === 0) return " Aucun administrateur actif : à contacter autrement."
-  if (noReachableAdmin(r)) return " Aucun administrateur joignable (adresses refusées) : à contacter autrement."
+  if (r.active === 0) return " Aucun organisateur actif : à contacter autrement."
+  if (noReachableAdmin(r)) return " Aucun organisateur joignable (adresses refusées) : à contacter autrement."
   return ""
 }
 
 /** Short wording for the report, next to the number of active administrators; null when all is fine. */
 export function reachabilityNote(r: AdminReachability): string | null {
-  if (r.active === 0) return "aucun administrateur actif"
-  if (noReachableAdmin(r)) return r.active === 1 ? "adresse refusée : administrateur injoignable" : "toutes les adresses refusées : aucun administrateur joignable"
+  if (r.active === 0) return "aucun organisateur actif"
+  if (noReachableAdmin(r)) return r.active === 1 ? "adresse refusée : organisateur injoignable" : "toutes les adresses refusées : aucun organisateur joignable"
   if (r.toVerify > 0) return `dont ${r.toVerify} adresse${r.toVerify > 1 ? "s" : ""} à vérifier`
   return null
 }

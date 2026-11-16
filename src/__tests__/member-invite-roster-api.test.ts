@@ -11,7 +11,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 type Vol = { id: string; firstName: string; lastName: string; birthDate: Date | null; erasedAt: Date | null; mergedIntoId: string | null; active: boolean }
 const db = vi.hoisted(() => ({
   invites: [] as { token: string; eventId: string; volunteerId: string; usedAt: Date | null; declinedAt: Date | null }[],
-  events: new Map<string, { id: string; slug: string; organizationId: string; publicStatus: string; shiftRosterEnabled: boolean; personalDataAnonymizedAt: Date | null; startDate: Date; endDate: Date; organization: { timeZone: string } }>(),
+  events: new Map<string, { id: string; slug: string; organizationId: string; publicStatus: string; shiftRosterEnabled: boolean; personalDataAnonymizedAt: Date | null; startDate: Date; endDate: Date; organization: { timeZone: string; active: boolean; suspendedAt: Date | null } }>(),
   shifts: [] as { id: string; eventId: string; label: string; date: Date; startTime: string; endTime: string; status: string }[],
   volunteers: new Map<string, Vol>(),
   registrations: [] as { eventId: string; shiftId: string; volunteerId: string; status: string }[],
@@ -63,7 +63,7 @@ const vol = (id: string, firstName: string, lastName: string, more: Partial<Vol>
 
 function seed() {
   db.invites = []; db.shifts = []; db.registrations = []; db.consents = []; db.volunteers.clear(); db.events.clear(); db.host = "club"
-  const ev = (id: string, slug: string, organizationId: string) => ({ id, slug, organizationId, publicStatus: "published", shiftRosterEnabled: true, personalDataAnonymizedAt: null, startDate: new Date("2099-10-01T00:00:00Z"), endDate: new Date("2099-10-01T00:00:00Z"), organization: { timeZone: "Europe/Zurich" } })
+  const ev = (id: string, slug: string, organizationId: string) => ({ id, slug, organizationId, publicStatus: "published", shiftRosterEnabled: true, personalDataAnonymizedAt: null, startDate: new Date("2099-10-01T00:00:00Z"), endDate: new Date("2099-10-01T00:00:00Z"), organization: { timeZone: "Europe/Zurich", active: true, suspendedAt: null } })
   db.events.set("ev-a", ev("ev-a", "fete", "org-a"))
   db.events.set("ev-b", ev("ev-b", "autre", "org-a"))
   const day = new Date("2099-10-01T00:00:00Z")
@@ -149,6 +149,16 @@ describe("GET /api/public/member-invite/[token]/roster", () => {
     }
     // Each refusal counts against the client's address.
     expect(rateLimit).toHaveBeenCalledWith("1.2.3.4", "member-invite-roster-miss", 20, 3600000)
+  })
+
+  it("nothing while the organisation is deactivated or suspended", async () => {
+    for (const more of [{ active: false }, { suspendedAt: new Date() }]) {
+      seed()
+      Object.assign(db.events.get("ev-a")!.organization, more)
+      const res = await get("inv-guest")
+      expect(res.status).toBe(403)
+      expect(await res.json()).toMatchObject({ code: "org_unavailable" })
+    }
   })
 
   it("refused once the client used up its misses, even with a valid invitation", async () => {

@@ -1,5 +1,7 @@
-import { describe, it, expect, vi } from "vitest"
-import { createSafeLookup, isAllowedPushEndpoint, isPublicAddress } from "../push-endpoint"
+import { describe, it, expect, vi, afterEach } from "vitest"
+import { EventEmitter } from "node:events"
+import net from "node:net"
+import { boundPushSocket, createSafeLookup, isAllowedPushEndpoint, isPublicAddress } from "../push-endpoint"
 
 // Web Push endpoints (#1041): any public push provider, never a non-public address.
 describe("isAllowedPushEndpoint", () => {
@@ -121,5 +123,63 @@ describe("createSafeLookup", () => {
     expect((await run(createSafeLookup(resolverFor([])), {})).err?.code).toBe("EPUSHNONPUBLIC")
     const failing = createSafeLookup(vi.fn((_h: string, _o: unknown, cb: Cb) => cb(Object.assign(new Error("nx"), { code: "ENOTFOUND" }), [])))
     expect((await run(failing, {})).err?.code).toBe("ENOTFOUND")
+  })
+})
+
+// A push endpoint is chosen by the subscriber: what its host does in return is bounded per connection.
+describe("boundPushSocket", () => {
+  afterEach(() => { vi.useRealTimers() })
+
+  function fakeSocket() {
+    const socket = Object.assign(new EventEmitter(), { destroy: vi.fn() })
+    return socket
+  }
+
+  it("closes the connection at the deadline", () => {
+    vi.useFakeTimers()
+    const socket = fakeSocket()
+    boundPushSocket(socket, { deadlineMs: 1000, maxBytes: 100 })
+    vi.advanceTimersByTime(999)
+    expect(socket.destroy).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+    expect(socket.destroy).toHaveBeenCalledWith(expect.objectContaining({ message: "Push send deadline exceeded" }))
+  })
+
+  it("closes the connection once the answer passes the size cap", () => {
+    const socket = fakeSocket()
+    boundPushSocket(socket, { deadlineMs: 60_000, maxBytes: 100 })
+    socket.emit("data", Buffer.alloc(60))
+    socket.emit("data", Buffer.alloc(40))
+    expect(socket.destroy).not.toHaveBeenCalled()
+    socket.emit("data", Buffer.alloc(1))
+    expect(socket.destroy).toHaveBeenCalledWith(expect.objectContaining({ message: "Push service answer too large" }))
+    socket.emit("close")
+  })
+
+  it("stops the deadline timer when the connection closes first", () => {
+    vi.useFakeTimers()
+    const socket = fakeSocket()
+    boundPushSocket(socket, { deadlineMs: 1000, maxBytes: 100 })
+    socket.emit("close")
+    vi.advanceTimersByTime(5000)
+    expect(socket.destroy).not.toHaveBeenCalled()
+  })
+
+  it("cuts a real connection that streams an endless answer", async () => {
+    const server = net.createServer((conn) => {
+      const chunk = Buffer.alloc(16 * 1024, 120)
+      const pump = () => { while (conn.writable && conn.write(chunk)) { /* fill */ } }
+      conn.on("drain", pump)
+      conn.on("error", () => {})
+      pump()
+    })
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve))
+    const { port } = server.address() as net.AddressInfo
+    const socket = net.connect(port, "127.0.0.1")
+    boundPushSocket(socket, { deadlineMs: 5000, maxBytes: 64 * 1024 })
+    const error = await new Promise<Error | undefined>((resolve) => socket.on("error", resolve).on("close", () => resolve(undefined)))
+    expect(error?.message).toBe("Push service answer too large")
+    expect(socket.destroyed).toBe(true)
+    await new Promise((resolve) => server.close(resolve))
   })
 })

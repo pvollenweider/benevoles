@@ -1,0 +1,15 @@
+npm run video:publish -- --context "default" --apply  BETA_ACCESS 
+
+> benevoles@2.6.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply BETA_ACCESS
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + beta-access/beta-access-og.jpg
+  + beta-access/beta-access.jpg
+  + beta-access/beta-access.mp4
+  + beta-access/beta-access.txt
+  + beta-access/beta-access.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 569
+Envoyé : 5 fichier(s).

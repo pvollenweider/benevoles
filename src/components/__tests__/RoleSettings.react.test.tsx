@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor, act } from "@testing-library/react"
 import { useState } from "react"
 
-import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm } from "../admin/shifts/RoleSettings"
+import { RoleColorPicker, RoleLimitForm, RoleMealForm, RoleOverlapForm, RoleReserveForm } from "../admin/shifts/RoleSettings"
 import type { RawShift } from "../admin/shifts/types"
 
 // Inline editors of a role in « Gérer les postes »: limit per person (#466), reserved tags (#470), colour.
@@ -37,6 +37,42 @@ describe("RoleSettings", () => {
   afterEach(() => {
     cleanup()
     vi.unstubAllGlobals()
+  })
+
+  // « Repas sur le pouce possible » on all of a poste's shifts (#1171, lot 2).
+  describe("RoleMealForm", () => {
+    const setup = (value: boolean | null, saved: "all" | "none" | "some") => {
+      const cb = { ...callbacks(), onValueChange: vi.fn() }
+      render(<RoleMealForm eventId="evt-1" role="Bar" index={0} saved={saved} value={value} busyRole={null} {...cb} />)
+      return cb
+    }
+
+    it("is indeterminate for a mixed poste, says so, and saving it untouched changes nothing", () => {
+      const cb = setup(null, "some")
+      const box = screen.getByRole("checkbox", { name: "Poste « Bar » : repas sur le pouce possible sur ses créneaux" }) as HTMLInputElement
+      expect(box.indeterminate).toBe(true)
+      expect(box).not.toHaveAttribute("aria-checked")
+      expect(box).toHaveAccessibleDescription(/Pour l'instant : sur certains créneaux seulement\..*cochée, sur tous ; décochée, sur aucun/)
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : aucune modification.")
+    })
+
+    it("saves for all live shifts and announces; a refusal stays in the panel's alert", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({}) })
+      const cb = setup(true, "some")
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onClose).toHaveBeenCalledWith("Bar"))
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ mealOnTheGo: true })
+      expect(applied(cb.setShifts, [shift({}), shift({ id: "s2", status: "cancelled" }), shift({ id: "s3", roleName: "Scène" })]).map((s) => s.mealOnTheGo)).toEqual([true, undefined, undefined])
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : repas sur le pouce possible sur tous ses créneaux.")
+      cleanup()
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ error: "Modification impossible : sans repas sur le pouce sur les créneaux de ce poste, le programme de Lou Martin ne respecterait plus les pauses et limites de charge de cet événement." }) })
+      const cb2 = setup(false, "all")
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb2.onActionError).toHaveBeenLastCalledWith(expect.stringContaining("Lou Martin")))
+      expect(cb2.onClose).not.toHaveBeenCalled()
+    })
   })
 
   // « Cumulable avec un autre créneau » (#986).
@@ -200,9 +236,9 @@ describe("RoleSettings", () => {
   })
 
   describe("RoleReserveForm", () => {
-    const setup = (value: string, reservedTags: string[] = []) => {
-      const cb = { ...callbacks(), onValueChange: vi.fn() }
-      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={reservedTags} value={value} busyRole={null} {...cb} />)
+    const setup = (value: string, reservedTags: string[] = [], assigned = { saved: false, draft: false }) => {
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn() }
+      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={reservedTags} assignedOnly={assigned.saved} assignedOnlyValue={assigned.draft} value={value} busyRole={null} {...cb} />)
       return cb
     }
 
@@ -212,16 +248,85 @@ describe("RoleSettings", () => {
       fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
 
       await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
-      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ reservedTags: ["sécurité", "secouriste"] })
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: ["sécurité", "secouriste"], reservedQuestionId: null, reservedAnswers: [] })
       expect(applied(cb.setShifts, [shift({})])[0].reservedTags).toEqual(["sécurité", "secouriste"])
       expect(cb.onClose).toHaveBeenCalledWith("Bar")
       expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : réservé aux membres avec l'étiquette sécurité ou secouriste. 1 étiquette ignorée (doublons, ou 10 au maximum).")
     })
 
     it("does nothing while another role action runs", () => {
-      const cb = { ...callbacks(), onValueChange: vi.fn() }
-      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={["a"]} value="a" busyRole="Accueil" {...cb} />)
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn() }
+      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={["a"]} assignedOnly={false} assignedOnlyValue={false} value="a" busyRole="Accueil" {...cb} />)
       fireEvent.click(screen.getByRole("button", { name: "Ouvrir à tous" }))
+      expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    // Assigned by the organisation only (#1145), in the same editor.
+    it("offers « attribué par l'organisation uniquement » first, described, with the tags field while unticked", () => {
+      const cb = setup("sécurité")
+      const box = screen.getByRole("checkbox", { name: "Poste « Bar » attribué par l'organisation uniquement" })
+      expect(box).toHaveFocus()
+      expect(box).not.toBeChecked()
+      expect(box).toHaveAccessibleDescription(/personne ne peut s'y inscrire, même avec un lien d'invitation.*Les étiquettes ne s'appliquent pas tant que cette case est cochée/)
+      expect(screen.getByLabelText("Étiquettes donnant accès au poste « Bar »")).toHaveValue("sécurité")
+      fireEvent.click(box)
+      expect(cb.onAssignedOnlyChange).toHaveBeenCalledWith(true)
+    })
+
+    it("ticked: the tags field is gone, and saving sends the option alone, keeping the tags", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = setup("sécurité", ["sécurité"], { saved: false, draft: true })
+      expect(screen.queryByLabelText("Étiquettes donnant accès au poste « Bar »")).toBeNull()
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: true })
+      const after = applied(cb.setShifts, [shift({ reservedTags: ["sécurité"] })])[0]
+      expect(after).toMatchObject({ assignedOnly: true, reservedTags: ["sécurité"] })
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : attribué par l'organisation uniquement.")
+    })
+
+    it("« Ouvrir à tous » shows for a saved assigned-only role and clears both settings", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = setup("", [], { saved: true, draft: true })
+      fireEvent.click(screen.getByRole("button", { name: "Ouvrir à tous" }))
+      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: [], reservedQuestionId: null, reservedAnswers: [] })
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : ouvert à tous.")
+    })
+
+    it("saving without a change sends nothing and says so", () => {
+      const cb = setup("sécurité", ["sécurité"], { saved: true, draft: true })
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : aucune modification.")
+    })
+
+    it("saves a choice question and its accepted answers as the poste's condition (#962)", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn() }
+      function Harness() {
+        const [questionId, setQuestionId] = useState("")
+        const [answers, setAnswers] = useState<string[]>([])
+        return <RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={[]} assignedOnly={false} assignedOnlyValue={false} value="" busyRole={null}
+          questions={[{ id: "q-permis", label: "Permis de conduire", type: "yesno", options: [], parentId: null, displayScope: "event" }]}
+          questionIdValue={questionId} onQuestionIdChange={setQuestionId} acceptedAnswersValue={answers} onAcceptedAnswersChange={setAnswers} {...cb} />
+      }
+      render(<Harness />)
+      fireEvent.change(screen.getByLabelText(/Condition d'accès/), { target: { value: "q-permis" } })
+      fireEvent.click(screen.getByRole("checkbox", { name: "Oui" }))
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: [], reservedQuestionId: "q-permis", reservedAnswers: ["Oui"] })
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : réservé aux personnes qui répondent Oui à « Permis de conduire ».")
+    })
+
+    it("refuses a condition without an accepted answer (#962)", () => {
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn(), onQuestionIdChange: vi.fn(), onAcceptedAnswersChange: vi.fn() }
+      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={[]} assignedOnly={false} assignedOnlyValue={false} value="" busyRole={null}
+        questions={[{ id: "q-permis", label: "Permis de conduire", type: "yesno", options: [], parentId: null, displayScope: "event" }]}
+        questionIdValue="q-permis" acceptedAnswersValue={[]} {...cb} />)
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      expect(cb.onActionError).toHaveBeenCalledWith("Choisissez au moins une réponse acceptée pour la condition d'accès.")
       expect(fetchMock).not.toHaveBeenCalled()
     })
 

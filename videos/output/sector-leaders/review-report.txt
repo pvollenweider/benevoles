@@ -1,8 +1,18 @@
 STATUS: READY
-SECTOR_LEADERS — batch 23-3 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 217.56 s; music 14.1–19.4 LU below voice. Music-only floor and real click/key effects validated.
-Whole narration regenerated in one pass with original voice; boundaries measured and independently audited.
-Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
-Whole Puck narration regenerated in one pass with continuousPauseTags false; first drifted generation archived, retained whole take passes all ten audio-only opening/chapter comparisons before filming. Eleven audiovisual chapters, eight chapter/anchor sheets, real nomination and signup emails with take-only sidebars, mobile roster, scope and invalidated leader link reviewed. Flag at registered +11.8–12.1 s is a natural breath with negligible impact per independent source-audio countercheck, not laughter, added words or voice discontinuity. Whole final ASRs agree; no informal viewer address or blocking issue.
-No product edit, commit, push or publication in batch 23-3. Real-time subjective listening unavailable as permitted.
+Batch:32 (resume)
+ID:SECTOR_LEADERS
+Duration:296.760 s
+Product commit:9831e86e40ae3dd1ba60eb632b8e90951483a11c
+BUILD_ID:jJH5zvJlD2hQBFLXtZa0x
+One full Puck TTS generation, same-master silence recut; all13 source and final chapter audits PASS.
+Fresh demo+beta seeds and owned mailbox cleanup before successful quick rehearsal and first narrated take.
+validate PASS; tools typecheck204 sources PASS;34 video files/1144 tests PASS.
+13 AV chapters/48 checkpoints, zero flags; actual chapter frames inspected including phone, real email body, revoked link, new sector nomination and day filter.
+Mailpit real body-only intervals63720–70640 and170960–185960ms are outside phone/restoration103741–139900ms; assembler guards overlap. No fake email or still hold.
+Music13.7–19.1LU under voice; music-only minimum-32.9LUFS; zero gap violations.
+Synced soft effects:36 actual clicks,152 actual keys.
+Full final multilingual ASR and VTT:0 viewer tu; no stray English/instructions.
+No localhost/dev overlay/outdated Timeline label found in inspected frames.
+Revision6 is the predeclared new story; do not increment again. Real-time subjective listening unavailable per standing rules.
+Source fixes: public-host routing, Mailpit port, sector heading selectors, disjoint phone/email composition. No product or guide edits.
+Evidence:videos/evidence/sector-leaders/batch32/.

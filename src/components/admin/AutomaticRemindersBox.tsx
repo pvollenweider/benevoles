@@ -12,7 +12,7 @@ export default function AutomaticRemindersBox({ summary }: { summary: RemindersS
       {summary.sent.length > 0 && (
         <ul className="text-xs text-gray-700 space-y-0.5 list-disc pl-4">
           {summary.sent.map((s) => (
-            <li key={s.key}><strong>{s.label}</strong> : {s.timing}</li>
+            <li key={s.key}><strong>{s.label}</strong>{s.timing ? ` : ${s.timing}` : ""}</li>
           ))}
         </ul>
       )}

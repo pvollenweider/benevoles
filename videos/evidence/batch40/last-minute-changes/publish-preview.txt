@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   LAST_MINUTE_CHANGES
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default LAST_MINUTE_CHANGES
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + last-minute-changes/last-minute-changes-og.jpg
+  + last-minute-changes/last-minute-changes.jpg
+  + last-minute-changes/last-minute-changes.mp4
+  + last-minute-changes/last-minute-changes.txt
+  + last-minute-changes/last-minute-changes.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 569
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

@@ -51,6 +51,10 @@ export type Member = MemberRow & {
   // pure rule in member-deletion.ts. Drives the row's « Supprimer » action: shown only when
   // eligible, never a dead button.
   deletion: MemberDeletionEligibility
+  // Every Registration row of the member, any status (#1307), from the same server-side query as
+  // `deletion`. Feeds the bulk deletion's deactivation checkbox without another request. Optional
+  // so a caller that doesn't load it leaves the label without a number rather than guessing.
+  registrationCount?: number
 }
 
 export type SortCol = "firstName" | "lastName" | "hoursTotal" | "hoursAttested" | "lastShiftDate"

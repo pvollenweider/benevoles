@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  activeTab, eventPrimaryAction, eventSubNav, eventSubPath, eventTabs, inDayOfWindow, primaryIsCurrent,
+  activeTab, eventPrimaryAction, eventSubNav, eventSubPath, eventTabs, inDayOfWindow, primaryIsCurrent, showPrimaryAction,
   type EventNavFacts, type PrimaryFacts,
 } from "../event-nav"
 
@@ -92,7 +92,7 @@ describe("eventTabs", () => {
 describe("eventSubNav", () => {
   it("lists the pages of a tab that groups several, the current one marked", () => {
     const nav = eventSubNav(`${B}/questions`, "e1")!
-    expect(nav.tabLabel).toBe("Réglages")
+    expect(nav.tabLabel).toBe("Paramètres")
     expect(nav.links.map((l) => `${l.label}:${l.current ?? "-"}`)).toEqual(["Informations:-", "Questions:page", "Responsables de secteur:-"])
   })
 
@@ -140,6 +140,15 @@ describe("eventPrimaryAction", () => {
     expect(primaryIsCurrent(share, `${B}/qr`, "e1")).toBe(false)
     expect(primaryIsCurrent({ kind: "publish", path: "review" }, `${B}/review`, "e1")).toBe(true)
   })
+
+  it("leaves step 2 of the creation assistant its own « Continuer » as the one primary (#1098)", () => {
+    const publish = { kind: "publish", path: "review" } as const
+    expect(showPrimaryAction(publish, `${B}/shifts`, "e1", true)).toBe(false)
+    expect(showPrimaryAction(publish, `${B}/shifts`, "e1", false)).toBe(true)
+    // Another page with a stray ?wizard keeps its primary; the page it leads to never shows it.
+    expect(showPrimaryAction(publish, `${B}/registrations`, "e1", true)).toBe(true)
+    expect(showPrimaryAction(publish, `${B}/review`, "e1", false)).toBe(false)
+  })
 })
 
 describe("eventDatesLabel", () => {
@@ -149,5 +158,21 @@ describe("eventDatesLabel", () => {
     expect(eventDatesLabel("2026-07-04", "2026-07-05")).toBe("4 au 5 juillet 2026")
     expect(eventDatesLabel("2026-06-30", "2026-07-02")).toBe("30 juin au 2 juillet 2026")
     expect(eventDatesLabel("2026-12-31", "2027-01-01")).toBe("31 décembre 2026 au 1 janvier 2027")
+  })
+})
+
+describe("eventSubNav — Disponibilités (#1146)", () => {
+  const labels = (optional: { availability?: boolean }, path = "registrations") => eventSubNav(`/admin/events/e1/${path}`, "e1", optional)?.links.map((l) => l.label)
+  it("lists « Disponibilités » only for an event that collects availability", () => {
+    expect(labels({})).toEqual(["Inscriptions", "Invitations"])
+    expect(labels({ availability: true })).toEqual(["Inscriptions", "Invitations", "Disponibilités"])
+  })
+  it("keeps it listed, as the current page, while on it", () => {
+    const nav = eventSubNav("/admin/events/e1/availability", "e1")
+    expect(nav?.links.find((l) => l.label === "Disponibilités")?.current).toBe("page")
+  })
+  it("shows « Affecter selon les disponibilités » (#1146, lot B) as part of « Disponibilités »", () => {
+    const nav = eventSubNav("/admin/events/e1/availability/assign", "e1", { availability: true })
+    expect(nav?.links.find((l) => l.label === "Disponibilités")?.current).toBe("true")
   })
 })

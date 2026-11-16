@@ -16,7 +16,9 @@ product
 
 ## Product Purpose
 
-Benevol est un outil communautaire open source qui simplifie la gestion des bénévoles pour les événements (festivals, spectacles, associations). Il couvre le cycle complet : création des créneaux → pool de membres → invitations tokenisées → inscription publique via Gantt → rappels automatiques → exports terrain.
+benevol.app est un outil communautaire open source qui simplifie la gestion des bénévoles pour les événements (festivals, spectacles, associations). Il couvre le cycle complet : création des créneaux → pool de membres → invitations tokenisées → inscription publique via Gantt → rappels automatiques → exports terrain.
+
+**Principe** (manifeste, novembre 2026) : le planning n'est pas le problème à résoudre, c'est le résultat visible d'un problème d'organisation et de circulation de l'information. benevol.app aide à structurer ce qui doit se passer (postes, horaires, besoins, informations), puis s'efface autant que possible une fois cette structure établie : une fonctionnalité qui demande à l'organisateur d'intervenir plus souvent doit le justifier.
 
 Ce n'est pas un produit SaaS commercial — c'est un outil que des organisations gèrent elles-mêmes ou partagent en multi-tenant. Le succès se mesure à la réduction de friction pour les organisateurs et à la clarté absolue pour les bénévoles.
 
@@ -25,6 +27,8 @@ Ce n'est pas un produit SaaS commercial — c'est un outil que des organisations
 Référence pour trier les demandes de fonctionnalités (revue produit du 29 septembre 2026).
 
 **Boucle centrale** : créer un planning, partager un lien, laisser les bénévoles choisir leurs créneaux. On ne court pas après les outils d'accréditation fonctionnalité par fonctionnalité.
+
+Le libre choix des créneaux par les bénévoles reste le fonctionnement par défaut. Sur un périmètre choisi, l'organisation peut aussi générer une proposition d'affectations en brouillon, comparer, verrouiller et ajuster les affectations, puis décider de les publier. La génération ne publie jamais d'inscription et n'envoie aucun message aux bénévoles.
 
 **Six capacités essentielles** ; toute autre fonctionnalité doit clairement en améliorer une :
 
@@ -35,7 +39,7 @@ Référence pour trier les demandes de fonctionnalités (revue produit du 29 sep
 5. Communiquer simplement avec les personnes concernées.
 6. Disposer d'un planning fiable, à l'écran comme sur papier.
 
-**Volontairement pas construit** : accréditations et zones d'accès ; badges complexes ; repas et hébergement ; signature électronique ; attribution automatique des bénévoles ; CRM marketing ; campagnes SMS bidirectionnelles ; gestion documentaire générique ; application mobile native ; workflows configurables ; constructeur de formulaires libre ; des dizaines de rôles et de permissions ; facturation à la fonctionnalité.
+**Volontairement pas construit** : accréditations et zones d'accès ; badges complexes ; repas et hébergement ; signature électronique ; affectation et publication des bénévoles sans validation explicite de l'organisation ; CRM marketing ; campagnes SMS bidirectionnelles ; gestion documentaire générique ; application mobile native ; workflows configurables ; constructeur de formulaires libre ; des dizaines de rôles et de permissions ; facturation à la fonctionnalité.
 
 **Positionnement** : « Organisez les créneaux de vos bénévoles en quelques minutes. Aucun compte à créer, aucun logiciel compliqué à apprendre. » ou « Le planning des bénévoles, simplement. » Objectif : une petite association publie son premier planning correctement en quinze minutes, sans formation ni démonstration commerciale.
 
@@ -45,11 +49,13 @@ Référence pour trier les demandes de fonctionnalités (revue produit du 29 sep
 
 La voix est directe, bienveillante, légèrement chaleureuse — mais jamais familière au point d'être condescendante. On tutoie les bénévoles, dans les emails et sur leur page personnelle ; on vouvoie les organisateurs et les responsables de secteur. On ne vend pas, on organise. L'interface s'efface pour laisser l'information devant.
 
+Le choix des mots (bénévole, staff, équipe, volontaires, collaborateurs) suit [`docs/vocabulaire.md`](docs/vocabulaire.md).
+
 Référence d'élégance : Notion / Linear — sobre, structuré, dense sans être oppressant. Le chrome disparaît, le contenu prime.
 
 ## Anti-references
 
-- **SaaS corporate froid** (Salesforce, Monday.com) : bleu-gris générique, hero-metrics, jargon de conversion, KPI partout. Benevol n'a pas de dashboards de croissance.
+- **SaaS corporate froid** (Salesforce, Monday.com) : bleu-gris générique, hero-metrics, jargon de conversion, KPI partout. benevol.app n'a pas de dashboards de croissance.
 - Overdesign dev-centric : dark mode obsidien pour le principe, typographie ultra-serrée, vibes "startup B2B".
 - Outil associatif daté : pastel délavé, hiérarchie plate, visuellement 2012.
 
@@ -67,4 +73,4 @@ Référence d'élégance : Notion / Linear — sobre, structuré, dense sans êt
 
 ## Accessibility & Inclusion
 
-Cible WCAG 2.2 AA sur toutes les surfaces ; état réel et limites connues dans `ACCESSIBILITE.md` (page `/accessibilite`), vérifications dans `docs/accessibilite.md`. Aucune régression acceptée. Pas d'animation de mouvement hors `motion-safe:`. Attention particulière sur la timeline Gantt publique (seniors, mobile, contraste des barres de postes).
+Cible WCAG 2.2 AA sur toutes les surfaces ; état réel et limites connues dans `content/pages/ACCESSIBILITE.md` (page `/accessibilite`), vérifications dans `docs/accessibilite.md`. Aucune régression acceptée. Pas d'animation de mouvement hors `motion-safe:`. Attention particulière sur la timeline Gantt publique (seniors, mobile, contraste des barres de postes).

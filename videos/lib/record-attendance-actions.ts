@@ -3,7 +3,7 @@
 
 import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { verifyAttendanceTransition } from "./attendance-capture-checks"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -15,7 +15,7 @@ type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 export async function recordAttendanceActions(options: { page: Page; base: string; eventId: string; directory: string; personPrefix?: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, scene, tap, settle } = options
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated video DB required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const evidence: { action: string; changedIds: string[]; unchangedStatuses: boolean; nonSelectedUnchanged: boolean }[] = []
   try {
     const event = await db.event.findUniqueOrThrow({ where: { id: eventId }, include: { registrations: { include: { volunteer: true, shift: true } } } })

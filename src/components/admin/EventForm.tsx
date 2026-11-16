@@ -13,7 +13,9 @@ import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel }
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
-import { ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster-text"
+import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX, SHOW_NAME_MAX } from "@/lib/text-limits"
+import { ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC, ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster-text"
+import DocMoreLink from "@/components/DocMoreLink"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 import RequiredMark from "@/components/RequiredMark"
 
@@ -30,6 +32,8 @@ type EventFormData = {
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
   requirePhone: boolean
+  /** Confirmation by email (#1253): a public sign-up without proof of the address reserves its places provisionally until the email link is clicked. Off by default. */
+  requireEmailConfirmation: boolean
   /** « Qui est inscrit » (#1068): opt-in names for confirmed volunteers and invited members; a new event starts with the organisation's default. */
   shiftRosterEnabled: boolean
   /** Automatic reminders of this event (J-2, J-1, day-of); the organization's settings still apply. */
@@ -72,6 +76,7 @@ const defaultData: EventFormData = {
   reminderMessage: "",
   publicStatus: "draft",
   requirePhone: false,
+  requireEmailConfirmation: false,
   shiftRosterEnabled: false,
   remindersEnabled: true,
   isListed: true,
@@ -96,7 +101,7 @@ function eventBody(form: EventFormData) {
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
-const inputCls = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+const inputCls = "w-full border border-gray-500 rounded-xl px-3 py-2.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
 
 export default function EventForm({ initialData, createdHref, timeZone = "Europe/Zurich" }: Props) {
   const router = useRouter()
@@ -124,6 +129,14 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   // The last status the server confirmed (each PATCH answers with the saved event), so a
   // refused publication restores what's really stored, not what the page loaded with.
   const savedStatusRef = useRef<EventFormData["publicStatus"]>(initialData?.publicStatus ?? "draft")
+  // The dates the server last accepted: new dates refused by the days-off rule (#1171) go back to
+  // them, so that the next autosave of another field is not refused again.
+  const savedDatesRef = useRef({ startDate: initialData?.startDate ?? "", endDate: initialData?.endDate ?? "" })
+  // That refusal, kept until the dates are typed again (a later save of another field keeps it).
+  const [datesError, setDatesError] = useState<{ message: string; lines: string[] } | null>(null)
+  // Going back to the saved dates changes the form but is not an edit: that change is not autosaved
+  // (it would say « Enregistré » right after « Dates non enregistrées »).
+  const skipNextAutosaveRef = useRef(false)
   // Latest state read by saveNow() so a retry sends what's on screen now, not what failed earlier.
   const formRef = useRef(form)
   const showsRef = useRef(shows)
@@ -151,6 +164,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
       const data = await res.json().catch(() => ({}))
       if (res.ok) {
         if (data?.publicStatus) savedStatusRef.current = data.publicStatus
+        savedDatesRef.current = { startDate: formRef.current.startDate, endDate: formRef.current.endDate }
         setError(null)
         setSaveError(null)
         setSave({ kind: "saved", at: formatSavedAt(new Date()) })
@@ -162,6 +176,14 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
       }
       // A refused publication (no shift yet) is a rule, not a glitch: say it and go back to
       // the last status the server confirmed.
+      if (res.status === 409 && data?.code === "workload") {
+        const saved = savedDatesRef.current
+        skipNextAutosaveRef.current = true
+        setForm((f) => ({ ...f, startDate: saved.startDate, endDate: saved.endDate }))
+        setDatesError({ message: typeof data.error === "string" ? data.error : "Dates non enregistrées.", lines: Array.isArray(data.workload) ? data.workload.filter((l: unknown): l is string => typeof l === "string") : [] })
+        setSave({ kind: "idle" })
+        return
+      }
       if (res.status === 409) {
         const previous = savedStatusRef.current
         setForm((f) => ({ ...f, publicStatus: previous }))
@@ -190,6 +212,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return }
     if (!isEdit || !form.title) return
+    if (skipNextAutosaveRef.current) { skipNextAutosaveRef.current = false; return }
 
     const timer = setTimeout(() => { void saveNow() }, 800)
 
@@ -198,6 +221,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   }, [form, shows])
 
   function set(field: keyof EventFormData, value: string) {
+    if (field === "startDate" || field === "endDate") setDatesError(null)
     setForm((f) => {
       const next = { ...f, [field]: value }
       if (field === "startDate" && (!f.endDate || f.endDate < value)) {
@@ -317,35 +341,54 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         <div>
           <label htmlFor="event-title" className="block text-sm font-medium text-gray-700 mb-1">Titre<RequiredMark /></label>
-          <input id="event-title" type="text" required value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
+          <input id="event-title" type="text" required maxLength={EVENT_TITLE_MAX} value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
         </div>
 
         <div>
           <label htmlFor="event-description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <textarea id="event-description" rows={3} value={form.description} onChange={(e) => set("description", e.target.value)} className={`${inputCls} resize-none`} />
+          <textarea id="event-description" rows={3} maxLength={MARKDOWN_TEXT_MAX} value={form.description} onChange={(e) => set("description", e.target.value)} className={`${inputCls} resize-none`} />
         </div>
 
         <div>
           <label htmlFor="event-location" className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
-          <input id="event-location" type="text" value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} />
+          <input id="event-location" type="text" maxLength={EVENT_LOCATION_MAX} value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} />
         </div>
 
         <CoordinatesField
           id="event-coordinates"
           value={{ latitude: form.latitude, longitude: form.longitude }}
           onChange={(c) => setForm((f) => ({ ...f, latitude: c?.latitude ?? null, longitude: c?.longitude ?? null }))}
-          hint="Les bénévoles auront un lien « Voir sur la carte » (OpenStreetMap) sur la page d'inscription, dans les emails et sur leur page personnelle ; les créneaux sans lieu propre l'utilisent aussi."
+          hint="Les bénévoles auront un lien « Voir sur la carte » (OpenStreetMap) sur la page d'inscription, dans les emails et sur leur page « Mes inscriptions » ; les créneaux sans lieu propre l'utilisent aussi."
         />
 
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="event-start" className="block text-sm font-medium text-gray-700 mb-1">Date début<RequiredMark /></label>
-            <input id="event-start" type="date" required value={form.startDate} onChange={(e) => set("startDate", e.target.value)} className={inputCls} />
+            <input id="event-start" type="date" required value={form.startDate} aria-describedby={datesError ? "event-dates-error" : undefined} onChange={(e) => set("startDate", e.target.value)} className={inputCls} />
           </div>
           <div>
             <label htmlFor="event-end" className="block text-sm font-medium text-gray-700 mb-1">Date fin<RequiredMark /></label>
-            <input id="event-end" type="date" required value={form.endDate} min={form.startDate || undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
+            <input id="event-end" type="date" required value={form.endDate} min={form.startDate || undefined} aria-describedby={datesError ? "event-dates-error" : undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
           </div>
+        </div>
+
+        {/* Always mounted, filled on a refusal: announced more reliably than a node added full. */}
+        <div role="alert" className={datesError ? "bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700" : "sr-only"} data-event-dates-workload="1">
+          {datesError && (
+            <div id="event-dates-error" className="space-y-1">
+              <p>{datesError.message}</p>
+              {datesError.lines.length > 0 && (
+                <ul role="list" className="list-disc pl-5 space-y-0.5">
+                  {datesError.lines.map((l) => <li key={l}>{l}</li>)}
+                </ul>
+              )}
+              <p>
+                <a href="#protection-charge" className="font-medium text-red-800 underline underline-offset-2 hover:text-red-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  Voir la protection des pauses et de la charge
+                </a>
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Spectacles — visible only once both dates are set */}
@@ -369,6 +412,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                     <input
                       id="edit-show-name"
                       type="text"
+                      maxLength={SHOW_NAME_MAX}
                       placeholder="Nom du spectacle"
                       value={editShow.name}
                       onChange={(e) => setEditShow((s) => ({ ...s, name: e.target.value }))}
@@ -424,6 +468,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               <input
                 id="new-show-name"
                 type="text"
+                maxLength={SHOW_NAME_MAX}
                 placeholder="Nom du spectacle"
                 value={newShow.name}
                 onChange={(e) => setShow("name", e.target.value)}
@@ -460,7 +505,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         <div>
           <label htmlFor="event-public-instructions" className="block text-sm font-medium text-gray-700 mb-1">Instructions publiques</label>
-          <textarea id="event-public-instructions" rows={2} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
+          <textarea id="event-public-instructions" rows={2} maxLength={MARKDOWN_TEXT_MAX} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
             placeholder="Texte affiché aux bénévoles en haut de la page"
             className={`${inputCls} resize-none`} />
         </div>
@@ -469,7 +514,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         <fieldset id="event-day-contact" aria-describedby="event-day-contact-hint">
           <legend className="text-sm font-medium text-gray-700 mb-1">Contact le jour J</legend>
           <p id="event-day-contact-hint" className="text-xs text-gray-600 mb-2">
-            Facultatif. La personne que les bénévoles appellent sur place quand leur créneau n&apos;a pas de contact. Visible uniquement par les bénévoles confirmés (page personnelle, rappels, planning individuel imprimé), jamais sur la page publique. Le contact d&apos;un créneau, s&apos;il est renseigné, passe avant.
+            Facultatif. La personne que les bénévoles appellent sur place quand leur créneau n&apos;a pas de contact. Visible uniquement par les bénévoles confirmés (page « Mes inscriptions », rappels, planning individuel imprimé), jamais sur la page publique. Le contact d&apos;un créneau, s&apos;il est renseigné, passe avant.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
@@ -502,6 +547,26 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
           </div>
         </div>
 
+        {/* Confirmation by email (#1253): off by default, for existing events too. */}
+        <div id="event-email-confirmation-setting" className="flex items-start gap-3">
+          <input
+            id="event-email-confirmation"
+            type="checkbox"
+            aria-describedby="event-email-confirmation-hint"
+            checked={form.requireEmailConfirmation}
+            onChange={(e) => setForm((f) => ({ ...f, requireEmailConfirmation: e.target.checked }))}
+            className="mt-0.5 h-4 w-4"
+          />
+          <div>
+            <label htmlFor="event-email-confirmation" className="text-sm font-medium text-gray-700">
+              Confirmer l&apos;adresse email avant l&apos;inscription
+            </label>
+            <p id="event-email-confirmation-hint" className="text-xs text-gray-600">
+              Un bénévole qui s&apos;inscrit depuis la page publique sans son lien personnel reçoit un email et doit cliquer sur « Confirmer mon inscription ». Ses places restent réservées 24 heures au plus, jamais au-delà du début de son premier créneau.
+            </p>
+          </div>
+        </div>
+
         {/* Shift roster between volunteers (#1068): enables the volunteers' own opt-in, never shows anyone by itself. */}
         <div id="event-shift-roster-setting" className="flex items-start gap-3">
           <input
@@ -517,6 +582,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             <p id="event-shift-roster-hint" className="text-xs text-gray-600">{ROSTER_SETTING_HINT}</p>
             {/* The organiser's duty to inform, once on: a polite status, so that ticking the box says it. */}
             <p id="event-shift-roster-reminder" role="status" className={form.shiftRosterEnabled ? "mt-1 text-xs text-gray-800" : "sr-only"}>{form.shiftRosterEnabled ? ROSTER_ENABLE_REMINDER : ""}</p>
+            {/* The details are in the guide; outside the texts the box's description reads. */}
+            <p className="text-xs"><DocMoreLink href={ROSTER_DOC_LINKS.setting} about={ROSTER_DOC_TOPIC} /></p>
           </div>
         </div>
 
@@ -598,7 +665,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         <div>
           <label htmlFor="event-confirmation-message" className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
-          <textarea id="event-confirmation-message" aria-describedby="event-confirmation-message-hint" rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
+          <textarea id="event-confirmation-message" maxLength={MARKDOWN_TEXT_MAX} aria-describedby="event-confirmation-message-hint" rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
             className={`${inputCls} resize-none`} />
           <p id="event-confirmation-message-hint" className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {prénom}, et pour le premier créneau de la personne : {créneau}, {date}, {heure}."}</p>
         </div>
@@ -620,12 +687,12 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               aria-describedby="event-reminders-hint"
               checked={form.remindersEnabled}
               onChange={(e) => setForm((f) => ({ ...f, remindersEnabled: e.target.checked }))}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="mt-1 h-4 w-4 rounded border-gray-500 text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             />
             <div>
               <label htmlFor="event-reminders-enabled" className="text-sm font-medium text-gray-700">Rappels automatiques</label>
               <p id="event-reminders-hint" className="text-xs text-gray-600 mt-0.5">
-                Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Réglages des emails » ne partent pas.
+                Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Paramètres des emails » ne partent pas.
               </p>
             </div>
           </div>
@@ -648,7 +715,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                 checked={form.isListed}
                 aria-describedby={form.publicStatus === "published" && !form.isListed ? "event-listed-help event-listed-warning" : "event-listed-help"}
                 onChange={(e) => setForm((f) => ({ ...f, isListed: e.target.checked }))}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
               />
               <div>
                 <label htmlFor="event-listed" className="text-sm font-medium text-gray-700">{LISTED_FIELD_LABEL}</label>
@@ -674,7 +741,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                 aria-describedby="event-registrations-hint event-registrations-zone"
                 checked={form.registrationsOpen}
                 onChange={(e) => setForm((f) => ({ ...f, registrationsOpen: e.target.checked }))}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
               />
               <label htmlFor="event-registrations-open" className="text-sm font-medium text-gray-700">Inscriptions ouvertes</label>
             </div>
@@ -698,7 +765,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         )}
 
         <fieldset aria-describedby="event-accent-hint">
-          <legend className="text-sm font-medium text-gray-700 mb-1">Couleur de la page publique</legend>
+          <legend className="text-sm font-medium text-gray-700 mb-1">Couleur de la page d&apos;inscription</legend>
           <p id="event-accent-hint" className="text-xs text-gray-600 mb-2">Une couleur de la palette derrière le titre de la page d&apos;inscription (le texte reste lisible). Sans couleur, l&apos;en-tête reste blanc.</p>
           <div className="flex flex-wrap gap-2">
             {/* The radio covers its pill (screen-reader cursor and hit area match); the selected
@@ -752,7 +819,7 @@ function AccentPill({ value, selected, onSelect, children }: { value: string; se
   return (
     <label
       className={`relative inline-flex items-center gap-2 text-sm border rounded-full px-3 py-1.5 cursor-pointer has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600 ${
-        selected ? "border-gray-900 bg-gray-100 font-medium shadow-[inset_0_0_0_1px_#101828]" : "border-gray-300 hover:border-gray-500"
+        selected ? "border-gray-900 bg-gray-100 font-medium shadow-[inset_0_0_0_1px_#101828]" : "border-gray-500 hover:border-gray-700"
       }`}
     >
       <input type="radio" name="event-accent" value={value} checked={selected} onChange={onSelect} className="absolute inset-0 h-full w-full appearance-none opacity-0 cursor-pointer rounded-full" />

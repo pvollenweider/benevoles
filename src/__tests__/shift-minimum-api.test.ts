@@ -106,7 +106,7 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] with places and minimum"
           ]),
           findFirst: vi.fn().mockResolvedValue(null), updateMany: vi.fn(), update,
         },
-        $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { update } }),
+        $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { updateMany: update } }),
       },
       organizationId: "org-a", session: {},
     })
@@ -117,8 +117,8 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] with places and minimum"
     const res = await PATCH(request("/api/admin/events/evt-a/roles/Bar", "PATCH", { capacity: 3, minVolunteers: 2 }), params)
     expect(res.status).toBe(200)
     expect(update.mock.calls.map((c) => c[0])).toEqual([
-      { where: { id: "a" }, data: { capacity: 3, minVolunteers: 2 } },
-      { where: { id: "b" }, data: { capacity: 4, minVolunteers: 2 } },
+      { where: { id: { in: ["a"] }, eventId: "evt-a" }, data: { capacity: 3, minVolunteers: 2 } },
+      { where: { id: { in: ["b"] }, eventId: "evt-a" }, data: { capacity: 4, minVolunteers: 2 } },
     ])
     expect(logEvent.mock.calls.map((c) => c[0].changes)).toEqual([
       { capacity: { from: 2, to: 3 }, minVolunteers: { from: null, to: 2 } },

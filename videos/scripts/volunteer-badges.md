@@ -22,7 +22,7 @@ Reconnaître les personnes et leur équipe à l'accueil, puis réimprimer un bad
 6. **Choisir le bandeau.** Générer successivement couleur du poste, couleur de l'événement et noir et blanc. Comparer les résultats réels. Pour la couleur du poste, l'application prend une couleur parmi les postes de la personne et utilise celle de l'événement à défaut ; ne pas promettre un bandeau multicolore pour une personne multi-postes.
 7. **Alléger le contenu.** Décocher Nom de famille puis Créneaux, générer et montrer ce qui disparaît. Le prénom reste. Remettre les cases et vérifier le résultat. Pour une personne ayant beaucoup de créneaux, le badge affiche au plus quatre lignes, puis le nombre d'autres créneaux : il ne remplace pas son planning individuel.
 8. **Imprimer et découper.** Montrer le rendu d'une feuille entière, le format A4, les deux colonnes et cinq rangées, les repères de coupe. Ouvrir la vraie impression si elle est capturable, sinon expliquer cette limite et montrer le PDF réellement généré. Vérifier les noms longs et les sauts de page avant de lancer l'impression en quantité.
-9. **Résultat sur le terrain.** Montrer la version finale choisie, puis revenir aux réglages. Il n'y a ni photo ni QR code personnel sur ces badges. Une personne peut perdre ou faire photographier son badge : il n'offre pas de lien vers ses données personnelles et ne remplace pas la décision de l'organisateur sur les accès.
+9. **Résultat sur le terrain.** Montrer la version finale choisie, puis revenir aux paramètres. Il n'y a ni photo ni QR code personnel sur ces badges. Une personne peut perdre ou faire photographier son badge : il n'offre pas de lien vers ses données personnelles et ne remplace pas la décision de l'organisateur sur les accès.
 
 ## Jeu de données
 

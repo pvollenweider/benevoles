@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-10-29T06:18:02.821Z",
+  "segments": {
+    "swaps-welcome": {
+      "file": "audio/swaps-welcome.wav",
+      "durationMs": 17605,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-enable": {
+      "file": "audio/swaps-enable.wav",
+      "durationMs": 20730,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-publish": {
+      "file": "audio/swaps-publish.wav",
+      "durationMs": 22006,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-offer": {
+      "file": "audio/swaps-offer.wav",
+      "durationMs": 16120,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-accept": {
+      "file": "audio/swaps-accept.wav",
+      "durationMs": 16870,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-done": {
+      "file": "audio/swaps-done.wav",
+      "durationMs": 15947,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-approval": {
+      "file": "audio/swaps-approval.wav",
+      "durationMs": 15427,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-sector": {
+      "file": "audio/swaps-sector.wav",
+      "durationMs": 18554,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-sector-accept": {
+      "file": "audio/swaps-sector-accept.wav",
+      "durationMs": 9917,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-validate": {
+      "file": "audio/swaps-validate.wav",
+      "durationMs": 17994,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    },
+    "swaps-result": {
+      "file": "audio/swaps-result.wav",
+      "durationMs": 18190,
+      "generationSha256": "2ab7bceba8b7787d897439e71a4d0707fc3b1f2ecade9a1cbaabbccd7cb9b4c9"
+    }
+  }
+}

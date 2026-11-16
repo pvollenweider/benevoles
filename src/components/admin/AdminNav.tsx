@@ -127,7 +127,7 @@ export default function AdminNav({ userName, role, orgName, pendingSpaces = 0 }:
     <nav aria-label="Navigation de l'administration" className="bg-white border-b border-gray-200 px-4 print:hidden">
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 h-14">
         <div className="flex items-center gap-4 lg:gap-6 min-w-0">
-          <Link href="/admin/events" className={`font-semibold text-gray-900 text-sm truncate ${focusRing}`}>
+          <Link href="/admin/dashboard" className={`font-semibold text-gray-900 text-sm truncate ${focusRing}`}>
             {orgName ?? "Admin"}
           </Link>
           <div className="hidden md:flex items-center gap-4 lg:gap-6 shrink-0">

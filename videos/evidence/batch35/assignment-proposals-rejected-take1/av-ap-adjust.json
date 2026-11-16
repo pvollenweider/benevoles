@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:07:20.199Z",
+  "videoSha256": "965efa45a9e9c26767aa6af4ed9ba9aab07a99f95d7c511011cb110abc6fe96b",
+  "promptSha256": "1e0298c069b4c5c944b0f3aea50aed24eeab280d8022feeeffe756bb434a0df6",
+  "clipSha256": "aae4687491b42161ffc48a305c1784e18bfd7a9e65b91cc116bc38c1f3d0ee2d",
+  "scene": "ap-adjust",
+  "review": {
+    "heardOpening": "Léa doit partir plus tôt vendredi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Léa doit partir plus tôt vendredi : ouvrons son brouillon de billetterie",
+        "visibleSeconds": 0,
+        "visible": "Le tableau affiche la ligne de Léa Müller mais aucun clic n'ouvre son brouillon de billetterie",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "puis Retirer ce brouillon",
+        "visibleSeconds": 4,
+        "visible": "L'action 'Retirer ce brouillon' n'est ni affichée ni effectuée, l'écran défile vers le bas",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Dans la case de Lou, Ajouter",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur le bouton Ajouter sous la colonne de Lou Tóth, ouvrant la modale d'affectation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "puis Ajouter en brouillon sur la billetterie",
+        "visibleSeconds": 9.5,
+        "visible": "Sélection de la billetterie puis clic sur le bouton 'Ajouter en brouillon'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 00:01 et 00:05, l'ouverture du brouillon de billetterie de Léa et le clic sur 'Retirer ce brouillon' ne sont pas réalisés à l'écran avant le défilement vers Lou."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire et posée, bonne intelligibilité sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

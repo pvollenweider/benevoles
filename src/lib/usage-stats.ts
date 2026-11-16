@@ -74,3 +74,13 @@ export async function loadSignupFacts(now: Date = new Date()): Promise<SignupFac
     suspended,
   }
 }
+
+/**
+ * The spaces created by the self-service sign-up, per answer to « Comment avez-vous connu … ? »
+ * (#1094, rows by signupSourceRows in src/lib/signup-source.ts). The spaces present now: a deleted
+ * or refused space leaves the count with its organisation. Counts only, never the precisions.
+ */
+export async function loadSignupSources(): Promise<{ source: string | null; count: number }[]> {
+  const groups = await prisma.organization.groupBy({ by: ["signupSource"], where: { signupAt: { not: null } }, _count: { _all: true } })
+  return groups.map((g) => ({ source: g.signupSource, count: g._count._all }))
+}

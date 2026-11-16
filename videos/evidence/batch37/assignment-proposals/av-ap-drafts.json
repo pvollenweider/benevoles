@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:36:51.198Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "1dcc512cfb06e98801a9a6681dd8c1496c4d245f9461a5fb5ab85d8a55055ef6",
+  "clipSha256": "cae80e0c7103a93bffdbacf3f167b103ce7527efcbe070d10d87d8f3e8fb1a2b",
+  "scene": "ap-drafts",
+  "review": {
+    "heardOpening": "Aux Rencontres du Val d'Orsel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Aux Rencontres du Val d'Orsel, onze personnes ont indiqué leurs disponibilités.",
+        "visibleSeconds": 0.5,
+        "visible": "Page Disponibilités affichant l'onglet Inscriptions et la liste des personnes ayant répondu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Depuis la page Disponibilités, ouvrons Affectations en brouillon",
+        "visibleSeconds": 5.2,
+        "visible": "Affichage de la page Affectations en brouillon.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "une ligne par personne, une colonne par date avec les places à pourvoir, et encore aucune affectation.",
+        "visibleSeconds": 9.5,
+        "visible": "Tableau de planning montrant les lignes par participant, les colonnes par jour et l'état Aucune mission.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Cliquons sur Générer une proposition.",
+        "visibleSeconds": 15,
+        "visible": "Clic sur le lien Générer une proposition puis affichage de la page Proposition d'affectations.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

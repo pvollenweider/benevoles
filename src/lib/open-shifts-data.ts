@@ -4,6 +4,8 @@
 import type { OrgScopedPrisma } from "./prisma-org"
 import { LIVE_STATUSES } from "./registration-capacity"
 import { reservedRoles } from "./role-reservation"
+import { reservedAnswerConditions } from "./role-answer"
+import { assignedOnlyRoles } from "./role-assignment"
 import { spokenStaffingState, staffingStateText, staffingSummary } from "./staffing"
 import type { EventShiftRef, InviteRef, LiveRegistration, OpenShift, PoolMember } from "./open-shifts"
 
@@ -23,7 +25,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, reservedTags: true, minAge: true, overlapAllowed: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, minAge: true, overlapAllowed: true, assignedOnly: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { volunteerId: true, status: true } },
         },
       },
@@ -31,7 +33,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   })
   if (!event) return null
 
-  const [volunteers, invites] = await Promise.all([
+  const [volunteers, invites, declines, answers] = await Promise.all([
     // Merged records (#600) are tombstones, not members.
     db.volunteer.findMany({
       where: { mergedIntoId: null },
@@ -39,6 +41,15 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
       select: { id: true, firstName: true, lastName: true, email: true, active: true, tags: true, availabilityPeriods: true, availabilityNote: true, birthDate: true },
     }),
     db.memberInvite.findMany({ where: { eventId }, select: { volunteerId: true, declinedAt: true } }),
+    // « Je ne peux pas » for one precise shift (#1303), on this event's shifts only.
+    db.shiftDecline.findMany({
+      where: { shift: { eventId } },
+      select: { volunteerId: true, shiftId: true, declinedAt: true },
+    }),
+    // Stored answers (#962) of the members, only when a poste is reserved to one of them.
+    event.shifts.some((s) => s.reservedQuestionId)
+      ? db.questionAnswer.findMany({ where: { eventId }, select: { volunteerId: true, questionId: true, values: true } })
+      : Promise.resolve([]),
   ])
 
   const eventShifts: EventShiftRef[] = event.shifts.map((s) => ({
@@ -58,21 +69,31 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   const overlapAllowedOf = new Map(event.shifts.map((s) => [s.id, s.overlapAllowed]))
   // Reserved roles (#470): one set of tags per role, whichever shift carries it.
   const reserved = reservedRoles(event.shifts)
+  const answerConditions = reservedAnswerConditions(event.shifts)
+  // Roles assigned by the organisation only (#1145): never proposed to members, who could not take
+  // them; counted, so the page says where they went.
+  const assignedOnly = assignedOnlyRoles(event.shifts)
+  const assignedOnlyLeftOut = summary.underfilled.filter((s) => assignedOnly.has(s.roleName)).length
   // Underfilled shifts in time order: the order the email and the picker read best in.
   const openShifts: OpenShift[] = summary.underfilled
-    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], minAge: minAgeOf.get(s.id) ?? null, overlapAllowed: overlapAllowedOf.get(s.id) ?? false,
+    .filter((s) => !assignedOnly.has(s.roleName))
+    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], answerCondition: answerConditions.get(s.roleName) ?? null, minAge: minAgeOf.get(s.id) ?? null, overlapAllowed: overlapAllowedOf.get(s.id) ?? false,
       // The state against the minimum (#949), for the organizer's list only: never in the email.
       staffingState: staffingStateText(s, s.state ?? "open"), spokenStaffingState: spokenStaffingState(s, s.state ?? "open") }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime) || a.roleName.localeCompare(b.roleName, "fr"))
 
+  const answersOf = new Map<string, Record<string, string[]>>()
+  for (const a of answers) answersOf.set(a.volunteerId, { ...(answersOf.get(a.volunteerId) ?? {}), [a.questionId]: a.values })
   const members: PoolMember[] = volunteers.map((v) => ({
     id: v.id, firstName: v.firstName, lastName: v.lastName, hasEmail: !!v.email?.trim(), active: v.active, tags: v.tags,
     availabilityPeriods: v.availabilityPeriods, availabilityNote: v.availabilityNote,
     birthDate: v.birthDate ? v.birthDate.toISOString().slice(0, 10) : null,
+    answers: answersOf.get(v.id) ?? {},
   }))
   const registrations: LiveRegistration[] = event.shifts.flatMap((s) => s.registrations.map((r) => ({ volunteerId: r.volunteerId, shiftId: s.id, status: r.status })))
   const inviteRefs: InviteRef[] = invites.map((i) => ({ volunteerId: i.volunteerId, declined: !!i.declinedAt }))
+  const declineRefs = declines.map((d) => ({ volunteerId: d.volunteerId, shiftId: d.shiftId, declinedAt: d.declinedAt }))
   const tags = [...new Set(volunteers.flatMap((v) => v.tags))].sort((a, b) => a.localeCompare(b, "fr"))
 
-  return { event, eventShifts, openShifts, members, registrations, invites: inviteRefs, tags, emails: new Map(volunteers.map((v) => [v.id, v.email])) }
+  return { event, eventShifts, openShifts, assignedOnlyLeftOut, members, registrations, invites: inviteRefs, declines: declineRefs, tags, emails: new Map(volunteers.map((v) => [v.id, v.email])) }
 }

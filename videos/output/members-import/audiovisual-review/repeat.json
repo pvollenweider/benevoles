@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T16:30:09.109Z",
-  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
+  "reviewedAt": "2026-11-11T12:42:40.944Z",
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
   "promptSha256": "476beca7da3d6ace166ff7a345ef8b2e9344ef5752ab51890c2b95ae95aec6cc",
-  "clipSha256": "4c2f0f8257868c637b0757cf6f7330344eda337fcb2cf14ec02e7be8cbffe879",
+  "clipSha256": "216dfa51d1bfc0578d7bca345c293796b670363801eeebc3abe3320c7d48e053",
   "scene": "repeat",
   "review": {
     "heardOpening": "Si vous analysez de nouveau ce fichier avec Ignorer",
     "checkpoints": [
       {
-        "spokenSeconds": 0.9,
+        "spokenSeconds": 0.5,
         "spoken": "Si vous analysez de nouveau ce fichier avec Ignorer",
-        "visibleSeconds": 2.8,
-        "visible": "La fenêtre d'importation affiche l'option Ignorer cochée et le clic sur Analyser le fichier",
+        "visibleSeconds": 2.5,
+        "visible": "Ouverture de la boîte de dialogue d'import avec le fichier sélectionné et l'option Ignorer cochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.9,
+        "spokenSeconds": 3.4,
         "spoken": "les emails déjà présents sont reconnus",
-        "visibleSeconds": 4.2,
-        "visible": "L'analyse indique 39 fiches déjà présentes ignorées avec l'action ignorer pour les membres avec adresse",
+        "visibleSeconds": 4.1,
+        "visible": "Affichage du rapport d'analyse indiquant 39 membres déjà présents ignorés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "attention aux fiches sans email : le système ne peut pas les rapprocher",
-        "visibleSeconds": 7,
-        "visible": "La fiche de René Meyer sans email est marquée avec l'action créer",
+        "spokenSeconds": 5.4,
+        "spoken": "Mais attention aux fiches sans email : le système ne peut pas les rapprocher",
+        "visibleSeconds": 5.5,
+        "visible": "La liste montre René Meyer sans email avec l'action à créer et le bouton Importer 1 membre",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.5,
-        "spoken": "Regardez toujours le nombre de créations prévues",
-        "visibleSeconds": 16.8,
-        "visible": "La synthèse indique 1 à créer et le bouton d'action affiche Importer 1 membre",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18.6,
-        "spoken": "puis annulez si vous ne souhaitez rien ajouter",
-        "visibleSeconds": 18.8,
-        "visible": "Clic sur Retour pour revenir à l'écran précédent sans valider l'importation",
+        "spoken": "puis annulez si vous ne souhaitez rien ajouter.",
+        "visibleSeconds": 18,
+        "visible": "Fermeture de l'aperçu d'analyse pour revenir à l'étape précédente sans importer",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

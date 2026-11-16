@@ -15,6 +15,7 @@ import { shiftInstants } from "./ics"
 import { crossesMidnight } from "./gantt-utils"
 import { fmtHour } from "./registrations-list"
 import { fold } from "./text-fold"
+import { SECTOR_FILTER_PARAM } from "./sector-filter"
 
 /** « Dans les prochaines heures »: fixed by the owner (#561), not a setting. */
 export const DAY_OF_WINDOW_HOURS = 3
@@ -103,7 +104,7 @@ export type DayOfBoard = {
   laterCount: number
 }
 
-const byRole = (a: DayOfShift, b: DayOfShift) =>
+export const dayOfShiftOrder = (a: DayOfShift, b: DayOfShift) =>
   (a.displayOrder ?? 0) - (b.displayOrder ?? 0) || a.roleName.localeCompare(b.roleName, "fr") || a.label.localeCompare(b.label, "fr")
 
 /** Groups by start time (date and hour), earliest first, then role order inside each group. */
@@ -117,7 +118,7 @@ export function groupByStart(shifts: DayOfShift[]): DayOfGroup[] {
   }
   return [...groups.values()]
     .sort((a, b) => a.key.localeCompare(b.key))
-    .map((g) => ({ ...g, shifts: [...g.shifts].sort(byRole) }))
+    .map((g) => ({ ...g, shifts: [...g.shifts].sort(dayOfShiftOrder) }))
 }
 
 export function dayOfBoard(shifts: DayOfShift[], now: Date, timeZone: string, windowHours: number = DAY_OF_WINDOW_HOURS): DayOfBoard {
@@ -132,6 +133,30 @@ export function dayOfBoard(shifts: DayOfShift[], now: Date, timeZone: string, wi
     earlier: groupByStart(by.earlier),
     laterCount: by.later.length,
   }
+}
+
+/**
+ * The board with a shift added, at once (#1304): the day-of page shows a need created from the
+ * board without waiting for the next poll. A shift starting more than the window later is only
+ * counted (`laterCount`), as the board does. A shift already listed is left as it is.
+ */
+export function addShiftToBoard(board: DayOfBoard, shift: DayOfShift, now: Date, timeZone: string): { board: DayOfBoard; phase: DayOfPhase | null } {
+  const phase = shiftPhase(shift, now, timeZone)
+  if (!phase) return { board, phase: null }
+  const listed = (groups: DayOfGroup[]) => groups.some((g) => g.shifts.some((s) => s.id === shift.id))
+  if (listed(board.inProgress) || listed(board.upcoming) || listed(board.earlier)) return { board, phase }
+  if (phase === "later") {
+    return { board: { ...board, laterCount: board.laterCount + 1 }, phase }
+  }
+  const key = `${shift.date}T${shift.startTime}`
+  const list = phase === "in_progress" ? board.inProgress : phase === "upcoming" ? board.upcoming : board.earlier
+  const existing = list.find((g) => g.key === key)
+  const next = existing
+    ? list.map((g) => (g.key === key ? { ...g, shifts: [...g.shifts, shift].sort(dayOfShiftOrder) } : g))
+    : [...list, { key, date: shift.date, startTime: shift.startTime, shifts: [shift] }]
+  next.sort((a, b) => a.key.localeCompare(b.key))
+  const updated = phase === "in_progress" ? { ...board, inProgress: next } : phase === "upcoming" ? { ...board, upcoming: next } : { ...board, earlier: next }
+  return { board: updated, phase }
 }
 
 export const personName = (p: Pick<DayOfPerson, "firstName" | "lastName">) => `${p.firstName} ${p.lastName}`.trim()
@@ -222,6 +247,12 @@ export function telHref(phone: string): string {
  * registrations list (#399), for one registration, so the same rules (active registrations only,
  * no double mark) and the same event log entries apply.
  */
+/** The board route the open page polls (#1141), with the page's « Secteur » filter (#1170) when one is chosen. */
+export function dayOfBoardUrl(eventId: string, sector = ""): string {
+  const base = `/api/admin/events/${encodeURIComponent(eventId)}/day-of`
+  return sector ? `${base}?${new URLSearchParams({ [SECTOR_FILTER_PARAM]: sector })}` : base
+}
+
 export function presenceRequest(eventId: string, registrationId: string, present: boolean): { url: string; body: { action: "check_in" | "undo_check_in"; registrationIds: string[] } } {
   return {
     url: `/api/admin/events/${encodeURIComponent(eventId)}/registrations/bulk`,

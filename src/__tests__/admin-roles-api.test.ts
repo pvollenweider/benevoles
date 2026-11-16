@@ -7,13 +7,16 @@ const m = vi.hoisted(() => ({
   create: vi.fn(),
   update: vi.fn(),
   del: vi.fn(),
+  count: vi.fn(),
+  queryRaw: vi.fn().mockResolvedValue([]),
   orgLog: vi.fn().mockResolvedValue({ id: "log" }),
 }))
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: m.guard }))
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    adminUser: { findUnique: m.findUnique, findFirst: m.findUnique, create: m.create, update: m.update, delete: m.del },
+    adminUser: { findUnique: m.findUnique, findFirst: m.findUnique, create: m.create, update: m.update, delete: m.del, count: m.count },
     orgLog: { create: m.orgLog },
+    $queryRaw: m.queryRaw,
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },
 }))
@@ -29,6 +32,9 @@ const withDb = (target: object | null, owners: number, active = 3) => {
     },
     organization: { findUnique: vi.fn().mockResolvedValue({ name: "Org", outboundEmailApprovedAt: new Date() }) },
   }
+  // The level change and the removal read and write through the locked transaction (prisma).
+  m.findUnique.mockResolvedValue(target)
+  m.count.mockImplementation(async ({ where }: { where: { role?: string } }) => (where.role ? owners : active))
   m.guard.mockResolvedValue({ db, organizationId: "org-a", session })
   return db
 }
@@ -95,4 +101,28 @@ describe("admin levels", () => {
     expect((await PATCH(json("PATCH", { role: "admin" }), params)).status).toBe(404)
     expect(m.update).not.toHaveBeenCalled()
   })
+
+  it("locks the organisation before reading the target and counting the owners", async () => {
+    withDb({ id: "adm-2", role: "admin", isActive: true }, 2)
+    const order: string[] = []
+    m.queryRaw.mockImplementation(async (sql: TemplateStringsArray) => { order.push(sql.join("?").includes("FOR UPDATE") ? "lock" : "sql"); return [] })
+    m.findUnique.mockImplementation(async () => { order.push("target"); return { id: "adm-2", role: "admin", isActive: true } })
+    m.count.mockImplementation(async () => { order.push("count"); return 2 })
+    m.update.mockImplementation(async () => { order.push("update"); return {} })
+    const { PATCH } = await import("@/app/api/admin/settings/admins/[id]/route")
+    expect((await PATCH(json("PATCH", { role: "organizer" }), params)).status).toBe(200)
+    expect(order).toEqual(["lock", "target", "count", "update"])
+    const lockSql = (m.queryRaw.mock.calls[0][0] as TemplateStringsArray).join("?")
+    expect(lockSql).toMatch(/FROM "Organization" WHERE "id" = \? FOR UPDATE/)
+    expect(m.queryRaw.mock.calls[0][1]).toBe("org-a")
+  })
+
+  it("scopes the target and the owner count to the caller's organisation", async () => {
+    withDb({ id: "adm-2", role: "admin", isActive: true, email: "b@x.ch" }, 2)
+    const { DELETE } = await import("@/app/api/admin/settings/admins/[id]/route")
+    expect((await DELETE(new Request("http://localhost/x", { method: "DELETE" }), params)).status).toBe(200)
+    expect(m.findUnique.mock.calls[0][0].where).toEqual({ id: "adm-2", organizationId: "org-a" })
+    for (const [args] of m.count.mock.calls) expect(args.where.organizationId).toBe("org-a")
+  })
 })
+

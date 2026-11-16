@@ -1,12 +1,12 @@
 {
   "anchor": "Retrouvons notre événement de démonstration. Dans ses réglages, la même option",
-  "windowStart": 8.639,
+  "windowStart": 20.747999999999998,
   "result": {
     "found": true,
-    "startSeconds": 18.92,
-    "wordsHeard": "Retrouvons notre événement de démonstration. Dans ses réglages, la même option"
+    "startSeconds": 12.3,
+    "wordsHeard": "Retrouvons"
   },
-  "onset": 27.559,
-  "proposedCut": 27.152167,
+  "onset": 33.048,
+  "proposedCut": 32.881583500000005,
   "note": "Proposal only; recut then independently audit before capture"
 }

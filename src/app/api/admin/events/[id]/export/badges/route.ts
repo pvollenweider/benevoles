@@ -5,12 +5,20 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { badgeOptionsFrom, renderBadges } from "@/lib/print-badges"
 import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
+import { sectorFilterOfRequest } from "@/lib/sector-filter-data"
+import { sectorFilterCaption } from "@/lib/sector-filter"
 
-/** GET /api/admin/events/[id]/export/badges (#190): printable badges of the event's active volunteers. */
+/**
+ * GET /api/admin/events/[id]/export/badges (#190): printable badges of the event's active
+ * volunteers. `?secteur=` (#1170) keeps the postes of one sector: a badge then lists only the
+ * person's shifts there, combined with the poste and person choices.
+ */
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { id } = await params
+  const sector = await sectorFilterOfRequest(guard.db, id, req)
+  if (!sector) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const event = await guard.db.event.findFirst({
     where: { id },
@@ -19,7 +27,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       accentColorKey: true,
       organization: { select: { name: true, logo: ORG_LOGO_SELECT } },
       shifts: {
-        where: { status: { not: "cancelled" } },
+        where: { status: { not: "cancelled" }, ...sector.shiftWhere },
         orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
         select: {
           id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, colorKey: true,
@@ -43,6 +51,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, colorKey: s.colorKey,
       registrations: s.registrations.map((r) => ({ id: r.volunteer.id, firstName: r.volunteer.firstName, lastName: r.volunteer.lastName, email: r.volunteer.email, phone: null })),
     })),
+    sectorCaption: sectorFilterCaption(sector.filter),
   }, badgeOptionsFrom(new URL(req.url).searchParams))
 
   return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } })

@@ -18,13 +18,18 @@ export type ShiftRef = {
   startTime: string; endTime: string; capacity: number; registrationCount: number
   /** Its role may overlap another shift (#986): no overlap warning. */
   overlapAllowed?: boolean
+  /** « Repas sur le pouce possible » (#1171, lot 2), read by the workload check. */
+  mealOnTheGo?: boolean
+  /** Place of the mission and its name (#1171, lot 2), read by the travel check. */
+  placeId?: string | null
+  placeName?: string | null
 }
 
 type ListRegistration = {
   status?: string
   groupLinkId?: string | null
   shift: ShiftRef
-  volunteer: { id: string; firstName: string; lastName: string; email: string | null }
+  volunteer: { id: string; firstName: string; lastName: string; email: string | null; birthDate?: string | Date | null }
 }
 
 /** Short date, e.g. "sam. 1 juin". */
@@ -181,13 +186,13 @@ export function chosenOverlapMessage(selected: ShiftRef | null, otherChosen: Shi
 }
 
 /** A volunteer just made sector leader of a role (« responsable » is the same for everyone). */
-export function leaderDesignatedAnnouncement(name: string, role: string): string {
-  return `${name} est maintenant responsable de « ${role} », invitation envoyée par email.`
+export function leaderDesignatedAnnouncement(name: string, role: string, kind?: "sector"): string {
+  return `${name} est maintenant responsable ${kind === "sector" ? "du secteur " : "de "}« ${role} », invitation envoyée par email.`
 }
 
 /** A sector leader just removed from a role, without « ·e ». */
-export function leaderRemovedAnnouncement(name: string, role: string): string {
-  return `${name} n'est plus responsable de « ${role} ».`
+export function leaderRemovedAnnouncement(name: string, role: string, kind?: "sector"): string {
+  return `${name} n'est plus responsable ${kind === "sector" ? "du secteur " : "de "}« ${role} ».`
 }
 
 /**
@@ -196,9 +201,10 @@ export function leaderRemovedAnnouncement(name: string, role: string): string {
  * plurals instead of « inscription(s) », « Aucune » for zero. The waiting list and the requests only
  * when there are any.
  */
-export function registrationsSummary(c: { active: number; waiting: number; requested: number }): string {
+export function registrationsSummary(c: { active: number; waiting: number; requested: number; unconfirmed?: number }): string {
   return [
     c.active === 0 ? "Aucune inscription active" : `${c.active} ${plural(c.active, "inscription")} ${plural(c.active, "active")}`,
+    (c.unconfirmed ?? 0) > 0 ? `${c.unconfirmed} en attente de confirmation par email` : null,
     c.waiting > 0 ? `${c.waiting} en liste d'attente` : null,
     c.requested > 0 ? `${c.requested} ${plural(c.requested, "demande")} à traiter` : null,
   ].filter(Boolean).join(", ")

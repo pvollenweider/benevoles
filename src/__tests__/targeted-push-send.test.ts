@@ -105,6 +105,20 @@ describe("sendTargetedPush", () => {
     expect(peak).toBeLessThanOrEqual(5)
   })
 
+  it("honours a shorter TTL, per recipient or for the whole send (#1304)", async () => {
+    m.findMany.mockImplementation(async ({ where }: { where: { volunteerId: string } }) => [sub(where.volunteerId)])
+    m.send.mockResolvedValue({})
+    const { sendTargetedPush } = await import("@/lib/push")
+    await sendTargetedPush("msg-ttl", [{ volunteerId: "alice", url: "/my/a", ttlSeconds: 3600 }], { title: "T", body: "B", tag: "x" })
+    expect(m.send.mock.calls[0][2].TTL).toBe(3600)
+    m.send.mockClear()
+    await sendTargetedPush("msg-ttl", [{ volunteerId: "alice", url: "/my/a" }], { title: "T", body: "B", tag: "x", ttlSeconds: 60 })
+    expect(m.send.mock.calls[0][2].TTL).toBe(60)
+    m.send.mockClear()
+    await sendTargetedPush("msg-ttl", [{ volunteerId: "alice", url: "/my/a" }], { title: "T", body: "B", tag: "x" })
+    expect(m.send.mock.calls[0][2].TTL).toBe(3 * 24 * 3600)
+  })
+
   it("counts the devices of the recipients", async () => {
     m.count.mockResolvedValue(3)
     const { pushDeviceCount } = await import("@/lib/push")

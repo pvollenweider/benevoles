@@ -1,0 +1,89 @@
+{
+  "id": "SECTORS",
+  "slug": "sectors",
+  "validatedAt": "2026-11-10T20:04:28.285Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 220480,
+  "scenes": [
+    {
+      "id": "sectors-welcome",
+      "visualMs": 18917,
+      "audioMs": 18917,
+      "driftMs": 0
+    },
+    {
+      "id": "sectors-enable",
+      "visualMs": 15230,
+      "audioMs": 15228,
+      "driftMs": 2
+    },
+    {
+      "id": "sectors-create",
+      "visualMs": 22044,
+      "audioMs": 22043,
+      "driftMs": 1
+    },
+    {
+      "id": "sectors-poste",
+      "visualMs": 20576,
+      "audioMs": 20575,
+      "driftMs": 1
+    },
+    {
+      "id": "sectors-move",
+      "visualMs": 18002,
+      "audioMs": 18001,
+      "driftMs": 1
+    },
+    {
+      "id": "sectors-timeline",
+      "visualMs": 14609,
+      "audioMs": 14607,
+      "driftMs": 2
+    },
+    {
+      "id": "sectors-pdf",
+      "visualMs": 11006,
+      "audioMs": 11005,
+      "driftMs": 1
+    },
+    {
+      "id": "sectors-filter",
+      "visualMs": 19369,
+      "audioMs": 19369,
+      "driftMs": 0
+    },
+    {
+      "id": "sectors-pages",
+      "visualMs": 11957,
+      "audioMs": 11955,
+      "driftMs": 2
+    },
+    {
+      "id": "sectors-message",
+      "visualMs": 19725,
+      "audioMs": 19724,
+      "driftMs": 1
+    },
+    {
+      "id": "sectors-result",
+      "visualMs": 14976,
+      "audioMs": 14976,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 29,
+  "music": {
+    "voicedWindows": 182,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -34.1,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.6
+  },
+  "issues": []
+}

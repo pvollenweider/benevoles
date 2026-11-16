@@ -1,0 +1,5 @@
+
+> benevoles@2.5.0 video:validate
+> node --import tsx videos/tools/validate.ts VOLUNTEER_EVENT_AVAILABILITY
+
+✓ VOLUNTEER_EVENT_AVAILABILITY: 9 scene durations aligned, one continuous Kore voice; narration content checked; music 14.6–18.5 LU under the voice

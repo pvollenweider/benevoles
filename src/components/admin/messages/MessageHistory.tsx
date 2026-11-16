@@ -27,7 +27,8 @@ export default function MessageHistory({ eventId, items, timeZone }: { eventId: 
           {items.map((m) => (
             <li key={m.id} className="rounded-xl border border-gray-200 bg-white p-4">
               <article aria-labelledby={`msg-${m.id}`}>
-                <h3 id={`msg-${m.id}`} className="font-medium text-gray-900 break-words">{m.subject}</h3>
+                {/* Reached by « Voir le message » of an « envoi groupé » (#1101): focused by the link, by code only. */}
+                <h3 id={`msg-${m.id}`} tabIndex={-1} className="font-medium text-gray-900 break-words scroll-mt-4 focus:outline-none">{m.subject}</h3>
                 <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
                   <dt className="text-gray-600">Envoyé</dt>
                   <dd className="text-gray-900">le <time dateTime={m.createdAt.toISOString()}>{when(m.createdAt, timeZone)}</time>, par {m.authorName}</dd>

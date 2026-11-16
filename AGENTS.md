@@ -10,17 +10,21 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Page publique des fonctionnalités
 
-- `FEATURES.md` est la source de vérité de la page publique `/fonctionnalites`, qui le rend directement : ne jamais dupliquer cette liste dans la page React ou ailleurs.
-- Toute modification qui ajoute, supprime, renomme ou change substantiellement une fonctionnalité visible par les organisateurs ou les bénévoles vérifie et, si nécessaire, met à jour `FEATURES.md` dans le même changement. Une fonctionnalité non livrée n'y est jamais annoncée comme disponible ; un changement purement interne ne demande pas de mise à jour.
-- `FONCTIONNALITES.md` reste l'inventaire détaillé pour l'équipe ; `FEATURES.md` en est la présentation publique, par besoins.
-- Toute nouvelle page publique de contenu se déclare dans `src/lib/doc-pages.ts` (métadonnées propres, sitemap, navigation) et son fichier source est copié dans l'image (`Dockerfile`) ; `src/lib/__tests__/docker-public-sources.test.ts` et `doc-pages.test.ts` échouent sinon.
+- `content/pages/FEATURES.md` est la source de vérité de la page publique `/fonctionnalites`, qui le rend directement : ne jamais dupliquer cette liste dans la page React ou ailleurs.
+- Toute modification qui ajoute, supprime, renomme ou change substantiellement une fonctionnalité visible par les organisateurs ou les bénévoles vérifie et, si nécessaire, met à jour `content/pages/FEATURES.md` dans le même changement. Une fonctionnalité non livrée n'y est jamais annoncée comme disponible ; un changement purement interne ne demande pas de mise à jour.
+- `docs/fonctionnalites.md` reste l'inventaire détaillé pour l'équipe ; `content/pages/FEATURES.md` en est la présentation publique, par besoins.
+- Toute nouvelle page publique de contenu se déclare dans `src/lib/doc-pages.ts` (métadonnées propres, sitemap, navigation) et son fichier source, rangé sous `content/` (`pages/`, `legal/` ou `guide/`), est copié dans l'image (`Dockerfile`) ; `src/lib/__tests__/docker-public-sources.test.ts` et `doc-pages.test.ts` échouent sinon.
 
 ## Interface et accessibilité
 
 - Tout changement d'interface relit `DESIGN.md` et `PRODUCT.md`.
-- Si une limite d'accessibilité apparaît ou disparaît, mettre à jour dans le même changement les « Limites connues » et la date de `ACCESSIBILITE.md` (page publique `/accessibilite`, sans chemin de fichier ni code), et les « Écarts connus » de `docs/accessibilite.md`.
+- Si une limite d'accessibilité apparaît ou disparaît, mettre à jour dans le même changement les « Limites connues » et la date de `content/pages/ACCESSIBILITE.md` (page publique `/accessibilite`, sans chemin de fichier ni code), et les « Écarts connus » de `docs/accessibilite.md`.
 
 ## Captures de la documentation
 
 - Tout changement qui modifie un écran montré dans `public/doc-img/` (guides, README) régénère les captures concernées dans le même changement : `ONLY=<captures> npm run screenshots` sur une base jetable de la branche, procédure en tête de `scripts/screenshots.mjs`. Relire ensuite leurs textes alternatifs dans les guides. Une capture ne montre jamais un ancien libellé ou une ancienne disposition.
 - La CI le vérifie (`scripts/check-doc-screenshots.mjs`, correspondance capture → écrans dans `src/lib/doc-screenshots.ts`) : elle échoue si un écran montré change sans sa capture. Un changement sans effet visible le dit par `doc-img: unchanged` dans la description de la PR ou le message du dernier commit. Une nouvelle capture se déclare dans les deux fichiers.
+
+## Issues
+
+- Une issue triée porte un label de type, un de statut (`status:*`) et un de domaine (`area:*`) : règles dans `CONTRIBUTING.md`, section « Labels des issues ». Les labels marqués « Legacy » ne s'appliquent plus.

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import EventLogExplorer from "@/components/admin/EventLogExplorer"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Journal" }
@@ -22,6 +23,7 @@ export default async function EventLogPage({ params, searchParams }: { params: P
     <div className="space-y-6">
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Journal</h1>
+        <HelpLink route="/admin/events/[id]/log" />
         <p className="text-sm text-gray-500">Qui a fait quoi, et pourquoi — explorez, rejouez une plage horaire ou lisez le récit d&apos;un enchaînement.</p>
       </div>
 

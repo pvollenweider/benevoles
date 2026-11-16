@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:55:39.365Z",
+  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "promptSha256": "347d4e20b89ba659474eb53dd634f29b00b13255c881e1126ea3a61d169b5bc1",
+  "clipSha256": "33a04f08abd74dff9f6c40f5b29f29043c6751e9fed01e356a9988046400ba11",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Une mission n'a plus lieu : cette fois, on annule",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
+        "visibleSeconds": 5.6,
+        "visible": "Ouverture de la fenêtre modale « Supprimer le créneau » détaillant les conséquences de l'annulation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Après confirmation, les inscriptions concernées sont annulées",
+        "visibleSeconds": 11.2,
+        "visible": "Clic sur le bouton rouge « Supprimer » pour confirmer la suppression du créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Vérifions le statut, puis le vrai email reçu.",
+        "visibleSeconds": 18.5,
+        "visible": "Affichage de la page Journal montrant les inscriptions passées à l'état annulé, suivi à 22s de l'aperçu de l'email envoyé.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

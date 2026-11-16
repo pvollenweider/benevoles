@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest"
-import { liveRoleShifts, roleColorOf, roleSettingsOf, type RoleSettingsShift } from "../role-settings"
+import { liveRoleShifts, roleColorOf, roleSectorOf, roleSettingsOf, type RoleSettingsShift } from "../role-settings"
 
 // The settings of a poste (#1002), read from its live shifts for a shift created in it or moved to it.
 const shift = (patch: Partial<RoleSettingsShift> = {}): RoleSettingsShift => ({
-  roleName: "Bar", colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, displayOrder: 0, updatedAt: "2026-07-01T10:00:00Z", ...patch,
+  roleName: "Bar", colorKey: null, maxPerVolunteer: null, reservedTags: [], reservedQuestionId: null, reservedAnswers: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0, updatedAt: "2026-07-01T10:00:00Z", ...patch,
 })
 
 describe("roleSettingsOf", () => {
@@ -13,15 +13,26 @@ describe("roleSettingsOf", () => {
   })
 
   it("returns the poste's values when its shifts agree, ignoring other postes", () => {
-    const set = { colorKey: "teal", maxPerVolunteer: 2, reservedTags: ["sécurité"], overlapAllowed: true, displayOrder: 300 }
+    const set = { colorKey: "teal", maxPerVolunteer: 2, reservedTags: ["sécurité"], reservedQuestionId: null, reservedAnswers: [], overlapAllowed: true, assignedOnly: true, displayOrder: 300, sectorId: "sec-parking" }
     expect(roleSettingsOf([shift(set), shift(set), shift({ roleName: "Accueil", colorKey: "rose", displayOrder: 0 })], "Bar")).toEqual(set)
   })
 
   it("returns the defaults for a poste whose shifts have none set", () => {
-    expect(roleSettingsOf([shift()], "Bar")).toEqual({ colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, displayOrder: 0 })
+    expect(roleSettingsOf([shift()], "Bar")).toEqual({ colorKey: null, maxPerVolunteer: null, reservedTags: [], reservedQuestionId: null, reservedAnswers: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0, sectorId: null })
   })
 
   describe("mixed values (shifts added before #1002)", () => {
+    it("sector (#1147): the one most shifts carry, shifts without a sector ignored; none only when no shift has one", () => {
+      expect(roleSettingsOf([shift({ sectorId: "a" }), shift({ sectorId: "b" }), shift({ sectorId: "a" }), shift()], "Bar")?.sectorId).toBe("a")
+      expect(roleSettingsOf([shift(), shift({ sectorId: "b" }), shift()], "Bar")?.sectorId).toBe("b")
+      expect(roleSettingsOf([shift(), shift()], "Bar")?.sectorId).toBeNull()
+    })
+
+    it("sector (#1147): a tie goes to the most recently updated shift, then the first id", () => {
+      expect(roleSectorOf([shift({ sectorId: "b", updatedAt: "2026-07-02T10:00:00Z" }), shift({ sectorId: "a", updatedAt: "2026-07-01T10:00:00Z" })])).toBe("b")
+      expect(roleSectorOf([shift({ sectorId: "b" }), shift({ sectorId: "a" })])).toBe("a")
+    })
+
     it("limit per volunteer: the smallest one set, as sign-up enforces it", () => {
       expect(roleSettingsOf([shift({ maxPerVolunteer: 3 }), shift(), shift({ maxPerVolunteer: 2 })], "Bar")?.maxPerVolunteer).toBe(2)
     })
@@ -31,9 +42,22 @@ describe("roleSettingsOf", () => {
         .toEqual(["sécurité", "secours"])
     })
 
+    it("answer condition (#962): the question most shifts carry, every accepted answer of those", () => {
+      expect(roleSettingsOf([shift({ reservedQuestionId: "q1", reservedAnswers: ["Oui"] }), shift({ reservedQuestionId: "q1", reservedAnswers: ["Oui", "Peut-être"] }), shift()], "Bar"))
+        .toMatchObject({ reservedQuestionId: "q1", reservedAnswers: ["Oui", "Peut-être"] })
+      expect(roleSettingsOf([shift({ reservedQuestionId: "q1", reservedAnswers: ["Oui"] }), shift({ reservedQuestionId: "q2", reservedAnswers: ["Non"] })], "Bar")?.reservedQuestionId).toBe("q1")
+      expect(roleSettingsOf([shift()], "Bar")).toMatchObject({ reservedQuestionId: null, reservedAnswers: [] })
+    })
+
     it("cumulable: only when every shift is", () => {
       expect(roleSettingsOf([shift({ overlapAllowed: true }), shift()], "Bar")?.overlapAllowed).toBe(false)
       expect(roleSettingsOf([shift({ overlapAllowed: true }), shift({ overlapAllowed: true })], "Bar")?.overlapAllowed).toBe(true)
+    })
+
+    it("assigned by the organisation only (#1145): as soon as one shift is, as sign-up enforces it", () => {
+      expect(roleSettingsOf([shift(), shift({ assignedOnly: true })], "Bar")?.assignedOnly).toBe(true)
+      expect(roleSettingsOf([shift(), shift({ assignedOnly: null })], "Bar")?.assignedOnly).toBe(false)
+      expect(roleSettingsOf([shift(), shift({ roleName: "Accueil", assignedOnly: true })], "Bar")?.assignedOnly).toBe(false)
     })
 
     it("order: the smallest displayOrder, as the timelines order postes", () => {

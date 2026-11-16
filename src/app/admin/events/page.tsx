@@ -7,6 +7,7 @@ import FlashMessage from "@/components/admin/FlashMessage"
 import OnboardingChecklist from "@/components/admin/OnboardingChecklist"
 import { loadOnboarding } from "@/lib/onboarding-data"
 import { isUnlistedPublic } from "@/lib/event-visibility"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -36,8 +37,11 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
   return (
     <div className="space-y-6">
       {deleted === "1" && <FlashMessage message="Événement supprimé." />}
-      <div className="flex items-center justify-between">
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Événements</h1>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Événements</h1>
+          <HelpLink route="/admin/events" />
+        </div>
         <Link
           href="/admin/events/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"

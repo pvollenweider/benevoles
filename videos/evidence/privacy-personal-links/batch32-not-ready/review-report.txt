@@ -1,0 +1,14 @@
+STATUS: NOT READY
+Batch:32 (resume)
+ID:PRIVACY_PERSONAL_LINKS
+Product commit:9831e86e40ae3dd1ba60eb632b8e90951483a11c
+BUILD_ID:jJH5zvJlD2hQBFLXtZa0x
+No new publication; old online MP4, catalog published:true/revision4/dates retained.
+Take1 rejected: report announced in copies but compositor remained on Documents.
+Video-only focus fix verified in read-only diagnostic, then fresh-seed take2 shows actual report at copies+6s; copies AV PASS.
+Take2 rejected: voice identity drift22–22.5s into result. Final AV, final audio-only, and controlled source/final comparison flag it. One narration-only review disagrees; all evidence retained. Provenance is one continuous TTS request, not sentence splicing; model speculation about edited voices is not adopted.
+Rejected take2 duration381.360s; validate/words pass, music13.9–19.8LU under voice, music-onlymin-33.9LUFS;29 clicks176keys;0 viewer tu,1 exact quoted title Ton lien personnel. These are rejected-take measurements, not READY evidence.
+Whole Kore track regenerated again in one consistent pass with single-identity coaching. New10 chapter ASRs PASS (0–1.7% WER, zero flags), whole-master audio-only identity check:one constant voice, no changes. New audio is NOT mixed into rejected footage.
+One allowed narrated re-film already used. Explicit owner exception requested for a third narrated take; no approval assumed, no further take or publication without it.
+Source fixes: dedicated Mailpit port in recorder/review guard, public-host capture, relative fixture date, real report focus/positive checks, full-track voice coaching. No src/ or guide edits.
+Evidence:videos/evidence/privacy-personal-links/batch32-not-ready/.

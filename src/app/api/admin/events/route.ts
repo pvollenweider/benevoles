@@ -9,26 +9,32 @@ import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX, SHOW_NAME_MAX } from "@/lib/text-limits"
 import { dayContactSchema } from "@/lib/day-contact"
 import { cancelDeadlineSchema } from "@/lib/cancel-deadline-schema"
+import { newEventShiftSwapsEnabled } from "@/lib/shift-swap-data"
+import { newEventWorkload } from "@/lib/workload-policy-data"
+import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 
 const showSchema = z.object({
-  name: z.string(),
+  name: cappedText(SHOW_NAME_MAX, "Le nom du spectacle"),
   date: civilDateSchema,
   startTime: z.string(),
   endTime: z.string(),
 })
 
 const schema = z.object({
-  title: z.string().min(1),
-  description: z.string().optional(),
-  location: z.string().optional(),
+  title: cappedText(EVENT_TITLE_MAX, "Le titre").min(1),
+  description: cappedText(MARKDOWN_TEXT_MAX, "La description").optional(),
+  location: cappedText(EVENT_LOCATION_MAX, "Le lieu").optional(),
   startDate: civilDateSchema,
   endDate: civilDateSchema,
-  publicInstructions: z.string().optional(),
-  confirmationMessage: z.string().optional(),
+  publicInstructions: cappedText(MARKDOWN_TEXT_MAX, "Les informations pratiques").optional(),
+  confirmationMessage: cappedText(MARKDOWN_TEXT_MAX, "Le message de confirmation").optional(),
   showSchedule: z.array(showSchema).optional(),
   requirePhone: z.boolean().optional(),
+  requireEmailConfirmation: z.boolean().optional(),
   shiftRosterEnabled: z.boolean().optional(),
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
@@ -96,13 +102,20 @@ export async function POST(req: Request) {
   if (existing) slug = `${slug}-${Date.now()}`
 
   // « Qui est inscrit » (#1068): what the form sent, else the organisation's default for new events.
-  const org = data.shiftRosterEnabled === undefined
-    ? await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true } })
-    : null
+  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, timeZone: true } })
+  // Sectors (#1147): the organisation's default, only while the organisation is available.
+  const sectorsEnabled = await newEventSectorsEnabled(organizationId, org?.sectorsDefault)
+  // Shift swaps (#1174, beta): the organisation's default, only while the capability can be adopted.
+  const shiftSwapsEnabled = await newEventShiftSwapsEnabled(organizationId, org?.shiftSwapsDefault)
+  // Workload protection (#1171, beta): the organisation's values copied, only while it can be adopted.
+  const workload = await newEventWorkload(organizationId, org)
   const event = await db.event.create({
     data: {
       ...data,
+      ...workload,
       shiftRosterEnabled: data.shiftRosterEnabled ?? org?.shiftRosterDefault ?? true,
+      sectorsEnabled,
+      shiftSwapsEnabled,
       slug,
       organizationId,
       startDate: new Date(data.startDate),

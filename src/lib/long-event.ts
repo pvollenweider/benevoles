@@ -49,16 +49,3 @@ export function groupDaysByMonth(days: string[]): MonthGroup[] {
 export function usesMonthView(days: string[]): boolean {
   return days.length >= MONTH_VIEW_MIN_DAYS
 }
-
-/**
- * A long event's shift whose day is over can't be taken any more (the page doesn't show it, but
- * a page left open overnight still could). Returns the first such shift's label, or null.
- */
-export function pastShiftLabel(
-  event: { startDate?: Date | string | null; endDate?: Date | string | null },
-  shifts: { date: Date | string; label: string }[],
-  today: string,
-): string | null {
-  if (!isLongEvent(event.startDate, event.endDate)) return null
-  return shifts.find((s) => isoDay(s.date) < today)?.label ?? null
-}

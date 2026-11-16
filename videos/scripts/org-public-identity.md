@@ -25,7 +25,7 @@ les événements publics.
 
 ## Points d’attention
 
-- Ces réglages sont réservés aux propriétaires.
+- Ces paramètres sont réservés aux propriétaires.
 - Les anciens identifiants conservés redirigent vers l’adresse actuelle. C’est leur suppression qui casse les liens qui les utilisent.
 - L’adresse locale filmée est celle de l’environnement de démonstration, pas une organisation réellement publiée sur benevol.app.
 - Le logo est facultatif et ne remplace jamais le nom écrit. Une copie de document déjà téléchargée n’est pas réécrite après son retrait.

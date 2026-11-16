@@ -16,7 +16,7 @@ async function login(page: Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 test("two members with the same name and phone (written differently) appear as a pair, dismiss removes it, the owner can reach the merge preview", async ({ page }) => {

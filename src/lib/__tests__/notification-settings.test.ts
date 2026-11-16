@@ -42,8 +42,8 @@ describe("notification settings", () => {
   })
 
   it("summarizes in one sentence", () => {
-    expect(notificationSummary(DEFAULT_NOTIFICATION_SETTINGS, null)).toBe("Les trois rappels sont envoyés. Les admins reçoivent un email à chaque inscription et quand un bénévole modifie ses réponses. Les admins et les responsables de poste reçoivent un email à chaque désistement. Les admins reçoivent un résumé quotidien si des adresses sont à vérifier. Les réponses des bénévoles arrivent à l'adresse par défaut de la plateforme.")
-    expect(notificationSummary({ reminders: { j2: false, j1: true, dd: false }, signupAdminEmail: false, withdrawalAdminEmail: false, addressesToVerifyAdminEmail: false }, "c@o.ch")).toBe("Rappels envoyés : Rappel J-1. Pas d'email aux admins à l'inscription ni quand un bénévole modifie ses réponses. Pas d'email aux admins ni aux responsables de poste en cas de désistement. Pas de résumé quotidien des adresses à vérifier. Les réponses des bénévoles arrivent à c@o.ch.")
+    expect(notificationSummary(DEFAULT_NOTIFICATION_SETTINGS, null)).toBe("Les trois rappels sont envoyés. Les organisateurs reçoivent un email à chaque inscription et quand un bénévole modifie ses réponses. Les organisateurs et les responsables de poste reçoivent un email à chaque désistement. Les organisateurs reçoivent un résumé quotidien si des adresses sont à vérifier. Les réponses des bénévoles arrivent à l'adresse par défaut de la plateforme.")
+    expect(notificationSummary({ reminders: { j2: false, j1: true, dd: false }, signupAdminEmail: false, withdrawalAdminEmail: false, addressesToVerifyAdminEmail: false }, "c@o.ch")).toBe("Rappels envoyés : Rappel J-1. Pas d'email aux organisateurs à l'inscription ni quand un bénévole modifie ses réponses. Pas d'email aux organisateurs ni aux responsables de poste en cas de désistement. Pas de résumé quotidien des adresses à vérifier. Les réponses des bénévoles arrivent à c@o.ch.")
     expect(notificationSummary({ reminders: { j2: false, j1: false, dd: false }, signupAdminEmail: true, withdrawalAdminEmail: true, addressesToVerifyAdminEmail: true }, null)).toMatch(/^Aucun rappel automatique\./)
   })
 })

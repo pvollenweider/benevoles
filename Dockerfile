@@ -13,7 +13,7 @@ RUN npm ci --legacy-peer-deps
 # ── Stage 2 : prisma CLI avec toutes ses dépendances (engines inclus) ─────────
 FROM node:26-alpine AS prisma-cli
 WORKDIR /prisma
-RUN npm install prisma@7.10.0 \
+RUN npm install prisma@7.10.1 \
     --save-exact \
     --legacy-peer-deps \
     --no-fund \
@@ -36,13 +36,19 @@ ENV AUTH_SECRET=build-placeholder-secret-32-characters-min
 # NEXT_PUBLIC_SENTRY_DSN is a public value baked into the browser bundle
 ARG NEXT_PUBLIC_SENTRY_DSN
 ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+# Domains where the browser SDK runs (#1335, src/lib/sentry-client-loader.ts); empty: any host
+ARG NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS
+ENV NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS=$NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS
 ARG GIT_SHA
 ENV GIT_SHA=$GIT_SHA
 
 # SENTRY_AUTH_TOKEN is only needed at build time for source-map upload;
 # use --mount=type=secret so it never appears in image layers or history.
+# .next/cache (Turbopack's build cache, ~350 MB) is removed in the same layer: no later build reads
+# it (each one starts from a fresh layer) and the runner stage does not copy it, but deploy.yml's
+# BuildKit cache export (mode=max) uploaded it to the GitHub Actions cache on every deploy.
 RUN --mount=type=secret,id=sentry_auth_token,env=SENTRY_AUTH_TOKEN \
-    npx prisma generate && npm run build
+    npx prisma generate && npm run build && rm -rf .next/cache
 
 # ── Stage 4 : runner ─────────────────────────────────────────────────────────
 FROM node:26-alpine AS runner
@@ -69,26 +75,40 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.
 
 # Guides utilisateur, rendus par /doc — fs.readFileSync() à la requête, hors du tracing
 # automatique de `output: "standalone"`, donc copiés explicitement comme prisma/ ci-dessus.
-COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_ADMIN.md ./GUIDE_ADMIN.md
-COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOLE.md
-COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
-COPY --from=builder --chown=nextjs:nodejs /app/LOGICIEL-PLANNING-BENEVOLES.md ./LOGICIEL-PLANNING-BENEVOLES.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/guide/GUIDE_ADMIN.md ./content/guide/GUIDE_ADMIN.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/guide/GUIDE_BENEVOLE.md ./content/guide/GUIDE_BENEVOLE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/FEATURES.md ./content/pages/FEATURES.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/LOGICIEL-PLANNING-BENEVOLES.md ./content/pages/LOGICIEL-PLANNING-BENEVOLES.md
 # Pages « Pour qui ? » (#872), tarifs (#950) et questions de l'accueil (#951).
-COPY --from=builder --chown=nextjs:nodejs /app/POUR-QUI.md ./POUR-QUI.md
-COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-FETE-DE-VILLAGE.md ./BENEVOLES-FETE-DE-VILLAGE.md
-COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-FESTIVAL.md ./BENEVOLES-FESTIVAL.md
-COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-MANIFESTATION-SPORTIVE.md ./BENEVOLES-MANIFESTATION-SPORTIVE.md
-COPY --from=builder --chown=nextjs:nodejs /app/PLANNING-PERMANENCES-BENEVOLES.md ./PLANNING-PERMANENCES-BENEVOLES.md
-COPY --from=builder --chown=nextjs:nodejs /app/TARIFS.md ./TARIFS.md
-COPY --from=builder --chown=nextjs:nodejs /app/FAQ-ACCUEIL.md ./FAQ-ACCUEIL.md
-COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
-COPY --from=builder --chown=nextjs:nodejs /app/ACCORD-SOUS-TRAITANCE.md ./ACCORD-SOUS-TRAITANCE.md
-COPY --from=builder --chown=nextjs:nodejs /app/SOUS-TRAITANTS.md ./SOUS-TRAITANTS.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/POUR-QUI.md ./content/pages/POUR-QUI.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-FETE-DE-VILLAGE.md ./content/pages/BENEVOLES-FETE-DE-VILLAGE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-FESTIVAL.md ./content/pages/BENEVOLES-FESTIVAL.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md ./content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-MAIRIE-COMMUNE.md ./content/pages/BENEVOLES-MAIRIE-COMMUNE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/PLANNING-PERMANENCES-BENEVOLES.md ./content/pages/PLANNING-PERMANENCES-BENEVOLES.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TARIFS.md ./content/pages/TARIFS.md
+# Tableur et groupe de discussion, ou outil dédié ? (#871).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TABLEUR-OU-OUTIL-DEDIE.md ./content/pages/TABLEUR-OU-OUTIL-DEDIE.md
+# Manifeste (#1259).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/MANIFESTE.md ./content/pages/MANIFESTE.md
+# Citer benevol.app (#1323).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/CITER.md ./content/pages/CITER.md
+# Logiciel libre (#1326).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/LOGICIEL-LIBRE-BENEVOLES.md ./content/pages/LOGICIEL-LIBRE-BENEVOLES.md
+# Continuité du service (#1357).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/CONTINUITE-DU-SERVICE.md ./content/pages/CONTINUITE-DU-SERVICE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/FAQ-ACCUEIL.md ./content/pages/FAQ-ACCUEIL.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/ACCESSIBILITE.md ./content/pages/ACCESSIBILITE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/legal/ACCORD-SOUS-TRAITANCE.md ./content/legal/ACCORD-SOUS-TRAITANCE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/legal/SOUS-TRAITANTS.md ./content/legal/SOUS-TRAITANTS.md
 COPY --from=builder --chown=nextjs:nodejs /app/CHANGELOG.md ./CHANGELOG.md
-# Blog (#944) : blog/<date>-<slug>.md, lu de la même façon par /blog et son flux.
-COPY --from=builder --chown=nextjs:nodejs /app/blog ./blog
-# Documentation par tâche (#649) : guide/<slug>.md, lue de la même façon par /doc/<slug>.
-COPY --from=builder --chown=nextjs:nodejs /app/guide ./guide
+# Blog (#944) : content/blog/<date>-<slug>.md, lu de la même façon par /blog et son flux.
+COPY --from=builder --chown=nextjs:nodejs /app/content/blog ./content/blog
+# Guides pratiques (#1258) : content/ressources/<slug>.md et l'introduction de /ressources.
+COPY --from=builder --chown=nextjs:nodejs /app/content/ressources ./content/ressources
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/RESSOURCES.md ./content/pages/RESSOURCES.md
+# Documentation par tâche (#649) : content/guide/<slug>.md, lue de la même façon par /doc/<slug>.
+COPY --from=builder --chown=nextjs:nodejs /app/content/guide ./content/guide
 # Date du dernier commit de chacune de ces sources (lastmod du sitemap), écrite par
 # scripts/doc-lastmod.mjs dans deploy.yml avant le build ; `{}` pour un build local (étape builder).
 COPY --from=builder --chown=nextjs:nodejs /app/doc-lastmod.json ./doc-lastmod.json
@@ -106,6 +126,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/videos/MASTERCLASS_PLAN.md ./vide
 # Warm-up of a new server before it takes traffic (docker-entrypoint.sh, src/lib/readiness.ts):
 # plain Node, no dependency.
 COPY --from=builder --chown=nextjs:nodejs /app/scripts/warmup.mjs ./scripts/warmup.mjs
+# Database URL built from POSTGRES_* when DATABASE_URL is not set (docker-entrypoint.sh, Compose).
+COPY --from=builder --chown=nextjs:nodejs /app/scripts/database-url.mjs ./scripts/database-url.mjs
 
 # Merge prisma CLI (+ toutes ses deps) dans node_modules
 # Appeler index.js directement préserve __dirname = node_modules/prisma/build/

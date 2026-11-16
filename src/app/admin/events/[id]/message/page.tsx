@@ -10,26 +10,32 @@ import { audienceFromQuery } from "@/lib/targeted-message"
 import TargetedMessageForm from "@/components/admin/TargetedMessageForm"
 import MessageHistory from "@/components/admin/messages/MessageHistory"
 import ScheduledMessages from "@/components/admin/messages/ScheduledMessages"
+import SendBatchList from "@/components/admin/messages/SendBatchList"
+import { loadSendBatches } from "@/lib/send-batches-data"
 import { loadMessageHistory, loadScheduledMessages } from "@/lib/message-history-data"
 import { orgTimeZone } from "@/lib/time-zone"
 import HelpLink from "@/components/admin/HelpLink"
 import AutomaticRemindersBox from "@/components/admin/AutomaticRemindersBox"
+import EventReminderRulesForm from "@/components/admin/EventReminderRulesForm"
 import SendReminderButton from "@/components/admin/SendReminderButton"
 import { remindersSummary } from "@/lib/automatic-reminders"
 import { parseNotificationSettings } from "@/lib/notification-settings"
 import { hasUpcomingShift } from "@/lib/event-wizard"
+import { loadSectorFilter } from "@/lib/sector-filter-data"
+import { loadEventReminderRulesState } from "@/lib/reminder-rules-data"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Communication" }
+export const metadata: Metadata = { title: "Messages" }
 
 const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" })
 
 /**
- * « Communication »: « Écrire aux bénévoles » (#396), one message to the event, a role, a shift or
+ * « Messages »: « Écrire aux bénévoles » (#396), one message to the event, a role, a shift or
  * the waitlist, now or on a chosen date and time (#1019); the automatic reminders (#705) and the
- * manual reminder; the scheduled messages (#1019) and the messages sent (#467).
+ * manual reminder; the scheduled messages (#1019), every batch of emails (#1101) and the messages
+ * sent (#467).
  */
-export default async function MessagePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ shift?: string; role?: string; audience?: string }> }) {
+export default async function MessagePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ shift?: string; role?: string; audience?: string; secteur?: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
@@ -48,9 +54,14 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     },
   })
   if (!event) notFound()
+  const now = new Date()
   const timeZone = orgTimeZone(event.organization)
+  const reminderRulesState = await loadEventReminderRulesState(ctx.db, ctx.organizationId, event.id, now)
+  if (!reminderRulesState) notFound()
   const history = await loadMessageHistory(ctx.db, ctx.organizationId, event.id)
   const scheduled = await loadScheduledMessages(ctx.db, event.id, timeZone, new Date())
+  // Every batch of emails of the event (#1101), with its delivery.
+  const batches = await loadSendBatches(ctx.organizationId, { eventId: event.id })
   // One reminder email per person: the unique volunteers with a confirmed shift.
   const confirmed = await ctx.db.registration.findMany({
     where: { eventId: event.id, status: "active", shift: { status: { not: "cancelled" } } },
@@ -63,7 +74,8 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     published: event.publicStatus === "published",
     eventEnabled: event.remindersEnabled,
     organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
-    upcomingShifts: hasUpcomingShift(event.shifts.map((s) => ({ date: s.date.toISOString().slice(0, 10), startTime: s.startTime })), new Date(), timeZone),
+    upcomingShifts: hasUpcomingShift(event.shifts.map((s) => ({ date: s.date.toISOString().slice(0, 10), startTime: s.startTime })), now, timeZone),
+    customRules: reminderRulesState.rules,
   })
   const templates = await ctx.db.messageTemplate.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, subject: true, body: true } })
 
@@ -73,27 +85,36 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     roleName: s.roleName,
     name: `${s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName} — ${day(s.date)}, ${fmtRange(s.startTime, s.endTime)}`,
   }))
+  // The sector audience (#1170), offered once the event adopted sectors: active sectors then « Autres postes ».
+  const sectorState = await loadSectorFilter(ctx.db, event.id, null)
+  const sectors = sectorState?.offered ? sectorState.options.filter((o) => o.value !== "") : []
   const initial = audienceFromQuery(q)
-  // A prefilled shift or role that no longer exists falls back to everyone.
+  // A prefilled shift, role or sector that no longer exists (or is not offered) falls back to everyone.
   const valid =
     (initial.kind === "shift" && shifts.some((s) => s.id === initial.shiftId)) ||
     (initial.kind === "role" && roles.includes(initial.roleName)) ||
+    (initial.kind === "sector" && sectors.some((s) => s.value === initial.sectorId)) ||
     initial.kind === "event" || initial.kind === "waitlist" || initial.kind === "invited_without_shift"
 
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Communication</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Messages</h1>
         <HelpLink route="/admin/events/[id]/message" />
       </div>
       <section aria-labelledby="message-write" className="space-y-4">
         <div>
           <h2 id="message-write" className="text-base font-semibold text-gray-900">Écrire aux bénévoles</h2>
           <p className="text-sm text-gray-700 mt-1">
-            Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
+            Un email, à qui c&apos;est utile : tous les inscrits, {sectors.length > 0 ? "un secteur, " : ""}un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
+          </p>
+          {/* Before the form, so following it never leaves a message half written (#1098). */}
+          <p className="text-sm text-gray-700 mt-1">
+            Les messages que vous envoyez souvent peuvent devenir des modèles, à choisir dans « Partir d&apos;un modèle » :{" "}
+            <Link href="/admin/settings/message-templates" className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">gérer les modèles de messages</Link>.
           </p>
         </div>
-      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} templates={templates} timeZone={timeZone} canSchedule={event.publicStatus !== "archived"} />
+      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} sectors={sectors} initialAudience={valid ? initial : { kind: "event" }} templates={templates} timeZone={timeZone} canSchedule={event.publicStatus !== "archived"} />
       <p className="text-sm text-gray-600">
         Pour renvoyer leur lien d&apos;invitation aux membres invités sans créneau confirmé, utilisez « Relancer les … sans créneau » dans{" "}
         <Link href={`/admin/events/${event.id}/invitations`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">les invitations</Link>.
@@ -102,6 +123,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
       <section aria-labelledby="message-reminders" className="space-y-3">
         <h2 id="message-reminders" className="text-base font-semibold text-gray-900">Rappels</h2>
         <AutomaticRemindersBox summary={reminders} />
+        <EventReminderRulesForm eventId={event.id} timeZone={timeZone} initialState={reminderRulesState} />
         <SendReminderButton
           eventId={event.id}
           hasMessage={!!event.reminderMessage?.trim()}
@@ -110,6 +132,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
         />
       </section>
       <ScheduledMessages eventId={event.id} items={scheduled} timeZone={timeZone} />
+      <SendBatchList items={batches} timeZone={timeZone} messageIds={new Set(history.map((m) => m.id))} />
       <MessageHistory eventId={event.id} items={history} timeZone={timeZone} />
     </div>
   )

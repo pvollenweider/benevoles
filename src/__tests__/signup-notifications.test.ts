@@ -69,6 +69,21 @@ beforeEach(() => {
 })
 
 describe("buildSignupNotifications", () => {
+  // #1191: shifts added where the volunteer already holds a place: confirmed by the grouped email.
+  it("leaves the confirmation out when it is grouped, and keeps everything else", async () => {
+    const out = await buildSignupNotifications(input({ groupedConfirmation: true }))
+    expect(out.map((p) => p.kind)).not.toContain("registration_confirmation")
+    expect(out.map((p) => p.kind)).toContain("admin_notification")
+    const plain = await buildSignupNotifications(input())
+    expect(plain.map((p) => p.kind)).toContain("registration_confirmation")
+  })
+
+  it("still acknowledges a request and a waitlist entry when the confirmation is grouped", async () => {
+    const shifts = [shift("s1", "Bar"), shift("s2", "Caisse")]
+    const out = await buildSignupNotifications(input({ shifts, registrations: [reg("r1", "s1", "requested"), reg("r2", "s2", "waiting", 1)], groupedConfirmation: true }))
+    expect(out.map((p) => p.kind)).toEqual(expect.arrayContaining(["registration_requested", "waitlist_confirmation"]))
+  })
+
   it("confirms active places with the shift info and the first registration's token", async () => {
     const shifts = [shift("s1", "Bar", { locationDetails: "Entrée B" }), shift("s2", "Caisse")]
     const out = await buildSignupNotifications(input({ shifts }))
@@ -78,6 +93,7 @@ describe("buildSignupNotifications", () => {
     expect(confirmation.data).toEqual({
       volunteerName: "Ana Rossi",
       eventTitle: "Fête du village",
+      eventId: "ev1",
       shifts: [
         {
           label: "Créneau s1", roleName: "Bar", date: "14/07/2026", startTime: "10:00", endTime: "12:00",
@@ -153,8 +169,9 @@ describe("buildSignupNotifications", () => {
   })
 
   it("tells sector leaders of placed and waitlisted sign-ups, not of requests", async () => {
-    m.leaderFindMany.mockImplementation(async ({ where }: { where: { roleName: string } }) => [
-      { email: `lead-${where.roleName}@example.org`, name: `Lead ${where.roleName}`, roleName: where.roleName, tokenEnc: null, tokenLegacy: `ltok-${where.roleName}` },
+    // The poste's leaders and, since #1169, the sector leaders of the event (none here).
+    m.leaderFindMany.mockImplementation(async ({ where }: { where: { OR: [{ roleName: string }] } }) => [
+      { email: `lead-${where.OR[0].roleName}@example.org`, name: `Lead ${where.OR[0].roleName}`, roleName: where.OR[0].roleName, sectorId: null, sector: null, tokenEnc: null, tokenLegacy: `ltok-${where.OR[0].roleName}` },
     ])
     const shifts = [shift("s1", "Bar"), shift("s2", "Caisse"), shift("s3", "Accueil")]
     const out = await buildSignupNotifications(input({
@@ -165,7 +182,7 @@ describe("buildSignupNotifications", () => {
     const leaders = out.filter((p) => p.kind === "sector_leader_new_signup")
     expect(leaders.map((p) => p.recipient.email)).toEqual(["lead-Bar@example.org", "lead-Accueil@example.org"])
     expect(leaders[0].data).toMatchObject({ eventTitle: "Fête du village", volunteerName: "Ana Rossi", shiftLabel: "Créneau s1", orgSlug: "village", token: "ltok-Bar" })
-    expect(m.leaderFindMany).toHaveBeenCalledWith({ where: { eventId: "ev1", roleName: "Bar" } })
+    expect(m.leaderFindMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "ev1", OR: [{ roleName: "Bar" }, { sectorId: { not: null } }] } }))
   })
 
   it("confirms each waitlisted shift with its position", async () => {
@@ -190,8 +207,8 @@ describe("buildSignupNotifications", () => {
   })
 
   it("keeps the order and keys every payload on the first registration and its recipient (#315)", async () => {
-    m.leaderFindMany.mockImplementation(async ({ where }: { where: { roleName: string } }) => [
-      { email: `lead-${where.roleName}@example.org`, name: "Lead", roleName: where.roleName, tokenEnc: null, tokenLegacy: "lt" },
+    m.leaderFindMany.mockImplementation(async ({ where }: { where: { OR: [{ roleName: string }] } }) => [
+      { email: `lead-${where.OR[0].roleName}@example.org`, name: "Lead", roleName: where.OR[0].roleName, sectorId: null, sector: null, tokenEnc: null, tokenLegacy: "lt" },
     ])
     const shifts = [shift("s1", "Bar"), shift("s2", "Caisse"), shift("s3", "Accueil")]
     const out = await buildSignupNotifications(input({

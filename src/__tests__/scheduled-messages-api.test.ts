@@ -80,6 +80,24 @@ describe("POST /api/admin/events/[id]/scheduled-messages", () => {
     expect((await call(base)).status).toBe(429)
     expect(db.scheduledMessage.create).not.toHaveBeenCalled()
   })
+  it("stores a sector audience as its intent, named after the sector; refuses an archived or foreign one (#1170)", async () => {
+    const main = db.event.findFirst.getMockImplementation() as ((a: unknown) => unknown) | undefined
+    const sectorRead = { sectorsEnabled: true, sectorsAdoptedAt: new Date("2026-10-01"), sectors: [{ id: "sec-bar", name: "Buvette", displayOrder: 0, archivedAt: null }, { id: "sec-old", name: "Ancien", displayOrder: 1, archivedAt: new Date("2026-10-02") }] }
+    db.event.findFirst = vi.fn(async (args: { select: Record<string, unknown> }) => ("sectorsAdoptedAt" in args.select ? sectorRead : main!(args)))
+    db.shift.findMany = vi.fn().mockResolvedValue([{ roleName: "Bar", sectorId: "sec-bar", updatedAt: new Date("2026-10-02") }])
+    const res = await call({ ...base, audience: { kind: "sector", sectorId: "sec-bar" } })
+    expect(res.status).toBe(201)
+    expect(await res.json()).toMatchObject({ audience: "les bénévoles du secteur « Buvette »", recipients: 2 })
+    expect(db.scheduledMessage.create.mock.calls[0][0].data.audience).toEqual({ kind: "sector", sectorId: "sec-bar" })
+    db.scheduledMessage.create.mockClear()
+    for (const sectorId of ["sec-old", "sec-of-org-b"]) {
+      const refused = await call({ ...base, audience: { kind: "sector", sectorId } })
+      expect(refused.status).toBe(400)
+      expect((await refused.json()).error).toBe("Secteur introuvable dans cet événement.")
+    }
+    expect(db.scheduledMessage.create).not.toHaveBeenCalled()
+  })
+
 })
 
 describe("POST /api/admin/events/[id]/scheduled-messages/[scheduledId]/cancel", () => {

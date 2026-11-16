@@ -28,7 +28,7 @@ import type { AdminShift } from "../AdminDayTimeline"
  * page (#991); the other actions save on their own button.
  */
 export default function ShiftPopover({
-  shift, anchor, eventId, eventCount, onClose, onPatch, onDelete, onDuplicate, onApplyToPoste, onNotSaved,
+  shift, anchor, eventId, eventCount, onClose, onPatch, onDelete, onCancelShift, onDuplicate, onApplyToPoste, onNotSaved,
 }: {
   shift:    AdminShift
   anchor:   { x: number; y: number; w: number }
@@ -39,6 +39,11 @@ export default function ShiftPopover({
   /** Resolves to `false` when the change was not saved (the parent says why). */
   onPatch:  (id: string, data: Partial<AdminShift>) => Promise<boolean | void> | boolean | void
   onDelete: (id: string) => void
+  /**
+   * « Créneau annulé » chosen on a shift with people registered (AUTHZ-15): the parent closes the
+   * popover and asks first. Without it, or with nobody registered, the status saves at once.
+   */
+  onCancelShift?: (id: string) => void
   onDuplicate: (id: string) => Promise<void> | void
   /**
    * « Appliquer au poste » (#1017): `minVolunteers` null removes it, absent leaves each shift's own
@@ -269,7 +274,7 @@ export default function ShiftPopover({
   const left = clamp(barLeft + barWidth / 2 - POPW / 2, 8, window.innerWidth - POPW - 8)
   // Below the bar, or above it when it is low on the screen; always inside the viewport.
   const { top, maxHeight } = popoverPlacement({ anchorTop: barTop, anchorBottom: barBottom, viewportHeight: window.innerHeight, contentHeight })
-  const field = "w-full text-sm border border-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+  const field = "w-full text-sm border border-gray-500 rounded-lg px-2.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
   const action = "text-sm font-medium rounded-lg px-2 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
   return (
@@ -425,11 +430,14 @@ export default function ShiftPopover({
             id={`${id}-status`}
             value={status}
             aria-disabled={busy !== null ? true : undefined}
+            aria-describedby={shift.registrationCount > 0 && onCancelShift ? `${id}-status-hint` : undefined}
             onChange={e => {
               if (busy) return
+              // People registered: nothing is saved before the confirmation, so nothing to revert.
+              if (e.target.value === "cancelled" && shift.registrationCount > 0 && onCancelShift) { onCancelShift(shift.id); return }
               setStatus(e.target.value)
               onPatch(shift.id, { status: e.target.value })
-              announce(e.target.value === "closed" ? "Inscriptions fermées." : e.target.value === "open" ? "Inscriptions rouvertes." : "Statut enregistré.")
+              announce(e.target.value === "closed" ? "Inscriptions fermées." : e.target.value === "open" ? "Inscriptions rouvertes." : e.target.value === "cancelled" ? "Créneau annulé." : "Statut enregistré.")
             }}
             className={`${field} ${busy ? "opacity-50" : ""}`}
           >
@@ -438,6 +446,9 @@ export default function ShiftPopover({
             <option value="closed">Fermées</option>
             <option value="cancelled">Créneau annulé</option>
           </select>
+          {shift.registrationCount > 0 && onCancelShift && (
+            <p id={`${id}-status-hint`} className="text-xs text-gray-600 mt-1">Créneau annulé{"\u00a0"}: une confirmation sera demandée.</p>
+          )}
         </div>
 
         {shift.registrationCount > 0 && (

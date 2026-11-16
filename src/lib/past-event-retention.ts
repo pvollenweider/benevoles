@@ -63,6 +63,7 @@ export type PastEventBatchCounts = {
   anonymousRecords: number
   answers: number
   invites: number
+  shiftDeclines: number
   sectorLeaders: number
 }
 

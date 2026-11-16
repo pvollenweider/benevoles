@@ -1,0 +1,320 @@
+{
+  "slug": "members-import",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-11T12:39:44.507Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "d3f4c4ba81356b673b1952b19c4ffe99531652f5",
+    "sourceTree": "4bb62d63506b550b61814ed281817464115520fe",
+    "productSourceSha256": "f2f35e94ce8b850fc86d6bac5d883e4ad8f19a89646fd7dc226ee356459097ec",
+    "buildId": "AOuqevq41Wdo1_vo9UIzS",
+    "snapshot": "/tmp/benevoles-video-production.6ff2AH",
+    "builtAt": "2026-11-11T12:19:31.213Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "MEMBERS_IMPORT",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 23510
+    },
+    {
+      "kind": "click",
+      "atMs": 45874
+    },
+    {
+      "kind": "click",
+      "atMs": 48190
+    },
+    {
+      "kind": "click",
+      "atMs": 57057
+    },
+    {
+      "kind": "click",
+      "atMs": 96438
+    },
+    {
+      "kind": "click",
+      "atMs": 97238
+    },
+    {
+      "kind": "click",
+      "atMs": 103155
+    },
+    {
+      "kind": "click",
+      "atMs": 123788
+    },
+    {
+      "kind": "click",
+      "atMs": 128921
+    },
+    {
+      "kind": "click",
+      "atMs": 150570
+    },
+    {
+      "kind": "click",
+      "atMs": 161831
+    },
+    {
+      "kind": "click",
+      "atMs": 162690
+    },
+    {
+      "kind": "click",
+      "atMs": 166061
+    },
+    {
+      "kind": "click",
+      "atMs": 169196
+    },
+    {
+      "kind": "click",
+      "atMs": 172870
+    },
+    {
+      "kind": "key",
+      "atMs": 173178
+    },
+    {
+      "kind": "click",
+      "atMs": 174552
+    },
+    {
+      "kind": "click",
+      "atMs": 175385
+    },
+    {
+      "kind": "click",
+      "atMs": 176185
+    },
+    {
+      "kind": "click",
+      "atMs": 191251
+    },
+    {
+      "kind": "click",
+      "atMs": 192052
+    },
+    {
+      "kind": "click",
+      "atMs": 195202
+    },
+    {
+      "kind": "click",
+      "atMs": 196834
+    },
+    {
+      "kind": "click",
+      "atMs": 200668
+    },
+    {
+      "kind": "click",
+      "atMs": 210017
+    },
+    {
+      "kind": "click",
+      "atMs": 210800
+    },
+    {
+      "kind": "click",
+      "atMs": 211750
+    },
+    {
+      "kind": "key",
+      "atMs": 212058
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 187,
+      "endMs": 22567
+    },
+    {
+      "id": "file",
+      "startMs": 23021,
+      "endMs": 46806
+    },
+    {
+      "id": "preview",
+      "startMs": 47258,
+      "endMs": 71739
+    },
+    {
+      "id": "errors",
+      "startMs": 72192,
+      "endMs": 95485
+    },
+    {
+      "id": "update",
+      "startMs": 95937,
+      "endMs": 122843
+    },
+    {
+      "id": "corrected",
+      "startMs": 123294,
+      "endMs": 147917
+    },
+    {
+      "id": "confirm",
+      "startMs": 148367,
+      "endMs": 171918
+    },
+    {
+      "id": "repeat",
+      "startMs": 172369,
+      "endMs": 192359
+    },
+    {
+      "id": "cleanup",
+      "startMs": 192811,
+      "endMs": 216758
+    },
+    {
+      "id": "result",
+      "startMs": 217210,
+      "endMs": 239613
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "file",
+      "phrase": "prénom, nom, email, téléphone et",
+      "startMs": 6084,
+      "endMs": 7941,
+      "cueMs": 29107
+    },
+    {
+      "segmentId": "file",
+      "phrase": "elles ne sont pas importées",
+      "startMs": 22354,
+      "endMs": 23343,
+      "cueMs": 45376
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Ouvrez Importer des membres",
+      "startMs": 447,
+      "endMs": 4291,
+      "cueMs": 47706
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Cliquez sur Analyser le fichier",
+      "startMs": 9226,
+      "endMs": 10263,
+      "cueMs": 56486
+    },
+    {
+      "segmentId": "errors",
+      "phrase": "Corrigez le fichier d'origine plutôt",
+      "startMs": 13779,
+      "endMs": 17119,
+      "cueMs": 85974
+    },
+    {
+      "segmentId": "update",
+      "phrase": "Ici, Camille et Julien passent",
+      "startMs": 19606,
+      "endMs": 26354,
+      "cueMs": 115544
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "Les erreurs ont disparu.",
+      "startMs": 5141,
+      "endMs": 6139,
+      "cueMs": 128437
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "René n'a pas d'email ",
+      "startMs": 10774,
+      "endMs": 12250,
+      "cueMs": 134069
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Quand l'aperçu vous convient",
+      "startMs": 456,
+      "endMs": 2885,
+      "cueMs": 148823
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Fermez la fenêtre et recherchez",
+      "startMs": 12952,
+      "endMs": 14993,
+      "cueMs": 161321
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Ouvrez sa fiche pour vérifier",
+      "startMs": 17140,
+      "endMs": 19952,
+      "cueMs": 165509
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Importer une personne ne l'inscrit",
+      "startMs": 20313,
+      "endMs": 23345,
+      "cueMs": 168682
+    },
+    {
+      "segmentId": "repeat",
+      "phrase": "Regardez toujours le nombre de",
+      "startMs": 14758,
+      "endMs": 19191,
+      "cueMs": 187127
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Filtrons la liste",
+      "startMs": 1869,
+      "endMs": 4591,
+      "cueMs": 194681
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Avec Supprimer la sélection",
+      "startMs": 7364,
+      "endMs": 12726,
+      "cueMs": 200176
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Les membres qui ont des inscriptions",
+      "startMs": 13114,
+      "endMs": 15913,
+      "cueMs": 205924
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Cochons la case pour les désactiver",
+      "startMs": 16714,
+      "endMs": 18240,
+      "cueMs": 209526
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Les autres fiches sélectionnées sont supprimées",
+      "startMs": 18410,
+      "endMs": 21593,
+      "cueMs": 211221
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Voici la page vue par un visiteur anonyme. Aucun interrupteur pour",
+  "windowStart": 41.019999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 15.3,
+    "wordsHeard": "Voici la page vue par un visiteur anonyme. Aucun interrupteur pour"
+  },
+  "onset": 56.31999999999999,
+  "proposedCut": 56.019521,
+  "note": "Proposal only; recut then independently audit before capture"
+}

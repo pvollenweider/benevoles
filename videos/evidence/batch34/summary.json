@@ -1,0 +1,71 @@
+{
+  "id": "WORKLOAD_PROTECTION",
+  "status": "NOT READY",
+  "date": "2026-10-29",
+  "narratedTakes": 2,
+  "durationMs": 406640,
+  "product": {
+    "commit": "463644b712c5cde8c7c96549631b0fb5949202a2",
+    "sourceTree": "b1e6335e85e064a09173c596dfb300d59751388f",
+    "productSourceSha256": "7ea8cd4c2add5d45a2034288562bce055ef15c265996be7da1432d346dc385af",
+    "buildId": "4SZGZi_wlBN3PZTL_VMhp",
+    "snapshot": "/tmp/benevoles-video-production.batch34",
+    "builtAt": "2026-10-29T20:33:45.824Z"
+  },
+  "videoSha256": "6c46cb19015bd1d74ef7ffb1a00878b300299a02bf1bf181389cf014075adb02",
+  "music": {
+    "voicedWindows": 362,
+    "musicOnlyWindows": 5,
+    "smallestGapLu": 15,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -33.6,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.4
+  },
+  "musicGaps": 0,
+  "registerCandidates": 0,
+  "subtitleRegisterTokens": 0,
+  "tests": {
+    "files": 36,
+    "passed": 1203,
+    "explicitTypedSources": 208
+  },
+  "sourceChanges": [
+    "videos/lib/record-workload-protection.ts: final viewport and typed-value assertions; direct real form fill replaces delayed touch animations",
+    "videos/lib/verify-workload-review-fixture.ts: dedicated port45438",
+    "videos/README.md: batch34 stack",
+    "videos/scripts/workload-protection.md and FINAL_REVIEW_EVIDENCE.md: factual review status"
+  ],
+  "blockers": [
+    {
+      "scene": "wl-registrations",
+      "finding": "Only first of Sarah’s two remaining registrations is visible. Second remains below viewport throughout spoken claim. Confirmed in actual final frames; no further narrated take authorized."
+    }
+  ],
+  "resolved": [
+    "Final active heading and 1 programme à revoir visible from+2s through end",
+    "Checked offday-no visible at+4.5s,700ms hold",
+    "Sarah programme shown at+4.2s during enumeration starting+3.724s",
+    "Values6/30/8 and20/3 visible and consistent with unchanged verified Kore narration; automated missing-values claim contradicted by frames",
+    "Signup confirmation+23.059s before refusal sentence+24.779s, actual409 failure visible at+24.8s"
+  ],
+  "publication": false,
+  "catalog": {
+    "published": false,
+    "revision": 1,
+    "added": null
+  },
+  "notes": [
+    "No product change or workaround; src/ and content/guide/ untouched",
+    "Automated major limits/final-result flags contradicted by direct frames; original reports preserved",
+    "Real-time subjective listening unavailable; assisted AV/audio reviews and direct frame inspection performed",
+    "No push or merge"
+  ],
+  "finalChapterAsr": {
+    "total": 19,
+    "flagged": [
+      "wl-meal-travel: ending omitted in recognition; retained unresolved on take2"
+    ],
+    "report": "narration-audit-video.json"
+  }
+}

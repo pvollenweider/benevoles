@@ -203,3 +203,18 @@ describe("narrateChain time zone (#344)", () => {
     expect(narrateChain(chain, undefined, "America/New_York")).toMatch(/^Le 12 septembre à 18:30 : /)
   })
 })
+
+describe("an availability acknowledgement in the journal (#1146, lot B)", () => {
+  const evidence = { v: 1, via: "accept", requestId: "req-1", revision: 2, shiftStart: "2030-07-11T12:00:00.000Z", shiftEnd: "2030-07-11T18:00:00.000Z", timeZone: "Europe/Zurich", state: "partial", totalMinutes: 360, coveredMinutes: 270, outsideMinutes: 90, unknownMinutes: 0 }
+  const ack = entry({ action: "registration.availability_acknowledged", entityType: "Registration", changes: { shiftId: { from: "shift-1", to: "shift-1" }, availabilityAck: { from: null, to: evidence } } })
+  const labels = { "shift-1": { compact: "Bar · 11/07 14:00–20:00", spoken: "Bar, le 11 juillet de 14:00 à 20:00" } } as never
+
+  it("says who confirmed it, on which shift, and the minutes, never the ranges", () => {
+    expect(describeEntry(ack, labels)).toMatch(/^Alice a confirmé l'affectation malgré les disponibilités indiquées/)
+    expect(describeChanges(ack.changes, labels, "Registration")).toEqual(["hors des disponibilités indiquées : — → pas disponible 1 h 30 sur 6 h (acceptation d'une demande)"])
+  })
+
+  it("still reads an entry of another version", () => {
+    expect(describeChanges({ availabilityAck: { from: null, to: { v: 9 } } }, undefined, "Registration")).toEqual(["hors des disponibilités indiquées : — → confirmé"])
+  })
+})

@@ -19,7 +19,7 @@ test("printable sheets, complete export and badges have no serious violation", a
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   await page.goto("/admin/events")
   await page.getByRole("link", { name: /Spectacle/ }).first().click()

@@ -1,0 +1,10 @@
+STATUS: READY
+ASSIGNMENT_PROPOSALS — batch35,2026-10-30
+Two narrated takes consumed;first rejected for early manual correction and retained in previous-20261030-batch35-take1. Final take preceded by fresh seed and successful quick rehearsal.
+Verified current main aed410c8139e479c4730cfbce58c8307b645b878;BUILD_ID5Oaosk5GvwNjq85Z4bYwR. Duration160200ms.
+One whole Kore generation;source ASR and whole-master consistency pass after measured silence cuts,without text change or mixed voice.11final chapter ASRs PASS;11current AV chapter reports unflagged;actual frames of all11chapters inspected,including concrete dialog and removal frames.
+Manual correction now opens+2.862s/removes+4.245s after action sentence+2.391s. ap-lock10.322s visual/10.321s narration,no overrun. Proposal visible after4.163s,seed2026,29places/31,Impossible démontré and Kiosque gap visible.
+Read-only final DB proof:29active drafts,Emma Friday locked,Lou Friday manual,Lea Friday removed,0registrations,0notifications,one finished proven_impossible run with seed2026 and29written.
+Validation including sentence anchors PASS. Music14.7–19.2LU under voice;music-only minimum-33.7LUFS;0gaps.21real clicks/7real keys with synced soft effects. Whole multilingual soundtrack ASR0register candidates/VTT0,no stray stage directions.33frame OCR0forbidden labels;French dates,public links,synthetic identities verified.
+37video test files/1244tests PASS;211explicit typed sources PASS;ESLint6changed TS files PASS. Posters generated with isolated review/renders-generated.json;videos/renders.json unchanged.
+Real-time subjective listening unavailable,as allowed;assisted audio/video and actual-frame review completed. No product defect observed. Publication completed:preview then APPLY=1,context default,5files sent. Catalog published:true,revision1,added/updatedAt2026-10-30. No push or merge.

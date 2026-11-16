@@ -46,6 +46,21 @@ describe("toPublicEvent", () => {
   })
 })
 
+// The public page resolves the charter with the same inputs as the sign-up route, which hashes it (#569).
+describe("toPublicEvent charter", () => {
+  it("passes the organization's insurance choice with its charter", () => {
+    const row = {
+      id: "e", slug: "fete", title: "Fête", description: null, location: null, startDate: new Date(), endDate: new Date(),
+      publicInstructions: null, confirmationMessage: null, requirePhone: false, showSchedule: [],
+      organization: { name: "Org", slug: "org", volunteerCharter: null, hasOrgInsurance: false },
+      pages: [], shifts: [],
+    } as unknown as PublicEventRow
+    const out = toPublicEvent(row)
+    expect(out.volunteerCharter).toBeNull()
+    expect(out.hasOrgInsurance).toBe(false)
+  })
+})
+
 // A shift's meeting point is a whole pair (#191 audit): never its latitude with the event's longitude.
 describe("toPublicEvent coordinates", () => {
   const base = {

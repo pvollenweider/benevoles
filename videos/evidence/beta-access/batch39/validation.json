@@ -1,0 +1,53 @@
+{
+  "id": "BETA_ACCESS",
+  "slug": "beta-access",
+  "validatedAt": "2026-11-10T19:51:27.711Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 120600,
+  "scenes": [
+    {
+      "id": "beta-welcome",
+      "visualMs": 20905,
+      "audioMs": 20903,
+      "driftMs": 2
+    },
+    {
+      "id": "beta-operator",
+      "visualMs": 24332,
+      "audioMs": 24330,
+      "driftMs": 2
+    },
+    {
+      "id": "beta-owner",
+      "visualMs": 26303,
+      "audioMs": 26302,
+      "driftMs": 1
+    },
+    {
+      "id": "beta-event",
+      "visualMs": 15199,
+      "audioMs": 15199,
+      "driftMs": 0
+    },
+    {
+      "id": "beta-close",
+      "visualMs": 22026,
+      "audioMs": 22025,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 10,
+  "music": {
+    "voicedWindows": 103,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.4,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": -33.7,
+    "loudestMusicOnlyLufs": -33.7,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

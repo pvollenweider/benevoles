@@ -1,0 +1,10 @@
+{
+  "status": "NOT READY",
+  "reason": [
+    "copy click precedes spoken instruction",
+    "save click precedes complete instruction",
+    "Mailpit iframe click lacks input sound marker"
+  ],
+  "take": 1,
+  "reFilmRemaining": 1
+}

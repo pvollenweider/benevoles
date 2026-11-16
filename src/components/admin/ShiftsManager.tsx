@@ -6,13 +6,14 @@
 import { useEffect, useId, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { announce } from "@/lib/announce"
-import type { ActionRecap } from "@/lib/action-recap"
+import { unsavedRoleOrderRecap, type ActionRecap } from "@/lib/action-recap"
+import { roleOrderUnsaved } from "@/lib/role-order"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { flushSync } from "react-dom"
 import { fmtRange } from "@/lib/gantt-utils"
 import { spokenShift, spokenTimeRange } from "@/lib/spoken-time"
-import { focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-return"
+import { focusFirstAvailable, focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-return"
 import { shiftSavedMessage } from "@/lib/shift-editor-form"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 import { StaffingStateLabel } from "./StaffingShiftLine"
@@ -22,7 +23,7 @@ import ShiftRecurrenceForm from "./ShiftRecurrenceForm"
 import RecurrenceList from "./RecurrenceList"
 import type { HolidayCalendar } from "@/lib/shift-recurrence"
 import ShiftEditor, { type ShiftFormValues } from "./shifts/ShiftEditor"
-import RoleManagerPanel from "./shifts/RoleManagerPanel"
+import RoleManagerPanel, { type RoleManagerQuestion } from "./shifts/RoleManagerPanel"
 import type { AdminRecurrence, RawShift } from "./shifts/types"
 import {
   activeShiftsByDay,
@@ -35,13 +36,21 @@ import {
   spokenPlaces,
 } from "@/lib/shifts-admin"
 import StatusBadge from "./StatusBadge"
+import { roleSectorOf } from "@/lib/role-settings"
+import PlacesSection, { type AdminPlace } from "./shifts/PlacesSection"
+import { activeSectors, groupedRoleOrder, groupRolesBySector, managePostesLabel, sectorsAdopted, sectorsManaged, type SectorLike } from "@/lib/sectors"
 
-const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page publique n'est plus accessible."
+/** The event's sectors as « Gérer les postes » holds them (#1147). */
+export type AdminSector = SectorLike & { archivedAt: string | null }
+export type AdminSectorsState = { enabled: boolean; adoptedAt: string | null; sectors: AdminSector[] }
+
+const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page d'inscription n'est plus accessible."
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
   eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none", initialRecurrences = [], today = "",
+  initialSectors = null, mealOnTheGoShown = false, initialPlaces = null, questions = [],
 }: {
   eventId:        string
   eventStartDate: string
@@ -54,12 +63,33 @@ export default function ShiftsManager({
   initialRecurrences?: AdminRecurrence[]
   /** "YYYY-MM-DD" today in the organisation's zone. */
   today?: string
+  /** Sectors (#1147): the event's option, adoption and sectors; null = nothing about sectors on the page. */
+  initialSectors?: AdminSectorsState | null
+  /** « Repas sur le pouce possible » (#1171, lot 2): shown where the workload protection can be used. */
+  mealOnTheGoShown?: boolean
+  /** Places of the event (#1171, lot 2): null where the workload protection cannot be used (no section, no field). */
+  initialPlaces?: AdminPlace[] | null
+  /** The event's active questions (#962), for a poste's answer condition. */
+  questions?: RoleManagerQuestion[]
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
   const singleDay = dates.length === 1
 
   const [shifts, setShifts] = useState<RawShift[]>(initialShifts)
+  // Shared by the places section and the shift form, so a place just added can be chosen at once.
+  const [places, setPlaces] = useState<AdminPlace[]>(initialPlaces ?? [])
+  const [sectorsState, setSectorsState] = useState<AdminSectorsState | null>(initialSectors)
+  // Sectors collapsed in the timeline (#1147): one state for every day, all expanded at load.
+  const [collapsedSectors, setCollapsedSectors] = useState<ReadonlySet<string>>(new Set())
+  function toggleSector(key: string) {
+    setCollapsedSectors((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
   // The page header (wizard) says « Aucun créneau pour l'instant » from the server's count: refresh
   // it when the first shift appears or the last one goes. Client state survives a refresh.
   const router = useRouter()
@@ -82,6 +112,8 @@ export default function ShiftsManager({
   // What the shift form opens with; a new key remounts ShiftEditor, which resets its values.
   const [formInitial, setFormInitial] = useState<Partial<ShiftFormValues>>({})
   const [formKey, setFormKey]         = useState(0)
+  // « Ajouter un poste dans « S » » (#1147): the sector the form opens in.
+  const [formSector, setFormSector]   = useState<{ id: string; name: string } | null>(null)
   const [view, setView]             = useState<"timeline" | "list">("timeline")
   const [showReorder, setShowReorder]     = useState(false)
   const [reorderRoles, setReorderRoles]   = useState<string[]>([])
@@ -101,12 +133,13 @@ export default function ShiftsManager({
   const editBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   const formOpenerRef = useRef<FocusCandidate>(null)
 
-  function openForm(patch: Partial<ShiftFormValues>, editId: string | null) {
+  function openForm(patch: Partial<ShiftFormValues>, editId: string | null, inSector: { sector: { id: string; name: string }; opener: () => HTMLElement | null | undefined } | null = null) {
     // A getter: the row's « Modifier » may be gone by the time the editor closes (view switched).
-    formOpenerRef.current = editId ? () => editBtnRefs.current.get(editId) : () => addBtnRef.current
+    formOpenerRef.current = inSector ? inSector.opener : editId ? () => editBtnRefs.current.get(editId) : () => addBtnRef.current
     flushSync(() => {
       setShowSeries(false)
       setShowRecurrence(false)
+      setFormSector(inSector?.sector ?? null)
       setFormInitial(patch)
       setFormKey(k => k + 1)
       setEditingId(editId)
@@ -133,7 +166,17 @@ export default function ShiftsManager({
       ))
     } else {
       setShifts(prev => [...prev, { ...data, date: data.date.split("T")[0], registrationCount: 0 }])
+      // A new poste joins the order « Gérer les postes » is editing, so it shows in its sector there.
+      if (showReorder) setReorderRoles(prev => prev.includes(saved.roleName) ? prev : [...prev, saved.roleName])
     }
+    // A shift saved in a collapsed sector shows again (#1147): it never changes out of sight.
+    const sectorKey = roleSectorOf(shifts.filter((s) => s.roleName === saved.roleName && s.status !== "cancelled")) ?? saved.sectorId ?? "none"
+    setCollapsedSectors((prev) => {
+      if (!prev.has(sectorKey)) return prev
+      const next = new Set(prev)
+      next.delete(sectorKey)
+      return next
+    })
     closeForm()
     announce(setRoleAnnouncement, shiftSavedMessage(editingId ? "edited" : "added", saved))
   }
@@ -247,6 +290,32 @@ export default function ShiftsManager({
     focusFirstAvailableNextFrame([() => manageRolesBtnRef.current, () => addBtnRef.current, () => outcomeRef.current])
   }
 
+  /** The poste order as « Gérer les postes » draws it: sector by sector once the event uses sectors. */
+  function drawnRoleOrder(roles: string[]): string[] {
+    if (!sectorsInUse) return roles
+    return groupedRoleOrder(groupRolesBySector(roles, (r) => sectorOf[r], sectorsState.sectors))
+  }
+
+  /**
+   * « Fermer » or the « Gérer les postes » toggle: an order changed and not saved is never dropped
+   * silently, the confirmation modal asks first. « Fermer sans enregistrer » closes both at once and
+   * gives focus to the toggle in the same task (the modal's opener is gone with the panel).
+   */
+  function requestCloseReorder() {
+    if (!roleOrderUnsaved(drawnRoleOrder(reorderRoles), drawnRoleOrder(uniqueRoles))) { closeReorder(); return }
+    setDeleteError(null)
+    setPendingDelete({
+      recap: unsavedRoleOrderRecap(),
+      run: async () => {
+        flushSync(() => {
+          setPendingDelete(null)
+          setShowReorder(false)
+        })
+        focusFirstAvailable([() => manageRolesBtnRef.current, () => addBtnRef.current, () => outcomeRef.current])
+      },
+    })
+  }
+
   function requestRoleDelete(pending: { recap: ActionRecap; run: () => Promise<void> }) {
     setDeleteError(null)
     setPendingDelete(pending)
@@ -261,6 +330,20 @@ export default function ShiftsManager({
     announce(setRoleAnnouncement, unpublished ? `Poste « ${role} » supprimé. ${UNPUBLISHED_NOTICE}` : `Poste « ${role} » supprimé.`)
     outcomeRef.current?.focus()
   }
+
+  // By sector (#1147), once the event adopted sectors: each poste's sector over the whole event.
+  const sectorOf: Record<string, string | null> = {}
+  for (const role of uniqueRoles) sectorOf[role] = roleSectorOf(shifts.filter((s) => s.roleName === role && s.status !== "cancelled"))
+  const sectorsInUse = !!sectorsState && sectorsAdopted({ sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt })
+  const sectorGrouping = sectorsInUse
+    ? { sectors: sectorsState.sectors, sectorOf, collapsed: collapsedSectors, onToggle: toggleSector }
+    : undefined
+  // The shift form asks for the sector first once the event adopted sectors (#1147).
+  const editorSectors = sectorsInUse ? activeSectors(sectorsState.sectors).map((s) => ({ id: s.id, name: s.name })) : null
+  // With sectors on, « Gérer les postes » is where the sectors are created: shown before any poste.
+  const sectorsShown = sectorsManaged(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)
+  // « Gérer les secteurs et postes » once the event adopted sectors (server-confirmed adoptedAt), like the panel's heading.
+  const managePostes = managePostesLabel(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)
 
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = activeShiftsByDay(shifts)
@@ -299,19 +382,19 @@ export default function ShiftsManager({
               Liste
             </button>
           </div>
-          {uniqueRoles.length > 0 && (
+          {(uniqueRoles.length > 0 || sectorsShown) && (
             <button
               ref={manageRolesBtnRef}
               type="button"
-              onClick={showReorder ? closeReorder : openReorder}
+              onClick={showReorder ? requestCloseReorder : openReorder}
               aria-expanded={showReorder}
               aria-controls={showReorder ? rolesPanelId : undefined}
               className="text-xs text-gray-500 border border-gray-200 rounded-xl px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
             >
-              <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <svg aria-hidden="true" className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
               </svg>
-              Gérer les postes
+              {managePostes}
             </button>
           )}
         </div>
@@ -362,6 +445,7 @@ export default function ShiftsManager({
           existingShifts={shifts}
           onCreated={handleRecurrenceCreated}
           onClose={closeRecurrence}
+          sectors={editorSectors}
         />
       )}
 
@@ -383,7 +467,12 @@ export default function ShiftsManager({
           existingShifts={shifts}
           onCreated={handleSeriesCreated}
           onClose={closeSeries}
+          sectors={editorSectors}
         />
+      )}
+
+      {initialPlaces && (
+        <PlacesSection eventId={eventId} places={places} setPlaces={setPlaces} onAnnounce={(text) => announce(setRoleAnnouncement, text)} />
       )}
 
       {/* Role management panel: reorder, rename, delete */}
@@ -396,11 +485,18 @@ export default function ShiftsManager({
         roles={reorderRoles}
         setRoles={setReorderRoles}
         onClose={closeReorder}
+        onRequestClose={requestCloseReorder}
         onAnnounce={(text) => announce(setRoleAnnouncement, text)}
         onRequestDelete={requestRoleDelete}
         onDeletingChange={setDeleting}
         onDeleteError={setDeleteError}
         onRoleDeleted={handleRoleDeleted}
+        sectorsState={sectorsState}
+        setSectorsState={setSectorsState}
+        onConfirmDone={() => setPendingDelete(null)}
+        onAddPoste={(sector, opener) => openForm(singleDay ? { date: dates[0] } : {}, null, { sector, opener })}
+        mealOnTheGoShown={mealOnTheGoShown}
+        questions={questions}
       />
 
       {/* Quick-add / edit form */}
@@ -415,6 +511,10 @@ export default function ShiftsManager({
           existingShifts={shifts}
           onSaved={handleShiftSaved}
           onCancel={closeForm}
+          sectors={editorSectors}
+          presetSector={formSector}
+          mealOnTheGoShown={mealOnTheGoShown}
+          places={initialPlaces ? places : null}
         />
       )}
 
@@ -428,7 +528,7 @@ export default function ShiftsManager({
       {/* What the figures on a bar mean (#925), once above the days; each bar's name says it in words. */}
       {view === "timeline" && daysWithShifts.length > 0 && (
         <p className="text-xs text-gray-600 pl-1">
-          Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne, l&apos;accès réservé et le cumul avec un autre créneau se règlent sur le poste, dans « Gérer les postes ».
+          Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne, l&apos;accès réservé et le cumul avec un autre créneau se règlent sur le poste, dans « {managePostes} ».
           {usesMinimum && " Un créneau avec un minimum de personnes affiche « sous le minimum (2) » tant qu'il ne l'a pas, encadré de pointillés, puis « minimum atteint » jusqu'à ce qu'il soit complet."}
         </p>
       )}
@@ -444,6 +544,7 @@ export default function ShiftsManager({
             eventShifts={shifts}
             shows={showSchedule.filter(s => s.date === day)}
             roleOrder={uniqueRoles}
+            sectorGrouping={sectorGrouping}
             onCreated={handleCreated}
             onUpdated={handleUpdated}
             onDeleted={handleDeleted}
@@ -487,12 +588,19 @@ export default function ShiftsManager({
                     {s.minAge != null && <p className="text-[11px] text-gray-500">{s.minAge} ans minimum</p>}
                     {/* A cumulable role (#986): why someone may hold it and an overlapping shift. */}
                     {s.overlapAllowed && <p className="text-[11px] text-gray-600">Cumulable avec un autre créneau</p>}
+                    {/* A role assigned by the organisation only (#1145): why it is not on the public page. */}
+                    {s.assignedOnly && <p className="text-[11px] text-gray-600">Attribué par l&apos;organisation</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell tabular-nums">
                     <p className="text-gray-700 font-medium">
                       <span aria-hidden="true">{s.registrationCount}/{s.capacity}</span>
                       <span className="sr-only">{spokenPlaces(s.registrationCount, s.capacity)}</span>
                     </p>
+                    {(s.pendingConfirmationCount ?? 0) > 0 && (
+                      <p className="text-[11px] text-amber-800">
+                        {s.pendingConfirmationCount} en attente de confirmation par email
+                      </p>
+                    )}
                     {/* A full row says « Complet » once, in its status badge: the count alone here. */}
                     {s.registrationCount < s.capacity && (
                       <p className="text-[11px] text-green-800">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
@@ -530,6 +638,8 @@ export default function ShiftsManager({
                         internalNotes: s.internalNotes ?? "",
                         waitlistEnabled: s.waitlistEnabled ?? false,
                         requiresApproval: s.requiresApproval ?? false,
+                        mealOnTheGo: s.mealOnTheGo ?? false,
+                        placeId: s.placeId ?? "",
                         minAge: s.minAge ?? "",
                         locationDetails: s.locationDetails ?? "",
                         latitude: s.latitude ?? null,

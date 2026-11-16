@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T07:04:47.464Z",
+  "videoSha256": "daa8abf898802a0e414e56bdf9bd23de4939c94297d6766cf78822104fe17993",
+  "promptSha256": "678f5ac30d706299fcbd534c58a4ce180490388633abcc5cf58b2268ad156388",
+  "clipSha256": "6d694c2de24232d42907248d3e3ea245dcea9a1df71dad242909400f95e7240c",
+  "scene": "copies",
+  "review": {
+    "heardOpening": "Sur le terrain, une liste bien",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient.",
+        "visibleSeconds": 4,
+        "visible": "Le rapport pour le stand n'est ni ouvert ni affiché ; l'écran reste sur la liste des documents puis saute vers la liste des membres.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Comparons-le au CSV des membres",
+        "visibleSeconds": 9.2,
+        "visible": "Affichage de la page de prévisualisation « Lecture du CSV des membres ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "ce fichier comporte notamment des coordonnées et des notes internes.",
+        "visibleSeconds": 11.5,
+        "visible": "Défilement horizontal montrant les colonnes « Remarque de disposition », « Notes », etc.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:03, l'ouverture du rapport prévu pour le stand est annoncée, mais l'action n'est pas effectuée et le rapport n'est jamais présenté à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

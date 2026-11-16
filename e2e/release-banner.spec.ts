@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test"
 import { execFileSync } from "node:child_process"
 import { waitForHydration } from "./helpers/hydration"
 import pkg from "../package.json"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * « Une nouvelle version est disponible » banner (#612), super admin only. No network call: the
@@ -33,7 +34,8 @@ async function logIn(page: import("@playwright/test").Page) {
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await passSecondFactor(page)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 }
 
 test("shown to the super admin, dismissible, stays gone after a reload", async ({ page }) => {

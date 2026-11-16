@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T20:56:05.917Z",
+  "videoSha256": "6c46cb19015bd1d74ef7ffb1a00878b300299a02bf1bf181389cf014075adb02",
+  "promptSha256": "fe932b13680374a15205a6819574911a7af3236c68b042e11b6811353ec25171",
+  "clipSha256": "618d396f676c8ace86e6bdfe0f96e1b62f02aeb9dc56a08ca04255cf6e1f3b86",
+  "scene": "wl-result",
+  "review": {
+    "heardOpening": "De retour dans les informations de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "De retour dans les informations de l'événement, la carte est activée et signale un programme à revoir.",
+        "visibleSeconds": 0,
+        "visible": "La page Informations de l'événement apparaît une seconde avant d'être coupée ; la carte et le signalement ne sont pas montrés.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Préparez les lieux et le repas sur le pouce dans Créneaux,",
+        "visibleSeconds": 5.4,
+        "visible": "L'écran reste figé sur la section « Protection des pauses et de la charge » dans les paramètres ; l'onglet Créneaux n'est pas ouvert.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "vérifiez avec Aperçu, puis activez.",
+        "visibleSeconds": 9.3,
+        "visible": "Aucun passage par l'onglet Aperçu ni action d'activation à l'écran.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Dans Paramètres, des valeurs peuvent aussi être proposées",
+        "visibleSeconds": 13,
+        "visible": "La section de configuration des paramètres (Protection des pauses et début de journée) est affichée à l'écran de manière statique.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Dès 00:01, l'affichage coupe brutalement vers le bas de la page Paramètres et y reste figé jusqu'à la fin de l'extrait.",
+      "Les actions annoncées dans Informations, Créneaux et Aperçu (carte, lieux, repas, aperçu, activation) ne sont jamais affichées."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

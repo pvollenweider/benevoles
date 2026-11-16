@@ -67,12 +67,12 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
 
   return (
     <div className="space-y-8">
-      <form role="search" onSubmit={(e) => e.preventDefault()} className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 space-y-5">
+      <form role="search" onSubmit={(e) => e.preventDefault()} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6 space-y-5">
         <fieldset className="space-y-4">
-          <legend className="text-sm font-semibold text-gray-800">Filtrer les vidéos</legend>
+          <legend className="text-sm font-semibold text-gray-800 dark:text-gray-200">Filtrer les vidéos</legend>
 
           <div>
-            <label htmlFor="video-search" className="block text-sm font-medium text-gray-700 mb-1">Recherche</label>
+            <label htmlFor="video-search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Recherche</label>
             <input
               id="video-search"
               type="search"
@@ -85,7 +85,7 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label htmlFor="video-theme" className="block text-sm font-medium text-gray-700 mb-1">Thème</label>
+              <label htmlFor="video-theme" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Thème</label>
               <select id="video-theme" value={theme} onChange={(e) => setTheme(e.target.value as ThemeId | "")} className="input w-full">
                 <option value="">Tous les thèmes</option>
                 {themeOptions.map((t) => (
@@ -95,7 +95,7 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
             </div>
 
             <div>
-              <label htmlFor="video-level" className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
+              <label htmlFor="video-level" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Niveau</label>
               <select id="video-level" value={level} onChange={(e) => setLevel(e.target.value as Level | "")} className="input w-full">
                 <option value="">Tous les niveaux</option>
                 {levelOptions.map((l) => (
@@ -105,7 +105,7 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
             </div>
 
             <div>
-              <label htmlFor="video-audience" className="block text-sm font-medium text-gray-700 mb-1">Public</label>
+              <label htmlFor="video-audience" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Public</label>
               <select id="video-audience" value={audience} onChange={(e) => setAudience(e.target.value as Audience | "")} className="input w-full">
                 <option value="">Tous les publics</option>
                 {audienceOptions.map((a) => (
@@ -115,7 +115,7 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
             </div>
 
             <div>
-              <label htmlFor="video-tag" className="block text-sm font-medium text-gray-700 mb-1">Étiquette</label>
+              <label htmlFor="video-tag" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Étiquette</label>
               <select id="video-tag" value={tag} onChange={(e) => setTag(e.target.value)} className="input w-full">
                 <option value="">Toutes les étiquettes</option>
                 {tagOptions.map((t) => (
@@ -126,7 +126,7 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
           </div>
 
           {hasFilters && (
-            <button type="button" onClick={resetFilters} className="text-sm text-blue-600 hover:underline rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            <button type="button" onClick={resetFilters} className="text-sm text-blue-600 dark:text-blue-400 hover:underline rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
               Réinitialiser les filtres
             </button>
           )}
@@ -136,7 +136,7 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
       <div role="status" aria-live="polite" className="sr-only">{resultAnnouncement}</div>
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-gray-600">Aucune vidéo ne correspond à ces critères.</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Aucune vidéo ne correspond à ces critères.</p>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((video) => (
@@ -145,12 +145,12 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
                   (after:absolute after:inset-0 on a relatively positioned card) makes the whole
                   card clickable without nesting interactive elements inside the link, so the
                   link's accessible name stays just the title (#644 accessibility review). */}
-              <article className="relative h-full bg-white border border-gray-200 rounded-2xl p-5 hover:border-blue-200 hover:shadow-sm transition-colors">
+              <article className="relative h-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-sm transition-colors">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h2 className="text-sm font-semibold text-gray-900">
+                  <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                     <AutoplayLink
                       href={`/videos/${video.id}`}
-                      className="after:absolute after:inset-0 hover:text-blue-700 hover:underline rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                      className="after:absolute after:inset-0 hover:text-blue-700 dark:hover:text-blue-300 hover:underline rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
                     >
                       {video.title}
                     </AutoplayLink>
@@ -158,20 +158,20 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
                         without changing the link's name (#763 accessibility review). */}
                     {video.freshnessLabel && <FreshnessBadge kind={video.freshnessLabel} separated className="ml-1.5 align-text-bottom" />}
                   </h2>
-                  <span className="shrink-0 text-xs font-medium text-gray-500">{formatDuration(video.durationMs)}</span>
+                  <span className="shrink-0 text-xs font-medium text-gray-500 dark:text-gray-400">{formatDuration(video.durationMs)}</span>
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-3">{video.description}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3 line-clamp-3">{video.description}</p>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {video.themes.map((t) => (
-                    <span key={t} className="inline-flex items-center rounded-full bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5">
+                    <span key={t} className="inline-flex items-center rounded-full border border-transparent bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 text-xs font-medium px-2 py-0.5">
                       {themeOptions.find((o) => o.id === t)?.label ?? t}
                     </span>
                   ))}
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                   <span>{LEVEL_LABELS[video.level]}</span>
                   <span>{video.audience.map((a) => AUDIENCE_LABELS[a]).join(", ")}</span>
-                  {!video.published && <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5">À venir</span>}
+                  {!video.published && <span className="inline-flex items-center rounded-full border border-transparent bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200 text-xs font-medium px-2 py-0.5">À venir</span>}
                 </div>
               </article>
             </li>

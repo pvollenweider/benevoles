@@ -8,6 +8,9 @@ import HelpLink from "@/components/admin/HelpLink"
 import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
 import { orgTimeZone } from "@/lib/time-zone"
 import { localDay } from "@/lib/day-of"
+import { sectorsManaged } from "@/lib/sectors"
+import { canAdoptBeta } from "@/lib/beta-access"
+import { workloadProtectionShipped } from "@/lib/workload-shipped"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Créneaux" }
@@ -25,10 +28,19 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
     include: {
       organization: { select: { timeZone: true } },
       shiftRecurrences: { orderBy: { createdAt: "asc" } },
+      sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true }, orderBy: { displayOrder: "asc" } },
+      places: { select: { id: true, name: true, displayOrder: true, archivedAt: true }, orderBy: { displayOrder: "asc" } },
       shifts: {
-        // Only counted: the rows (and their link token) never go to the browser (#1009).
-        include: { registrations: { where: { status: "active" }, select: { id: true } } },
+        // Only counted: the rows (and their link token) never go to the browser (#1009). A
+        // provisional place (#1253) is shown apart from the confirmed ones in the planning.
+        include: { registrations: { where: { status: { in: ["active", "unconfirmed"] } }, select: { id: true, status: true } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
+      },
+      // The condition of a poste's access (#962) is picked among the event's choice questions.
+      questions: {
+        where: { archivedAt: null },
+        orderBy: { position: "asc" },
+        select: { id: true, label: true, type: true, options: true, parentId: true, displayScope: true },
       },
     },
   })
@@ -39,6 +51,9 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
   const showSchedule = (event.showSchedule as Show[]) ?? []
 
   const shiftCount = event.shifts.filter((s) => s.status !== "cancelled").length
+  // « Repas sur le pouce possible » (#1171, lot 2): offered where the workload protection can be
+  // used (as its card is), so pages of other organisations do not change.
+  const mealOnTheGoShown = event.workloadProtectionEnabled || (workloadProtectionShipped() && await canAdoptBeta(event.organizationId, "workloadProtection"))
 
   return (
     <div className="space-y-6">
@@ -67,11 +82,21 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         showSchedule={showSchedule}
         defaultHolidays={defaultHolidayCalendar(orgTimeZone(event.organization))}
         today={localDay(new Date(), orgTimeZone(event.organization))}
+        // Sectors (#1147): only for an event with the option on or adopted; otherwise nothing changes.
+        initialSectors={sectorsManaged(event) ? {
+          enabled: event.sectorsEnabled,
+          adoptedAt: event.sectorsAdoptedAt?.toISOString() ?? null,
+          sectors: event.sectors.map((s) => ({ ...s, archivedAt: s.archivedAt?.toISOString() ?? null })),
+        } : null}
+        mealOnTheGoShown={mealOnTheGoShown}
+        initialPlaces={mealOnTheGoShown ? event.places.map((p) => ({ ...p, archivedAt: p.archivedAt?.toISOString() ?? null })) : null}
         initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
+        questions={event.questions}
         initialShifts={event.shifts.map(({ registrations, ...s }) => ({
           ...s,
           date: s.date.toISOString().split("T")[0],
           registrationCount: registrations.length,
+          pendingConfirmationCount: registrations.filter((r) => r.status === "unconfirmed").length,
         }))}
       />
     </div>

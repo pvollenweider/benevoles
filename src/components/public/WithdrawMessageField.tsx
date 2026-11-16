@@ -34,7 +34,7 @@ export default function WithdrawMessageField({ id, value, onChange, disabled }: 
         rows={2}
         disabled={disabled}
         aria-describedby={hintId}
-        className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50"
+        className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50"
       />
       <p id={hintId} className="text-xs text-gray-600 mt-1">
         {withdrawalMessageHint(value.length)}

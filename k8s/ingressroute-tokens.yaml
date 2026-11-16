@@ -14,11 +14,19 @@
 # logged as before: date, router, method, status, duration, size, client address.
 #
 # The families follow src/lib/sentry-scrub.ts (same secrets, scrubbed there from error reports):
-#   path  /my/…  /waitlist/…  /leader/…  /api/public/registrations/…  /api/public/member-invite/…
-#         /api/public/leader/…  /api/public/waitlist/…
+#   path  /my/…  /waitlist/…  /leader/…  /disponibilites/…  /confirmation/…  /api/public/registrations/…
+#         /api/public/member-invite/…  /api/public/leader/…  /api/public/waitlist/…
+#         /api/public/availability/…  /api/public/confirmations/…
+#         (every src/app/**/[token] route: no-tokens-in-access-logs.test.ts lists them from the
+#         app router and fails if one is missing here)
 #   query token=…  t=…   (invitations on event pages, admin invitations, password reset,
 #                          product-update unsubscribe)
-#   and the admin search (/admin/search, /api/admin/search), whose ?q= is often a person's name.
+#   and the admin search (/admin/search, /api/admin/search), whose ?q= is often a person's name,
+#   like every other ?q= of the app (member list /admin/members and /api/admin/members, an event's
+#   registrations): any non-empty q is not logged either. Same for the other query values that
+#   can hold a name or a whole URL: deleted (the name of a member just deleted, #667), tag (a
+#   member tag typed by the organisation), next and callbackUrl (the page to return to after a
+#   login or an organisation switch, with its own query: a search, a token).
 # The Referer header, which can hold such a URL, is not logged (headers are dropped globally) and
 # the app sends no path in it anyway (Referrer-Policy: strict-origin, src/lib/security-headers.ts).
 #
@@ -53,8 +61,12 @@ spec:
         && (PathPrefix(`/my/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
         || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
         || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
+        || PathPrefix(`/disponibilites/`) || PathPrefix(`/api/public/availability/`) || PathPrefix(`/ne-peux-pas/`)
+        || PathPrefix(`/confirmation/`) || PathPrefix(`/api/public/confirmations/`)
         || Path(`/admin/search`) || Path(`/api/admin/search`)
-        || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`))
+        || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`) || QueryRegexp(`q`, `.+`)
+        || QueryRegexp(`deleted`, `.+`) || QueryRegexp(`tag`, `.+`)
+        || QueryRegexp(`next`, `.+`) || QueryRegexp(`callbackUrl`, `.+`))
       observability:
         accessLogs: false
       # Same compression and HSTS as the Ingress (middleware-compress.yaml, middleware-hsts.yaml).
@@ -85,8 +97,12 @@ spec:
         && (PathPrefix(`/my/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
         || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
         || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
+        || PathPrefix(`/disponibilites/`) || PathPrefix(`/api/public/availability/`) || PathPrefix(`/ne-peux-pas/`)
+        || PathPrefix(`/confirmation/`) || PathPrefix(`/api/public/confirmations/`)
         || Path(`/admin/search`) || Path(`/api/admin/search`)
-        || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`))
+        || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`) || QueryRegexp(`q`, `.+`)
+        || QueryRegexp(`deleted`, `.+`) || QueryRegexp(`tag`, `.+`)
+        || QueryRegexp(`next`, `.+`) || QueryRegexp(`callbackUrl`, `.+`))
       observability:
         accessLogs: false
       middlewares:

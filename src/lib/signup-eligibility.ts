@@ -13,7 +13,7 @@ import { normalizeEmail } from "./email-address"
 import { acceptsRegistrations, refusalMessage, registrationState, type RegistrationWindow } from "./registration-window"
 import { memberMayTake, reservationRefusal } from "./role-reservation"
 import { orgTimeZone } from "./time-zone"
-import { pastShiftLabel } from "./long-event"
+import { endedShift } from "./shift-ended"
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash, type OverlapShift } from "./shift-overlap"
 
@@ -68,29 +68,42 @@ export function selectionOverlapRefusal(shifts: (OverlapShift & { label: string 
   return null
 }
 
-/** The first of the volunteer's registrations that clashes with one of the asked shifts (#986: a cumulable role may overlap). */
+/** A registration's shift as the overlap checks read it. */
+type ExistingShift = OverlapShift & { label: string; roleName?: string; assignedOnly?: boolean | null }
+
+/**
+ * The first of the volunteer's registrations that clashes with one of the asked shifts (#986: a
+ * cumulable role may overlap). The label is null for a shift of a role assigned by the
+ * organisation only (#1145), its own flag or its role in `hiddenRoles` (`assignedOnlyRoles` of the
+ * event): nothing proves the submitter is that volunteer, the answer never names it.
+ */
 export function findOverlap(
-  existing: { shift: OverlapShift & { label: string } }[],
+  existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
-): { label: string } | null {
+  hiddenRoles: Set<string> = new Set(),
+): { label: string | null } | null {
   for (const reg of existing) {
     for (const shift of shifts) {
-      if (shiftsClash(reg.shift, shift)) return { label: reg.shift.label }
+      if (shiftsClash(reg.shift, shift)) {
+        const hidden = !!reg.shift.assignedOnly || (reg.shift.roleName !== undefined && hiddenRoles.has(reg.shift.roleName))
+        return { label: hidden ? null : reg.shift.label }
+      }
     }
   }
   return null
 }
 
-export function overlapWithExisting(label: string): SignupRefusal {
-  return { status: 409, body: { error: `Ce créneau chevauche une inscription existante (${label}).` } }
+export function overlapWithExisting(label: string | null): SignupRefusal {
+  return { status: 409, body: { error: label === null ? "Ce créneau chevauche une inscription existante." : `Ce créneau chevauche une inscription existante (${label}).` } }
 }
 
 /** Overlap with one of the volunteer's live registrations of the event. */
 export function existingOverlapRefusal(
-  existing: { shift: OverlapShift & { label: string } }[],
+  existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
+  hiddenRoles: Set<string> = new Set(),
 ): SignupRefusal | null {
-  const clash = findOverlap(existing, shifts)
+  const clash = findOverlap(existing, shifts, hiddenRoles)
   return clash ? overlapWithExisting(clash.label) : null
 }
 
@@ -152,16 +165,17 @@ export function minimumAgeRefusal(
 }
 
 /**
- * A long-running event (#866): a day that is over can't be taken any more, even from a page left
- * open since. `today` is the organisation's local day, "YYYY-MM-DD".
+ * A shift that is over (#866, then for every event): refused, even from a page left open since.
+ * Its end instant in the organisation's time zone decides (src/lib/shift-ended.ts): a shift still
+ * running can be taken. Checked again under the shift lock, on the shift as it is then.
  */
 export function pastShiftRefusal(
-  event: { startDate?: Date | null; endDate?: Date | null },
-  shifts: { date: Date; label: string }[],
-  today: string,
+  shifts: { date: Date | string; startTime: string; endTime: string; label: string }[],
+  now: Date,
+  timeZone: string,
 ): SignupRefusal | null {
-  const label = pastShiftLabel(event, shifts, today)
-  return label ? { status: 409, body: { error: `Le créneau "${label}" est passé. Recharge la page.` } } : null
+  const ended = endedShift(shifts, now, timeZone)
+  return ended ? { status: 409, body: { error: `Le créneau "${ended.label}" est terminé. Recharge la page.` } } : null
 }
 
 /**
@@ -178,4 +192,27 @@ export const DUPLICATE_SIGNUP_MESSAGE =
 
 export function duplicateSignupRefusal(): SignupRefusal {
   return { status: 409, body: { error: DUPLICATE_SIGNUP_MESSAGE, duplicate: true } }
+}
+
+/**
+ * The personal link or the invitation the sign-up came with no longer proves the address (#1138
+ * follow-up): checked again under the member lock, it was replaced in the meantime (an organiser
+ * corrected the address, which renews every link of the member). Nothing is saved; the volunteer
+ * starts again from the newest link they received. Same answer for both kinds of link.
+ */
+export const STALE_LINK_MESSAGE =
+  "Le lien avec lequel tu t'inscris n'est plus valable : il a été remplacé. Rien n'a été enregistré."
+
+export function staleLinkRefusal(): SignupRefusal {
+  return { status: 409, body: { error: STALE_LINK_MESSAGE, staleLink: true } }
+}
+
+/**
+ * Too many sign-ups at the same moment on the same shifts (AUTHZ-04): the locks could not be had in
+ * time, the transaction rolled back, nothing was recorded. A clean answer to retry, never a 500.
+ */
+export const BUSY_SIGNUP_MESSAGE = "Plusieurs inscriptions sont en cours en même temps. Cette tentative n'a pas été enregistrée."
+
+export function busySignupRefusal(): SignupRefusal {
+  return { status: 409, body: { error: BUSY_SIGNUP_MESSAGE, busy: true } }
 }

@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-11-11T12:25:02.905Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 29262,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "withdrawal": {
+      "file": "audio/withdrawal.wav",
+      "durationMs": 30843,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "offer": {
+      "file": "audio/offer.wav",
+      "durationMs": 26684,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "coverage": {
+      "file": "audio/coverage.wav",
+      "durationMs": 29923,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "availability": {
+      "file": "audio/availability.wav",
+      "durationMs": 39666,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "message": {
+      "file": "audio/message.wav",
+      "durationMs": 55661,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "need": {
+      "file": "audio/need.wav",
+      "durationMs": 35450,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "schedule": {
+      "file": "audio/schedule.wav",
+      "durationMs": 29676,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "cancel": {
+      "file": "audio/cancel.wav",
+      "durationMs": 30503,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "journal": {
+      "file": "audio/journal.wav",
+      "durationMs": 28041,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    },
+    "result": {
+      "file": "audio/result.wav",
+      "durationMs": 32413,
+      "generationSha256": "28e759f8b29cccf0566248d66ee7da627dec9991df9fa8d30c904eb74f5e43e8"
+    }
+  }
+}

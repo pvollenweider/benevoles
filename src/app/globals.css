@@ -65,7 +65,7 @@ body {
 
 .input {
   width: 100%;
-  border: 1px solid #d1d5db;
+  border: 1px solid #6b7280;
   border-radius: 0.75rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
@@ -81,6 +81,48 @@ body {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 1);
 }
 
+/* The page canvas under a dark content frame: gray-900 like the frame, with dark native scrollbars
+   (color-scheme), so no white shows around it (overscroll, the instant before the frame paints).
+   Matches only while a frame whose root has `dark` is on the page: back on the home page (no
+   frame), the canvas is white again with no script to undo. Nothing is portalled to <body> outside
+   the frame on these pages; if something ever is, it would inherit the dark color-scheme. */
+html:has([data-theme-scope].dark) {
+  background-color: var(--color-gray-900);
+  color-scheme: dark;
+}
+
+/* The element (usually a heading) a client navigation to a #fragment focuses, made focusable only
+   while it has the focus (ContentShellRoot, data-nav-focus): the content links' focus outline
+   (blue-700, blue-400 in dark), not the browser's own ring, and only for a keyboard user
+   (focus-visible). Elements a page focuses itself keep their own style. */
+[data-theme-scope] [data-nav-focus]:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 4px;
+  border-radius: 0.25rem;
+}
+
+[data-theme-scope].dark [data-nav-focus]:focus-visible {
+  outline-color: var(--color-blue-400);
+}
+
+/* In a dark content frame (ContentShell, #1116: the video library's filters): a gray-800 field
+   whose gray-400 border is its visible edge (1.4.11: 5.8:1 on its fill, 7:1 on gray-900), light
+   text, and the dark theme's focus blue. `.dark` only exists on that frame's root. */
+.dark .input {
+  background: var(--color-gray-800);
+  border-color: var(--color-gray-400);
+  color: var(--color-gray-100);
+}
+
+.dark .input::placeholder {
+  color: var(--color-gray-400);
+}
+
+.dark .input:focus {
+  border-color: var(--color-blue-400);
+  box-shadow: 0 0 0 2px var(--color-blue-400);
+}
+
 /* Forced colours (Windows Contrast themes) drop box-shadow and force border colours, so the
    focus above disappears. A transparent outline is repainted in the system colour, like
    Tailwind's `outline-hidden`; outside forced colours nothing changes. */
@@ -91,6 +133,17 @@ body {
   }
 }
 
+/* An invalid field at rest (#1123): the red border alone is about as dark as the gray-500 resting
+   border (1.01:1), so a second pixel of red, drawn as a shadow, keeps it apart by its weight, not
+   by its hue alone. Not on focus, where the field's own focus indicator takes the box-shadow. In
+   @layer base so an explicit shadow utility still wins; the error text and aria-invalid carry
+   the information either way (forced colours drop the shadow and keep the border). */
+@layer base {
+  :is(input:not([type="checkbox"], [type="radio"]), select, textarea, [role="combobox"])[aria-invalid="true"]:not(:focus) {
+    box-shadow: 0 0 0 1px #dc2626;
+  }
+}
+
 /* In @layer base so that a `focus-visible:outline-*` utility can override it (an unlayered rule
    would beat every utility, whatever its specificity) — needed on coloured headers (#300). */
 @layer base {
@@ -98,6 +151,13 @@ body {
   input[type="range"]:focus-visible {
     outline: 2px solid #1d4ed8;
     outline-offset: 2px;
+  }
+
+  /* blue-700 is 1.7:1 on the dark theme's gray-900: a button without its own outline colour
+     takes the dark theme's blue-400 there (#1116). */
+  .dark button:focus-visible,
+  .dark input[type="range"]:focus-visible {
+    outline-color: var(--color-blue-400);
   }
 }
 
@@ -127,4 +187,30 @@ body {
 
 .dark [data-doc-video] :is(a, button):focus-visible {
   outline-color: #60a5fa;
+}
+
+/* « This page did not start » (#1343, src/components/HydrationNotice.tsx): in the server HTML,
+   hidden and taking no room, shown after 4 s if the page's scripts never attached (a browser too
+   old for them). The delay is CSS because scripts are what failed. A step of visibility, not a
+   movement: it must run under « Réduire les animations » too, hence a plain class and no
+   animate-* / motion-safe utility. */
+@keyframes hydration-notice-reveal {
+  to {
+    visibility: visible;
+    max-height: 40rem;
+  }
+}
+
+/* No room while hidden: the margin a « space-y » parent would give it is moved inside, under the
+   block, where max-height: 0 hides it too. */
+.hydration-notice {
+  margin-block: 0 !important;
+  visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  animation: hydration-notice-reveal 1ms steps(1, end) 4s forwards;
+}
+
+.hydration-notice > p {
+  margin-bottom: 1rem;
 }

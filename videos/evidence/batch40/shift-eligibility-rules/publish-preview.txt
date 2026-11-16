@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   SHIFT_ELIGIBILITY_RULES
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default SHIFT_ELIGIBILITY_RULES
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + shift-eligibility-rules/shift-eligibility-rules-og.jpg
+  + shift-eligibility-rules/shift-eligibility-rules.jpg
+  + shift-eligibility-rules/shift-eligibility-rules.mp4
+  + shift-eligibility-rules/shift-eligibility-rules.txt
+  + shift-eligibility-rules/shift-eligibility-rules.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 569
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

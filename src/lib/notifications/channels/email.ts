@@ -10,8 +10,10 @@ import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 import { orgBaseUrl } from "@/lib/urls"
 import { classifySmtpOutcome, type SmtpErrorLike, type SmtpInfoLike } from "../smtp-outcome"
 import { recordDeliveryOutcomes } from "../delivery-outcomes"
+import { isRecipientAddressRejection } from "../recipient-rejection"
 import { encodeOutcomeReason } from "@/lib/outbox-view"
-import { siteDomain } from "@/lib/site"
+import { siteDomain, siteName } from "@/lib/site"
+import { withReadBeforeShiftPages } from "@/lib/read-before-shift-data"
 
 /**
  * Outcome when no SMTP server is configured. Outside production (dev, tests) the message is printed
@@ -77,8 +79,11 @@ export const emailChannel: { send: Send } = {
     }
 
     const org = payload.organizationId ? await orgEmailContext(payload.organizationId) : null
-    const { subject, html, text } = render(payload, org?.brand)
-    const from = env.EMAIL_FROM ?? `Bénévoles <notifications@${siteDomain()}>`
+    // Pages attached to a shift's poste (#1324) are read now, not when the email was queued: a
+    // page deleted since then leaves no dead link. A read failure never blocks the email.
+    const prepared = await withReadBeforeShiftPages(payload).catch(() => payload)
+    const { subject, html, text } = render(prepared, org?.brand)
+    const from = env.EMAIL_FROM ?? `${siteName()} <notifications@${siteDomain()}>`
     // The organization's own reply-to when it set one (#381), else the platform's.
     const replyTo = org?.replyTo ?? env.EMAIL_REPLY_TO ?? undefined
     const transport = createTransport()
@@ -106,7 +111,9 @@ export const emailChannel: { send: Send } = {
         // Nodemailer only resolves like this when *some* recipient was accepted; with a single
         // `to` that can't happen, but stay honest about what was actually proven.
         console.error(`[notif:email] ${payload.kind} partial: code=${classified.responseCode ?? "-"} category=${classified.outcome}`)
-        return { ok: false as const, reason: encodeOutcomeReason(classified), permanent: classified.outcome === "rejected_permanent" }
+        const permanent = classified.outcome === "rejected_permanent"
+        const recipientRejected = permanent && isRecipientAddressRejection({ rejectedErrors: info.rejectedErrors as SmtpErrorLike[] | undefined }, to)
+        return { ok: false as const, reason: encodeOutcomeReason(classified), permanent, ...(recipientRejected ? { recipientRejected: true as const } : {}) }
       }
       return { ok: true as const }
     } catch (err) {
@@ -115,7 +122,11 @@ export const emailChannel: { send: Send } = {
       await recordDeliveryOutcomes(recordCtx, [classified])
       // Code, category and kind only — never the recipient or the raw server reply (#598).
       console.error(`[notif:email] ${payload.kind} failed: code=${errLike.code ?? classified.responseCode ?? "-"} category=${classified.outcome}`)
-      return { ok: false as const, reason: encodeOutcomeReason(classified), permanent: classified.outcome === "rejected_permanent" }
+      const permanent = classified.outcome === "rejected_permanent"
+      // A mailbox or domain that doesn't exist (5.1.x): the outbox still fails the row, but doesn't
+      // report it to Sentry (a member's wrong address, not an application error).
+      const recipientRejected = permanent && isRecipientAddressRejection(errLike, to)
+      return { ok: false as const, reason: encodeOutcomeReason(classified), permanent, ...(recipientRejected ? { recipientRejected: true as const } : {}) }
     }
   },
 }
@@ -126,6 +137,7 @@ function toSmtpErrorLike(err: unknown): SmtpErrorLike {
     const e = err as Record<string, unknown>
     return {
       code: typeof e.code === "string" ? e.code : undefined,
+      command: typeof e.command === "string" ? e.command : undefined,
       response: typeof e.response === "string" ? e.response : undefined,
       responseCode: typeof e.responseCode === "number" ? e.responseCode : undefined,
       recipient: typeof e.recipient === "string" ? e.recipient : undefined,

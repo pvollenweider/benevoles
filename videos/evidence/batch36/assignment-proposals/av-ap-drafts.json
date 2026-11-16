@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:01.016Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "1dcc512cfb06e98801a9a6681dd8c1496c4d245f9461a5fb5ab85d8a55055ef6",
+  "clipSha256": "c4515f4bfcaa26cac38dd787bbf1b965c2e56b8d77b62186f493f14016c5367f",
+  "scene": "ap-drafts",
+  "review": {
+    "heardOpening": "Aux Rencontres du Val d'Orsel, 11 personnes ont indiqué",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Aux Rencontres du Val d'Orsel, 11 personnes ont indiqué leurs disponibilités.",
+        "visibleSeconds": 0.5,
+        "visible": "Page Disponibilités affichant notamment Réponse complète (11).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "ouvrons Affectations en brouillon",
+        "visibleSeconds": 5.2,
+        "visible": "Affichage de la page Affectations en brouillon.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "une ligne par personne, une colonne par date avec les places à pourvoir, et encore aucune affectation.",
+        "visibleSeconds": 8,
+        "visible": "Défilement sur le tableau Planning par personne et par jour avec colonnes par date, places à pourvoir et mention Aucune mission.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Cliquons sur Générer une proposition.",
+        "visibleSeconds": 14.2,
+        "visible": "Clic sur le lien Générer une proposition et ouverture de la page Proposition d'affectations.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, naturelle et bien synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

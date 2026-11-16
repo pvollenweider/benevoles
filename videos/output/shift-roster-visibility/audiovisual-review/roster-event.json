@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T20:42:50.931Z",
-  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
-  "promptSha256": "3477e4deef99226bf41920bfc4365f639aa0df6fd3070d8fbbe784a8b7d23108",
-  "clipSha256": "f6b1a461f4353afbab1977d1b26fb95611d60aefa259f919a63ecee21c599466",
+  "reviewedAt": "2026-10-22T09:37:57.529Z",
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "promptSha256": "d34f452605a25a15ad5d6afb1dae998485f2e357f1baf532ca2d78830590193b",
+  "clipSha256": "b276901eb0f0188955f5b6c933f288bcdb0bff934b958ba707dd82868495b0f4",
   "scene": "roster-event",
   "review": {
-    "heardOpening": "Sur la page de l'événement, le bouton Voir qui est inscrit",
+    "heardOpening": "Sur la page de l'événement, l'interrupteur Voir qui est inscrit",
     "checkpoints": [
       {
-        "spokenSeconds": 8.9,
+        "spokenSeconds": 7.5,
         "spoken": "Passons en Liste.",
-        "visibleSeconds": 9.4,
-        "visible": "Basculement vers l'onglet Liste affichant les créneaux sous forme de cartes textuelles",
+        "visibleSeconds": 8,
+        "visible": "Bascule vers la vue Liste avec les détails des inscrits par créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 9,
         "spoken": "Sur votre créneau, la ligne commence par Avec toi.",
-        "visibleSeconds": 11.2,
-        "visible": "Créneau 09h-12h Accueil portant la mention « Avec toi : David P. et 1 autre bénévole. »",
+        "visibleSeconds": 9,
+        "visible": "Affichage de la mention « Avec toi : David P. et 1 autre bénévole » sur le créneau Accueil",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.4,
-        "spoken": "Sur les autres, elle commence par Sur ce créneau",
-        "visibleSeconds": 14.4,
-        "visible": "Les autres créneaux (Buvette, Rangement) affichent la mention « Sur ce créneau : »",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 22.8,
+        "spokenSeconds": 18.8,
         "spoken": "Passons en Frise.",
-        "visibleSeconds": 21.5,
-        "visible": "Retour sur l'onglet Frise avec la vue chronologique",
+        "visibleSeconds": 19.3,
+        "visible": "Clic sur l'onglet Frise et réaffichage du planning sous forme de barres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 26.2,
-        "spoken": "Survolez un créneau",
-        "visibleSeconds": 24.5,
-        "visible": "Le créneau Buvette 12h-14h est survolé et affiche en dessous « Sur ce créneau : Bruno F. »",
+        "spokenSeconds": 22.3,
+        "spoken": "Survolez un créneau : la ligne sous le graphique du jour montre les personnes de cette barre.",
+        "visibleSeconds": 22.8,
+        "visible": "Survol du créneau Buvette et affichage sous la frise de « Sur ce créneau : Bruno F. »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions de l'interface."
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { inviteResultText, remindResultText } from "@/lib/invitation-summary"
+import { inviteResultText, remindResultText, remindWaitHint } from "@/lib/invitation-summary"
 import { inviteState, inviteStateCounts, type InviteState } from "@/lib/invite-state"
 import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
 import { flushSync } from "react-dom"
@@ -34,6 +34,8 @@ type Invite = {
   email: string | null
   tags: string[]
   registered: boolean
+  /** Invited or reminded less than 48 h ago (#1105): « Relancer » leaves them out. */
+  recentlyContacted: boolean
 }
 
 type Props = {
@@ -74,6 +76,11 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   const states = useMemo(() => invites.map((i) => inviteState({ declinedAt: i.declinedAt, hasActiveRegistration: i.registered })), [invites])
   const counts = useMemo(() => inviteStateCounts(invites.map((i) => ({ declinedAt: i.declinedAt, hasActiveRegistration: i.registered }))), [invites])
   const { total, registered, notAvailable, noAnswer } = counts
+  // Who « Relancer » reaches now (#1105): no answer, and not emailed in the last 48 h.
+  const remindable = useMemo(() => invites.filter((i, idx) => states[idx] === "no_answer" && !i.recentlyContacted).length, [invites, states])
+  const remindWait = noAnswer - remindable
+  const remindHint = remindWaitHint({ eligible: remindable, recent: remindWait })
+  const remindHintId = useId()
   const visibleInvites = useMemo(
     () => (filter === "all" ? invites : invites.filter((i, idx) => states[idx] === filter)),
     [invites, states, filter],
@@ -118,7 +125,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   }
 
   function remindNonRegistered() {
-    if (noAnswer === 0) return
+    if (remindable === 0) return
     setConfirmingRemind(true)
   }
 
@@ -126,7 +133,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
     setReminding(true)
     setRemindResult(null)
     setRemindError(null)
-    const outcome = await requestJson<{ sent: number; failed?: number; declinedSkipped?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être envoyées.")
+    const outcome = await requestJson<{ queued: number; recentlySkipped?: number; declinedSkipped?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être lancées.")
     setReminding(false)
     // A failure stays in the dialog, where « Réessayer » is at hand.
     if (!outcome.ok) { setRemindError(outcome.error); return }
@@ -139,7 +146,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   return (
     <div className="space-y-5">
       {confirmingRemind && (
-        <ConfirmActionModal recap={remindInvitedRecap({ people: noAnswer, declined: notAvailable })} busy={reminding} error={remindError} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
+        <ConfirmActionModal recap={remindInvitedRecap({ people: remindable, declined: notAvailable, recent: remindWait })} busy={reminding} error={remindError} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
       )}
       <div role="group" aria-label="Filtrer les invités par statut" className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard label="Invités" value={total} active={filter === "all"} onClick={() => setFilter("all")} />
@@ -150,6 +157,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
       {/* Always mounted, so the filter's result is voiced even when the same text repeats. */}
       <p id="invitations-filter-status" role="status" className="sr-only">{filterAnnouncement}</p>
 
+      <div className="space-y-2">
       <div className="flex gap-2 flex-wrap">
         <button
           onClick={() => setShowInvite(true)}
@@ -158,12 +166,16 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
           + Inviter des membres
         </button>
         {noAnswer > 0 && (
+          // Stays mounted when nobody can be reminded yet (#1105): the focus returned here after a
+          // reminder is not lost, and the hint below says when it becomes possible.
           <button
             type="button"
             onClick={remindNonRegistered}
-            className="text-sm border border-gray-300 px-3 py-2 rounded-xl hover:bg-gray-50"
+            aria-disabled={remindable === 0 || undefined}
+            aria-describedby={remindHint ? remindHintId : undefined}
+            className="text-sm border border-gray-300 px-3 py-2 rounded-xl hover:bg-gray-50 aria-disabled:opacity-60 aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent"
           >
-            {noAnswer === 1 ? "Relancer la personne sans créneau" : `Relancer les ${noAnswer} sans créneau`}
+            {remindable === 0 ? (noAnswer === 1 ? "Relancer la personne sans créneau" : "Relancer les sans créneau") : remindable === 1 ? "Relancer la personne sans créneau" : `Relancer les ${remindable} sans créneau`}
           </button>
         )}
         {noAnswer > 0 && (
@@ -175,13 +187,18 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
             {noAnswer === 1 ? "Écrire un message à la personne sans créneau" : `Écrire un message aux ${noAnswer} sans créneau`}
           </Link>
         )}
-        <span role="status" className="text-sm self-center text-gray-600">{remindResult ?? ""}</span>
         <button
           onClick={() => setShowTest((v) => !v)}
           className="text-xs text-gray-500 hover:text-gray-700 ml-auto self-center"
         >
           Tester l&apos;envoi d&apos;email
         </button>
+      </div>
+      {/* Not live: it changes with each refresh, and would talk over the result below (#1105). */}
+      {noAnswer > 0 && remindHint && (
+        <p id={remindHintId} className="text-sm text-gray-600">{remindHint}</p>
+      )}
+      <p role="status" className={remindResult ? "text-sm text-gray-700" : "sr-only"}>{remindResult ?? ""}</p>
       </div>
 
       {showTest && (
@@ -202,7 +219,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
               aria-describedby={testFieldError ? `${testId}-error` : undefined}
               onChange={(e) => { setTestEmail(e.target.value); setTestState("idle"); setTestFieldError(null) }}
               placeholder="votre@email.com"
-              className="w-full border border-amber-300 rounded-lg px-3 py-1.5 text-sm bg-white"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm bg-white"
             />
           </div>
           <button
@@ -365,7 +382,7 @@ function InviteModal({
     if (selected.size === 0 || submitting) return
     setSubmitting(true)
     setResult(null)
-    const outcome = await requestJson<{ invitedNew?: number; skippedExisting?: number; emailsSent?: number; emailsFailed?: number; membersWithoutEmail?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations`, {
+    const outcome = await requestJson<{ invitedNew?: number; skippedExisting?: number; emailsQueued?: number; recentlySkipped?: number; membersWithoutEmail?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -401,13 +418,13 @@ function InviteModal({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher…"
-            className="flex-1 min-w-[180px] border border-gray-200 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
+            className="flex-1 min-w-[180px] border border-gray-500 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
           />
           <select
             aria-label="Filtrer par étiquette"
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+            className="border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
           >
             <option value="">Toutes les étiquettes</option>
             {allTags.map((t) => <option key={t} value={t}>{t}</option>)}
@@ -462,7 +479,7 @@ function InviteModal({
               maxLength={500}
               rows={2}
               placeholder="Un mot d'accompagnement court qui sera inclus dans l'email"
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
             />
           </div>
 
@@ -507,14 +524,12 @@ function StatCard({ label, value, positive, warning, muted, active, onClick }: {
       type="button"
       onClick={onClick}
       aria-pressed={!!active}
-      // Accessible name reads the label before the count ("Sans réponse : 3"), the reverse of the
-      // visual stack (count first, label below it): the visible text alone stays label-in-name
-      // only incidentally, so the name is set explicitly and the visible text hidden from AT.
-      aria-label={`${label} : ${value}`}
+      // Named by its visible text, in the visual order (« 3 Sans réponse », WCAG 2.5.3): the
+      // space keeps the count and the label two words.
       className={`rounded-xl border p-4 text-center transition-colors motion-safe:duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] forced-colors:aria-pressed:text-[HighlightText] ${color} ${active ? "ring-2 ring-blue-600 ring-offset-1" : ""}`}
     >
-      <p aria-hidden="true" className="text-2xl font-bold">{value}</p>
-      <p aria-hidden="true" className="text-xs mt-1 opacity-70">{label}</p>
+      <span className="block text-2xl font-bold">{value}</span>{" "}
+      <span className="block text-xs mt-1 opacity-70">{label}</span>
     </button>
   )
 }

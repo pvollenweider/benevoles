@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:34.602Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "f7748dd5625a4af7e235e6e2a062b406b5fcda4cd3a8f699286a2c9679ceadaf",
+  "clipSha256": "4312fd6a8c3caaa9c0c444c77fbcff1fc1a5f34fd123db6b5a8ecb52eff28739",
+  "scene": "ap-launch",
+  "review": {
+    "heardOpening": "Rotation, nuit et réserve reste replié",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Rotation, nuit et réserve reste replié, sans réglage.",
+        "visibleSeconds": 0,
+        "visible": "La section 'Rotation, nuit et réserve' est repliée avec la mention 'Aucun réglage'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "tapons le numéro de tirage deux mille vingt-six",
+        "visibleSeconds": 5.4,
+        "visible": "Dépliage des paramètres de calcul et saisie de 2026 dans le champ Numéro de tirage.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "Puis Générer une proposition.",
+        "visibleSeconds": 11.2,
+        "visible": "Clic sur le bouton bleu 'Générer une proposition' et affichage de l'écran 'Calcul en cours'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

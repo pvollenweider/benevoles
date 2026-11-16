@@ -151,3 +151,36 @@ export function resizedTimes(
   const newStart = snapWithin(cur, Math.max(dayStart, 0, endMin - 1440 + SNAP), Math.min(endMin - MIN_DUR, 1440 - SNAP))
   return { startTime: fromMin(newStart), endTime: orig.endTime }
 }
+
+// ── Sectors (#1147) ───────────────────────────────────────────────────────────
+/** Height of a sector's header row: its collapse button (at least 24 px) and the band. */
+export const SECTOR_H = 32
+
+export type SectorRows = {
+  /** One entry per group, in order: where its header starts, its full height, and the postes drawn (none when collapsed). */
+  groups: { key: string; top: number; height: number; roles: string[] }[]
+  roleTop: Record<string, number>
+  rowsH: number
+}
+
+/**
+ * Rows of a timeline grouped by sector: each group's header, then its postes (their heights from
+ * layoutRoles), unless the group is collapsed. The rows of the postes of a collapsed group are not
+ * drawn at all, so their bars leave the tab order.
+ */
+export function layoutSectorGroups(groups: { key: string; roles: string[] }[], roleHeight: Record<string, number>, collapsed: ReadonlySet<string>): SectorRows {
+  const roleTop: Record<string, number> = {}
+  const out: SectorRows["groups"] = []
+  let acc = 0
+  for (const g of groups) {
+    const top = acc
+    acc += SECTOR_H + LANE_GAP
+    const roles = collapsed.has(g.key) ? [] : g.roles
+    for (const role of roles) {
+      roleTop[role] = acc
+      acc += (roleHeight[role] ?? ROW_H) + GAP
+    }
+    out.push({ key: g.key, top, height: acc - top, roles })
+  }
+  return { groups: out, roleTop, rowsH: acc }
+}

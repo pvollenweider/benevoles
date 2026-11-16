@@ -4,6 +4,8 @@
 import { NextResponse } from "next/server"
 import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { z } from "zod"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
@@ -37,18 +39,24 @@ export async function POST(req: Request) {
   // opens the volunteer's page, so only that token can subscribe.
   const registration = await prisma.registration.findFirst({
     where: { ...registrationToken.where(editToken), status: "active" },
-    select: { volunteerId: true },
+    select: { volunteerId: true, event: { select: { organization: { select: ORG_LIFECYCLE_SELECT } } } },
   })
   if (!registration) {
     return NextResponse.json({ error: "Inscription introuvable" }, { status: 404 })
   }
+  // No new device while the organisation is closed. Unsubscribing below stays possible: it only
+  // removes the volunteer's own subscription and gives nothing back.
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   const { volunteerId } = registration
 
   // Under the member's row lock (#516, the lock the erasure takes first): a record erased since
-  // the lookup above never gets a device attached to it.
+  // the lookup above never gets a device attached to it, and a link renewed since (a corrected
+  // address, src/lib/member-address-revocation.ts, takes the same lock) no longer attaches one.
   const attached = await prisma.$transaction(async (tx) => {
     const rows = await tx.$queryRaw<{ erasedAt: Date | null }[]>`SELECT "erasedAt" FROM "Volunteer" WHERE id = ${volunteerId} FOR UPDATE`
     if (rows.length === 0 || rows[0].erasedAt) return false
+    const stillValid = await tx.registration.findFirst({ where: { ...registrationToken.where(editToken), status: "active", volunteerId }, select: { id: true } })
+    if (!stillValid) return false
     await tx.pushSubscription.upsert({
       where: { endpoint_volunteerId: { endpoint, volunteerId } },
       update: { auth, p256dh },

@@ -98,7 +98,7 @@ describe("review: practical info item", () => {
   it("words what is missing, with the count and where to fix it", () => {
     const both = check({ practicalInfo: gaps({ noPlace: 3, noContact: 3, noPlaceNorContact: 3, incomplete: 3 }) }, "practical-info")!
     expect(both).toMatchObject({ ok: false, required: false, warn: true, label: "3 créneaux sans lieu ni contact", href: "/admin/events/evt-1/shifts" })
-    expect(both.hint).toMatch(/email de confirmation, les rappels et la page personnelle/)
+    expect(both.hint).toMatch(/email de confirmation, les rappels et la page « Mes inscriptions »/)
     expect(check({ practicalInfo: gaps({ noContact: 1, incomplete: 1 }) }, "practical-info")!.label).toBe("1 créneau sans contact")
     expect(check({ practicalInfo: gaps({ noPlace: 2, incomplete: 2 }) }, "practical-info")!.label).toBe("2 créneaux sans lieu de rendez-vous")
     expect(check({ practicalInfo: gaps({ noPlace: 1, noContact: 2, incomplete: 3 }) }, "practical-info")!.label).toBe("3 créneaux sans lieu ou sans contact")
@@ -153,7 +153,7 @@ describe("review: reminders item", () => {
 
   it("says on, with a link to the organization's settings", () => {
     expect(check({ reminders: rem({}) }, "reminders")!.warn).toBeFalsy()
-    expect(check({ reminders: rem({}) }, "reminders")).toMatchObject({ ok: true, label: "Rappels automatiques J-2, J-1 et du jour activés", href: "/admin/settings/notifications", action: "Réglages des emails" })
+    expect(check({ reminders: rem({}) }, "reminders")).toMatchObject({ ok: true, label: "Rappels automatiques J-2, J-1 et du jour activés", href: "/admin/settings/notifications", action: "Paramètres des emails" })
   })
 
   it("names the reminders left when the organization switched some off", () => {
@@ -167,12 +167,36 @@ describe("review: reminders item", () => {
       .toMatchObject({ ok: false, warn: true, label: "Aucun rappel automatique : désactivés pour l'organisation", href: "/admin/settings/notifications" })
   })
 
+  it("describes the event's own delays and links to the message page, not the organisation's switches", () => {
+    const custom = [
+      { unit: "days", value: 7, enabled: true },
+      { unit: "hours", value: 2, enabled: false },
+      { unit: "days", value: 2, enabled: true },
+    ] as const
+    expect(check({ reminders: rem({ customRules: custom, organization: { j2: false, j1: false, dd: false } }) }, "reminders")).toMatchObject({
+      ok: true, required: false, label: "Rappels automatiques : 7 jours avant et 2 jours avant",
+      href: "/admin/events/evt-1/message#event-reminder-rules", action: "Modifier",
+    })
+  })
+
+  it("warns when every rule of the event is disabled", () => {
+    const off = check({ reminders: rem({ customRules: [{ unit: "days", value: 1, enabled: false }] }) }, "reminders")!
+    expect(off).toMatchObject({
+      ok: false, required: false, warn: true, label: "Rappels automatiques désactivés pour cet événement",
+      href: "/admin/events/evt-1/message#event-reminder-rules", action: "Modifier",
+    })
+    expect(off.hint).toBe("Aucun email automatique ne partira pour cet événement. Activez au moins un rappel dans l'onglet Messages, section Rappels.")
+  })
+
   it("says when they are off for this event, which wins, with a link to the box in the event form", () => {
     const off = check({ reminders: rem({ eventEnabled: false, organization: { j2: false, j1: true, dd: true } }) }, "reminders")!
     expect(off).toMatchObject({ ok: false, warn: true, label: "Rappels automatiques coupés pour cet événement" })
     expect(off).toMatchObject({ href: "/admin/events/evt-1/edit#event-reminders", action: "Modifier" })
-    expect(off.hint).toBe("Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.")
+    expect(off.hint).toBe("Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les paramètres de l'organisation.")
     expect(off.hint).not.toMatch(/interface/)
+    const customOff = check({ reminders: rem({ eventEnabled: false, customRules: [{ unit: "days", value: 7, enabled: true }] }) }, "reminders")!
+    expect(customOff.hint).toBe("Aucun rappel automatique ne part pour cet événement, quels que soient les paramètres de l'organisation et les délais choisis.")
+    expect(customOff.hint).not.toMatch(/J-2|J-1|Rappel du jour/)
   })
 })
 

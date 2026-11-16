@@ -2,7 +2,7 @@
 
 ## Ambition
 
-Créer une formation vidéo complète, consultable par thème depuis un carrousel, qui illustre **100 % des fonctionnalités destinées aux utilisateurs** et **100 % des sujets des guides publics** : `FEATURES.md`, `GUIDE_ADMIN.md` et `GUIDE_BENEVOLE.md`. `FONCTIONNALITES.md` sert de contrôle complémentaire pour ne laisser aucune fonction livrée hors champ.
+Créer une formation vidéo complète, consultable par thème depuis un carrousel, qui illustre **100 % des fonctionnalités destinées aux utilisateurs** et **100 % des sujets des guides publics** : `content/pages/FEATURES.md`, `content/guide/GUIDE_ADMIN.md` et `content/guide/GUIDE_BENEVOLE.md`. `docs/fonctionnalites.md` sert de contrôle complémentaire pour ne laisser aucune fonction livrée hors champ.
 
 Les documents techniques (`docs/architecture.md`, `docs/api.md`, déploiement, sauvegardes, configuration serveur) ne font pas partie de la formation des associations. Ils pourront alimenter plus tard un cursus séparé « Exploiter sa propre instance ».
 
@@ -1036,7 +1036,7 @@ assemblée, jamais sur la seule base du transcript.
 
 - Ajouter au registre de chaque vidéo : version du produit, date de capture, pages et fonctions couvertes, seed utilisé et hash du transcript.
 - Lorsqu’une fonctionnalité visible change, le même changement doit signaler les vidéos concernées.
-- Une vérification périodique compare les titres des guides, `FEATURES.md` et `FONCTIONNALITES.md` à la matrice de couverture.
+- Une vérification périodique compare les titres des guides, `content/pages/FEATURES.md` et `docs/fonctionnalites.md` à la matrice de couverture.
 - Une vidéo obsolète reste masquée du carrousel jusqu’à sa nouvelle capture ; ne jamais laisser une procédure fausse en ligne.
 - Les scripts, manifestes, sous-titres et seeds sont versionnés. Les MP4 restent des artefacts générés.
 

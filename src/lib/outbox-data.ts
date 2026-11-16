@@ -9,14 +9,18 @@ import { outboxCounts, outboxRowView, type OutboxRowView } from "./outbox-view"
 import type { NotificationPayload } from "./notifications/types"
 import { MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel-reason"
 import { MEMBER_DELETED_CANCEL_REASON } from "./outbox-member-deleted-reason"
+import { sameEmailKeyPrefix } from "./invitation-sending"
 
 /** Rows shown on the delivery page; sent rows only live until the nightly cleanup anyway. */
 export const OUTBOX_PAGE_LIMIT = 200
 
-/** The organization's recent notifications, newest first, with only recipient and kind opened. */
-export async function loadOutbox(organizationId: string, limit: number = OUTBOX_PAGE_LIMIT) {
+/**
+ * The organization's recent notifications, newest first, with only recipient and kind opened;
+ * `sendBatchId`: only the emails of one batch (#1101), still in the outbox.
+ */
+export async function loadOutbox(organizationId: string, limit: number = OUTBOX_PAGE_LIMIT, opts: { sendBatchId?: string } = {}) {
   const rows = await prisma.notificationOutbox.findMany({
-    where: { organizationId },
+    where: { organizationId, ...(opts.sendBatchId ? { sendBatchId: opts.sendBatchId } : {}) },
     orderBy: { createdAt: "desc" },
     take: limit,
     select: { id: true, status: true, attempts: true, nextAttemptAt: true, lastError: true, sentAt: true, createdAt: true, payload: true },
@@ -41,11 +45,42 @@ export async function loadOutbox(organizationId: string, limit: number = OUTBOX_
  * its payload still carries the absorbed record's old address.
  */
 export async function retryOutboxRow(id: string, organizationId: string): Promise<boolean> {
-  const { count } = await prisma.notificationOutbox.updateMany({
-    // « failed » only: a cancelled row (#814, #815) is never put back, whatever the UI shows. The
-    // reason check stays for a row written before the « cancelled » state existed.
-    where: { id, organizationId, status: "failed", NOT: { lastError: { in: [MERGED_MEMBER_CANCEL_REASON, MEMBER_DELETED_CANCEL_REASON] } } },
-    data: { status: "pending", attempts: 0, nextAttemptAt: new Date(), claimedAt: null },
+  return prisma.$transaction(async (tx) => {
+    // A failed invitation or manual reminder (#1105) is not put back when another copy of the same
+    // email is waiting or being sent, or went out after this one was queued: it would reach the
+    // person twice. An older copy sent before this one was queued is a past email, not a twin.
+    // Retries of copies of the same email are serialised by a transaction-scoped advisory lock.
+    const row = await tx.notificationOutbox.findFirst({ where: { id, organizationId, status: "failed" }, select: { dedupeKey: true, createdAt: true } })
+    const prefix = sameEmailKeyPrefix(row?.dedupeKey)
+    if (row && prefix) {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${prefix}))`
+      const twin = await tx.notificationOutbox.count({
+        where: {
+          organizationId, id: { not: id }, dedupeKey: { startsWith: prefix },
+          OR: [
+            { status: { in: ["pending", "sending"] } },
+            { status: "sent", OR: [{ createdAt: { gt: row.createdAt } }, { sentAt: { gt: row.createdAt } }] },
+          ],
+        },
+      })
+      if (twin > 0) return false
+    }
+    const { count } = await tx.notificationOutbox.updateMany({
+      // « failed » only: a cancelled row (#814, #815) is never put back, whatever the UI shows. The
+      // reason check stays for a row written before the « cancelled » state existed.
+      where: { id, organizationId, status: "failed", NOT: { lastError: { in: [MERGED_MEMBER_CANCEL_REASON, MEMBER_DELETED_CANCEL_REASON] } } },
+      data: { status: "pending", attempts: 0, nextAttemptAt: new Date(), claimedAt: null },
+    })
+    if (count !== 1) return false
+    // A custom reminder (#1139) that gave up left its occurrence "failed", and the resolver
+    // cancels a failed occurrence instead of sending it: an administrator's retry would put the
+    // row back and still send nothing. Reopen the occurrence with its row, same transaction and
+    // same outbox id. Nothing to reopen (a merge or an erasure removed it, or its event is gone)
+    // changes nothing here: the retry still answers for the row, like every other kind.
+    await tx.reminderOccurrence.updateMany({
+      where: { outboxId: id, status: "failed", volunteer: { erasedAt: null } },
+      data: { status: "queued", sentAt: null, lastError: null },
+    })
+    return true
   })
-  return count === 1
 }

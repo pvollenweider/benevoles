@@ -1,0 +1,936 @@
+[
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:32.071Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "d3e475a7c890efabb7e90e9e2a29c2a4eb161a0770c6a46280e2b7fc946b919f",
+    "clipSha256": "5986e819814ec2ce484e76fc44843efa306536df34221e0d75b057d1e4cefc81",
+    "scene": "wl-withdraw",
+    "review": {
+      "heardOpening": "Une annulation, elle, n'est jamais refusée",
+      "checkpoints": [
+        {
+          "spokenSeconds": 4.2,
+          "spoken": "Dimanche, Sarah est inscrite à l'accueil de la Scène du Lac le matin, au Chapiteau l'après-midi et au bar le soir.",
+          "visibleSeconds": 9.5,
+          "visible": "Défilement vers la section 'Tous mes créneaux' affichant les trois créneaux du dimanche (Scène du Lac, Chapiteau, Bar Grande Scène).",
+          "sync": "late",
+          "severity": "minor"
+        },
+        {
+          "spokenSeconds": 11.2,
+          "spoken": "elle annule son créneau du Chapiteau",
+          "visibleSeconds": 10.2,
+          "visible": "Clic sur le bouton 'Annuler' en face du créneau Accueil Chapiteau.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 13.4,
+          "spoken": "puis Oui, annuler.",
+          "visibleSeconds": 12.2,
+          "visible": "Clic sur le bouton de confirmation 'Oui, annuler' dans la boîte de dialogue.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 15.6,
+          "spoken": "Entre le matin et le soir, elle attendrait maintenant bien plus longtemps",
+          "visibleSeconds": 13,
+          "visible": "La liste des créneaux restants s'affiche avec le créneau du matin (9h-12h) et celui du soir (18h-21h).",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [
+        "00:04 - 00:09 : L'énumération des trois créneaux d'inscription se fait alors que seule la partie supérieure de la page est visible ; le défilement vers 'Tous mes créneaux' n'intervient qu'à 00:09."
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien articulée, avec musique de fond discrète."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:57.028Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "3018cbbccb0fe7f7d06b66ae0926cef96e922ae377924123f81cfa0bcac23dbf",
+    "clipSha256": "0705b98b92df524057f53d1234ea148af56c9df05ef2b16f0ff3339fb9665be5",
+    "scene": "wl-limits",
+    "review": {
+      "heardOpening": "Viennent ensuite six durées, en heures et en minutes.",
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.5,
+          "spoken": "Reprendre les réglages d'avertissement existants remplit six heures sans vraie pause, une pause de trente minutes et huit heures",
+          "visibleSeconds": 17.5,
+          "visible": "Les champs de durées (6 h, 30 min, 8 h) apparaissent remplis avec un fort décalage",
+          "sync": "late",
+          "severity": "major"
+        },
+        {
+          "spokenSeconds": 18,
+          "spoken": "Complétons vingt heures sur tout l'événement",
+          "visibleSeconds": 23,
+          "visible": "Le champ « Durée maximale de missions sur tout l'événement » reste vide",
+          "sync": "missing",
+          "severity": "major"
+        },
+        {
+          "spokenSeconds": 20.5,
+          "spoken": "et trois heures d'attente au plus entre deux missions d'une même journée",
+          "visibleSeconds": 23,
+          "visible": "Le champ « Attente maximale entre deux missions d'une même journée » reçoit le focus mais reste vide",
+          "sync": "missing",
+          "severity": "major"
+        }
+      ],
+      "issues": [
+        "À 00:04, la voix annonce le remplissage automatique via les réglages d'avertissement, mais les valeurs n'apparaissent qu'à 00:17 (retard de plus de 13 secondes).",
+        "À partir de 00:18, la saisie de '20 heures' et '3 heures' promise par la voix n'est pas réalisée à l'écran avant la fin de l'extrait."
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien articulée, avec un fond musical léger."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:41.394Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "cfc8ed77869ab02f5798071a06f773f6fcaf274b91ee1d7b73f21a5b722d0a2f",
+    "clipSha256": "ca11a457cb95ca2e752c1778b4a6a6eda89560a43b936ec19169caa86baf2221",
+    "scene": "wl-places",
+    "review": {
+      "heardOpening": "Commençons par Créneaux.",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "Commençons par Créneaux.",
+          "visibleSeconds": 0.8,
+          "visible": "Page ouverte sur l'onglet Créneaux de l'événement Festival du Lac de Montvert.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.2,
+          "spoken": "La section Lieux des missions liste les endroits où se passent les missions : la Grande Scène, la Scène du Lac et le Chapiteau.",
+          "visibleSeconds": 3.2,
+          "visible": "Section Lieux des missions affichant la liste avec Grande Scène, Scène du Lac et Chapiteau.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.8,
+          "spoken": "Ajoutons Le Dôme, puis Ajouter le lieu.",
+          "visibleSeconds": 11.2,
+          "visible": "Saisie de 'Le Dôme' dans le champ Nouveau lieu puis clic sur le bouton Ajouter le lieu, faisant apparaître Le Dôme dans la liste.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:42.071Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "090fcd64c0ff3f94234e788a365e0a305e8138599285972092d2a1a291df579c",
+    "clipSha256": "5ba3e4a0605cd9f88e258c0d9f1f7ed51bb6a8d7029dd374b2e0e41f27de1b89",
+    "scene": "wl-welcome",
+    "review": {
+      "heardOpening": "Pendant un festival, des bénévoles",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "Pendant un festival, des bénévoles enchaînent parfois les missions sans vraie pause.",
+          "visibleSeconds": 0,
+          "visible": "Bandeau d'introduction « Protéger les pauses et la charge des bénévoles » affiché en surimpression sur l'onglet Créneaux.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 11.2,
+          "spoken": "C'est une fonction en bêta, proposée aux organisations qui y participent.",
+          "visibleSeconds": 11.2,
+          "visible": "L'écran des créneaux reste affiché avec l'étiquette « bêta » visible à côté de « Lieux des missions ».",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 15.6,
+          "spoken": "Chaque événement l'active lui-même, et vous choisissez chaque valeur.",
+          "visibleSeconds": 15.6,
+          "visible": "Écran stable de l'événement « Festival du Lac de Montvert » accompagnant la présentation conceptuelle de l'option.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix naturelle, posée et parfaitement audible, sans bruits parasites."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:58.672Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "0c4b7017089ef1710ccff933e35a94badc587e9aa21e2963f00255780d6fc352",
+    "clipSha256": "9d16b5ddd82c08200479e66acc778a331b1e338a252ea6bc9a987af5c52f5df6",
+    "scene": "wl-meal-travel",
+    "review": {
+      "heardOpening": "La pause repas est déjà remplie",
+      "checkpoints": [
+        {
+          "spokenSeconds": 1,
+          "spoken": "La pause repas est déjà remplie : trente minutes de repas dans chaque plage",
+          "visibleSeconds": 1,
+          "visible": "Section de configuration du repas avec durée fixée à 30 minutes et plages horaires définies",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 12.8,
+          "spoken": "Le trajet entre deux lieux demande quinze minutes de marge.",
+          "visibleSeconds": 13,
+          "visible": "Défilement vers la règle 'Trajet entre deux lieux' affichant une marge de 15 minutes",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 16,
+          "spoken": "La carte signale qu'un créneau n'a pas de lieu, et que son trajet n'est pas vérifié.",
+          "visibleSeconds": 16,
+          "visible": "Message d'avertissement affiché : '1 créneau n'a pas de lieu : son trajet n'est pas vérifié. Choisir les lieux dans Créneaux'",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off posée et claire, accompagnée d'une musique de fond discrète."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:42.351Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "3c4547c9258f002c67eaf0eb805aef92efce727d2bd6e4b496e91656145a2766",
+    "clipSha256": "0c68028e4368099ceec6df964d3c83c318b9d23d4ad0cee53a04e3a6e694be44",
+    "scene": "wl-service-day",
+    "review": {
+      "heardOpening": "D'abord, le début de la journée de service",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "D'abord, le début de la journée de service",
+          "visibleSeconds": 0.5,
+          "visible": "Affichage de la section 'Début de la journée de service' avec le champ initialement à 00:00",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 2.8,
+          "spoken": "Tapons six heures",
+          "visibleSeconds": 3.6,
+          "visible": "Saisie de la valeur '06' dans le champ d'heures",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8.8,
+          "spoken": "Des exemples apparaissent aussitôt sous le champ",
+          "visibleSeconds": 4.2,
+          "visible": "Le texte d'exemple explicatif s'affiche sous le champ dès la saisie de 06:00",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off posée, claire et parfaitement audible."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:44:50.276Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "35e565e319f128a18a2654963d3477dfbfda968d956e442550d38b2817a1c312",
+    "clipSha256": "c3f77278995b8f57c585ecc4126df7e51d3b5941271553779cfdc0a46b9e1b54",
+    "scene": "wl-meal-on-the-go",
+    "review": {
+      "heardOpening": "Au bar de la Grande Scène",
+      "checkpoints": [
+        {
+          "spokenSeconds": 4.5,
+          "spoken": "Ouvrons Gérer les postes",
+          "visibleSeconds": 5.5,
+          "visible": "Ouverture de la fenêtre modale Gérer les postes",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.5,
+          "spoken": "puis le bouton Repas, non, du bar",
+          "visibleSeconds": 6.2,
+          "visible": "Déploiement des options de repas sous la ligne Bar Grande Scène",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10,
+          "spoken": "Cochons repas sur le pouce possible, et enregistrons",
+          "visibleSeconds": 9.5,
+          "visible": "Case cochée puis clic sur le lien Enregistrer",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14,
+          "spoken": "Le bouton indique maintenant Repas, sur le pouce",
+          "visibleSeconds": 10.8,
+          "visible": "Le libellé de la colonne affiche désormais Repas : sur le pouce",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et chaleureuse, accompagnée d'une musique de fond discrète."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:34.909Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "5c77039158c6a45569e39a835c9fcf3614b948953844dfbf1be05534816f7083",
+    "clipSha256": "635cfd49dcca726749a88d3ab5e8c58f71c19f7c6ef09dc6a9078996a2ef5c19",
+    "scene": "wl-my-card",
+    "review": {
+      "heardOpening": "Sur la page Mes inscriptions de Sarah",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Sur la page Mes inscriptions de Sarah",
+          "visibleSeconds": 0,
+          "visible": "Page affichant l'en-tête « Mes inscriptions » et le profil de Sarah Smith",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.4,
+          "spoken": "la carte Pauses et charge explique ce qui ne va plus",
+          "visibleSeconds": 3,
+          "visible": "Encadré jaune d'alerte intitulé « Pauses et charge » avec le détail du dépassement",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 13.5,
+          "spoken": "Juste en dessous, Mes limites lui permet de demander moins que l'événement",
+          "visibleSeconds": 14,
+          "visible": "Défilement vers le bas révélant la section « Mes limites » avec les champs configurables",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la navigation à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:23.129Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "1e42a2290877874d55661d72aea669b841678713460aea5e8fa9b29bc9371548",
+    "clipSha256": "bed6e1d1ab88422e6579257670aed6e2dee368e20481a565f1d13a54dac45274",
+    "scene": "wl-personal",
+    "review": {
+      "heardOpening": "Une fois la protection active",
+      "checkpoints": [
+        {
+          "spokenSeconds": 6.5,
+          "spoken": "Choisissons Camille",
+          "visibleSeconds": 7,
+          "visible": "Ouverture du formulaire et sélection de Camille Rossi dans le menu déroulant",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8,
+          "spoken": "avec six heures au plus par journée de service",
+          "visibleSeconds": 8.5,
+          "visible": "Saisie de la valeur 6 dans le champ des heures pour la durée maximale par journée de service",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10,
+          "spoken": "et enregistrons",
+          "visibleSeconds": 9.8,
+          "visible": "Clic sur « Enregistrer les limites de la personne » et apparition du récapitulatif enregistré",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off posée, claire et parfaitement synchronisée avec les manipulations à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:32.202Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "c3e7209c9c11537b57e758c203b48b754b2e492ecc5e5e75c4a52a6d5e2b0c82",
+    "clipSha256": "1af3eb28eece67110a0db769a844934ded77bddc33a5458fdcce018898a49485",
+    "scene": "wl-registrations",
+    "review": {
+      "heardOpening": "Dans Inscriptions, ses deux créneaux restants",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "Dans Inscriptions",
+          "visibleSeconds": 1,
+          "visible": "Affichage de l'onglet Inscriptions dans la gestion de l'événement Festival du Lac de Montvert",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 2.5,
+          "spoken": "ses deux créneaux restants portent maintenant la mention Limite dépassée",
+          "visibleSeconds": 2,
+          "visible": "La mention 'Limite dépassée' apparaît sous le nom de la bénévole Sarah Smith pour ses deux créneaux de Bar Grande Scène",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5.6,
+          "spoken": "avec la règle, les heures et l'écart",
+          "visibleSeconds": 5.6,
+          "visible": "Détail de la règle affiché sous l'alerte : 'Journée de service du dimanche 15 novembre : ces deux missions laissent 6 heure...'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8,
+          "spoken": "L'organisation voit tout de suite quel programme revoir",
+          "visibleSeconds": 8,
+          "visible": "Vue d'ensemble de la liste des inscriptions avec l'alerte bien visible pour guider les ajustements",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off féminine claire, chaleureuse, posée et parfaitement synchronisée avec l'interface."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:54.710Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "f5f2aa5ba1c74d68ea4ae3f4d6dbda544eaf62a4daf0814b99ddd5e64a3bf77e",
+    "clipSha256": "354e0eb99ba9e2f7ce9f2195e68860c432baaf62d4dbe3a79c4039aac4421cb8",
+    "scene": "wl-offday",
+    "review": {
+      "heardOpening": "Plus bas, Jours sans mission demande une réponse explicite.",
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.6,
+          "spoken": "Appliquons la règle",
+          "visibleSeconds": 4,
+          "visible": "Sélection du bouton radio « Appliquer cette règle » dans la section Jours sans mission",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5.2,
+          "spoken": "au moins un jour sans mission",
+          "visibleSeconds": 5.6,
+          "visible": "Saisie de la valeur 1 dans le champ « Jours sans mission minimum »",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7,
+          "spoken": "sur une période de trois journées de service d'affilée",
+          "visibleSeconds": 7.2,
+          "visible": "Saisie de la valeur 3 dans le champ « Période, en journées de service d'affilée »",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et parfaitement synchronisée avec la saisie à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:25.191Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "1e911603ba0e9ad00f71a3078a6c6db478b0509f2e9d2fbd30962a4434bed92a",
+    "clipSha256": "fdcba1f94ed13e6c16faca4de4137890dd75345c15c01242439d1b5f91cf39ff",
+    "scene": "wl-signup",
+    "review": {
+      "heardOpening": "Côté bénévole, Emma s'inscrit",
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.7,
+          "spoken": "Elle choisit l'accueil du Chapiteau samedi après-midi",
+          "visibleSeconds": 4.1,
+          "visible": "Sélection du créneau Accueil Chapiteau 14h30-17h30 le samedi",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7,
+          "spoken": "puis le bar de la Grande Scène le soir.",
+          "visibleSeconds": 5.5,
+          "visible": "Sélection du créneau Bar Grande Scène 18h-22h puis transition vers le formulaire",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10.8,
+          "spoken": "le récapitulatif affiche Ces créneaux dépassent les limites de l'événement.",
+          "visibleSeconds": 11,
+          "visible": "Encadré d'alerte rouge affichant 'Ces créneaux dépassent les limites de l'événement'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 20.2,
+          "spoken": "Emma remplit tout de même ses informations, avec sa date de naissance, et confirme.",
+          "visibleSeconds": 21,
+          "visible": "Saisie des coordonnées, case cochée et clic sur le bouton Confirmer mon inscription",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 24.8,
+          "spoken": "L'inscription est refusée, avec la même explication précise.",
+          "visibleSeconds": 27.8,
+          "visible": "Message d'erreur bloquant sous les cases à cocher avec le détail du refus",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:11.391Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "feda703858eb60e94ffe08a6311281d8c19a9ad836a7e1a1cbb71822890968cf",
+    "clipSha256": "17d887686c65ac39caaeb6f7b28079786e6bcb7bacbe98982d8295f7a032e758",
+    "scene": "wl-minors",
+    "review": {
+      "heardOpening": "Pour les moins de 18 ans",
+      "checkpoints": [
+        {
+          "spokenSeconds": 2.1,
+          "spoken": "les repères ont rempli quatre limites plus strictes",
+          "visibleSeconds": 1,
+          "visible": "Section 'Moins de 18 ans' affichant quatre limites préremplies",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5,
+          "spoken": "Sous chacune, la limite de l'événement est rappelée",
+          "visibleSeconds": 5,
+          "visible": "Mentions 'Événement :' affichées sous chaque paramètre de durée ou repos",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 16.5,
+          "spoken": "Une personne déjà inscrite sans date de naissance est vérifiée comme majeure",
+          "visibleSeconds": 16.5,
+          "visible": "Note informative en bas de bloc indiquant que les inscrits sans date de naissance sont vérifiés comme majeurs",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:43.351Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "fe932b13680374a15205a6819574911a7af3236c68b042e11b6811353ec25171",
+    "clipSha256": "6a5439d5f44c5b2f84adc7c63e808a2a078ab3d8718048e34a0e6326e5cb92dd",
+    "scene": "wl-result",
+    "review": {
+      "heardOpening": "De retour dans les informations de l'événement",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "De retour dans les informations de l'événement",
+          "visibleSeconds": 0,
+          "visible": "L'écran Informations de l'événement est visible brièvement",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 2.4,
+          "spoken": "la carte est activée et signale un programme à revoir",
+          "visibleSeconds": 2,
+          "visible": "Coupure vers un écran de réglages (plages horaires, trajet entre deux lieux) ; aucune carte n'est affichée",
+          "sync": "missing",
+          "severity": "major"
+        },
+        {
+          "spokenSeconds": 7.3,
+          "spoken": "dans Créneaux, choisissez chaque limite",
+          "visibleSeconds": 7.3,
+          "visible": "L'onglet Créneaux n'est pas ouvert et aucune limite n'est manipulée ; l'écran reste figé",
+          "sync": "missing",
+          "severity": "major"
+        },
+        {
+          "spokenSeconds": 10.5,
+          "spoken": "vérifiez avec Aperçu, puis activez",
+          "visibleSeconds": 10.5,
+          "visible": "L'onglet Aperçu n'est pas sélectionné et aucune activation n'est effectuée",
+          "sync": "missing",
+          "severity": "major"
+        }
+      ],
+      "issues": [
+        "À partir de 00:02, basculement inattendu vers un formulaire de paramétrage fixe sans afficher la carte mentionnée",
+        "Les étapes concrètes annoncées (Créneaux, choix des limites, Aperçu, activation) ne sont pas montrées à l'écran, qui reste totalement statique de 00:02 à 00:16"
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien articulée, sans parasite sonore."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:19.492Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "37342728ae5328a6dc97d387fd970792688d6cb0e558dc4c551943c9288f5dbd",
+    "clipSha256": "1225db07d5363c4855a29fec5d64b58c9abaa97ea1d5538bb01d6715d47ec47a",
+    "scene": "wl-activate",
+    "review": {
+      "heardOpening": "Pour un festival de trois jours",
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.4,
+          "spoken": "Choisissons Ne pas appliquer cette règle",
+          "visibleSeconds": 4.1,
+          "visible": "L'option 'Ne pas appliquer cette règle' n'est ni affichée ni sélectionnée ; le curseur clique directement sur le bouton Aperçu",
+          "sync": "missing",
+          "severity": "major"
+        },
+        {
+          "spokenSeconds": 5.4,
+          "spoken": "puis Aperçu",
+          "visibleSeconds": 4.2,
+          "visible": "Clic sur le bouton Aperçu",
+          "sync": "early",
+          "severity": "minor"
+        },
+        {
+          "spokenSeconds": 7.1,
+          "spoken": "Aucun programme actuel ne dépasse plus les limites",
+          "visibleSeconds": 5.2,
+          "visible": "Affichage de la mention 'Aperçu : aucun programme actuel ne dépasse ces limites. Rien n'est encore activé.'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10,
+          "spoken": "Activons la protection",
+          "visibleSeconds": 10.3,
+          "visible": "Clic sur le bouton Activer la protection",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 12.5,
+          "spoken": "Désormais, toute affectation qui dépasse ces limites est refusée",
+          "visibleSeconds": 11.4,
+          "visible": "Nouvel écran affichant 'Désactiver la protection' et la section 'Protection des pauses et de la charge'",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [
+        "00:03 - L'action 'Choisissons Ne pas appliquer cette règle' n'est pas réalisée à l'écran : le curseur clique directement sur le bouton 'Aperçu' à 00:04 sans modifier de règle."
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine naturelle, claire et posée."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:10.322Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "7d9453b2f6f28e536e3a8c2e0b7b895295f6c295d39ea1635083ed4b449b7cc6",
+    "clipSha256": "17437306f2fa92c0cc2ea03fcf464508029953d41b70e58269a1f0a99ad3483c",
+    "scene": "wl-preview",
+    "review": {
+      "heardOpening": "L'encadré En résumé reprend ensuite",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "L'encadré En résumé reprend ensuite chaque règle en clair.",
+          "visibleSeconds": 0.8,
+          "visible": "L'encadré intitulé « En résumé » apparaît à l'écran avec la liste à puces des règles détaillées.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.2,
+          "spoken": "Avant d'activer, Aperçu juge les programmes actuels, sans rien enregistrer.",
+          "visibleSeconds": 3.6,
+          "visible": "Clic sur le bouton « Aperçu », ce qui affiche la section d'analyse en dessous sans validation définitive.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.4,
+          "spoken": "Une personne dépasserait ces limites.",
+          "visibleSeconds": 4.2,
+          "visible": "Le message d'alerte « Aperçu : 1 personne dépasserait ces limites. Rien n'est encore activé. » est affiché.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.6,
+          "spoken": "Noah est inscrit à l'accueil les trois jours, sans aucun jour sans mission.",
+          "visibleSeconds": 5,
+          "visible": "Le détail sous le nom Noah De Jong indique 3 journées de service d'affilée toutes avec une mission.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine posée, claire et bien articulée, synchronisée avec les actions affichées."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:57.101Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "1fccfca210247bd4dbd3df9712cdb0c78a48377a3d38f3db015ebdcd658df67e",
+    "clipSha256": "3a9715ac954ba51f9a8374c0bc14f7b638eea0b73dcbe5b1330daf397ed23cb3",
+    "scene": "wl-benchmarks",
+    "review": {
+      "heardOpening": "Ouvrons repères et suggestions",
+      "checkpoints": [
+        {
+          "spokenSeconds": 1,
+          "spoken": "Ouvrons Repères et suggestions",
+          "visibleSeconds": 0.8,
+          "visible": "Clic sur le bouton déroulant « Repères et suggestions » qui déploie la section",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 15,
+          "spoken": "Utilisons 11 heures de repos entre deux journées",
+          "visibleSeconds": 16.5,
+          "visible": "Clic sur le bouton « Utiliser 11 h de repos entre deux journées »",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 17.8,
+          "spoken": "Puis 30 minutes de repas entre 11 heures 30 et 14 heures, et entre 18 et 21 heures",
+          "visibleSeconds": 19.8,
+          "visible": "Clic sur le bouton « Utiliser 30 min repas entre 11 h 30 et 14 h et entre 18 h et 21 h »",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 23.8,
+          "spoken": "15 minutes entre deux lieux",
+          "visibleSeconds": 24.6,
+          "visible": "Clic sur le bouton « Utiliser 15 min entre deux lieux »",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 26,
+          "spoken": "Et les repères pour les moins de 18 ans",
+          "visibleSeconds": 27.2,
+          "visible": "Clic sur le bouton « Utiliser les repères pour les moins de 18 ans »",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off féminine naturelle, claire et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:41:39.179Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "0be22c3e39c5d40ec67619755c5a132a2f6adbb499ae06147d528cc1a028f9a2",
+    "clipSha256": "c5ea64320b234133db9ba0125cbdaf43c9826fcc2cf3a048ef6ec95db70b4309",
+    "scene": "wl-card",
+    "review": {
+      "heardOpening": "Ouvrons maintenant les informations de l'événement",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "Ouvrons maintenant les informations de l'événement",
+          "visibleSeconds": 0,
+          "visible": "Section Informations de l'événement affichée sous l'onglet Paramètres",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.5,
+          "spoken": "La carte Protection des pauses et de la charge est encore désactivée",
+          "visibleSeconds": 3,
+          "visible": "Défilement vers le bas révélant la carte 'Protection des pauses et de la charge' avec le statut 'Désactivée'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14.2,
+          "spoken": "Les heures sont lues dans le fuseau de l'organisation",
+          "visibleSeconds": 3.5,
+          "visible": "Texte explicatif visible sous le statut : 'Toutes nos heures sont lues dans le fuseau Europe/Zurich.'",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec le défilement de l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:42:14.427Z",
+    "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+    "promptSha256": "ae564ad269dec8ce1b660878c47026e2744cd4337be8f50bff0c98686ad20d5d",
+    "clipSha256": "6c97bd8ea5929d2fdca150b2dde5bbdab07c7151ea65bf6d576d45e2c6d55845",
+    "scene": "wl-refused",
+    "review": {
+      "heardOpening": "Essayons tout de même Activer la protection",
+      "checkpoints": [
+        {
+          "spokenSeconds": 1.8,
+          "spoken": "Activer la protection.",
+          "visibleSeconds": 1,
+          "visible": "Clic sur le bouton bleu « Activer la protection ».",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.6,
+          "spoken": "Elle est refusée, et rien n'a été activé ni modifié.",
+          "visibleSeconds": 1.2,
+          "visible": "Affichage de l'alerte indiquant le refus et la mention « rien n'a été activé ni modifié ».",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.8,
+          "spoken": "La carte liste les programmes à modifier d'abord, avec la règle en cause et les dates.",
+          "visibleSeconds": 6.8,
+          "visible": "Section « Programmes à modifier d'abord » affichant Noah De Jong, les dates du 13 au 15 novembre et la règle non respectée.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les éléments à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  }
+]

@@ -21,7 +21,7 @@ Chaleureux, souriant et concret. La personne qui raconte connaît la réalité d
 7. **Relance ciblée** — écrire uniquement aux invités qui n’ont pas encore choisi de créneau, aux personnes en liste d’attente, à un poste ou à un créneau précis.
 8. **Message et aperçu** — partir d’un modèle, adapter le texte, utiliser les variables, vérifier le nombre de destinataires et prévisualiser l’email avant tout envoi.
 9. **Email et notification** — rappeler que l’email reste le canal principal et que la notification peut être ajoutée pour une information urgente lorsque les bénévoles l’ont activée.
-10. **Rappels automatiques** — montrer les rappels programmés avant les créneaux et leurs réglages.
+10. **Rappels automatiques** — montrer les rappels programmés avant les créneaux et leurs paramètres.
 11. **Jour J** — générer les listes par poste, les réponses utiles, les plannings individuels et les badges.
 12. **Historique** — lire le journal d’activité pour savoir qui s’est inscrit, désinscrit ou a modifié le planning, et quand.
 
@@ -61,7 +61,7 @@ Contrôle des WAV restaurés le 2026-10-16 : la reconnaissance indépendante ret
 
 ## Révision du 2026-10-16 — lot 23-1
 
-Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des paramètres hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
 
 Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
 

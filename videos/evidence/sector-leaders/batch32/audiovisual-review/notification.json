@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:54:23.385Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "promptSha256": "a497ecd2e99bd10a8548bbb27a21fef5c42d8d1bcd97226d74718508c37a85ea",
+  "clipSha256": "836aa8e4c6af1f88381052590fa941f288c10046d3a8546e50e49d5c58bcac4f",
+  "scene": "notification",
+  "review": {
+    "heardOpening": "Côté responsable, voici l'email réellement reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "voici l'email réellement reçu à la suite de cette inscription",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la notification email indiquant l'inscription de Nora Perrin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Il indique le nom de Nora et le créneau de la Buvette du dimanche",
+        "visibleSeconds": 4.5,
+        "visible": "Le texte mentionne 'Nora Perrin', 'Buvette' et la date/horaire du '08/11/2026 : 10:00–14:00'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Le lien permet de retrouver l'équipe complète",
+        "visibleSeconds": 8.5,
+        "visible": "Présence du bouton 'Voir la liste complète' dans le message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées",
+        "visibleSeconds": 11.2,
+        "visible": "Transition vers la liste des bénévoles où Nora Perrin figure sous le créneau buvette du dimanche avec son email et numéro",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée, bien synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

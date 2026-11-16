@@ -100,6 +100,7 @@ describe("Markdown images drawn by the caller (renderEventPageMarkdown `image`)"
     const seen: number[] = []
     const html = renderEventPageMarkdown("![Un](/doc-img/a.png)\n\n![Deux](/doc-img/b.png \"Titre\")", {
       shiftHeadings: false,
+      allowImages: true,
       image: (img, index) => {
         seen.push(index)
         return docImageTag(img, { src: `${img.src}?v=1`, width: 10, height: 20 }, index)
@@ -115,6 +116,7 @@ describe("Markdown images drawn by the caller (renderEventPageMarkdown `image`)"
   it("keeps special characters of the alt text escaped exactly once", () => {
     const html = renderEventPageMarkdown("![A & B \\*x\\* &amp; « C »](/doc-img/a.png)", {
       shiftHeadings: false,
+      allowImages: true,
       image: (img, index) => docImageTag(img, null, index),
     })
     const alt = /alt="([^"]*)"/.exec(html)?.[1]
@@ -122,8 +124,15 @@ describe("Markdown images drawn by the caller (renderEventPageMarkdown `image`)"
     expect(html).not.toContain("&amp;amp;")
   })
 
-  it("leaves admin-authored event pages with marked's own image and no loading attribute", () => {
+  it("leaves admin-authored event pages without any image or loading attribute", () => {
     const html = renderEventPageMarkdown('![x](/a.png)<img src="/b.png" loading="lazy">')
+    expect(html).not.toContain("<img")
+    expect(html).not.toContain("loading=")
+  })
+
+  it("keeps marked's own image, without loading attributes, when images are allowed but not drawn by the caller", () => {
+    const html = renderEventPageMarkdown('![x](/a.png)<img src="/b.png" loading="lazy">', { allowImages: true })
+    expect(html).toContain('<img src="/a.png" alt="x">')
     expect(html).not.toContain("loading=")
   })
 })

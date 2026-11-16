@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { passwordSchema } from "@/lib/password"
+import { RESET_LINK_REVOKED } from "@/lib/password-reset-revocation"
 import { PASSWORD_CHECK_BLOCKED, passwordCheckAllowed, recordPasswordCheckFailure } from "@/lib/admin-session"
 import { getClientIp } from "@/lib/rate-limit"
 import { validationError } from "@/lib/api-error"
@@ -50,12 +51,17 @@ export async function PATCH(req: Request) {
     if (conflict) return NextResponse.json({ error: "Cet email est déjà utilisé." }, { status: 409 })
   }
 
+  const emailChanged = !!email && email !== user.email
   await prisma.adminUser.update({
     where: { id: user.id },
     data: {
       ...(email ? { email } : {}),
       // A new password ends every session opened before (#360); the form signs in again.
       ...(newPassword ? { passwordHash: await bcrypt.hash(newPassword, 12), sessionVersion: { increment: 1 } } : {}),
+      // A new password or a new address revokes a reset link still pending
+      // (src/lib/password-recovery.ts): a link sent before, possibly to the old inbox, keeps no
+      // authority over the account. An email still queued with it is cancelled at delivery.
+      ...(newPassword || emailChanged ? RESET_LINK_REVOKED : {}),
     },
   })
 

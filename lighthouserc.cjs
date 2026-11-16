@@ -8,6 +8,9 @@
 // - SEO of /videos pages: without VIDEO_MEDIA_BASE_URL (CI) no video can be played, so the library
 //   is noindex on purpose (src/lib/video-seo.ts) and Lighthouse's « is-crawlable » fails. In
 //   production, with the media host, they score 100.
+// - SEO of the seeded organisation's public page (/?org=default): the seed's only event is over, so
+//   the page shows no event and is noindex on purpose (orgHomeRobots, src/lib/event-visibility.ts);
+//   « is-crawlable » fails there too. A page with an upcoming event is indexable.
 // - mobile performance: the shared CI runner and `next start` without the edge compression give
 //   scores 20 points under production for the heaviest pages (home, event page: 76 and 73 here,
 //   95 and 96 in production). It stays a report until a stable measure exists.
@@ -36,6 +39,7 @@ const paths = [
 ]
 
 const VIDEO_PAGES = "/videos"
+const EMPTY_ORG_HOME = "/\\?org=default$"
 // Performance: 0.95, not 1: a one-point dip on the shared runner must not fail a build.
 const minScore = (name) => (name === "performance" ? 0.95 : 1)
 const assertions = (levels) =>
@@ -57,13 +61,15 @@ module.exports = {
     assert: {
       assertMatrix: [
         {
-          // Every page but the video library: the four categories (performance on desktop only).
-          matchingUrlPattern: `^${base}(?!${VIDEO_PAGES}).*$`,
+          // Every page but the video library and the seeded organisation's page: the four
+          // categories (performance on desktop only).
+          matchingUrlPattern: `^${base}(?!${VIDEO_PAGES}|${EMPTY_ORG_HOME}).*$`,
           assertions: assertions({ performance: desktop ? "error" : "warn", accessibility: "error", "best-practices": "error", seo: "error" }),
         },
         {
-          // The video library: SEO only warns (noindex without the media host, see above).
-          matchingUrlPattern: `^${base}${VIDEO_PAGES}.*$`,
+          // The video library and the seeded organisation's page: SEO only warns (noindex on
+          // purpose, see above).
+          matchingUrlPattern: `^${base}(${VIDEO_PAGES}.*|${EMPTY_ORG_HOME})$`,
           assertions: assertions({ performance: desktop ? "error" : "warn", accessibility: "error", "best-practices": "error", seo: "warn" }),
         },
       ],

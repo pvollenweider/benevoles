@@ -16,7 +16,7 @@ test("every admin destination and the user menu are reachable on a small screen"
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const nav = page.getByRole("navigation", { name: "Navigation de l'administration" })
   // No horizontal overflow of the bar.

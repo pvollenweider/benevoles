@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T19:51:54.661Z",
+  "videoSha256": "6a81b1d9046cb9cf8b43b23c2d9302c565fc8fd8f7206da7134cecaa4eab158f",
+  "promptSha256": "db4e46596f754ba1f4e14e6e2e07fe228410c8da3b3020ef87aa0c529c1e7e52",
+  "clipSha256": "6a74580667567f22801190bfa231c534aa08e24102201628778675c3ab80bb35",
+  "scene": "beta-welcome",
+  "review": {
+    "heardOpening": "Certaines fonctions avancées",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Certaines fonctions avancées s'essaient d'abord en bêta",
+        "visibleSeconds": 0.5,
+        "visible": "Cartouche titre affiché : « Fonctions bêta : ouvrir et essayer une fonction avancée »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "L'opérateur de la plateforme ouvre une fonction à l'essai",
+        "visibleSeconds": 6.8,
+        "visible": "Écran d'administration de la plateforme avec la liste des organisations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.7,
+        "spoken": "Voyons les deux premières étapes",
+        "visibleSeconds": 18.7,
+        "visible": "Écran stable sur l'interface d'administration en transition vers les étapes pratiques",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la présentation introductive."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -110,4 +110,18 @@ describe("member import API", () => {
     expect((await preview()).status).toBe(429)
     expect(findMany).not.toHaveBeenCalled()
   })
+
+  it.each(["preview", "import"])("answers 415, not a server error, when the %s gets a JSON body", async (which) => {
+    const mod = which === "preview" ? await import("@/app/api/admin/members/import/preview/route") : await import("@/app/api/admin/members/import/route")
+    const res = await mod.POST(new Request("http://localhost/api/admin/members/import", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ file: "x" }) }))
+    expect(res.status).toBe(415)
+    expect(findMany).not.toHaveBeenCalled()
+  })
+
+  it("answers 400 for a multipart body that does not parse", async () => {
+    const { POST } = await import("@/app/api/admin/members/import/preview/route")
+    const res = await POST(new Request("http://localhost/api/admin/members/import/preview", { method: "POST", headers: { "Content-Type": "multipart/form-data; boundary=zzz" }, body: "not a multipart body" }))
+    expect(res.status).toBe(400)
+  })
 })
+

@@ -3,7 +3,7 @@
 
 import { prisma } from "./prisma"
 import { getOrgClient } from "./prisma-org"
-import { enqueueNotifications } from "./notifications/outbox"
+import { enqueueBatch } from "./notifications/outbox"
 import { buildTargetedMessage } from "./targeted-message-build"
 import { audienceSchema, messagePushPayload } from "./targeted-message"
 import { renderVariables, templateProblems } from "./message-template"
@@ -106,7 +106,7 @@ async function dispatchOne(id: string, now: Date, deferPush?: DispatchOptions["d
   if (problems.length > 0) return skip(`variables du texte refusées (${problems.join(" ")})`)
 
   const build = await buildTargetedMessage(db, event, audience, sm.subject, sm.message)
-  const reason = skipReason({ eventStatus: event.publicStatus, audience, shiftAvailable, recipients: build.recipients.length })
+  const reason = skipReason({ eventStatus: event.publicStatus, audience, shiftAvailable, recipients: build.recipients.length, sectorGone: build.sectorGone })
   if (reason) return skip(reason)
 
   const pushDevices = sm.push ? await pushDeviceCount(build.recipients.map((r) => r.volunteerId)) : 0
@@ -130,10 +130,11 @@ async function dispatchOne(id: string, now: Date, deferPush?: DispatchOptions["d
       },
       select: { id: true },
     })
-    await enqueueNotifications(
+    // Its « envoi groupé » (#1101), credited to whoever scheduled it.
+    await enqueueBatch(
       build.recipients.map((r) => build.payloadFor(r, `message:scheduled:${sm.id}:${r.volunteerId}`)),
       tx,
-      { organizationId: sm.organizationId, targetedMessageId: history.id },
+      { organizationId: sm.organizationId, targetedMessageId: history.id, batch: { kind: "scheduled_message", eventId: event.id, actorId: sm.authorId } },
     )
     await tx.scheduledMessage.update({ where: { id }, data: { targetedMessageId: history.id } })
     return history.id

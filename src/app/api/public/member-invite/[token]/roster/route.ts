@@ -4,6 +4,8 @@
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { getClientIp, isRateLimited, rateLimit } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { resolveOrgSlug } from "@/lib/resolve-org"
@@ -53,12 +55,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     select: {
       volunteerId: true, usedAt: true, declinedAt: true,
       volunteer: { select: { active: true, erasedAt: true, mergedIntoId: true } },
-      event: { select: { id: true, slug: true, organizationId: true, publicStatus: true, shiftRosterEnabled: true, personalDataAnonymizedAt: true, startDate: true, endDate: true, organization: { select: { timeZone: true } } } },
+      event: { select: { id: true, slug: true, organizationId: true, organization: { select: { timeZone: true, ...ORG_LIFECYCLE_SELECT } }, publicStatus: true, shiftRosterEnabled: true, personalDataAnonymizedAt: true, startDate: true, endDate: true } },
     },
   })
   if (!invite || invite.event.slug !== slug) return miss()
   const resolved = await resolveOrgSlug(orgSlug)
   if (!resolved || resolved.org.id !== invite.event.organizationId) return miss()
+  if (!orgLinksOpen(invite.event.organization)) return orgUnavailableResponse()
 
   if (!(await rateLimit(hashToken(token), "member-invite-roster-link", INVITE_ROSTER_READS, HOUR)).ok) return json({ error: "Trop de tentatives." }, 429)
 

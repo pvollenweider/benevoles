@@ -10,6 +10,9 @@ export default defineConfig({
     fileParallelism: false,
     testTimeout: 30_000,
     hookTimeout: 60_000,
+    // next-auth imports `next/server` without an extension, which Node's ESM resolver refuses;
+    // inlined, Vite resolves it (src/__integration__/session-revocation.int.test.ts).
+    server: { deps: { inline: ["next-auth"] } },
   },
   resolve: {
     alias: {

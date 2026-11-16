@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:55:10.941Z",
+  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "promptSha256": "9e67d4e43b4d465597b98ef68d13ad9ba25e08c3ee6d1bad9dc345720ea42018",
+  "clipSha256": "ed0434c90583376bbe45c877a05f0c26b0b315510e4b97bdeacc26ad014be253",
+  "scene": "need",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tôt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Sur la page Jour J, ouvrons Ajouter un besoin.",
+        "visibleSeconds": 5.1,
+        "visible": "Clic sur l'onglet Jour J puis clic sur le bouton Ajouter un besoin pour ouvrir le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Indiquons le poste, Renfort matériel",
+        "visibleSeconds": 9.5,
+        "visible": "Le poste Renfort matériel est sélectionné dans le champ Poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "le début, la fin et une place.",
+        "visibleSeconds": 13.5,
+        "visible": "Les horaires 13:45 - 14:45 sont ajustés et le nombre de places est renseigné à 1",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Ajouter le créneau enregistre d'abord le besoin.",
+        "visibleSeconds": 15.6,
+        "visible": "Clic sur Ajouter le créneau et affichage de l'Étape 2 sur 2 : prévenir",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.3,
+        "spoken": "Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone.",
+        "visibleSeconds": 23.4,
+        "visible": "Les cases Inscrits aujourd'hui et Envoyer aussi une notification sur le téléphone sont visibles et cochées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons.",
+        "visibleSeconds": 27.2,
+        "visible": "Coche de la bénévole Emma Johansson, ouverture de la modale d'aperçu puis clic sur Envoyer à 1 personne",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

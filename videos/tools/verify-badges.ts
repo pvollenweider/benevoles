@@ -5,14 +5,14 @@
 import { chromium } from "playwright"
 import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 async function main() {
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video environment required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const event = await db.event.findFirstOrThrow({ where: { organizationId: "default", slug: "festival-des-documents" }, include: { registrations: { where: { status: "active" }, include: { volunteer: true, shift: true } } } })
@@ -26,7 +26,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/events/${event.id}/print`)
     const person = page.getByLabel("Bénévole (réimpression)", { exact: true })
     const options = await person.locator("option").allTextContents()

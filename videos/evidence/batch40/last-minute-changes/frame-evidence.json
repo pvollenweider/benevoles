@@ -1,0 +1,252 @@
+{
+  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "frames": [
+    {
+      "scene": "welcome",
+      "seconds": 16.168,
+      "file": "frames/welcome-3.png",
+      "checkpoint": {
+        "spokenSeconds": 14.5,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un.",
+        "visibleSeconds": 15,
+        "visible": "Écran d'aperçu de l'événement affichant les sections « Où manque-t-il du monde ? » et « À traiter »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "withdrawal",
+      "seconds": 55.692,
+      "file": "frames/withdrawal-3.png",
+      "checkpoint": {
+        "spokenSeconds": 21.3,
+        "spoken": "Ouvrons le vrai email reçu par Nicolas",
+        "visibleSeconds": 23,
+        "visible": "Affichage de l'email adressé à Nicolas l'invitant à confirmer sa participation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "offer",
+      "seconds": 78.798,
+      "file": "frames/offer-4.png",
+      "checkpoint": {
+        "spokenSeconds": 13,
+        "spoken": "Maintenant seulement, sa participation est confirmée.",
+        "visibleSeconds": 13,
+        "visible": "Le créneau « Accueil du matin » venant d'être accepté n'apparaît pas pour Nicolas Peeters (seul « Préparation, Réception du matériel » est listé).",
+        "sync": "missing",
+        "severity": "major"
+      }
+    },
+    {
+      "scene": "coverage",
+      "seconds": 110.946,
+      "file": "frames/coverage-4.png",
+      "checkpoint": {
+        "spokenSeconds": 16.2,
+        "spoken": "Une demande à valider réserve déjà une place, sans être une présence confirmée.",
+        "visibleSeconds": 16.2,
+        "visible": "Ligne Préparation avec la mention « 1/3 · 1 demande à traiter · manque 1 ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "availability",
+      "seconds": 129.434,
+      "file": "frames/availability-1.png",
+      "checkpoint": {
+        "spokenSeconds": 1.6,
+        "spoken": "regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque.",
+        "visibleSeconds": 2.5,
+        "visible": "Filtrage sur Zoé affichant la mention Matin et la remarque, puis ouverture de la fiche de modification",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "availability",
+      "seconds": 144.434,
+      "file": "frames/availability-2.png",
+      "checkpoint": {
+        "spokenSeconds": 14.2,
+        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement.",
+        "visibleSeconds": 17.5,
+        "visible": "Affichage de la page Activité de Zoé Papadopoulos détaillant son inscription au créneau du 12 novembre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "availability",
+      "seconds": 156.434,
+      "file": "frames/availability-3.png",
+      "checkpoint": {
+        "spokenSeconds": 28.5,
+        "spoken": "Sarah répond Je ne peux pas pour ce seul créneau.",
+        "visibleSeconds": 29.5,
+        "visible": "Clic sur le bouton Confirmer que je ne peux pas et affichage du message de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "availability",
+      "seconds": 161.934,
+      "file": "frames/availability-4.png",
+      "checkpoint": {
+        "spokenSeconds": 34.2,
+        "spoken": "Dans Chercher des bénévoles, A répondu non le indique sa réponse",
+        "visibleSeconds": 35,
+        "visible": "Page Chercher des bénévoles avec la mention A répondu non le 11 novembre 2026 sous Sarah Smith",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "message",
+      "seconds": 217.365,
+      "file": "frames/message-7.png",
+      "checkpoint": {
+        "spokenSeconds": 48.7,
+        "spoken": "revenons à la couverture : le poste est rempli",
+        "visibleSeconds": 48.5,
+        "visible": "Retour à l'onglet Aperçu (Où manque-t-il du monde ?) montrant que le créneau n'apparaît plus comme manquant",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "need",
+      "seconds": 231.889,
+      "file": "frames/need-1.png",
+      "checkpoint": {
+        "spokenSeconds": 4.1,
+        "spoken": "Sur la page Jour J, ouvrons Ajouter un besoin.",
+        "visibleSeconds": 5.1,
+        "visible": "Clic sur l'onglet Jour J puis clic sur le bouton Ajouter un besoin pour ouvrir le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "need",
+      "seconds": 236.289,
+      "file": "frames/need-2.png",
+      "checkpoint": {
+        "spokenSeconds": 8,
+        "spoken": "Indiquons le poste, Renfort matériel",
+        "visibleSeconds": 9.5,
+        "visible": "Le poste Renfort matériel est sélectionné dans le champ Poste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "need",
+      "seconds": 240.289,
+      "file": "frames/need-3.png",
+      "checkpoint": {
+        "spokenSeconds": 11.2,
+        "spoken": "le début, la fin et une place.",
+        "visibleSeconds": 13.5,
+        "visible": "Les horaires 13:45 - 14:45 sont ajustés et le nombre de places est renseigné à 1",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "need",
+      "seconds": 242.389,
+      "file": "frames/need-4.png",
+      "checkpoint": {
+        "spokenSeconds": 15,
+        "spoken": "Ajouter le créneau enregistre d'abord le besoin.",
+        "visibleSeconds": 15.6,
+        "visible": "Clic sur Ajouter le créneau et affichage de l'Étape 2 sur 2 : prévenir",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "need",
+      "seconds": 250.189,
+      "file": "frames/need-5.png",
+      "checkpoint": {
+        "spokenSeconds": 21.3,
+        "spoken": "Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone.",
+        "visibleSeconds": 23.4,
+        "visible": "Les cases Inscrits aujourd'hui et Envoyer aussi une notification sur le téléphone sont visibles et cochées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "need",
+      "seconds": 253.989,
+      "file": "frames/need-6.png",
+      "checkpoint": {
+        "spokenSeconds": 26.5,
+        "spoken": "Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons.",
+        "visibleSeconds": 27.2,
+        "visible": "Coche de la bénévole Emma Johansson, ouverture de la modale d'aperçu puis clic sur Envoyer à 1 personne",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "schedule",
+      "seconds": 286.605,
+      "file": "frames/schedule-4.png",
+      "checkpoint": {
+        "spokenSeconds": 21.5,
+        "spoken": "puis revenons au planning.",
+        "visibleSeconds": 22.1,
+        "visible": "Retour à la page des créneaux de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "cancel",
+      "seconds": 314.943,
+      "file": "frames/cancel-3.png",
+      "checkpoint": {
+        "spokenSeconds": 18.2,
+        "spoken": "Vérifions le statut, puis le vrai email reçu.",
+        "visibleSeconds": 18.5,
+        "visible": "Affichage de la page Journal montrant les inscriptions passées à l'état annulé, suivi à 22s de l'aperçu de l'email envoyé.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "journal",
+      "seconds": 347.723,
+      "file": "frames/journal-4.png",
+      "checkpoint": {
+        "spokenSeconds": 18.2,
+        "spoken": "Le journal aide l'équipe à se coordonner",
+        "visibleSeconds": 18.5,
+        "visible": "Sélection de l'enchaînement Aline Martin et affichage du détail du récit d'annulation et proposition",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "result",
+      "seconds": 377.021,
+      "file": "frames/result-5.png",
+      "checkpoint": {
+        "spokenSeconds": 15.6,
+        "spoken": "Nous avons vérifié les résultats,",
+        "visibleSeconds": 17.5,
+        "visible": "Retour sur la vue de couverture « Où manque-t-il du monde ? » pour le récapitulatif final.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    }
+  ]
+}

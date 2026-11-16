@@ -15,7 +15,8 @@ import { canPublish as orgCanPublish } from "@/lib/org-approval"
 import EventShareLink from "@/components/admin/EventShareLink"
 import HelpLink from "@/components/admin/HelpLink"
 import ReviewChecklist from "@/components/admin/ReviewChecklist"
-import { ROSTER_PUBLISH_NOTE, ROSTER_PUBLISH_NOTE_ON, ROSTER_SETTING_LINK } from "@/lib/shift-roster-text"
+import { ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC, ROSTER_PUBLISH_NOTE, ROSTER_PUBLISH_NOTE_ON, ROSTER_SETTING_LINK } from "@/lib/shift-roster-text"
+import DocMoreLink from "@/components/DocMoreLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Vérifier avant publication" }
@@ -85,9 +86,10 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
                 : "Complétez les points marqués d'un ! (« À faire ») avant de publier."}
             </p>
             {/* Shift roster (#1068): an informative note, never a condition of publication; on by
-                default for a new event, so it says so and where to turn it off. */}
+                default for a new event, so it recalls the duty to inform and where to turn it off. */}
             <p className="text-sm text-gray-700">
               {event.shiftRosterEnabled ? ROSTER_PUBLISH_NOTE_ON : ROSTER_PUBLISH_NOTE}{" "}
+              {event.shiftRosterEnabled && <><DocMoreLink href={ROSTER_DOC_LINKS.publish} about={ROSTER_DOC_TOPIC} />{" "}<span aria-hidden="true">·</span>{" "}</>}
               <Link href={`/admin/events/${event.id}/edit#event-shift-roster-setting`} className={linkClass}>{ROSTER_SETTING_LINK}</Link>
             </p>
             <div className="flex flex-wrap items-center gap-3">

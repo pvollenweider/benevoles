@@ -3,7 +3,7 @@
 
 /** Focused, idempotent datasets for the video masterclass. Never run outside the video DB. */
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { registrationToken, linkToken } from "../src/lib/token-vault"
 import { workloadWarnings } from "../src/lib/workload"
 import { staffingSummary } from "../src/lib/staffing"
@@ -18,7 +18,7 @@ if (!process.env.DATABASE_URL?.includes("benevoles_video")) {
   throw new Error("Refusing to seed a database whose URL does not contain benevoles_video")
 }
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
 
 async function freshOrganization() {
   const organizationId = "default"
@@ -62,6 +62,25 @@ async function main() {
     const { seedVideoExports } = await import("./seed-video-exports")
     return seedVideoExports(prisma)
   }
+  if (scenario === "members-import") {
+    const person = await prisma.volunteer.findUniqueOrThrow({ where: { id: "video-member-management-2" } })
+    if (person.organizationId !== "default" || person.firstName !== "René" || person.email !== null) throw new Error("Exact synthetic import witness required")
+    await prisma.volunteer.update({ where: { id: person.id }, data: { active: true } })
+    const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const shift = await prisma.shift.findFirstOrThrow({ where: { eventId: event.id, roleName: "Montage" } })
+    await prisma.registration.create({ data: { id: "video-import-kept-registration", volunteerId: person.id, eventId: event.id, shiftId: shift.id, status: "active", source: "admin_manual", ...registrationToken.data("demo-import-kept") } })
+    console.log("✓ Import cleanup: one René has a registration to preserve; imported and baseline extra rows have none")
+    return
+  }
+  if (scenario === "shift-eligibility-rules") {
+    const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const question = await prisma.eventQuestion.findFirstOrThrow({ where: { eventId: event.id, label: "Permis de conduire" } })
+    await prisma.questionAnswer.deleteMany({ where: { questionId: question.id } })
+    await prisma.eventQuestion.update({ where: { id: question.id }, data: { type: "yesno", options: [], required: true, parentId: null, displayScope: "event", displayRoleNames: [] } })
+    await prisma.shift.updateMany({ where: { eventId: event.id, roleName: "Navette" }, data: { reservedQuestionId: null, reservedAnswers: [], capacity: 5, status: "open", requiresApproval: false } })
+    console.log("✓ Eligibility: Permis de conduire is a yes/no question asked to every volunteer; Navette condition is configured on camera")
+    return
+  }
   if (scenario === "fresh-organization") return freshOrganization()
   if (scenario === "shift-recurrence") {
     const { seedVideoRecurrence } = await import("./seed-video-recurrence")
@@ -78,6 +97,34 @@ async function main() {
   if (scenario === "attendance-check-in") {
     const { seedVideoAttendance } = await import("./seed-video-attendance")
     return seedVideoAttendance(prisma)
+  }
+  // The beta videos (#1168): their own organisation, never the demo one (scripts/seed-video-beta.ts).
+  if (scenario === "beta-access" || scenario === "sectors" || scenario === "sector-leaders" || scenario === "shift-swaps") {
+    const beta = await import("./seed-video-beta")
+    if (scenario === "beta-access") return beta.seedVideoBetaAccess(prisma)
+    if (scenario === "sectors") return beta.seedVideoSectors(prisma)
+    if (scenario === "sector-leaders") return beta.seedVideoSectorLeadersBeta(prisma)
+    return beta.seedVideoShiftSwaps(prisma)
+  }
+  // Breaks and workload protection (#1171): its own organisation (scripts/seed-video-workload.ts).
+  if (scenario === "workload-protection") {
+    const { seedVideoWorkloadProtection } = await import("./seed-video-workload")
+    return seedVideoWorkloadProtection(prisma)
+  }
+  // Assignment proposals (#1172): its own organisation (scripts/seed-video-proposals.ts).
+  if (scenario === "assignment-proposals") {
+    const { seedVideoAssignmentProposals } = await import("./seed-video-proposals")
+    return seedVideoAssignmentProposals(prisma)
+  }
+  // The volunteer's dated availability link (#1146): its own organisation (scripts/seed-video-volunteer-availability.ts).
+  // Publishing the drafts and what volunteers can do next (#1172): its own organisation (scripts/seed-video-publication.ts).
+  if (scenario === "assignment-publication") {
+    const { seedVideoAssignmentPublication } = await import("./seed-video-publication")
+    return seedVideoAssignmentPublication(prisma)
+  }
+  if (scenario === "volunteer-event-availability") {
+    const { seedVideoVolunteerAvailability } = await import("./seed-video-volunteer-availability")
+    return seedVideoVolunteerAvailability(prisma)
   }
   if (scenario === "event-reports" || scenario === "volunteer-badges") {
     const { seedVideoDocuments } = await import("./seed-video-documents")
@@ -187,7 +234,7 @@ async function main() {
     await prisma.shift.createMany({ data: [event.startDate!, event.endDate!].map(date => ({ eventId: event.id, roleName: "Photos", label: "Photos — reportage bénévole", date, startTime: "10:00", endTime: "12:00", capacity: 3, colorKey: "violet", displayOrder: 6 })) })
     const shifts = await prisma.shift.findMany({ where: { eventId: event.id, status: { not: "cancelled" } }, include: { registrations: true } })
     const leaders = await prisma.sectorLeader.findMany({ where: { eventId: event.id } })
-    const summary = staffingSummary(shifts.map(s => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10), startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, active: s.registrations.filter(r => r.status === "active").length, waiting: s.registrations.filter(r => r.status === "waiting" || r.status === "offered").length, requested: s.registrations.filter(r => r.status === "requested").length, closed: s.status === "closed" })), leaders.map(l => l.roleName))
+    const summary = staffingSummary(shifts.map(s => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10), startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, active: s.registrations.filter(r => r.status === "active").length, waiting: s.registrations.filter(r => r.status === "waiting" || r.status === "offered").length, requested: s.registrations.filter(r => r.status === "requested").length, closed: s.status === "closed" })), leaders.flatMap(l => (l.roleName ? [l.roleName] : [])))
     if (!summary.emptyRoles.some(r => r.roleName === "Photos" && r.shiftCount === 2 && r.capacity === 6) || !summary.full.length || !summary.waitlisted.length || !summary.underfilled.length || summary.totals.requested !== 2) throw new Error("Staffing scenario doesn't cover every report group")
     console.log(`✓ Staffing scenario: ${summary.totals.shifts} shifts, all five report groups, two held requests and a closed shift`)
     return
@@ -245,11 +292,10 @@ async function main() {
       { firstName: "René", lastName: "Sansmail" },
       { id: "video-member-management-2" },
     ] } })
-    // The demo seed supplies 24 members. Add 36 deterministic fictional members for a
+    // The current main demo supplies 27 members. Add 36 deterministic fictional members for a
     // substantial list, including two distinct homonyms and a contact without email.
     for (let index = 0; index < 36; index++) {
-      const id = `video-member-management-${index}`
-      const { id: _id, ...data } = expectedMemberV2(index, scenario === "members-invitations")
+      const { id, ...data } = expectedMemberV2(index, scenario === "members-invitations")
       await prisma.volunteer.upsert({ where: { id }, create: { id, ...data }, update: data })
     }
     const seededMembers = await prisma.volunteer.findMany({ where: { id: { in: Array.from({ length: 36 }, (_, index) => `video-member-management-${index}`) }, organizationId: "default" } })
@@ -257,7 +303,7 @@ async function main() {
     await mkdir("videos/output/member-fixture-v2", { recursive: true })
     await writeFile("videos/output/member-fixture-v2/seed-proof.json", JSON.stringify(seedProof, null, 2))
     const count = await prisma.volunteer.count({ where: { organizationId: "default" } })
-    if (count !== 60) throw new Error(`Members scenario expects 60 members after demo seed, got ${count}`)
+    if (count !== 63) throw new Error(`Members scenario expects 63 members after demo seed, got ${count}`)
     if (scenario === "members-reminders") {
       const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
       const lucas = await prisma.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "lucas.girard@example.org" } })
@@ -273,10 +319,10 @@ async function main() {
       await prisma.volunteer.update({ where: { id: "video-member-management-3" }, data: { firstName: "Aline", lastName: "Mercier", tags: ["accueil"] } })
       await prisma.volunteer.update({ where: { id: "video-member-management-4" }, data: { firstName: "Nicolas", lastName: "Renaud", tags: ["sécurité", "permis-b"] } })
       await prisma.volunteer.update({ where: { id: "video-member-management-2" }, data: { firstName: "René", lastName: "Meyer", tags: ["accueil"] } })
-      console.log("✓ Invitation scenario: 60 fictional members, two new invitees and a no-email contact; existing invitation statuses supplied by demo")
+      console.log("✓ Invitation scenario: 63 fictional members, two new invitees and a no-email contact; existing invitation statuses supplied by demo")
       return
     }
-    console.log("✓ Members scenario: 60 fictional members, homonyms, contact without email and inactive member")
+    console.log("✓ Members scenario: 63 fictional members, homonyms, contact without email and inactive member")
     return
   }
   if (scenario === "personal-session") {

@@ -18,7 +18,7 @@ async function login(page: Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 async function patchEvent(browser: Browser, eventId: string, data: Record<string, unknown>) {
@@ -131,7 +131,7 @@ async function openPublic(page: Page, event: PublicEvent, token: string) {
 test("the public event page: no ✕ on a held shift past the deadline, a link to the personal page instead", async ({ page }) => {
   const token = await publicSignUp(page, soon, soon.shifts.map((s) => s.id))
   await openPublic(page, soon, token)
-  await expect(page.getByRole("link", { name: "ta page personnelle" })).toHaveAttribute("href", `/my/${token}`)
+  await expect(page.getByRole("link", { name: "ta page « Mes inscriptions »" })).toHaveAttribute("href", `/my/${token}`)
   await expect(page.getByRole("button", { name: /^Annuler le créneau Bar/ })).toHaveCount(0)
 })
 

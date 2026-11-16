@@ -3,6 +3,11 @@
 # services with the same names ("postgres", "mailpit"/none here) — see docker-compose.e2e.yml's
 # comment for what happens without it. Matches the directory-name default this already had, so no
 # volume rename/migration needed (still resolves to benevoles_postgres_data).
+#
+# PostgreSQL is reachable only by the app, on the Compose network: no port on the host. Its
+# password is required (POSTGRES_PASSWORD, in .env next to this file or exported), with no default.
+# On a volume that already exists, PostgreSQL keeps the password it was created with: see
+# docs/deploiement.md before changing it. Local access: docker-compose.override.example.yml.
 name: benevoles
 
 services:
@@ -12,14 +17,9 @@ services:
     environment:
       POSTGRES_DB: benevoles
       POSTGRES_USER: benevoles
-      # Read only when the volume is first created: changing it later does not change the
-      # password of an existing database (see docs/auto-hebergement.md).
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-benevoles}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est requis, voir docs/deploiement.md}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    # Reachable from this machine only (psql, pg_dump); remove the line if nothing needs it.
-    ports:
-      - "127.0.0.1:5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U benevoles"]
       interval: 5s
@@ -30,13 +30,18 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - "3000:3000"
-    # Values from .env (template: .env.example, reference: docs/configuration.md) or the shell.
+      # Loopback only: reach the app through a reverse proxy on this host. Publishing port
+      # 3000 on another interface lets clients forge X-Forwarded-For and bypass IP rate
+      # limits — see docs/deploiement.md, "Exposition et adresse des visiteurs".
+      - "127.0.0.1:3000:3000"
     environment:
-      DATABASE_URL: postgresql://benevoles:${POSTGRES_PASSWORD:-benevoles}@postgres:5432/benevoles?schema=public
+      # docker-entrypoint.sh builds DATABASE_URL from these, each part encoded (any password works).
       POSTGRES_HOST: postgres
+      POSTGRES_DB: benevoles
       POSTGRES_USER: benevoles
-      AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-32chars}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est requis, voir docs/deploiement.md}
+      # Required, no default: a random value of your own (openssl rand -base64 32).
+      AUTH_SECRET: ${AUTH_SECRET:?AUTH_SECRET est requis, générer une valeur avec openssl rand -base64 32 (voir docs/deploiement.md)}
       # Required by the production image (openssl rand -base64 32); the server won't start
       # without it. Never change or lose it once used — see README.
       TOKEN_ENCRYPTION_KEY: ${TOKEN_ENCRYPTION_KEY:-}
@@ -48,15 +53,23 @@ services:
       EMAIL_FROM: ${EMAIL_FROM:-no-reply@example.com}
       ADMIN_NOTIFICATION_EMAIL: ${ADMIN_NOTIFICATION_EMAIL:-}
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
-      # NextAuth behind the reverse proxy (docs/auto-hebergement.md)
+      # The address sign-in accepts: the public URL, unless AUTH_URL says otherwise. No
+      # AUTH_TRUST_HOST by default, which would trust the Host header of the request.
       AUTH_URL: ${AUTH_URL:-${NEXT_PUBLIC_APP_URL:-http://localhost:3000}}
-      AUTH_TRUST_HOST: ${AUTH_TRUST_HOST:-true}
-      # Shared with the cron service below; without it, /api/cron/* refuses every call.
-      CRON_SECRET: ${CRON_SECRET:-}
+      # Required, no default (openssl rand -base64 32): shared with the cron service below.
+      # Without it /api/cron/* refuses every call, so no reminder and no queued email leaves.
+      CRON_SECRET: ${CRON_SECRET:?CRON_SECRET est requis, générer une valeur avec openssl rand -base64 32 (voir docs/deploiement.md)}
+      # Premier super admin créé au démarrage (facultatif, voir docs/configuration.md).
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_NAME: ${ADMIN_NAME:-}
       NODE_ENV: production
-      # Optional settings, passed only when set in .env or the shell (left unset otherwise: an
-      # empty value is not the same as no value for some of them, VIDEO_MEDIA_BASE_URL for one).
+      # Optional settings (docs/configuration.md), passed only when set in .env or in the shell:
+      # for some of them an empty value is not the same as no value.
+      AUTH_TRUST_HOST:
       EMAIL_REPLY_TO:
+      APP_TIME_ZONE:
+      TRUSTED_PROXY_HOPS:
       TOKEN_ENCRYPTION_KEY_ID:
       TOKEN_ENCRYPTION_PREVIOUS_KEYS:
       SITE_NAME:
@@ -64,51 +77,43 @@ services:
       SUPPORT_URL:
       HOSTED_SERVICE:
       SIGNUP:
-      APP_TIME_ZONE:
-      TRUSTED_PROXY_HOPS:
       RELEASE_CHECK:
-      ORG_INACTIVITY:
-      PAST_EVENT_RETENTION:
       OPERATOR_ALERT_EMAIL:
-      NTFY_URL:
-      NTFY_TOKEN:
       VAPID_PUBLIC_KEY:
       VAPID_PRIVATE_KEY:
       VAPID_EMAIL:
-      VIDEO_MEDIA_BASE_URL:
       SENTRY_DSN:
-      EMAIL_LIMIT_SIGNUP_PER_HOUR:
-      EMAIL_LIMIT_ORG_PER_MINUTE:
-      EMAIL_LIMIT_ORG_PER_DAY:
-      EMAIL_LIMIT_ORG_BULK_PER_DAY:
-      EMAIL_LIMIT_ORG_ACCOUNT_PER_DAY:
-      EMAIL_LIMIT_RECIPIENT_PER_HOUR:
-      EMAIL_LIMIT_GLOBAL_PER_MINUTE:
-      WARMUP:
     depends_on:
       postgres:
         condition: service_healthy
-    # The same check as the Kubernetes liveness probe: the server answers and reaches the
-    # database. `docker compose ps` shows the app « healthy » once it passes.
+    # The server answers and reaches the database (/api/health, the liveness check of the
+    # Kubernetes install): `docker compose ps` shows the app « healthy » once it passes.
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/api/health"]
-      interval: 30s
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 10s
       timeout: 5s
-      retries: 3
-      start_period: 90s
+      retries: 6
+      start_period: 120s
 
-  # The scheduled tasks (reminders, outbox, cleanup, release check), as the Kubernetes CronJobs
-  # do: scripts/compose-cron.sh. Without CRON_SECRET it exits with a message (Docker restarts
-  # it, so the message repeats in its log), and no reminder or queued email leaves.
+  # The scheduled tasks (queued emails, reminders, daily cleanup, release check), with the same
+  # calls and UTC times as the Kubernetes CronJobs: scripts/compose-cron.sh. It reaches the app on
+  # the Compose network, never through the reverse proxy.
   cron:
     image: curlimages/curl:8.7.1
     restart: unless-stopped
     entrypoint: ["sh", "/compose-cron.sh"]
     environment:
       APP_URL: http://app:3000
-      CRON_SECRET: ${CRON_SECRET:-}
+      CRON_SECRET: ${CRON_SECRET:?CRON_SECRET est requis, générer une valeur avec openssl rand -base64 32 (voir docs/deploiement.md)}
     volumes:
       - ./scripts/compose-cron.sh:/compose-cron.sh:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     depends_on:
       app:
         condition: service_healthy

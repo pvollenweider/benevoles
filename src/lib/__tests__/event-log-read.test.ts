@@ -14,7 +14,7 @@ vi.mock("../prisma", () => ({
   },
 }))
 
-import { listEventLogs, getCausalChain, listReplayCandidates, listStoryCandidates } from "../event-log-read"
+import { listEventLogs, getCausalChain, listReplayCandidates, listStoryCandidates, clampLogLimit } from "../event-log-read"
 
 const row = (overrides: Partial<Record<string, unknown>> = {}) => ({
   id: "log-1",
@@ -145,14 +145,23 @@ describe("getCausalChain", () => {
       .mockResolvedValueOnce([confirmed]) // fetch frontier=[log-3]
       .mockResolvedValueOnce([]) // nothing caused by log-3
 
-    const { entries: chain } = await getCausalChain("log-1")
+    const { entries: chain } = await getCausalChain("evt-1", "log-1")
     expect(chain.map((e) => e.id)).toEqual(["log-1", "log-2", "log-3"])
     expect(chain[2].actorLabel).toBe("Alain Dupont")
   })
 
+  it("binds every read of the chain, and the shift labels, to the event", async () => {
+    findMany
+      .mockResolvedValueOnce([row({ changes: { shiftId: { from: null, to: "shift-9" } } })])
+      .mockResolvedValueOnce([])
+    await getCausalChain("evt-1", "log-1")
+    for (const [args] of findMany.mock.calls) expect(args.where.eventId).toBe("evt-1")
+    expect(shiftFindMany.mock.calls[0][0].where).toMatchObject({ id: { in: ["shift-9"] }, eventId: "evt-1" })
+  })
+
   it("returns just the root when nothing was caused by it", async () => {
     findMany.mockResolvedValueOnce([row()]).mockResolvedValueOnce([])
-    const { entries: chain } = await getCausalChain("log-1")
+    const { entries: chain } = await getCausalChain("evt-1", "log-1")
     expect(chain).toHaveLength(1)
   })
 })
@@ -246,5 +255,17 @@ describe("actor label — merged volunteer (#600)", () => {
     volunteerFindMany.mockResolvedValueOnce([{ id: "vol-absorbed", firstName: "", lastName: "", mergedIntoId: "vol-gone" }]).mockResolvedValueOnce([])
     const { entries } = await listEventLogs("evt-1", {})
     expect(entries[0].actorLabel).toBe("Bénévole (compte supprimé)")
+  })
+})
+
+describe("clampLogLimit", () => {
+  it("keeps a page size between 1 and 200, the default for anything else", () => {
+    expect(clampLogLimit(undefined)).toBe(50)
+    expect(clampLogLimit(Number("abc"))).toBe(50)
+    expect(clampLogLimit(-5)).toBe(50)
+    expect(clampLogLimit(0)).toBe(50)
+    expect(clampLogLimit(Infinity)).toBe(50)
+    expect(clampLogLimit(12.7)).toBe(12)
+    expect(clampLogLimit(10_000)).toBe(200)
   })
 })

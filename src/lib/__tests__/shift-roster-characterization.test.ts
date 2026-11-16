@@ -165,12 +165,12 @@ describe("shift roster characterization (#1068)", () => {
     expect(fingerprint(out)).toMatchSnapshot()
   })
 
-  it("the viewer's state and its sentences, buttons and messages", () => {
+  it("the viewer's state and its sentences, switch states and messages", () => {
     const choices: (StoredRosterChoice | null)[] = [null]
     for (const status of ["visible", "pending", "hidden"] as const) for (const noticeVersion of [V1, V2, "x"]) choices.push({ status, noticeVersion })
     const states = choices.flatMap((c) => [false, true].map((minor) => ({ c, minor, state: fn("viewerState")(c, minor) })))
     const texts = ["visible", "visible_confirmed", "pending", "hidden", "minor"].flatMap((s) =>
-      [null, "Aline M.", "Léa F.", "Solo"].map((n) => ({ s, n, text: fn("viewerStateText")(s, n), button: fn("rosterButtonLabel")(s) })))
+      [null, "Aline M.", "Léa F.", "Solo"].map((n) => ({ s, n, text: fn("rosterChoiceText")(s, n), state: s === "minor" ? null : fn("rosterStateText")(s, n) })))
     const done = ["show", "hide", "widen"].map((a) => fn("rosterDoneText")(a))
     expect({ states, texts, done }).toMatchSnapshot()
   })

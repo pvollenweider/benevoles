@@ -1,0 +1,814 @@
+{
+  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "source": "Fresh audiovisual reports of take 2, checked against actual final frames and measured sentence anchors",
+  "resolvedFinding": "offer-review-resolution.json",
+  "blockingFindings": 0,
+  "anchors": [
+    {
+      "segmentId": "withdrawal",
+      "phrase": "Depuis son lien personnel",
+      "startMs": 2805,
+      "endMs": 5536,
+      "cueMs": 35147
+    },
+    {
+      "segmentId": "withdrawal",
+      "phrase": "C'est un retrait individuel",
+      "startMs": 6081,
+      "endMs": 9173,
+      "cueMs": 38424
+    },
+    {
+      "segmentId": "withdrawal",
+      "phrase": "Revenons dans les inscriptions côté",
+      "startMs": 10031,
+      "endMs": 12952,
+      "cueMs": 42373
+    },
+    {
+      "segmentId": "withdrawal",
+      "phrase": "Ouvrons le vrai email reçu",
+      "startMs": 21135,
+      "endMs": 23640,
+      "cueMs": 53478
+    },
+    {
+      "segmentId": "offer",
+      "phrase": "Ouvrons son lien et acceptons",
+      "startMs": 6956,
+      "endMs": 9891,
+      "cueMs": 72405
+    },
+    {
+      "segmentId": "offer",
+      "phrase": "Maintenant seulement, sa participation est",
+      "startMs": 13085,
+      "endMs": 15829,
+      "cueMs": 78534
+    },
+    {
+      "segmentId": "coverage",
+      "phrase": "Lisons le poste, la date",
+      "startMs": 10743,
+      "endMs": 13663,
+      "cueMs": 105140
+    },
+    {
+      "segmentId": "coverage",
+      "phrase": "Un total de personnes inscrites",
+      "startMs": 20614,
+      "endMs": 24417,
+      "cueMs": 115011
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Ce renseignement aide à lui",
+      "startMs": 7546,
+      "endMs": 9676,
+      "cueMs": 134132
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "il ne l'inscrit pas automatiquement",
+      "startMs": 9944,
+      "endMs": 13920,
+      "cueMs": 136530
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Regardons aussi ses inscriptions pour",
+      "startMs": 14056,
+      "endMs": 17565,
+      "cueMs": 140641
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Si la mission demande un",
+      "startMs": 17800,
+      "endMs": 24457,
+      "cueMs": 144384
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Depuis le lien de l'email On cherche encore du monde",
+      "startMs": 28690,
+      "endMs": 33671,
+      "cueMs": 155275
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Dans Chercher des bénévoles",
+      "startMs": 34422,
+      "endMs": 39422,
+      "cueMs": 161008
+    },
+    {
+      "segmentId": "message",
+      "phrase": "Vérifions l'aperçu et le destinataire",
+      "startMs": 24197,
+      "endMs": 27032,
+      "cueMs": 192717
+    },
+    {
+      "segmentId": "message",
+      "phrase": "Ouvrons le vrai email reçu.",
+      "startMs": 27193,
+      "endMs": 28578,
+      "cueMs": 195710
+    },
+    {
+      "segmentId": "message",
+      "phrase": "Ce message ne crée aucune",
+      "startMs": 29174,
+      "endMs": 30888,
+      "cueMs": 198999
+    },
+    {
+      "segmentId": "message",
+      "phrase": "Revenons aux inscriptions et ouvrons",
+      "startMs": 35812,
+      "endMs": 38329,
+      "cueMs": 204329
+    },
+    {
+      "segmentId": "message",
+      "phrase": "Choisissons le créneau de logistique",
+      "startMs": 43150,
+      "endMs": 46932,
+      "cueMs": 214292
+    },
+    {
+      "segmentId": "message",
+      "phrase": "Enfin, revenons à la couverture",
+      "startMs": 47074,
+      "endMs": 48813,
+      "cueMs": 216809
+    },
+    {
+      "segmentId": "need",
+      "phrase": "Sur la page Jour J",
+      "startMs": 5756,
+      "endMs": 9028,
+      "cueMs": 232195
+    },
+    {
+      "segmentId": "need",
+      "phrase": "Indiquons le poste Renfort matériel",
+      "startMs": 9154,
+      "endMs": 13163,
+      "cueMs": 235593
+    },
+    {
+      "segmentId": "need",
+      "phrase": "Ajouter le créneau enregistre d'abord le besoin",
+      "startMs": 13666,
+      "endMs": 17777,
+      "cueMs": 241800
+    },
+    {
+      "segmentId": "need",
+      "phrase": "Inscrits aujourd'hui est déjà coché",
+      "startMs": 21276,
+      "endMs": 25925,
+      "cueMs": 247716
+    },
+    {
+      "segmentId": "need",
+      "phrase": "Sélectionnons une personne proposée",
+      "startMs": 26684,
+      "endMs": 29983,
+      "cueMs": 253125
+    },
+    {
+      "segmentId": "need",
+      "phrase": "L'email propose le créneau",
+      "startMs": 30312,
+      "endMs": 31707,
+      "cueMs": 256752
+    },
+    {
+      "segmentId": "schedule",
+      "phrase": "Ouvrons le créneau concerné et",
+      "startMs": 4883,
+      "endMs": 8860,
+      "cueMs": 269038
+    },
+    {
+      "segmentId": "schedule",
+      "phrase": "Décalons les deux heures, puis",
+      "startMs": 9202,
+      "endMs": 10275,
+      "cueMs": 273358
+    },
+    {
+      "segmentId": "schedule",
+      "phrase": "L'application prévient les personnes déjà",
+      "startMs": 11139,
+      "endMs": 17633,
+      "cueMs": 275295
+    },
+    {
+      "segmentId": "schedule",
+      "phrase": "Lisons l'ancien et le nouvel",
+      "startMs": 17991,
+      "endMs": 21072,
+      "cueMs": 282147
+    },
+    {
+      "segmentId": "schedule",
+      "phrase": "Un email envoyé ne prouve",
+      "startMs": 21528,
+      "endMs": 25447,
+      "cueMs": 285684
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "Ouvrons la confirmation et prenons",
+      "startMs": 4939,
+      "endMs": 9898,
+      "cueMs": 301033
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "Une demande en attente de",
+      "startMs": 15423,
+      "endMs": 17809,
+      "cueMs": 311517
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "Si des présences ont déjà",
+      "startMs": 20307,
+      "endMs": 26661,
+      "cueMs": 316401
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "Annuler n'est pas simplement fermer",
+      "startMs": 27320,
+      "endMs": 30066,
+      "cueMs": 323414
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Le mode Récit peut montrer",
+      "startMs": 9534,
+      "endMs": 14139,
+      "cueMs": 338407
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Deux lignes proches dans le",
+      "startMs": 14547,
+      "endMs": 17809,
+      "cueMs": 343420
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Le journal aide l'équipe à",
+      "startMs": 18401,
+      "endMs": 22447,
+      "cueMs": 347275
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Nicolas a accepté sa place",
+      "startMs": 5230,
+      "endMs": 12429,
+      "cueMs": 364403
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Nous avons vérifié les résultats",
+      "startMs": 12615,
+      "endMs": 17498,
+      "cueMs": 371786
+    },
+    {
+      "segmentId": "result",
+      "phrase": "En cas d'imprévu ",
+      "startMs": 17667,
+      "endMs": 19289,
+      "cueMs": 376838
+    }
+  ],
+  "checkpoints": [
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 0.818,
+      "globalVisibleSeconds": 0.818,
+      "spokenSeconds": 0,
+      "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
+      "visibleSeconds": 0,
+      "visible": "Titre superposé au centre de l'écran : « Gérer un imprévu sans perdre le fil - Vérifier, prévenir, contrôler le résultat »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 11.318,
+      "globalVisibleSeconds": 12.318,
+      "spokenSeconds": 10.5,
+      "spoken": "prévenir les bonnes personnes et regarder le résultat.",
+      "visibleSeconds": 11.5,
+      "visible": "L'encadré central disparaît pour afficher l'onglet « Aperçu » de l'événement « Fête des imprévus – démonstration »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 15.318,
+      "globalVisibleSeconds": 15.818,
+      "spokenSeconds": 14.5,
+      "spoken": "Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un.",
+      "visibleSeconds": 15,
+      "visible": "Écran d'aperçu de l'événement affichant les sections « Où manque-t-il du monde ? » et « À traiter »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "withdrawal",
+      "globalSpokenSeconds": 35.842,
+      "globalVisibleSeconds": 36.142,
+      "spokenSeconds": 3.5,
+      "spoken": "elle annule son inscription",
+      "visibleSeconds": 3.8,
+      "visible": "Boîte de dialogue de confirmation d'annulation avec clic sur Oui, annuler",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "withdrawal",
+      "globalSpokenSeconds": 42.142,
+      "globalVisibleSeconds": 42.342,
+      "spokenSeconds": 9.8,
+      "spoken": "Revenons dans les inscriptions côté organisation",
+      "visibleSeconds": 10,
+      "visible": "Affichage de la liste des inscriptions dans l'interface organisateur",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "withdrawal",
+      "globalSpokenSeconds": 53.642,
+      "globalVisibleSeconds": 55.342,
+      "spokenSeconds": 21.3,
+      "spoken": "Ouvrons le vrai email reçu par Nicolas",
+      "visibleSeconds": 23,
+      "visible": "Affichage de l'email adressé à Nicolas l'invitant à confirmer sa participation",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "offer",
+      "globalSpokenSeconds": 69.448,
+      "globalVisibleSeconds": 66.448,
+      "spokenSeconds": 4,
+      "spoken": "Nicolas doit répondre dans le délai de son offre.",
+      "visibleSeconds": 1,
+      "visible": "Page « Mes inscriptions » affichant l'offre pour le créneau « Accueil du matin » avec le délai de réponse avant réattribution.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "offer",
+      "globalSpokenSeconds": 72.248,
+      "globalVisibleSeconds": 73.248,
+      "spokenSeconds": 6.8,
+      "spoken": "Ouvrons son lien et acceptons la place dans cet exemple.",
+      "visibleSeconds": 7.8,
+      "visible": "Affichage de la page « Place confirmée ! » sans visualisation du clic sur le bouton d'acceptation.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "offer",
+      "globalSpokenSeconds": 75.348,
+      "globalVisibleSeconds": 77.448,
+      "spokenSeconds": 9.9,
+      "spoken": "Puis vérifions le statut dans les inscriptions.",
+      "visibleSeconds": 12,
+      "visible": "Affichage de la vue organisateur dans l'onglet « Inscriptions » de l'événement.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "offer",
+      "globalSpokenSeconds": 78.448,
+      "globalVisibleSeconds": 78.448,
+      "spokenSeconds": 13,
+      "spoken": "Maintenant seulement, sa participation est confirmée.",
+      "visibleSeconds": 13,
+      "visible": "Le créneau « Accueil du matin » venant d'être accepté n'apparaît pas pour Nicolas Peeters (seul « Préparation, Réception du matériel » est listé).",
+      "sync": "missing",
+      "severity": "major"
+    },
+    {
+      "scene": "coverage",
+      "globalSpokenSeconds": 97.696,
+      "globalVisibleSeconds": 94.396,
+      "spokenSeconds": 3.3,
+      "spoken": "Ouvrons la vue de couverture de l'événement.",
+      "visibleSeconds": 0,
+      "visible": "La vue « Où manque-t-il du monde ? » dans l'onglet Créneaux est déjà affichée à l'écran.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "coverage",
+      "globalSpokenSeconds": 100.696,
+      "globalVisibleSeconds": 100.696,
+      "spokenSeconds": 6.3,
+      "spoken": "Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif.",
+      "visibleSeconds": 6.3,
+      "visible": "Les postes Accueil apparaissent bien complets en bas (1/1) tandis que des créneaux restent à compléter en haut.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "coverage",
+      "globalSpokenSeconds": 105.596,
+      "globalVisibleSeconds": 105.596,
+      "spokenSeconds": 11.2,
+      "spoken": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
+      "visibleSeconds": 11.2,
+      "visible": "Affichage détaillé de la ligne « Logistique - Installation du matériel, jeu. 12 nov. 12:00–14:00, 1/2 · manque 1 ».",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "coverage",
+      "globalSpokenSeconds": 110.596,
+      "globalVisibleSeconds": 110.596,
+      "spokenSeconds": 16.2,
+      "spoken": "Une demande à valider réserve déjà une place, sans être une présence confirmée.",
+      "visibleSeconds": 16.2,
+      "visible": "Ligne Préparation avec la mention « 1/3 · 1 demande à traiter · manque 1 ».",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "availability",
+      "globalSpokenSeconds": 128.184,
+      "globalVisibleSeconds": 129.084,
+      "spokenSeconds": 1.6,
+      "spoken": "regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque.",
+      "visibleSeconds": 2.5,
+      "visible": "Filtrage sur Zoé affichant la mention Matin et la remarque, puis ouverture de la fiche de modification",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "availability",
+      "globalSpokenSeconds": 140.784,
+      "globalVisibleSeconds": 144.084,
+      "spokenSeconds": 14.2,
+      "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement.",
+      "visibleSeconds": 17.5,
+      "visible": "Affichage de la page Activité de Zoé Papadopoulos détaillant son inscription au créneau du 12 novembre",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "availability",
+      "globalSpokenSeconds": 155.084,
+      "globalVisibleSeconds": 156.084,
+      "spokenSeconds": 28.5,
+      "spoken": "Sarah répond Je ne peux pas pour ce seul créneau.",
+      "visibleSeconds": 29.5,
+      "visible": "Clic sur le bouton Confirmer que je ne peux pas et affichage du message de confirmation",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "availability",
+      "globalSpokenSeconds": 160.784,
+      "globalVisibleSeconds": 161.584,
+      "spokenSeconds": 34.2,
+      "spoken": "Dans Chercher des bénévoles, A répondu non le indique sa réponse",
+      "visibleSeconds": 35,
+      "visible": "Page Chercher des bénévoles avec la mention A répondu non le 11 novembre 2026 sous Sarah Smith",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "message",
+      "globalSpokenSeconds": 170.715,
+      "globalVisibleSeconds": 170.515,
+      "spokenSeconds": 2.2,
+      "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel",
+      "visibleSeconds": 2,
+      "visible": "Sélection de l'option 'Les bénévoles d'un créneau' et du créneau Logistique - Installation du matériel",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "message",
+      "globalSpokenSeconds": 191.315,
+      "globalVisibleSeconds": 193.015,
+      "spokenSeconds": 22.8,
+      "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi",
+      "visibleSeconds": 24.5,
+      "visible": "Clic sur 'Voir l'aperçu et envoyer', affichage de la modale d'aperçu pour Emma puis confirmation de l'envoi",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "message",
+      "globalSpokenSeconds": 195.715,
+      "globalVisibleSeconds": 197.615,
+      "spokenSeconds": 27.2,
+      "spoken": "Ouvrons le vrai email reçu",
+      "visibleSeconds": 29.1,
+      "visible": "Affichage du client de messagerie avec l'email reçu par Emma",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "message",
+      "globalSpokenSeconds": 204.015,
+      "globalVisibleSeconds": 205.115,
+      "spokenSeconds": 35.5,
+      "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel",
+      "visibleSeconds": 36.6,
+      "visible": "Retour à l'onglet Inscriptions et clic sur le bouton '+ Ajouter manuellement'",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "message",
+      "globalSpokenSeconds": 207.115,
+      "globalVisibleSeconds": 208.515,
+      "spokenSeconds": 38.6,
+      "spoken": "Saisissons son prénom, son nom et la même adresse email que sa fiche membre",
+      "visibleSeconds": 40,
+      "visible": "Saisie de Zoé Papadopoulos et de son adresse email dans le formulaire d'inscription manuelle",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "message",
+      "globalSpokenSeconds": 212.115,
+      "globalVisibleSeconds": 214.715,
+      "spokenSeconds": 43.6,
+      "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la",
+      "visibleSeconds": 46.2,
+      "visible": "Sélection du créneau Logistique 12h-14h dans la liste déroulante et clic sur Ajouter",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "message",
+      "globalSpokenSeconds": 217.215,
+      "globalVisibleSeconds": 217.015,
+      "spokenSeconds": 48.7,
+      "spoken": "revenons à la couverture : le poste est rempli",
+      "visibleSeconds": 48.5,
+      "visible": "Retour à l'onglet Aperçu (Où manque-t-il du monde ?) montrant que le créneau n'apparaît plus comme manquant",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "need",
+      "globalSpokenSeconds": 230.539,
+      "globalVisibleSeconds": 231.539,
+      "spokenSeconds": 4.1,
+      "spoken": "Sur la page Jour J, ouvrons Ajouter un besoin.",
+      "visibleSeconds": 5.1,
+      "visible": "Clic sur l'onglet Jour J puis clic sur le bouton Ajouter un besoin pour ouvrir le formulaire",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "need",
+      "globalSpokenSeconds": 234.439,
+      "globalVisibleSeconds": 235.939,
+      "spokenSeconds": 8,
+      "spoken": "Indiquons le poste, Renfort matériel",
+      "visibleSeconds": 9.5,
+      "visible": "Le poste Renfort matériel est sélectionné dans le champ Poste",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "need",
+      "globalSpokenSeconds": 237.639,
+      "globalVisibleSeconds": 239.939,
+      "spokenSeconds": 11.2,
+      "spoken": "le début, la fin et une place.",
+      "visibleSeconds": 13.5,
+      "visible": "Les horaires 13:45 - 14:45 sont ajustés et le nombre de places est renseigné à 1",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "need",
+      "globalSpokenSeconds": 241.439,
+      "globalVisibleSeconds": 242.039,
+      "spokenSeconds": 15,
+      "spoken": "Ajouter le créneau enregistre d'abord le besoin.",
+      "visibleSeconds": 15.6,
+      "visible": "Clic sur Ajouter le créneau et affichage de l'Étape 2 sur 2 : prévenir",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "need",
+      "globalSpokenSeconds": 247.739,
+      "globalVisibleSeconds": 249.839,
+      "spokenSeconds": 21.3,
+      "spoken": "Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone.",
+      "visibleSeconds": 23.4,
+      "visible": "Les cases Inscrits aujourd'hui et Envoyer aussi une notification sur le téléphone sont visibles et cochées",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "need",
+      "globalSpokenSeconds": 252.939,
+      "globalVisibleSeconds": 253.639,
+      "spokenSeconds": 26.5,
+      "spoken": "Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons.",
+      "visibleSeconds": 27.2,
+      "visible": "Coche de la bénévole Emma Johansson, ouverture de la modale d'aperçu puis clic sur Envoyer à 1 personne",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "schedule",
+      "globalSpokenSeconds": 268.455,
+      "globalVisibleSeconds": 266.355,
+      "spokenSeconds": 4.3,
+      "spoken": "Ouvrons le créneau concerné et lisons la date, le début et la fin",
+      "visibleSeconds": 2.2,
+      "visible": "Affichage du formulaire 'Modifier le créneau' avec la date du 12 novembre et les horaires 14:00 - 16:00",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "schedule",
+      "globalSpokenSeconds": 274.655,
+      "globalVisibleSeconds": 275.355,
+      "spokenSeconds": 10.5,
+      "spoken": "Décalons les deux heures, puis enregistrons.",
+      "visibleSeconds": 11.2,
+      "visible": "Les horaires sont modifiés à 14:30 - 16:30 puis clic sur le bouton 'Enregistrer'",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "schedule",
+      "globalSpokenSeconds": 281.955,
+      "globalVisibleSeconds": 284.355,
+      "spokenSeconds": 17.8,
+      "spoken": "Lisons l'ancien et le nouvel horaire dans le message reçu,",
+      "visibleSeconds": 20.2,
+      "visible": "Affichage de l'email de notification comparant 14:00-16:00 et 14:30-16:30",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "schedule",
+      "globalSpokenSeconds": 285.655,
+      "globalVisibleSeconds": 286.255,
+      "spokenSeconds": 21.5,
+      "spoken": "puis revenons au planning.",
+      "visibleSeconds": 22.1,
+      "visible": "Retour à la page des créneaux de l'événement",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "cancel",
+      "globalSpokenSeconds": 301.993,
+      "globalVisibleSeconds": 301.693,
+      "spokenSeconds": 5.9,
+      "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
+      "visibleSeconds": 5.6,
+      "visible": "Ouverture de la fenêtre modale « Supprimer le créneau » détaillant les conséquences de l'annulation.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "cancel",
+      "globalSpokenSeconds": 306.393,
+      "globalVisibleSeconds": 307.293,
+      "spokenSeconds": 10.3,
+      "spoken": "Après confirmation, les inscriptions concernées sont annulées",
+      "visibleSeconds": 11.2,
+      "visible": "Clic sur le bouton rouge « Supprimer » pour confirmer la suppression du créneau.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "cancel",
+      "globalSpokenSeconds": 314.293,
+      "globalVisibleSeconds": 314.593,
+      "spokenSeconds": 18.2,
+      "spoken": "Vérifions le statut, puis le vrai email reçu.",
+      "visibleSeconds": 18.5,
+      "visible": "Affichage de la page Journal montrant les inscriptions passées à l'état annulé, suivi à 22s de l'aperçu de l'email envoyé.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "journal",
+      "globalSpokenSeconds": 331.473,
+      "globalVisibleSeconds": 330.873,
+      "spokenSeconds": 2.6,
+      "spoken": "ouvrons le journal de l'événement",
+      "visibleSeconds": 2,
+      "visible": "L'onglet Journal de l'événement est déjà ouvert et affiché à l'écran",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "journal",
+      "globalSpokenSeconds": 333.373,
+      "globalVisibleSeconds": 336.873,
+      "spokenSeconds": 4.5,
+      "spoken": "Retrouvons le retrait, l'offre et son acceptation, puis le changement d'horaire et l'annulation",
+      "visibleSeconds": 8,
+      "visible": "Défilement de la liste des événements du journal présentant les différentes étapes et statuts",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "journal",
+      "globalSpokenSeconds": 339.773,
+      "globalVisibleSeconds": 343.373,
+      "spokenSeconds": 10.9,
+      "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
+      "visibleSeconds": 14.5,
+      "visible": "Clic sur l'onglet Récit sous la section Journal",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "journal",
+      "globalSpokenSeconds": 347.073,
+      "globalVisibleSeconds": 347.373,
+      "spokenSeconds": 18.2,
+      "spoken": "Le journal aide l'équipe à se coordonner",
+      "visibleSeconds": 18.5,
+      "visible": "Sélection de l'enchaînement Aline Martin et affichage du détail du récit d'annulation et proposition",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 359.171,
+      "globalVisibleSeconds": 360.171,
+      "spokenSeconds": 0,
+      "spoken": "Terminons dans la vue de couverture et les inscriptions à jour.",
+      "visibleSeconds": 1,
+      "visible": "Affichage de la page de couverture puis bascule vers l'onglet Inscriptions.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 364.171,
+      "globalVisibleSeconds": 364.671,
+      "spokenSeconds": 5,
+      "spoken": "Nicolas a accepté sa place,",
+      "visibleSeconds": 5.5,
+      "visible": "Défilement de la liste des inscriptions montrant Nicolas Peeters.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 366.471,
+      "globalVisibleSeconds": 366.171,
+      "spokenSeconds": 7.3,
+      "spoken": "Zoé est sur le créneau convenu,",
+      "visibleSeconds": 7,
+      "visible": "Zoé Papadopoulos visible dans la liste avec ses affectations.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 369.371,
+      "globalVisibleSeconds": 371.971,
+      "spokenSeconds": 10.2,
+      "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir.",
+      "visibleSeconds": 12.8,
+      "visible": "Navigation vers l'onglet Créneaux montrant la frise puis la vue en liste.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 374.771,
+      "globalVisibleSeconds": 376.671,
+      "spokenSeconds": 15.6,
+      "spoken": "Nous avons vérifié les résultats,",
+      "visibleSeconds": 17.5,
+      "visible": "Retour sur la vue de couverture « Où manque-t-il du monde ? » pour le récapitulatif final.",
+      "sync": "aligned",
+      "severity": "none"
+    }
+  ]
+}

@@ -24,6 +24,10 @@ export const sectorLeaderLabel = (count: number) => (count > 1 ? "Responsables d
 export const EMERGENCY_NOTE = "En cas d'urgence, appelle les numéros d'urgence officiels : ce contact ne les remplace pas."
 
 import { coordinatesOf, MAP_LINK_LABEL, osmLink } from "@/lib/map-link"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
+
+/** An information page to read before the shift (#1324): title and absolute URL only. */
+export type ReadBeforePage = { title: string; url: string }
 
 export type ShiftInfo = {
   locationDetails?: string | null
@@ -45,9 +49,20 @@ export type ShiftInfo = {
    * unless the leader is also entered as the shift's or the day-of contact.
    */
   sectorLeaderNames?: string[] | null
+  /** « Repas sur le pouce possible » (#1171, lot 2): the meal can be taken during the mission. */
+  mealOnTheGo?: boolean | null
+  /**
+   * Information pages attached to this shift's poste (#1324), for a confirmed place only: the
+   * link is shown with the shift's practical information, never the page content. Resolved at
+   * send time for emails; set per confirmed registration on the personal page.
+   */
+  readBefore?: ReadBeforePage[] | null
 }
 
-export type ShiftInfoLine = { kind: "place" | "contact" | "dayContact" | "leader" | "instructions"; label: string; text: string; /** Map link of the place, when coordinates are known. */ href?: string }
+/** What a volunteer reads about a mission marked « repas sur le pouce possible ». */
+export const MEAL_ON_THE_GO_TEXT = "sur le pouce possible pendant cette mission"
+
+export type ShiftInfoLine = { kind: "place" | "contact" | "dayContact" | "leader" | "instructions" | "meal"; label: string; text: string; /** Map link of the place, when coordinates are known. */ href?: string }
 
 const clean = (v: string | null | undefined) => (v ?? "").trim()
 
@@ -87,7 +102,8 @@ export function withDayContact<T extends ShiftInfo>(info: T, event: { dayContact
 }
 
 /** Names of the leaders of this role, trimmed, without blanks or repeats. */
-export function sectorLeaderNames(roleName: string, leaders: { roleName: string; name: string }[] | null | undefined): string[] {
+// Poste leaders only (#1169): a sector leader (roleName null) is not named to volunteers in this lot.
+export function sectorLeaderNames(roleName: string, leaders: { roleName: string | null; name: string }[] | null | undefined): string[] {
   return [...new Set((leaders ?? []).filter((l) => l.roleName === roleName).map((l) => clean(l.name)).filter(Boolean))]
 }
 
@@ -95,7 +111,7 @@ export function sectorLeaderNames(roleName: string, leaders: { roleName: string;
  * The shift's info with the names of its role's sector leaders attached (#560). For confirmed
  * volunteers only (personal page, reminders, individual printed sheet). Only `name` is read.
  */
-export function withSectorLeaders<T extends ShiftInfo>(info: T, roleName: string, leaders: { roleName: string; name: string }[] | null | undefined): T {
+export function withSectorLeaders<T extends ShiftInfo>(info: T, roleName: string, leaders: { roleName: string | null; name: string }[] | null | undefined): T {
   const names = sectorLeaderNames(roleName, leaders)
   return names.length ? { ...info, sectorLeaderNames: names } : info
 }
@@ -120,26 +136,52 @@ export function shiftInfoLines(info: ShiftInfo): ShiftInfoLine[] {
   if (leaders.length) lines.push({ kind: "leader", label: sectorLeaderLabel(leaders.length), text: leaders.join(", ") })
   const instructions = clean(info.instructions)
   if (instructions) lines.push({ kind: "instructions", label: "À savoir", text: instructions })
+  if (info.mealOnTheGo) lines.push({ kind: "meal", label: "Repas", text: MEAL_ON_THE_GO_TEXT })
   return lines
 }
 
-export function hasShiftInfo(info: ShiftInfo): boolean {
-  return shiftInfoLines(info).length > 0
+/** The pages to read before the shift, ignoring a blank title or URL. */
+export function readBeforePages(info: ShiftInfo): ReadBeforePage[] {
+  return (info.readBefore ?? []).filter((p) => clean(p.title) && clean(p.url))
 }
 
-/** Plain-text lines for emails: « Lieu : Entrée B. Voir sur la carte : https://… ». */
+export function hasShiftInfo(info: ShiftInfo): boolean {
+  return shiftInfoLines(info).length > 0 || readBeforePages(info).length > 0
+}
+
+/**
+ * Plain-text lines for emails: « Lieu : Entrée B. Voir sur la carte : https://… » and, for a
+ * page attached to the shift's poste, « À lire avant ton créneau : Tenir la caisse : https://… ».
+ */
 export function shiftInfoText(info: ShiftInfo): string[] {
   // A place already ending with . ! or ? keeps its own punctuation instead of getting « .. ».
-  return shiftInfoLines(info).map((l) => l.href
-    ? `${l.label} : ${l.text.replace(/[.!?…]+$/, "")}${/[!?…]$/.test(l.text) ? l.text.slice(-1) : "."} ${MAP_LINK_LABEL} : ${l.href}`
-    : `${l.label} : ${l.text}`)
+  return [
+    ...shiftInfoLines(info).map((l) => l.href
+      ? `${l.label} : ${l.text.replace(/[.!?…]+$/, "")}${/[!?…]$/.test(l.text) ? l.text.slice(-1) : "."} ${MAP_LINK_LABEL} : ${l.href}`
+      : `${l.label} : ${l.text}`),
+    ...readBeforePages(info).map((p) => `${READ_BEFORE_LABEL} : ${p.title} : ${p.url}`),
+  ]
+}
+
+/**
+ * The pages of an email's shifts, once each: a page stays under the first shift that carries it,
+ * and later shifts of the same poste lose their copy. A grouped reminder shows a page one time
+ * even when several shifts belong to its poste (#1324), and never under another poste's shift.
+ */
+export function withReadBeforeOnce<T extends ShiftInfo>(shifts: readonly T[]): T[] {
+  const seen = new Set<string>()
+  return shifts.map((shift) => {
+    const pages = readBeforePages(shift).filter((page) => !seen.has(page.url))
+    for (const page of pages) seen.add(page.url)
+    return { ...shift, readBefore: pages }
+  })
 }
 
 /**
  * The same fields picked from a shift row, for a notification payload. With the event, a shift
  * without its own coordinates takes the event's (#191).
  */
-export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: number | null; longitude?: number | null } | null): Required<Omit<ShiftInfo, "dayContactName" | "dayContactPhone" | "sectorLeaderNames">> {
+export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: number | null; longitude?: number | null } | null): Required<Omit<ShiftInfo, "dayContactName" | "dayContactPhone" | "sectorLeaderNames" | "mealOnTheGo" | "readBefore">> & Pick<ShiftInfo, "mealOnTheGo"> {
   const coords = coordinatesOf(s) ?? coordinatesOf(event)
   return {
     locationDetails: s.locationDetails ?? null,
@@ -148,5 +190,7 @@ export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: nu
     instructions: s.instructions ?? null,
     latitude: coords?.latitude ?? null,
     longitude: coords?.longitude ?? null,
+    // Only when set, so payloads of the other shifts keep their shape.
+    ...(s.mealOnTheGo ? { mealOnTheGo: true } : {}),
   }
 }

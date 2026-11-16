@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:05:05.129Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "6f5d40308cf5d1940515e03bede7881ee28b33e032d7787a41181f5a490434a2",
+  "clipSha256": "0eeec75f0c82d920ff4743590af3a33dd7b3f5b0097406a859cc381de2e8ae54",
+  "scene": "sectors-enable",
+  "review": {
+    "heardOpening": "Dans les informations de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans les informations de l'événement, la carte Secteurs propose l'interrupteur Organiser les postes par secteurs.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la carte Secteurs avec l'interrupteur désactivé Organiser les postes par secteurs.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Activons-le.",
+        "visibleSeconds": 6.8,
+        "visible": "L'interrupteur Organiser les postes par secteurs est activé et fait apparaître les liens associés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Suivons le lien Organiser les secteurs dans Créneaux.",
+        "visibleSeconds": 11.8,
+        "visible": "Affichage de l'onglet Créneaux après le clic sur le lien.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

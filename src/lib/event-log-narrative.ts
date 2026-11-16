@@ -13,9 +13,31 @@ import type { EventLogEntry, ShiftLabel } from "./event-log-read"
 import { APP_TIME_ZONE } from "./time-zone"
 import { listingChangeLabel } from "./event-visibility"
 import { logValueLabel } from "./log-value-labels"
+import { fmtDuration } from "./signup-recap"
 
 const dateFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" })
 
+
+/** The action an availability acknowledgement was given for (#1146, lot B), as stored in `via`. */
+const ACK_VIA_WORDS: Record<string, string> = {
+  manual_add: "ajout par l'organisation",
+  accept: "acceptation d'une demande",
+  restore: "inscription rétablie",
+  swap: "échange validé",
+}
+
+/**
+ * The evidence of an availability acknowledgement (src/lib/availability-assist.ts
+ * availabilityAckChanges): « pas disponible 1 h 30 sur 6 h (acceptation d'une demande) ». Never
+ * the ranges, which the entry does not hold.
+ */
+export function ackEvidenceText(v: unknown): string | null {
+  if (!v || typeof v !== "object") return null
+  const e = v as { via?: unknown; outsideMinutes?: unknown; totalMinutes?: unknown }
+  if (typeof e.outsideMinutes !== "number" || typeof e.totalMinutes !== "number") return null
+  const how = typeof e.via === "string" && ACK_VIA_WORDS[e.via] ? ` (${ACK_VIA_WORDS[e.via]})` : ""
+  return `pas disponible ${fmtDuration(e.outsideMinutes)} sur ${fmtDuration(e.totalMinutes)}${how}`
+}
 
 function fmtValue(v: unknown): string {
   if (v === null || v === undefined) return "—"
@@ -30,6 +52,7 @@ const FIELD_LABELS: Record<string, string> = {
   registrations: "inscriptions anonymisées",
   answers: "réponses aux questions",
   invites: "invitations",
+  shiftDeclines: "réponses « Je ne peux pas » pour un créneau",
   sectorLeaders: "responsables de secteur",
   capacity: "places",
   minVolunteers: "minimum de personnes",
@@ -43,6 +66,14 @@ const FIELD_LABELS: Record<string, string> = {
   requiresApproval: "sur validation",
   // « Cumulable avec un autre créneau » (#986).
   overlapAllowed: "cumulable avec un autre créneau",
+  // « Attribué par l'organisation uniquement » (#1145).
+  assignedOnly: "attribué par l'organisation uniquement",
+  // « Accès par une réponse » (#962).
+  reservedAnswer: "accès par une réponse",
+  // « Repas sur le pouce possible » (#1171, lot 2).
+  mealOnTheGo: "repas sur le pouce possible",
+  // Place of a mission (#1171, lot 2).
+  placeId: "lieu de la mission",
   shiftId: "créneau",
   source: "origine",
   comment: "commentaire",
@@ -64,6 +95,9 @@ const FIELD_LABELS: Record<string, string> = {
   resent: "envois relancés",
   scheduledFor: "envoi prévu",
   reason: "raison",
+  // Shift swaps (#1174): the request's state and why it ended.
+  swapStatus: "demande d'échange",
+  swapReason: "motif",
   personalLink: "lien personnel",
   confirmationEmail: "email de confirmation",
   // Share links per group (#947).
@@ -79,6 +113,29 @@ const FIELD_LABELS: Record<string, string> = {
   answer: "réponse",
   // A follow-up question's condition (#1016): « Si « Oui » à « … » », or none.
   condition: "affichée seulement",
+  // Who a question is asked to (#1140): « tous les bénévoles », or the postes.
+  displayScope: "posée à",
+  // Sectors (#1147): a poste's sector (by name), the event's option and how many postes moved.
+  sector: "secteur",
+  sectorsEnabled: "organisation des postes par secteurs",
+  // Shift swaps (#1174): the event's options.
+  shiftSwapsEnabled: "demandes d'échange de créneaux",
+  shiftSwapsApproval: "validation de chaque échange",
+  // Breaks and workload protection (#1171): the event's option and a summary of its limits.
+  workloadProtectionEnabled: "protection des pauses et de la charge",
+  workloadPolicy: "limites de pauses et de charge",
+  // Dated availability (#1146): the event's option and its deadline; how many dates an answer gave.
+  availabilityEnabled: "collecte des disponibilités",
+  availabilityDeadline: "date limite des disponibilités",
+  dates: "dates",
+  // Added by an organiser outside the person's declared availability, knowingly (#1146, lot B).
+  outsideAvailability: "ajout confirmé hors des disponibilités indiquées",
+  availabilityAck: "hors des disponibilités indiquées",
+  // Added knowingly to a full or closed shift (AUTHZ-15): the state confirmed, after the addition.
+  shiftOverride: "ajout confirmé sur un créneau complet ou fermé",
+  // A shift cancelled with people registered (AUTHZ-15): whether they were emailed.
+  volunteersNotified: "inscrits prévenus par email",
+  postes: "postes",
 }
 
 /**
@@ -108,6 +165,7 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
         : field === "isListed" ? listingChangeLabel(v)
         : field === "answer" && (v === null || v === undefined) ? "pas de réponse"
         : field === "checkedInAt" && v === "set" ? "enregistrée"
+        : field === "availabilityAck" && v !== null && v !== undefined ? ackEvidenceText(v) ?? "confirmé"
         : logValueLabel(field, v, entityType) ?? fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`
     })
@@ -143,6 +201,9 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.checked_in": (a) => `${a} a marqué la personne présente`,
   "registration.check_in_undone": (a) => `${a} a annulé la présence`,
   "registration.requested": (a) => `${a} a demandé une inscription`,
+  "registration.confirmation_requested": (a) => `${a} a demandé une inscription à confirmer par email`,
+  "registration.confirmed_by_email": (a) => `${a} a confirmé son inscription par email`,
+  "registration.confirmation_expired": () => "une demande en attente de confirmation par email a expiré",
   "registration.accepted": (a) => `${a} a accepté la demande d'inscription`,
   "registration.refused": (a) => `${a} a refusé la demande d'inscription`,
   "event.published": (a) => `${a} a publié l'événement`,
@@ -163,7 +224,13 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "question.answer_changed": (a) => `${a} a modifié sa réponse à une question`,
   "roster.choice_changed": (a) => `${a} a changé l'affichage de son nom aux autres bénévoles`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
+  // One entry per reminder batch (#1105), its count in `changes.recipients`.
+  "memberinvite.reminded": (a) => `${a} a relancé les invités sans réponse`,
+  // #1101: an invitation sent again to people already invited, once per batch.
+  "memberinvite.resent": (a) => `${a} a renvoyé l'invitation à des personnes déjà invitées`,
   "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
+  // #1303: one precise shift, never the whole event.
+  "shiftdecline.declined": (a) => `${a} a indiqué ne pas pouvoir prendre un créneau`,
   "eventpage.created": (a) => `${a} a créé une page`,
   "eventpage.updated": (a) => `${a} a modifié une page`,
   "eventpage.deleted": (a) => `${a} a supprimé une page`,
@@ -175,6 +242,42 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "grouplink.created": (a) => `${a} a créé un lien de groupe`,
   "grouplink.updated": (a) => `${a} a modifié un lien de groupe`,
   "grouplink.deleted": (a) => `${a} a supprimé un lien de groupe`,
+  "sector.created": (a) => `${a} a créé un secteur`,
+  "sector.updated": (a) => `${a} a renommé un secteur`,
+  "sector.archived": (a) => `${a} a archivé un secteur`,
+  "sector.restored": (a) => `${a} a rétabli un secteur`,
+  "sector.reordered": (a) => `${a} a changé l'ordre des secteurs`,
+  // Places of an event (#1171, lot 2).
+  "place.created": (a) => `${a} a créé un lieu`,
+  "place.updated": (a) => `${a} a renommé un lieu`,
+  "place.archived": (a) => `${a} a archivé un lieu`,
+  "place.restored": (a) => `${a} a rétabli un lieu`,
+  // Personal workload limits (#1171, lot 2): that they changed, never the values.
+  "workload.personal_limits_set": (a) => `${a} a fixé des limites personnelles de charge`,
+  "workload.personal_limits_removed": (a) => `${a} a retiré des limites personnelles de charge`,
+  // Shift swaps between volunteers (#1174): the request's steps, and each registration it moved.
+  "swap.published": (a) => `${a} a proposé d'échanger un de ses créneaux`,
+  "swap.offered": (a) => `${a} a proposé un de ses créneaux en échange`,
+  "swap.offer_declined": (a) => `${a} a refusé la proposition d'échange`,
+  "swap.offer_withdrawn": (a) => `${a} a retiré sa proposition d'échange`,
+  "swap.confirmed": (a) => `${a} a accepté l'échange, qui attend la validation de l'organisation`,
+  "swap.applied": () => "l'échange de créneaux a été effectué",
+  "swap.refused": (a) => `${a} n'a pas validé l'échange de créneaux`,
+  "swap.withdrawn": (a) => `${a} a retiré sa demande d'échange`,
+  "swap.expired": () => "la demande d'échange a expiré",
+  "swap.ended": () => "la demande d'échange a pris fin sans échange",
+  "registration.swapped": () => "l'inscription a changé de créneau par un échange entre bénévoles",
+  // Dated availability (#1146, lot B): an organiser's acknowledgement, committed with the assignment.
+  "registration.availability_acknowledged": (a) => `${a} a confirmé l'affectation malgré les disponibilités indiquées`,
+  // Dated availability (#1146): that someone answered or was asked, never the ranges.
+  "availability.requested": (a) => `${a} a demandé ses disponibilités à un membre`,
+  "availability.answered": (a) => `${a} a indiqué ses disponibilités`,
+  "availability.corrected": (a) => `${a} a corrigé les disponibilités d'un membre`,
+  // Draft assignments (#1146, lot C): one entry per publication, each registration it created after it.
+  "drafts.published": (a) => `${a} a publié des affectations en brouillon`,
+  // Generated proposals (#1172): a run written into the drafts (nothing published).
+  "proposal.written": (a) => `${a} a écrit une proposition d'affectations dans les brouillons`,
+  "event.sectors_adopted": (a) => `${a} a enregistré le premier secteur : l'événement garde désormais l'organisation par secteurs`,
   // Not a real event: a synthetic snapshot of current state for entities that predate logging
   // (see the baseline endpoint). Worded as an observation, never as something that "happened".
   "shift.baseline": () => "état initial observé (avant le suivi du journal)",
@@ -188,7 +291,10 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.created", "registration.cancelled", "registration.restored", "registration.waitlist_joined",
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
-  "registration.requested", "registration.accepted", "registration.refused",
+  "registration.requested", "registration.accepted", "registration.refused", "registration.swapped",
+  "registration.confirmation_requested", "registration.confirmed_by_email",
+  "registration.availability_acknowledged",
+  "shiftdecline.declined",
 ])
 
 /** The question an answer change is about (#984), named by its label at the time: « … à « Repas ? » ». */

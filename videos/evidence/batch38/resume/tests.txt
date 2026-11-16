@@ -1,0 +1,12 @@
+
+ RUN  v5.0.3 /Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources
+
+
+ Test Files  40 passed (40)
+      Tests  1344 passed (1344)
+   Start at  09:05:58
+   Duration  3.05s (transform 52%, import 35%, tests 11%, worker 1%)
+
+  Transform  transforming modules took 7.93s · 52% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

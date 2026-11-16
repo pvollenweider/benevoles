@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:24.771Z",
+  "revalidatedAt": "2026-11-01T08:03:24.771Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-adjust",
+      "audioSha256": "8db4b83819c5920ccd22550a84e030df5af49c04035266eba9f099b88790b958",
+      "recognized": "Léa doit partir plus tôt vendredi, ouvrons son brouillon de billetterie. Puis retirez ce brouillon et confirmons. Dans la case de Lou, ajoutez, puis ajoutez un brouillon sur la billetterie. Une proposition ne remplace jamais un brouillon manuel.",
+      "expected": "Léa doit partir plus tôt vendredi : ouvrons son brouillon de billetterie, puis Retirer ce brouillon, et confirmons. Dans la case de Lou, Ajouter, puis Ajouter en brouillon sur la billetterie. Une proposition ne remplace jamais un brouillon manuel.",
+      "wordErrorRate": 0.10526315789473684,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

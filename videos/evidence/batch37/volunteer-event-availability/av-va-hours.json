@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:40:43.761Z",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "promptSha256": "fd63eef2b004418887684df6738c9598f5762a149d86386c1783efa07917329d",
+  "clipSha256": "6b0eee8e116491b3334b413e1cd2474566287676a76720a4d93f6c3223dfd84d",
+  "scene": "va-hours",
+  "review": {
+    "heardOpening": "Le vendredi, Morgane choisit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Morgane choisit Disponible à certaines heures",
+        "visibleSeconds": 2.6,
+        "visible": "Sélection de l'option « Disponible à certaines heures » pour le vendredi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Elle indique le début, neuf heures",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie de 09:00 dans le champ Début",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "et la fin, midi",
+        "visibleSeconds": 5.7,
+        "visible": "Saisie de 12:00 dans le champ Fin",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

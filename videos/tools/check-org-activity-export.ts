@@ -3,8 +3,9 @@
 
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { fullNameOf, rosterSurname } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { readFile, writeFile } from "node:fs/promises"
 import { parse } from "csv-parse/sync"
 import { createHash } from "node:crypto"
@@ -17,7 +18,7 @@ async function main() {
   const directory = "videos/output/organization-activity-log"
   const prepared = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8"))
   if (prepared.organizationId !== "video-org-activity" || prepared.distinctActors !== 2) throw new Error("Actual two-session preparation required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const page = await browser.newPage({ acceptDownloads: true })
@@ -25,7 +26,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.org-activity.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     // Give the member activity page a real registration, not an empty placeholder.
     let event = await db.event.findFirst({ where: { organizationId: prepared.organizationId, slug: "atelier-journal-organisation" } })
     if (!event) {
@@ -47,11 +48,11 @@ async function main() {
       if (!registered.ok()) throw new Error(`Actual member registration HTTP ${registered.status()}`)
     }
     await page.goto(`${base}/admin/members/${prepared.firstMemberId}`)
-    await page.getByRole("heading", { name: "Activité de Aline Exemple 01", exact: true }).waitFor()
+    await page.getByRole("heading", { name: `Activité de Aline ${rosterSurname(0)}`, exact: true }).waitFor()
     if (!(await page.locator("ol li").allTextContents()).some(text => text.includes("Accueil"))) throw new Error("Member activity does not show the actual registration")
     await page.goto(`${base}/admin/settings/activity`)
     await page.getByLabel("Filtrer par type", { exact: true }).selectOption("AdminUser")
-    await page.getByText("Colette Exemple a invité un admin", { exact: true }).waitFor()
+    await page.getByText(`${fullNameOf("Colette")} a invité un admin`, { exact: true }).waitFor()
     const downloadPromise = page.waitForEvent("download")
     await page.getByRole("link", { name: /Exporter tout le journal/ }).click()
     const download = await downloadPromise

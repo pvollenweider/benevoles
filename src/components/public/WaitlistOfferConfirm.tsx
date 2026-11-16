@@ -6,6 +6,8 @@
 import { useId, useLayoutEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { WAITLIST_OFFER_PAGE_TITLES, type WaitlistOfferPageState, type WaitlistOfferView as View } from "@/lib/waitlist-offer"
+import { isOrgUnavailable, orgUnavailableContact } from "@/lib/org-lifecycle"
+import { OrgUnavailableText } from "@/components/public/OrgUnavailableNotice"
 
 export type WaitlistOfferDetails = {
   eventTitle: string
@@ -26,6 +28,7 @@ const TITLES: Record<View, string> = {
   active: "Place déjà confirmée",
   requested: "Demande déjà envoyée",
   invalid: "Lien expiré ou invalide",
+  unavailable: "Espace indisponible",
   confirmed: "Place confirmée !",
   requestSent: "Demande envoyée",
   gone: "Place plus disponible",
@@ -49,12 +52,13 @@ const LINK_CLASS = "inline-flex min-h-11 items-center text-sm font-medium text-b
  * previews open links, some run the page's scripts. The « Prendre la place » button accepts the
  * offer (POST), like the sign-up confirmation page (#810).
  */
-export default function WaitlistOfferConfirm({ token, state, details }: { token: string; state: WaitlistOfferPageState; details: WaitlistOfferDetails | null }) {
+export default function WaitlistOfferConfirm({ token, state, details, contact = null }: { token: string; state: WaitlistOfferPageState; details: WaitlistOfferDetails | null; /** The instance's contact address, for the unavailable view. */ contact?: string | null }) {
   const id = useId()
   const [view, setView] = useState<View>(state)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [goneMessage, setGoneMessage] = useState<string | null>(null)
+  const [contactAddress, setContactAddress] = useState(contact)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const initialView = useRef<View>(state)
 
@@ -76,6 +80,10 @@ export default function WaitlistOfferConfirm({ token, state, details }: { token:
       const data = await res.json().catch(() => ({})) as { success?: boolean; requested?: boolean; error?: string }
       if (res.ok && data.success) {
         setView(data.requested ? "requestSent" : "confirmed")
+      } else if (res.status === 403 && isOrgUnavailable(data)) {
+        // The organisation was closed since the page loaded: nothing to accept, nothing to show.
+        setContactAddress(orgUnavailableContact(data) ?? contact)
+        setView("unavailable")
       } else if (res.status === 404 || res.status === 410) {
         // The offer is gone (expired, already taken): the button could only fail again.
         setGoneMessage(data.error ?? TEXTS.invalid!)
@@ -97,7 +105,7 @@ export default function WaitlistOfferConfirm({ token, state, details }: { token:
   )
   const myLink = view === "invalid"
     ? <Link href="/" className={LINK_CLASS}>Retour à l&apos;accueil</Link>
-    : <Link href={`/my/${token}`} className={LINK_CLASS}>Accéder à mon inscription</Link>
+    : <Link href={`/my/${encodeURIComponent(token)}`} className={LINK_CLASS}>Accéder à mon inscription</Link>
 
   if (view === "offered" && details) {
     return (
@@ -128,10 +136,20 @@ export default function WaitlistOfferConfirm({ token, state, details }: { token:
           {busy ? "Confirmation…" : "Prendre la place"}
         </button>
         <p className="text-sm text-gray-700 mt-4">
-          Tu ne peux plus venir ? Tu peux refuser la place depuis ta page personnelle.
+          Tu ne peux plus venir ? Tu peux refuser la place depuis ta page « Mes inscriptions ».
         </p>
         <p>{myLink}</p>
       </form>
+    )
+  }
+
+  if (view === "unavailable") {
+    // No link out: the organisation's pages, its home included, are closed too.
+    return (
+      <div className="text-center">
+        {heading}
+        <OrgUnavailableText audience="volunteer" contact={contactAddress} />
+      </div>
     )
   }
 

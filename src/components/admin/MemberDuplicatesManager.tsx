@@ -29,6 +29,8 @@ type Props = {
   /** That member's display name, server-validated (member-duplicates/page.tsx) — used only for the
    * empty-state message and the organizer's search link; never trusted beyond display/a query string. */
   prefilterMemberName?: string
+  /** « Aide : … » (#1096): the page's HelpLink, a server component rendered by the page. */
+  helpLink?: React.ReactNode
 }
 
 /** 24px targets (#557 axe target-size) on every link/button here, including the empty-state ones. */
@@ -41,7 +43,7 @@ const fullName = (m: MemberView) => `${m.firstName} ${m.lastName}${m.active ? ""
  * pair was last, or the empty-state message once none are left) — never dropped to <body>. */
 const EMPTY_TARGET = "__empty__"
 
-export default function MemberDuplicatesManager({ initialPairs, isOwner, prefilterMemberId, prefilterMemberName }: Props) {
+export default function MemberDuplicatesManager({ initialPairs, isOwner, prefilterMemberId, prefilterMemberName, helpLink }: Props) {
   const [pairs, setPairs] = useState(initialPairs)
   const [onlyMemberId, setOnlyMemberId] = useState(prefilterMemberId)
   const [busyKey, setBusyKey] = useState<string | null>(null)
@@ -114,6 +116,7 @@ export default function MemberDuplicatesManager({ initialPairs, isOwner, prefilt
           <span aria-hidden="true">←</span>Retour aux membres
         </Link>
         <h1 className="text-xl font-bold text-gray-900">Doublons possibles</h1>
+        {helpLink}
         <p className="text-sm text-gray-700">
           Des fiches peut-être en double, repérées par un nom, un téléphone, une adresse email ou une date de naissance proches. Ce ne sont que des suggestions : rien n&apos;est fusionné ni modifié ici, et un nom identique n&apos;est pas forcément la même personne.
         </p>

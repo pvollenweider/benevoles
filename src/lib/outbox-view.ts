@@ -7,6 +7,7 @@ import { MAX_ATTEMPTS, type NotificationKind, type NotificationPayload } from ".
 import type { SmtpOutcome, SmtpReason } from "./notifications/smtp-outcome"
 import { MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel-reason"
 import { MEMBER_DELETED_CANCEL_REASON } from "./outbox-member-deleted-reason"
+import { ACCOUNT_LINK_REVOKED_REASON, LEADER_LINK_REVOKED_REASON, AVAILABILITY_LINK_REVOKED_REASON, MEMBER_ADDRESS_CHANGED_REASON, PERSONAL_LINK_REVOKED_REASON } from "./outbox-address-changed-reason"
 
 /**
  * The email delivery page of an organization (#382): how an outbox row reads for an admin.
@@ -105,9 +106,14 @@ export function outboxErrorSentence(lastError: string | null): string | null {
   if (!lastError) return null
   if (lastError === MERGED_MEMBER_CANCEL_REASON) return "Annulé : fiche fusionnée avec une autre."
   if (lastError === MEMBER_DELETED_CANCEL_REASON) return "Annulé : membre supprimé."
+  if (lastError === MEMBER_ADDRESS_CHANGED_REASON) return "Annulé : l'adresse du membre a changé depuis la mise en file. Rien n'est parti vers l'ancienne adresse ; renvoyez ce message s'il doit le recevoir à la nouvelle."
+  if (lastError === PERSONAL_LINK_REVOKED_REASON) return "Annulé : le lien personnel de cet email a été remplacé depuis la mise en file."
+  if (lastError === ACCOUNT_LINK_REVOKED_REASON) return "Annulé : le lien de cet email a été remplacé ou n'est plus valable."
+  if (lastError === LEADER_LINK_REVOKED_REASON) return "Annulé : ce responsable de secteur a été retiré, ou son adresse a changé, depuis la mise en file."
+  if (lastError === AVAILABILITY_LINK_REVOKED_REASON) return "Annulé : le lien de disponibilités de cet email a été remplacé, ou la collecte arrêtée, depuis la mise en file."
   if (lastError === "limit:recipient_per_hour") return "Annulé : trop de demandes pour cette adresse en une heure."
   if (lastError === ORG_INACTIVE_REASON) return "Annulé : organisation désactivée, jamais envoyé."
-  if (lastError === ORG_PENDING_REASON) return "Annulé : espace en attente de validation, les emails ne partent qu'à ses administrateurs."
+  if (lastError === ORG_PENDING_REASON) return "Annulé : espace en attente de validation, les emails ne partent qu'à ses organisateurs."
   const decoded = decodeOutcomeReason(lastError)
   if (decoded) return sentenceFor(decoded)
   return "Échec technique de l'envoi (détail non disponible)."
@@ -115,17 +121,19 @@ export function outboxErrorSentence(lastError: string | null): string | null {
 
 export const KIND_LABELS: Record<NotificationKind, string> = {
   registration_confirmation: "Confirmation d'inscription",
+  signup_email_confirmation: "Confirmation de l'adresse avant l'inscription",
   member_invite: "Invitation d'un membre",
   reminder_j2: "Rappel J-2",
   reminder_j1: "Rappel J-1",
   reminder_dd: "Rappel du jour",
-  manual_reminder: "Rappel envoyé par un admin",
+  reminder_rule: "Rappel personnalisé",
+  manual_reminder: "Rappel envoyé par un organisateur",
   shift_modified: "Créneau modifié",
   shift_cancelled: "Créneau annulé",
-  registration_cancelled: "Désistement : notification aux admins",
+  registration_cancelled: "Désistement : notification aux organisateurs",
   admin_notification: "Notification à l'équipe",
-  admin_invite: "Invitation d'un administrateur",
-  admin_welcome: "Bienvenue administrateur",
+  admin_invite: "Invitation d'un organisateur",
+  admin_welcome: "Bienvenue organisateur",
   password_reset: "Réinitialisation du mot de passe",
   waitlist_confirmation: "Liste d'attente : confirmation",
   waitlist_offered: "Liste d'attente : place proposée",
@@ -155,6 +163,12 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   milestone_owner_reminder: "Rappel à qui s'occupe d'un jalon",
   answers_changed: "Réponses aux questions modifiées par un bénévole",
   sector_leader_answers_changed: "Réponse modifiée, aux responsables du poste de la question",
+  shift_swap_applied: "Échange de créneaux effectué",
+  shift_swap_ended: "Échange de créneaux non effectué",
+  shift_swap_offered: "Proposition d'échange de créneaux reçue",
+  shift_swap_approval_needed: "Échange de créneaux à valider, aux organisateurs",
+  availability_request: "Demande de disponibilités à un membre",
+  availability_changed: "Disponibilités corrigées après la publication des affectations",
 }
 
 export function kindLabel(kind: string): string {

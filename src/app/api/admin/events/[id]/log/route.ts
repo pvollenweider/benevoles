@@ -27,8 +27,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const url = new URL(req.url)
   const chainOf = url.searchParams.get("chainOf")
   if (chainOf) {
-    const { entries: chain, shiftLabels } = await getCausalChain(chainOf)
-    // Ownership check on the chain root, not on every entry: a chain never crosses events.
+    // Read within this event only; the root check below stays as a second guard.
+    const { entries: chain, shiftLabels } = await getCausalChain(eventId, chainOf)
     if (chain.length > 0 && chain[0].eventId !== eventId) {
       return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
     }
@@ -39,6 +39,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const since = url.searchParams.get("since")
   const until = url.searchParams.get("until")
   const limitParam = url.searchParams.get("limit")
+  // Malformed paging or dates are the caller's mistake: a 400, never a failed query.
+  if (limitParam !== null && !/^\d{1,6}$/.test(limitParam)) return NextResponse.json({ error: "Paramètre limit invalide." }, { status: 400 })
+  const sinceDate = since ? new Date(since) : undefined
+  const untilDate = until ? new Date(until) : undefined
+  if ((sinceDate && Number.isNaN(sinceDate.getTime())) || (untilDate && Number.isNaN(untilDate.getTime()))) {
+    return NextResponse.json({ error: "Date invalide." }, { status: 400 })
+  }
 
   const { entries, nextCursor, shiftLabels } = await listEventLogs(eventId, {
     entityType: url.searchParams.get("entityType") ?? undefined,
@@ -46,8 +53,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     actorId: url.searchParams.get("actorId") ?? undefined,
     actorType: url.searchParams.get("actorType") ?? undefined,
     action: url.searchParams.get("action") ?? undefined,
-    since: since ? new Date(since) : undefined,
-    until: until ? new Date(until) : undefined,
+    since: sinceDate,
+    until: untilDate,
     cursor: url.searchParams.get("cursor") ?? undefined,
     limit: limitParam ? Number(limitParam) : undefined,
   })

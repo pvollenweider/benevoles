@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // #541: GET /api/public/member-invite/[token] returns the member's name, email and phone to
 // pre-fill the sign-up form. It had no rate limit, and checked the event slug but not the
 // organization of the host (event slugs are only unique per organization).
@@ -8,6 +11,7 @@ const m = vi.hoisted(() => ({
   findInvite: vi.fn(),
   findOrg: vi.fn(),
   findHistory: vi.fn(),
+  findQuestions: vi.fn(),
   orgHeader: { value: null as string | null },
 }))
 
@@ -16,6 +20,7 @@ vi.mock("@/lib/prisma", () => ({
     memberInvite: { findUnique: m.findInvite },
     organization: { findUnique: m.findOrg },
     orgSlugHistory: { findUnique: m.findHistory },
+    eventQuestion: { findMany: m.findQuestions },
   },
 }))
 vi.mock("next/headers", () => ({
@@ -24,7 +29,7 @@ vi.mock("next/headers", () => ({
 
 const invite = (over: Record<string, unknown> = {}) => ({
   volunteer: { id: "v1", firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 000 00 00", active: true, tags: [] },
-  event: { slug: "festival", organizationId: "org-a", shifts: [] },
+  event: { id: "evt-1", slug: "festival", organizationId: "org-a", organization: OPEN_ORG, shifts: [] },
   ...over,
 })
 
@@ -43,6 +48,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   m.orgHeader.value = null
   m.findInvite.mockResolvedValue(invite())
+  m.findQuestions.mockResolvedValue([])
   m.findOrg.mockImplementation(async ({ where }: { where: { slug: string } }) =>
     ({ "org-a-slug": { id: "org-a", slug: "org-a-slug", name: "A", publicTitle: null }, "org-b-slug": { id: "org-b", slug: "org-b-slug", name: "B", publicTitle: null } } as Record<string, unknown>)[where.slug] ?? null)
   m.findHistory.mockResolvedValue(null)

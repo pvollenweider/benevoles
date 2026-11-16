@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:12.812Z",
+  "revalidatedAt": "2026-11-01T08:03:12.813Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-lock",
+      "audioSha256": "942824df91bec5f13d62cbca335b2d2f04c69f24c8f02964d5e355bd4192a624",
+      "recognized": "De retour au planning, chaque brouillon proposé porte la mention proposé. Ouvrons celui d'Emma, puis verrouiller. Une nouvelle proposition ne le remplacera pas. Le cadenas le signale sur le planning.",
+      "expected": "De retour au planning, chaque brouillon proposé porte la mention Proposé. Ouvrons celui d'Emma, puis Verrouiller : une nouvelle proposition ne le remplacera pas. Le cadenas le signale sur le planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -7,7 +7,7 @@
     "summary": "Dans cette vidéo, vous activez l'inscription sur validation pour une mission sensible.",
     "steps": [
       "Activez « Sur validation » dans le créneau et ajoutez les critères utiles dans la consigne.",
-      "Laissez le bénévole envoyer sa demande : sa page personnelle affiche « Demande envoyée », suivi de « en attente de réponse ».",
+      "Laissez le bénévole envoyer sa demande : sa page Mes inscriptions affiche « Demande envoyée », suivi de « en attente de réponse ».",
       "Ouvrez le filtre « Demandes à traiter » pour voir le nom, les coordonnées et les réponses de la personne.",
       "Acceptez ou refusez la demande, avec un message facultatif."
     ],
@@ -39,7 +39,7 @@
     },
     {
       "id": "request",
-      "transcript": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation avant même l’inscription. Une fois le formulaire envoyé, la page personnelle affiche Demande envoyée, en attente de réponse : ce n’est pas présenté comme une confirmation définitive.",
+      "transcript": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation avant même l’inscription. Une fois le formulaire envoyé, la page Mes inscriptions affiche Demande envoyée, en attente de réponse : ce n’est pas présenté comme une confirmation définitive.",
       "fallbackDurationMs": 25000
     },
     {
@@ -54,7 +54,7 @@
     },
     {
       "id": "volunteer",
-      "transcript": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
+      "transcript": "Sur sa page Mes inscriptions, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
       "fallbackDurationMs": 24000
     },
     {

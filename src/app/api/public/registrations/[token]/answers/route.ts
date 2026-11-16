@@ -4,12 +4,15 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { orgTimeZone } from "@/lib/time-zone"
 import { checkAnswers } from "@/lib/event-questions"
 import { myAnswerRows, myAnswersQuery, storedAnswers } from "@/lib/my-answers"
+import { askedQuestions } from "@/lib/question-scope"
 import { answerChanges, answersClosedText, answersEditState } from "@/lib/answer-changes"
 import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 
@@ -41,13 +44,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
       volunteerId: true,
       eventId: true,
       volunteer: { select: { firstName: true, lastName: true } },
-      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { timeZone: true } } } },
+      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
     },
   })
   if (!registration) {
     await recordTokenMiss(req)
     return notFound()
   }
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "answers"))) return tooManyAttempts()
 
   const { volunteerId, eventId, event } = registration
@@ -57,7 +61,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
   // The withdrawals' lock (#946), on every live registration of this volunteer on the event.
   const live = await prisma.registration.findMany({
     where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } },
-    select: { status: true, shift: { select: { date: true, startTime: true, endTime: true } } },
+    select: { status: true, shift: { select: { date: true, startTime: true, endTime: true, roleName: true } } },
   })
   const edit = answersEditState({ registrations: live, setting: event, timeZone, now })
   if (!edit.allowed) {
@@ -67,7 +71,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
   // The event's active questions with this volunteer's stored answers; only those sent are checked,
   // the others kept as stored. A follow-up (#1016) whose parent's answer no longer shows it is
   // cleared, sent or not: it counts as a change, logged and told like the others.
-  const questions = await prisma.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId))
+  // Only the questions asked for the postes they hold (#1140): an answer sent for another one is
+  // ignored, and the answer kept for it stays as stored (neither checked, required nor cleared).
+  const roles = live.map((r) => r.shift.roleName)
+  const questions = askedQuestions(await prisma.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId)), roles)
   const raw = parsed.data.answers
   const submitted = new Set(questions.filter((q) => Object.hasOwn(raw, q.id)).map((q) => q.id))
   const check = checkAnswers(questions, raw, { keep: storedAnswers(questions) })
@@ -96,6 +103,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
     changes,
   }, now)
 
-  const fresh = await prisma.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId))
+  const fresh = askedQuestions(await prisma.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId)), roles)
   return NextResponse.json({ answers: myAnswerRows(fresh), changed: changes.length })
 }

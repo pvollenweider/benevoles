@@ -33,7 +33,7 @@ const dangerButton =
 type FormValues = { name: string; roleNames: string[]; hideFull: boolean }
 
 /**
- * Share links per group (#947), in the event's « Partager l'événement » area: one link per club or
+ * Share links per group (#947), in the event's « Liens à partager » page: one link per club or
  * team, showing only its roles, with its QR code and the sign-ups it brought. Inline forms (no
  * dialog), the focus handled by hand as in MilestonesSection; deletion asks first.
  *
@@ -164,8 +164,8 @@ export default function GroupLinksManager({ eventId, roles, initialLinks, publis
                     {link.missingRoles.length > 0 && (
                       <p className="text-sm text-amber-900">
                         {link.missingRoles.length === link.roleNames.length
-                          ? "Aucun de ses postes n'est au planning : le lien affiche tout l'événement."
-                          : `Plus au planning : ${link.missingRoles.join(", ")}.`}
+                          ? "Aucun de ses postes n'est sur la page d'inscription : le lien affiche tout l'événement."
+                          : `Plus sur la page d'inscription : ${link.missingRoles.join(", ")}.`}
                       </p>
                     )}
                     {link.roleNames.length === 0 && (
@@ -260,7 +260,7 @@ function GroupLinkForm({ eventId, roles, link, onSaved, onCancel }: {
     roleNames: (link?.roleNames ?? []).filter((r) => roles.includes(r)),
     hideFull: link?.hideFull ?? false,
   })
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
   const errorId = `${id}-error`
 
   useLayoutEffect(() => {
@@ -338,7 +338,7 @@ function GroupLinkForm({ eventId, roles, link, onSaved, onCancel }: {
                 aria-invalid={rolesInvalid}
                 // The focused box carries the message too: VoiceOver does not read the fieldset's.
                 aria-describedby={i === 0 && rolesInvalid ? errorId : undefined}
-                className="h-4 w-4 rounded border-gray-400"
+                className="h-4 w-4 rounded border-gray-500"
               />
               {role}
             </label>
@@ -352,13 +352,13 @@ function GroupLinkForm({ eventId, roles, link, onSaved, onCancel }: {
             checked={values.hideFull}
             onChange={(e) => setValues((v) => ({ ...v, hideFull: e.target.checked }))}
             aria-describedby={`${id}-full-hint`}
-            className="h-4 w-4 rounded border-gray-400"
+            className="h-4 w-4 rounded border-gray-500"
           />
           Masquer les créneaux complets
         </label>
         <p id={`${id}-full-hint`} className="text-xs text-gray-600">Les bénévoles ne voient que les créneaux où il reste de la place.</p>
       </div>
-      <FormStatus error={error} errorId={errorId} />
+      <FormStatus error={error} errorId={errorId} quiet={quiet} alertShown={alertShown} />
       <p role="status" className="sr-only">{busy ? "Enregistrement en cours…" : ""}</p>
       <div className="flex flex-wrap justify-end gap-2">
         <button type="button" onClick={onCancel} className={quietButton}>Annuler</button>

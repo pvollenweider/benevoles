@@ -34,7 +34,7 @@ const linkClass = "text-blue-600 dark:text-blue-400 underline underline-offset-2
 // The previous and next unit of the group: a bordered block, the whole block is the link.
 const pagerClass = "flex h-full flex-col gap-1 rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
-// A documentation unit (#649), rendered from its own guide/<slug>.md (source of truth, also
+// A documentation unit (#649), rendered from its own content/guide/<slug>.md (source of truth, also
 // readable on GitHub): breadcrumb (its group links to the group on the /doc index), title, who it
 // is for (and, on a unit for both audiences, a link to each half), content, « Voir aussi », the
 // previous and next unit of its group (src/lib/doc-navigation.ts). Beside it from `lg`, the menu

@@ -9,16 +9,22 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { SHIFT_DESCRIPTION_MAX, SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { generateShiftSeries, seriesProblem } from "@/lib/shift-series"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
-import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
+import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf, type RoleSettings } from "@/lib/role-settings"
+import { newShiftsSector } from "@/lib/sector-adoption"
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Tx = any
 
 const schema = z.object({
   eventId: z.string(),
-  roleName: z.string().min(1),
-  label: z.string().optional(),
-  description: z.string().optional(),
+  roleName: cappedText(SHIFT_ROLE_NAME_MAX, "Le nom du poste").min(1),
+  label: cappedText(SHIFT_LABEL_MAX, "Le libellé du créneau").optional(),
+  description: cappedText(SHIFT_DESCRIPTION_MAX, "La description du créneau").optional(),
   date: civilDateSchema,
   startTime: clockSchema,
   endTime: clockSchema,
@@ -27,7 +33,7 @@ const schema = z.object({
   capacity: z.number().int().min(1),
   // Minimum per shift (#949), the same on every shift of the series.
   minVolunteers: z.number().nullable().optional(),
-  locationDetails: z.string().optional(),
+  locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
@@ -37,6 +43,12 @@ const schema = z.object({
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
+  /**
+   * Sector chosen in the form (#1147), as for one shift (POST /api/admin/shifts): a new poste is
+   * created in it, an existing poste keeps its own and a different one is refused (409). Absent:
+   * as before, the poste's sector or none.
+   */
+  sectorId: z.string().min(1).nullable().optional(),
 }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
   .superRefine((d, ctx) => {
     const problem = minVolunteersProblem(d.minVolunteers, d.capacity)
@@ -51,7 +63,7 @@ export async function POST(req: Request) {
 
   const parsed = schema.safeParse(await req.json())
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
-  const { eventId, slotMinutes, breakMinutes, date, startTime, endTime, label, ...rest } = parsed.data
+  const { eventId, slotMinutes, breakMinutes, date, startTime, endTime, label, sectorId, ...rest } = parsed.data
 
   const problem = seriesProblem({ date, startTime, endTime, slotMinutes, breakMinutes })
   if (problem) return NextResponse.json({ error: problem }, { status: 400 })
@@ -61,9 +73,7 @@ export async function POST(req: Request) {
   if (!isDayInPeriod(parsed.data.date, owned.startDate, owned.endDate)) return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
 
   const slots = generateShiftSeries({ date, startTime, endTime, slotMinutes, breakMinutes })
-  // Shifts added to an existing poste take its settings (#986, #1002).
-  const poste = roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(eventId, rest.roleName), select: ROLE_SETTINGS_SELECT }), rest.roleName)
-  const shifts = await db.$transaction((tx) =>
+  const create = (tx: Tx, poste: Partial<RoleSettings> | null) =>
     Promise.all(
       slots.map((slot) =>
         tx.shift.create({
@@ -79,8 +89,24 @@ export async function POST(req: Request) {
           },
         }),
       ),
-    ),
-  )
+    )
+  let shifts: Awaited<ReturnType<typeof create>>
+  let sectorName: string | null = null
+  if (sectorId === undefined) {
+    // Shifts added to an existing poste take its settings (#986, #1002).
+    const poste = roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(eventId, rest.roleName), select: ROLE_SETTINGS_SELECT }), rest.roleName)
+    shifts = await db.$transaction((tx) => create(tx, poste))
+  } else {
+    // Sector first (#1147): checked and locked like one shift, the series written in the same transaction.
+    const outcome = await db.$transaction(async (tx) => {
+      const target = await newShiftsSector(tx, guard.organizationId, eventId, rest.roleName, sectorId)
+      if (!target.ok) return target
+      return { ok: true as const, value: { shifts: await create(tx, { ...target.value.poste, sectorId: target.value.sectorId }), name: target.value.sectorName } }
+    })
+    if (!outcome.ok) return NextResponse.json({ error: outcome.error }, { status: outcome.status })
+    shifts = outcome.value.shifts
+    sectorName = outcome.value.name
+  }
 
   const actor = adminActor(guard.session)
   await Promise.all(
@@ -97,6 +123,7 @@ export async function POST(req: Request) {
           startTime: { from: null, to: shift.startTime },
           endTime: { from: null, to: shift.endTime },
           capacity: { from: null, to: shift.capacity },
+          ...(sectorName ? { sector: { from: null, to: sectorName } } : {}),
         },
       }),
     ),

@@ -21,6 +21,9 @@ export function canSelfReactivate(org: OrgState | null | undefined): boolean {
   return !!org && !org.active && org.suspendedAt === null && org.inactivityDeactivatedAt !== null
 }
 
+/** The same condition as a database filter, for the reactivation's conditional write. */
+export const SELF_REACTIVATION_WHERE = { active: false, suspendedAt: null, inactivityDeactivatedAt: { not: null } } as const
+
 /** Whether a stored link still works: an active account, before expiry, for a space it can reactivate. */
 export function reactivationLinkValid(
   admin: { isActive: boolean; orgReactivationExpiresAt: Date | null; organization: OrgState | null },

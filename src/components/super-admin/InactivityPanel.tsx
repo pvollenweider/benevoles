@@ -77,7 +77,7 @@ export default function InactivityPanel({ orgId, status, postponed, exempt, appl
               id={`${id}-months`}
               value={months}
               onChange={(e) => setMonths(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-500 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             >
               {POSTPONE_MONTHS.map((m) => <option key={m} value={m}>{m} mois</option>)}
             </select>

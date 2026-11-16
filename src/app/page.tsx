@@ -12,7 +12,8 @@ import OrgLogoImage from "@/components/OrgLogoImage"
 import { ORG_LOGO_SELECT, orgLogoOf, type OrgLogo } from "@/lib/org-logo"
 import { apexBaseUrl, orgBaseUrl, orgPageFooterSite } from "@/lib/urls"
 import { orgHomeMetadata } from "@/lib/event-share"
-import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
+import { orgHomeEventsWhere, orgHomeRobots } from "@/lib/event-visibility"
+import { publicShifts } from "@/lib/role-assignment"
 import { CONTACT_EMAIL, LANDING_FAQ_SOURCE, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
 import { loadDocUnits } from "@/lib/doc-units"
 import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } from "@/lib/landing-start-guides"
@@ -45,11 +46,17 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!rawOrgSlug) return isHostedService() ? landingMetadata(apexBaseUrl()) : instanceHomeMetadata(apexBaseUrl())
   const resolved = await resolveOrgSlug(rawOrgSlug)
   if (!resolved || resolved.redirectUrl) return {}
-  // The organisation's page shared in a message or found in a search (#564 for its events).
-  return orgHomeMetadata(
-    { name: resolved.org.name, title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE },
-    { canonicalUrl: `${orgBaseUrl(resolved.org.slug)}/`, imageUrl: `${apexBaseUrl()}/og-image.png` },
-  )
+  // The organisation's page shared in a message or found in a search (#564 for its events), kept
+  // out of search engines while it shows no event.
+  const shownEvents = await prisma.event.count({ where: { ...orgHomeEventsWhere(), organizationId: resolved.org.id } })
+  const robots = orgHomeRobots(shownEvents)
+  return {
+    ...orgHomeMetadata(
+      { name: resolved.org.name, title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE },
+      { canonicalUrl: `${orgBaseUrl(resolved.org.slug)}/`, imageUrl: `${apexBaseUrl()}/og-image.png` },
+    ),
+    ...(robots && { robots }),
+  }
 }
 
 export default async function HomePage() {
@@ -79,14 +86,10 @@ export default async function HomePage() {
   if (!orgSlug) return isHostedService() ? <LandingPage /> : await InstanceHome()
 
   // Hide events that are already over: they would show "N places à pourvoir".
-  const startOfToday = new Date()
-  startOfToday.setHours(0, 0, 0, 0)
-
   const events = await prisma.event.findMany({
     where: {
-      ...PUBLIC_LIST_WHERE,
+      ...orgHomeEventsWhere(),
       organization: { slug: orgSlug },
-      endDate: { gte: startOfToday },
     },
     include: {
       organization: { select: { slug: true, name: true } },
@@ -99,8 +102,10 @@ export default async function HomePage() {
   })
 
   const enriched = events.map((event) => {
-    const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
-    const totalRegistered = event.shifts.reduce((s, sh) => s + sh.registrations.length, 0)
+    // Roles assigned by the organisation only (#1145) are not counted: no total reveals them.
+    const shifts = publicShifts(event.shifts)
+    const totalCapacity = shifts.reduce((s, sh) => s + sh.capacity, 0)
+    const totalRegistered = shifts.reduce((s, sh) => s + sh.registrations.length, 0)
     return { ...event, totalCapacity, totalRegistered, spotsLeft: totalCapacity - totalRegistered }
   })
 
@@ -259,7 +264,7 @@ async function InstanceHome() {
 }
 
 function LandingPage() {
-  // The documentation's entry points (#764): titles and summaries read from guide/.
+  // The documentation's entry points (#764): titles and summaries read from content/guide/.
   const units = loadDocUnits()
   const quickstart = landingQuickstartLink(units)
   // The phone plays the volunteer sign-up video in place (#765) when it can play here.
@@ -452,8 +457,9 @@ function LandingPage() {
             <div>
               <dt className="text-lg font-semibold">Pensé pour tout le monde</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                L&apos;inscription comme l&apos;administration s&apos;utilisent au clavier et avec un
-                lecteur d&apos;écran, et c&apos;est vérifié à chaque modification.{" "}
+                L&apos;inscription comme l&apos;administration s&apos;utilisent entièrement au clavier,
+                et sont conçues pour les lecteurs d&apos;écran ; chaque modification des écrans passe
+                une revue d&apos;accessibilité.{" "}
                 <Link href="/accessibilite" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
                   Déclaration d&apos;accessibilité
                 </Link>

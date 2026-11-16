@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
-import { COMMITTED_STATUSES } from "@/lib/registration-capacity"
+import { placeChoiceProblem } from "@/lib/places"
+import { NOTIFIED_COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -13,14 +14,19 @@ import { cancelShift } from "@/lib/shift-cancel"
 import { registrationToken } from "@/lib/token-vault"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { SHIFT_DESCRIPTION_MAX, SHIFT_INTERNAL_NOTES_MAX, SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
+import { endSwapsIn } from "@/lib/shift-swap-server"
+import { shiftMateriallyChanged } from "@/lib/shift-swaps"
+import { checkScheduleEdit, scheduleEditRefusalBody, ScheduleEditRefusalError } from "@/lib/workload-guard"
 
 const schema = z.object({
-  roleName: z.string().optional(),
-  label: z.string().optional(),
-  description: z.string().optional().nullable(),
+  roleName: cappedText(SHIFT_ROLE_NAME_MAX, "Le nom du poste").optional(),
+  label: cappedText(SHIFT_LABEL_MAX, "Le libellé du créneau").optional(),
+  description: cappedText(SHIFT_DESCRIPTION_MAX, "La description du créneau").optional().nullable(),
   date: civilDateSchema.optional(),
   startTime: clockSchema.optional(),
   endTime: clockSchema.optional(),
@@ -28,20 +34,31 @@ const schema = z.object({
   // Minimum per shift (#949): null removes it; checked below against the places it will have.
   minVolunteers: z.number().nullable().optional(),
   status: z.enum(["open", "full", "closed", "cancelled"]).optional(),
-  locationDetails: z.string().optional().nullable(),
+  locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
   contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
   instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),
   displayOrder: z.number().int().optional(),
-  internalNotes: z.string().optional().nullable(),
+  internalNotes: cappedText(SHIFT_INTERNAL_NOTES_MAX, "Les notes internes").optional().nullable(),
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
-  // Caller can opt out of notifying volunteers (default true).
+  /** « Repas sur le pouce possible » (#1171, lot 2); removing it is judged like new hours. */
+  mealOnTheGo: z.boolean().optional(),
+  /** Place of the mission (#1171, lot 2); a new place is judged like new hours. */
+  placeId: z.string().min(1).nullable().optional(),
+  // Caller can opt out of notifying volunteers (default true): of new hours, and of a cancellation
+  // (AUTHZ-15, « Ne pas prévenir les inscrits »).
   notifyVolunteers: z.boolean().optional(),
 }).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
+
+/** A field sent unchanged (the timeline sends the label with every edit). */
+function sameValue(next: unknown, stored: unknown): boolean {
+  if (stored instanceof Date) return typeof next === "string" && stored.toISOString().slice(0, 10) === next
+  return (next ?? null) === (stored ?? null)
+}
 
 function fmtDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
@@ -85,8 +102,31 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     parsed.data.capacity ?? before.capacity,
   )
   if (minProblem) return NextResponse.json({ error: minProblem }, { status: 400 })
+  if (parsed.data.placeId !== undefined && parsed.data.placeId !== before.placeId) {
+    const placeProblem = placeChoiceProblem(await db.eventPlace.findMany({ where: { eventId: before.eventId }, select: { id: true, name: true, archivedAt: true } }), parsed.data.placeId, before.placeId)
+    if (placeProblem) return NextResponse.json({ error: placeProblem, field: "placeId" }, { status: 400 })
+  }
 
   const { notifyVolunteers, ...rest } = parsed.data
+
+  // Cancelling by the status (AUTHZ-15): the same cancellation as « Supprimer » (registrations and
+  // pending requests cancelled, swaps ended, a published event left with no shift back to draft),
+  // the people registered emailed unless the organiser chose not to. Alone: a cancellation is
+  // never mixed with other changes. Reopening later gives no place back (« Rétablir » does).
+  if (rest.status === "cancelled" && before.status !== "cancelled") {
+    const others = (Object.keys(rest) as (keyof typeof rest)[]).filter((k) => k !== "status" && rest[k] !== undefined && !sameValue(rest[k], before[k as keyof typeof before]))
+    if (others.length > 0) return NextResponse.json({ error: "Annulez le créneau sans autre modification en même temps." }, { status: 400 })
+    const shift = await db.shift.findFirst({
+      where: { id },
+      include: {
+        event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
+        registrations: { where: { status: { in: [...NOTIFIED_COMMITTED_STATUSES] } }, include: { volunteer: true } },
+      },
+    })
+    if (!shift) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+    const result = await cancelShift(shift, adminActor(guard.session), { notify: notifyVolunteers !== false })
+    return NextResponse.json({ ...shift, registrations: undefined, event: undefined, status: "cancelled", ...result })
+  }
   const updateData: Record<string, unknown> = { ...rest }
   // A shift moved to an existing poste takes its settings (#986, #1002): colour, limit, access,
   // cumulable and order, over the order the form sends. A poste new to the event keeps the shift's
@@ -99,43 +139,75 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   // The update and its notifications commit together (#352): volunteers are never left
   // unaware of a schedule change that was saved.
-  const { after, outboxIds, notified } = await db.$transaction(async (tx) => {
-    const after = await tx.shift.update({ where: { id }, data: updateData })
-
-    // Detect schedule changes worth notifying about (date / start / end).
-    const scheduleChanged =
-      (rest.date && before.date.toISOString() !== after.date.toISOString()) ||
-      (rest.startTime && before.startTime !== after.startTime) ||
-      (rest.endTime && before.endTime !== after.endTime)
-
-    // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
-    const outbox = collectNotifications()
-    if (scheduleChanged && notifyVolunteers !== false && before.registrations.length > 0) {
-      for (const reg of before.registrations) {
-        await outbox.send({
-          kind: "shift_modified",
-          dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
-          recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
-          volunteerId: reg.volunteerId,
-          organizationId: before.event.organizationId,
-          data: {
-            volunteerName: reg.volunteer.firstName,
-            eventTitle: before.event.title,
-            orgSlug: before.event.organization.slug,
-            shiftLabel: after.label,
-            oldDate: fmtDate(before.date),
-            newDate: fmtDate(after.date),
-            oldStart: before.startTime,
-            newStart: after.startTime,
-            oldEnd: before.endTime,
-            newEnd: after.endTime,
-            editToken: registrationToken.reveal(reg),
-          },
-        })
+  const timesMove = (rest.date !== undefined && rest.date !== before.date.toISOString().slice(0, 10))
+    || (rest.startTime !== undefined && rest.startTime !== before.startTime)
+    || (rest.endTime !== undefined && rest.endTime !== before.endTime)
+  // Removing « repas sur le pouce possible » can take the meal away from people holding the shift
+  // (Codex, lot 2): judged like new hours. Setting it can only help, judged all the same (cheap).
+  const mealMoves = rest.mealOnTheGo !== undefined && rest.mealOnTheGo !== before.mealOnTheGo
+  // A new place is judged too (travel margin): a mission elsewhere may be too close now.
+  const placeMoves = rest.placeId !== undefined && (rest.placeId ?? null) !== before.placeId
+  let saved
+  try {
+    saved = await db.$transaction(async (tx) => {
+      // Workload protection (#1171): new hours are judged for every person holding the shift, before
+      // anything is written; one refusal refuses the edit.
+      if (timesMove || mealMoves || placeMoves) {
+        const refusals = await checkScheduleEdit(tx, before.eventId, [{
+          id,
+          date: rest.date ?? before.date,
+          startTime: rest.startTime ?? before.startTime,
+          endTime: rest.endTime ?? before.endTime,
+          mealOnTheGo: rest.mealOnTheGo ?? before.mealOnTheGo,
+          placeId: rest.placeId !== undefined ? rest.placeId : before.placeId,
+          placeName: null,
+        }])
+        if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals, timesMove ? undefined : placeMoves ? "avec ce lieu" : "sans repas sur le pouce sur ce créneau")
       }
-    }
-    return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: before.event.organizationId }), notified: outbox.payloads.length }
-  })
+      const after = await tx.shift.update({ where: { id }, data: updateData })
+      // A new time, day, place, poste or requirement ends the swap requests agreed on the old one
+      // (#1174 E13): never applied to terms nobody agreed to.
+      if (shiftMateriallyChanged(before, after)) await endSwapsIn(tx, { shiftIds: [id] }, "shift_changed", adminActor(guard.session))
+
+      // Detect schedule changes worth notifying about (date / start / end).
+      const scheduleChanged =
+        (rest.date && before.date.toISOString() !== after.date.toISOString()) ||
+        (rest.startTime && before.startTime !== after.startTime) ||
+        (rest.endTime && before.endTime !== after.endTime)
+
+      // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
+      const outbox = collectNotifications()
+      if (scheduleChanged && notifyVolunteers !== false && before.registrations.length > 0) {
+        for (const reg of before.registrations) {
+          await outbox.send({
+            kind: "shift_modified",
+            dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
+            recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+            volunteerId: reg.volunteerId,
+            organizationId: before.event.organizationId,
+            data: {
+              volunteerName: reg.volunteer.firstName,
+              eventTitle: before.event.title,
+              orgSlug: before.event.organization.slug,
+              shiftLabel: after.label,
+              oldDate: fmtDate(before.date),
+              newDate: fmtDate(after.date),
+              oldStart: before.startTime,
+              newStart: after.startTime,
+              oldEnd: before.endTime,
+              newEnd: after.endTime,
+              editToken: registrationToken.reveal(reg),
+            },
+          })
+        }
+      }
+      return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: before.event.organizationId }), notified: outbox.payloads.length }
+    })
+  } catch (e) {
+    if (e instanceof ScheduleEditRefusalError) return NextResponse.json(scheduleEditRefusalBody(e.refusals, e.cause), { status: 409 })
+    throw e
+  }
+  const { after, outboxIds, notified } = saved
 
   const shiftChanges = diffFields(before, after, [
     "roleName",
@@ -149,6 +221,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     "waitlistEnabled",
     "requiresApproval",
     "minAge",
+    "mealOnTheGo",
+    "placeId",
   ])
   if (shiftChanges) {
     await logEvent({
@@ -177,7 +251,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     include: {
       event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
       // Pending requests (#484) are cancelled and told too: they held a spot on this shift.
-      registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
+      registrations: { where: { status: { in: [...NOTIFIED_COMMITTED_STATUSES] } }, include: { volunteer: true } },
     },
   })
   if (!shift) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })

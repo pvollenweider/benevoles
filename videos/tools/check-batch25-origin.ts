@@ -6,6 +6,7 @@ import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser, videoRequestProxy } from "../lib/public-hosts"
 import { verifyProductBuild } from "../lib/product-build"
+import { passOperatorSecondFactor } from "../lib/operator-second-factor"
 async function main() {
   const operator = process.argv[2] === "operator"
   assert(process.argv.length === (operator ? 3 : 2))
@@ -21,6 +22,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill(operator ? "video.operator.platform@example.org" : "video.last-minute.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
+    if (operator) await passOperatorSecondFactor(page)
     await page.waitForURL(/\/(admin\/(events|dashboard)|super-admin\/organizations)/)
     if (operator) {
       await page.goto(`${base}/super-admin/use-org/video-operator-org-a`)

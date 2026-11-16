@@ -11,8 +11,14 @@
  */
 
 import { PAST_EVENT_NOTICE_DAYS } from "./past-event-retention"
-import { DEACTIVATION_DAYS, INACTIVITY_MONTHS } from "./org-inactivity"
+import { INACTIVITY_MONTHS } from "./org-inactivity"
+import { FINAL_NOTICE_DAYS, MIN_DEACTIVATION_DAYS, REMINDER_GAP_DAYS } from "./org-inactivity-steps"
+import { SESSION_ABSOLUTE_SECONDS } from "./session-lifetime"
 
+// ReminderOccurrence (#1139) deliberately has no age-based retention yet: a row is send state,
+// kept until its event or volunteer goes (cascade), and a sent one is the only proof that a rule
+// did not send twice. When a window is wanted, add it to RETENTION_DAYS below and purge it from
+// /api/cron/cleanup like DeliveryOutcome — never from the hourly reminder run.
 export const RETENTION_DAYS = {
   /** Deactivated organisation, with its events, members, registrations, logs (cascade). */
   deactivatedOrganization: 30,
@@ -29,22 +35,44 @@ export const RETENTION_DAYS = {
    * and the accepted outcomes kept alongside them (needed so #599 can tell a later send to the
    * same address succeeded). */
   deliveryOutcome: 30,
+  /** Batch of emails sent at once (#1101): kind, author, counts, no recipient, no content. Three
+   * years, like the volunteers' data of a past event, so an organisation can still say what it
+   * sent for an event of the last seasons. */
+  sendBatch: 1095,
   /** Targeted message (subject, text, audience, counts), #467. */
   targetedMessage: 365,
   /** Anonymous « utile ? » answer to a tutorial video (#646): not personal data, but no reason to
    * keep it longer than the videos it judges stay current; a year of answers is enough to find
    * the videos to improve, and a regenerated video starts fresh anyway (new revision). */
   videoFeedback: 365,
+  /** Sending limits reached (#1100): organisation, limit, hour, counts; no address, no content.
+   * The operator looks at the last 7 days; three months show whether a limit is hit again and again. */
+  emailLimitHit: 90,
+  /** Aggregated delivery counts of the transactional emails (#1269): organisation, day, kind,
+   * outcome, count, no address and no content. Kept 13 months, so a season can be compared with
+   * the previous one. */
+  deliveryCounter: 395,
   /** The operator's decisions (#810): space validated, refused, suspended, deleted, block list. */
   operatorLog: 365,
   /** Self-service sign-up request (#810): name, contact name and address typed on /inscription. */
   signupRequest: 7,
+  /** Operator alert rows in the outbox: title, message, health link, and the recipient's email.
+   * Kept seven days so a same-day cleanup rerun finds the key and sends neither the push nor the
+   * email again (src/lib/operator-alerts.ts). */
+  operatorAlert: 7,
   /** Encrypted database dump on the server. */
   localBackup: 30,
   /** Copy of the encrypted dumps off site. */
   offsiteBackup: 90,
   /** Container logs, rotated on the nodes (manual setup, k8s/log-rotation.md). */
   technicalLogs: 90,
+  /** Traefik access log, a JSON file on the node rotated daily (k8s/node/traefik-access.logrotate:
+   * rotate and maxage; k8s/node/traefik-log-anonymise MAX_DAYS deletes what maxage misses), owner
+   * decision of 2026-10-22: one year, to investigate abuse after the fact. */
+  accessLogs: 365,
+  /** Full client address and User-Agent in the access log; older files have the address
+   * truncated to /24 or /48 and the User-Agent dropped (k8s/node/traefik-log-anonymise, FULL_IP_DAYS). */
+  accessLogFullIp: 90,
 } as const
 
 export const DAY_MS = 24 * 60 * 60 * 1000
@@ -67,7 +95,7 @@ const inBackups = `oui, jusqu'à ${d.localBackup} jours sur le serveur et ${d.of
 
 export const RETENTION: readonly RetentionEntry[] = [
   {
-    data: "Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés, logo de l'organisation",
+    data: "Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes organisateurs, doublons possibles ignorés, logo de l'organisation",
     purpose: "Organiser les événements de l'organisation",
     duration: `tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés ${d.deactivatedOrganization} jours après sa désactivation par l'opérateur (délai compté depuis la dernière modification de l'organisation désactivée) ; une organisation sans activité depuis ${INACTIVITY_MONTHS} mois suit la ligne « Organisation désactivée faute d'activité »`,
     trigger: "désactivation de l'organisation",
@@ -85,20 +113,29 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels) restés sans réponse ${DEACTIVATION_DAYS} jours`,
-    purpose: "Permettre à ses administrateurs de la réactiver eux-mêmes",
+    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses organisateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels, chacun accepté par le serveur d'envoi pour au moins un organisateur, le suivant au plus tôt ${REMINDER_GAP_DAYS} jours de calendrier plus tard) restés sans réponse au moins ${FINAL_NOTICE_DAYS} jours après l'envoi du dernier rappel, et au moins ${MIN_DEACTIVATION_DAYS} jours après l'envoi du premier`,
+    purpose: "Permettre à ses organisateurs de la réactiver eux-mêmes",
     duration: "conservées tant qu'elle est désactivée ; une réponse, une activité ou un événement prévu arrête la procédure avant la désactivation",
     trigger: "désactivation après trois messages sans réponse",
-    mechanism: "aucune suppression automatique ; réactivation par un administrateur depuis la page de connexion, ou suppression définitive par l'opérateur",
+    mechanism: "aucune suppression automatique ; réactivation par un organisateur depuis la page de connexion, ou suppression définitive par l'opérateur",
     backups: inBackups,
     public: true,
   },
   {
-    data: "Demande d'espace faite sur le site : nom de l'association, sa description et son besoin, nom et adresse email de la personne",
+    data: "Demande d'espace faite sur le site : nom de l'association, sa description et son besoin, nom et adresse email de la personne, et la réponse facultative à « Comment avez-vous connu le site ? »",
     purpose: "Confirmer l'adresse puis créer l'espace et son compte propriétaire",
-    duration: `${d.signupRequest} jours après la demande, confirmée ou non (l'espace et le compte créés, et la description gardée sur la fiche de l'espace pour l'opérateur, suivent ensuite les règles de l'organisation ; un espace dont le mot de passe n'a jamais été choisi est effacé avec son compte ${d.deactivatedAdmin} jours après sa création)`,
+    duration: `${d.signupRequest} jours après la demande, confirmée ou non (l'espace et le compte créés, et la description et la réponse « Comment avez-vous connu le site ? » gardées sur la fiche de l'espace pour l'opérateur, suivent ensuite les règles de l'organisation ; un espace dont le mot de passe n'a jamais été choisi est effacé avec son compte ${d.deactivatedAdmin} jours après sa création)`,
     trigger: "demande sur la page d'inscription",
     mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Inscription publique en attente de confirmation par email : prénom, nom, adresse email, téléphone, date de naissance, commentaire, réponses aux questions, empreinte du lien de confirmation et échéance",
+    purpose: "Réserver les places choisies le temps que le bénévole confirme son adresse, puis garder le résultat du lien",
+    duration: "tant que l'événement existe ; les places provisoires sont libérées à l'échéance, la demande remplacée, expirée ou annulée ne tient plus de place ; effacée avec l'événement, à l'effacement des données du membre, à une fusion de fiches et à l'anonymisation de l'événement 3 ans après sa fin",
+    trigger: "inscription publique sur un événement qui demande la confirmation de l'adresse",
+    mechanism: "libération à l'échéance par le cron des rappels ; suppression en cascade avec l'événement ou le membre ; anonymisation des événements passés",
     backups: inBackups,
     public: true,
   },
@@ -121,7 +158,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Choix d'un bénévole d'afficher ou non son prénom et l'initiale de son nom aux autres bénévoles confirmés d'un événement : affiché, à confirmer ou masqué, version du texte accepté, manière (formulaire d'inscription ou page personnelle) et date ; les changements sont aussi notés dans le journal de l'événement",
+    data: "Choix d'un bénévole d'afficher ou non son prénom et l'initiale de son nom aux autres bénévoles confirmés d'un événement : affiché, à confirmer ou masqué, version du texte accepté, manière (formulaire d'inscription ou page « Mes inscriptions ») et date ; les changements sont aussi notés dans le journal de l'événement",
     purpose: "N'afficher le nom qu'avec l'accord de la personne, et pouvoir le montrer",
     duration: `tant que l'événement existe ; les noms ne sont plus montrés après le dernier jour de l'événement ; effacé avec l'événement ou le membre, à l'effacement des données du membre, à une fusion de fiches (le choix ne passe jamais d'une fiche à l'autre) et à l'anonymisation de l'événement 3 ans après sa fin`,
     trigger: "choix du bénévole",
@@ -130,7 +167,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Événement supprimé par un administrateur",
+    data: "Événement supprimé par un organisateur",
     purpose: "—",
     duration: "effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et programmés et son journal",
     trigger: "suppression définitive d'un événement archivé",
@@ -141,7 +178,7 @@ export const RETENTION: readonly RetentionEntry[] = [
   {
     data: "Organisation supprimée par l'opérateur du service",
     purpose: "—",
-    duration: "effacée immédiatement, avec ses membres et ses administrateurs",
+    duration: "effacée immédiatement, avec ses membres et ses organisateurs",
     trigger: "suppression définitive d'une organisation désactivée",
     mechanism: "suppression en cascade",
     backups: inBackups,
@@ -157,11 +194,29 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions (aussi celles que le journal a notées quand un bénévole les a modifiées), invitations et responsables de secteur",
+    data: "Réponses « Je ne peux pas » d'un membre pour un créneau : une par membre et par créneau, avec la date de la réponse",
+    purpose: "Ne pas reproposer par erreur un créneau auquel la personne a déjà répondu non, et montrer la raison à l'organisation",
+    duration: "tant que l'événement existe, comme son invitation ; la réponse est supprimée quand la personne prend le créneau, à l'effacement de ses données et à une fusion de fiches, et avec l'événement ou à son anonymisation 3 ans après sa fin",
+    trigger: "réponse depuis le lien de l'email",
+    mechanism: "suppression à la prise du créneau, à l'effacement et à la fusion ; suppression en cascade avec le membre, le créneau ou l'événement",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions (aussi celles que le journal a notées quand un bénévole les a modifiées), invitations, réponses « Je ne peux pas » par créneau, disponibilités datées, affectations en brouillon, propositions d'affectations, objectifs d'heures et responsables de secteur",
     purpose: "Ne pas garder sans fin les données personnelles d'événements anciens",
     duration: `anonymisées 3 ans après la fin de l'événement : ses inscriptions passent à une fiche « Bénévole effacé » par personne, sans lien avec sa fiche de membre (effectifs, heures et présences gardés, sans nom), le reste est effacé ; l'événement lui-même (titre, dates, créneaux, totaux) et les fiches des membres restent. L'organisation est prévenue ${PAST_EVENT_NOTICE_DAYS} jours avant la première anonymisation, puis les événements qui atteignent 3 ans sont anonymisés chaque mois. Règle appliquée lorsque l'opérateur du service l'active`,
     trigger: "3 ans après la fin de l'événement",
     mechanism: "nettoyage quotidien (cron cleanup) avec PAST_EVENT_RETENTION=enforce : un préavis unique par organisation, puis un lot par mois ; sans cette variable, observation seulement (« Statistiques » du super admin et réponse du nettoyage). Une sauvegarde restaurée est anonymisée de nouveau au lot suivant (marque `personalDataAnonymizedAt` de l'événement)",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Disponibilités datées d'un membre pour un événement : plages libres ou « pas disponible » date par date, qui les a saisies et quand, et le lien personnel « Indiquer mes disponibilités » (son empreinte et sa copie chiffrée) ; affectations en brouillon de l'organisation (une personne sur un créneau, en attente, publiée ou retirée) et la trace de leurs publications ; propositions d'affectations (les choix de l'organisateur, les données lues pour le calcul, le résultat et ses explications) et objectifs d'heures par personne",
+    purpose: "Préparer les affectations de l'événement ; vues par les organisateurs seulement",
+    duration: "avec l'événement : effacées 3 ans après sa fin (ligne « Événement terminé depuis plus de 3 ans »), à l'effacement des données du membre, ou avec l'événement ; le lien est révoqué quand la collecte est arrêtée, les réponses restent",
+    trigger: "fin de l'événement, effacement du membre, suppression de l'événement",
+    mechanism: "anonymisation des événements passés, effacement à la demande, suppression en cascade",
     backups: inBackups,
     public: true,
   },
@@ -175,7 +230,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
+    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses « Je ne peux pas » par créneau, disponibilités datées des événements, affectations en brouillon, objectifs d'heures et place dans les propositions d'affectations, réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
     purpose: "Droit à l'effacement",
     duration: "effacées immédiatement ; la fiche devient « Bénévole effacé » et ses inscriptions restent, sans identité, pour les effectifs, les heures et l'historique",
     trigger: "effacement par un propriétaire ou un organisateur depuis la page du membre",
@@ -193,6 +248,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
+    data: "Alertes envoyées à l'opérateur : titre, message, lien vers la page de santé, et l'adresse email du destinataire dans la file d'envoi",
+    purpose: "Éviter qu'une même alerte soit renvoyée plusieurs fois le même jour, et garder la trace de ce qui a été signalé",
+    duration: `${d.operatorAlert} jours après leur mise en file`,
+    trigger: "envoi d'une alerte à l'opérateur",
+    mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: false,
+  },
+  {
     data: "Emails en file d'envoi (destinataire et contenu)",
     purpose: "Envoyer les emails",
     duration: `effacés chaque nuit une fois partis ; ceux en échec ou annulés ${d.failedNotification} jours après leur mise en file`,
@@ -202,11 +266,38 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
+    data: "Compteurs d'emails transactionnels : organisation (ou « plateforme » pour les emails sans organisation), jour de mise en file, type d'email, résultat (envoyé, en échec ou annulé) et classe de la raison d'annulation, nombre ; ni destinataire, ni adresse, ni contenu, ni identifiant de bénévole",
+    purpose: "Savoir ce qui a été envoyé et ce qui n'est pas parti, après la purge de la file d'envoi",
+    duration: `${d.deliveryCounter} jours après le jour de mise en file`,
+    trigger: "purge d'un email de la file d'envoi",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés avec l'organisation",
+    backups: inBackups,
+    public: true,
+  },
+  {
     data: "Résultats d'envoi par destinataire : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse",
     purpose: "Fournir l'email à l'organisation, et permettre de corriger une adresse en échec",
     duration: `${d.deliveryOutcome} jours`,
     trigger: "envoi",
     mechanism: "nettoyage quotidien (cron cleanup) ; effacés aussi si le membre est effacé",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Plafonds d'envoi atteints : organisation, plafond concerné, type d'email, heure, nombres d'emails retenus et refusés ; ni adresse, ni destinataire, ni contenu",
+    purpose: "Permettre à l'opérateur de voir quelle organisation atteint quel plafond, et à quelle fréquence",
+    duration: `${d.emailLimitHit} jours après le dernier email retenu ou refusé de l'heure`,
+    trigger: "un email retenu ou refusé par un plafond d'envoi",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés avec l'organisation",
+    backups: inBackups,
+    public: false,
+  },
+  {
+    data: "Envois groupés d'emails (invitations, relances, rappels, messages) : type d'envoi, événement, organisateur qui l'a lancé, date, nombre de destinataires et nombres d'emails envoyés, retenus par un plafond d'envoi, en échec ou annulés ; ni destinataire, ni adresse, ni contenu ; et l'entrée correspondante du journal d'activité de l'organisation",
+    purpose: "Permettre à l'organisation de suivre un envoi dans son ensemble, et de savoir plus tard ce qui a été envoyé pour un événement",
+    duration: `${d.sendBatch} jours après l'envoi, ou avec l'événement`,
+    trigger: "envoi groupé depuis un événement",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés avec l'événement ou l'organisation",
     backups: inBackups,
     public: true,
   },
@@ -230,7 +321,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Invitations d'administrateur non acceptées",
+    data: "Invitations d'organisateur non acceptées",
     purpose: "Permettre d'accepter ou de renvoyer l'invitation",
     duration: `effacées ${d.deactivatedAdmin} jours après leur dernier envoi`,
     trigger: "invitation ou renvoi",
@@ -239,7 +330,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Administrateur retiré de l'équipe",
+    data: "Organisateur retiré de l'équipe",
     purpose: "—",
     duration: "effacé immédiatement",
     trigger: "retrait par un propriétaire",
@@ -275,6 +366,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
+    data: "Identifiant aléatoire d'une session d'administration terminée par « Se déconnecter » (rien d'autre sur la session ni sur la personne)",
+    purpose: "Refuser une copie du cookie de session après la déconnexion",
+    duration: `effacé au nettoyage qui suit la fin de la durée maximale de la session (${SESSION_ABSOLUTE_SECONDS / 86_400} jours après la connexion)`,
+    trigger: "déconnexion",
+    mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: false,
+  },
+  {
     data: "Jetons personnels en clair (colonnes héritées, sans clé de chiffrement)",
     purpose: "Renvoyer les liens personnels",
     duration: "chiffrés puis effacés au nettoyage suivant dès qu'une clé est configurée (clé obligatoire en production)",
@@ -293,7 +393,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
-    data: "Historique des nouveautés produit envoyées aux administrateurs (objet, contenu, auteur, nombres)",
+    data: "Historique des nouveautés produit envoyées aux organisateurs (objet, contenu, auteur, nombres)",
     purpose: "Historique des envois",
     duration: "sans limite : aucune purge",
     trigger: "envoi",
@@ -320,11 +420,20 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Journaux techniques des conteneurs",
+    data: "Journaux techniques des conteneurs (messages de l'application et des services, sans les journaux d'accès du proxy)",
     purpose: "Sécurité et débogage",
     duration: `${d.technicalLogs} jours`,
     trigger: "écriture du journal",
     mechanism: "procédure manuelle : rotation sur les nœuds (k8s/log-rotation.md), à vérifier sur le serveur",
+    backups: "non",
+    public: false,
+  },
+  {
+    data: "Journaux d'accès du proxy : date et heure, adresse IP du visiteur, site et page demandés (sans les liens personnels), méthode, statut, durée, taille de la réponse, navigateur et système déclarés (en-tête User-Agent) ; aucun autre en-tête. Le même fichier reçoit les requêtes des autres sites hébergés sur le serveur",
+    purpose: "Sécurité, détection des abus et débogage ; analyse de la fréquentation, des erreurs et des performances, sans cookie ni profil individuel",
+    duration: `${d.accessLogs} jours ; l'adresse IP complète et le navigateur pendant ${d.accessLogFullIp} jours, puis l'adresse réduite à son réseau (adresse IPv4 sans son dernier nombre, adresse IPv6 limitée à ses trois premiers groupes) et le navigateur retiré`,
+    trigger: "requête reçue par le serveur",
+    mechanism: "procédure manuelle : fichier du nœud tourné chaque jour, adresses réduites et fichiers échus supprimés chaque nuit (k8s/log-rotation.md), à vérifier sur le serveur",
     backups: "non",
     public: false,
   },
@@ -342,8 +451,8 @@ export const RETENTION: readonly RetentionEntry[] = [
 // Markdown table cell: backslashes first, then pipes, so an escape can't be undone.
 const cell = (s: string) => s.replace(/\\/g, "\\\\").replace(/\|/g, "\\|")
 
-/** The organisers' documentation unit that holds their retention table (#649, guide/). */
-export const RETENTION_GUIDE_SOURCE = "guide/exporter-et-conserver-ses-donnees.md"
+/** The organisers' documentation unit that holds their retention table (#649, content/guide/). */
+export const RETENTION_GUIDE_SOURCE = "content/guide/exporter-et-conserver-ses-donnees.md"
 
 /** The organisers' table (RETENTION_GUIDE_SOURCE): data and retention. */
 export function retentionGuideTable(): string {

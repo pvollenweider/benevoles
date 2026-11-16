@@ -66,7 +66,7 @@
     },
     {
       "id": "success",
-      "transcript": "Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "transcript": "Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
       "style": "Use a broad, clearly audible smile and genuine celebratory warmth, as if welcoming a new teammate. Keep that smile in the practical sentences that follow, while becoming calmly reassuring and clear about the confirmation email and personal link. Energetic but never exaggerated.",
       "fallbackDurationMs": 10500
     }

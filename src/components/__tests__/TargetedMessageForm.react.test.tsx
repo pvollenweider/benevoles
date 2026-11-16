@@ -57,6 +57,32 @@ describe("TargetedMessageForm", () => {
     await waitFor(() => expect(lastBody().audience).toEqual({ kind: "role", roleName: "Accueil" }))
   })
 
+  it("offers no sector audience without sectors (#1170)", () => {
+    setup()
+    expect(screen.queryByRole("radio", { name: "Les bénévoles d'un secteur" })).not.toBeInTheDocument()
+  })
+
+  it("writes to a sector: radio after « Tous », its select right under it, the count for that sector (#1170)", async () => {
+    render(<TargetedMessageForm eventId="evt-1" roles={["Bar"]} shifts={[]} sectors={[{ value: "sec-bar", label: "Buvette" }, { value: "autres", label: "Autres postes" }]} initialAudience={{ kind: "event" }} />)
+    const radios = screen.getAllByRole("radio").map((r) => r.getAttribute("value"))
+    expect(radios.slice(0, 3)).toEqual(["event", "sector", "role"])
+    fireEvent.click(screen.getByRole("radio", { name: "Les bénévoles d'un secteur" }))
+    const select = screen.getByRole("combobox", { name: "Secteur" })
+    // Read right after its own radio, before the next one.
+    expect(screen.getByRole("radio", { name: "Les bénévoles d'un secteur" }).compareDocumentPosition(select) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(select.compareDocumentPosition(screen.getByRole("radio", { name: "Les bénévoles d'un poste" })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    await waitFor(() => expect(lastBody().audience).toEqual({ kind: "sector", sectorId: "sec-bar" }))
+    fireEvent.change(select, { target: { value: "autres" } })
+    await waitFor(() => expect(lastBody().audience).toEqual({ kind: "sector", sectorId: "autres" }))
+    expect(await screen.findByText("12 personnes recevront ce message.")).toBeInTheDocument()
+  })
+
+  it("starts on a prefilled sector (#1170)", async () => {
+    render(<TargetedMessageForm eventId="evt-1" roles={["Bar"]} shifts={[]} sectors={[{ value: "sec-bar", label: "Buvette" }, { value: "autres", label: "Autres postes" }]} initialAudience={{ kind: "sector", sectorId: "autres" }} />)
+    expect(screen.getByRole("radio", { name: "Les bénévoles d'un secteur" })).toBeChecked()
+    expect(screen.getByRole("combobox", { name: "Secteur" })).toHaveValue("autres")
+  })
+
   it("names the missing fields instead of previewing", async () => {
     setup()
     await screen.findByText(/12 personnes/)
@@ -128,8 +154,15 @@ describe("TargetedMessageForm", () => {
   // the server, a preview and a confirmation that say when and that the count is recalculated.
   describe("scheduled send", () => {
     const zone = "Europe/Zurich"
-    const tomorrow = () => localNow(new Date(Date.now() + 24 * 3600 * 1000), zone).date
-    const yesterday = () => localNow(new Date(Date.now() - 24 * 3600 * 1000), zone).date
+    // Calendar days of the zone, not 24 hours: the day the clocks go back lasts 25 hours, and
+    // « now minus 24 h » was still today during its last hour.
+    const shiftDay = (days: number) => {
+      const d = new Date(`${localNow(new Date(), zone).date}T12:00:00Z`)
+      d.setUTCDate(d.getUTCDate() + days)
+      return d.toISOString().slice(0, 10)
+    }
+    const tomorrow = () => shiftDay(1)
+    const yesterday = () => shiftDay(-1)
     const fillText = () => {
       fireEvent.change(screen.getByLabelText("Objet *"), { target: { value: "Parking" } })
       fireEvent.change(screen.getByLabelText("Message *"), { target: { value: "Entrée par la rue Basse." } })

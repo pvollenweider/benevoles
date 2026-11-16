@@ -3,13 +3,13 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useLayoutEffect, useRef, useState } from "react"
+import { useLayoutEffect, useRef } from "react"
 import Link from "next/link"
-import { useSelectedLayoutSegments } from "next/navigation"
+import { useSearchParams, useSelectedLayoutSegments } from "next/navigation"
 import PublishToggle from "@/components/admin/PublishToggle"
 import { isFocusDropped } from "@/lib/focus-return"
-import { announce } from "@/lib/announce"
-import { eventHref, eventPrimaryAction, eventSubNav, eventTabs, primaryIsCurrent, type PrimaryFacts } from "@/lib/event-nav"
+import { useAnnounceDone } from "@/components/admin/AnnounceProvider"
+import { eventHref, eventPrimaryAction, eventSubNav, eventTabs, showPrimaryAction, type PrimaryFacts } from "@/lib/event-nav"
 import EventTabs from "./EventTabs"
 import EventSubNav from "./EventSubNav"
 import EventMoreMenu from "./EventMoreMenu"
@@ -27,6 +27,8 @@ export type EventHeaderProps = {
   awaitingValidation: boolean
   /** Owner of the organisation and event archived: the menu offers the permanent deletion. */
   canDelete: boolean
+  /** The event collects dated availability (#1146): « Disponibilités » in the Inscriptions tab. */
+  availabilityPage?: boolean
 }
 
 /**
@@ -35,16 +37,18 @@ export type EventHeaderProps = {
  * then the tabs and, for a tab of several pages, their own navigation. The title is the page's
  * <h1> on the overview only; every other page has its own <h1 id="page-heading">.
  */
-export default function EventHeader({ facts, title, dates, location, stage, unlisted, awaitingValidation, canDelete }: EventHeaderProps) {
+export default function EventHeader({ facts, title, dates, location, stage, unlisted, awaitingValidation, canDelete, availabilityPage = false }: EventHeaderProps) {
   const segments = useSelectedLayoutSegments()
   const subPath = segments.join("/")
   const pathname = eventHref(facts.eventId, subPath)
   const isOverview = segments.length === 0
   const tabs = eventTabs(facts, pathname)
-  const subNav = eventSubNav(pathname, facts.eventId)
+  const subNav = eventSubNav(pathname, facts.eventId, { availability: availabilityPage })
   const primary = eventPrimaryAction(facts)
-  const showPrimary = primary && !primaryIsCurrent(primary, pathname, facts.eventId)
-  const [announcement, setAnnouncement] = useState("")
+  // Step 2 of the creation assistant has its own « Continuer » (#1098): no competing « Publier ».
+  const inWizard = useSearchParams()?.has("wizard") ?? false
+  const showPrimary = primary && showPrimaryAction(primary, pathname, facts.eventId, inWizard)
+  const announceDone = useAnnounceDone()
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const shownPath = useRef(pathname)
 
@@ -59,12 +63,12 @@ export default function EventHeader({ facts, title, dates, location, stage, unli
     if (isFocusDropped(document.activeElement)) document.getElementById("page-heading")?.focus()
   }, [pathname])
 
-  // The control that acted unmounts on refresh: say what happened here (outside the panel), and
-  // put the focus on « ⋯ » (menu actions) or on the page's heading (the primary « Publier »).
+  // The control that acted unmounts on refresh: say what happened (the layout's AnnounceProvider,
+  // outside the panel), and put the focus on « ⋯ » (menu actions) or on the page's heading (the
+  // primary « Publier »).
   function done(message: string, focus: "menu" | "heading") {
-    announce(setAnnouncement, message)
     const heading = focus === "heading" ? document.getElementById("page-heading") : null
-    ;(heading ?? menuButtonRef.current)?.focus()
+    announceDone(message, heading ?? menuButtonRef.current)
   }
 
   return (
@@ -111,9 +115,6 @@ export default function EventHeader({ facts, title, dates, location, stage, unli
           />
         </div>
       </div>
-      {/* A polite live region without role="status": the pages' own status regions stay the only
-          ones (several pages and their tests rely on a single status region). */}
-      <p aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</p>
       <EventTabs tabs={tabs} />
       {subNav && <EventSubNav tabLabel={subNav.tabLabel} links={subNav.links} />}
     </header>

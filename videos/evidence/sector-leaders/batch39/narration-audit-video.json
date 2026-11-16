@@ -1,0 +1,141 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-10T20:11:34.295Z",
+  "revalidatedAt": "2026-11-10T20:11:34.296Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "4ac6794c0b097b631861bfcbadb75704151efac612d98f510e16e3ae99147aac",
+      "recognized": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Dans un événement organisé par secteur, un responsable peut aussi suivre tout un secteur. Aucun accès à toute l'administration n'est nécessaire.",
+      "expected": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Dans un événement organisé par secteurs, un responsable peut aussi suivre tout un secteur. Aucun accès à toute l'administration n'est nécessaire.",
+      "wordErrorRate": 0.014084507042253521,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "nominate",
+      "audioSha256": "748fa243e8829fea1bfadb41fbbda02f6da942a8c0f85c40bcdc1fecb01f9d7b",
+      "recognized": "Dans l'événement, ouvrez les responsables et ajoutez une personne. Choisissez le poste, puis renseignez son nom et son e-mail. Vérifiez bien cette adresse, c'est là que son lien sera envoyé. Vous pouvez désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son e-mail.",
+      "expected": "Dans l'événement, ouvrez les responsables et ajoutez une personne. Choisissez le poste, puis renseignez son nom et son email. Vérifiez bien cette adresse : c'est là que son lien sera envoyé. Vous pouvez désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son email.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "registered",
+      "audioSha256": "086c47caed0602b0408351bd1350ebeff4ba39b8db3e9f80cbc116ca9e2cac73",
+      "recognized": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir. Vérifiez le poste proposé avant de confirmer. Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes. La nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
+      "expected": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir. Vérifiez le poste proposé avant de confirmer. Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes : la nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "email",
+      "audioSha256": "9bffa5cba0dc7291b08c40d00d9ffafbf313a841bf0b354c6f37afbcb9a6914c",
+      "recognized": "Voici l'email reçu. Le responsable ouvre son lien personnel directement, sans créer de compte ni choisir de mot de passe. Ce lien est confidentiel, il donne accès aux coordonnées de l'équipe. On le garde pour soi et on ne l'affiche jamais sur une page publique ou sur le QR code de recrutement.",
+      "expected": "Voici l'email reçu. Le responsable ouvre son lien personnel directement, sans créer de compte ni choisir de mot de passe. Ce lien est confidentiel : il donne accès aux coordonnées de l'équipe. On le garde pour soi, et on ne l'affiche jamais sur une page publique ou sur le QR code de recrutement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster",
+      "audioSha256": "d7069e018fe2e0ea1b4f094b07493111eefd35da1958e245c8d041e2b87a4670",
+      "recognized": "Sur ce lien, la responsable de la buvette retrouve uniquement les inscriptions de son poste. Les personnes sont regroupées par créneau avec la date et les horaires. Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné et le commentaire éventuel. La mention liste d'attente distingue les personnes qui n'ont pas encore une place confirmée.",
+      "expected": "Sur ce lien, la responsable de la Buvette retrouve uniquement les inscriptions de son poste. Les personnes sont regroupées par créneau, avec la date et les horaires. Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné et le commentaire éventuel. La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "mobile",
+      "audioSha256": "220a72f0bc987f478558c0e25f55fea95ebd0e574fd683cc728e43f2cd4ea0a0",
+      "recognized": "Sur téléphone, la même page accompagne le responsable sur le terrain. Les liens e-mail et téléphone permettent de préparer un message ou un appel avec les applications du téléphone. On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires. Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+      "expected": "Sur téléphone, la même page accompagne le responsable sur le terrain. Les liens email et téléphone permettent de préparer un message ou un appel avec les applications du téléphone. On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires. Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "scope",
+      "audioSha256": "31f26b61b565cd2ed5a7474ddb56e460dbe03bc7d3ccf85d7d865d12bd1e83cf",
+      "recognized": "Cet espace est en lecture seule. Le responsable ne modifie pas les créneaux et ne retire pas les inscriptions. Il ne voit pas les équipes des autres postes. Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
+      "expected": "Cet espace est en lecture seule : le responsable ne modifie pas les créneaux et ne retire pas les inscriptions. Il ne voit pas les équipes des autres postes. Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "new-signup",
+      "audioSha256": "fd138c5cefc1ac40e2e4c591e99b1e9c30e5cd2431f47756834eb40d6e95777c",
+      "recognized": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la buvette du dimanche. Nora choisit ce créneau, puis continue vers le formulaire. Elle renseigne son prénom et son nom, son adresse e-mail et son téléphone. La taille du t-shirt est obligatoire pour cet événement. Elle choisit une taille, accepte la convention et l'utilisation de ses données pour organiser sa participation. Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi. Nous confirmons maintenant. La page indique que son inscription est enregistrée.",
+      "expected": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la Buvette du dimanche. Nora choisit ce créneau, puis continue vers le formulaire. Elle renseigne son prénom et son nom, son adresse email et son téléphone. La taille du t-shirt est obligatoire pour cet événement. Elle choisit une taille, accepte la convention et l'utilisation de ses données pour organiser sa participation. Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi. Nous confirmons maintenant : la page indique que son inscription est enregistrée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "notification",
+      "audioSha256": "34b8e86547a86ce2d4ef552554070cca8482f824645012a648d8553e87df4d2d",
+      "recognized": "Côté responsable, voici l'e-mail réellement reçu à la suite de cette inscription. Il indique le nom de Nora et le créneau de la buvette du dimanche. Le lien permet de retrouver l'équipe complète. En rouvrant la page, Nora apparaît maintenant dans le bon créneau avec ses coordonnées. La responsable peut ainsi suivre les changements sans accéder à toute l'administration.",
+      "expected": "Côté responsable, voici l'email réellement reçu à la suite de cette inscription. Il indique le nom de Nora et le créneau de la Buvette du dimanche. Le lien permet de retrouver l'équipe complète. En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées. La responsable peut ainsi suivre les changements sans accéder à toute l'administration.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "contact",
+      "audioSha256": "9a7c465f6622eb61193e2ed23f4d01b4bfbf1ea6d74e8142f741253e685b1502",
+      "recognized": "Attention à une autre distinction. Le contact opérationnel indiqué sur un créneau est la personne que les bénévoles doivent joindre sur place. Désigner un responsable ne publie pas automatiquement ses coordonnées comme contact. L'organisateur renseigne ce contact séparément dans le créneau si c'est bien la personne à appeler.",
+      "expected": "Attention à une autre distinction : le contact opérationnel indiqué sur un créneau est la personne que les bénévoles doivent joindre sur place. Désigner un responsable ne publie pas automatiquement ses coordonnées comme contact. L'organisateur renseigne ce contact séparément dans le créneau, si c'est bien la personne à appeler.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "remove",
+      "audioSha256": "265dfab9b256703bedb5e8e16c5aadcb96b1d98bd8412272f920cda8fc367f30",
+      "recognized": "Quand la responsabilité change, retirez la personne de ce poste et confirmez. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien. Chacun dispose du bon accès au bon moment.",
+      "expected": "Quand la responsabilité change, retirez la personne de ce poste et confirmez. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien : chacun dispose du bon accès, au bon moment.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "leaders-sector-scope",
+      "audioSha256": "da85f53498a807b64272e24f53f84a127b4e58ee1b29ba608196b2db6d08bd40",
+      "recognized": "Voyons maintenant un événement organisé par secteur, le Festival de Mont-Vert. Sa page s'appelle responsable de poste et de secteur et classe les responsables par secteur. En ajoutant un responsable, choisissez d'abord responsable de tout un secteur ou un poste précis comme dans un événement sans secteur. Confions tout le secteur parking à Paul. Renseignons son nom et son email, puis ajoutons et envoyons son lien. Cette possibilité est disponible dès que l'événement utilise des secteurs.",
+      "expected": "Voyons maintenant un événement organisé par secteurs, le Festival de Montvert. Sa page s'appelle Responsables de poste et de secteur, et classe les responsables par secteur. En ajoutant un responsable, choisissez d'abord Responsable de. Tout un secteur, ou Un poste précis, comme dans un événement sans secteurs. Confions tout le secteur Parking à Paul. Renseignons son nom et son email, puis ajoutons et envoyons son lien. Cette possibilité est disponible dès que l'événement utilise des secteurs.",
+      "wordErrorRate": 0.06329113924050633,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "leaders-sector-roster",
+      "audioSha256": "bb911b6ff93a27338e4d599638d9e903132b96978ba566bc7061b2147099cdee",
+      "recognized": "Le lien personnel de Paul montre tous les postes qui sont en ce moment dans le secteur parking, classés par poste : parking Nord et parking mairie. Un filtre jour limite la liste à une journée. Un poste ajouté plus tard au secteur y apparaît aussitôt. Paul reçoit aussi les emails de nouvelle inscription et de désistement de tous les postes du secteur. Les bénévoles, eux, ne voient pas les secteurs.",
+      "expected": "Le lien personnel de Paul montre tous les postes qui sont en ce moment dans le secteur Parking, classés par poste : Parking Nord et Parking Mairie. Un filtre Jour limite la liste à une journée. Un poste ajouté plus tard au secteur y apparaît aussitôt. Paul reçoit aussi les emails de nouvelle inscription et de désistement de tous les postes du secteur. Les bénévoles, eux, ne voient pas les secteurs.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

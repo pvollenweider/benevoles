@@ -109,6 +109,11 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     const regFuture = await prisma.registration.create({ data: { eventId, shiftId: futureShift, volunteerId: x.id, status: "active", comment: v.comment, ...registrationToken.data(`${tag}-tok-future`) } })
     const regOther = await prisma.registration.create({ data: { eventId, shiftId: futureShift, volunteerId: other.id, status: "active", comment: "le mien", ...registrationToken.data(`${tag}-tok-other`) } })
     const invite = await prisma.memberInvite.create({ data: { eventId, volunteerId: x.id, tokenHash: `${tag}-inv-hash`, declinedAt: new Date() } })
+    // « Je ne peux pas » for one shift (#1303): the person's own, and a tombstone's, go; another
+    // member's stays.
+    const declineX = await prisma.shiftDecline.create({ data: { shiftId: futureShift, volunteerId: x.id } })
+    const declineTombstone = await prisma.shiftDecline.create({ data: { shiftId: pastShift, volunteerId: tombstone.id } })
+    const declineOther = await prisma.shiftDecline.create({ data: { shiftId: futureShift, volunteerId: other.id } })
     await prisma.questionAnswer.create({ data: { questionId, eventId, volunteerId: x.id, values: [v.answer] } })
     const otherAnswer = await prisma.questionAnswer.create({ data: { questionId, eventId, volunteerId: other.id, values: ["M"] } })
     await prisma.pushSubscription.create({ data: { volunteerId: x.id, endpoint: v.endpoint, auth: "a", p256dh: "p" } })
@@ -143,7 +148,7 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     const result = await runMemberErasure(getOrgClient(orgId), orgId, ADMIN_ACTOR, x.id)
     expect(result.alreadyErased).toBe(false)
     expect(result.outboxDeleted).toBe(4)
-    expect(result.counts).toMatchObject({ registrations: 2, upcomingLive: 1, invites: 1, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 1 })
+    expect(result.counts).toMatchObject({ registrations: 2, upcomingLive: 1, invites: 1, shiftDeclines: 2, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 1 })
 
     // 1. No value the person gave survives, in any table — except in the other organisation's own
     // rows about the same person (record, queued email), which this erasure must not touch.
@@ -169,6 +174,9 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     expect(past.editTokenHash).not.toBe(before.tokenPast)
     expect(await prisma.registration.findFirst({ where: registrationToken.where(`${tag}-tok-past`) })).toBeNull()
     expect(await prisma.memberInvite.findUnique({ where: { id: invite.id } })).toBeNull()
+    expect(await prisma.shiftDecline.findUnique({ where: { id: declineX.id } })).toBeNull()
+    expect(await prisma.shiftDecline.findUnique({ where: { id: declineTombstone.id } })).toBeNull()
+    expect(await prisma.shiftDecline.findUnique({ where: { id: declineOther.id } })).not.toBeNull()
     expect(await prisma.eventLog.count({ where: { eventId, actorId: x.id } })).toBe(2)
     // The logged answer changes stay, without the answer; someone else's keeps it.
     for (const id of [changedByX.id, changedByTombstone.id]) {

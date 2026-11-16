@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { hostResolverRules, localGatewayTarget, localTarget, servedWithPublicUrl, videoAdminEmail, VIDEO_ADMIN_EMAIL } from "../public-hosts"
 
 describe("public hosts of the videos", () => {
@@ -32,6 +32,16 @@ describe("public hosts of the videos", () => {
     for (const url of ["http://localhost:22/", "http://127.0.0.1:43102/", "http://localhost/", "https://localhost:43104/", "http://example.org:43104/", "http://localhost.example.org:43104/", "http://user@localhost:43104/", "/relative", "invalid"]) {
       expect(localGatewayTarget(url, "http://localhost:43104")).toBeNull()
     }
+  })
+
+  it("uses only the explicitly configured loopback Mailpit port", () => {
+    try {
+      vi.stubEnv("VIDEO_MAILPIT_URL", "http://localhost:48030")
+      expect(localGatewayTarget("http://localhost:48030/mail", "http://localhost:43102")?.href).toBe("http://127.0.0.1:48030/mail")
+      expect(localGatewayTarget("http://localhost:48026/mail", "http://localhost:43102")).toBeNull()
+      vi.stubEnv("VIDEO_MAILPIT_URL", "http://example.org:48030")
+      expect(() => localGatewayTarget("http://localhost:48030/", "http://localhost:43102")).toThrow("Local Mailpit URL required")
+    } finally { vi.unstubAllEnvs() }
   })
 
   it("replaces the legacy localhost admin email, keeps a dedicated one", () => {

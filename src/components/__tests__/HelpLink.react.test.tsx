@@ -7,7 +7,7 @@ import { render, screen, cleanup } from "@testing-library/react"
 import HelpLink from "../admin/HelpLink"
 
 // #568, #649: « Aide : <section> » opens the page of the documentation that explains the screen
-// (a unit of guide/, at a heading when the route names one), in a new tab, said so.
+// (a unit of content/guide/, at a heading when the route names one), in a new tab, said so.
 describe("HelpLink", () => {
   afterEach(cleanup)
 

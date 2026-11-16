@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:31:31.916Z",
+  "videoSha256": "360d0218823ac42402d2a5ba46bd6a89cb939710c3aa2e8fd8d6325c9a84c2cc",
+  "promptSha256": "6f5d40308cf5d1940515e03bede7881ee28b33e032d7787a41181f5a490434a2",
+  "clipSha256": "7d507ca76a0a637405a0e3b36feb323225ca90f001b040dd07a295ffd7962bb9",
+  "scene": "sectors-enable",
+  "review": {
+    "heardOpening": "Dans les informations de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "la carte Secteurs propose l'interrupteur Organiser les postes par secteurs.",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la carte Secteurs avec l'interrupteur désactivé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "Activons-le.",
+        "visibleSeconds": 6.3,
+        "visible": "Clic sur l'interrupteur qui passe à l'état actif.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.7,
+        "spoken": "Tant qu'aucun secteur n'est enregistré, vous pouvez encore le désactiver.",
+        "visibleSeconds": 8,
+        "visible": "L'interrupteur reste accessible avec le texte explicatif en dessous.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "Suivons le lien Organiser les secteurs dans Créneaux.",
+        "visibleSeconds": 11.4,
+        "visible": "Affichage de la page de gestion des créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

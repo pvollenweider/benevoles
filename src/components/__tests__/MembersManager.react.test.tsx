@@ -181,6 +181,10 @@ describe("MembersManager — deleting a member", () => {
     fireEvent.click(screen.getByRole("button", { name: "Supprimer Alice Seule" }))
     fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Supprimer" }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce())
+    // The announcement lands one frame later (announce() clears, then sets the text): wait for it
+    // before the refreshed list removes the row, as the real router.refresh() does. Otherwise its
+    // late focus-on-status effect can steal the focus from the heading set when the row goes.
+    await waitFor(() => expect(screen.getByText("Alice Seule supprimé·e.")).toBeInTheDocument())
     rerender(<MembersManager initialMembers={[]} allTags={[]} defaultHoursPeriod={period} />)
     expect(screen.getByRole("heading", { level: 1, name: "Membres" })).toHaveFocus()
   })
@@ -248,10 +252,11 @@ describe("MembersManager — ?deleted= from the member page (#667)", () => {
   })
 })
 
-// #927: at 1280 px the row actions ran past the table's edge (min-w 64rem, nowrap cell). The
-// table now fits the admin column and the actions wrap in a flex row, each keeping its target size.
-describe("MembersManager — row actions wrap instead of overflowing", () => {
-  it("lays the actions out in a wrapping flex row, in a table of 56rem minimum", () => {
+// #927: at 1280 px the row actions ran past the table's edge (min-w 64rem). #1102: the page is
+// wider for this list, so the actions sit on one line (no more stacking), each keeping its own box
+// and target size; a table still too wide scrolls in its region.
+describe("MembersManager — row actions on one line, never past the table's edge", () => {
+  it("lays the actions out in one flex row, in a table of 56rem minimum", () => {
     render(
       <MembersManager
         initialMembers={[member({ id: "a", addressStatus: { kind: "to_verify", since: "2026-03-01T00:00:00.000Z" } })]}
@@ -264,8 +269,7 @@ describe("MembersManager — row actions wrap instead of overflowing", () => {
     expect(table).not.toHaveClass("min-w-[64rem]")
     const edit = screen.getByRole("button", { name: "Modifier Alice Martin" })
     const row = edit.parentElement!
-    expect(row).toHaveClass("flex", "flex-wrap", "gap-1")
-    expect(row.closest("td")).not.toHaveClass("whitespace-nowrap")
+    expect(row).toHaveClass("flex", "flex-nowrap", "gap-1")
     const actions = [
       screen.getByRole("link", { name: "Activité de Alice Martin" }),
       edit,
@@ -324,5 +328,293 @@ describe("MembersManager — absorbed and erased records", () => {
   it("a deep-linked edit never opens for an archived record", () => {
     render(<MembersManager initialMembers={members} allTags={[]} initialEditId="erased" defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }} />)
     expect(screen.queryByRole("dialog")).toBeNull()
+  })
+})
+
+// Bulk deletion (#1305): selection of the current filter, one confirmation, a result in words.
+describe("MembersManager — bulk deleting a selection", () => {
+  const period = { from: "2026-01-01", to: "2026-12-31" }
+  const members = [
+    member({ id: "a", firstName: "Anne", lastName: "Favre" }),
+    member({ id: "b", firstName: "Marc", lastName: "Rochat" }),
+    member({ id: "c", firstName: "Léa", lastName: "Dubois", deletion: { eligible: true } }),
+  ]
+  const setup = () => render(<MembersManager initialMembers={members} allTags={[]} defaultHoursPeriod={period} />)
+  const counter = (text: string) => screen.getByText(text).closest("[role='status']")
+
+  afterEach(() => vi.unstubAllGlobals())
+
+  it("selects each row with its own accessible name and only offers the action once something is selected", () => {
+    setup()
+    expect(screen.queryByRole("button", { name: "Supprimer la sélection" })).toBeNull()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    expect(counter("1 membre sélectionné")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Supprimer la sélection" })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Marc Rochat" }))
+    expect(counter("2 membres sélectionnés")).toBeInTheDocument()
+  })
+
+  it("« Tout sélectionner » takes every member of the current filter, and changing the filter empties the selection", () => {
+    const withArchived = [
+      ...members,
+      member({ id: "tomb", firstName: "", lastName: "", active: false, record: { kind: "merged", keptId: "a", keptName: "Anne Favre", deletionDay: "2026-11-14" } }),
+    ]
+    render(<MembersManager initialMembers={withArchived} allTags={[]} defaultHoursPeriod={period} />)
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    // The merged record is history, never part of the selection.
+    expect(counter("3 membres sélectionnés")).toBeInTheDocument()
+
+    fireEvent.change(screen.getByPlaceholderText("Rechercher (nom, email, téléphone)…"), { target: { value: "Anne" } })
+    expect(screen.queryByText("3 membres sélectionnés")).toBeNull()
+    expect(screen.queryByRole("button", { name: "Supprimer la sélection" })).toBeNull()
+    expect(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" })).not.toBeChecked()
+  })
+
+  it("asks once, in the shared alertdialog, how many members and what stays", () => {
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
+    expect(dialog).toHaveTextContent("irréversible")
+    expect(dialog).toHaveTextContent("Les membres qui ont des inscriptions ne seront pas supprimés")
+    fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+  })
+
+  it("posts the selection, announces the result in words, clears the selection and focuses it", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deleted: ["a", "b"],
+        skipped: [{ id: "c", reason: "registrations", name: "Anne Favre" }],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Supprimer" }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: ["a", "b", "c"], deactivateKept: false }),
+    }))
+    const text = "2 membres supprimés. 1 laissé car il a des inscriptions : Anne Favre. Vous pouvez l'effacer depuis sa fiche."
+    await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument())
+    expect(screen.getByText(text).closest("p")).toHaveFocus()
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+    expect(screen.queryByRole("button", { name: "Supprimer la sélection" })).toBeNull()
+  })
+
+  it("moves focus to the page heading when no member is left after the refresh", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ deleted: ["a"], skipped: [] }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    const { rerender } = render(
+      <MembersManager initialMembers={[member({ id: "a", firstName: "Anne", lastName: "Favre" })]} allTags={[]} defaultHoursPeriod={period} />,
+    )
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Supprimer" }))
+    await waitFor(() => expect(screen.getByText("1 membre supprimé.")).toBeInTheDocument())
+    rerender(<MembersManager initialMembers={[]} allTags={[]} defaultHoursPeriod={period} />)
+    expect(screen.getByRole("heading", { level: 1, name: "Membres" })).toHaveFocus()
+  })
+})
+
+// Bulk deactivation (#1307): the checkbox in the deletion dialog, and the separate reversible action.
+describe("MembersManager — bulk deactivating a selection", () => {
+  const period = { from: "2026-01-01", to: "2026-12-31" }
+  const withCounts = [
+    member({ id: "a", firstName: "Anne", lastName: "Favre", registrationCount: 2 }),
+    member({ id: "b", firstName: "Marc", lastName: "Rochat", registrationCount: 0 }),
+    member({ id: "c", firstName: "Léa", lastName: "Dubois", registrationCount: 0, deletion: { eligible: true } }),
+  ]
+  const setup = (members = withCounts) => render(<MembersManager initialMembers={members} allTags={[]} defaultHoursPeriod={period} />)
+  const counter = (text: string) => screen.getByText(text).closest("[role='status']")
+
+  afterEach(() => vi.unstubAllGlobals())
+
+  it("puts the deactivation checkbox in the deletion dialog, unchecked, with the known number of selected members that have registrations", () => {
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
+    const checkbox = within(dialog).getByRole("checkbox", { name: "Désactiver le membre qui a des inscriptions : il ne peut pas être supprimé" })
+    expect(checkbox).not.toBeChecked()
+  })
+
+  it("hides the checkbox when no selected member has registrations", () => {
+    setup([
+      member({ id: "a", registrationCount: 0 }),
+      member({ id: "b", registrationCount: 0 }),
+    ])
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    expect(screen.getByRole("alertdialog", { name: "Supprimer 2 membres ?" })).toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: /Désactiver les membres qui ne peuvent pas être supprimés/ })).toBeNull()
+  })
+
+  it("keeps the label without a number when the list doesn't know the counts", () => {
+    setup([member({ id: "a" }), member({ id: "b" })])
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    expect(screen.getByRole("checkbox", { name: "Désactiver les membres qui ne peuvent pas être supprimés (ceux qui ont des inscriptions)" })).toBeInTheDocument()
+  })
+
+  it("sends deactivateKept when checked and words the deactivated members apart from the already inactive ones", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deleted: ["a"],
+        skipped: [
+          { id: "b", reason: "registrations", name: "Marc Rochat" },
+          { id: "c", reason: "registrations", name: "Léa Dubois" },
+        ],
+        deactivated: ["b"],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
+    fireEvent.click(within(dialog).getByRole("checkbox", { name: /^Désactiver (le|les) / }))
+    fireEvent.click(within(dialog).getByRole("button", { name: "Supprimer" }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: ["a", "b", "c"], deactivateKept: true }),
+    }))
+    const text = "1 membre supprimé. 1 désactivé car il a des inscriptions : Marc Rochat. 1 déjà inactif, laissé tel quel : Léa Dubois."
+    await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument())
+    expect(screen.getByText(text).closest("p")).toHaveFocus()
+  })
+
+  it("offers « Désactiver la sélection » next to the deletion, in a simple non-danger dialog that says it is reversible", () => {
+    setup()
+    expect(screen.queryByRole("button", { name: "Désactiver la sélection" })).toBeNull()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Marc Rochat" }))
+    expect(counter("2 membres sélectionnés")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Désactiver la sélection" }))
+
+    const dialog = screen.getByRole("dialog", { name: "Désactiver 2 membres ?" })
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+    expect(dialog).toHaveTextContent("Vous pourrez les réactiver en affichant les inactifs")
+    expect(within(dialog).getByRole("button", { name: "Désactiver" })).toBeInTheDocument()
+    fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
+    expect(screen.queryByRole("dialog")).toBeNull()
+  })
+
+  it("posts the selection to bulk-deactivate, announces the result and focuses it", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deactivated: ["a", "b"],
+        skipped: [{ id: "c", reason: "inactive", name: "Léa Dubois" }],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Désactiver la sélection" }))
+    fireEvent.click(within(screen.getByRole("dialog", { name: "Désactiver 3 membres ?" })).getByRole("button", { name: "Désactiver" }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-deactivate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: ["a", "b", "c"] }),
+    }))
+    const text = "2 membres désactivés. 1 déjà inactif."
+    await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument())
+    expect(screen.getByText(text).closest("p")).toHaveFocus()
+    expect(screen.queryByRole("dialog")).toBeNull()
+    expect(screen.queryByRole("button", { name: "Désactiver la sélection" })).toBeNull()
+  })
+
+  it("says when nothing was deactivated because the whole selection was already inactive", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deactivated: [],
+        skipped: [{ id: "a", reason: "inactive", name: "Anne Favre" }],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup([member({ id: "a", firstName: "Anne", lastName: "Favre", active: false, registrationCount: 1 })])
+    fireEvent.click(screen.getByRole("checkbox", { name: "Inclure inactifs" }))
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    fireEvent.click(screen.getByRole("button", { name: "Désactiver la sélection" }))
+    fireEvent.click(within(screen.getByRole("dialog", { name: "Désactiver 1 membre ?" })).getByRole("button", { name: "Désactiver" }))
+    await waitFor(() => expect(screen.getByText("Aucun membre désactivé. 1 déjà inactif.")).toBeInTheDocument())
+  })
+})
+
+describe("MembersManager — table layout (#1102)", () => {
+  const HINT = /Le tableau est plus large que l'écran/
+  const renderList = () => render(
+    <MembersManager
+      initialMembers={[member({ id: "a", firstName: "Gwendoline", lastName: "Montmollin", email: "gwendoline.de.montmollin@long-address.example.org", phone: "079 123 45 67", tags: ["permis B"] })]}
+      allTags={["permis B"]}
+      defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }}
+    />,
+  )
+  const stubWidths = (scrollWidth: number, clientWidth: number) => {
+    const sw = vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(scrollWidth)
+    const cw = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(clientWidth)
+    return () => { sw.mockRestore(); cw.mockRestore() }
+  }
+
+  it("marks its root so the admin page widens for it", () => {
+    const { container } = renderList()
+    expect(container.firstElementChild).toHaveAttribute("data-admin-wide")
+  })
+
+  it("keeps the row actions on one line, with their names unchanged", () => {
+    renderList()
+    const edit = screen.getByRole("button", { name: "Modifier Gwendoline Montmollin" })
+    const actions = edit.parentElement!
+    expect(actions).toHaveClass("flex-nowrap", "whitespace-nowrap")
+    expect(actions).not.toHaveClass("flex-wrap")
+    expect(within(actions).getByRole("link", { name: "Activité de Gwendoline Montmollin" })).toBeInTheDocument()
+    expect(within(actions).getByRole("button", { name: "Désactiver Gwendoline Montmollin" })).toBeInTheDocument()
+  })
+
+  it("contains the sr-only parts of the action names in the scroll region (no page-level sideways scroll)", () => {
+    renderList()
+    expect(screen.getByRole("region", { name: "Liste des membres" })).toHaveClass("relative", "overflow-x-auto")
+  })
+
+  it("wraps a long address and keeps tags and phone numbers whole", () => {
+    renderList()
+    expect(screen.getByText("gwendoline.de.montmollin@long-address.example.org")).toHaveClass("[overflow-wrap:anywhere]")
+    expect(screen.getByText("079 123 45 67")).toHaveClass("whitespace-nowrap")
+    expect(screen.getByText("permis B", { selector: "span" })).toHaveClass("whitespace-nowrap")
+  })
+
+  it("shows no scroll cue when the table fits", () => {
+    const restore = stubWidths(1246, 1246)
+    try {
+      renderList()
+      expect(screen.queryByText(HINT)).toBeNull()
+      expect(screen.getByRole("region", { name: "Liste des membres" })).not.toHaveAttribute("aria-describedby")
+    } finally { restore() }
+  })
+
+  it("shows the cue, as the region's description, when the table is wider than its region", () => {
+    const restore = stubWidths(1076, 341)
+    try {
+      renderList()
+      const hint = screen.getByText(HINT)
+      const region = screen.getByRole("region", { name: "Liste des membres" })
+      expect(region).toHaveAttribute("aria-describedby", hint.id)
+      // Before the region in reading order.
+      expect(hint.compareDocumentPosition(region) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    } finally { restore() }
   })
 })

@@ -1,0 +1,162 @@
+{
+  "updatedAt": "2026-10-29T07:37:58.413085+00:00",
+  "branch": "video-batch32",
+  "productBuild": {
+    "commit": "9831e86e40ae3dd1ba60eb632b8e90951483a11c",
+    "sourceTree": "3cab4c5ef35c951b4999e429b70f1346471393aa",
+    "productSourceSha256": "3670484777e8a01d5bd1cfce0ea8d49693bf0c6d23523b1c2ddf8ae8d29d261e",
+    "buildId": "jJH5zvJlD2hQBFLXtZa0x",
+    "snapshot": "/tmp/benevoles-video-production.h6qj9dqj",
+    "builtAt": "2026-10-29T06:13:15.550Z"
+  },
+  "videos": [
+    {
+      "id": "BETA_ACCESS",
+      "status": "READY",
+      "publishedInBatch": true,
+      "durationMs": 126520,
+      "musicGapLu": [
+        15.4,
+        18.9
+      ],
+      "musicOnlyMinLufs": -34.2,
+      "viewerTu": 0,
+      "quotedRegister": 0,
+      "problems": [],
+      "sourceChanges": [
+        "public-host routing",
+        "beta fixture visual guard",
+        "full soundtrack ASR"
+      ],
+      "buildId": "jJH5zvJlD2hQBFLXtZa0x",
+      "filmedCommit": "9831e86e40ae3dd1ba60eb632b8e90951483a11c"
+    },
+    {
+      "id": "SECTORS",
+      "status": "READY",
+      "publishedInBatch": true,
+      "durationMs": 222280,
+      "musicGapLu": [
+        14.5,
+        19.2
+      ],
+      "musicOnlyMinLufs": -34.1,
+      "viewerTu": 0,
+      "quotedRegister": 0,
+      "problems": [],
+      "resolvedObservation": "URL chrome excluded; real reload and filter persistence verified",
+      "sourceChanges": [
+        "public-host routing",
+        "full narration regeneration and same-master alignment"
+      ],
+      "buildId": "jJH5zvJlD2hQBFLXtZa0x",
+      "filmedCommit": "9831e86e40ae3dd1ba60eb632b8e90951483a11c"
+    },
+    {
+      "id": "SHIFT_SWAPS",
+      "status": "NOT READY",
+      "publishedInBatch": false,
+      "durationMs": 208680,
+      "measurementsFromRejectedTake": true,
+      "musicGapLu": [
+        14.8,
+        19.4
+      ],
+      "viewerTu": 0,
+      "quotedRegister": 2,
+      "problems": [
+        "take1 early accept click",
+        "take2 recorder ReferenceError corrected",
+        "third narrated take needs explicit owner exception"
+      ],
+      "sourceChanges": [
+        "sentence acceptance anchor",
+        "confirmation retention",
+        "explicit EVENT_ID journal route"
+      ],
+      "buildId": "jJH5zvJlD2hQBFLXtZa0x",
+      "filmedCommit": "9831e86e40ae3dd1ba60eb632b8e90951483a11c"
+    },
+    {
+      "id": "SECTOR_LEADERS",
+      "status": "READY",
+      "publishedInBatch": true,
+      "durationMs": 296760,
+      "revision": 6,
+      "musicGapLu": [
+        13.7,
+        19.1
+      ],
+      "musicOnlyMinLufs": -32.9,
+      "viewerTu": 0,
+      "quotedRegister": 0,
+      "problems": [],
+      "sourceChanges": [
+        "public-host routing",
+        "Mailpit configuration",
+        "sector heading selectors",
+        "disjoint phone/email framing"
+      ],
+      "buildId": "jJH5zvJlD2hQBFLXtZa0x",
+      "filmedCommit": "9831e86e40ae3dd1ba60eb632b8e90951483a11c"
+    },
+    {
+      "id": "PRIVACY_PERSONAL_LINKS",
+      "status": "NOT READY",
+      "publishedInBatch": false,
+      "oldOnlineMovieRetained": true,
+      "durationMs": 381360,
+      "measurementsFromRejectedTake": true,
+      "musicGapLu": [
+        13.9,
+        19.8
+      ],
+      "viewerTu": 0,
+      "quotedRegister": 1,
+      "problems": [
+        "take1 report focus corrected",
+        "take2 within-take voice drift",
+        "new whole Kore source passes10 ASRs and whole-master voice consistency",
+        "third narrated take needs explicit owner exception"
+      ],
+      "sourceChanges": [
+        "Mailpit configuration including review guard",
+        "future fixture date",
+        "real report focus and positive checks",
+        "whole-track identity coaching"
+      ],
+      "buildId": "jJH5zvJlD2hQBFLXtZa0x",
+      "filmedCommit": "9831e86e40ae3dd1ba60eb632b8e90951483a11c"
+    }
+  ],
+  "publishedChecksums": "15 unchanged remote files; zero uploads in final preview",
+  "httpChecks": "9/9 successful for MP4,VTT,JPG of the three published IDs",
+  "checks": {
+    "typecheckSources": 204,
+    "videoTestFiles": 34,
+    "videoTests": 1144,
+    "passed": true
+  },
+  "noPushOrPrMerge": true,
+  "noProductGuideOrRendersChanges": true,
+  "ownerExceptions": "SHIFT_SWAPS and PRIVACY requested asynchronously; neither assumed",
+  "ownedResourcesStopped": {
+    "stoppedAt": "2026-10-29T07:36:41.141741+00:00",
+    "pid": 8876,
+    "snapshot": "/tmp/benevoles-video-production.h6qj9dqj",
+    "listeningPidAndCwdVerified": true,
+    "containers": [
+      {
+        "name": "benevoles_batch32_resume_postgres",
+        "id": "c4953bfa2ae3729aeb669ac1d6bfda1b19da7f9f67882411fd767418ff39886a",
+        "stopped": true
+      },
+      {
+        "name": "benevoles_batch32_resume_mailpit",
+        "id": "791526915a4a61d4604fd92660ee8bb2d143e87a6f3d5b2cbb6e3ecada560e7a",
+        "stopped": true
+      }
+    ],
+    "unrelatedContainersUntouched": true
+  }
+}

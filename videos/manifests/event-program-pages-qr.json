@@ -2,19 +2,19 @@
   "id": "EVENT_PROGRAM_PAGES_QR",
   "slug": "event-program-pages-qr",
   "title": "Programme, pages d’information et QR code",
-  "description": "Enrichir la page publique avec un programme, des pages pratiques et des supports QR prêts à partager.",
+  "description": "Enrichir la page d'inscription avec un programme, des pages pratiques et des supports QR prêts à partager.",
   "viewer": {
     "summary": "Dans cette vidéo, vous complétez votre page d'inscription avec un programme, des pages d'information et un QR code à diffuser.",
     "steps": [
       "Ajoutez chaque spectacle au programme avec son nom, sa date et ses horaires, et corrigez-le avec Modifier si besoin.",
       "Créez des pages comme Accès, Foire aux questions ou Règlement, en Markdown.",
       "Changez l'ordre des pages avec Monter et Descendre : il est enregistré aussitôt.",
-      "Vérifiez que le programme et les pages apparaissent correctement sur la page publique.",
+      "Vérifiez que le programme et les pages apparaissent correctement sur la page d'inscription.",
       "Téléchargez le QR code en PNG ou en SVG, ou imprimez la fiche prête à poser.",
       "Scannez le code avec un vrai téléphone avant de le diffuser."
     ],
     "remember": [
-      "Le QR code pointe directement vers la page publique de l'événement.",
+      "Le QR code pointe directement vers la page d'inscription de l'événement.",
       "Les pages d'information évitent d'alourdir le formulaire d'inscription.",
       "Relisez toujours les pages publiques avant de diffuser le code."
     ]
@@ -36,7 +36,7 @@
     },
     {
       "id": "program",
-      "transcript": "Dans les réglages de l’événement, ajoutons un spectacle au programme. Saisissons Concert du village, le quatorze novembre deux mille vingt-six, de onze heures à douze heures trente, puis cliquez sur Ajouter. Son horaire sert de repère dans le planning, sans réserver de bénévoles ni créer de créneau de travail.",
+      "transcript": "Dans les paramètres de l’événement, ajoutons un spectacle au programme. Saisissons Concert du village, le quatorze novembre deux mille vingt-six, de onze heures à douze heures trente, puis cliquez sur Ajouter. Son horaire sert de repère dans le planning, sans réserver de bénévoles ni créer de créneau de travail.",
       "fallbackDurationMs": 29000
     },
     {
@@ -56,12 +56,12 @@
     },
     {
       "id": "public",
-      "transcript": "Ouvrons maintenant la page publique. Le concert apparaît en repère sur le planning. Les liens d’information reprennent l’ordre choisi. Ouvrons Ce qu’il faut apporter : le titre, le gras et la liste sont mis en forme, et la gourde est bien présente. Le bénévole peut préparer son arrivée sans chercher un ancien email.",
+      "transcript": "Ouvrons maintenant la page d’inscription. Le concert apparaît en repère sur le planning. Les liens d’information reprennent l’ordre choisi. Ouvrons Ce qu’il faut apporter : le titre, le gras et la liste sont mis en forme, et la gourde est bien présente. Le bénévole peut préparer son arrivée sans chercher un ancien email.",
       "fallbackDurationMs": 29000
     },
     {
       "id": "qr",
-      "transcript": "Le QR code mène à la page publique de cet événement. Téléchargez le PNG pour l’intégrer à un document, ou le SVG pour une impression nette. La commande Imprimer prépare une fiche à afficher sur un stand. Vérifiez le nom de l’événement et l’adresse avant de diffuser le support.",
+      "transcript": "Le QR code mène à la page d’inscription de cet événement. Téléchargez le PNG pour l’intégrer à un document, ou le SVG pour une impression nette. La commande Imprimer prépare une fiche à afficher sur un stand. Vérifiez le nom de l’événement et l’adresse avant de diffuser le support.",
       "fallbackDurationMs": 27000
     },
     {

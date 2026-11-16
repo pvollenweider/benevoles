@@ -4,6 +4,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useEffect, useCallback, useId } from "react"
+import { SEND_BATCHES_ANCHOR, type ActivityBatch } from "@/lib/send-batches"
+
+const LINK = "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 export type OrgLogEntry = {
   id: string
@@ -15,6 +18,8 @@ export type OrgLogEntry = {
   entityId: string
   changes: Record<string, { from: unknown; to: unknown }> | null
   createdAt: string
+  /** A batch of emails (#1101), with its delivery as it is now; null when deleted since. */
+  batch?: ActivityBatch | null
 }
 
 /**
@@ -30,6 +35,7 @@ export const ACTION_LABEL: Record<string, string> = {
   "template.deleted": "a supprimé un modèle de message",
   "member.updated": "a modifié un membre",
   "member.deactivated": "a désactivé un membre",
+  "member.links_renewed": "a corrigé l'adresse d'un membre\u00a0: ses liens personnels ont été renouvelés",
   // #516: says that an erasure happened, never whose (the entry points to the organisation).
   "member.erased": "a effacé les données personnelles d'un membre",
   "organization.suspended": "a suspendu l'organisation pour abus",
@@ -37,30 +43,38 @@ export const ACTION_LABEL: Record<string, string> = {
   "organization.reactivated_after_inactivity": "a réactivé l'espace, désactivé faute d'activité",
   "organization.kept": "a confirmé vouloir conserver l'espace",
   "organization.inactivity_email_sent": "a demandé si l'espace doit être conservé (vérification d'inactivité)",
+  "organization.inactivity_email_queued": "a préparé l'envoi d'un message demandant si l'espace doit être conservé (vérification d'inactivité)",
+  "organization.inactivity_check_blocked": "a mis en attente la vérification d'inactivité : un message n'a pu être envoyé à aucun organisateur, l'opérateur du service est prévenu",
   "organization.inactivity_check_stopped": "a arrêté la vérification d'inactivité en cours (activité, réponse, événement prévu ou décision de l'équipe du service)",
   "organization.deactivated_for_inactivity": "a désactivé l'espace, sans réponse à la vérification d'inactivité",
   "organization.approved": "a validé l'espace",
-  "adminuser.invited": "a invité un admin",
+  "adminuser.invited": "a invité un organisateur",
   "notification.retried": "a renvoyé un email",
-  "organization.notifications_updated": "a modifié les réglages de notification",
+  "organization.notifications_updated": "a modifié les paramètres des emails",
   // #1077: says whose address became the reply-to without writing it in the log.
   "organization.reply_to_defaulted": "a activé son compte : son adresse email est devenue l'adresse de réponse de l'organisation",
   "organization.logo_updated": "a changé le logo de l'organisation",
   "organization.logo_removed": "a retiré le logo de l'organisation",
-  "adminuser.removed": "a retiré un admin",
-  "adminuser.role_changed": "a changé le rôle d'un admin",
+  // #1168: joining or leaving the beta; neither changes an event.
+  "organization.beta_opted_in": "a fait participer l'organisation à la bêta des fonctions avancées",
+  "organization.beta_opted_out": "a arrêté la participation à la bêta : aucune nouvelle fonction bêta ne sera activée",
+  "adminuser.removed": "a retiré un organisateur",
+  "adminuser.role_changed": "a changé le rôle d'un organisateur",
   "member.merged": "a fusionné deux membres",
   "member.deleted": "a supprimé un membre",
   "member.duplicate_dismissed": "a ignoré un doublon possible",
   "volunteer.certificate_generated": "a généré une attestation de bénévolat",
   "organization.links_regenerated": "a régénéré les liens personnels de tous les membres",
+  // #1101: one entry per batch of emails sent at once from an event.
+  "sendbatch.queued": "a lancé un envoi groupé d'emails",
 }
 
 const ENTITY_FILTERS = [
   { value: "", label: "Tous les types" },
   { value: "Member", label: "Membres" },
-  { value: "AdminUser", label: "Comptes admin" },
+  { value: "AdminUser", label: "Comptes organisateurs" },
   { value: "NotificationOutbox", label: "Emails" },
+  { value: "SendBatch", label: "Envois groupés" },
   { value: "Organization", label: "Organisation" },
 ]
 
@@ -150,7 +164,7 @@ export default function ActivityLog() {
           id={filterId}
           value={entityType}
           onChange={(e) => setEntityType(e.target.value)}
-          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white"
+          className="border border-gray-500 rounded-lg px-3 py-1.5 text-sm bg-white"
         >
           {ENTITY_FILTERS.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
         </select>
@@ -169,11 +183,22 @@ export default function ActivityLog() {
       ) : (
         <ul className="space-y-1.5" role="list">
           {entries.map((entry) => (
-            <li key={entry.id} className="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-center justify-between gap-3">
-              <p className="text-sm text-gray-800 min-w-0">
-                <span className="font-medium">{entry.actorLabel}</span> {ACTION_LABEL[entry.action] ?? entry.action}
-              </p>
-              <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">{fmtDateTime(entry.createdAt)}</span>
+            <li key={entry.id} className="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-gray-800">
+                  <span className="font-medium">{entry.actorLabel}</span> {ACTION_LABEL[entry.action] ?? entry.action}
+                </p>
+                {entry.batch && (
+                  <p className="text-sm text-gray-700 mt-0.5">
+                    {entry.batch.kindLabel}, {entry.batch.eventTitle}{"\u00a0"}: {entry.batch.summary}.
+                    {entry.batch.heldSentence && <> {entry.batch.heldSentence}</>}{" "}
+                    <a href={`/admin/events/${entry.batch.eventId}/message#${SEND_BATCHES_ANCHOR}`} className={LINK}>
+                      Voir dans les messages de l&apos;événement<span className="sr-only">{"\u00a0"}: {entry.batch.kindLabel}, {entry.batch.eventTitle}, {fmtDateTime(entry.createdAt)}</span>
+                    </a>
+                  </p>
+                )}
+              </div>
+              <time dateTime={entry.createdAt} className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">{fmtDateTime(entry.createdAt)}</time>
             </li>
           ))}
         </ul>

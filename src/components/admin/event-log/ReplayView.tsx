@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from "react"
 import { describeChanges, describeEntry } from "@/lib/event-log-narrative"
 import type { ShiftLabel } from "@/lib/event-log-read"
-import { fmtDateTime, replayHeading, isBaseline, type ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"
+import { fmtDateTime, replayHeading, isBaseline, REPLAY_LOAD_ERROR, type ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"
 import { EmptyTabPrompt } from "./Pickers"
 
 export default function ReplayView({
@@ -19,21 +19,27 @@ export default function ReplayView({
   const [entries, setEntries] = useState<EventLogEntry[]>([])
   const [shiftLabels, setShiftLabels] = useState<Record<string, ShiftLabel>>({})
   const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
   const [step, setStep] = useState(0)
   const [announcement, setAnnouncement] = useState("")
   const sliderRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    queueMicrotask(() => { setLoading(true) })
+    queueMicrotask(() => { setLoading(true); setFailed(false) })
     const params = new URLSearchParams({ entityType: scope.entityType, entityId: scope.entityId, limit: "200" })
+    // A refused or failed request says so (#1272), never « Aucun historique » as if there were none.
     fetch(`/api/admin/events/${eventId}/log?${params}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`log ${r.status}`)
+        return r.json()
+      })
       .then((data) => {
         const ordered = [...data.entries].reverse() // API returns newest-first; replay goes chronologically
         setEntries(ordered)
         setShiftLabels(data.shiftLabels)
         setStep(0)
       })
+      .catch(() => { setEntries([]); setFailed(true) })
       .finally(() => setLoading(false))
   }, [eventId, scope])
 
@@ -50,7 +56,16 @@ export default function ReplayView({
     return () => clearTimeout(id)
   }, [step, entries, shiftLabels])
 
-  if (loading) return <p role="status" className="text-sm text-gray-500">Chargement…</p>
+  // Loading and failure share one persistent status element, so the change of text is announced;
+  // after a failure the way to another element stays at hand.
+  if (loading || failed) {
+    return (
+      <div className="flex items-center justify-between gap-3">
+        <p role="status" className={`text-sm ${failed && !loading ? "text-red-700" : "text-gray-500"}`}>{loading ? "Chargement…" : REPLAY_LOAD_ERROR}</p>
+        {failed && !loading && <button onClick={onClear} className="text-xs text-gray-500 hover:text-gray-800">Changer d&apos;élément</button>}
+      </div>
+    )
+  }
   if (entries.length === 0) return <EmptyTabPrompt text="Aucun historique pour cet élément." />
 
   const entry = entries[step]

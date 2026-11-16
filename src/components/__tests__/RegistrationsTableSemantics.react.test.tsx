@@ -161,3 +161,31 @@ describe("RegistrationsManager — count announcements", () => {
     expect(outcome().textContent).toBe(result)
   })
 })
+
+describe("RegistrationsManager — « Écrire » link with the page's sector (#1170)", () => {
+  afterEach(cleanup)
+  const mount = (sectorFilter: { value: string; label: string } | null) => render(
+    <RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[bar, accueil]} initialRegistrations={[reg("r1", "Alice", bar)]} sectorFilter={sectorFilter} />,
+  )
+
+  it("names the sector and writes to it when no poste or créneau is chosen", () => {
+    mount({ value: "sec-bar", label: "Buvette" })
+    expect(screen.getByRole("link", { name: "Écrire au secteur Buvette" })).toHaveAttribute("href", "/admin/events/evt-1/message?secteur=sec-bar")
+  })
+
+  it("« Autres postes » has its own wording", () => {
+    mount({ value: "autres", label: "Autres postes" })
+    expect(screen.getByRole("link", { name: "Écrire aux « Autres postes »" })).toHaveAttribute("href", "/admin/events/evt-1/message?secteur=autres")
+  })
+
+  it("a poste chosen in the list wins over the sector", () => {
+    mount({ value: "sec-bar", label: "Buvette" })
+    fireEvent.change(screen.getByLabelText("Filtrer par poste"), { target: { value: "Bar" } })
+    expect(screen.getByRole("link", { name: "Écrire à ce poste" })).toHaveAttribute("href", "/admin/events/evt-1/message?role=Bar")
+  })
+
+  it("without a sector, writes to everyone as before", () => {
+    mount(null)
+    expect(screen.getByRole("link", { name: "Écrire aux bénévoles" })).toHaveAttribute("href", "/admin/events/evt-1/message")
+  })
+})

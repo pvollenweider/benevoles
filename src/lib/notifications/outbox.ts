@@ -5,12 +5,21 @@ import { after } from "next/server"
 import { prisma } from "../prisma"
 import type { Prisma } from "@/generated/prisma/client"
 import { reportError } from "../report-error"
+import { errorLogLine } from "../report-error-log"
 import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
 import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
 import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
+import { isAddedShiftsConfirmation, resolveAddedShiftsConfirmation } from "./added-shifts-confirmation"
+import { outboxRecipientVerdict } from "../outbox-recipient-check"
+import { hourStart, recordLimitHit } from "./limit-hits"
+import type { SendBatchKind } from "../send-batches"
+import { inactivityCopyVerdict } from "../org-inactivity-steps"
+import { outboxFailureGroup } from "./outbox-failure"
+import { isCustomRuleReminder, resolveCustomRuleReminder, sendCustomReminderPush } from "../reminder-occurrence-delivery"
+import { nextReminderAttemptAt } from "../reminder-rules"
 
 /**
  * Notification outbox (#293).
@@ -26,6 +35,15 @@ import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organize
  */
 
 export { MAX_ATTEMPTS }
+
+/**
+ * A row that gave up only because the recipient's address doesn't exist (5.1.x, flagged by the
+ * email channel): not reported to Sentry. Both flags are required, so any other failure, including
+ * an unflagged permanent one, is still reported.
+ */
+export function isRecipientDataFailure(outcome: { permanent?: boolean; recipientRejected?: true }): boolean {
+  return outcome.permanent === true && outcome.recipientRejected === true
+}
 /** 5 min, 10, 20, 40, 80 between attempts. */
 export function backoffMs(attempts: number): number {
   return 5 * 60 * 1000 * 2 ** Math.max(0, attempts - 1)
@@ -39,10 +57,29 @@ const STALE_CLAIM_MS = 15 * 60 * 1000
  */
 export type OutboxDb = {
   notificationOutbox: {
-    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null; targetedMessageId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
+    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null; inactivityStepId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
     findUniqueOrThrow(args: { where: { dedupeKey: string }; select: { id: true } }): Promise<{ id: string }>
-    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null; targetedMessageId?: string | null }; select: { id: true } }): Promise<{ id: string }>
+    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null; inactivityStepId?: string | null }; select: { id: true } }): Promise<{ id: string }>
   }
+}
+
+/** A batch of emails sent at once from an event (#1101): recorded with the emails, see enqueueNotifications. */
+export type SendBatchSpec = { kind: SendBatchKind; eventId: string; actorId: string | null }
+
+/** What recording a batch needs on top of OutboxDb: the transaction of the routes has it all. */
+export type BatchDb = OutboxDb & {
+  sendBatch: {
+    create(args: { data: { organizationId: string; eventId: string; kind: string; actorId: string | null; targetedMessageId?: string | null }; select: { id: true } }): Promise<{ id: string }>
+    // updateMany / deleteMany, never update / delete: the org-scoped client checks a unique-key
+    // write against the committed row, which this transaction's new batch is not yet.
+    updateMany(args: { where: { id: string }; data: { recipientCount: number } }): Promise<unknown>
+    deleteMany(args: { where: { id: string } }): Promise<unknown>
+  }
+  orgLog: {
+    create(args: { data: { organizationId: string; actorType: string; actorId: string | null; action: string; entityType: string; entityId: string; changes?: Prisma.InputJsonValue } }): Promise<unknown>
+  }
+  /** Savepoints only (constant statements), so the batch record never aborts the send. */
+  $executeRawUnsafe(query: string): Promise<number>
 }
 
 /** A `send` that only records payloads, to pass to the notification helpers. */
@@ -86,10 +123,87 @@ export function openPayload(stored: unknown): NotificationPayload {
 export async function enqueueNotifications(
   payloads: NotificationPayload[],
   db: OutboxDb = prisma,
-  /** `targetedMessageId`: the history row of a targeted message (#467) these emails belong to. */
-  opts: { organizationId?: string | null; targetedMessageId?: string } = {},
+  /**
+   * `targetedMessageId`: the history row of a targeted message (#467) these emails belong to.
+   * `inactivityStepId`: the inactivity step (#1114) these copies confirm once one is sent.
+   */
+  opts: { organizationId?: string | null; targetedMessageId?: string; inactivityStepId?: string } = {},
 ): Promise<string[]> {
-  const link = opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}
+  return enqueueRows(payloads, db, opts, null)
+}
+
+/**
+ * Stores a batch of emails sent at once from an event (#1101) like `enqueueNotifications`, plus
+ * its SendBatch (who, when, how many; no recipient) and one organisation log entry, in the same
+ * transaction: the batch, its emails and its trace commit together. Nothing queued (no address,
+ * all already queued): no batch, no entry. Returns the ids of rows to deliver.
+ *
+ * The record never decides whether the emails go: each of its writes runs inside a savepoint, and
+ * a failure rolls back that savepoint only (reported), never the transaction of the send. The
+ * emails are then queued as before, outside any batch, or the batch keeps no log entry.
+ */
+export async function enqueueBatch(
+  payloads: NotificationPayload[],
+  db: BatchDb,
+  opts: { organizationId: string; targetedMessageId?: string; batch: SendBatchSpec },
+): Promise<string[]> {
+  if (!payloads.some((p) => p.recipient.email?.trim())) return []
+  const batchId = await inSavepoint(db, "send_batch_create", async () => (await db.sendBatch.create({
+    data: { organizationId: opts.organizationId, eventId: opts.batch.eventId, kind: opts.batch.kind, actorId: opts.batch.actorId, targetedMessageId: opts.targetedMessageId ?? null },
+    select: { id: true },
+  })).id)
+  const ids = await enqueueRows(payloads, db, opts, batchId)
+  if (!batchId) return ids
+  await inSavepoint(db, "send_batch_finish", async () => {
+    if (ids.length === 0) {
+      await db.sendBatch.deleteMany({ where: { id: batchId } })
+      return
+    }
+    await db.sendBatch.updateMany({ where: { id: batchId }, data: { recipientCount: ids.length } })
+    await db.orgLog.create({
+      data: {
+        organizationId: opts.organizationId,
+        actorType: opts.batch.actorId ? "admin" : "system",
+        actorId: opts.batch.actorId,
+        action: "sendbatch.queued",
+        entityType: "SendBatch",
+        entityId: batchId,
+        changes: { recipients: { from: null, to: ids.length } },
+      },
+    })
+  })
+  return ids
+}
+
+/**
+ * Runs `step` inside a savepoint of the current transaction: on failure, only the step is rolled
+ * back, the transaction goes on (Postgres aborts a whole transaction on a failed statement
+ * otherwise). Returns the step's value, or null when it failed.
+ */
+async function inSavepoint<T>(db: BatchDb, name: string, step: () => Promise<T>): Promise<T | null> {
+  await db.$executeRawUnsafe(`SAVEPOINT ${name}`)
+  try {
+    const value = await step()
+    await db.$executeRawUnsafe(`RELEASE SAVEPOINT ${name}`)
+    return value
+  } catch (e) {
+    await db.$executeRawUnsafe(`ROLLBACK TO SAVEPOINT ${name}`)
+    try { reportError(`outbox.send_batch.${name}`)(e) } catch { /* reporting never fails the send */ }
+    return null
+  }
+}
+
+async function enqueueRows(
+  payloads: NotificationPayload[],
+  db: OutboxDb,
+  opts: { organizationId?: string | null; targetedMessageId?: string; inactivityStepId?: string },
+  sendBatchId: string | null,
+): Promise<string[]> {
+  const link = {
+    ...(opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}),
+    ...(sendBatchId ? { sendBatchId } : {}),
+    ...(opts.inactivityStepId ? { inactivityStepId: opts.inactivityStepId } : {}),
+  }
   const ids: string[] = []
   for (const { dedupeKey, ...payload } of payloads) {
     if (!payload.recipient.email?.trim()) continue
@@ -120,12 +234,79 @@ export function outboxMessageId(rowId: string): string {
 }
 
 /**
+ * Puts a row held over a sending limit (#810) back to pending in ONE statement (#1139): status,
+ * claim release, first/last hold markers and the deadline commit together, so the rescheduler can
+ * never see a pending row without its hold. Fenced by the claim this worker wrote: a delivery that
+ * stalled past the claim timeout and was reclaimed must not touch the newer worker's row. The
+ * `countedThisHour` flag is computed from the row's own pre-update `lastHeldAt` in the same
+ * statement, not from the snapshot read before the send: only the delivery whose write lands
+ * records the limit hit, once per row and UTC hour.
+ */
+async function holdForLimit(
+  rowId: string,
+  claimMarker: Date,
+  now: Date,
+  heldUntil: Date,
+): Promise<{ applied: boolean; countedThisHour: boolean }> {
+  const hour = hourStart(now)
+  // Instants go in as UTC ISO strings cast to the column's timestamp(3): a raw Date parameter's
+  // binding type (timestamp or timestamptz) depends on the driver, and a session timezone must
+  // never move a claim marker or a deadline.
+  const claim = claimMarker.toISOString()
+  const at = now.toISOString()
+  const bucket = hour.toISOString()
+  const until = heldUntil.toISOString()
+  const rows = await prisma.$queryRaw<{ countedThisHour: boolean }[]>`
+    WITH previous AS (
+      SELECT "lastHeldAt" FROM "NotificationOutbox"
+      WHERE id = ${rowId} AND status = 'sending' AND "claimedAt" = ${claim}::timestamp(3)
+    )
+    UPDATE "NotificationOutbox" AS o
+    SET status = 'pending',
+        "claimedAt" = NULL,
+        "firstHeldAt" = COALESCE(o."firstHeldAt", ${at}::timestamp(3)),
+        "lastHeldAt" = CASE
+          WHEN p."lastHeldAt" IS NULL OR p."lastHeldAt" < ${bucket}::timestamp(3) THEN ${at}::timestamp(3)
+          ELSE o."lastHeldAt"
+        END,
+        "deliveryNotBefore" = ${until}::timestamp(3),
+        "nextAttemptAt" = ${until}::timestamp(3)
+    FROM previous AS p
+    WHERE o.id = ${rowId} AND o.status = 'sending' AND o."claimedAt" = ${claim}::timestamp(3)
+    RETURNING (p."lastHeldAt" IS NULL OR p."lastHeldAt" < ${bucket}::timestamp(3)) AS "countedThisHour"
+  `
+  return rows.length === 0
+    ? { applied: false, countedThisHour: false }
+    : { applied: true, countedThisHour: rows[0].countedThisHour }
+}
+
+/**
  * Delivers stored rows once the response has been sent. After a transactional enqueue, call it
  * only once the transaction has committed: before that, the rows aren't visible to delivery.
  */
 export function deliverAfterResponse(ids: string[]): void {
   if (ids.length === 0) return
   after(() => deliverOutbox({ ids }).then(() => undefined, reportError("outbox.deliver")))
+}
+
+/**
+ * Completion of a custom reminder whose SMTP send was accepted (#1139): the outbox row and its
+ * occurrence commit together. The rule's current state is deliberately not checked: the email was
+ * already in flight when the organiser may have removed the rule, and its success must stay in the
+ * history so recreating the same delay cannot send it again.
+ */
+export async function completeCustomReminderDelivery(
+  outboxId: string,
+  occurrenceId: string,
+  sentAt: Date,
+): Promise<void> {
+  await prisma.$transaction([
+    prisma.notificationOutbox.update({ where: { id: outboxId }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } }),
+    prisma.reminderOccurrence.updateMany({
+      where: { id: occurrenceId, status: "queued" },
+      data: { status: "sent", sentAt, lastError: null },
+    }),
+  ])
 }
 
 /**
@@ -161,52 +342,160 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     if (count === 0) continue // claimed by another delivery meanwhile
 
     const claimed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
-    // A grouped « added by an organizer » email (#916) lists what is still held when it leaves:
-    // nothing left, nothing to tell. A failed read is an ordinary failed attempt, retried.
+    // A grouped « added by an organizer » email (#916), or a grouped confirmation of shifts added
+    // by the volunteer (#1191), lists what is still held when it leaves: nothing left, nothing to
+    // tell. A failed read is an ordinary failed attempt, retried.
     let nothingLeft = false
+    let recipientRefused: string | null = null
+    let inactivityStopped: string | null = null
+    // Custom reminder (#1139): its occurrence decides at the last moment, like the resolvers above.
+    let customReminderCancelled: string | null = null
+    let customReminderDeferredUntil: Date | null = null
+    let customReminderOccurrenceId: string | null = null
+    let payloadForPush: NotificationPayload | null = null
+    // The email kind, for a sending limit reached (kept on EmailLimitHit for the operator).
+    let kind: string | null = null
     const outcome = await Promise.resolve()
       .then(async () => {
         let payload = openPayload(claimed.payload)
-        if (isAddedByOrganizer(payload)) {
-          const resolved = await resolveAddedByOrganizer(payload)
+        if (isCustomRuleReminder(payload)) {
+          customReminderOccurrenceId = (payload.data as { occurrenceId?: string }).occurrenceId ?? null
+          const resolved = await resolveCustomRuleReminder(payload, now)
+          if (resolved.kind === "cancel") {
+            customReminderCancelled = resolved.reason
+            return { ok: true as const }
+          }
+          if (resolved.kind === "defer") {
+            customReminderDeferredUntil = resolved.until
+            return { ok: true as const }
+          }
+          payload = resolved.payload
+        }
+        if (isAddedByOrganizer(payload) || isAddedShiftsConfirmation(payload)) {
+          const resolved = isAddedByOrganizer(payload) ? await resolveAddedByOrganizer(payload) : await resolveAddedShiftsConfirmation(payload)
           if (!resolved) { nothingLeft = true; return { ok: true as const } }
           payload = resolved
         }
+        kind = payload.kind
+        // Read right before the send: a member whose address was corrected, a link replaced or
+        // revoked, a leader removed since the email was queued. Cancelled, never redirected.
+        recipientRefused = await outboxRecipientVerdict(payload)
+        if (recipientRefused) return { ok: true as const }
+        // An inactivity message (#1114) goes only to a current administrator, while the procedure runs.
+        if (claimed.inactivityStepId) {
+          inactivityStopped = await inactivityCopyBlocked(claimed.inactivityStepId, payload.recipient.email ?? "", now)
+          if (inactivityStopped) return { ok: true as const }
+        }
         // The row's organisation (#814) is checked by sendNotification right before this one send,
         // not when the batch was read: a deactivation during a batch stops the rest of it.
+        payloadForPush = payload
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
       })
       .catch(
-      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined }),
+      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, recipientRejected: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined, limit: undefined as string | undefined }),
     )
 
+    if (customReminderCancelled) {
+      await prisma.$transaction([
+        prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: customReminderCancelled, claimedAt: null, deliveryNotBefore: null } }),
+        // Never reopen a sent occurrence: only pending/queued rows are cancelled here.
+        prisma.reminderOccurrence.updateMany({
+          where: { id: customReminderOccurrenceId ?? "", status: { in: ["pending", "queued"] } },
+          data: { status: "cancelled", lastError: customReminderCancelled },
+        }),
+      ])
+      result.cancelled++
+      continue
+    }
+
+    if (customReminderDeferredUntil) {
+      // A shift moved later: keep the row for its new due instant, not as a failure. A retry or
+      // hold constraint already on the row still wins when it is later than the new due instant.
+      const deferredUntil = customReminderDeferredUntil
+      await prisma.$transaction([
+        prisma.notificationOutbox.update({
+          where: { id: row.id },
+          data: {
+            status: "pending",
+            claimedAt: null,
+            nextAttemptAt: nextReminderAttemptAt(deferredUntil, claimed.deliveryNotBefore),
+          },
+        }),
+        prisma.reminderOccurrence.updateMany({
+          where: { id: customReminderOccurrenceId ?? "", status: "queued" },
+          data: { dueAt: deferredUntil },
+        }),
+      ])
+      result.held++
+      continue
+    }
+
+    if (recipientRefused) {
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: recipientRefused, claimedAt: null, deliveryNotBefore: null } })
+      result.cancelled++
+      continue
+    }
+
+    if (inactivityStopped) {
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: inactivityStopped, claimedAt: null, deliveryNotBefore: null } })
+      result.cancelled++
+      continue
+    }
+
     if (nothingLeft) {
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: "Plus aucune inscription à annoncer.", claimedAt: null } })
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: "Plus aucune inscription à annoncer.", claimedAt: null, deliveryNotBefore: null } })
       result.cancelled++
       continue
     }
 
     if (!outcome.ok && outcome.held) {
       // Over a sending limit (#810): not an attempt, not a failure. Back to pending, tried again
-      // when the window ends; the attempts count is left as it was.
-      await prisma.notificationOutbox.update({
-        where: { id: row.id },
-        data: { status: "pending", claimedAt: null, nextAttemptAt: new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000)) },
-      })
+      // when the window ends; the attempts count is left as it was. The status, the hold markers
+      // and the deadline are written in ONE statement (#1139): the rescheduler must never see a
+      // pending row without its hold. The hold is later than the due instant (the row was due).
+      const heldUntil = new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000))
+      const hold = await holdForLimit(row.id, now, now, heldUntil)
+      // Our claim was reclaimed meanwhile (a stalled delivery, pick up after the claim timeout):
+      // the row belongs to the newer worker, which writes its own hold. Never overwrite its
+      // markers or deadline, and never count the same row and hour twice.
+      if (!hold.applied) continue
       result.held++
+      if (hold.countedThisHour && outcome.limit) {
+        await recordLimitHit({ organizationId: claimed.organizationId, limit: outcome.limit, kind, outcome: "held", now })
+      }
       continue
     }
 
     if (!outcome.ok && outcome.blocked) {
       // Deactivated or deleted organisation (#814), or a public-triggered email over its
       // per-recipient cap (#810): cancelled for good, never retried, never sent later.
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: outcome.reason, claimedAt: null } })
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: outcome.reason, claimedAt: null, deliveryNotBefore: null } })
       result.cancelled++
       continue
     }
 
     if (outcome.ok) {
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt: new Date(), lastError: null } })
+      const sentAt = new Date()
+      if (claimed.inactivityStepId) {
+        // The first copy accepted confirms its inactivity step (#1114), in the same transaction:
+        // the sent row itself is purged the next night, the confirmation stays.
+        const stepId = claimed.inactivityStepId
+        await prisma.$transaction([
+          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } }),
+          prisma.orgInactivityStep.updateMany({ where: { id: stepId, confirmedAt: null }, data: { confirmedAt: sentAt } }),
+        ])
+      } else if (customReminderOccurrenceId) {
+        // The email and its occurrence commit together: a crash cannot leave the occurrence
+        // unsent while the outbox row says sent (delivery stays at-least-once either way).
+        await completeCustomReminderDelivery(row.id, customReminderOccurrenceId, sentAt)
+      } else {
+        await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } })
+      }
+      if (customReminderOccurrenceId && payloadForPush) {
+        // Push is best effort, only after the email was accepted: a suspended organisation never
+        // reaches this point, and the tag keeps one notification per occurrence.
+        sendCustomReminderPush(payloadForPush).catch(reportError("push.reminder_rule"))
+      }
       result.sent++
       continue
     }
@@ -215,21 +504,42 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     // A permanent SMTP rejection (#598) stops the retries at once: a 5xx can't be fixed by
     // waiting, unlike a 4xx or a connection issue, which keep the normal backoff.
     const giveUp = attempts >= MAX_ATTEMPTS || outcome.permanent === true
-    await prisma.notificationOutbox.update({
-      where: { id: row.id },
-      data: {
-        status: giveUp ? "failed" : "pending",
-        attempts,
-        lastError: outcome.reason.slice(0, 500),
-        nextAttemptAt: new Date(now.getTime() + backoffMs(attempts)),
-        claimedAt: null,
-      },
-    })
+    const retryAt = new Date(now.getTime() + backoffMs(attempts))
+    const failure = {
+      status: giveUp ? "failed" : "pending",
+      attempts,
+      lastError: outcome.reason.slice(0, 500),
+      nextAttemptAt: retryAt,
+      // Retry backoff is the delivery's own constraint (#1139), kept apart from a reminder's due
+      // instant so a later reschedule cannot erase it.
+      deliveryNotBefore: giveUp ? null : retryAt,
+      claimedAt: null,
+    }
+    if (giveUp && customReminderOccurrenceId) {
+      // A custom reminder (#1139) that gives up moves its occurrence to "failed" in the same
+      // transaction: a final failure is not a cancellation the hourly run may recompute.
+      await prisma.$transaction([
+        prisma.notificationOutbox.update({ where: { id: row.id }, data: failure }),
+        prisma.reminderOccurrence.updateMany({
+          where: { id: customReminderOccurrenceId, status: "queued" },
+          data: { status: "failed", lastError: outcome.reason.slice(0, 500) },
+        }),
+      ])
+    } else {
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: failure })
+    }
     if (giveUp) {
       result.failed++
       let kind = "unknown"
       try { kind = openPayload(claimed.payload).kind } catch { /* reported below anyway */ }
-      reportError(`outbox.gave_up.${kind}`)(new Error(`Notification ${row.id} failed ${attempts} times: ${outcome.reason}`))
+      const gaveUp = new Error(`Notification ${row.id} failed ${attempts} times: ${outcome.reason}`)
+      if (isRecipientDataFailure(outcome)) {
+        // A mailbox or domain that doesn't exist: the member's address, not an application error.
+        // Failed and shown to the organiser as before, logged as a warning, not sent to Sentry.
+        console.warn(errorLogLine(`outbox.gave_up.${kind}`, gaveUp))
+      } else {
+        reportError(`outbox.gave_up.${kind}`)(gaveUp)
+      }
     } else {
       result.retried++
     }
@@ -237,8 +547,43 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
   return result
 }
 
+/**
+ * Why a queued inactivity copy (#1114) must not leave any more, read right before the send: its
+ * step is gone (procedure stopped), the recipient is no longer an active administrator at that
+ * address, or the procedure was stopped since the step was queued. Null: it may go.
+ */
+async function inactivityCopyBlocked(stepId: string, recipientEmail: string, now: Date): Promise<string | null> {
+  const step = await prisma.orgInactivityStep.findUnique({
+    where: { id: stepId },
+    select: {
+      queuedAt: true,
+      organization: {
+        select: {
+          active: true, inactivityExempt: true, inactivityPostponedUntil: true, lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true,
+          admins: { where: { isActive: true }, select: { email: true } },
+        },
+      },
+    },
+  })
+  if (!step) return "Vérification d'inactivité arrêtée : message annulé."
+  const o = step.organization
+  return inactivityCopyVerdict({ recipientEmail, queuedAt: step.queuedAt }, {
+    active: o.active,
+    exempt: o.inactivityExempt,
+    postponedUntil: o.inactivityPostponedUntil,
+    lastActivityAt: o.lastMeaningfulActivityAt,
+    lastRetentionConfirmedAt: o.lastRetentionConfirmedAt,
+    adminEmails: o.admins.map((a) => a.email),
+  }, now)
+}
+
 export type OutboxHealth = {
+  /** Total definitive failures of the last day; the sum of the two counts below. */
   failedLastDay: number
+  /** Those caused by the recipient's address (unknown mailbox, disabled mailbox, unknown domain). */
+  recipientFailuresLastDay: number
+  /** Every other definitive failure: relay, policy, timeout, unknown reason, non-SMTP error… */
+  otherFailuresLastDay: number
   oldestPendingMinutes: number | null
   staleClaims: number
   healthy: boolean
@@ -254,22 +599,32 @@ export type OutboxHealth = {
 export const MAX_PENDING_AGE_MINUTES = 120
 
 /**
- * Health of the queue (#316): rows that gave up in the last day, age of the oldest undelivered
- * row, claims abandoned by a crashed delivery. The health page shows it all; the hourly cron sends
- * it to Sentry only when delivery is stuck.
+ * Health of the queue (#316): rows that gave up in the last day, split by cause, how late the oldest
+ * row already due is, claims abandoned by a crashed delivery. The health page shows it all; the hourly
+ * cron sends it to Sentry only when delivery is stuck. A refusal caused by the recipient's address
+ * doesn't make the queue unhealthy: it says nothing about the platform.
  */
 export async function outboxHealth(now: Date = new Date()): Promise<OutboxHealth> {
-  const [failedLastDay, oldestPending, staleClaims] = await Promise.all([
-    prisma.notificationOutbox.count({ where: { status: "failed", createdAt: { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) } } }),
+  const [failedRows, oldestPending, staleClaims] = await Promise.all([
+    prisma.notificationOutbox.findMany({
+      where: { status: "failed", createdAt: { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) } },
+      select: { lastError: true },
+    }),
+    // Only rows already due: an email waiting for its scheduled retry (a back-off after a
+    // temporary refusal, or a sending limit) is not late. Before, a mistyped domain retried for
+    // hours raised « Notification outbox unhealthy » (2026-11-10).
     prisma.notificationOutbox.findFirst({
-      where: { status: { in: ["pending", "sending"] } },
-      orderBy: { createdAt: "asc" },
-      select: { createdAt: true },
+      where: { status: { in: ["pending", "sending"] }, nextAttemptAt: { lte: now } },
+      orderBy: { nextAttemptAt: "asc" },
+      select: { nextAttemptAt: true },
     }),
     prisma.notificationOutbox.count({ where: { status: "sending", claimedAt: { lt: new Date(now.getTime() - STALE_CLAIM_MS) } } }),
   ])
-  const oldestPendingMinutes = oldestPending ? Math.floor((now.getTime() - oldestPending.createdAt.getTime()) / 60000) : null
+  const failedLastDay = failedRows.length
+  const recipientFailuresLastDay = failedRows.filter((row) => outboxFailureGroup(row.lastError) === "recipient").length
+  const otherFailuresLastDay = failedLastDay - recipientFailuresLastDay
+  const oldestPendingMinutes = oldestPending ? Math.floor((now.getTime() - oldestPending.nextAttemptAt.getTime()) / 60000) : null
   const stuck = staleClaims > 0 || (oldestPendingMinutes ?? 0) > MAX_PENDING_AGE_MINUTES
-  const healthy = failedLastDay === 0 && !stuck
-  return { failedLastDay, oldestPendingMinutes, staleClaims, healthy, stuck }
+  const healthy = otherFailuresLastDay === 0 && !stuck
+  return { failedLastDay, recipientFailuresLastDay, otherFailuresLastDay, oldestPendingMinutes, staleClaims, healthy, stuck }
 }

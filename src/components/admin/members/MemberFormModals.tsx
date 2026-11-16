@@ -8,11 +8,13 @@ import ModalShell from "@/components/admin/ModalShell"
 import AvailabilityFields from "@/components/AvailabilityFields"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
+import { MEMBER_NOTES_MAX } from "@/lib/text-limits"
 import { parseTags, type Member } from "@/lib/members-list"
 import { MEMBER_TAGS_HINT as TAGS_HINT } from "@/lib/role-reservation"
 import type { AvailabilityPeriod } from "@/lib/availability"
 import type { FocusCandidate } from "@/lib/focus-return"
 import RequiredMark from "@/components/RequiredMark"
+import { addressCorrected } from "@/lib/member-address-change"
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -25,6 +27,9 @@ function memberProblem(v: { firstName: string; lastName: string; email: string }
   if (v.email.trim() && !EMAIL.test(v.email.trim())) return { field: "email", message: "Indiquez une adresse email complète, ou laissez le champ vide." }
   return null
 }
+
+/** Shown while an organiser corrects a saved address: saving renews the member's links (src/lib/member-address-revocation.ts). */
+const LINKS_RENEWED_HINT = "À l'enregistrement, les liens personnels de ce membre (y compris l'abonnement au calendrier) seront renouvelés\u00a0: ceux déjà envoyés à l'ancienne adresse ne fonctionneront plus, et les nouveaux seront envoyés à cette adresse pour ses événements à venir."
 
 /** The API's 400/409 talk about the address (duplicate, invalid); mark it. */
 const fieldForStatus = (status: number | null): FieldKey | undefined => (status === 400 || status === 409 ? "email" : undefined)
@@ -47,7 +52,7 @@ export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose
   const emailRef = useRef<HTMLInputElement>(null)
   // Only called from handlers, never during render.
   const elementFor = (f: FieldKey) => (f === "firstName" ? firstNameRef : f === "lastName" ? lastNameRef : emailRef).current
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -80,16 +85,20 @@ export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose
           <Field label="Prénom" required value={firstName} onChange={setFirstName} inputRef={firstNameRef} invalid={isInvalid("firstName")} errorId={errorId} autoComplete="off" />
           <Field label="Nom" required value={lastName} onChange={setLastName} inputRef={lastNameRef} invalid={isInvalid("lastName")} errorId={errorId} autoComplete="off" />
         </div>
-        <Field label="Email" type="email" value={email} onChange={setEmail} inputRef={emailRef} invalid={isInvalid("email")} errorId={errorId} autoComplete="off" />
+        <Field
+          label="Email" type="email" value={email} onChange={setEmail} inputRef={emailRef} invalid={isInvalid("email")} errorId={errorId} autoComplete="off"
+          liveHint
+          hint={EMAIL.test(email.trim()) && addressCorrected(member.email, email) ? LINKS_RENEWED_HINT : undefined}
+        />
         <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} autoComplete="off" />
         <Field label="Étiquettes (séparées par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" hint={TAGS_HINT} />
-        <Field label="Notes" value={notes} onChange={setNotes} multiline />
+        <Field label="Notes" value={notes} onChange={setNotes} multiline maxLength={MEMBER_NOTES_MAX} />
         <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
         <div className="flex items-center gap-2">
           <input id={activeId} type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="h-4 w-4" />
           <label htmlFor={activeId} className="text-sm text-gray-700">Membre actif</label>
         </div>
-        <FormStatus error={error} errorId={errorId} />
+        <FormStatus error={error} errorId={errorId} quiet={quiet} alertShown={alertShown} />
         <Actions busy={busy} onClose={onClose} label="Enregistrer" />
       </form>
     </ModalShell>
@@ -109,7 +118,7 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
   const emailRef = useRef<HTMLInputElement>(null)
   // Only called from handlers, never during render.
   const elementFor = (f: FieldKey) => (f === "firstName" ? firstNameRef : f === "lastName" ? lastNameRef : emailRef).current
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -145,7 +154,7 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
         <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} autoComplete="off" />
         <Field label="Étiquettes (séparées par des virgules)" value={tags} onChange={setTags} placeholder="parent CM2, bar" hint={TAGS_HINT} />
         <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
-        <FormStatus error={error} errorId={errorId} />
+        <FormStatus error={error} errorId={errorId} quiet={quiet} alertShown={alertShown} />
         <Actions busy={busy} onClose={onClose} label="Créer" />
       </form>
     </ModalShell>
@@ -170,11 +179,17 @@ function Actions({ busy, onClose, label }: { busy: boolean; onClose: () => void;
 }
 
 function Field({
-  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete, hint,
+  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete, hint, liveHint = false, maxLength,
 }: {
+  maxLength?: number
   label: string
   /** A short help line under the field, read with it (aria-describedby). */
   hint?: string
+  /**
+   * The hint appears while typing: its container stays mounted as a polite status, so a screen
+   * reader announces it once when it appears (not on each keystroke), not only on focus.
+   */
+  liveHint?: boolean
   value: string
   onChange: (v: string) => void
   type?: string
@@ -187,14 +202,14 @@ function Field({
   autoComplete?: string
 }) {
   const id = useId()
-  const cls = "w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+  const cls = "w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
   return (
     <div>
       <label htmlFor={id} className="block text-sm text-gray-700 mb-1">
         {label}{required && <RequiredMark />}
       </label>
       {multiline ? (
-        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={3} className={cls} />
+        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} maxLength={maxLength} rows={3} className={cls} />
       ) : (
         <input
           id={id}
@@ -206,11 +221,13 @@ function Field({
           autoComplete={autoComplete}
           required={required}
           aria-invalid={invalid}
-          aria-describedby={[hint ? `${id}-hint` : null, invalid && errorId ? errorId : null].filter(Boolean).join(" ") || undefined}
+          aria-describedby={[hint || liveHint ? `${id}-hint` : null, invalid && errorId ? errorId : null].filter(Boolean).join(" ") || undefined}
           className={cls}
         />
       )}
-      {hint && <p id={`${id}-hint`} className="text-xs text-gray-600 mt-1">{hint}</p>}
+      {liveHint
+        ? <p id={`${id}-hint`} role="status" className={hint ? "text-xs text-gray-600 mt-1" : "text-xs text-gray-600"}>{hint ?? ""}</p>
+        : hint && <p id={`${id}-hint`} className="text-xs text-gray-600 mt-1">{hint}</p>}
     </div>
   )
 }

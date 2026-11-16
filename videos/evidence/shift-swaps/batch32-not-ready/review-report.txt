@@ -1,0 +1,6 @@
+STATUS: NOT READY
+Batch32
+Take1 rejected for early acceptance click. Take2 failed in swaps-result: ReferenceError event is not defined (video recorder only).
+Source corrected to /admin/events/${EVENT_ID}/log; actual public-host local route verified with13 real entries.
+One re-film cap exhausted; explicit exception requested asynchronously. No third narrated take or publication without owner authorization.
+Same full verified Kore narration retained.

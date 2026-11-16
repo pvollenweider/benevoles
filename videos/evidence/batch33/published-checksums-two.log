@@ -1,0 +1,9 @@
+npm run video:publish -- --context "default"    SHIFT_SWAPS PRIVACY_PERSONAL_LINKS
+
+> benevoles@2.5.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default SHIFT_SWAPS PRIVACY_PERSONAL_LINKS
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (0) :
+Inchangés : 10
+Présents seulement sur le serveur (laissés tels quels) : 544

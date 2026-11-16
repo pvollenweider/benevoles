@@ -3,13 +3,13 @@
 /** Reset only the independently owned batch-22 onboarding classroom. */
 import assert from "node:assert/strict"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { verifyProductBuild } from "../lib/product-build"
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
   await verifyProductBuild("http://localhost:43102")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   const id = "video-first-steps-batch22", slug = "formation-premiers-pas", email = "video.firststeps.owner@example.org"
   try {
     const fixture = await db.organization.findUnique({ where: { id }, include: { admins: true, volunteers: true, events: { include: { sectorLeaders: true } } } })

@@ -1,4 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 import { applySelect, expectNoSecretFields, secretKeyPaths } from "./helpers/no-secret-fields"
 import { REGISTRATION_ADMIN_SELECT, SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
 
@@ -124,9 +130,12 @@ describe("registration routes never return the personal link's token (#1009)", (
 
   it("POST /api/admin/registrations: the registration just added", async () => {
     m.db = {
-      shift: { findFirst: vi.fn(async () => ({ ...shiftRow(), registrations: [], event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } } })), findMany: vi.fn(async () => []), update: vi.fn() },
+      event: { findFirst: vi.fn(async () => null) },
+      shift: { findFirst: vi.fn(async () => ({ ...shiftRow(), registrations: [], event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } } })), findMany: vi.fn(async () => []), update: vi.fn(), updateMany: vi.fn() },
       volunteer: { findFirst: vi.fn(async () => volunteerRow()), create: vi.fn() },
-      registration: { findMany: vi.fn(async () => []), create: answers(registrationRow) },
+      registration: { findMany: vi.fn(async () => []), create: answers(registrationRow), count: vi.fn(async () => 0) },
+      shiftDecline: { deleteMany: vi.fn(async () => ({ count: 0 })) },
+      $queryRaw: vi.fn(),
       adminUser: { findFirst: vi.fn(async () => ({ name: "Léa" })) },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(m.db),
     }

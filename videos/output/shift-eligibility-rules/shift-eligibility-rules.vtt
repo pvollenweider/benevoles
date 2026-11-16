@@ -1,117 +1,145 @@
 WEBVTT
 
-00:00:00.574 --> 00:00:05.948
+00:00:00.578 --> 00:00:05.716
 Certaines missions demandent une règle
 simple : un âge minimum, un nombre maximum
 
-00:00:05.948 --> 00:00:10.909
+00:00:05.716 --> 00:00:10.459
 de créneaux, ou l’appartenance à une
 équipe déjà formée. Ces contrôles évitent
 
-00:00:10.909 --> 00:00:15.043
+00:00:10.459 --> 00:00:14.411
 les affectations impossibles tout en
 expliquant clairement la situation avant
 
-00:00:15.043 --> 00:00:15.456
+00:00:14.411 --> 00:00:14.806
 l’inscription.
 
-00:00:15.909 --> 00:00:21.276
+00:00:15.265 --> 00:00:20.299
 Les règles se configurent au bon niveau.
 L’âge minimum appartient au créneau. La
 
-00:00:21.276 --> 00:00:25.816
-limite et les étiquettes réservées
-appartiennent au poste entier, pour rester
+00:00:20.299 --> 00:00:24.945
+limite, les étiquettes réservées et la
+condition par une réponse appartiennent au
 
-00:00:25.816 --> 00:00:31.183
-cohérents sur toutes ses plages horaires.
-Ici, Buvette est limitée à deux créneaux
+00:00:24.945 --> 00:00:29.592
+poste entier, pour rester cohérents sur
+toutes ses plages horaires. Ici, Buvette
 
-00:00:31.183 --> 00:00:33.247
-et Sécurité exige l’étiquette sécurité.
+00:00:29.592 --> 00:00:33.464
+est limitée à deux créneaux et Sécurité
+exige l’étiquette sécurité.
 
-00:00:33.701 --> 00:00:38.105
+00:00:33.920 --> 00:00:38.112
 Sur le planning public, la Buvette du soir
 annonce dix-huit ans minimum avant toute
 
-00:00:38.105 --> 00:00:42.194
+00:00:38.112 --> 00:00:42.005
 sélection. La date de naissance demandée
 dans le formulaire permet au serveur de
 
-00:00:42.194 --> 00:00:47.227
+00:00:42.005 --> 00:00:46.796
 vérifier la règle ; modifier le navigateur
 ou masquer le texte ne permet donc pas de
 
-00:00:47.227 --> 00:00:47.856
+00:00:46.796 --> 00:00:47.395
 la contourner.
 
-00:00:50.021 --> 00:00:53.986
+00:00:49.559 --> 00:00:53.298
 Camille possède déjà deux engagements de
 Buvette. En revenant au planning depuis
 
-00:00:53.986 --> 00:00:57.951
+00:00:53.298 --> 00:00:57.038
 son lien personnel, sa session reconnaît
 ces inscriptions : les autres créneaux
 
-00:00:57.951 --> 00:01:02.246
+00:00:57.038 --> 00:01:01.088
 restent visibles, mais indiquent que la
 limite de deux est atteinte. Elle peut
 
-00:01:02.246 --> 00:01:05.881
+00:01:01.088 --> 00:01:04.516
 d’abord retirer un engagement si elle
 souhaite en choisir un autre.
 
-00:01:06.342 --> 00:01:10.670
+00:01:04.973 --> 00:01:09.245
 Sans invitation, le poste Sécurité reste
 visible mais marqué réservé à certains
 
-00:01:10.670 --> 00:01:14.997
+00:01:09.245 --> 00:01:13.517
 membres. Le message ne révèle pas les
 étiquettes internes : il demande
 
-00:01:14.997 --> 00:01:19.325
+00:01:13.517 --> 00:01:17.789
 simplement d’utiliser le lien personnel
 reçu par email. Une invitation sans la
 
-00:01:19.325 --> 00:01:21.849
+00:01:17.789 --> 00:01:20.281
 bonne étiquette ne donne pas davantage
 accès.
 
-00:01:22.307 --> 00:01:26.118
+00:01:20.732 --> 00:01:24.445
 Julien possède l’étiquette sécurité. En
 ouvrant son invitation, la même mission
 
-00:01:26.118 --> 00:01:30.968
+00:01:24.445 --> 00:01:29.171
 devient sélectionnable : le lien prouve
 quel membre a été invité et le serveur
 
-00:01:30.968 --> 00:01:35.819
+00:01:29.171 --> 00:01:33.897
 contrôle ses étiquettes au moment de
 l’inscription. Il n’y a donc ni compte à
 
-00:01:35.819 --> 00:01:37.551
+00:01:33.897 --> 00:01:35.585
 créer, ni code à recopier.
 
-00:01:38.003 --> 00:01:42.465
+00:01:36.037 --> 00:01:41.318
+Le poste Navette demande le permis de
+conduire. Dans Gérer les postes, ouvrons
+
+00:01:41.318 --> 00:01:46.600
+son éditeur Accès. Choisissons la question
+Permis de conduire, posée à tous les
+
+00:01:46.600 --> 00:01:51.475
+bénévoles, puis cochons Oui dans Réponses
+acceptées et enregistrons. Sur la page
+
+00:01:51.475 --> 00:01:55.944
+publique, le créneau annonce Réponse
+requise : Permis de conduire, Oui.
+
+00:01:55.944 --> 00:02:01.225
+Essayons de nous inscrire avec Non. Au
+moment de confirmer, le formulaire refuse
+
+00:02:01.225 --> 00:02:05.694
+cette réponse pour la Navette. Choisissons
+maintenant Oui et confirmons :
+
+00:02:05.694 --> 00:02:06.913
+l'inscription est acceptée.
+
+00:02:07.370 --> 00:02:12.118
 Ces règles doivent rester compréhensibles.
 Dans les paramètres de l’événement, la
 
-00:01:42.465 --> 00:01:46.116
+00:02:12.118 --> 00:02:16.002
 description permet d’expliquer les
 critères. Vérifions aussi le téléphone
 
-00:01:46.116 --> 00:01:50.984
+00:02:16.002 --> 00:02:21.181
 obligatoire si l’équipe doit appeler le
 jour J. Pour corriger un profil,
 
-00:01:50.984 --> 00:01:55.852
+00:02:21.181 --> 00:02:26.360
 retrouvons Julien dans les membres, puis
 ouvrons Modifier : son étiquette sécurité
 
-00:01:55.852 --> 00:02:01.126
+00:02:26.360 --> 00:02:31.971
 est une information interne. Ici, nous
 vérifions la fiche sans la modifier, puis
 
-00:02:01.126 --> 00:02:01.937
+00:02:31.971 --> 00:02:32.834
 nous annulons.
 

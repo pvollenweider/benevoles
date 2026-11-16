@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test"
 
 /**
  * Contextual help (#568): « Aide : <section> » under a main admin page's title opens, in a new tab,
- * the page of the documentation that explains the screen (#649: a unit of guide/, at a heading when
+ * the page of the documentation that explains the screen (#649: a unit of content/guide/, at a heading when
  * the route names one). The units and headings are checked by src/lib/__tests__/help-links.test.ts;
  * this follows a link for real, with the mouse and with the keyboard.
  */
@@ -14,7 +14,7 @@ async function newEvent(page: Page): Promise<string> {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
   const res = await page.request.post("/api/admin/events", {
     data: { title: `E2E Aide ${Date.now()}`, startDate: "2030-10-01", endDate: "2030-10-01", publicStatus: "draft" },
   })
@@ -71,4 +71,30 @@ test("the guide says how to send feedback: email first, GitHub optional", async 
   await expect(heading).toBeInViewport()
   await expect(page.getByRole("link", { name: "contact@benevol.app" })).toHaveAttribute("href", "mailto:contact@benevol.app")
   await expect(page.getByRole("link", { name: "le suivi public sur GitHub" })).toHaveAttribute("href", "https://github.com/pvollenweider/benevoles/issues")
+})
+
+// #1096: the settings page's help is the organisation's settings; the team has its own link.
+test("the settings page opens « Personnaliser l'organisation », the team section « Gérer l'équipe d'organisation »", async ({ page }) => {
+  await newEvent(page)
+  await page.goto("/admin/settings/admins")
+  await expect(page.getByRole("link", { name: "Aide : Personnaliser l'organisation (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "/doc/personnaliser-l-organisation")
+  await expect(page.getByRole("link", { name: "En savoir plus sur l'équipe d'organisation (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "/doc/equipe-d-organisation")
+})
+
+test("the dashboard and the members list have their help link", async ({ page }) => {
+  await newEvent(page)
+  await page.goto("/admin/dashboard")
+  await expect(page.getByRole("link", { name: "Aide : Tableau de bord (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "/doc/tableau-de-bord")
+  await page.goto("/admin/members")
+  await expect(page.getByRole("link", { name: "Aide : Gérer les membres (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "/doc/gerer-les-membres")
+})
+
+test("the « Ce lien ne fonctionne pas » page links to its section of the guide", async ({ page }) => {
+  await page.goto("/my/e2e-no-such-link-1096")
+  await expect(page.getByRole("heading", { level: 1, name: "Ce lien ne fonctionne pas" })).toBeVisible()
+  const link = page.getByRole("link", { name: "En savoir plus sur ton lien personnel (ouvre dans un nouvel onglet)" })
+  await expect(link).toHaveAttribute("href", "/doc/lien-personnel#la-page-ce-lien-ne-fonctionne-pas-s-affiche")
+  const [guide] = await Promise.all([page.context().waitForEvent("page"), link.click()])
+  await guide.waitForLoadState()
+  await expect(guide.getByRole("heading", { level: 2, name: "La page « Ce lien ne fonctionne pas » s'affiche" })).toBeInViewport()
 })

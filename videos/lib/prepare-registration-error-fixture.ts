@@ -6,6 +6,7 @@ import type { PrismaClient } from "../../src/generated/prisma/client"
 import { registrationToken } from "../../src/lib/token-vault"
 import { openPayload } from "../../src/lib/notifications/outbox"
 import { videoAdminEmail } from "./public-hosts"
+import { fullNameOf, isFixtureSurname, LEGACY_FIXTURE_SURNAME, surnameOf } from "./fixture-names"
 
 // TEST-NET-1, used only by this fixture's local browser; never a deployed client.
 export const registrationErrorFixtureIp = "192.0.2.29"
@@ -23,10 +24,10 @@ export async function prepareRegistrationErrorFixture(db: PrismaClient, reset = 
   const events = await db.event.findMany({ where: { organizationId: orgId } })
   assert(events.every(event => event.id === eventId && event.slug === "atelier-inscription" && event.title === "Inscription robuste — démonstration" && event.description === "Données fictives de formation uniquement."), "Unknown event in fixture")
   const people = await db.volunteer.findMany({ where: { organizationId: orgId } })
-  assert(people.every(person => person.lastName === "Exemple" && ["video.errors.aline@example.org", "video.errors.alex@example.org", "video.errors.nicolas@example.org", "video.errors.zoe@example.org"].includes(person.email ?? "") && (!person.phone || (person.email === "video.errors.alex@example.org" && person.phone === "079 000 12 34"))), "Unknown person in fixture")
+  assert(people.every(person => ["Aline", "Alex", "Nicolas", "Zoé"].includes(person.firstName) && isFixtureSurname(person.firstName, person.lastName, true) && ["video.errors.aline@example.org", "video.errors.alex@example.org", "video.errors.nicolas@example.org", "video.errors.zoe@example.org"].includes(person.email ?? "") && (!person.phone || (person.email === "video.errors.alex@example.org" && person.phone === "079 000 12 34"))), "Unknown person in fixture")
   const owners = await db.adminUser.findMany({ where: { organizationId: orgId } })
   if (existing) assert.equal(owners.length, 1, "Fixture owner missing")
-  assert(owners.every(owner => owner.id === `${orgId}-owner` && owner.email === "video.errors.owner@example.org" && owner.name === "Élodie Exemple"), "Unknown owner in fixture")
+  assert(owners.every(owner => owner.id === `${orgId}-owner` && owner.email === "video.errors.owner@example.org" && [fullNameOf("Élodie"), `Élodie ${LEGACY_FIXTURE_SURNAME}`].includes(owner.name)), "Unknown owner in fixture")
   const queued = await db.notificationOutbox.findMany({ where: { organizationId: orgId } })
   for (const row of queued) {
     const payload = openPayload(row.payload)
@@ -41,11 +42,13 @@ export async function prepareRegistrationErrorFixture(db: PrismaClient, reset = 
     await tx.notificationOutbox.deleteMany({ where: { organizationId: orgId, id: { in: queued.map(row => row.id) } } })
     if (events.length) await tx.event.delete({ where: { id: eventId } })
     await tx.volunteer.deleteMany({ where: { organizationId: orgId, id: { in: people.map(person => person.id) } } })
+    // Bases seeded before the surname cast keep their owner row; only the display name moves.
+    if (existing) await tx.adminUser.update({ where: { id: `${orgId}-owner` }, data: { name: fullNameOf("Élodie") } })
     if (!existing) {
       await tx.organization.create({ data: { id: orgId, slug: "formation-erreurs", name: "Formation — inscription robuste", timeZone: "Europe/Zurich", active: true, hasOrgInsurance: true, replyToEmail: "video.errors.owner@example.org" } })
-      await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.errors.owner@example.org", name: "Élodie Exemple", role: "admin", isActive: true, passwordHash: source.passwordHash } })
+      await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.errors.owner@example.org", name: fullNameOf("Élodie"), role: "admin", isActive: true, passwordHash: source.passwordHash } })
     }
-    await tx.volunteer.create({ data: { id: `${orgId}-aline`, organizationId: orgId, firstName: "Aline", lastName: "Exemple", email: "video.errors.aline@example.org", active: true } })
+    await tx.volunteer.create({ data: { id: `${orgId}-aline`, organizationId: orgId, firstName: "Aline", lastName: surnameOf("Aline"), email: "video.errors.aline@example.org", active: true } })
     await tx.event.create({ data: { id: eventId, organizationId: orgId, slug: "atelier-inscription", title: "Inscription robuste — démonstration", description: "Données fictives de formation uniquement.", startDate: day, endDate: day, publicStatus: "published", isListed: false, remindersEnabled: false } })
     await tx.eventQuestion.create({ data: { id: `${orgId}-question`, eventId, label: "Taille du t-shirt", type: "single", options: ["S", "M", "L"], required: true } })
     for (const [index, [roleName, startTime, endTime]] of [["Accueil", "10:00", "12:00"], ["Vestiaire", "11:00", "13:00"], ["Logistique", "14:00", "16:00"]].entries()) await tx.shift.create({ data: { id: `${orgId}-shift-${index}`, eventId, roleName, label: `${roleName} — démonstration`, date: day, startTime, endTime, capacity: 3, status: "open", displayOrder: index } })

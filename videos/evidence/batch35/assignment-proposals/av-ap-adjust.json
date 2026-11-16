@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:13:15.978Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "1e0298c069b4c5c944b0f3aea50aed24eeab280d8022feeeffe756bb434a0df6",
+  "clipSha256": "bf082f97375a1449fa74fe9d4bbefab32adbdf77fe8c4f7c23db7d119af8cdf9",
+  "scene": "ap-adjust",
+  "review": {
+    "heardOpening": "Léa doit partir plus tôt vendredi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "ouvrons son brouillon de billetterie",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur Voir le brouillon de Léa Müller et ouverture de la fenêtre modale du brouillon de billetterie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "puis Retirer ce brouillon",
+        "visibleSeconds": 4.1,
+        "visible": "Clic sur le bouton rouge Retirer ce brouillon et fermeture de la fenêtre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Dans la case de Lou, Ajouter",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur le bouton Ajouter sous la colonne du vendredi de Lou Tóth et ouverture du formulaire d'affectation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "puis Ajouter en brouillon sur la billetterie",
+        "visibleSeconds": 10.3,
+        "visible": "Sélection de la mission Billetterie puis clic sur le bouton Ajouter en brouillon",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire, fluide et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

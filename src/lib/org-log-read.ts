@@ -35,7 +35,7 @@ const GENERIC_LABEL: Record<string, string> = {
 
 const ENTITY_TYPE_LABEL: Record<string, string> = {
   Member: "Membre",
-  AdminUser: "Compte admin",
+  AdminUser: "Compte organisateur",
 }
 
 export function entityTypeLabel(entityType: string): string {

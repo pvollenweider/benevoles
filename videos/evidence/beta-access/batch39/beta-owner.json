@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T19:52:19.186Z",
+  "videoSha256": "6a81b1d9046cb9cf8b43b23c2d9302c565fc8fd8f7206da7134cecaa4eab158f",
+  "promptSha256": "9f7ef5235957b87168b3b1a1804ccca6735e8b155a1d01740f927f3fcda25b43",
+  "clipSha256": "1d73a0622f5f6962d1f3318ea1a2bdcfd9c03b3aac09e5472ad08b2e340d9392",
+  "scene": "beta-owner",
+  "review": {
+    "heardOpening": "Passons maintenant du côté de l'association",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Dans Paramètres, une nouvelle carte Fonctions bêta est apparue.",
+        "visibleSeconds": 5.5,
+        "visible": "L'onglet Paramètres s'affiche et la page défile pour révéler la section Fonctions bêta.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Activons l'interrupteur Essayer les fonctions avancées en bêta.",
+        "visibleSeconds": 10.9,
+        "visible": "L'interrupteur 'Essayer les fonctions avancées en bêta' est activé et passe au bleu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "La phrase au-dessus indique depuis quand l'organisation participe, et qui l'a activée.",
+        "visibleSeconds": 15.2,
+        "visible": "Le texte 'Votre organisation participe à la bêta depuis le 10 novembre 2026 (activée par Élodie Novaková).' est visible au-dessus de l'interrupteur.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine fluide, naturelle et parfaitement intelligible, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

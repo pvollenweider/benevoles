@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 const getMock = vi.hoisted(() => vi.fn())
 vi.mock("next/headers", () => ({ headers: () => Promise.resolve({ get: getMock }) }))
-vi.mock("@/lib/prisma", () => ({ prisma: { event: { findMany: vi.fn().mockResolvedValue([]) } } }))
+vi.mock("@/lib/prisma", () => ({ prisma: { event: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(1) } } }))
 // The video entries read the runtime environment (src/lib/video-seo-context.ts): stubbed per test.
 vi.mock("@/lib/env", () => ({
   env: {
@@ -33,7 +33,7 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url).slice(0, 20)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 27)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       // The editorial page on volunteer scheduling (#767).
@@ -43,8 +43,20 @@ describe("sitemap on the apex host", () => {
       "https://www.benevol.app/benevoles-fete-de-village",
       "https://www.benevol.app/benevoles-festival",
       "https://www.benevol.app/benevoles-manifestation-sportive",
+      "https://www.benevol.app/benevoles-mairie-commune",
       "https://www.benevol.app/planning-permanences-benevoles",
       "https://www.benevol.app/tarifs",
+      // Spreadsheet and chat group, or a dedicated tool? (#871).
+      "https://www.benevol.app/tableur-ou-outil-dedie",
+      // The free software page (#1326).
+      "https://www.benevol.app/logiciel-libre-benevoles",
+      // The service continuity page (#1357).
+      "https://www.benevol.app/continuite-du-service",
+      "https://www.benevol.app/manifeste",
+      // The citation page (#1323).
+      "https://www.benevol.app/citer",
+      // The practical guides (#1258).
+      "https://www.benevol.app/ressources",
       // The sign-up page (#934).
       "https://www.benevol.app/inscription",
       // What changed, rendered from CHANGELOG.md (#757).
@@ -61,16 +73,20 @@ describe("sitemap on the apex host", () => {
       "https://www.benevol.app/doc/admin",
       "https://www.benevol.app/doc/benevole",
     ])
-    // Then the documentation units of guide/ (#649), each at /doc/<slug>, in reading order. No video:
+    // Then the documentation units of content/guide/ (#649), each at /doc/<slug>, in reading order. No video:
     // without VIDEO_MEDIA_BASE_URL none can be played, so none is indexed.
     const { readDocUnits } = await import("../lib/doc-units")
     const units = readDocUnits()
-    expect(entries.map((e) => e.url).slice(20, 20 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
-    // Then the blog posts of blog/ (#944), newest first, each dated the day it was sent.
+    expect(entries.map((e) => e.url).slice(27, 27 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    // Then the blog posts of content/blog/ (#944), newest first, each dated the day it was sent.
     const { readBlogPosts } = await import("../lib/blog")
     const posts = readBlogPosts()
-    expect(entries.map((e) => e.url).slice(20 + units.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))
-    expect(entries.at(-1)?.lastModified).toEqual(new Date(`${posts.at(-1)!.date}T00:00:00Z`))
+    expect(entries.map((e) => e.url).slice(27 + units.length, 27 + units.length + posts.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))
+    // Then the practical guides of content/ressources/ (#1258), most useful first, dated their last check.
+    const { readRessources } = await import("../lib/ressources")
+    const guides = readRessources()
+    expect(entries.map((e) => e.url).slice(27 + units.length + posts.length)).toEqual(guides.map((g) => `https://www.benevol.app/ressources/${g.slug}`))
+    expect(entries.at(-1)?.lastModified).toEqual(new Date(`${guides.at(-1)!.updated}T00:00:00Z`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")
     // Dates come from doc-lastmod.json, written at deploy from git: without it (tests,
@@ -123,5 +139,19 @@ describe("sitemap on an organisation host", () => {
     const sitemap = (await import("../app/sitemap")).default
     const urls = (await sitemap()).map((e) => e.url)
     expect(urls.some((u) => u.includes("/fonctionnalites") || u.includes("/doc"))).toBe(false)
+  })
+
+  // A public page that shows no event carries noindex: its own sitemap never lists it.
+  it("lists the organisation's public page only while it shows an event", async () => {
+    const { resolveOrgSlug } = await import("@/lib/resolve-org")
+    const { prisma } = await import("@/lib/prisma")
+    vi.mocked(resolveOrgSlug).mockResolvedValue({ org: { id: "o", slug: "asso" } } as never)
+    withHeaders({ host: "asso.benevol.app", "x-org-slug": "asso" })
+    const sitemap = (await import("../app/sitemap")).default
+    vi.mocked(prisma.event.count).mockResolvedValueOnce(1 as never)
+    expect((await sitemap()).map((e) => e.url)).toEqual(["https://asso.benevol.app"])
+    vi.mocked(prisma.event.count).mockResolvedValueOnce(0 as never)
+    expect(await sitemap()).toEqual([])
+    expect(vi.mocked(prisma.event.count).mock.calls.at(-1)?.[0]?.where).toMatchObject({ organizationId: "o", publicStatus: "published", isListed: true, endDate: { gte: expect.any(Date) } })
   })
 })

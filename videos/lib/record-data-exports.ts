@@ -92,9 +92,9 @@ export async function recordDataExports(options: { page: Page; base: string; dir
   })
   await scene("contents", async at => {
     const select = async (key: string) => { await tap(page, page.getByLabel("Partie du fichier :", { exact: true })); await page.getByLabel("Partie du fichier :", { exact: true }).selectOption(key) }
-    await at("On retrouve les réglages, les"); await select("event")
-    await at("On retrouve les réglages, les"); await select("shifts")
-    await at("On retrouve les réglages, les"); await select("registrations")
+    await at("On retrouve les paramètres, les"); await select("event")
+    await at("On retrouve les paramètres, les"); await select("shifts")
+    await at("On retrouve les paramètres, les"); await select("registrations")
     await at("Les pages, les questions et"); await select("pages")
     await at("Les pages, les questions et"); await select("questions")
     await at("Les pages, les questions et"); await select("sectorLeaders")

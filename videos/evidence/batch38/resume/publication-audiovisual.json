@@ -1,0 +1,521 @@
+{
+  "reviews": [
+    {
+      "scene": "pb-cancel",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-11-01T07:56:34.024Z",
+      "review": {
+        "heardOpening": "Le parking de dimanche ne lui convient plus",
+        "checkpoints": [
+          {
+            "spokenSeconds": 3.4,
+            "spoken": "il appuie sur Annuler",
+            "visibleSeconds": 4.4,
+            "visible": "Clic sur le bouton Annuler en face du créneau Parking",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 7,
+            "spoken": "Il écrit son message",
+            "visibleSeconds": 7.8,
+            "visible": "Saisie du message « Absent dimanche matin, désolé » dans le champ texte",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 9.5,
+            "spoken": "puis il confirme avec Oui, annuler",
+            "visibleSeconds": 11.6,
+            "visible": "Clic sur le bouton Oui, annuler",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 11.6,
+            "spoken": "Il lui reste son créneau de samedi",
+            "visibleSeconds": 13,
+            "visible": "Le chargement de l'annulation est en cours et la liste actualisée n'apparaît pas avant la fin du clip",
+            "sync": "missing",
+            "severity": "minor"
+          }
+        ],
+        "issues": [
+          "À partir de 00:11.8, le bouton 'Oui, annuler' passe en état de chargement et la vidéo se termine avant que la modal ne se ferme et que la liste ne montre qu'il ne reste que le créneau de samedi."
+        ],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix naturelle, chaleureuse et bien articulée, avec une musique de fond discrète."
+        }
+      }
+    },
+    {
+      "scene": "pb-correct",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-11-01T07:57:01.339Z",
+      "review": {
+        "heardOpening": "Emma, elle, n'est plus libre",
+        "checkpoints": [
+          {
+            "spokenSeconds": 3.4,
+            "spoken": "Voici ce qu'elle voit avec le lien reçu pour ses disponibilités",
+            "visibleSeconds": 8.5,
+            "visible": "Affichage de la page 'Mes disponibilités pour Rencontres du Val d'Orsel' après clic sur le lien",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 6.7,
+            "spoken": "La page le dit : elle peut les corriger, et cela ne modifie ni n'annule ses missions",
+            "visibleSeconds": 8.8,
+            "visible": "Texte explicatif visible sur la page indiquant que la modification ultérieure n'annule ni ne modifie les missions",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 12.1,
+            "spoken": "Pour vendredi, elle choisit Pas disponible",
+            "visibleSeconds": 13.6,
+            "visible": "Sélection de l'option 'Pas disponible' sous Vendredi 20 novembre",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix féminine claire, posée et bien synchronisée avec les actions affichées."
+        }
+      }
+    },
+    {
+      "scene": "pb-done",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-10-31T20:33:51.244Z",
+      "review": {
+        "heardOpening": "Publication faite",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.6,
+            "spoken": "Publication faite",
+            "visibleSeconds": 2,
+            "visible": "La modale se ferme et l'encadré vert 'Publication faite' s'affiche à l'écran",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 2,
+            "spoken": "vingt-neuf affectations publiées pour onze personnes, et plus aucun brouillon",
+            "visibleSeconds": 2,
+            "visible": "Affichage de '29 affectations publiées pour 11 personnes' et de la mention 'Aucune affectation en brouillon pour l'instant'",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 6.2,
+            "spoken": "Sur le planning, chaque mission est maintenant Confirmée",
+            "visibleSeconds": 6.5,
+            "visible": "Défilement vers le planning montrant les étiquettes vertes 'Confirmée' en face des créneaux attribués",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix off posée, claire et bien articulée, synchronisée avec les actions affichées."
+        }
+      }
+    },
+    {
+      "scene": "pb-email",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-10-31T20:34:10.558Z",
+      "review": {
+        "heardOpening": "Les emails partent une dizaine de minutes",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.5,
+            "spoken": "Les emails partent une dizaine de minutes après la publication",
+            "visibleSeconds": 0.5,
+            "visible": "Tableau récapitulatif des bénévoles avec le statut Affectation publiée",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 6,
+            "spoken": "Voici celui d'Emma",
+            "visibleSeconds": 5.8,
+            "visible": "Affichage de l'email adressé à Hello Emma",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 7.5,
+            "spoken": "ses deux soirées au Bar des Tilleuls",
+            "visibleSeconds": 7.5,
+            "visible": "Deux créneaux listés au Bar des Tilleuls les vendredi 20 et samedi 21 novembre",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 9.5,
+            "spoken": "et le bouton Gérer mes inscriptions",
+            "visibleSeconds": 9.5,
+            "visible": "Bouton bleu Gérer mes inscriptions bien visible",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix off féminine claire, fluide et parfaitement synchronisée avec l'affichage de l'email."
+        }
+      }
+    },
+    {
+      "scene": "pb-publish",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-10-31T20:33:40.810Z",
+      "review": {
+        "heardOpening": "Cliquons sur Publier les affectations",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0,
+            "spoken": "Cliquons sur Publier les affectations.",
+            "visibleSeconds": 2.8,
+            "visible": "Clic sur le bouton bleu « Publier les affectations ».",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 3.6,
+            "spoken": "La confirmation le rappelle : les places sont prises maintenant, et chaque personne reçoit un seul email avec ses missions.",
+            "visibleSeconds": 3.8,
+            "visible": "Affichage de la modale de confirmation avec le texte explicatif.",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 9.8,
+            "spoken": "Confirmons avec Publier.",
+            "visibleSeconds": 11,
+            "visible": "Le clic de confirmation sur le bouton « Publier » n'est pas effectué avant la coupure de la vidéo.",
+            "sync": "missing",
+            "severity": "minor"
+          }
+        ],
+        "issues": [
+          "À 00:10, la voix annonce « Confirmons avec Publier », mais la vidéo se termine à 00:11 sans que le clic sur le bouton « Publier » ne soit réalisé."
+        ],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix féminine naturelle, claire, bien articulée et posée."
+        }
+      }
+    },
+    {
+      "scene": "pb-ready",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-10-31T20:33:26.894Z",
+      "review": {
+        "heardOpening": "Aux Rencontres du Val d'Orsel",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.8,
+            "spoken": "Aux Rencontres du Val d'Orsel",
+            "visibleSeconds": 0.5,
+            "visible": "Page de l'événement « Rencontres du Val d'Orsel » affichée dans l'onglet Inscriptions",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 2.2,
+            "spoken": "vingt-neuf affectations en brouillon attendent, pour onze personnes",
+            "visibleSeconds": 2,
+            "visible": "Section « Publier les affectations » affichant la mention « 29 affectations en brouillon pour 11 personnes »",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 6.3,
+            "spoken": "Sur le planning, ce sont encore des brouillons",
+            "visibleSeconds": 6,
+            "visible": "Défilement vers le bas révélant le planning par personne avec les mentions « Brouillon » sur les créneaux",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix off posée, claire et parfaitement intelligible."
+        }
+      }
+    },
+    {
+      "scene": "pb-registrations",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-10-31T20:34:00.592Z",
+      "review": {
+        "heardOpening": "Ouvrons Voir les inscriptions.",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.6,
+            "spoken": "Ouvrons Voir les inscriptions.",
+            "visibleSeconds": 2.6,
+            "visible": "Clic sur le lien Voir les inscriptions et ouverture de la liste des inscriptions",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 3.7,
+            "spoken": "La liste compte vingt-neuf inscriptions actives",
+            "visibleSeconds": 4,
+            "visible": "Affichage du sous-titre '29 inscriptions actives' sous le titre Inscriptions",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 5.6,
+            "spoken": "chacune avec la source Affectation publiée.",
+            "visibleSeconds": 4,
+            "visible": "Colonne Source affichant 'Affectation publiée' pour les entrées de la liste",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix posée, claire et naturelle, parfaitement synchronisée avec la démonstration à l'écran."
+        }
+      }
+    },
+    {
+      "scene": "pb-review",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-11-01T07:57:22.223Z",
+      "review": {
+        "heardOpening": "Sur Affectations en brouillon",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.5,
+            "spoken": "Sur Affectations en brouillon, vous voyez une mission à revoir après une correction des disponibilités",
+            "visibleSeconds": 0.5,
+            "visible": "Page Affectations en brouillon affichant le bloc '1 mission à revoir après une correction des disponibilités'",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 6.7,
+            "spoken": "Emma, vendredi, au Bar des Tilleuls.",
+            "visibleSeconds": 6.7,
+            "visible": "Ligne 'Emma Johansson, vendredi 20 novembre : Bar des Tilleuls, de 18h à 22h' visible dans l'encadré",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 12.3,
+            "spoken": "Dans sa case, Voir l'inscription mène à son inscription.",
+            "visibleSeconds": 12.3,
+            "visible": "Tableau du planning affiché avec la case d'Emma Johansson le vendredi contenant le lien 'Voir l'inscription'",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
+        }
+      }
+    },
+    {
+      "scene": "pb-saved",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-11-01T07:57:10.469Z",
+      "review": {
+        "heardOpening": "Puis Enregistrer mes disponibilités",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.8,
+            "spoken": "Puis Enregistrer mes disponibilités.",
+            "visibleSeconds": 2.6,
+            "visible": "Clic sur le bouton bleu « Enregistrer mes disponibilités »",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 2.8,
+            "spoken": "La page confirme :",
+            "visibleSeconds": 3.6,
+            "visible": "Affichage du message de confirmation « C'est enregistré. »",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 4.3,
+            "spoken": "l'organisation est prévenue, et ses missions restent les mêmes.",
+            "visibleSeconds": 4,
+            "visible": "Lecture du texte affiché : « l'organisation est prévenue, tes missions restent les mêmes. »",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix claire, posée et bien synchronisée avec l'apparition des éléments à l'écran."
+        }
+      }
+    },
+    {
+      "scene": "pb-volunteer",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-11-01T07:56:21.197Z",
+      "review": {
+        "heardOpening": "Noah a reçu le même email",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.5,
+            "spoken": "Noah a reçu le même email, avec ses deux créneaux.",
+            "visibleSeconds": 0.5,
+            "visible": "Email affiché avec l'intitulé 'Hello Noah' et les deux créneaux (Accueil et Parking).",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 4.1,
+            "spoken": "Voici ce qu'il voit en appuyant sur Gérer mes inscriptions.",
+            "visibleSeconds": 6.7,
+            "visible": "Le curseur clique sur le bouton bleu 'Gérer mes inscriptions'.",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 7.4,
+            "spoken": "Sa page Mes inscriptions liste Tous mes créneaux.",
+            "visibleSeconds": 8,
+            "visible": "Affichage de la page contenant la section 'Tous mes créneaux'.",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 12.3,
+            "spoken": "il peut annuler un créneau, ou Écrire à l'organisation.",
+            "visibleSeconds": 12,
+            "visible": "Boutons 'Annuler' en face des créneaux et bouton 'Écrire à l'organisation' bien visibles à l'écran.",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix féminine claire, fluide, bien articulée et parfaitement synchronisée avec les actions affichées."
+        }
+      }
+    },
+    {
+      "scene": "pb-welcome",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-10-31T20:33:17.891Z",
+      "review": {
+        "heardOpening": "Les affectations sont prêtes en brouillon",
+        "checkpoints": [
+          {
+            "spokenSeconds": 0.6,
+            "spoken": "Les affectations sont prêtes en brouillon",
+            "visibleSeconds": 0.6,
+            "visible": "Encart de titre « Publier les affectations et suivre les retours » sur fond de la page Inscriptions affichant « Affectations en brouillon »",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 2.3,
+            "spoken": "Voyons ce que change la publication",
+            "visibleSeconds": 2.6,
+            "visible": "Disparition de l'encart d'introduction laissant apparaître la section « Publier les affectations » avec son bouton bleu",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 3.8,
+            "spoken": "pour vous et pour les bénévoles",
+            "visibleSeconds": 3.8,
+            "visible": "Vue complète sur les blocs de publication des affectations et de planning par personne et par jour",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix féminine naturelle, claire et au débit régulier."
+        }
+      }
+    },
+    {
+      "scene": "pb-withdrawal",
+      "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+      "reviewedAt": "2026-11-01T07:56:48.821Z",
+      "review": {
+        "heardOpening": "De votre côté",
+        "checkpoints": [
+          {
+            "spokenSeconds": 2.5,
+            "spoken": "un email vous prévient",
+            "visibleSeconds": 1,
+            "visible": "Affichage de l'email de notification de désistement",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 4,
+            "spoken": "qui se désiste, de quel créneau",
+            "visibleSeconds": 1,
+            "visible": "Mention de Noah De Jong, du poste Parking et du créneau horaire",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 6.2,
+            "spoken": "son message, et la place qui manque maintenant",
+            "visibleSeconds": 1,
+            "visible": "Affichage de la place manquante et de l'encadré avec le message du participant",
+            "sync": "aligned",
+            "severity": "none"
+          },
+          {
+            "spokenSeconds": 9.1,
+            "spoken": "Trouver un remplaçant mène aux membres libres à cet horaire",
+            "visibleSeconds": 1,
+            "visible": "Bouton bleu 'Trouver un remplaçant' visible avec sa description associée",
+            "sync": "aligned",
+            "severity": "none"
+          }
+        ],
+        "issues": [],
+        "voice": {
+          "consistent": true,
+          "warm": true,
+          "observation": "Voix claire, posée et naturelle, en parfait accord avec le contenu de l'email affiché."
+        }
+      }
+    }
+  ],
+  "resolution": "See publication-cross-boundary.json, cancel-cross-boundary.json and full-final-voice.json; chapter clips truncate subsequent results."
+}

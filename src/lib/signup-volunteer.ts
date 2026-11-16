@@ -13,6 +13,14 @@
  * answers, profile) is ever written onto an erased record. If the erasure comes second, it scrubs
  * what this sign-up wrote, as for any other registration.
  *
+ * An address corrected by an organiser in between (#1138 follow-up) is caught the same way: the
+ * address is re-read under the lock, and a record that no longer holds the submitted address throws
+ * `SignupMatchMovedError`. The caller rolls its transaction back (so it keeps no lock on the old
+ * match, and never locks two members) and either refuses, when the sign-up relied on a proof of that
+ * member's address, or starts again without the stale match, so the sign-up goes to whoever holds
+ * the address now, exactly as one arriving after the correction would. The record found or created
+ * for the address is locked the same way, only while it still holds the address and is not erased.
+ *
  * Server-only (takes a transaction client).
  */
 
@@ -21,6 +29,13 @@ import type { Prisma } from "@/generated/prisma/client"
 /** The slice of the interactive transaction client this needs. */
 export type SignupVolunteerTx = Pick<Prisma.TransactionClient, "$queryRaw"> & {
   volunteer: Pick<Prisma.TransactionClient["volunteer"], "createMany" | "findFirstOrThrow">
+}
+
+/** The record matched before the transaction no longer holds the submitted address (see above). */
+export class SignupMatchMovedError extends Error {
+  constructor() {
+    super("The member matched before the sign-up transaction no longer holds this address")
+  }
 }
 
 export interface SignupVolunteerResult {
@@ -37,16 +52,31 @@ export async function lockSignupVolunteer(
 ): Promise<SignupVolunteerResult> {
   let matchErased = false
   if (opts.existingId) {
-    const rows = await tx.$queryRaw<{ id: string; erasedAt: Date | null }[]>`SELECT id, "erasedAt" FROM "Volunteer" WHERE id = ${opts.existingId} FOR UPDATE`
-    if (rows.length > 0 && !rows[0].erasedAt) return { volunteerId: opts.existingId, createdNow: false, matchErased: false }
-    matchErased = rows.length > 0
+    const rows = await tx.$queryRaw<{ id: string; erasedAt: Date | null; email: string | null }[]>`SELECT id, "erasedAt", email FROM "Volunteer" WHERE id = ${opts.existingId} FOR UPDATE`
+    const row = rows[0]
+    if (row && !row.erasedAt) {
+      // Case-insensitive, as the lookup before the transaction (addresses stored before #310).
+      if (row.email?.toLowerCase() === opts.email.toLowerCase()) return { volunteerId: opts.existingId, createdNow: false, matchErased: false }
+      throw new SignupMatchMovedError()
+    }
+    matchErased = row != null
   }
   // ON CONFLICT DO NOTHING (skipDuplicates) so a concurrent first sign-up with the same address
   // doesn't abort this transaction; whoever inserted it "created" it. An erased record has no
   // address any more, so it never conflicts here.
   const { count } = await tx.volunteer.createMany({ data: [{ ...opts.create, email: opts.email, organizationId: opts.organizationId }], skipDuplicates: true })
-  const { id } = await tx.volunteer.findFirstOrThrow({ where: { email: opts.email, organizationId: opts.organizationId }, select: { id: true } })
-  // Same per-volunteer lock as an existing match (#285): overlap and role limits are re-checked under it.
-  await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${id} FOR UPDATE`
+  let id: string
+  try {
+    ({ id } = await tx.volunteer.findFirstOrThrow({ where: { email: opts.email, organizationId: opts.organizationId }, select: { id: true } }))
+  } catch (e) {
+    // The record that held the address lost it between the insert and this read.
+    if ((e as { code?: unknown })?.code === "P2025") throw new SignupMatchMovedError()
+    throw e
+  }
+  // Same per-volunteer lock as an existing match (#285): overlap and role limits are re-checked
+  // under it. Locked only while it still holds the address and is not erased: under READ COMMITTED
+  // the condition is evaluated again on the row's latest version once the lock is granted.
+  const locked = await tx.$queryRaw<{ id: string }[]>`SELECT id FROM "Volunteer" WHERE id = ${id} AND email = ${opts.email} AND "erasedAt" IS NULL FOR UPDATE`
+  if (locked.length === 0) throw new SignupMatchMovedError()
   return { volunteerId: id, createdNow: count === 1, matchErased }
 }

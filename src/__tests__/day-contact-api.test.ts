@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Day-of contact of an event (#560): saved from the event settings, shown to registered
 // volunteers on their personal page (only for a confirmed shift without a contact of its own),
 // never in a public payload.
@@ -114,7 +117,7 @@ describe("public payloads never carry the day-of contact", () => {
   it("GET /api/public/events", async () => {
     prismaMock.event.findMany.mockResolvedValue([eventRow])
     const { GET } = await import("@/app/api/public/events/route")
-    const res = await GET(new Request("http://localhost/api/public/events"))
+    const res = await GET()
     const text = await res.text()
     expect(text).toContain("Fête")
     expect(text).not.toContain(PHONE)
@@ -131,7 +134,7 @@ describe("GET /api/public/registrations/[token] — « Avant ta mission »", () 
     pages: [{ slug: "acces", title: "Accès" }, { slug: "faq", title: "FAQ" }],
     // Only roleName and name are selected; the email here checks that nothing else is passed on.
     sectorLeaders: [{ roleName: "Bar", name: "Paul Martin", email: "paul@leader.example" }],
-    organization: { slug: "org", timeZone: "Europe/Zurich", replyToEmail: "orga@example.org" },
+    organization: { ...OPEN_ORG, slug: "org", timeZone: "Europe/Zurich", replyToEmail: "orga@example.org" },
     ...over,
   })
   const reg = (id: string, status: string, shift: Record<string, unknown>) => ({

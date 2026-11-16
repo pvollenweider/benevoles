@@ -49,6 +49,11 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
+# Loaded by Next.js on their own (next dev / next start): real values, never committed.
+# The committed templates (.env.example, .env.development.example) are not matched.
+.env.development
+.env.production
+.env.test
 .env.e2e
 .env.e2e.*
 .env.video.e2e
@@ -80,9 +85,12 @@ prisma/setup-horizon.ts
 # vendored AI skills (third-party, flagged by CodeQL)
 .github/skills/
 
-# compiled Go binary (built by gandi-webhook/Dockerfile)
-gandi-webhook/cert-manager-webhook-gandi
+# compiled Go binary (built by k8s/gandi-webhook/Dockerfile)
+k8s/gandi-webhook/cert-manager-webhook-gandi
 
 # local tool scratch output (impeccable skill critiques, vitest run artifacts)
 .impeccable/
 .vitest/
+
+# Local access to the Compose database (docker-compose.override.example.yml)
+docker-compose.override.yml

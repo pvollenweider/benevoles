@@ -1,0 +1,15 @@
+npm run video:publish -- --context "default" --apply  VOLUNTEER_EVENT_AVAILABILITY
+
+> benevoles@2.5.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply VOLUNTEER_EVENT_AVAILABILITY
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + volunteer-event-availability/volunteer-event-availability-og.jpg
+  + volunteer-event-availability/volunteer-event-availability.jpg
+  + volunteer-event-availability/volunteer-event-availability.mp4
+  + volunteer-event-availability/volunteer-event-availability.txt
+  + volunteer-event-availability/volunteer-event-availability.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 564
+Envoyé : 5 fichier(s).

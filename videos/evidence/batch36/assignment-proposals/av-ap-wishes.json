@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:23.299Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "c0c227026895dcffbbfb73f88d1248e90ad77ee9e2aba1c4a55c9d3d05366769",
+  "clipSha256": "98b37fb06afb6db01e51190f9a810a81408283483501e81c6b18ade7db06fe13",
+  "scene": "ap-wishes",
+  "review": {
+    "heardOpening": "Pour Emma, Bar des Tilleuls comme poste souhaité",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Emma, Bar des Tilleuls comme poste souhaité",
+        "visibleSeconds": 0.8,
+        "visible": "Sélection de « Bar des Tilleuls » dans la colonne Poste souhaité pour Emma Johansson",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "pour Lucas, Parking comme poste à éviter",
+        "visibleSeconds": 4,
+        "visible": "Défilement vers le bas et sélection de « Parking » dans la colonne Poste à éviter pour Lucas Silva",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Ces souhaits passent après les règles et l'équilibre des heures",
+        "visibleSeconds": 6.5,
+        "visible": "Vue d'ensemble stable du tableau récapitulant les préférences configurées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et naturelle, parfaitement synchronisée avec la manipulation du formulaire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

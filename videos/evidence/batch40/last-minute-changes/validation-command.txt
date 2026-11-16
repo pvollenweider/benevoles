@@ -1,0 +1,5 @@
+
+> benevoles@2.7.0 video:validate
+> node --import tsx videos/tools/validate.ts LAST_MINUTE_CHANGES
+
+✓ LAST_MINUTE_CHANGES: 11 scene durations aligned, one continuous Kore voice; narration content checked; music 14.7–19.9 LU under the voice

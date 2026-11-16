@@ -67,6 +67,13 @@ describe("renderBadges", () => {
     expect(html).toContain("2 badges")
   })
 
+  it("says the sector it is limited to (#1170), in the title and the header; nothing otherwise", () => {
+    const html = renderBadges({ ...data, sectorCaption: "Secteur : Parking" }, DEFAULT_BADGE_OPTIONS)
+    expect(html).toContain("<title>Badges – Fête – Secteur : Parking</title>")
+    expect(html).toMatch(/2 badges · Secteur : Parking/)
+    expect(renderBadges(data, DEFAULT_BADGE_OPTIONS)).not.toContain("Secteur :")
+  })
+
   it("says when nobody matches, naming the post and the person", () => {
     expect(renderBadges(data, { ...DEFAULT_BADGE_OPTIONS, role: "Sécurité" })).toContain("Aucun bénévole inscrit pour le poste « Sécurité ».")
     expect(renderBadges(data, { ...DEFAULT_BADGE_OPTIONS, volunteer: "v-gone" })).toContain("Ce bénévole n'a plus d'inscription active sur cet événement.")

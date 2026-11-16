@@ -8,6 +8,8 @@ export type Volunteer = {
   id: string; firstName: string; lastName: string; email: string | null; phone: string | null
   /** Optional general availability (#402), for manual placement. */
   availabilityPeriods?: string[]; availabilityNote?: string | null
+  /** Birth date, for the minors' workload limits (#1171, lot 2); serialised by the page. */
+  birthDate?: string | Date | null
 }
 export type Registration = {
   id: string; status: string; source: string; comment: string | null
@@ -16,6 +18,8 @@ export type Registration = {
   /** The share link per group (#947) the sign-up came through, if any. */
   groupLinkId?: string | null
   createdAt: string; waitingPosition: number | null; volunteer: Volunteer; shift: ShiftRef
+  /** A provisional place waiting for its email confirmation (#1253): the deadline its email gave. */
+  confirmationDeadline?: string | null
   // True when this volunteer is already the (or a) sector leader of this shift's own role —
   // computed server-side from SectorLeader (role + email), see registrations/page.tsx.
   isLeader: boolean
@@ -31,6 +35,8 @@ export type Registration = {
 /** The fields of the manual addition form. `volunteerId` is the member chosen from the list (#914),
  * "" for a new person typed by hand. `shiftId` is the first shift, required. */
 export type AddFormValues = { volunteerId: string; firstName: string; lastName: string; email: string; phone: string; shiftId: string; comment: string
+  /** Birth date (#1171, lot 2), asked when the event protects minors; "" when not given. */
+  birthDate?: string
   /** The shifts chosen after the first one (#918); "" for a line not chosen yet. */
   extraShiftIds: string[] }
 

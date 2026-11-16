@@ -45,7 +45,7 @@
     },
     {
       "id": "identity",
-      "transcript": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis. Quand ce poste existe déjà, le texte sous le champ rappelle que ses réglages s’appliquent aux nouveaux créneaux. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+      "transcript": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis. Quand ce poste existe déjà, le texte sous le champ rappelle que ses paramètres s’appliquent aux nouveaux créneaux. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
       "fallbackDurationMs": 22000
     },
     {

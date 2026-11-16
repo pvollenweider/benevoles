@@ -8,11 +8,12 @@ import { useRouter } from "next/navigation"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
 import { ORGANIZER_ROLE, OWNER_ROLE, ROLE_LABEL, type OrgRole } from "@/lib/permissions"
-import { withInvitedAdmin } from "@/lib/admin-invitation"
+import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 
 const ROLE_HELP: Record<OrgRole, string> = {
-  admin: "Tous les droits, dont l'équipe d'administration et les réglages de l'organisation.",
-  organizer: "Événements, créneaux, inscriptions, membres et messages ; pas l'équipe ni les réglages de l'organisation.",
+  admin: "Tous les droits, dont la gestion de l'équipe d'organisation et les paramètres de l'organisation.",
+  organizer: "Événements, créneaux, inscriptions, membres et messages ; pas la gestion de l'équipe ni les paramètres de l'organisation.",
 }
 const roleLabel = (role: string) => ROLE_LABEL[role as OrgRole] ?? role
 
@@ -51,7 +52,7 @@ export default function AdminsManager({
   const id = useId()
   const nameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
-  const { submit, busy: submitting, error, status, setStatus, fail, reset, isInvalid } = useSubmit()
+  const { submit, busy: submitting, error, status, setStatus, fail, reset, isInvalid, quiet, alertShown } = useSubmit()
   // Where the focus lands when a control disappears (form closed, admin removed).
   const inviteButtonRef = useRef<HTMLButtonElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -61,7 +62,7 @@ export default function AdminsManager({
     e.preventDefault()
     if (form.name.trim().length < 2) { fail("Indiquez le nom de la personne (2 caractères au moins).", "name", nameRef.current); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) { fail("Indiquez une adresse email complète.", "email", emailRef.current); return }
-    const outcome = await submit<Admin>(() => fetch("/api/admin/settings/admins", {
+    const outcome = await submit<{ accepted: true }>(() => fetch("/api/admin/settings/admins", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), role: form.role }),
@@ -71,12 +72,16 @@ export default function AdminsManager({
       fail(outcome.error, outcome.status === 400 || outcome.status === 409 ? "email" : undefined, outcome.status === 400 || outcome.status === 409 ? emailRef.current : null)
       return
     }
-    // A re-invited expired invitation comes back under a new id (#1053): it takes the old row's place.
-    setAdmins((prev) => withInvitedAdmin(prev, outcome.data))
+    // The answer is the same whether an invitation was created or not (it never says whether the
+    // address is used elsewhere): the team list, read again, shows the pending invitation if any,
+    // in place of an expired one re-invited under a new id (#1053).
+    const invited = form.email.trim().toLowerCase()
+    const list = await fetch("/api/admin/settings/admins").catch(() => null)
+    if (list?.ok) setAdmins(await list.json())
     setForm({ name: "", email: "", role: ORGANIZER_ROLE })
     setShowForm(false)
     // The activation link goes by email only (#1045), never on this page.
-    setStatus(`Invitation envoyée à ${outcome.data.email}. Le lien d'activation, valable 7 jours, lui a été envoyé par email.`)
+    setStatus(`Si ${invited} peut rejoindre l'équipe, cette adresse reçoit une invitation par email, avec un lien d'activation valable 7 jours.`)
     inviteButtonRef.current?.focus()
   }
 
@@ -87,7 +92,7 @@ export default function AdminsManager({
     setRemoving(null)
     if (!outcome.ok) return
     setAdmins((prev) => prev.filter((a) => a.id !== adminId))
-    setStatus("Administrateur retiré.")
+    setStatus("Organisateur retiré de l'équipe.")
     headingRef.current?.focus()
   }
 
@@ -102,18 +107,20 @@ export default function AdminsManager({
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ role }),
-    }))
+    }), { silent: true })
     setChangingRole(null)
     setDraft((d) => { const { [admin.id]: _drop, ...rest } = d; void _drop; return rest })
     if (!outcome.ok) {
+      if (!outcome.error) return // a second click while the first request runs
+      // The row's select takes the focus and its description, so the error stays out of the alert.
       setRoleErrorFor(admin.id)
-      selectOf(admin.id)?.focus()
+      fail(outcome.error, `role-${admin.id}`, selectOf(admin.id))
       return
     }
     setAdmins((prev) => prev.map((a) => (a.id === admin.id ? { ...a, role } : a)))
     if (demotingSelf) {
       // The team controls go away: land on the heading, then let the server render the page for the new role.
-      setStatus("Votre rôle : organisateur. Vous ne gérez plus l'équipe ni les réglages de l'organisation.")
+      setStatus("Votre rôle : organisateur. Vous ne gérez plus l'équipe ni les paramètres de l'organisation.")
       headingRef.current?.focus()
       router.refresh()
       return
@@ -124,12 +131,12 @@ export default function AdminsManager({
 
   return (
     <div className="space-y-4">
-      <FormStatus status={status} error={error} errorId={`${id}-error`} />
+      <FormStatus status={status} error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
 
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
           <h2 ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-gray-700 focus:outline-none">
-            Administrateurs ({admins.length})
+            Organisateurs ({admins.length})
           </h2>
           {canManage && canInvite && <button
             ref={inviteButtonRef}
@@ -139,20 +146,21 @@ export default function AdminsManager({
             <span aria-hidden="true">+ </span>Inviter
           </button>}
         </div>
+        <p className="px-4 pt-2 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.admin.adminTeam)} about="l'équipe d'organisation" /></p>
         {!canManage && (
           <p className="px-4 py-2 border-b border-gray-100 text-xs text-gray-700">
-            Votre rôle : organisateur. Seuls les propriétaires invitent, retirent ou changent le rôle des administrateurs.
+            Votre rôle : organisateur. Seuls les propriétaires peuvent inviter ou retirer des organisateurs, ou modifier leur rôle.
           </p>
         )}
         {canManage && !canInvite && (
           <p className="px-4 py-2 border-b border-gray-100 text-xs text-gray-700">
-            Votre espace est en attente de validation. Vous pourrez inviter d&apos;autres administrateurs une fois qu&apos;il sera validé ; vous recevrez un email.
+            Votre espace est en attente de validation. Vous pourrez inviter d&apos;autres organisateurs une fois qu&apos;il sera validé ; vous recevrez un email.
           </p>
         )}
 
         {showForm && (
           <form onSubmit={handleInvite} noValidate aria-labelledby={`${id}-invite-title`} className="px-4 py-4 border-b border-gray-100 bg-gray-50 space-y-3">
-            <h3 id={`${id}-invite-title`} className="text-sm font-medium text-gray-800">Inviter un administrateur</h3>
+            <h3 id={`${id}-invite-title`} className="text-sm font-medium text-gray-800">Inviter un organisateur</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor={`${id}-name`} className="block text-xs font-medium text-gray-700 mb-1">Nom</label>
@@ -163,8 +171,8 @@ export default function AdminsManager({
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   aria-invalid={isInvalid("name")}
-                  aria-describedby={error ? `${id}-error` : undefined}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  aria-describedby={isInvalid("name") ? `${id}-error` : undefined}
+                  className="w-full border border-gray-500 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   autoComplete="off"
                 />
               </div>
@@ -177,8 +185,8 @@ export default function AdminsManager({
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   aria-invalid={isInvalid("email")}
-                  aria-describedby={error ? `${id}-error` : undefined}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  aria-describedby={isInvalid("email") ? `${id}-error` : undefined}
+                  className="w-full border border-gray-500 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   autoComplete="off"
                 />
               </div>
@@ -252,7 +260,7 @@ export default function AdminsManager({
                           onChange={(e) => { setRoleErrorFor(null); setDraft((d) => ({ ...d, [admin.id]: e.target.value as OrgRole })) }}
                           aria-invalid={roleErrorFor === admin.id && error ? true : undefined}
                           aria-describedby={roleErrorFor === admin.id && error ? `${id}-error` : undefined}
-                          className="text-xs border border-gray-300 rounded-lg px-2 py-1 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                          className="text-xs border border-gray-500 rounded-lg px-2 py-1 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
                           <option value={OWNER_ROLE}>{ROLE_LABEL.admin}</option>
                           <option value={ORGANIZER_ROLE}>{ROLE_LABEL.organizer}</option>

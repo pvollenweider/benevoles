@@ -13,6 +13,7 @@
  * by client components (see CLAUDE.md) — only from the API route.
  */
 
+import { parsePersonalLayers, storedPersonalLayers, stricterLimits } from "./workload-personal"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { generateToken } from "./utils"
 import { registrationToken, linkToken } from "./token-vault"
@@ -28,7 +29,13 @@ import {
   type VolunteerLite,
 } from "./member-merge"
 import type { LogActor } from "./event-log"
-import { cancelOutboxForMergedMember } from "./outbox-merge-cancel"
+import { cancelOutboxForMergedMember, MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel"
+import { planReminderOccurrenceMerge } from "./reminder-occurrence-merge"
+import { endSwapsIn } from "./shift-swap-server"
+import { mergeAvailability } from "./event-availability-data"
+import { mergeDraftAssignments } from "./draft-assignments-lifecycle"
+import { mergeProposalData } from "./proposal-runs-lifecycle"
+import type { Tx } from "./registration-capacity"
 
 export class MergeConflictError extends Error {
   constructor(message: string, readonly status: 404 | 409 = 409) {
@@ -51,7 +58,7 @@ const VOLUNTEER_SELECT = {
   organizationId: true, mergedIntoId: true, erasedAt: true,
 } as const
 
-const SHIFT_SELECT = { id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, minAge: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true } as const
+const SHIFT_SELECT = { id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, minAge: true, maxPerVolunteer: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, overlapAllowed: true } as const
 
 export interface MemberMergeResult {
   keepId: string
@@ -76,11 +83,13 @@ export async function loadMergeInput(db: OrgScopedPrisma, keepId: string, absorb
   const refusal = refuseMerge({ keep, absorb })
   if (refusal) return { error: refusal }
 
-  const [keepRegistrations, absorbRegistrations, keepInvites, absorbInvites, keepAnswers, absorbAnswers, absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed] = await Promise.all([
+  const [keepRegistrations, absorbRegistrations, keepInvites, absorbInvites, keepShiftDeclines, absorbShiftDeclines, keepAnswers, absorbAnswers, absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed] = await Promise.all([
     db.registration.findMany({ where: { volunteerId: keepId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true } }),
     db.registration.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true } }),
     db.memberInvite.findMany({ where: { volunteerId: keepId }, select: { id: true, eventId: true, usedAt: true } }),
     db.memberInvite.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, usedAt: true } }),
+    db.shiftDecline.findMany({ where: { volunteerId: keepId }, select: { id: true, shiftId: true, declinedAt: true } }),
+    db.shiftDecline.findMany({ where: { volunteerId: absorbId }, select: { id: true, shiftId: true, declinedAt: true } }),
     db.questionAnswer.findMany({ where: { volunteerId: keepId }, select: { id: true, questionId: true, eventId: true, values: true } }),
     db.questionAnswer.findMany({ where: { volunteerId: absorbId }, select: { id: true, questionId: true, eventId: true, values: true } }),
     db.pushSubscription.findMany({ where: { volunteerId: absorbId }, select: { id: true, endpoint: true } }),
@@ -100,7 +109,8 @@ export async function loadMergeInput(db: OrgScopedPrisma, keepId: string, absorb
 
   return {
     keep, absorb, shifts,
-    keepRegistrations, absorbRegistrations, keepInvites, absorbInvites, keepAnswers, absorbAnswers,
+    keepRegistrations, absorbRegistrations, keepInvites, absorbInvites,
+    keepShiftDeclines, absorbShiftDeclines, keepAnswers, absorbAnswers,
     absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed,
     keepAddressHash,
   }
@@ -140,6 +150,26 @@ export async function runMemberMerge(
     const input = withKeepAddressHash(loaded, finalEmail)
     const plan = buildMergePlan(input, choices)
 
+    // Custom reminder send state (#1139): the occurrences keep their key (event, local day, rule)
+    // and their outbox rows. Reading both sides under the same lock lets the plan below retain a
+    // `sent` reminder over anything else, so moving the registrations cannot make the next run
+    // send the same reminder again.
+    const [keepOccurrences, absorbOccurrences] = await Promise.all([
+      tx.reminderOccurrence.findMany({
+        where: { volunteerId: keepId },
+        select: { id: true, eventId: true, localDay: true, ruleId: true, status: true, outboxId: true, sentAt: true },
+      }),
+      tx.reminderOccurrence.findMany({
+        where: { volunteerId: absorbId },
+        select: { id: true, eventId: true, localDay: true, ruleId: true, status: true, outboxId: true, sentAt: true },
+      }),
+    ])
+    const occurrencePlan = planReminderOccurrenceMerge(keepOccurrences, absorbOccurrences)
+
+    // Swap requests of either record (#1174): the registrations change hands or links, so no
+    // agreement given before the merge is applied after it. Ended in the same commit.
+    await endSwapsIn(tx, { volunteerIds: [keepId, absorbId] }, "volunteer_gone", actor)
+
     // 1. Resolve same-shift conflicts first: cancel the losing registration(s) before reassigning,
     // so the partial unique index (shiftId, volunteerId) for live statuses is never hit.
     for (const { id } of plan.registrationsToCancel) {
@@ -162,15 +192,43 @@ export async function runMemberMerge(
     // otherwise collide with the winner once reassigned to the same volunteerId).
     if (plan.answerIdsToDrop.length) await tx.questionAnswer.deleteMany({ where: { id: { in: plan.answerIdsToDrop } } })
     if (plan.inviteIdsToDelete.length) await tx.memberInvite.deleteMany({ where: { id: { in: plan.inviteIdsToDelete } } })
+    // « Je ne peux pas » answers (#1303): the losing duplicate or an answer on a shift now held goes,
+    // the other answers of the absorbed record move to the kept one.
+    if (plan.shiftDeclineIdsToDrop.length) await tx.shiftDecline.deleteMany({ where: { id: { in: plan.shiftDeclineIdsToDrop } } })
 
     // 3. Reassign every remaining relation of the inventory from the absorbed record to the kept one.
     if (plan.registrationsToReassign.length) await tx.registration.updateMany({ where: { id: { in: plan.registrationsToReassign } }, data: { volunteerId: keepId } })
     if (plan.inviteIdsToReassign.length) await tx.memberInvite.updateMany({ where: { id: { in: plan.inviteIdsToReassign } }, data: { volunteerId: keepId } })
+    if (plan.shiftDeclineIdsToReassign.length) await tx.shiftDecline.updateMany({ where: { id: { in: plan.shiftDeclineIdsToReassign } }, data: { volunteerId: keepId } })
     if (plan.answerIdsToReassign.length) await tx.questionAnswer.updateMany({ where: { id: { in: plan.answerIdsToReassign } }, data: { volunteerId: keepId } })
     if (plan.deliveryOutcomeIdsToReassign.length) await tx.deliveryOutcome.updateMany({ where: { id: { in: plan.deliveryOutcomeIdsToReassign } }, data: { volunteerId: keepId } })
     // Push subscriptions are dropped, never moved (owner decision, #600): a device subscribed
     // through the absorbed record's wrong-address link may belong to someone else.
     if (plan.pushSubscriptionIdsToDelete.length) await tx.pushSubscription.deleteMany({ where: { id: { in: plan.pushSubscriptionIdsToDelete } } })
+    // Personal workload limits (#1171, lot 2): moved to the kept record; where both had a row on
+    // the same event, the stricter value of each field is kept (Codex), then reported below.
+    const absorbLimits: { id: string; eventId: string; values: unknown; updatedBy: string }[] = await tx.eventVolunteerLimit.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, values: true, updatedBy: true } })
+    for (const l of absorbLimits) {
+      const kept: { id: string; values: unknown; updatedBy: string } | null = await tx.eventVolunteerLimit.findFirst({ where: { volunteerId: keepId, eventId: l.eventId }, select: { id: true, values: true, updatedBy: true } })
+      if (!kept) {
+        await tx.eventVolunteerLimit.update({ where: { id: l.id }, data: { volunteerId: keepId } })
+        continue
+      }
+      // Layer by layer: the organisation's with the organisation's, the person's with the person's.
+      const k = parsePersonalLayers(kept.values), x = parsePersonalLayers(l.values)
+      const merged = storedPersonalLayers({ admin: stricterLimits(k.admin, x.admin), volunteer: stricterLimits(k.volunteer, x.volunteer) })
+      if (merged) await tx.eventVolunteerLimit.update({ where: { id: kept.id }, data: { values: merged } })
+      await tx.eventVolunteerLimit.delete({ where: { id: l.id } })
+    }
+    // Dated availability (#1146): moved event by event; where both records answered differently,
+    // the kept record's answers stay, flagged for review, never united (src/lib/event-availability.ts).
+    await mergeAvailability(tx as unknown as Tx, keepId, absorbId)
+    // Draft assignments (#1146, lot C): moved, « à revoir » (another record's answer judged them);
+    // a pending draft on a shift the kept record already has one on is discarded.
+    await mergeDraftAssignments(tx as unknown as Tx, keepId, absorbId)
+    // Generated proposals (#1172): hour targets moved (the kept record's wins, never summed), and
+    // the absorbed record removed from every run, which then reads as stale.
+    await mergeProposalData(tx as unknown as Tx, organizationId, keepId, absorbId)
     // Shift roster choices (#1068) are dropped too: a merge is not the person's consent. The
     // absorbed record's choices go, and so do the kept record's on the events where registrations
     // just moved to it, so nobody is shown on those events until they choose again.
@@ -178,6 +236,39 @@ export async function runMemberMerge(
     await tx.rosterConsent.deleteMany({
       where: { OR: [{ volunteerId: absorbId }, ...(movedEventIds.length ? [{ volunteerId: keepId, eventId: { in: movedEventIds } }] : [])] },
     })
+    // Pending public sign-ups waiting for their email confirmation (#1253) are not moved either: a
+    // merge does not prove the absorbed record's address. Its provisional places are cancelled (the
+    // rows stay for history) and the pending request goes; a later click on the old link does nothing.
+    await tx.registration.updateMany({ where: { volunteerId: absorbId, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
+    await tx.signupConfirmation.deleteMany({ where: { volunteerId: absorbId } })
+    // Custom reminder send state (#1139): folded into the kept record's keys, not dropped. A sent
+    // occurrence wins over any other for the same key, a terminal failed one wins over the
+    // recomputable states, and a queued conflict keeps one row and cancels the superseded outbox
+    // row, so no duplicate goes out after the merge.
+    if (occurrencePlan.deleteKeepIds.length) {
+      await tx.reminderOccurrence.deleteMany({ where: { id: { in: occurrencePlan.deleteKeepIds } } })
+    }
+    if (occurrencePlan.deleteAbsorbIds.length) {
+      await tx.reminderOccurrence.deleteMany({ where: { id: { in: occurrencePlan.deleteAbsorbIds } } })
+    }
+    if (occurrencePlan.reassignIds.length) {
+      await tx.reminderOccurrence.updateMany({
+        where: { id: { in: occurrencePlan.reassignIds } },
+        data: { volunteerId: keepId },
+      })
+    }
+    for (const sent of occurrencePlan.markSent) {
+      await tx.reminderOccurrence.update({
+        where: { id: sent.id },
+        data: { status: "sent", sentAt: sent.sentAt, outboxId: sent.outboxId, lastError: null },
+      })
+    }
+    if (occurrencePlan.cancelOutboxIds.length) {
+      await tx.notificationOutbox.updateMany({
+        where: { id: { in: occurrencePlan.cancelOutboxIds }, status: "pending" },
+        data: { status: "cancelled", lastError: MERGED_MEMBER_CANCEL_REASON, deliveryNotBefore: null },
+      })
+    }
 
     // 4. Turn the absorbed record into an inactive tombstone: no personal data left, mapped to
     // the kept record so old ids keep resolving (event-log-read.ts, member-activity-data.ts).
@@ -230,14 +321,19 @@ export async function runMemberMerge(
 
     // 7. Invariant: no relation may remain on the absorbed record, except the DeliveryOutcome
     // rows deliberately left (owner decision, #600) for the retention purge to cascade-delete.
-    const [regCount, inviteCount, answerCount, pushCount] = await Promise.all([
+    const [regCount, inviteCount, declineCount, answerCount, pushCount, availabilityCount, draftCount, targetCount, occurrenceCount] = await Promise.all([
       tx.registration.count({ where: { volunteerId: absorbId } }),
       tx.memberInvite.count({ where: { volunteerId: absorbId } }),
+      tx.shiftDecline.count({ where: { volunteerId: absorbId } }),
       tx.questionAnswer.count({ where: { volunteerId: absorbId } }),
       tx.pushSubscription.count({ where: { volunteerId: absorbId } }),
+      tx.availabilityRequest.count({ where: { volunteerId: absorbId } }),
+      tx.draftAssignment.count({ where: { volunteerId: absorbId } }),
+      tx.eventVolunteerTarget.count({ where: { volunteerId: absorbId } }),
+      tx.reminderOccurrence.count({ where: { volunteerId: absorbId } }),
     ])
-    if (regCount || inviteCount || answerCount || pushCount) {
-      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} answer=${answerCount} push=${pushCount})`)
+    if (regCount || inviteCount || declineCount || answerCount || pushCount || availabilityCount || draftCount || targetCount || occurrenceCount) {
+      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} declines=${declineCount} answer=${answerCount} push=${pushCount} availability=${availabilityCount} drafts=${draftCount} targets=${targetCount} occurrences=${occurrenceCount})`)
     }
 
     // 8. Audit, written with the transaction's own client so it commits with the merge (unlike
@@ -256,10 +352,14 @@ export async function runMemberMerge(
           registrationsCancelled: { from: null, to: plan.registrationsToCancel.length },
           invitesMoved: { from: null, to: plan.inviteIdsToReassign.length },
           invitesDeleted: { from: null, to: plan.inviteIdsToDelete.length },
+          shiftDeclinesMoved: { from: null, to: plan.shiftDeclineIdsToReassign.length },
+          shiftDeclinesDropped: { from: null, to: plan.shiftDeclineIdsToDrop.length },
           answersMoved: { from: null, to: plan.answerIdsToReassign.length },
           answersDropped: { from: null, to: plan.answerIdsToDrop.length },
           pushSubscriptionsDropped: { from: null, to: plan.pushSubscriptionIdsToDelete.length },
           deliveryOutcomesReassigned: { from: null, to: plan.deliveryOutcomeIdsToReassign.length },
+          reminderOccurrencesMoved: { from: null, to: occurrencePlan.reassignIds.length },
+          reminderOccurrencesSuperseded: { from: null, to: occurrencePlan.deleteAbsorbIds.length + occurrencePlan.deleteKeepIds.length },
           outboxCancelled: { from: null, to: cancelledOutboxIds.length },
         },
       },

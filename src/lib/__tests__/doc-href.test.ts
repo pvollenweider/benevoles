@@ -14,7 +14,7 @@ describe("docUnitHref", () => {
     }
   })
 
-  it("accepts every unit of guide/", () => {
+  it("accepts every unit of content/guide/", () => {
     for (const unit of loadDocUnits()) expect(docUnitHref(unit.slug)).toBe(`/doc/${unit.slug}`)
   })
 })

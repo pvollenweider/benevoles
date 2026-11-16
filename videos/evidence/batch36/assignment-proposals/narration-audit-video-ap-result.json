@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.1-pro-preview",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-31T07:19:40.454Z",
+  "revalidatedAt": "2026-10-31T07:19:40.455Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-result",
+      "audioSha256": "3504b78cee1272c61824d35d485889b461062bf5a8d078671741ed61257f65c5",
+      "recognized": "En quelques secondes, le résultat s'affiche en haut de la page. Vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Couverture complète impossible. Personne n'est disponible pour tout le rangement du kiosque dimanche soir. Et la raison est écrite.",
+      "expected": "En quelques secondes, le résultat s'affiche en haut de la page : vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Couverture complète impossible : personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -133,7 +133,7 @@ node --env-file=.env.video.e2e --import tsx videos/tools/operator-local.ts run v
 ```
 
 La répétition accélérée vérifie les actions mais n'est jamais montée avec une
-narration. L'entrée opérateur du catalogue est interne et reste non publiée.
+narration. L'entrée opérateur du catalogue est publiée comme les autres.
 
 Préparation :
 
@@ -377,9 +377,8 @@ est une aide automatisée, pas une validation humaine, et ses observations doive
 confrontées aux images et au parcours réel. Un résultat signalé ne doit pas être ignoré au
 motif que `video:validate` passe.
 
-L'envoi visuel est pour l'instant limité à `EVENT_REPORTS`, `VOLUNTEER_BADGES`,
-`ATTENDANCE_CHECK_IN`, `REMINDERS_CHANGES`, `DATA_EXPORTS_ARCHIVES` et
-`LAST_MINUTE_CHANGES`, dans la base locale `benevoles_video`.
+L'envoi visuel est limité aux vidéos dont le jeu fictif est vérifié (liste dans
+`videos/tools/audit-audiovisual.ts`), dans la base locale `benevoles_video`.
 Un garde-fou vérifie le jeu explicitement fictif (dont les trois événements des rappels) et les identifiants,
 adresses `example.org` et téléphones de démonstration (ou leur absence pour le pointage) de chaque inscription. Aucune autre
 vidéo, capture de production ou donnée réelle n'est acceptée. Les exports et les
@@ -545,7 +544,7 @@ Depuis le 2026-10-07, la bibliothèque est publique et référencée (`src/lib/v
 - sitemap vidéo `/video-sitemap.xml` (extension vidéo de Google), cité dans `robots.txt`, servi
   sur le domaine principal seulement ;
 - liens « Tutoriels vidéo » dans le pied de page public, sur `/doc` et sur `/fonctionnalites`
-  (`FEATURES.md`).
+  (`content/pages/FEATURES.md`).
 - le téléphone de l'accueil de benevol.app joue `VOLUNTEER_REGISTER` sur place (#765,
   `src/lib/home-signup-video.ts`) : la dépublier ou la renommer rend au téléphone son image fixe.
 
@@ -560,7 +559,7 @@ et `seedScenario` (#637, #638) :
 - `level` (optionnel parmi `decouverte`, `intermediaire`, `avance`) : aucune vidéo n'en a
   aujourd'hui, le plan ne donnant pas encore de niveau par module.
 - `feature` : le nom de la fonctionnalité Benevol illustrée (texte simple aujourd'hui, pas encore
-  un lien vérifié vers une ancre de `FEATURES.md` ou `GUIDE_ADMIN.md`).
+  un lien vérifié vers une ancre de `content/pages/FEATURES.md` ou `content/guide/GUIDE_ADMIN.md`).
 - `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : `revision` identifie le rendu sur
   lequel portent les réponses « utile ? » (#646, voir plus bas). L'augmenter quand une vidéo est
   entièrement régénérée : ses réponses repartent de zéro.
@@ -569,8 +568,8 @@ et `seedScenario` (#637, #638) :
   sur la page de la vidéo pendant 30 jours. Jamais déduits de `updatedAt` ou de `revision`, qui
   bougent à chaque rendu : à renseigner quand le changement mérite d'être signalé.
 
-`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 56 des
-59 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Les
+`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app`. La galerie affiche aussi
+les vidéos non publiées, avec leur état (« À venir »). Les
 guides publics renvoient aux vidéos publiées par leur
 identifiant (`<!-- video: ID -->`, #645, `src/lib/doc-video-references.ts`). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`
@@ -652,7 +651,7 @@ les vidéos** (`/super-admin/video-feedback`) ; aucun score n'est montré au pub
 2. Déclarer cet identifiant, son manifeste, sa catégorie et ses tags dans `videos/catalog.json`.
 3. Écrire le script humain dans `videos/scripts/`.
 4. Ajouter son manifeste dans `videos/manifests/`, avec le même `id` que le catalogue.
-5. Ajouter un scénario de capture et le déclarer dans `videos/tools/record.ts`. Extraire les scénarios dans `videos/scenarios/` si leur nombre ou leur complexité continue d’augmenter.
+5. Ajouter un scénario de capture dans `videos/lib/record-*.ts` et le déclarer dans `videos/tools/record.ts`.
 6. Relire le transcript avec `--dry-run`.
 7. Générer la voix, enregistrer, assembler et visionner le résultat complet.
 8. Lancer `npm run video:validate -- VIDEO_ID` : le contrôle refuse plusieurs prises vocales,
@@ -758,3 +757,193 @@ réellement depuis le message reçu. Le recorder vérifie le défaut du formulai
 la note de publication, la carte limitée aux propres créneaux, Liste et Frise,
 l’accès avant inscription, l’élargissement V1 explicite et le retrait.
 Le montage cadre le véritable corps Mailpit sans modifier le message.
+
+### Pile isolée sur des ports alternatifs (lot 30)
+
+Ne jamais reprendre ni arrêter un conteneur existant pour libérer un port. Le lot 30
+utilise ses propres conteneurs PostgreSQL sur **45434**, SMTP sur **41030**, Mailpit
+sur **48030**, et le serveur produit vérifié sur **43102**. `DATABASE_URL` désigne
+uniquement `benevoles_video` sur ce PostgreSQL local ; `VIDEO_SMTP_PORT=41030` et
+`VIDEO_MAILPIT_URL=http://localhost:48030` doivent être présents dans le serveur,
+le seed et le recorder. Le proxy n'accepte que l'origine Mailpit locale configurée.
+Les valeurs historiques restent les valeurs par défaut pour les autres lots.
+
+Après le seed principal sur cette base neuve, utiliser le même build vérifié et
+les mêmes commandes de seed/répétition/prise que ci-dessus. Le contrôle du PID,
+du répertoire standalone et des deux BUILD_ID prouve le serveur réellement filmé.
+La narration et les sources du lot 30 décrivent les interrupteurs de #1083 et
+le clavier de la Frise de #1088 : un arrêt Tab par jour, flèches entre les barres.
+La vidéo d'accessibilité exige toujours ses inserts natifs ; un refus TCC laisse
+son statut NOT READY et l'écart #1075 ouvert.
+
+
+### Reprise du lot 32 : fonctions bêta et confidentialité
+
+Le build propre de main inclut #1206. Les conteneurs de cette reprise sont dédiés :
+PostgreSQL **45436**, SMTP **41033**, Mailpit **48033**, serveur vérifié **43102**.
+Ne pas reprendre les conteneurs historiques du port 45433. Transmettre
+`VIDEO_SMTP_PORT=41033` et `VIDEO_MAILPIT_URL=http://localhost:48033` au serveur,
+aux seeds et aux outils. Le client Prisma du snapshot est généré sur son schéma
+courant ; les outils peuvent y tourner sans régénérer `src/generated` du checkout.
+
+Les prises BETA_ACCESS, SECTORS, SHIFT_SWAPS, SECTOR_LEADERS et
+PRIVACY_PERSONAL_LINKS naviguent sur les domaines publics via la passerelle locale
+vérifiée, avec le même contrôle du PID et du BUILD_ID. Cela permet les vraies
+écritures depuis le navigateur sans présenter une origine localhost au produit.
+Les seeds bêta restent limités à leurs capacités ; la protection des pauses et de
+la charge n'est jamais ouverte par ces scénarios.
+
+Avant chaque répétition ou prise de SECTOR_LEADERS : seed démo, seed
+`sector-leaders`, puis `prepare-registration-mailbox.ts sector-leaders` (le port
+45436 est admis pour ce seul scénario). Le recorder nettoie séparément les emails
+de la fixture bêta. Pour PRIVACY, les précontrôles `prepare-privacy.ts` et
+`verify-privacy-details.ts` passent d'abord via `local-production.ts run` ; rejouer
+ensuite le seed `privacy-personal-links` avant la répétition et avant la prise,
+en conservant le rapport de précontrôle. Les dates de cette fixture sont à deux
+semaines de la prise, sans date fixe devenue passée.
+
+Les montages SHIFT_SWAPS, SECTOR_LEADERS et PRIVACY cadrent le corps réel Mailpit
+(x=320, y=264, 960×536), comme la vidéo du planning partagé. Les intervalles sont
+mesurés image par image dans la capture brute ; aucun contenu reçu n'est réécrit,
+aucune image fixe n'est ajoutée. Le rapport conserve l'empreinte de la capture.
+`audit-full-final-audio.ts ID` complète les audits de chapitres par une ASR sans
+texte attendu de la bande-son entière, transitions et musique comprises. Son
+contrôle du registre utilise les frontières Unicode : « bêta » ne contient pas
+le mot « ta ». Les correspondances restent à relire en contexte.
+
+### Lot 33 : reprises autorisées et première protection de la charge
+
+Le lot 33 utilise PostgreSQL **45437**, SMTP **41034**, Mailpit **48034** et le
+serveur vérifié **43102**. Les ports historiques et leurs conteneurs restent
+intacts. Installer les dépendances du lockfile dans la copie jetable avant le
+build vérifié ; les dépendances déjà présentes dans le worktree peuvent être
+plus anciennes que celles de `main`. Les outils tournent avec le client Prisma
+généré dans cette copie, sans régénérer `src/` du worktree.
+
+`WORKLOAD_PROTECTION` utilise son organisation `formation-charge`. Son seed
+ouvre seulement `workloadProtection` dans la liste bêta globale : filmer les
+reprises bêta précédentes avant de le lancer. Faire une première répétition
+`--rehearse --quick-rehearse`, puis re-semer avant chaque prise narrée. Conserver
+la page d'édition ouverte entre la saisie des valeurs et l'activation : les
+valeurs de la carte restent locales à cette page jusque-là.
+
+`audit-whole-voice.ts ID` complète les audits de chapitres par une observation
+audio du master continu entier, conclusion comprise. Il conserve son empreinte
+et refuse plusieurs générations ou un changement de voix signalé ; il ne
+remplace ni l'ASR indépendante ni la revue du MP4 final. Les contrôles
+`audit-audiovisual.ts` et `audit-full-final-audio.ts` acceptent désormais la
+fixture WORKLOAD explicitement vérifiée.
+
+### Lot 34 : terminer la protection de la charge
+
+`WORKLOAD_PROTECTION` utilise une pile dédiée : PostgreSQL **45438**, SMTP
+**41035**, Mailpit **48035**, serveur vérifié **43102**. Les conteneurs des lots
+précédents restent intacts. Transmettre `VIDEO_SMTP_PORT=41035` et
+`VIDEO_MAILPIT_URL=http://localhost:48035` au serveur et aux outils. Le seed
+`seed-video-scenario.ts workload-protection` précède chaque répétition et prise.
+Le recorder exige que le titre, l'état activé et « 1 programme à revoir » soient
+tous dans le cadre final, et vérifie les valeurs 6 h / 30 min / 8 h puis 20 h / 3 h.
+
+### Lot 35 : charge et propositions d'affectations
+
+La pile dédiée utilise PostgreSQL **45439**, SMTP **41036**, Mailpit **48036**,
+avec le serveur **43102** construit depuis le main courant et vérifié par PID et
+BUILD_ID. Les conteneurs historiques ne sont pas réutilisés. Le wrapper
+`local-production.ts run` admet les seeds `workload-protection` et
+`assignment-proposals` et leurs recorders/revues sur cette seule base.
+
+Filmer WORKLOAD_PROTECTION en premier : le seed des propositions remplace la
+liste bêta globale. Refaire le seed correspondant avant chaque répétition et
+chaque prise. Dans Inscriptions, le recorder centre les deux lignes de Sarah,
+attend leur stabilisation et exige que les deux lignes entières soient dans le
+viewport. La narration Kore existante est conservée si son texte reste identique.
+
+ASSIGNMENT_PROPOSALS conserve la graine saisie **2026** et mesure le délai réel
+jusqu'aux affectations écrites. `verify-proposals-review-fixture.ts` vérifie
+l'organisation dédiée, ses douze membres fictifs, les quatorze créneaux, les trois
+lieux et l'absence d'inscription publiée avant l'envoi à la revue audiovisuelle.
+Le verrouillage et la correction restent de vraies écritures en brouillon ;
+la confirmation de publication est annulée.
+
+
+### Lot 37 : disponibilités datées côté bénévole et propositions
+
+Pile dédiée : PostgreSQL **45441**, SMTP **41038**, Mailpit **48038** et serveur
+produit vérifié **43102**. Le wrapper charge les outils avec le client Prisma
+généré dans la copie jetable vérifiée, sans régénérer `src/` du worktree.
+Rejouer le seed `volunteer-event-availability` ou `assignment-proposals` avant
+chaque répétition et chaque prise : chacun remplace la liste bêta globale.
+
+La première proposition utilise maintenant sa graine interne par défaut ; aucun
+numéro n'est saisi ni montré. Le bouton « Proposer une autre répartition » et
+son indication sont montrés sans clic. Les deux narrations sont des générations
+Kore entières. Le tutoiement est attendu pour la vidéo exclusivement bénévole.
+
+Le message de Morgane est demandé par la vraie route organisateur après chaque
+seed neuf, puis ouvert avant le premier chapitre. Son sujet sur deux lignes
+exige un cadrage sous les onglets Mailpit : x=320, y=312, 960×488. Le cadrage
+s'applique aux pixels réels de la capture, sans modifier le message.
+Les iframes Mailpit bloquent le script d'instrumentation initial : `tap` conserve
+alors l'horodatage de l'envoi du véritable `mouse.down()` sur le bouton, relayé et
+dédoublonné avant l'effet sonore. Aucun clic n'est inventé.
+
+### Lot 39 : secteurs disponibles pour toute organisation active
+
+Les prises `SECTORS` et la partie par secteur de `SECTOR_LEADERS` utilisent une
+organisation active sans inscription à la bêta et une liste ouverte vide. L'option
+reste propre à l'événement, désactivée par défaut ; aucun badge bêta n'est montré.
+`BETA_ACCESS` vérifie les quatre capacités encore proposées par le super admin et
+n'ouvre que les Échanges de créneaux. Son opérateur fictif passe le vrai second
+facteur avant l'enregistrement (secret de démonstration du helper existant).
+
+Sur macOS, le lanceur français suit Chromium 1254. Les champs horaires natifs du
+nouveau poste sont remplis puis vérifiés : une saisie séquentielle peut modifier
+les minutes seulement. Pour la nouvelle inscription des responsables, ouvrir
+l'hôte public de l'organisation (`https://default.benevol.app/fete-du-village` pour
+la démo), via la passerelle locale ; `?org=` sur `www` n'identifie pas une
+organisation en production. Servir le build vérifié avec `serve-public` pour que
+les redirections Auth.js des sessions préparées restent sur l'hôte public.
+
+### Lot 40 : imprévus, accès par réponse et suppression après import
+
+Le build vérifié vient du main courant (dont #1318), avec `npm ci` et le client Prisma
+généré dans la copie jetable. Utilisez une pile créée pour la prise, sur des ports libres :
+PostgreSQL 45433, SMTP 41026, Mailpit 48026 ; `local-production.ts serve-public` sert le
+build sur 43102. Le wrapper charge désormais aussi les outils de cette base avec le
+client de la copie vérifiée, sans régénérer `src/` du checkout. Les trois recorders
+naviguent sur le sous-domaine public de leur organisation par la passerelle locale.
+
+Après le seed démo initial, préparez les deux parcours communs ainsi :
+
+```bash
+# Répéter cette préparation avant chaque répétition ou prise correspondante.
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run videos/tools/prepare-demo.ts
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-scenario.ts shift-eligibility-rules
+
+# Pour l'import, les membres d'invitation fournissent le témoin René sans email.
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-scenario.ts members-invitations
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-scenario.ts members-import
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run videos/tools/prepare-import-baseline.ts
+```
+
+L'accès par réponse utilise une question oui/non posée à tous, un poste Navette avec
+des places libres, puis la vraie invitation de Julien. L'import conserve la preuve de la
+création réelle du contact sans email. Les trois témoins supplémentaires du seed démo
+courant sont vérifiés par leurs noms et emails exacts. Après la suppression groupée,
+`verify-batch40-member-cleanup.ts`, par le même wrapper, vérifie en lecture seule les
+deux suppressions, la désactivation de René et la conservation de son inscription.
+
+Pour les imprévus, `seed-video-scenario.ts last-minute-changes`, par le wrapper, nettoie
+uniquement ses messages et prépare un événement publié couvrant aujourd'hui et demain.
+Le créneau du jour permet le filtre « Inscrits aujourd'hui » ; les autres missions restent
+à venir pour le retrait et l'offre. L'horloge du produit reste réelle. Faire les précontrôles
+`verify-last-minute.ts`, `flush-last-minute-outbox.ts` et `verify-last-minute-mail.ts`,
+puis refaire le seed avant la répétition et avant chaque prise narrée. Après la prise,
+refaire la vérification des vrais emails reçus avant la revue audiovisuelle.
+
+Les emails de cette vidéo sont cadrés sur leurs pixels réels (x=320, y=264, 960×536),
+sans en-tête Mailpit ni date anglaise. La page de réponse « Je ne peux pas » s'ouvre
+directement depuis le vrai lien reçu, sans afficher la boîte technique pour ce passage.
+Les nouvelles narrations sont chacune un master Kore entier ; les frontières corrigées
+sur les silences sont réauditées avant le tournage. Les trois identifiants sont admis par
+`audit-full-final-audio.ts` pour la reconnaissance multilingue du MP4 entier.

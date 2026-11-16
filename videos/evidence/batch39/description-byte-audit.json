@@ -1,0 +1,17 @@
+[
+  {
+    "id": "BETA_ACCESS",
+    "description": "L'opérateur ouvre une fonction à l'essai, puis la propriétaire inscrit son organisation à la bêta depuis Paramètres.",
+    "utf8Bytes": 122
+  },
+  {
+    "id": "SECTORS",
+    "description": "Activer les secteurs sur un événement, y ranger les postes, puis suivre chaque secteur avec son filtre et lui écrire.",
+    "utf8Bytes": 120
+  },
+  {
+    "id": "SECTOR_LEADERS",
+    "description": "Désigner un responsable de poste ou de tout un secteur, et découvrir son planning d'équipe depuis son lien personnel.",
+    "utf8Bytes": 120
+  }
+]

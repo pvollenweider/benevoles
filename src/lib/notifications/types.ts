@@ -10,10 +10,12 @@
 
 export type NotificationKind =
   | "registration_confirmation"
+  | "signup_email_confirmation"
   | "member_invite"
   | "reminder_j2"
   | "reminder_j1"
   | "reminder_dd"
+  | "reminder_rule"
   | "manual_reminder"
   | "shift_modified"
   | "shift_cancelled"
@@ -50,6 +52,12 @@ export type NotificationKind =
   | "milestone_owner_reminder"
   | "answers_changed"
   | "sector_leader_answers_changed"
+  | "shift_swap_applied"
+  | "shift_swap_ended"
+  | "shift_swap_offered"
+  | "shift_swap_approval_needed"
+  | "availability_request"
+  | "availability_changed"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
 export const MAX_ATTEMPTS = 6
@@ -91,4 +99,8 @@ export type NotificationPayload<K extends NotificationKind = NotificationKind> =
  * `permanent` (#598): true when the failure is a permanent SMTP rejection — the outbox stops
  * retrying at once instead of spending ~2.5h on a backoff that can't succeed.
  */
-export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; blocked?: true; held?: true; retryAfterMs?: number }>
+/**
+ * `recipientRejected`: the server refused the recipient's address itself (a mailbox or domain that
+ * doesn't exist, src/lib/notifications/recipient-rejection.ts), always with `permanent: true`.
+ */
+export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; recipientRejected?: true; blocked?: true; held?: true; retryAfterMs?: number }>

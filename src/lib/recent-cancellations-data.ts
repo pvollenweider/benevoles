@@ -13,12 +13,13 @@ const READ_LIMIT = 200
 /**
  * The « Annulations récentes » of an event (#809), read through the organisation's own client:
  * cancelled registrations on shifts not cancelled and not past, with their latest cancellation
- * entry, and what decides whether the spot is still free. Server only.
+ * entry, and what decides whether the spot is still free. `shiftWhere` narrows them to some
+ * postes (the « Secteur » filter, #1170). Server only.
  */
-export async function loadRecentCancellations(db: OrgScopedPrisma, eventId: string, timeZone: string, now: Date = new Date()): Promise<RecentCancellation[]> {
+export async function loadRecentCancellations(db: OrgScopedPrisma, eventId: string, timeZone: string, now: Date = new Date(), shiftWhere: { roleName?: { in: string[] } } = {}): Promise<RecentCancellation[]> {
   const yesterday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1))
   const cancelled = await db.registration.findMany({
-    where: { eventId, status: "cancelled", shift: { status: { not: "cancelled" }, date: { gte: yesterday } } },
+    where: { eventId, status: "cancelled", shift: { status: { not: "cancelled" }, date: { gte: yesterday }, ...shiftWhere } },
     select: {
       id: true, volunteerId: true, shiftId: true,
       volunteer: { select: { firstName: true, lastName: true, email: true } },
@@ -49,9 +50,12 @@ export async function loadRecentCancellations(db: OrgScopedPrisma, eventId: stri
     const log = latest.get(r.id)
     return {
       id: r.id,
+      volunteerId: r.volunteerId,
+      shiftId: r.shiftId,
       volunteerName: `${r.volunteer.firstName} ${r.volunteer.lastName}`,
       hasEmail: !!r.volunteer.email,
       shift: spokenShift({ ...r.shift, date: r.shift.date.toISOString().slice(0, 10) }),
+      shiftParts: { roleName: r.shift.roleName, label: r.shift.label, date: r.shift.date.toISOString().slice(0, 10), startTime: r.shift.startTime, endTime: r.shift.endTime },
       shiftStatus: r.shift.status,
       shiftStart: localDateTimeToUtc(r.shift.date, r.shift.startTime, timeZone),
       capacity: r.shift.capacity,

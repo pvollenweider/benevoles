@@ -47,6 +47,7 @@ export const STATIC_ROUTES: ReadonlySet<string> = new Set([
   "/benevoles-festival",
   "/benevoles-fete-de-village",
   "/benevoles-manifestation-sportive",
+  "/benevoles-mairie-commune",
   "/blog",
   "/doc",
   "/doc/admin",
@@ -59,17 +60,24 @@ export const STATIC_ROUTES: ReadonlySet<string> = new Set([
   "/legal/sous-traitance",
   "/legal/sous-traitants",
   "/legal/terms",
+  "/logiciel-libre-benevoles",
+  "/continuite-du-service",
   "/logiciel-planning-benevoles",
+  "/manifeste",
+  "/citer",
   "/nouveautes",
   "/planning-permanences-benevoles",
   "/pour-qui",
+  "/product-updates/unsubscribe",
   "/product-updates/unsubscribed",
+  "/ressources",
+  "/tableur-ou-outil-dedie",
   "/tarifs",
   "/videos",
 ])
 
 /** Folders whose second segment is a parameter of their own (`/doc/<slug>`, `/my/<token>`...): never the event segment. */
-export const DYNAMIC_CHILD_FOLDERS: ReadonlySet<string> = new Set(["blog", "doc", "videos", "my", "leader"])
+export const DYNAMIC_CHILD_FOLDERS: ReadonlySet<string> = new Set(["blog", "confirmation", "doc", "videos", "my", "leader", "disponibilites", "ressources"])
 
 /** Folders left entirely to their own routes and guards: the administration and the API. */
 export const OWN_FOLDERS: ReadonlySet<string> = new Set(["admin", "super-admin", "api", "_next", "monitoring"])
@@ -101,6 +109,8 @@ export type NotFoundLookups = {
   videoExists: (param: string) => boolean
   /** `/blog/<slug>` shows a post (src/lib/blog.ts `findBlogPost`). */
   blogPostExists: (slug: string) => boolean
+  /** `/ressources/<slug>` shows a guide (src/lib/ressources.ts `findRessource`). */
+  ressourceExists: (slug: string) => boolean
 }
 
 /** Whether the proxy should answer this path with the 404 page (rewrite to `NOT_FOUND_ROUTE`). */
@@ -113,5 +123,6 @@ export function isServerNotFound(pathname: string, lookups: NotFoundLookups): bo
   if (folder === "doc") return !lookups.docSlugExists(param)
   if (folder === "videos") return !lookups.videoExists(param)
   if (folder === "blog") return !lookups.blogPostExists(param)
+  if (folder === "ressources") return !lookups.ressourceExists(param)
   return false
 }

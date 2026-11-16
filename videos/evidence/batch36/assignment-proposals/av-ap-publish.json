@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:27.255Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "8fe0f6f9bfc7562aeb592345884792aee20a85407ac249e7cc95e61e4c198b3d",
+  "clipSha256": "d7b3af27c0b41bd4df01b2ab3687d20c79f1c2b10b749559ea9450f72f5c4f79",
+  "scene": "ap-publish",
+  "review": {
+    "heardOpening": "Publier les affectations demande une confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Publier les affectations demande une confirmation",
+        "visibleSeconds": 0.9,
+        "visible": "Affichage de la boîte de dialogue de confirmation « Publier les affectations ? »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Annulons ici",
+        "visibleSeconds": 7.3,
+        "visible": "Clic sur le bouton « Annuler » et fermeture de la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "la proposition reste un brouillon",
+        "visibleSeconds": 8.5,
+        "visible": "L'écran principal reste sur la section « Affectations en brouillon »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

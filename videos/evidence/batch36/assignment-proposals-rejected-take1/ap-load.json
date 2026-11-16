@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:10:38.527Z",
+  "videoSha256": "32d8145bb0ee7b43304d22d24f2b4df3fee3974cf9db3446616709397f75d039",
+  "promptSha256": "c4ce2242d9c68e42ec36250078fe5c679e80cec98849396b714e85a2454b42f4",
+  "clipSha256": "45bb78f63e34b8682fd0feea2eeccaf39b530de8a99d3ede1893a4aa5a68bd46",
+  "scene": "ap-load",
+  "review": {
+    "heardOpening": "La charge par personne compare les heures prévues",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.4,
+        "spoken": "La charge par personne compare les heures prévues à l'objectif de chacun",
+        "visibleSeconds": 0.4,
+        "visible": "Tableau 'Charge par personne' affichant les heures prévues par rapport à l'objectif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Noah a ses six heures",
+        "visibleSeconds": 3.6,
+        "visible": "Ligne 'Noah De Jong' affichant '6 h prévues pour un objectif de 6 h : objectif atteint.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Dans Affectations proposées, chaque ligne dit pourquoi",
+        "visibleSeconds": 6.1,
+        "visible": "Défilement vers la section 'Affectations proposées (29)' détaillant les raisons pour chaque affectation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Emma est au bar vendredi : disponible sur tout le créneau, c'est son poste souhaité",
+        "visibleSeconds": 9.5,
+        "visible": "L'affectation d'Emma n'est pas affichée à l'écran (la liste montre Aline, Léa, Lou, Nicolas et Sarah)",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:09, l'affectation d'Emma au bar n'apparaît pas parmi les lignes visibles de la section 'Affectations proposées'."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

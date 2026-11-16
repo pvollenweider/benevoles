@@ -1,6 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 import { hashCharterText } from "@/lib/charter-hash"
-import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
+import { buildVolunteerCharter, DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
 
 // Proof of acceptance of the volunteer charter (#569): the public sign-up refuses without the
 // checkbox, and stores the hash of the exact text shown plus the acceptance date on every
@@ -13,21 +19,25 @@ const m = vi.hoisted(() => ({
   charterUpsert: vi.fn(),
 }))
 
-vi.mock("@/lib/prisma", () => ({
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
+  return ({
   prisma: {
+      charterVersion: { upsert: m.charterUpsert },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) },
     event: { findFirst: m.eventFindFirst },
-    shift: { findMany: m.shiftFindMany },
+    shift: { findMany: locked.top(m.shiftFindMany) },
     volunteer: { findFirst: vi.fn().mockResolvedValue(null) },
     registration: { findMany: vi.fn().mockResolvedValue([]) },
     memberInvite: { findFirst: vi.fn() },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
-      $queryRaw: vi.fn(),
-      shift: { findMany: vi.fn().mockResolvedValue([]) },
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]), // the member lock (#285): the row it locked
+      shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) },
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
       charterVersion: { upsert: m.charterUpsert },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
-      registration: {
+      shiftDecline: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+      registration: { findFirst: vi.fn().mockResolvedValue(null),
         findMany: vi.fn().mockResolvedValue([]),
         count: vi.fn().mockResolvedValue(0),
         aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
@@ -35,7 +45,8 @@ vi.mock("@/lib/prisma", () => ({
       },
     })),
   },
-}))
+})
+})
 vi.mock("@/lib/notification-helpers", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn() }))
 vi.mock("@/lib/notifications/outbox", () => ({ collectNotifications: () => ({ send: vi.fn(), payloads: [] }), enqueueNotifications: vi.fn().mockResolvedValue([]), deliverAfterResponse: vi.fn() }))
@@ -55,7 +66,7 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
     vi.clearAllMocks()
     m.eventFindFirst.mockResolvedValue({
       id: "evt-1", organizationId: "org-a", title: "Fête", confirmationMessage: null,
-      organization: { slug: "a", timeZone: null, volunteerCharter: null },
+      organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: true },
     })
     m.shiftFindMany.mockResolvedValue([bar])
     m.txCreate.mockResolvedValue({ id: "reg-1", shiftId: "s1", status: "active", waitingPosition: null })
@@ -99,6 +110,21 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
       create: { organizationId: "org-a", hash: expectedHash, text: DEFAULT_VOLUNTEER_CHARTER },
       update: {},
     })
+  })
+
+  // Regression: with the switch off and no custom text, the « with insurance » default was hashed.
+  it("hashes the default for the organization's insurance choice when its switch is off", async () => {
+    m.eventFindFirst.mockResolvedValue({
+      id: "evt-1", organizationId: "org-a", title: "Fête", confirmationMessage: null,
+      organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: false },
+    })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await POST(post())
+    const shown = buildVolunteerCharter({ hasOrgInsurance: false })
+    expect(m.charterUpsert).toHaveBeenCalledWith(expect.objectContaining({
+      create: { organizationId: "org-a", hash: hashCharterText(shown), text: shown },
+    }))
+    expect(hashCharterText(shown)).not.toBe(hashCharterText(DEFAULT_VOLUNTEER_CHARTER))
   })
 
   it("hashes the organization's own custom text instead, when it set one", async () => {

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:38:21.452Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "b7bd2412d79bae5f70af332b3381365f9ac56e55be58fb4357bbfc39ff2a75b5",
+  "clipSha256": "4227e8a49285dd38bac293341b0bf931f0324af95307b92bb4f9bc31435c7197",
+  "scene": "ap-adjust",
+  "review": {
+    "heardOpening": "Léa doit partir plus tôt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrons son brouillon de billetterie",
+        "visibleSeconds": 2.6,
+        "visible": "Ouverture de la fenêtre modale du brouillon de billetterie pour Léa Müller",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis Retirer ce brouillon, et confirmons",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur « Retirer ce brouillon » puis confirmation sur le bouton rouge",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Dans la case de Lou, Ajouter",
+        "visibleSeconds": 7.7,
+        "visible": "Affichage de la modale d'affectation pour Lou Tóth",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "puis Ajouter en brouillon sur la billetterie",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur « Ajouter en brouillon » sous la section Billetterie",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

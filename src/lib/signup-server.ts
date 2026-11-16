@@ -9,6 +9,7 @@ import { inviteLink } from "@/lib/invite-link"
 import { isReservedOrgSlug } from "@/lib/org-subdomain"
 import { reportError } from "@/lib/report-error"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { normalizeSignupSource } from "@/lib/signup-source"
 import { confirmable, signupAlertMessage, slugify, SIGNUP_LINK_HOURS, type SignupInput } from "@/lib/signup"
 import { blockApplies, signupKeys } from "@/lib/signup-blocklist"
 import { isReleasableInvitation } from "@/lib/admin-invitation"
@@ -54,17 +55,20 @@ export async function signupBlocked(email: string, ip: string | null, now: Date 
  * has an account: the caller answers the same way, the form never tells. An expired, never-activated
  * invitation into another team is no account (#1053): the confirmation replaces it.
  */
-export async function createSignupRequest(input: Pick<SignupInput, "organizationName" | "contactName" | "email" | "description">, now: Date = new Date()): Promise<{ queued: boolean }> {
+export async function createSignupRequest(input: Pick<SignupInput, "organizationName" | "contactName" | "email" | "description" | "source" | "sourceDetail">, now: Date = new Date()): Promise<{ queued: boolean }> {
   const known = await findAdminEmailHolder(prisma, input.email, now)
   if (known && !isReleasableInvitation(known, now)) return { queued: false }
 
   const token = randomBytes(32).toString("base64url")
+  const answer = normalizeSignupSource(input.source, input.sourceDetail)
   await prisma.signupRequest.create({
     data: {
       organizationName: input.organizationName,
       contactName: input.contactName,
       email: input.email,
       description: input.description,
+      source: answer.source,
+      sourceDetail: answer.detail,
       tokenHash: hashToken(token),
       expiresAt: new Date(now.getTime() + SIGNUP_LINK_HOURS * HOUR),
     },
@@ -124,6 +128,9 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
         publicationApprovedAt: null,
         outboundEmailApprovedAt: null,
         signupDescription: req.description,
+        // « Comment avez-vous connu … ? » (#1094): only the operator sees it.
+        signupSource: req.source,
+        signupSourceDetail: req.sourceDetail,
         signupAt: now,
         // Replies to the space's emails reach its owner until changed in the settings (#1067).
         replyToEmail: initialReplyToEmail(req.email),

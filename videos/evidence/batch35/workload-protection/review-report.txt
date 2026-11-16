@@ -1,0 +1,12 @@
+STATUS: READY
+WORKLOAD_PROTECTION — batch35, 2026-10-30
+One narrated take; two successful quick rehearsals, each preceded by fresh workload seed.
+Verified current-main product aed410c8139e479c4730cfbce58c8307b645b878; BUILD_ID5Oaosk5GvwNjq85Z4bYwR.
+Duration406480ms. Existing single continuous Kore master retained without text or audio change; source ASR and whole-master voice consistency pass.
+19 scenes and sentence anchors validate. Music14.7–19.7LU under voice;music-only min-33.6LUFS;0gaps.35real clicks/12real key presses with synced soft effects.
+Whole final multilingual soundtrack ASR:0register candidates;VTT0;no stray stage direction.57actual full-resolution frames OCR:0forbidden labels. French dates, public addresses, fictional identities verified.
+Both complete Sarah rows visible during narration, asserted in viewport and inspected at25/60/85%. Signup confirmation+22.927s precedes refusal sentence+24.779s. Active heading and1programme à revoir visible throughout final result after navigation.
+19 assisted AV chapter reports current;2false-positive findings resolved against actual MP4 frames (limits present;conclusion recap). Original reports retained.18final chapter ASRs pass automatically;meal-travel ending flag resolved by independent7s actual-final audio ASR: Choisir les lieux dans Créneau y ramène (Créneau/Créneaux homophones). No missing ending.
+All19chapters inspected via actual MP4 frames and assisted audiovisual review. Real-time subjective listening unavailable, as allowed by batch rules. No product defect observed.
+Posters generated with review/renders-generated.json;videos/renders.json unchanged.37video test files/1244tests PASS;211explicit typed sources PASS.
+Publication completed:preview then APPLY=1,context default,5files sent. Catalog published:true,revision1,added/updatedAt2026-10-30. No push or merge.

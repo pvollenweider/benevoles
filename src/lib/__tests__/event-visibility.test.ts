@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { isUnlistedPublic, listingChangeLabel, PUBLIC_ACCESS_WHERE, PUBLIC_LIST_WHERE, robotsFor, visibilityLabel } from "../event-visibility"
+import { isUnlistedPublic, listingChangeLabel, orgHomeEventsWhere, orgHomeRobots, PUBLIC_ACCESS_WHERE, PUBLIC_LIST_WHERE, robotsFor, startOfToday, visibilityLabel } from "../event-visibility"
 
 // Unlisted events (#414): listing is a second axis, never a bypass of the lifecycle.
 describe("event visibility", () => {
@@ -28,5 +28,24 @@ describe("event visibility", () => {
   it("words the log entry", () => {
     expect(listingChangeLabel(true)).toBe("répertorié")
     expect(listingChangeLabel(false)).toBe("non répertorié")
+  })
+})
+
+// An organisation's public page without any event to show reads as a soft 404 to Google.
+describe("organisation public page", () => {
+  it("shows published, listed events not over yet, from midnight today", () => {
+    const now = new Date(2026, 10, 2, 15, 42, 7)
+    expect(startOfToday(now)).toEqual(new Date(2026, 10, 2))
+    expect(now.getHours()).toBe(15)
+    expect(orgHomeEventsWhere(now)).toEqual({ publicStatus: "published", isListed: true, endDate: { gte: new Date(2026, 10, 2) } })
+  })
+
+  it("keeps the page out of search engines while it shows no event, links still followed", () => {
+    expect(orgHomeRobots(0)).toEqual({ index: false, follow: true })
+  })
+
+  it("lets robots index the page again as soon as it shows an event", () => {
+    expect(orgHomeRobots(1)).toBeUndefined()
+    expect(orgHomeRobots(7)).toBeUndefined()
   })
 })

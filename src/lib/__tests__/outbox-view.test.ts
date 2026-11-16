@@ -10,7 +10,7 @@ const row = { id: "o1", status: "pending", attempts: 0, nextAttemptAt: new Date(
 // Email delivery page (#382).
 describe("outbox view", () => {
   it("labels every notification kind, and falls back to the raw kind", () => {
-    expect(Object.keys(KIND_LABELS)).toHaveLength(41)
+    expect(Object.keys(KIND_LABELS)).toHaveLength(49)
     expect(kindLabel("open_shifts")).toBe("Créneaux à compléter proposés à des membres")
     expect(kindLabel("registration_added_by_organizer")).toBe("Inscription ajoutée par l'organisation")
     expect(kindLabel("member_invite")).toBe("Invitation d'un membre")
@@ -128,5 +128,25 @@ describe("outbox view", () => {
   it("never says every email left while some were cancelled", () => {
     expect(outboxHeadline({ pending: 0, retrying: 0, sent: 2, failed: 0, cancelled: 1 })).toBe("1 email annulé (organisation désactivée), jamais envoyé ; les autres sont partis.")
     expect(outboxHeadline({ pending: 0, retrying: 0, sent: 0, failed: 0, cancelled: 2 })).toBe("2 emails annulés (organisation désactivée), jamais envoyés.")
+  })
+})
+
+describe("an email cancelled because the member's address changed (#1105)", () => {
+  it("says why in French and that nothing went to the old address", async () => {
+    const { MEMBER_ADDRESS_CHANGED_REASON, memberAddressChanged } = await import("../outbox-address-changed-reason")
+    expect(outboxErrorSentence(MEMBER_ADDRESS_CHANGED_REASON)).toBe("Annulé : l'adresse du membre a changé depuis la mise en file. Rien n'est parti vers l'ancienne adresse ; renvoyez ce message s'il doit le recevoir à la nouvelle.")
+    expect(memberAddressChanged("A@x.ch ", { email: "a@x.ch" })).toBe(false)
+    expect(memberAddressChanged("typo@x.ch", { email: "a@x.ch" })).toBe(true)
+    expect(memberAddressChanged("a@x.ch", { email: null })).toBe(true)
+    expect(memberAddressChanged("a@x.ch", null)).toBe(true)
+  })
+})
+
+describe("an email cancelled because its link was revoked", () => {
+  it("says so in French, without the token or the address", async () => {
+    const { ACCOUNT_LINK_REVOKED_REASON, LEADER_LINK_REVOKED_REASON, PERSONAL_LINK_REVOKED_REASON } = await import("../outbox-address-changed-reason")
+    expect(outboxErrorSentence(PERSONAL_LINK_REVOKED_REASON)).toBe("Annulé : le lien personnel de cet email a été remplacé depuis la mise en file.")
+    expect(outboxErrorSentence(ACCOUNT_LINK_REVOKED_REASON)).toBe("Annulé : le lien de cet email a été remplacé ou n'est plus valable.")
+    expect(outboxErrorSentence(LEADER_LINK_REVOKED_REASON)).toBe("Annulé : ce responsable de secteur a été retiré, ou son adresse a changé, depuis la mise en file.")
   })
 })

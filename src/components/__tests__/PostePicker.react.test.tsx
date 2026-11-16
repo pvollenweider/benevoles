@@ -18,15 +18,15 @@ const fetchMock = vi.fn()
 const shift = (roleName: string, date: string, displayOrder: number, status = "open") =>
   ({ id: `${roleName}-${date}`, roleName, label: roleName, date, startTime: "10:00", endTime: "12:00", capacity: 2, status, displayOrder, registrationCount: 0 }) as unknown as RawShift
 
-// Day 1 has Accueil and Montage; day 2 has Bar; a cancelled Loge does not count.
+// Day 1 has Accueil and Montage; day 2 has Bar; a cancelled Buvette does not count.
 const existing = [
   shift("Bar", "2026-07-05", 200),
   shift("Accueil", "2026-07-04", 100),
   shift("Montage", "2026-07-04", 300),
-  shift("Loge", "2026-07-04", 50, "cancelled"),
+  shift("Buvette", "2026-07-04", 50, "cancelled"),
 ]
 
-const HINT = "Les réglages du poste « Accueil » s'appliquent (couleur, limite, accès, chevauchement)."
+const HINT = "Les paramètres du poste « Accueil » s'appliquent (couleur, limite, accès, chevauchement)."
 // The hint keeps its non-breaking spaces: match the text as is.
 const raw = { normalizer: (s: string) => s }
 
@@ -63,7 +63,8 @@ describe("poste picker of the shift forms (#1018)", () => {
     const list = options(input)
     expect(list.slice(0, 3)).toEqual(["Accueil", "Bar", "Montage"])
     expect(list).toContain("Billetterie")
-    expect(list).toContain("Loge") // only cancelled on the event: still an example
+    expect(list).toContain("Buvette") // only cancelled on the event: still an example
+    expect(list).not.toContain("Loge") // removed from the examples
     expect(list.filter((o) => o.toLowerCase() === "bar")).toHaveLength(1)
   })
 
@@ -84,7 +85,7 @@ describe("poste picker of the shift forms (#1018)", () => {
     const { input } = editor()
     fireEvent.change(input, { target: { value: "Parking" } })
     await new Promise((r) => setTimeout(r, 600))
-    expect(screen.queryByText(/Les réglages du poste/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Les paramètres du poste/)).not.toBeInTheDocument()
   })
 
   it("sends the existing poste's spelling, so the shift joins it", async () => {
@@ -100,7 +101,7 @@ describe("poste picker of the shift forms (#1018)", () => {
   it("gives no hint when editing a shift without changing its poste", async () => {
     editor({ editingId: "s9", initial: { roleName: "Accueil", date: "2026-07-04", startTime: "08:00", endTime: "09:00" } })
     await new Promise((r) => setTimeout(r, 600))
-    expect(screen.queryByText(/Les réglages du poste/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Les paramètres du poste/)).not.toBeInTheDocument()
   })
 
   it("does the same in the series form", async () => {

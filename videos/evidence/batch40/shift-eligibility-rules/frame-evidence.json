@@ -1,0 +1,174 @@
+{
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "frames": [
+    {
+      "scene": "welcome",
+      "seconds": 9.428,
+      "file": "frames/welcome-3.png",
+      "checkpoint": {
+        "spokenSeconds": 8.5,
+        "spoken": "Ces contrôles évitent les affectations impossibles",
+        "visibleSeconds": 8.5,
+        "visible": "Vue d'ensemble stable du planning des créneaux en support de l'introduction générale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "settings",
+      "seconds": 30.815,
+      "file": "frames/settings-4.png",
+      "checkpoint": {
+        "spokenSeconds": 14.5,
+        "spoken": "et Sécurité exige l’étiquette sécurité.",
+        "visibleSeconds": 15.2,
+        "visible": "Options du poste Sécurité ouvertes avec le champ Étiquette réservée contenant sécurité",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "age",
+      "seconds": 43.77,
+      "file": "frames/age-3.png",
+      "checkpoint": {
+        "spokenSeconds": 8,
+        "spoken": "permet au serveur de vérifier la règle",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie de la date de naissance 28/11/1995 dans le champ correspondant",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "quota",
+      "seconds": 62.709,
+      "file": "frames/quota-4.png",
+      "checkpoint": {
+        "spokenSeconds": 11.2,
+        "spoken": "Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+        "visibleSeconds": 12.8,
+        "visible": "Panneau latéral des créneaux sélectionnés affichant la possibilité de retirer un créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "reserved",
+      "seconds": 77.323,
+      "file": "frames/reserved-3.png",
+      "checkpoint": {
+        "spokenSeconds": 12,
+        "spoken": "Une invitation sans la bonne étiquette ne donne pas davantage accès",
+        "visibleSeconds": 12,
+        "visible": "L'écran redescend sur la liste des créneaux incluant le poste Sécurité réservé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "eligible",
+      "seconds": 93.582,
+      "file": "frames/eligible-4.png",
+      "checkpoint": {
+        "spokenSeconds": 12,
+        "spoken": "Il n'y a donc ni compte à créer, ni code à recopier.",
+        "visibleSeconds": 12.5,
+        "visible": "Formulaire d'inscription directement accessible et pré-rempli sans étape de connexion ou de saisie de code",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "answer",
+      "seconds": 99.787,
+      "file": "frames/answer-1.png",
+      "checkpoint": {
+        "spokenSeconds": 2.9,
+        "spoken": "Dans Gérer les postes, ouvrons son éditeur Accès.",
+        "visibleSeconds": 3.4,
+        "visible": "Ouverture du volet Gérer les postes puis clic sur le lien Accès de la Navette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "answer",
+      "seconds": 106.187,
+      "file": "frames/answer-2.png",
+      "checkpoint": {
+        "spokenSeconds": 6.4,
+        "spoken": "Choisissons la question Permis de conduire, posée à tous les bénévoles, puis cochons Oui dans Réponses acceptées et enregistrons.",
+        "visibleSeconds": 9.8,
+        "visible": "Sélection de la case Oui sous Réponses acceptées puis clic sur Enregistrer l'ordre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "answer",
+      "seconds": 113.587,
+      "file": "frames/answer-3.png",
+      "checkpoint": {
+        "spokenSeconds": 13.5,
+        "spoken": "Sur la page publique, le créneau annonce Réponse requise : Permis de conduire, Oui.",
+        "visibleSeconds": 17.2,
+        "visible": "Affichage de la vue liste publique avec la mention Réponse requise : Permis de conduire, Oui sous Navette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "answer",
+      "seconds": 116.687,
+      "file": "frames/answer-4.png",
+      "checkpoint": {
+        "spokenSeconds": 19.1,
+        "spoken": "Essayons de nous inscrire avec Non.",
+        "visibleSeconds": 20.3,
+        "visible": "Sélection du créneau puis choix de l'option Non pour le permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "answer",
+      "seconds": 122.187,
+      "file": "frames/answer-5.png",
+      "checkpoint": {
+        "spokenSeconds": 22.1,
+        "spoken": "Au moment de confirmer, le formulaire refuse cette réponse pour la Navette.",
+        "visibleSeconds": 25.8,
+        "visible": "Clic sur Confirmer mon inscription et apparition du message d'erreur rouge bloquant l'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "answer",
+      "seconds": 123.587,
+      "file": "frames/answer-6.png",
+      "checkpoint": {
+        "spokenSeconds": 26.5,
+        "spoken": "Choisissons maintenant Oui et confirmons : l'inscription est acceptée.",
+        "visibleSeconds": 27.2,
+        "visible": "Sélection de Oui, validation et affichage de l'écran Inscription confirmée !",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "result",
+      "seconds": 150.52,
+      "file": "frames/result-5.png",
+      "checkpoint": {
+        "spokenSeconds": 23.5,
+        "spoken": "puis nous annulons.",
+        "visibleSeconds": 22.8,
+        "visible": "Fermeture de la boîte de dialogue sans enregistrer.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    }
+  ]
+}

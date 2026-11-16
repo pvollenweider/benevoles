@@ -5,6 +5,7 @@ import { randomInt } from "node:crypto"
 import { z } from "zod"
 import { LIVE_STATUSES, isUniqueViolation } from "@/lib/registration-capacity"
 import { eventPublicUrl } from "@/lib/urls"
+import { publicShifts } from "@/lib/role-assignment"
 import {
   type AdminGroupLink,
   GROUP_LINK_NAME_MAX,
@@ -48,14 +49,17 @@ export async function nameTaken(db: Db, eventId: string, name: string, exceptId?
   return others.some((o) => o.id !== exceptId && sameGroupName(o.name, name))
 }
 
-/** Roles with at least one live (not cancelled) shift, in the planning's order. */
+/**
+ * Roles with at least one live (not cancelled) shift, in the planning's order: the roles a link may
+ * show. A role assigned by the organisation only (#1145) is not one: the public page never shows it.
+ */
 export async function liveRoleNames(db: Db, eventId: string): Promise<string[]> {
-  const shifts: { roleName: string }[] = await db.shift.findMany({
+  const shifts: { roleName: string; assignedOnly?: boolean }[] = await db.shift.findMany({
     where: { eventId, status: { not: "cancelled" } },
-    select: { roleName: true },
+    select: { roleName: true, assignedOnly: true },
     orderBy: [{ displayOrder: "asc" }, { date: "asc" }, { startTime: "asc" }],
   })
-  return [...new Set(shifts.map((s) => s.roleName))]
+  return [...new Set(publicShifts(shifts).map((s) => s.roleName))]
 }
 
 /**

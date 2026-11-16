@@ -1,0 +1,282 @@
+{
+  "ap-welcome": [
+    {
+      "text": "La proposition d'affectations, en bêta, prépare un planning en brouillon selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun.",
+      "startMs": 238,
+      "endMs": 7971,
+      "method": "silence"
+    },
+    {
+      "text": "Rien n'est publié, et aucun bénévole n'est prévenu, sans votre décision.",
+      "startMs": 8359,
+      "endMs": 12273,
+      "method": "silence"
+    }
+  ],
+  "ap-drafts": [
+    {
+      "text": "Aux Rencontres du Val d'Orsel, onze personnes ont indiqué leurs disponibilités.",
+      "startMs": 398,
+      "endMs": 4244,
+      "method": "silence"
+    },
+    {
+      "text": "Depuis la page Disponibilités, ouvrons Affectations en brouillon :",
+      "startMs": 4801,
+      "endMs": 8638,
+      "method": "silence"
+    },
+    {
+      "text": "une ligne par personne, une colonne par date avec les places à pourvoir, et encore aucune affectation.",
+      "startMs": 9617,
+      "endMs": 14572,
+      "method": "silence"
+    },
+    {
+      "text": "Cliquons sur Générer une proposition.",
+      "startMs": 15150,
+      "endMs": 17611,
+      "method": "silence"
+    }
+  ],
+  "ap-scope": [
+    {
+      "text": "Ce qui est vérifié rappelle les règles toujours respectées, dont la protection des pauses et de la charge, ici activée.",
+      "startMs": 533,
+      "endMs": 6539,
+      "method": "silence"
+    },
+    {
+      "text": "Dans Périmètre, les trois dates et les cinq postes sont cochés :",
+      "startMs": 7436,
+      "endMs": 10622,
+      "method": "silence"
+    },
+    {
+      "text": "quatorze créneaux, trente et une places à pourvoir.",
+      "startMs": 10894,
+      "endMs": 13003,
+      "method": "silence"
+    }
+  ],
+  "ap-targets": [
+    {
+      "text": "Jules n'a pas répondu :",
+      "startMs": 443,
+      "endMs": 1796,
+      "method": "silence"
+    },
+    {
+      "text": "il n'est pas inclus.",
+      "startMs": 2047,
+      "endMs": 2753,
+      "method": "silence"
+    },
+    {
+      "text": "Les objectifs d'heures sont vides :",
+      "startMs": 3349,
+      "endMs": 5190,
+      "method": "silence"
+    },
+    {
+      "text": "Appliquer la suggestion les remplit, six heures par date où la personne est libre.",
+      "startMs": 5593,
+      "endMs": 9647,
+      "method": "silence"
+    },
+    {
+      "text": "Noah ne veut que six heures en tout :",
+      "startMs": 9974,
+      "endMs": 11663,
+      "method": "silence"
+    },
+    {
+      "text": "tapons six.",
+      "startMs": 12105,
+      "endMs": 12774,
+      "method": "silence"
+    }
+  ],
+  "ap-wishes": [
+    {
+      "text": "Pour Emma, Bar des Tilleuls comme poste souhaité ;",
+      "startMs": 354,
+      "endMs": 2984,
+      "method": "silence"
+    },
+    {
+      "text": "pour Lucas, Parking comme poste à éviter.",
+      "startMs": 3321,
+      "endMs": 5807,
+      "method": "silence"
+    },
+    {
+      "text": "Ces souhaits passent après les règles et l'équilibre des heures.",
+      "startMs": 6235,
+      "endMs": 9301,
+      "method": "silence"
+    }
+  ],
+  "ap-launch": [
+    {
+      "text": "Rotation, nuit et réserve reste replié, sans réglage.",
+      "startMs": 555,
+      "endMs": 3884,
+      "method": "silence"
+    },
+    {
+      "text": "Puis Générer une proposition :",
+      "startMs": 4448,
+      "endMs": 5104,
+      "method": "silence"
+    },
+    {
+      "text": "avec les mêmes données et les mêmes réglages, ce premier calcul donne la même proposition.",
+      "startMs": 5347,
+      "endMs": 11251,
+      "method": "silence"
+    }
+  ],
+  "ap-result": [
+    {
+      "text": "En quelques secondes, le résultat s'affiche en haut de la page :",
+      "startMs": 532,
+      "endMs": 3220,
+      "method": "silence"
+    },
+    {
+      "text": "vingt-neuf places couvertes sur trente et une, écrites dans les brouillons.",
+      "startMs": 3360,
+      "endMs": 6950,
+      "method": "silence"
+    },
+    {
+      "text": "Couverture complète impossible :",
+      "startMs": 7101,
+      "endMs": 8384,
+      "method": "silence"
+    },
+    {
+      "text": "personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite.",
+      "startMs": 8512,
+      "endMs": 12777,
+      "method": "silence"
+    },
+    {
+      "text": "Proposer une autre répartition en chercherait une autre, sur le même périmètre.",
+      "startMs": 13132,
+      "endMs": 17016,
+      "method": "silence"
+    }
+  ],
+  "ap-load": [
+    {
+      "text": "La charge par personne compare les heures prévues à l'objectif de chacun :",
+      "startMs": 442,
+      "endMs": 5501,
+      "method": "silence"
+    },
+    {
+      "text": "Noah a ses six heures.",
+      "startMs": 5956,
+      "endMs": 5956,
+      "method": "silence"
+    },
+    {
+      "text": "Dans Affectations proposées, chaque ligne dit pourquoi.",
+      "startMs": 6103,
+      "endMs": 9771,
+      "method": "silence"
+    },
+    {
+      "text": "Emma est au bar vendredi :",
+      "startMs": 9920,
+      "endMs": 11103,
+      "method": "silence"
+    },
+    {
+      "text": "disponible sur tout le créneau, c'est son poste souhaité.",
+      "startMs": 11296,
+      "endMs": 14828,
+      "method": "silence"
+    }
+  ],
+  "ap-lock": [
+    {
+      "text": "De retour au planning, chaque brouillon proposé porte la mention Proposé.",
+      "startMs": 0,
+      "endMs": 4399,
+      "method": "silence"
+    },
+    {
+      "text": "Ouvrons celui d'Emma, puis Verrouiller :",
+      "startMs": 4756,
+      "endMs": 6671,
+      "method": "silence"
+    },
+    {
+      "text": "une nouvelle proposition ne le remplacera pas.",
+      "startMs": 6810,
+      "endMs": 9785,
+      "method": "silence"
+    },
+    {
+      "text": "Le cadenas le signale sur le planning.",
+      "startMs": 10129,
+      "endMs": 11974,
+      "method": "silence"
+    }
+  ],
+  "ap-adjust": [
+    {
+      "text": "Léa doit partir plus tôt vendredi :",
+      "startMs": 249,
+      "endMs": 2319,
+      "method": "silence"
+    },
+    {
+      "text": "ouvrons son brouillon de billetterie, puis Retirer ce brouillon, et confirmons.",
+      "startMs": 2842,
+      "endMs": 6979,
+      "method": "silence"
+    },
+    {
+      "text": "Dans la case de Lou, Ajouter, puis Ajouter en brouillon sur la billetterie.",
+      "startMs": 7641,
+      "endMs": 11870,
+      "method": "silence"
+    },
+    {
+      "text": "Une proposition ne remplace jamais un brouillon manuel.",
+      "startMs": 12258,
+      "endMs": 15525,
+      "method": "silence"
+    }
+  ],
+  "ap-publish": [
+    {
+      "text": "Publier les affectations demande une confirmation :",
+      "startMs": 585,
+      "endMs": 2890,
+      "method": "silence"
+    },
+    {
+      "text": "alors seulement les places sont prises, et chacun reçoit son email.",
+      "startMs": 3507,
+      "endMs": 6854,
+      "method": "silence"
+    },
+    {
+      "text": "Annulons ici.",
+      "startMs": 7466,
+      "endMs": 9978,
+      "method": "silence"
+    },
+    {
+      "text": "Tant que vous ne publiez pas, la proposition reste un brouillon, et aucun bénévole n'est prévenu.",
+      "startMs": 10216,
+      "endMs": 13470,
+      "method": "silence"
+    }
+  ]
+}

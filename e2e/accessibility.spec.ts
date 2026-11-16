@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test"
 import { execFileSync } from "node:child_process"
 import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
+import { passSecondFactor } from "./helpers/super-admin"
+import { createPublicEvent } from "./helpers/public-signup"
 
 /**
  * Automated accessibility checks on the critical paths (#487), as listed on /accessibilite:
@@ -15,7 +17,7 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 test.describe("public pages", () => {
   // /videos and /videos/[id] (#644): the public video library, same accessibility bar as every other page.
   // The audience pages, their index and the pricing page (#872, #950).
-  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/planning-permanences-benevoles", "/tarifs", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
+  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/benevoles-mairie-commune", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/logiciel-libre-benevoles", "/continuite-du-service", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
@@ -30,8 +32,10 @@ test.describe("public pages", () => {
     expect.soft(await seriousViolations(page)).toEqual([])
   })
 
-  test("event page, then the sign-up form, have no serious violation", async ({ page }) => {
-    await page.goto("/spectacle-cirque-2026?org=default")
+  test("event page, then the sign-up form, have no serious violation", async ({ page, browser }) => {
+    // An event still to come: the seeded demo event's shifts are over and can no longer be chosen.
+    const event = await createPublicEvent(browser, `E2E Accessibilite ${Date.now()}`, [{ label: "Billetterie", startTime: "09:00", endTime: "12:00" }])
+    await page.goto(`/${event.slug}?org=default`)
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
     expect.soft(await seriousViolations(page)).toEqual([])
     await page.getByRole("button", { name: /, Billetterie[^:]* : sélectionner/ }).first().click()
@@ -45,10 +49,34 @@ test.describe("content pages on a phone, in dark mode", () => {
   test.use({ viewport: { width: 320, height: 640 }, colorScheme: "dark" })
   // Documentation units (#649): the breadcrumb wraps at 320 px; an organisers' unit has wide tables.
   // /doc/rappels: a unit for both audiences, with its jump links, previous and next, « Dans ce thème ».
-  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/planning-permanences-benevoles", "/tarifs", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels"]) {
+  // The video library and the legal documents (#1116): in the content pages' frame, dark theme included.
+  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/logiciel-libre-benevoles", "/continuite-du-service", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels", "/videos", "/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants"]) {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+      expect.soft(await seriousViolations(page)).toEqual([])
+    })
+  }
+})
+
+// #1116: a video page with its disclosures open (axe skips closed <details>), then the library's
+// filters in use and its empty state, in the dark theme on a phone and on a desktop.
+test.describe("video library in dark mode", () => {
+  test.use({ colorScheme: "dark" })
+  for (const viewport of [{ width: 320, height: 640 }, { width: 1280, height: 800 }]) {
+    test(`a video page, details open, and the filters have no serious violation at ${viewport.width} px`, async ({ page }) => {
+      await page.setViewportSize(viewport)
+      await page.goto("/videos/EVENT_CREATE_BLANK")
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+      await page.locator("main details").evaluateAll((els) => els.forEach((d) => d.setAttribute("open", "")))
+      expect.soft(await seriousViolations(page)).toEqual([])
+
+      await page.goto("/videos")
+      const search = page.getByLabel("Recherche")
+      await waitForHydration(search)
+      await search.fill("zzzz-aucune-video")
+      await expect(page.getByText("Aucune vidéo ne correspond à ces critères.")).toBeVisible()
+      await expect(page.getByRole("button", { name: "Réinitialiser les filtres" })).toBeVisible()
       expect.soft(await seriousViolations(page)).toEqual([])
     })
   }
@@ -85,9 +113,11 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
     expect.soft(await seriousViolations(page)).toEqual([])
 
+    await page.goto("/admin/events")
+    expect.soft(await seriousViolations(page)).toEqual([])
     await page.getByRole("link", { name: /Spectacle/ }).first().click()
     await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
     const base = page.url()
@@ -95,7 +125,7 @@ test.describe("admin", () => {
     // « /questions » carries the answers summary (#686), with its tables or its empty state; « /review » the share link (#564) and the review checks (#565);
     // « /staffing/search » the shift picker of « Chercher des bénévoles » (#566).
     // « /day-of » (#561): its empty state here, outside the event's dates; with content in e2e/day-of.spec.ts.
-    // « /share » the Partage tab (public link, links per group, embed); « /edit » the Réglages tab and its deletion section.
+    // « /share » the Partage tab (public link, links per group, embed); « /edit » the Paramètres tab and its deletion section.
     for (const sub of ["/shifts", "/registrations", "/message", "/invitations", "/questions", "/review", "/staffing", "/staffing/search", "/day-of", "/share", "/edit"]) {
       await page.goto(base + sub)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
@@ -109,7 +139,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `A11y${Date.now()}` } })
     expect(res.ok(), await res.text()).toBeTruthy()
@@ -132,7 +162,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
     await page.goto("/admin/settings/admins")
     await expect(page.getByRole("region", { name: "Logo de l'organisation" })).toBeVisible()
     expect.soft(await seriousViolations(page), "organization settings").toEqual([])
@@ -145,7 +175,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `Del${Date.now()}`, active: false } })
     expect(res.ok(), await res.text()).toBeTruthy()
@@ -166,7 +196,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `Erase${Date.now()}` } })
     expect(res.ok(), await res.text()).toBeTruthy()
@@ -194,7 +224,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     await page.goto("/admin/dashboard")
     await expect(page.getByRole("heading", { name: "Ce qui demande votre attention" })).toBeVisible()
@@ -222,7 +252,8 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
+    await page.goto("/admin/events")
     await page.getByRole("link", { name: /Spectacle/ }).first().click()
     await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
     await page.goto(page.url() + "/shifts")
@@ -245,7 +276,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const post = async (url: string, body: unknown) => {
       const res = await page.request.post(url, { data: body })
@@ -280,7 +311,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const post = async (url: string, body: unknown) => {
       const res = await page.request.post(url, { data: body })
@@ -318,7 +349,8 @@ test.describe("super admin", () => {
     await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+    await passSecondFactor(page)
+    await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
     await page.goto("/super-admin/organizations")
     await expect(page.getByRole("region", { name: "Nouvelle version disponible" })).toBeVisible()

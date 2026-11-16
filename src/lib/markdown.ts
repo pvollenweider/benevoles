@@ -141,8 +141,12 @@ function makeRenderer(vars?: Record<string, string>): Renderer {
     return `<a href="${fillUrl(href)}"${title ? ` title="${fill(title, escapeHtml)}"` : ""} style="color:#2563eb;text-decoration:underline">${this.parser.parseInline(tokens)}</a>`
   }
 
+  // A Markdown image becomes a link to it, never an <img>: an image loads by itself, in every mail
+  // client and on every visit to the success or personal page, from whatever host the address
+  // names. A link only opens when the reader chooses to. Its text is the alt text, or the address.
   r.image = function ({ href, title, text }: Tokens.Image) {
-    return `<img src="${fillUrl(href)}" alt="${fill(text, escapeHtml)}"${title ? ` title="${fill(title, escapeHtml)}"` : ""} style="max-width:100%;border-radius:8px">`
+    const label = text.trim() ? fill(text, escapeHtml) : fillUrl(href)
+    return `<a href="${fillUrl(href)}"${title ? ` title="${fill(title, escapeHtml)}"` : ""} style="color:#2563eb;text-decoration:underline">${label}</a>`
   }
 
   r.table = function (token: Tokens.Table) {
@@ -166,10 +170,11 @@ const ALLOWED_TAGS = [
   "h1", "h2", "h3", "h4", "h5", "h6",
   "strong", "em", "del", "code", "pre",
   "ul", "ol", "li", "input",
-  "a", "blockquote", "img",
+  "a", "blockquote",
   "table", "thead", "tbody", "tr", "th", "td",
 ]
-const ALLOWED_ATTR = ["href", "title", "src", "alt", "style", "type", "checked", "disabled", "data-lang"]
+// No img and no src: nothing in this output loads from another host on its own (see r.image).
+const ALLOWED_ATTR = ["href", "title", "style", "type", "checked", "disabled", "data-lang"]
 
 /**
  * Renders Markdown (CommonMark + GFM tables/strikethrough/task-lists/autolinks) to HTML with

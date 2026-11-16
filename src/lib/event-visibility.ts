@@ -16,6 +16,32 @@ export const PUBLIC_LIST_WHERE = { publicStatus: "published", isListed: true } a
 /** Direct access (event page, its pages, sign-up): published is enough, listed or not. */
 export const PUBLIC_ACCESS_WHERE = { publicStatus: "published" } as const
 
+/** Midnight today on the server's clock: an event whose end date falls before it is over. */
+export function startOfToday(now: Date = new Date()): Date {
+  const start = new Date(now)
+  start.setHours(0, 0, 0, 0)
+  return start
+}
+
+/**
+ * Prisma filter for the events an organisation's public page shows (src/app/page.tsx): published,
+ * listed and not over yet (an event already over would read « N places à pourvoir »). The same
+ * filter decides whether that page is worth indexing (`orgHomeRobots`) and whether the apex
+ * sitemap index lists the organisation (src/lib/sitemap-index.ts).
+ */
+export function orgHomeEventsWhere(now: Date = new Date()) {
+  return { ...PUBLIC_LIST_WHERE, endDate: { gte: startOfToday(now) } }
+}
+
+/**
+ * Robots metadata for an organisation's public page: out of search engines while it shows no event
+ * (« Aucun événement en cours. », a page Google reports as a soft 404), back in as soon as one is
+ * published and listed. Links stay followed.
+ */
+export function orgHomeRobots(shownEvents: number): { index: boolean; follow: boolean } | undefined {
+  return shownEvents > 0 ? undefined : { index: false, follow: true }
+}
+
 export function isUnlistedPublic(e: Visibility): boolean {
   return e.publicStatus === "published" && !e.isListed
 }

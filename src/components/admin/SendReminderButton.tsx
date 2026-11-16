@@ -8,6 +8,7 @@ import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
+import { manualReminderResultText } from "@/lib/invitation-summary"
 
 type Props = {
   eventId: string
@@ -33,7 +34,8 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [result, setResult] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
+  // "info": already started less than 5 minutes ago (#1105), a protection, not a failure.
+  const [result, setResult] = useState<{ kind: "ok" | "info" | "error"; text: string } | null>(null)
   const [, startTransition] = useTransition()
   // Confirmation of a send-to-many action: focus the safe choice first.
   const cancelRef = useRef<HTMLButtonElement>(null)
@@ -44,15 +46,15 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
     if (submitting) return
     setSubmitting(true)
     setResult(null)
-    const outcome = await requestJson<{ sent: number; failed?: number }>(() => fetch(`/api/admin/events/${eventId}/send-reminder`, { method: "POST" }), "Le rappel n'a pas pu être envoyé.")
+    const outcome = await requestJson<{ queued: number }>(() => fetch(`/api/admin/events/${eventId}/send-reminder`, { method: "POST" }), "Le rappel n'a pas pu être lancé.")
     setSubmitting(false)
-    if (!outcome.ok) {
+    if (!outcome.ok && outcome.status !== 409) {
       setResult({ kind: "error", text: outcome.error })
       return
     }
-    const data = outcome.data
-    // « Envoyer » disappears with the success: commit first, then park the focus on « Fermer ».
-    flushSync(() => setResult({ kind: "ok", text: `${data.sent} rappel${data.sent > 1 ? "s" : ""} envoyé${data.sent > 1 ? "s" : ""}${data.failed ? ` · ${data.failed} échec${data.failed > 1 ? "s" : ""}` : ""}` }))
+    // « Envoyer » disappears with the success (or the « already started » answer): commit first,
+    // then park the focus on « Fermer ».
+    flushSync(() => setResult(outcome.ok ? { kind: "ok", text: manualReminderResultText(outcome.data.queued) } : { kind: "info", text: outcome.error }))
     cancelRef.current?.focus()
     startTransition(() => router.refresh())
   }
@@ -103,7 +105,7 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
               <a href={`/admin/events/${eventId}/edit`} className="underline">Ajouter un message</a>
             </div>
           )}
-          <div role="status" className={result?.kind === "ok" ? "bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mb-4" : "sr-only"}>{result?.kind === "ok" ? result.text : ""}</div>
+          <div role="status" className={result && result.kind !== "error" ? "bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mb-4" : "sr-only"}>{result && result.kind !== "error" ? result.text : ""}</div>
           <div role="alert" className={result?.kind === "error" ? "bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800 mb-4" : "sr-only"}>{result?.kind === "error" ? result.text : ""}</div>
           <div className="flex justify-end gap-2">
             <button
@@ -113,9 +115,9 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
               aria-disabled={submitting || undefined}
               className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
             >
-              {result?.kind === "ok" ? "Fermer" : "Annuler"}
+              {result && result.kind !== "error" ? "Fermer" : "Annuler"}
             </button>
-            {result?.kind !== "ok" && (
+            {(!result || result.kind === "error") && (
               <button
                 type="button"
                 onClick={send}

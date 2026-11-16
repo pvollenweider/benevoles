@@ -51,7 +51,7 @@ describe("sending for a deactivated organisation (#814)", () => {
     expect(await cancelPendingOutboxForOrganization({ notificationOutbox: { updateMany } }, "org-1")).toBe(3)
     expect(updateMany).toHaveBeenCalledWith({
       where: { organizationId: "org-1", status: "pending" },
-      data: { status: "cancelled", lastError: ORG_INACTIVE_REASON, claimedAt: null },
+      data: { status: "cancelled", lastError: ORG_INACTIVE_REASON, claimedAt: null, deliveryNotBefore: null },
     })
   })
 })

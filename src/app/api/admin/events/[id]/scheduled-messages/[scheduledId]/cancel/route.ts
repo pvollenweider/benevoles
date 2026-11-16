@@ -26,7 +26,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     data: {
       status: "cancelled",
       cancelledAt: new Date(),
-      cancelledByName: guard.session.user?.name || guard.session.user?.email || "Administrateur",
+      cancelledByName: guard.session.user?.name || guard.session.user?.email || "Organisateur",
     },
   })
   if (count === 0) return NextResponse.json({ error: "Trop tard : ce message est déjà parti ou a déjà été annulé." }, { status: 409 })

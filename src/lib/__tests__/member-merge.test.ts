@@ -42,6 +42,8 @@ function baseInput(overrides: Partial<MemberMergeInput> = {}): MemberMergeInput 
     absorbRegistrations: [],
     keepInvites: [],
     absorbInvites: [],
+    keepShiftDeclines: [],
+    absorbShiftDeclines: [],
     keepAnswers: [],
     absorbAnswers: [],
     absorbPushSubscriptions: [],
@@ -202,6 +204,16 @@ describe("mergeConflicts — overlap, role limit, min age, reserved role", () =>
     })
     expect(mergeConflicts(input, {})).toContainEqual(expect.objectContaining({ kind: "reserved_role", shiftId: "s1" }))
   })
+
+  it("reports a reserved-answer conflict when the merged record lacks an accepted answer (#962)", () => {
+    const shift = { id: "s1", eventId: "e1", roleName: "Navette", label: "Navette", date: new Date("2030-06-01"), startTime: "10:00", endTime: "12:00", minAge: null, maxPerVolunteer: null, reservedTags: [], reservedQuestionId: "q1", reservedAnswers: ["Oui"] }
+    const input = baseInput({
+      shifts: [shift],
+      absorbRegistrations: [{ id: "r2", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null }],
+    })
+    expect(mergeConflicts(input, {})).toContainEqual(expect.objectContaining({ kind: "reserved_answer", shiftId: "s1" }))
+    expect(mergeConflicts(baseInput({ ...input, keepAnswers: [{ id: "a1", questionId: "q1", eventId: "e1", values: ["Oui"] }] }), {})).not.toContainEqual(expect.objectContaining({ kind: "reserved_answer" }))
+  })
 })
 
 describe("mergeConflicts — answers and invites", () => {
@@ -289,5 +301,28 @@ describe("buildMergePlan — delivery outcomes and push subscriptions", () => {
     })
     const plan = buildMergePlan(input, {})
     expect(plan.tokenRegeneration).toEqual({ registrationIds: ["r1"], inviteIds: ["i1"] })
+  })
+})
+
+describe("buildMergePlan — « Je ne peux pas » answers (#1303)", () => {
+  it("unites both records' answers and drops one where a live registration holds the shift", () => {
+    const input = baseInput({
+      keepRegistrations: [{ id: "r-keep", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null }],
+      absorbRegistrations: [{ id: "r-absorb", eventId: "e1", shiftId: "s2", status: "waiting", checkedInAt: null }],
+      keepShiftDeclines: [
+        { id: "d-keep-s3", shiftId: "s3", declinedAt: new Date("2026-06-20T10:00:00Z") },
+        { id: "d-keep-s1", shiftId: "s1", declinedAt: new Date("2026-06-20T10:00:00Z") },
+      ],
+      absorbShiftDeclines: [
+        { id: "d-absorb-s3", shiftId: "s3", declinedAt: new Date("2026-06-21T10:00:00Z") },
+        { id: "d-absorb-s2", shiftId: "s2", declinedAt: new Date("2026-06-21T10:00:00Z") },
+        { id: "d-absorb-s4", shiftId: "s4", declinedAt: new Date("2026-06-21T10:00:00Z") },
+      ],
+    })
+    const plan = buildMergePlan(input, {})
+    // The kept record's answer on s3 wins over the duplicate; s1 and s2 are held live.
+    expect(plan.shiftDeclineIdsToReassign).toEqual(["d-absorb-s4"])
+    expect(plan.shiftDeclineIdsToDrop).toEqual(["d-keep-s1", "d-absorb-s3", "d-absorb-s2"])
+    expect(buildMergePreview(input, {}).counts).toMatchObject({ shiftDeclinesReassigned: 1, shiftDeclinesDropped: 3 })
   })
 })

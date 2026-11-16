@@ -1,6 +1,6 @@
 # Déploiement
 
-Trois modes : développement local, Docker Compose, Kubernetes. Les variables d'environnement sont décrites dans [configuration.md](configuration.md). Pour installer sa propre instance avec Docker Compose, voir [auto-hebergement.md](auto-hebergement.md) (squelette, non testé sur machine vierge).
+Trois modes : développement local, Docker Compose, Kubernetes. Les variables d'environnement sont décrites dans [configuration.md](configuration.md).
 
 ## Développement local
 
@@ -18,31 +18,94 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 1. `deps` : `npm ci`
 2. `prisma-cli` : installe la CLI Prisma pour les migrations à l'exécution
 3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` (affiché sur la page Santé du service) sont des arguments de build, `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
-4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `FEATURES.md`, `ACCESSIBILITE.md`) et les pages de documentation (`guide/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
+4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`content/guide/GUIDE_ADMIN.md`, `content/guide/GUIDE_BENEVOLE.md`, `content/pages/FEATURES.md`, `content/pages/ACCESSIBILITE.md`, `CHANGELOG.md`, les autres pages publiques de `content/` comme `content/pages/TARIFS.md`, `content/pages/FAQ-ACCUEIL.md` ou `content/legal/SOUS-TRAITANTS.md` : liste exacte dans le `Dockerfile`), les pages de documentation (`content/guide/`) et les articles (`content/blog/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
 
 Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js` et, en arrière-plan, le préchauffage de ses pages publiques (voir [Préchauffage avant la mise en service](#préchauffage-avant-la-mise-en-service)). Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
+### Images publiées
+
+Le paquet `ghcr.io/pvollenweider/benevoles` est public : `docker pull` ne demande pas de compte. Images construites pour amd64 seulement (un Mac Apple Silicon les émule).
+
+- `sha-<7 premiers caractères du commit>` : une image par push sur `main`, contrôles réussis ou non. Seules celles dont les contrôles passent sont déployées.
+- `latest` : l'image qui tourne sur benevol.app, déplacée par `deploy.yml` après un déploiement réussi, jamais à la construction ; « Refuse an older version » l'empêche de revenir en arrière.
+
+Une installation qui dure épingle un `sha-…` ou un digest (`docker inspect --format '{{index .RepoDigests 0}}' <image>`) : un `latest` qui bouge applique les migrations au `pull` suivant. `docker-compose.essai.yml` (#1333) utilise `latest` pour un essai local, décrit dans le README (« Essayer sur votre machine »).
+
 ## Docker Compose
 
+Nouvelle installation : placer les secrets dans un fichier `.env` à côté de `docker-compose.yml` (lu par Compose, à ne jamais commiter), puis lancer la stack.
+
 ```bash
-export AUTH_SECRET="$(openssl rand -base64 48)"
-export TOKEN_ENCRYPTION_KEY="$(openssl rand -base64 32)"   # à conserver : voir « Mise à jour depuis 1.x »
+umask 077
+cat > .env <<EOF
+POSTGRES_PASSWORD=$(openssl rand -hex 32)
+AUTH_SECRET=$(openssl rand -base64 48)
+TOKEN_ENCRYPTION_KEY=$(openssl rand -base64 32)
+CRON_SECRET=$(openssl rand -base64 32)
+EOF
 docker compose up -d
 ```
 
-`docker-compose.yml` lance PostgreSQL 16, l'application (`build: .`) sur le port 3000, et le service `cron`, qui appelle `/api/cron/*` aux heures des CronJobs Kubernetes (`scripts/compose-cron.sh`). L'application a un healthcheck sur `/api/health` (`docker compose ps` la montre `healthy`), et `cron` attend qu'elle le soit. Le fichier transmet `AUTH_URL` (par défaut `NEXT_PUBLIC_APP_URL`), `AUTH_TRUST_HOST` (par défaut `true`), `CRON_SECRET`, et les variables optionnelles de [configuration.md](configuration.md) quand elles sont définies dans `.env` ou dans le shell. Procédure complète : [auto-hebergement.md](auto-hebergement.md). Ce qu'il ne fait pas :
+`TOKEN_ENCRYPTION_KEY` est à conserver (voir « Mise à jour depuis 1.x »), `POSTGRES_PASSWORD` aussi : PostgreSQL l'enregistre à la création du volume.
 
-- Sans `AUTH_SECRET` exporté, il démarre sans erreur avec la valeur connue `change-me-in-production-32chars` : toujours l'exporter.
-- Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production et le service `cron` s'arrête avec un message (Docker le relance) : aucun rappel ni email en file ne part. Pour utiliser le cron de l'hôte à la place, retirer le service et suivre [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README.
-- Il ne sauvegarde pas la base (voir [auto-hebergement.md](auto-hebergement.md#sauvegarde-et-restauration)).
-- Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes :
+`docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur `127.0.0.1:3000` : l'application n'est joignable que depuis la boucle locale de l'hôte. PostgreSQL n'est joignable que par l'application, sur le réseau interne de Compose : aucun port n'est publié sur l'hôte. Sans `POSTGRES_PASSWORD`, Compose refuse de démarrer ; il n'y a pas de valeur par défaut. L'application reçoit `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` et `POSTGRES_HOST` plutôt qu'une URL : `docker-entrypoint.sh` construit `DATABASE_URL` (`scripts/database-url.mjs`, chaque partie encodée), donc tout caractère est accepté dans le mot de passe et les deux services reçoivent toujours le même. Dans `.env`, entourer de guillemets simples une valeur qui contient `$`, `#` ou une espace ; un mot de passe hexadécimal évite la question. Une `DATABASE_URL` fournie explicitement (Kubernetes, base externe) est utilisée telle quelle.
+
+Ce qu'il ne fait pas :
+
+- Il transmet `AUTH_URL` (par défaut la valeur de `NEXT_PUBLIC_APP_URL`) et, seulement si elles sont définies dans `.env` ou dans le shell, `AUTH_TRUST_HOST`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS`, `SITE_NAME`, `CONTACT_EMAIL`, `SUPPORT_URL`, `HOSTED_SERVICE`, `SIGNUP`, `RELEASE_CHECK`, `OPERATOR_ALERT_EMAIL`, les variables VAPID et `SENTRY_DSN`. Toute autre variable de [configuration.md](configuration.md) est à ajouter dans la section `environment`.
+- `AUTH_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer, comme pour `POSTGRES_PASSWORD`. Une valeur d'exemple ou trop simple est refusée au démarrage de l'application (`src/lib/production-guards.ts`).
+- `CRON_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer. Le service `cron` (`scripts/compose-cron.sh`) appelle l'application sur le réseau interne de Compose, aux mêmes heures UTC que les CronJobs de Kubernetes : `/api/cron/outbox` toutes les 5 minutes, `/api/cron/reminders` toutes les heures, `/api/cron/cleanup` à 02:00, `/api/cron/release-check` à 03:00 (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README). Il démarre quand l'application est saine et écrit une ligne par appel : `docker compose logs cron`. Un cron de l'hôte qui appelait déjà ces endpoints est à retirer. Les sauvegardes de la base ne sont pas incluses.
+- L'application a un contrôle de santé (`/api/health` : le serveur répond et joint la base) : `docker compose ps` l'affiche « healthy », et `docker compose up -d --wait` rend la main quand elle l'est.
+- Le premier super admin peut être créé au démarrage à partir de `ADMIN_EMAIL` et `ADMIN_PASSWORD` dans `.env` (et `ADMIN_NAME` pour son nom), sans passer par un checkout : les définir avant `docker compose up -d`, puis se connecter par la page habituelle. Le compte n'est créé qu'une fois, tant qu'aucun super admin n'existe ; changer `ADMIN_PASSWORD` ensuite ne le modifie pas. Détails : [configuration.md](configuration.md#premier-super-admin-auto-hébergement).
+- Il n'exécute pas le seed, et l'image ne contient pas `tsx` : pour l'organisation `default`, son admin et l'événement de démonstration, lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*`, le temps d'un accès local à la base (ci-dessous) :
 
   ```bash
-  DATABASE_URL=postgresql://benevoles:benevoles@localhost:5432/benevoles \
-  ADMIN_EMAIL=… ADMIN_PASSWORD=… ORG_ADMIN_EMAIL=… ORG_ADMIN_PASSWORD=… npm run db:seed
+  set -a; . ./.env; set +a
+  DATABASE_URL="$(POSTGRES_HOST=127.0.0.1 node scripts/database-url.mjs)" \
+  NODE_ENV=production ADMIN_EMAIL=… ADMIN_PASSWORD=… ORG_ADMIN_EMAIL=… ORG_ADMIN_PASSWORD=… npm run db:seed
   ```
 
-- Sans `POSTGRES_PASSWORD`, le mot de passe PostgreSQL est celui du développement (`benevoles`) : le définir avant le premier démarrage, car il n'est lu qu'à la création du volume. PostgreSQL est publié sur `127.0.0.1:5432`, comme la stack de développement : les deux ne tournent pas ensemble.
+  Avec `NODE_ENV=production`, le seed refuse de s'exécuter si l'un des deux mots de passe manque ou ne respecte pas les règles des mots de passe (10 caractères, majuscule, minuscule, chiffre, caractère spécial), avant d'écrire quoi que ce soit. Relancé sur des comptes existants, il remet leurs mots de passe et ferme leurs sessions ouvertes.
+
+### Exposition et adresse des visiteurs
+
+L'application n'écoute que sur la boucle locale de l'hôte (`127.0.0.1:3000`) : elle n'est joignable ni depuis le réseau local, ni depuis Internet. Installer un proxy inverse sur le même hôte (nginx, Caddy, Traefik…), qui écoute en 443 et transmet à `127.0.0.1:3000`.
+
+Ne jamais publier directement le port 3000 sur une interface publique. Les limites de débit par adresse (connexion, inscription, mot de passe oublié, invitations…) lisent `X-Forwarded-For`, avec `TRUSTED_PROXY_HOPS` à 1 par défaut : sans proxy de confiance devant l'application, un client qui atteint directement le port 3000 peut forger cet en-tête et obtenir un compteur neuf à chaque requête.
+
+Pour un proxy installé sur une autre machine, l'exposition est une modification volontaire : publier sur une interface privée (jamais `0.0.0.0`), limiter l'accès au proxy par un pare-feu ou un réseau dédié, et déclarer le nombre de proxys. Exemple de `docker-compose.override.yml` :
+
+```yaml
+services:
+  app:
+    ports:
+      - "10.0.0.5:3000:3000"
+    environment:
+      AUTH_URL: https://benevoles.example.org
+      AUTH_TRUST_HOST: "true"
+      TRUSTED_PROXY_HOPS: "1"
+```
+
+`TRUSTED_PROXY_HOPS` compte depuis la droite de `X-Forwarded-For` : 1 quand le proxy le plus proche ajoute l'adresse du visiteur, 2 si un répartiteur de charge ajoute encore une entrée devant. Une valeur trop grande fait remonter une entrée que le client a pu fournir.
+
+### Accès ponctuel à la base
+
+- Une requête SQL, sans rien ouvrir : `docker compose exec postgres psql -U benevoles benevoles` (connexion locale au conteneur).
+- Une commande Prisma dans le conteneur de l'application, qui n'a pas `DATABASE_URL` hors du démarrage : `docker compose exec app sh -c 'DATABASE_URL="$(node scripts/database-url.mjs)" ./node_modules/.bin/prisma migrate status'`.
+- Un outil sur l'hôte (seed, client graphique, `pg_dump` local) : copier `docker-compose.override.example.yml` en `docker-compose.override.yml`, puis `docker compose up -d`. PostgreSQL est alors publié sur `127.0.0.1:5432` uniquement, jamais sur le réseau ; la stack de développement utilise le même port, les deux ne tournent pas ensemble. Supprimer la copie et relancer `docker compose up -d` une fois terminé.
+
+### Mettre à jour une installation Compose existante
+
+Le fichier publiait PostgreSQL sur le port 5432 de toutes les interfaces de l'hôte, avec le mot de passe `benevoles`. Il ne le publie plus et exige `POSTGRES_PASSWORD`. Sur un volume existant, **changer `POSTGRES_PASSWORD` ne change pas le mot de passe enregistré par PostgreSQL** : il n'est lu qu'à la création du volume. Ne jamais supprimer le volume `benevoles_postgres_data` pour appliquer ce changement, il contient toutes les données.
+
+1. Sauvegarder : `docker compose exec -T postgres pg_dump -U benevoles benevoles | gzip > benevoles-avant-mot-de-passe.sql.gz`.
+2. Choisir le nouveau mot de passe et l'enregistrer dans PostgreSQL, sans qu'il apparaisse dans l'historique ni dans la liste des processus : `docker compose exec postgres psql -U benevoles benevoles -c '\password benevoles'` (saisi deux fois). L'application en place n'ouvre plus de nouvelle connexion jusqu'à l'étape 4 : enchaîner les étapes.
+3. Écrire le même mot de passe dans `.env` : `POSTGRES_PASSWORD=…`.
+4. `git pull && docker compose up -d --build` : l'application se reconnecte avec le nouveau mot de passe et le port 5432 n'est plus publié (`docker compose ps` ne l'affiche plus).
+
+Si le mot de passe de `.env` et celui de PostgreSQL diffèrent, l'application s'arrête au démarrage sur une erreur d'authentification : refaire l'étape 2 avec la valeur de `.env`. Si le port était ouvert vers l'extérieur, considérer l'ancien mot de passe comme connu et vérifier le contenu de la base (comptes `AdminUser` en particulier).
+
+Le fichier lance aussi les tâches planifiées (service `cron`) et exige pour cela `CRON_SECRET` dans `.env`. Avant `docker compose up -d --build` : y écrire la valeur que votre cron de l'hôte utilise déjà, ou une nouvelle (`openssl rand -base64 32`), et retirer d'abord du cron de l'hôte les appels à `/api/cron/*`. Ne pas laisser les deux tourner : chaque tâche serait appelée deux fois, et des rappels pourraient partir en double.
 
 ## Kubernetes
 
@@ -50,16 +113,19 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 
 | Fichier | Objets | Appliqué par `deploy.yml` | Contenu |
 |---------|--------|---------------------------|---------|
-| `namespace.yaml` | Namespace `benevoles` | oui | |
+| `namespace.yaml` | Namespace `benevoles` | non | Objet de cluster, appliqué à la main ; niveau Pod Security `baseline` imposé (`pod-security.kubernetes.io/enforce`), voir « Accès du workflow aux secrets et au cluster » ci-dessous |
+| `rbac-ci-deployer.yaml` | ServiceAccount `ci-deployer`, Secret `ci-deployer-token`, Role et RoleBinding `ci-deployer` | non | Compte de déploiement du workflow, limité au namespace `benevoles` ; appliqué à la main, voir « Accès du workflow aux secrets et au cluster » ci-dessous |
 | `secret.yaml` | Secret `benevoles-secret` | non | Modèle incomplet ; le secret réel est régénéré par le workflow (voir [configuration.md](configuration.md#secrets-kubernetes)) |
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
 | `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
-| `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
+| `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, clés de `benevoles-secret` données une à une (voir [configuration.md](configuration.md#secrets-kubernetes)), limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
+| `networkpolicy.yaml` | NetworkPolicies `default-deny-ingress`, `app-from-traefik`, `media-from-traefik`, `acme-solver-from-traefik`, `postgres-from-clients` | oui, avant la migration ; retirées si le déploiement échoue ensuite | Entrées refusées par défaut dans le namespace, voir « Isolation réseau » ci-dessous |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
 | `middleware-compress.yaml` | Middlewares `benevoles-compress` et `benevoles-identity-upstream` | oui, avant `ingress.yaml` | Compression des réponses texte par Traefik (zstd, Brotli ou gzip selon le navigateur) ; l'application reçoit la requête sans `Accept-Encoding` et répond donc sans compression, ce que Traefik exige pour compresser. Voir « Compression » ci-dessous |
-| `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
+| `middleware-hsts.yaml` | Middleware `benevoles-hsts` | oui, avant `ingress.yaml` et `ingressroute-tokens.yaml` | En-tête `Strict-Transport-Security` (1 an, sans `includeSubDomains` ni `preload`) ; un routeur qui nomme un middleware absent est désactivé par Traefik |
+| `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute : le test `no-tokens-in-access-logs.test.ts` lit les routes `[token]` de `src/app` et échoue s'il en manque une |
 | `ingressroute-http.yaml` | IngressRoute `benevoles-app-http` | oui | Route de dernière priorité sur l'entrée `web` : toute adresse `http://` de benevol.app (apex et sous-domaines) est redirigée de façon permanente vers `https://`, avec le Middleware de `ingressroute-tokens.yaml` (à appliquer avant). Sans elle, Traefik répondait « 404 page not found » |
-| `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès activés, délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
+| `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès en JSON dans `/var/log/traefik/access.log` sur le nœud (répertoire à créer avant, voir `log-rotation.md`), délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
 | `certificate-wildcard.yaml` | Certificate `benevol-app-wildcard` | non | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`, hors dépôt) |
 | `gandi-webhook.yaml` | Deployment `cert-manager-webhook-gandi`, APIService `v1alpha1.acme.bwolf.me`… (`cert-manager`) | non | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard ; lit le secret `gandi-api-key` |
 | `cronjob-reminders.yaml` | CronJob `app-reminders` | oui | Rappels, toutes les heures |
@@ -68,7 +134,32 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
 | `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; demande le secret `rclone-config` et la clé `OFFSITE_BUCKET` de `benevoles-secret` |
-| `log-rotation.md` | | | Rotation des journaux du nœud : procédure manuelle, la durée de 90 jours n'est pas encore garantie |
+| `log-rotation.md`, `node/` | | | Journaux du nœud, procédure manuelle : journaux d'accès de Traefik gardés 1 an, adresses réduites après 90 jours (`node/` : logrotate, script et tâche cron à installer sur le nœud), analyse à la demande avec GoAccess ; journaux des conteneurs, 90 jours pas encore garantis |
+
+### Restrictions des pods
+
+Les pods de l'application, du Job de migration et des CronJobs ne reçoivent pas de jeton de compte de service (`automountServiceAccountToken: false`), tournent avec le profil seccomp `RuntimeDefault`, sans élévation de privilèges (`allowPrivilegeEscalation: false`) et sans aucune capacité Linux (`capabilities.drop: [ALL]`) ; `k8s-hardening.test.ts` le vérifie.
+
+- L'application et la migration tournent sous l'utilisateur `nextjs` de l'image (uid 1001, groupe 1001), donné en chiffres : `runAsNonRoot` ne peut pas vérifier un utilisateur désigné par son nom. Leur système de fichiers reste en écriture : Next.js écrit son cache à l'exécution (`.next/cache`, et les pages qu'il régénère dans `.next/server/app`).
+- Les quatre CronJobs `curl` tournent sous `curl_user` (uid 100, groupe 101), système de fichiers en lecture seule, avec un `emptyDir` pour `/tmp`.
+- La sauvegarde et la copie hors site restent root sans capacité : la sauvegarde installe `openssl` avec `apk add`, et les fichiers de `backup-pvc` appartiennent à root.
+- PostgreSQL (`postgres.yaml`) et le serveur de médias (`media.yaml`) gardent leur démarrage root, sans jeton de compte de service, avec `RuntimeDefault`, sans élévation de privilèges, et avec les seules capacités qu'il utilise : le point d'entrée de PostgreSQL vérifie le propriétaire du répertoire de données puis passe sous l'utilisateur `postgres` (uid 70) avec `su-exec` (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETGID`, `SETUID`) ; le serveur de médias fait tourner ses processus sous `nginx` et reçoit les fichiers de `make video-publish` par `tar` en root (les mêmes, plus `FSETID`). Leurs volumes gardent leurs propriétaires : ni `runAsUser` ni `fsGroup`. PostgreSQL est remplacé (`strategy: Recreate`) et non mis à jour progressivement : deux serveurs ne tournent jamais sur le même répertoire de données, au prix de quelques secondes sans base à chaque changement de son modèle de pod.
+
+### Isolation réseau
+
+`k8s/networkpolicy.yaml` refuse par défaut toute connexion entrante vers les pods du namespace `benevoles` ; le contrôleur de NetworkPolicy intégré à k3s (kube-router) l'applique. Seuls passent :
+
+- Traefik (pod `app.kubernetes.io/name=traefik` du namespace `kube-system`) vers l'application (port 3000), le serveur de médias (8080) et le pod de validation HTTP-01 de cert-manager (8089), qui renouvelle le certificat de `benevol.app` dans ce namespace ;
+- l'application, le Job de migration et la sauvegarde (étiquettes `app: benevoles-app`, `benevoles-migrate`, `postgres-backup`) vers PostgreSQL (5432).
+
+Les sondes du kubelet partent du nœud et passent toujours ; `kubectl exec`, `logs` et `port-forward` ne passent pas par le réseau des pods. Les CronJobs appellent l'adresse publique et arrivent donc par Traefik. Un nouveau pod qui doit joindre PostgreSQL reçoit l'une de ces étiquettes, sinon sa connexion est refusée. Les sorties ne sont pas filtrées (SMTP, Sentry, ntfy, notifications push, GitHub, miroirs Alpine, Swiss Backup).
+
+`deploy.yml` applique ces règles avant la migration : le Job de migration et le nouveau pod ouvrent alors de nouvelles connexions à travers elles. Il applique d'abord `cronjob-backup.yaml` (étiquette de la sauvegarde) et attend la fin d'une sauvegarde lancée avec l'ancien modèle ; le fichier liste le refus par défaut en dernier. Après le déploiement, l'étape « Check the site through the NetworkPolicy » interroge les adresses publiques ; si elle échoue, ou si une étape échoue ou si l'exécution est annulée après le début de l'application des règles, elles sont retirées et le site reste joignable. À la main :
+
+```bash
+kubectl -n benevoles get networkpolicy
+kubectl -n benevoles delete networkpolicy -l app.kubernetes.io/part-of=benevoles-netpol   # retrait d'urgence
+```
 
 ### Adresse des visiteurs et limites de débit
 
@@ -89,35 +180,47 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
 
 ### Ordre de déploiement
 
-À chaque push sur `main`, `deploy.yml` enchaîne trois jobs et applique les migrations **avant** de mettre à jour l'application :
+À chaque push sur `main`, `deploy.yml` lance deux jobs en parallèle, puis le déploiement quand les deux ont réussi, et applique les migrations **avant** de mettre à jour l'application :
 
-1. **check** : type-check, lint, tests unitaires ;
-2. **build-push** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>` (et `:latest`), avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build ;
-3. **deploy** (environnement GitHub `production`) :
-   1. applique `k8s/namespace.yaml` et régénère le secret de tirage `ghcr-secret` ;
-   2. s'arrête, avant de toucher au reste, si le secret GitHub `TOKEN_ENCRYPTION_KEY` est vide ;
-   3. régénère `benevoles-secret` (« Sync k8s secret ») ;
-   4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
-   5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   6. applique `service.yaml`, `middleware-compress.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
-   7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé.
+1. **check** : type-check, lint, tests unitaires, sur le commit fusionné (la CI de la pull request a testé un commit de fusion temporaire, qui peut différer si `main` a avancé entre-temps) ;
+2. **build-push**, en même temps que **check** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`, en suivant les renommages et en sautant les commits dont le message porte la ligne `Doc-Lastmod: skip`, réservée à un déplacement de sources qui ne change aucune page), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>`, avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build, lus dans l'environnement GitHub `production-build`. Une image dont les contrôles échouent est publiée sous ce seul tag et n'est jamais déployée. Le job transmet la référence complète `…:sha-<commit>@sha256:<empreinte>` : le Job de migration et l'application tournent exactement sur l'image construite, même si le tag était republié ;
+3. **deploy** (environnement GitHub `production`), après **check** et **build-push** :
+   1. refuse de déployer une version plus ancienne que celle en production (« Refuse an older version ») : si le commit de l'image en production contient déjà le commit de ce run, le job échoue avant de toucher au cluster. C'est le cas de la relance d'un ancien run, ou d'un run dont l'image a fini après celle d'un commit plus récent. Redéployer le commit en production (relance pour recopier un secret) reste possible ; un retour volontaire à une version précédente suit la « Mise en place manuelle » ci-dessous ;
+   2. régénère le secret de tirage `ghcr-secret` ;
+   3. s'arrête, avant de toucher au reste, si l'un des secrets `TOKEN_ENCRYPTION_KEY`, `AUTH_SECRET`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `CRON_SECRET`, `SMTP_HOST`, `SMTP_PASSWORD`, `EMAIL_FROM` ou `OFFSITE_BUCKET` est vide (le journal ne nomme que les secrets vides) ;
+   4. régénère `benevoles-secret` (« Sync k8s secret ») ;
+   5. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
+   6. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
+   7. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
+   8. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé ;
+   9. une fois le site vérifié, déplace `:latest` sur l'image déployée, par son empreinte, sans la reconstruire.
 
-Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
+Un seul déploiement à la fois (groupe de concurrence `production-deploy`), jamais annulé une fois commencé : une migration peut être en cours. Si deux fusions se suivent de près, le déploiement de la seconde attend la fin du premier ; un déploiement en attente est remplacé par un plus récent, et son run apparaît alors annulé (« cancelled ») sans avoir rien touché : le commit plus récent contient le sien. L'ordre d'attente n'est pas forcément l'ordre des commits, d'où la vérification de l'étape 1.
+
+L'image est toujours reconstruite après la fusion : celle que la CI de la pull request aurait pu construire vient d'un autre commit (le commit de fusion temporaire), avec d'autres arguments (`GIT_SHA`, DSN Sentry, `doc-lastmod.json`), et rien ne prouverait aujourd'hui qu'elle correspond au commit de `main`. Les limites et la piste d'une promotion sans reconstruction sont dans « Construction partagée en CI » plus bas.
+
+Le workflow n'applique pas `namespace.yaml` (objet de cluster), `rbac-ci-deployer.yaml` (ses propres droits), `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
+
+### Accès du workflow aux secrets et au cluster
+
+- **Secrets dans des environnements GitHub** : le job **deploy** lit ses secrets dans l'environnement `production`, le job **build-push** les siens (`SENTRY_AUTH_TOKEN`, `NEXT_PUBLIC_SENTRY_DSN`) dans l'environnement `production-build`. Les deux n'acceptent que la branche `main` : un workflow lancé depuis une autre branche ou une pull request ne les lit pas. La CI des pull requests (`ci.yml`) n'utilise aucun secret. Deux environnements plutôt qu'un : chaque job qui nomme un environnement crée un déploiement GitHub, et `production` ne doit apparaître actif qu'après le vrai déploiement. Un secret de dépôt du même nom sert de repli tant que l'environnement n'en a pas.
+- **Compte de déploiement limité au namespace** : `KUBECONFIG_BASE64` contient le jeton du compte de service `ci-deployer` (`k8s/rbac-ci-deployer.yaml`), qui n'a de droits que dans le namespace `benevoles`, sur les seuls types d'objets que le workflow applique. Il atteint les secrets par leur nom (`benevoles-secret`, `ghcr-secret`, lecture et modification) : il ne lit ni `rclone-config` ni son propre jeton, et ne recrée pas ces deux secrets s'ils disparaissent (recréation à la main, comme sur un cluster neuf). Le niveau Pod Security `baseline` du namespace (`namespace.yaml`) refuse les pods privilégiés, `hostPath`, `hostNetwork` et `hostPID` : ce compte ne peut pas sortir du namespace vers le nœud. Un type d'objet nouveau dans un manifeste appliqué par le workflow s'ajoute au Role (`k8s-hardening.test.ts` échoue sinon), puis `kubectl apply -f k8s/rbac-ci-deployer.yaml` à la main avant la fusion. Supprimer le secret `ci-deployer-token` révoque le jeton ; `kubectl apply -f k8s/rbac-ci-deployer.yaml` en crée un nouveau, à reposer dans `KUBECONFIG_BASE64`.
+- **Règles de `main`** : pas de push direct ni de force-push, fusion par pull request (squash), contrôles de la CI verts et branche à jour exigés. Les actions des workflows sont épinglées par SHA de commit (`workflow-hardening.test.ts`, et le réglage du dépôt l'exige).
 
 Entre la migration et la fin du remplacement, l'ancienne version du code tourne sur le nouveau schéma : chaque migration doit rester compatible avec la version précédente (règles *expand/contract* dans [CONTRIBUTING.md](../CONTRIBUTING.md), vérifiées par la CI).
 
 ### Changer un secret en production
 
-Les secrets de production sont les secrets GitHub du dépôt (Settings → Secrets and variables → Actions, ou `gh secret set`). Ils arrivent dans l'application en trois temps, et chacun peut être vérifié :
+Les secrets de production sont les secrets de l'environnement GitHub `production` (Settings → Environments → `production`, ou `gh secret set NOM --env production`) ; ceux de la construction de l'image, dans `production-build`. Ils arrivent dans l'application en trois temps, et chacun peut être vérifié :
 
-1. **Secret GitHub** : `gh secret set NOM --repo <dépôt> --body "valeur"` (une valeur seule, sans guillemets dans la valeur, sans espace ni retour à la ligne autour). `gh secret list` montre la date de mise à jour, jamais la valeur.
-2. **Secret Kubernetes `benevoles-secret`** : recopié depuis GitHub à chaque déploiement (« Sync k8s secret »). Un secret GitHub nouveau ou modifié n'agit qu'au déploiement suivant. Un nouveau secret doit aussi figurer dans la commande `kubectl create secret` de `deploy.yml`, sinon il n'est jamais recopié.
-3. **Pod** : le pod lit `benevoles-secret` (`envFrom`) **à son démarrage seulement**. Un pod qui tourne garde l'ancienne valeur.
+1. **Secret GitHub** : `gh secret set NOM --env production --repo <dépôt> --body "valeur"` (une valeur seule, sans guillemets dans la valeur, sans espace ni retour à la ligne autour). `gh secret list --env production` montre la date de mise à jour, jamais la valeur.
+2. **Secret Kubernetes `benevoles-secret`** : recopié depuis GitHub à chaque déploiement (« Sync k8s secret »). Un secret GitHub nouveau ou modifié n'agit qu'au déploiement suivant. Un nouveau secret doit aussi figurer dans cette étape de `deploy.yml`, dans son bloc `env:` et dans la liste des clés, sinon il n'est jamais recopié, et dans la liste `env:` de `k8s/deployment.yaml`, sinon il n'arrive pas dans le pod (`k8s-hardening.test.ts` le rappelle).
+3. **Pod** : le pod lit ses clés de `benevoles-secret` **à son démarrage seulement**. Un pod qui tourne garde l'ancienne valeur.
 
 Conséquence : pour qu'un secret modifié prenne effet,
 
 - un push sur `main` suffit (nouvelle image `sha-…`, donc nouveau pod) ;
-- relancer un déploiement du **même** commit (`gh run rerun <id>`) recopie le secret mais ne redémarre pas le pod (même image, spécification inchangée). Il faut alors redémarrer le pod après la relance :
+- relancer le seul job de déploiement du **même** commit (`gh run rerun <id> --job <id du job deploy>`) recopie le secret mais ne redémarre pas le pod (même image, même empreinte, spécification inchangée). Il faut alors redémarrer le pod après la relance (relancer tout le run reconstruit l'image, dont l'empreinte peut changer et redémarrer le pod, ou non) :
 
 ```bash
 kubectl -n benevoles rollout restart deployment/benevoles-app
@@ -147,7 +250,7 @@ Même ordre que `deploy.yml`, sans quoi une nouvelle version pourrait démarrer 
 ```bash
 IMAGE=ghcr.io/pvollenweider/benevoles:sha-<7 premiers caractères du commit>
 
-# 0. Prérequis hors dépôt : k3s avec Traefik 3.1 ou plus récent, cert-manager, ClusterIssuer
+# 0. Prérequis hors dépôt : k3s avec Traefik 3.2 ou plus récent, cert-manager, ClusterIssuer
 #    letsencrypt-prod qui utilise le webhook Gandi (k8s/gandi-webhook.yaml, secret gandi-api-key
 #    dans cert-manager). Une fois par cluster, voir « Mise à jour depuis 1.x », étape 5 :
 kubectl apply -f k8s/traefik-config.yaml
@@ -155,6 +258,7 @@ kubectl apply -f k8s/traefik-config.yaml
 # 1. Namespace et secrets (secret.yaml est un modèle incomplet : remplacer les valeurs et ajouter
 #    les clés qui manquent, voir configuration.md « Secrets Kubernetes »)
 kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/rbac-ci-deployer.yaml   # compte de déploiement du workflow
 kubectl apply -f k8s/secret.yaml
 kubectl -n benevoles create secret docker-registry ghcr-secret \
   --docker-server=ghcr.io --docker-username=<utilisateur> --docker-password=<jeton read:packages>
@@ -172,7 +276,7 @@ kubectl -n benevoles wait --for=condition=complete job/benevoles-migrate --timeo
 kubectl -n benevoles logs job/benevoles-migrate
 
 # 4. Exposition et tâches planifiées
-kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
+kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/middleware-hsts.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
 kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 
 # 5. Seulement ensuite, l'application
@@ -209,6 +313,18 @@ Quand le script se termine, échoue ou atteint sa limite, l'entrée écrit le fi
 
 Avec Docker Compose, le préchauffage tourne de la même façon (sur l'hôte de `NEXT_PUBLIC_APP_URL`, `localhost` par défaut) ; rien n'attend `/api/health/ready`, le serveur répond dès son démarrage. Le préchauffage ne se lance que pour la commande `node server.js` : le Job de migration, qui utilise la même image, n'est pas concerné.
 - Les cron jobs de rappels, d'envoi des emails et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
+
+## Mise à jour depuis 2.5.x
+
+Les migrations de la 2.6 ajoutent des tables et des colonnes sans rien retirer ; elles passent par le Job habituel sur Kubernetes et au démarrage de l'application avec Docker Compose. Aucune nouvelle variable.
+
+- **Docker Compose : action requise avant la mise à jour.** `POSTGRES_PASSWORD` et `AUTH_SECRET` n'ont plus de valeur par défaut (Compose refuse de démarrer sans eux) et PostgreSQL n'est plus publié sur l'hôte. Sur un volume existant, suivre [Mettre à jour une installation Compose existante](#mettre-à-jour-une-installation-compose-existante) : le mot de passe enregistré par PostgreSQL ne change pas avec la variable.
+- **`AUTH_SECRET` et `CRON_SECRET`** : en production, le serveur refuse de démarrer avec une valeur d'exemple publiée dans le dépôt (dont l'ancienne valeur par défaut de `docker-compose.yml` et l'ancienne valeur de `.env.example`) ou trop simple (`src/lib/production-guards.ts`). Générer une valeur aléatoire propre à l'instance (`openssl rand -base64 48`) ; avant de changer un `AUTH_SECRET` déjà utilisé, voir [configuration.md](configuration.md) (registre des effacements).
+- **Double authentification du super admin** : `TOKEN_ENCRYPTION_KEY` doit être définie (déjà obligatoire en production) ; elle chiffre aussi le secret du second facteur, et sans elle le super admin ne peut pas se connecter. Chaque super admin active le second facteur à sa prochaine connexion (application d'authentification, puis codes de secours à garder). Téléphone et codes perdus : réinitialisation d'urgence dans [double-authentification.md](double-authentification.md).
+- **Reconnexion** : les sessions d'administration sont désormais fermées côté serveur ; chaque organisateur se reconnecte une fois après la mise à jour.
+- **Seed en production** : lancé avec `NODE_ENV=production`, le seed refuse de s'exécuter si `ADMIN_PASSWORD` ou `ORG_ADMIN_PASSWORD` manque ou ne respecte pas les règles des mots de passe ; relancé sur des comptes existants, il ferme leurs sessions.
+- **Kubernetes** : `k8s/deployment.yaml` donne à l'application une à une les clés de `benevoles-secret` qu'elle lit (`DATABASE_URL`, `AUTH_SECRET` et `TOKEN_ENCRYPTION_KEY` obligatoires, voir [configuration.md](configuration.md#secrets-kubernetes)), et `k8s/networkpolicy.yaml` refuse par défaut les connexions entrantes du namespace (voir [Isolation réseau](#isolation-réseau) : sur un autre cluster, vérifier l'étiquette du pod Traefik avant de l'appliquer).
+- **Fonctions bêta** : fermées par défaut. L'opérateur les ouvre dans l'espace super admin (« Fonctions bêta »), puis un propriétaire y fait participer son organisation dans **Paramètres**.
 
 ## Mise à jour depuis 2.2.x
 
@@ -267,15 +383,15 @@ La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et 
 
 ### 4. Installer la clé
 
-- **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle d'une clé qu'il gère serait écrasée (liste des clés : [configuration.md](configuration.md#secrets-kubernetes)).
+- **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY --env production`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle d'une clé qu'il gère serait écrasée (liste des clés : [configuration.md](configuration.md#secrets-kubernetes)).
 - **Kubernetes à la main** : ajouter `TOKEN_ENCRYPTION_KEY` dans `benevoles-secret` (modèle : `k8s/secret.yaml`). Vérifier aussi que ce secret contient `CRON_SECRET` et `NEXT_PUBLIC_APP_URL` : les CronJobs de sauvegarde les lisent, et sans eux leur pod ne démarre pas.
-- **Docker Compose** : `TOKEN_ENCRYPTION_KEY` dans le fichier `.env` à côté de `docker-compose.yml`, et `CRON_SECRET` dans la section `environment` : sans lui, la tâche de nettoyage est refusée et les anciens liens ne sont jamais chiffrés.
+- **Docker Compose** : `TOKEN_ENCRYPTION_KEY` et `CRON_SECRET` dans le fichier `.env` à côté de `docker-compose.yml` : sans lui, la tâche de nettoyage est refusée et les anciens liens ne sont jamais chiffrés.
 
 ### 5. Kubernetes
 
 Avec `deploy.yml`, un push sur `main` applique tout dans le bon ordre. À la main, suivre [Mise en place manuelle](#mise-en-place-manuelle) : migrations d'abord, et ne pas continuer si le Job échoue (`backoffLimit: 0`).
 
-`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. À appliquer une fois :
+`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès dans un fichier du nœud, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. Créer d'abord sur le nœud le répertoire `/var/log/traefik` (root, groupe 65532), le fichier `access.log` (65532, 0640) et `/var/log/traefik-archive` (root), puis installer la rotation et le script ([`k8s/log-rotation.md`](../k8s/log-rotation.md), « Mise en place ») : sans ce répertoire, le nouveau pod Traefik ne démarre pas. À appliquer ensuite :
 
 ```bash
 kubectl apply -f k8s/traefik-config.yaml
@@ -371,11 +487,11 @@ aucune donnée personnelle et n'est pas sauvegardé : les vidéos se régénère
 
 ## Webhook DNS Gandi
 
-`gandi-webhook/` est un programme Go (`main.go`, `gandiclient.go`) construit par son propre `Dockerfile`. Il implémente le webhook cert-manager qui crée les enregistrements DNS-01 chez Gandi, nécessaire au certificat wildcard.
+`k8s/gandi-webhook/` est un programme Go (`main.go`, `gandiclient.go`) construit par son propre `Dockerfile`. Il implémente le webhook cert-manager qui crée les enregistrements DNS-01 chez Gandi, nécessaire au certificat wildcard.
 
-Le workflow `gandi-webhook.yml` construit l'image à chaque pull request touchant `gandi-webhook/` (sans la publier) et la publie sur GHCR (`:latest` et `:<sha du commit>`) à chaque push sur `main`. Le déploiement Kubernetes de ce webhook n'est pas appliqué par `deploy.yml` : il se met à jour à la main.
+Le workflow `gandi-webhook.yml` construit l'image à chaque pull request touchant `k8s/gandi-webhook/` (sans la publier) et la publie sur GHCR (`:latest` et `:<sha du commit>`) à chaque push sur `main`. Le déploiement Kubernetes de ce webhook n'est pas appliqué par `deploy.yml` : il se met à jour à la main.
 
-Le manifeste `k8s/gandi-webhook.yaml` référence le tag du commit et non `:latest`, avec `imagePullPolicy: IfNotPresent` : avec `:latest`, un redémarrage réutiliserait l'image en cache sur le nœud et ne chargerait jamais la nouvelle. Pour mettre à jour après un changement de `gandi-webhook/` :
+Le manifeste `k8s/gandi-webhook.yaml` référence le tag du commit et non `:latest`, avec `imagePullPolicy: IfNotPresent` : avec `:latest`, un redémarrage réutiliserait l'image en cache sur le nœud et ne chargerait jamais la nouvelle. Pour mettre à jour après un changement de `k8s/gandi-webhook/` :
 
 ```bash
 # 1. Attendre la fin du workflow « Build Gandi Webhook » sur main, puis :
@@ -396,7 +512,7 @@ L'opérateur de l'instance est prévenu par une notification ntfy sur son télé
 | Alerte | Quand | Priorité ntfy |
 |---|---|---|
 | « Nouvelle demande d'espace » | une association confirme son inscription en libre-service ; le message reprend le nom de l'espace et le début de sa description, sans lien | 4 |
-| « plafond d'envoi atteint » | un plafond d'envoi d'emails est atteint (au plus une fois par heure, par plafond et par organisation) | 4 |
+| « plafond d'envoi atteint » | un plafond d'envoi d'emails est atteint (au plus une fois par heure, par plafond et par organisation) ; le détail des 7 derniers jours (emails retenus, refusés, encore en attente) est en haut de la liste des organisations du super admin | 4 |
 | « espaces en attente » | récapitulatif quotidien, tant que des espaces attendent une validation (cron de nettoyage) | 3 |
 
 **Deux canaux, de rôles différents.** La notification ntfy prévient vite ; l'email est la garantie (iOS peut retenir une notification plusieurs minutes, et ntfy.sh peut ne pas répondre). Les deux partent en même temps : l'email n'attend jamais la notification. La notification est tentée trois fois (tout de suite, après 2 s, puis après 10 s) en cas de coupure réseau, de réponse 429 ou d'erreur 5xx de ntfy, une seule fois si ntfy refuse la demande ; un échec final est signalé une fois à Sentry (`operator_alert.ntfy`).
@@ -410,8 +526,8 @@ L'opérateur de l'instance est prévenu par une notification ntfy sur son télé
 3. Secrets GitHub (voir « Changer un secret en production ») :
 
 ```bash
-gh secret set NTFY_URL --repo <dépôt> --body "https://ntfy.sh/<sujet>"
-gh secret set OPERATOR_ALERT_EMAIL --repo <dépôt> --body "operateur@exemple.org"
+gh secret set NTFY_URL --env production --repo <dépôt> --body "https://ntfy.sh/<sujet>"
+gh secret set OPERATOR_ALERT_EMAIL --env production --repo <dépôt> --body "operateur@exemple.org"
 ```
 
 4. Déployer (push sur `main`), ou relancer le dernier déploiement puis redémarrer le pod.
@@ -427,13 +543,66 @@ kubectl -n benevoles exec deploy/benevoles-app -- node -e 'fetch(process.env.NTF
 - Le parcours complet : une demande sur `/inscription` avec une adresse jamais utilisée, puis « Confirmer » dans l'email reçu. La notification et l'email « Nouvelle demande d'espace » doivent arriver. Une demande confirmée avant la mise en place n'envoie rien de plus.
 - En cas d'absence : `kubectl -n benevoles logs deploy/benevoles-app | grep operator_alert` montre les échecs (par exemple `ConnectTimeoutError` si ntfy.sh n'a pas répondu, ou un statut HTTP de refus).
 
+## Compter les emails envoyés
+
+Le nettoyage nocturne agrège les emails de la file d'envoi avant de les supprimer (#1269) : par
+organisation (ou « plateforme » pour ceux qui n'en ont pas), jour UTC de mise en file, type d'email
+et résultat — envoyé, en échec, ou annulé avec la classe de sa raison (`limit:recipient_per_hour`,
+`org_inactive`…) —, avec un nombre. Ni destinataire, ni adresse, ni contenu, ni identifiant de
+bénévole. Les compteurs sont gardés 13 mois (voir `docs/retention.md`).
+
+Lecture en SQL, sans passer par l'application (base en lecture seule) :
+
+```sql
+SELECT
+  COALESCE(o.name, 'plateforme') AS organisation,
+  c."day"::date                  AS jour,
+  c."kind"                       AS type,
+  c."outcome"                    AS resultat,
+  NULLIF(c."reason", '')         AS raison,
+  c."count"                      AS nombre
+FROM "NotificationDeliveryCount" c
+LEFT JOIN "Organization" o ON o.id = c."organizationId"
+WHERE c."day" >= date_trunc('month', now()) - interval '2 months'
+ORDER BY jour DESC, organisation, type, resultat;
+```
+
+Pour une organisation et une période précises, remplacer le `WHERE` :
+
+```sql
+WHERE o."slug" = 'mon-asso'
+  AND c."day" >= DATE '2026-11-01'
+  AND c."day" <  DATE '2026-12-01'
+```
+
 ## CI/CD
 
 | Workflow | Déclencheur | Étapes |
 |----------|-------------|--------|
-| `ci.yml` | pull request vers `main` | type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente) ; job E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`), tests Playwright |
-| `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
-| `gandi-webhook.yml` | pull request ou push sur `main` touchant `gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
+| `ci.yml` | pull request vers `main` | aucune source publique en brouillon (`check-no-draft-content.mjs`) ; type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente), `check-doc-screenshots.mjs` (captures de la documentation à jour) ; un `next build` partagé (job Build), puis le job Lighthouse et deux jobs E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`, premier job), tests Playwright répartis entre les deux |
+| `deploy.yml` | push sur `main` | type-check, lint, tests, en parallèle de la construction et de la publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
+| `gandi-webhook.yml` | pull request ou push sur `main` touchant `k8s/gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
+| `mirror-ci-images.yml` | manuel, chaque lundi à 04:17 UTC, ou pull request et push sur `main` touchant ce fichier | copie vers GHCR des images Postgres et Mailpit utilisées par la CI |
+
+Un nouveau push sur une pull request annule le run `ci.yml` du push précédent, dont le résultat ne dit plus rien de la branche.
+
+### Construction partagée en CI
+
+Le job **Build (Next.js)** de `ci.yml` fait le seul `next build` du run, sur le commit de fusion de la pull request, avec les réglages de build qu'avaient les jobs E2E et Lighthouse (sans base de données : le build n'en lit aucune). Il publie `.next` en artefact `next-build` (une archive `tar` compressée, environ 30 Mo, gardée 3 jours), sans le cache de Turbopack, la copie `standalone` (propre à Docker) ni les traces, avec un manifeste `.next/ci-build.json` écrit par `scripts/ci-build-artifact.mjs`.
+
+Les deux jobs **E2E (Playwright, 1/2 et 2/2)** et le job **Lighthouse** installent les dépendances du même `package-lock.json`, téléchargent l'artefact et le vérifient avant de lancer `next start` dessus (`E2E_SERVER=prebuilt` pour Playwright) : même run, même commit et même arbre Git (`HEAD^{tree}`), même `package-lock.json`, même plateforme, même version majeure de Node, mêmes valeurs `NEXT_PUBLIC_*` (inscrites dans le build), et un `.next/BUILD_ID` conforme. À la moindre différence, le job échoue ; il ne reconstruit jamais l'application lui-même, et sans build `next start` s'arrête. Le build tourne sur le même runner Ubuntu que ses consommateurs : rien n'est copié vers l'image Alpine de production, construite à part par `deploy.yml`.
+
+Chaque job E2E a sa propre base PostgreSQL, sa propre boîte Mailpit et son propre seed. Playwright répartit les fichiers de tests entre eux (`--shard=1/2`, `--shard=2/2`), toujours un fichier à la fois dans chaque job ; les tests d'intégration ne tournent que dans le premier. Les deux projets (Chromium et WebKit iPhone) sont conservés.
+
+Relances :
+
+- « Re-run failed jobs » sur un job E2E ou Lighthouse réutilise l'artefact du run tant qu'il existe (3 jours) ;
+- au-delà, ou si l'artefact manque, le téléchargement échoue : relancer tout le run (« Re-run all jobs »), qui reconstruit et remplace l'artefact ;
+- un artefact d'un autre run n'est jamais accepté (le manifeste porte l'identifiant du run).
+
+Caches : `actions/setup-node` garde le cache npm (les téléchargements, pas `npm ci`, qui tourne dans chaque job). Le cache de build de Turbopack (`.next/cache`, environ 350 Mo) n'est sauvegardé ni en CI ni dans Docker : le cache GitHub Actions du dépôt dépasse déjà sa limite de 10 Go, et un cache par push de pull request évincerait celui de BuildKit dont dépend la vitesse du déploiement. Le `Dockerfile` le supprime dans la couche du build, que l'export `mode=max` de BuildKit téléversait à chaque déploiement.
+
+Pas de promotion de l'image de la pull request en production : la CI ne construit pas d'image, et une image de PR serait faite d'un autre commit (le commit de fusion temporaire), d'un autre `GIT_SHA`, de dates de documentation qui peuvent changer après un squash, et sans les secrets Sentry. Une promotion sans reconstruction demanderait une empreinte vérifiable du contenu compilé (arbre Git, `doc-lastmod.json`, arguments de build, image de base, dépendances), recalculée après la fusion à partir de sources de confiance, et la séparation de `GIT_SHA` du contenu compilé : piste non retenue pour l'instant.
 
 L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.github/workflows/` : elle est configurée côté GitHub (paramètres de sécurité du dépôt).
 
@@ -527,18 +696,28 @@ kubectl create secret generic rclone-config -n benevoles \
 
 **`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
 
-**Restauration / test.** `scripts/restore-test-offsite.sh` liste le remote, télécharge le dernier fichier, le déchiffre avec `BACKUP_PASSPHRASE` et vérifie qu'il redonne un `pg_dump` gzippé valide — sans jamais rien modifier côté distant (uniquement `lsf`/`lsl`/`copy` en lecture) ni restaurer dans une base :
+**Restauration / test.** `scripts/restore-test-offsite.sh` prend le dump chiffré le plus récent, le déchiffre avec `BACKUP_PASSPHRASE`, vérifie le gzip et l'en-tête `pg_dump`, puis, par défaut, le recharge dans un conteneur PostgreSQL 16 jetable (sans port publié, supprimé à la fin) et compare les comptages : organisations, événements, bénévoles, inscriptions et migrations terminées. La sauvegarde est donc réellement restaurable, pas seulement bien formée. Le script ne modifie jamais la copie hors site : montage local en lecture seule, ou `rclone lsl`/`lsf`/`copy` depuis le remote uniquement.
 
-```bash
-OFFSITE_BUCKET=<container> \
-RCLONE_CONFIG=$HOME/.config/rclone/rclone.conf \
-BACKUP_PASSPHRASE=<valeur du cluster> \
-./scripts/restore-test-offsite.sh
-```
+Source du dump, au choix :
 
-Le script affiche à la fin la commande `curl` à lancer pour enregistrer le test sur la page de santé (voir « Checklist opérationnelle » ci-dessous) ; il ne l'envoie pas lui-même, pour qu'un essai local contre un `rclone.conf` personnel ne signale jamais un faux succès en production.
+- **Montage local Swiss Backup** (application de bureau) : si `SWISSBACKUP_DIR` est défini, ou si `$HOME/SwissBackup/benevol-backups/benevol-backups` existe, le script y prend le plus récent `benevoles_*.sql.gz.enc`, en lecture seule.
+- **Remote rclone** : sinon, avec `OFFSITE_BUCKET` (container Swiss Backup) et éventuellement `RCLONE_CONFIG` :
 
-`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`wget`) du script du CronJob et du script de restauration ; voir son en-tête. `make test-offsite-backup` le lance, et `make restore-test-offsite OFFSITE_BUCKET=… BACKUP_PASSPHRASE=…` lance le test de restauration réel.
+  ```bash
+  # montage local, dossier par défaut ou SWISSBACKUP_DIR=…
+  ./scripts/restore-test-offsite.sh
+
+  # remote rclone
+  OFFSITE_BUCKET=<container> \
+  RCLONE_CONFIG=$HOME/.config/rclone/rclone.conf \
+  ./scripts/restore-test-offsite.sh
+  ```
+
+La phrase secrète est lue dans `BACKUP_PASSPHRASE` si elle est définie, sinon demandée en saisie masquée sur le terminal ; elle n'apparaît jamais dans la liste des processus. `make restore-test-offsite` lance la même chose sans afficher de secret. Sans Docker, `RESTORE_MODE=header` se limite à l'ancienne vérification d'en-tête ; le script indique toujours le mode utilisé. L'image PostgreSQL se change avec `RESTORE_PG_IMAGE` (défaut `postgres:16`, la version de production).
+
+Le script affiche à la fin la commande `kubectl exec` à lancer pour enregistrer le test sur la page de santé (voir « Checklist opérationnelle » ci-dessous) ; il ne l'envoie pas lui-même et ne lit pas `CRON_SECRET` sur le poste, pour qu'un essai local ne signale jamais un faux succès en production. La phrase secrète doit rester dans un gestionnaire de mots de passe hors du serveur : sans elle, les copies hors site restent indéchiffrables si le cluster est perdu (voir « `BACKUP_PASSPHRASE` est un point unique de défaillance » ci-dessus).
+
+`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`docker`/`wget`) du script du CronJob et du script de restauration ; voir son en-tête. `make test-offsite-backup` le lance.
 
 **Retrait de Dropbox (#697), côté opérateur**, une fois ce changement déployé :
 
@@ -546,15 +725,15 @@ Le script affiche à la fin la commande `curl` à lancer pour enregistrer le tes
 2. Retirer la section `[dropbox]` de `rclone.conf` et recréer le secret `rclone-config` (commande ci-dessus).
 3. Si ce n'est pas déjà fait, supprimer l'ancien CronJob : `kubectl delete cronjob backup-offsite-dropbox -n benevoles`.
 
-Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour lister, `rclone copy <remote>:<chemin>/<fichier> .` pour télécharger, puis déchiffrer comme ci-dessus (ou utiliser `scripts/restore-test-offsite.sh` qui fait tout cela et vérifie le résultat).
+Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour lister, `rclone copy <remote>:<chemin>/<fichier> .` pour télécharger, puis déchiffrer comme ci-dessus (ou utiliser `scripts/restore-test-offsite.sh`, qui fait tout cela et recharge le dump dans une base jetable).
 
 ### Limites actuelles
 
 Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie hors site ci-dessus.
 
-**Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de chaque tâche : rappels (signalés au-delà de 2 h sans passage), nettoyage, sauvegarde chiffrée et copie hors site (au-delà de 26 h), test de restauration (avertissement après 45 jours, erreur après 90). Une sauvegarde qui échoue sans bruit y apparaît donc le lendemain, sans consulter `kubectl`.
+**Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de chaque tâche : rappels (signalés au-delà de 2 h sans passage), envoi des emails en attente (au-delà d'1 h), nettoyage, sauvegarde chiffrée et copie hors site (au-delà de 26 h), test de restauration (avertissement après 45 jours, erreur après 90). Une sauvegarde qui échoue sans bruit y apparaît donc le lendemain, sans consulter `kubectl`.
 
-**Encore manuel.** Aucune alerte n'est envoyée d'elle-même (ni email ni notification) : il faut ouvrir la page de santé. Le test de restauration complète se fait à la main (voir la checklist ci-dessous) ; il envoie son propre signal de vie, que la page de santé réclame après 45 jours et passe en erreur après 90.
+**Alerte automatique.** Le nettoyage nocturne (02:00 UTC, après les deux sauvegardes de 01:00 et 01:30) lit les signaux de vie et envoie à l'opérateur un push ntfy et un email quand la sauvegarde ou la copie hors site est en échec ou en retard (plus de 26 h), ou quand le test de restauration a échoué ou date de plus de 90 jours. Une même alerte ne part qu'une fois par jour et par tâche (`backup-alert:<tâche>:<date UTC>`) : le push et l'email sont dédupliqués par une trace conservée sept jours ; le lien mène à `/super-admin/health`. Le simple avertissement à 45 jours du test de restauration n'alerte pas. Une tâche qui n'a jamais tourné n'alerte pas : une instance Docker Compose, sans CronJob de sauvegarde, reste silencieuse. Le test de restauration complet reste manuel (voir la checklist ci-dessous) ; il envoie son propre signal de vie, que la page de santé réclame après 45 jours et passe en erreur après 90.
 
 ## Checklist opérationnelle
 
@@ -573,13 +752,16 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 
 - [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump et copie hors site) ;
 - [ ] le dernier fichier sur `backup-pvc` et sur Swiss Backup a une taille plausible (pas 0 octet) ;
-- [ ] **test de restauration** : télécharger un dump, le déchiffrer et le charger dans une base PostgreSQL jetable (`psql -f dump.sql`), puis vérifier quelques comptages (organisations, événements, inscriptions) ;
-  puis le signaler à la page de santé (avertissement après 45 jours sans test, erreur après 90) :
+- [ ] **test de restauration** : `make restore-test-offsite` (ou `sh scripts/restore-test-offsite.sh`) prend le dernier dump — montage local Swiss Backup ou `OFFSITE_BUCKET=…` —, le déchiffre et le recharge dans un PostgreSQL 16 jetable, puis compare les comptages (organisations, événements, bénévoles, inscriptions, migrations terminées). Sans Docker, `RESTORE_MODE=header` vérifie seulement l'en-tête. La phrase secrète reste dans le gestionnaire de mots de passe hors du serveur : sans elle, les copies hors site sont indéchiffrables si le cluster est perdu.
+  Puis le signaler à la page de santé (avertissement après 45 jours sans test, erreur après 90), depuis le cluster et sans manipuler `CRON_SECRET` sur le poste : reprendre la commande `kubectl exec` affichée par le script, qui remplit le nom du dump et le mode utilisés :
 
   ```bash
-  curl -s -X POST -H "Authorization: Bearer $CRON_SECRET" -H "Content-Type: application/json" \
-    -d '{"job":"restore-test","ok":true,"summary":{"dump":"benevoles_2026-09-30_01-00"}}' \
-    https://www.benevol.app/api/cron/heartbeat
+  kubectl -n benevoles exec deploy/benevoles-app -- node -e '
+  fetch("http://localhost:3000/api/cron/heartbeat", {
+    method: "POST",
+    headers: { authorization: `Bearer ${process.env.CRON_SECRET}`, "content-type": "application/json" },
+    body: JSON.stringify({ job: "restore-test", ok: true, summary: { dump: "benevoles_2026-09-30_01-00.sql.gz.enc", mode: "full" } }),
+  }).then(async r => console.log(r.status, await r.text()))'
   ```
 
   Les CronJobs de sauvegarde et de copie hors site envoient le même battement de cœur (`backup`, `backup-offsite`) à la fin de chaque exécution réussie ; les rappels et le nettoyage s'enregistrent eux-mêmes.
@@ -588,8 +770,8 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 
 ## Supprimer une organisation
 
-Il n'y a pas de suppression immédiate : le super admin **désactive** l'organisation (`/super-admin/organizations`), ce qui coupe l'accès admin et public tout de suite, et `/api/cron/cleanup` l'efface définitivement (événements, créneaux, inscriptions, membres, invitations en cascade ; comptes admin de l'organisation effacés avec elle) **30 jours après la désactivation**. Avant de désactiver, rappeler à l'organisation d'exporter ce qu'elle veut garder (`guide/exporter-et-conserver-ses-donnees.md`, « Exporter et conserver ses données »). Une réactivation dans les 30 jours annule la suppression. Les sauvegardes chiffrées contenant ces données expirent selon leur propre rétention (30 jours sur le serveur, 90 jours hors site).
+Il n'y a pas de suppression immédiate : le super admin **désactive** l'organisation (`/super-admin/organizations`), ce qui coupe l'accès admin et public tout de suite (liens personnels des bénévoles, liens des responsables de secteur, offres de liste d'attente, invitations et abonnements au calendrier compris, sur le sous-domaine comme sur le domaine principal : `src/lib/org-lifecycle.ts`), et `/api/cron/cleanup` l'efface définitivement (événements, créneaux, inscriptions, membres, invitations en cascade ; comptes admin de l'organisation effacés avec elle) **30 jours après la désactivation**. Avant de désactiver, rappeler à l'organisation d'exporter ce qu'elle veut garder (`content/guide/exporter-et-conserver-ses-donnees.md`, « Exporter et conserver ses données »). Une réactivation dans les 30 jours annule la suppression. Les sauvegardes chiffrées contenant ces données expirent selon leur propre rétention (30 jours sur le serveur, 90 jours hors site).
 
 ## Journaux
 
-[`k8s/log-rotation.md`](../k8s/log-rotation.md) décrit comment limiter la rétention des journaux à 90 jours sur le nœud k3s (kubelet, logrotate ; Loki s'il est installé).
+[`k8s/log-rotation.md`](../k8s/log-rotation.md) décrit les journaux du nœud k3s : les journaux d'accès de Traefik, écrits dans `/var/log/traefik/access.log`, tournés chaque jour vers `/var/log/traefik-archive/` et gardés 1 an, avec l'adresse IP réduite à son réseau et le User-Agent retiré après 90 jours, et analysés à la demande (GoAccess) (fichiers de `k8s/node/` à installer sur le nœud) ; et la limite de 90 jours des journaux des conteneurs (kubelet, logrotate ; Loki s'il est installé). Le même fichier reçoit les requêtes des autres sites servis par ce Traefik.

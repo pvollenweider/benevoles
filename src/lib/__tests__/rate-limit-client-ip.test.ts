@@ -11,6 +11,11 @@ describe("getClientIp (#289)", () => {
     expect(getClientIp(req({ "x-forwarded-for": "1.2.3.4, 203.0.113.7" }))).toBe("203.0.113.7")
   })
 
+  it("uses the rightmost entry with TRUSTED_PROXY_HOPS=1", () => {
+    vi.stubEnv("TRUSTED_PROXY_HOPS", "1")
+    expect(getClientIp(req({ "x-forwarded-for": "1.2.3.4, 198.51.100.9, 203.0.113.7" }))).toBe("203.0.113.7")
+  })
+
   it("a spoofed header can't pick a different bucket per request", () => {
     const a = getClientIp(req({ "x-forwarded-for": "10.0.0.1, 203.0.113.7" }))
     const b = getClientIp(req({ "x-forwarded-for": "10.0.0.2, 203.0.113.7" }))

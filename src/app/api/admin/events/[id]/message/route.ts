@@ -6,10 +6,10 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
 import { rateLimit } from "@/lib/rate-limit"
 import { render } from "@/lib/notifications/templates"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { messagePushPayload, messageSchema, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
-import { buildTargetedMessage } from "@/lib/targeted-message-build"
+import { buildTargetedMessage, sectorAudienceAvailable, SECTOR_AUDIENCE_NOT_FOUND } from "@/lib/targeted-message-build"
 import { renderVariables, templateProblems } from "@/lib/message-template"
 import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
@@ -44,8 +44,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const shift = await db.shift.findFirst({ where: { id: audience.shiftId, eventId: id }, select: { id: true } })
     if (!shift) return NextResponse.json({ error: "Créneau introuvable dans cet événement." }, { status: 400 })
   }
+  if (audience.kind === "sector" && !(await sectorAudienceAvailable(db, id, audience.sectorId))) {
+    return NextResponse.json({ error: SECTOR_AUDIENCE_NOT_FOUND }, { status: 400 })
+  }
 
-  const { recipients, label, declinedExcluded, vars, payloadFor: buildPayload } = await buildTargetedMessage(db, event, audience, subject, message)
+  const { recipients, label, declinedExcluded, sectorGone, vars, payloadFor: buildPayload } = await buildTargetedMessage(db, event, audience, subject, message)
+  // Archived between the check above and this read: the same refusal, never another audience.
+  if (sectorGone) return NextResponse.json({ error: SECTOR_AUDIENCE_NOT_FOUND }, { status: 400 })
   type Target = (typeof recipients)[number]
 
   // Template variables (#482): refused before anything is sent when unknown or out of place, then
@@ -94,7 +99,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         organizationId,
         eventId: id,
         authorId: guard.session.user?.id ?? null,
-        authorName: guard.session.user?.name || guard.session.user?.email || "Administrateur",
+        authorName: guard.session.user?.name || guard.session.user?.email || "Organisateur",
         subject,
         message,
         audienceLabel: label,
@@ -105,7 +110,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       select: { id: true },
     })
     historyId = history.id
-    return enqueueNotifications(recipients.map((r) => payloadFor(r, batchId)), tx, { organizationId, targetedMessageId: history.id })
+    // Its « envoi groupé » (#1101) too: the history row keeps the text, the batch the delivery.
+    return enqueueBatch(recipients.map((r) => payloadFor(r, batchId)), tx, { organizationId, targetedMessageId: history.id, batch: { kind: "targeted_message", eventId: id, actorId: guard.session.user?.id ?? null } })
   })
   deliverAfterResponse(outboxIds)
 

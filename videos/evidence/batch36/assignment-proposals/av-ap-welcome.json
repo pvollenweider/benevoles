@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:15:47.580Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "9e7642f497f9756f62bf9b69e6d0223c0516e6d517385e68bb8352a4eb646fe9",
+  "clipSha256": "2658834bac9a8274d4ec22553af6a192a788eb4218b7f6cbc2bd43a3b01383ba",
+  "scene": "ap-welcome",
+  "review": {
+    "heardOpening": "La proposition d'affectations, en bêta",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La proposition d'affectations, en bêta, prépare un planning en brouillon",
+        "visibleSeconds": 0,
+        "visible": "Encadré central intitulé « Générer une proposition d'affectations - Un planning proposé en brouillon, que vous relisez avant de publier »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "selon les disponibilités, les règles de l'événement",
+        "visibleSeconds": 3,
+        "visible": "L'encart disparaît pour révéler l'onglet « Disponibilités » de l'événement « Rencontres du Val d'Orsel »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Rien n'est publié, et aucun bénévole n'est prévenu, sans votre décision.",
+        "visibleSeconds": 8,
+        "visible": "Affichage stable de la liste des disponibilités et des actions associées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

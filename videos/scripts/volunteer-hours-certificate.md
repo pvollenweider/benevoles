@@ -7,7 +7,7 @@ Voix Kore, vouvoiement, ton souriant, patient et bienveillant. Aucune balise de
 pause à prononcer, aucune promesse de mesure chronométrée.
 
 Les huit chapitres expliquent l'utilité, montrent les gestes réels et vérifient
-leur résultat : liste des membres, dernière participation et tris, chronologie, deux exports de période, réglages
+leur résultat : liste des membres, dernière participation et tris, chronologie, deux exports de période, paramètres
 de l'attestation, distinction présence/prévision, PDF imprimé réellement et
 résumé d'événement. Le module est dans `videos/lib/record-volunteer-hours.ts`.
 

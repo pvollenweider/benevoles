@@ -1,0 +1,18 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T07:25:39.000Z",
+  "audioSha256": "5713eacb20e9fae12dc5b3fbdc05d008efd81d14406f502329bae46f548bca48",
+  "prompt": "Écoute uniquement cet enregistrement vocal, sans musique ni images. Combien de personnes parlent réellement ? L'identité vocale reste-t-elle constante du début à la fin ? Distingue un changement de locutrice d'une simple variation d'intonation, de sourire ou de rythme. Rends seulement JSON {speakers:number,consistentVoice:boolean,changes:[{seconds:number,observation:string}],evidence:string}. Aucun texte attendu n'est fourni.",
+  "result": {
+    "speakers": 1,
+    "consistentVoice": true,
+    "changes": [
+      {
+        "seconds": 22,
+        "observation": "Passage à une intonation plus souriante, chaleureuse et dynamique pour la conclusion, sans changement d'identité vocale."
+      }
+    ],
+    "evidence": "Une seule locutrice intervient sur l'ensemble de l'extrait. Le grain de voix, la texture vocale et les caractéristiques d'articulation restent identiques ; la variation perceptible à 22 secondes relève simplement d'un sourire dans la voix et d'un ton plus enjoué marquant la conclusion."
+  },
+  "note": "Narration-only countercheck to distinguish actual voice drift from prescribed music vocal samples"
+}

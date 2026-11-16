@@ -20,7 +20,7 @@ export const USAGE_METRICS = [
   { key: "shifts", label: "Créneaux créés", platformOnly: false },
   { key: "registrations", label: "Inscriptions enregistrées", platformOnly: false },
   { key: "members", label: "Membres ajoutés", platformOnly: false },
-  { key: "admins", label: "Comptes administrateurs créés", platformOnly: false },
+  { key: "admins", label: "Comptes organisateurs créés", platformOnly: false },
   { key: "sector_leaders", label: "Responsables de secteur désignés", platformOnly: false },
   { key: "member_invites", label: "Invitations envoyées", platformOnly: false },
 ] as const

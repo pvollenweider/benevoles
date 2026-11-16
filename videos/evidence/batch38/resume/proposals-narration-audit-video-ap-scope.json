@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:18.193Z",
+  "revalidatedAt": "2026-11-01T08:03:18.194Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-scope",
+      "audioSha256": "db1a2d99f9b11775b933258bbca05f8641ee6ca41bbe379023c0b6da4ca3c0a3",
+      "recognized": "ce qui est vérifié, rappelle les règles toujours respectées, dont la protection des pauses et de la charge, ici activée. Dans périmètre, les trois dates et les cinq postes sont cochés. Quatorze créneaux, trente et une places à pourvoir.",
+      "expected": "Ce qui est vérifié rappelle les règles toujours respectées, dont la protection des pauses et de la charge, ici activée. Dans Périmètre, les trois dates et les cinq postes sont cochés : quatorze créneaux, trente et une places à pourvoir.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -7,8 +7,9 @@ import { useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
+import { FORGOT_PASSWORD_DONE } from "@/lib/forgot-password-copy"
 
-const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const inputClass = "w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 export default function ForgotPasswordPage() {
   const id = useId()
@@ -16,7 +17,7 @@ export default function ForgotPasswordPage() {
   const doneRef = useRef<HTMLHeadingElement>(null)
   const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
 
   // The form is replaced by the confirmation: the focus follows, onto its heading.
   useEffect(() => { if (submitted) doneRef.current?.focus() }, [submitted])
@@ -48,10 +49,9 @@ export default function ForgotPasswordPage() {
 
         {submitted ? (
           <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center space-y-3">
-            <h2 ref={doneRef} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">Email envoyé</h2>
-            <p className="text-sm text-gray-600">
-              Si cette adresse est associée à un compte, vous recevrez un lien valable 1 heure.
-            </p>
+            <h2 ref={doneRef} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">{FORGOT_PASSWORD_DONE.title}</h2>
+            <p className="text-sm text-gray-600">{FORGOT_PASSWORD_DONE.body}</p>
+            <p className="text-sm text-gray-600">{FORGOT_PASSWORD_DONE.hint}</p>
             <Link href="/admin/login" className="block text-sm text-blue-700 underline underline-offset-2 mt-2">
               Retour à la connexion
             </Link>
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                 autoComplete="email"
               />
             </div>
-            <FormStatus error={error} errorId={`${id}-error`} />
+            <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
             <button
               type="submit"
               aria-disabled={busy || undefined}

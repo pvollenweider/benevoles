@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:05:17.953Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "f9efdb4885a1543212b8fd289c79a2cf88d79ac9f773192fe7e5a33f03d82b03",
+  "clipSha256": "6f5902ced8eeab18e8d65b2193fdaa0c210678f364e8122a7bbe3cc117886ffa",
+  "scene": "sectors-create",
+  "review": {
+    "heardOpening": "Ouvrons Gérer les postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.3,
+        "spoken": "Ouvrons Gérer les postes.",
+        "visibleSeconds": 0.7,
+        "visible": "Clic sur « Gérer les postes » et ouverture du volet correspondant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.4,
+        "spoken": "Tapons Parking dans Nouveau secteur, puis Ajouter le secteur.",
+        "visibleSeconds": 7.3,
+        "visible": "Saisie de « Parking » dans le champ Nouveau secteur puis clic sur « Ajouter le secteur »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "Ajoutons de même Backline.",
+        "visibleSeconds": 12,
+        "visible": "Saisie de « Backline » et clic sur « Ajouter le secteur »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Le bouton et le panneau s'appellent désormais Gérer les secteurs et postes.",
+        "visibleSeconds": 18.2,
+        "visible": "Affichage de l'intitulé « Gérer les secteurs et postes » sur le bouton et en titre du panneau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

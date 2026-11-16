@@ -1,0 +1,26 @@
+[
+  {
+    "scene": "need",
+    "anchor": {
+      "segmentId": "need",
+      "phrase": "Inscrits aujourd'hui est déjà coché",
+      "startMs": 21276,
+      "endMs": 25925,
+      "cueMs": 247716
+    },
+    "seconds": 250.01600000000002,
+    "frame": "need-notification.png"
+  },
+  {
+    "scene": "message",
+    "anchor": {
+      "segmentId": "message",
+      "phrase": "Ouvrons le vrai email reçu.",
+      "startMs": 27193,
+      "endMs": 28578,
+      "cueMs": 195710
+    },
+    "seconds": 197.51000000000002,
+    "frame": "message-email-synced.png"
+  }
+]

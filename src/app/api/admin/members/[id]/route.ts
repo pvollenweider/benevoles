@@ -6,19 +6,26 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, diffFields, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { MEMBER_NOTES_MAX } from "@/lib/text-limits"
 import { availabilitySchema } from "@/lib/availability"
 import { isUniqueViolation } from "@/lib/registration-capacity"
-import { MEMBER_ERASURE_REASON } from "@/lib/member-erasure"
+import { memberWriteRefusal } from "@/lib/member-erasure"
+import { addressCorrected } from "@/lib/member-address-change"
+import { SEND_TRANSACTION_OPTIONS } from "@/lib/invitation-sending"
+import { renewMemberLinks } from "@/lib/member-address-revocation"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
+import type { Tx } from "@/lib/registration-capacity"
 
 const EMAIL_TAKEN = "Un autre membre de l'organisation utilise déjà cette adresse email."
 
 const patchSchema = z.object({
-  firstName: z.string().min(1).optional(),
-  lastName: z.string().min(1).optional(),
+  firstName: z.string().min(1).max(100).optional(),
+  lastName: z.string().min(1).max(100).optional(),
   email: z.string().trim().toLowerCase().email().optional().nullable().or(z.literal("")),
-  phone: z.string().optional().nullable(),
+  phone: z.string().max(50).optional().nullable(),
   tags: z.array(z.string()).optional(),
-  notes: z.string().optional().nullable(),
+  notes: cappedText(MEMBER_NOTES_MAX, "Les notes").optional().nullable(),
   active: z.boolean().optional(),
   availabilityPeriods: availabilitySchema.shape.availabilityPeriods.optional(),
   availabilityNote: availabilitySchema.shape.availabilityNote.optional(),
@@ -36,8 +43,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const before = await db.volunteer.findFirst({ where: { id } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
-  // An erased record (#516) stays empty: personal data can't be typed back into it.
-  if (before.erasedAt) return NextResponse.json({ error: MEMBER_ERASURE_REASON.erased }, { status: 409 })
+  // An erased record (#516) stays empty, and a merge tombstone (#600) holds no data: personal data
+  // can't be typed back into either.
+  const tombstone = memberWriteRefusal(before)
+  if (tombstone) return NextResponse.json({ error: tombstone }, { status: 409 })
 
   const data = parsed.data
   const updateData: Record<string, unknown> = {}
@@ -60,13 +69,47 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     if (taken) return NextResponse.json({ error: EMAIL_TAKEN }, { status: 409 })
   }
 
+  // An edit that carries an address goes through a transaction with the member's row locked, so
+  // that two edits, or an edit and a merge or an erasure, never interleave and the address compared
+  // is the one under the lock (an unlocked comparison would let a form that still shows the old
+  // address put it back after a correction without renewing anything). A corrected address renews
+  // the member's links in that same transaction (src/lib/member-address-revocation.ts): the old
+  // address loses access, the new one receives what the member needs. Any other edit is a plain
+  // update, as before.
   let volunteer
+  let renewal: Awaited<ReturnType<typeof renewMemberLinks>> | null = null
   try {
-    volunteer = await db.volunteer.update({ where: { id }, data: updateData })
+    if (newEmail === undefined) {
+      volunteer = await db.volunteer.update({ where: { id }, data: updateData })
+    } else {
+      const outcome = await db.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${id} FOR UPDATE`
+        const locked = await tx.volunteer.findFirst({ where: { id }, select: { email: true, erasedAt: true, mergedIntoId: true } })
+        if (!locked) return { notFound: true as const }
+        const refusal = memberWriteRefusal(locked)
+        if (refusal) return { refused: refusal }
+        const updated = await tx.volunteer.update({ where: { id }, data: updateData })
+        const renewed = addressCorrected(locked.email, updated.email)
+          ? await renewMemberLinks(tx as unknown as Tx, {
+            organizationId,
+            volunteer: { id, firstName: updated.firstName, lastName: updated.lastName, active: updated.active },
+            oldEmail: locked.email!,
+            newEmail: updated.email,
+            now: new Date(),
+          })
+          : null
+        return { updated, renewed }
+      }, SEND_TRANSACTION_OPTIONS)
+      if ("notFound" in outcome) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+      if ("refused" in outcome) return NextResponse.json({ error: outcome.refused }, { status: 409 })
+      volunteer = outcome.updated
+      renewal = outcome.renewed
+    }
   } catch (e) {
     if (isUniqueViolation(e)) return NextResponse.json({ error: EMAIL_TAKEN }, { status: 409 })
     throw e
   }
+  if (renewal) deliverAfterResponse(renewal.outboxIds)
 
   // Deactivation is its own action (matches DELETE's "soft delete"), distinct from a plain field
   // edit — logged separately so the activity list reads naturally either way. `tags` excluded:
@@ -96,7 +139,18 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     })
   }
 
-  return NextResponse.json(volunteer)
+  if (renewal) {
+    await logOrgEvent({
+      organizationId,
+      actor: adminActor(guard.session),
+      action: "member.links_renewed",
+      entityType: "Member",
+      entityId: id,
+    })
+  }
+
+  // `linksRenewed`: what the edit form tells the organiser after a corrected address.
+  return NextResponse.json({ ...volunteer, ...(renewal ? { linksRenewed: { links: renewal.registrations + renewal.invites, emailsQueued: renewal.outboxIds.length } } : {}) })
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {

@@ -3,7 +3,7 @@ import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
 
 /**
- * A documentation unit (#649): guide/<slug>.md rendered at /doc/<slug>, with its breadcrumb, its
+ * A documentation unit (#649): content/guide/<slug>.md rendered at /doc/<slug>, with its breadcrumb, its
  * single <h1> and who it is for; a unit shared by both roles; the indexes of the units on /doc and
  * on the guides' pages; the old anchors of the guides followed to their unit. The parsing and the
  * checks of the units are unit-tested in src/lib/__tests__/doc-units.test.ts, the frozen anchors in
@@ -39,13 +39,24 @@ test("a unit page has a breadcrumb, one title, its audience and no serious viola
 test("a unit for both roles says so, then speaks to each under its own heading", async ({ page }) => {
   await page.goto("/doc/liste-d-attente")
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Liste d'attente")
-  await expect(page.locator("main p", { hasText: /^Pour\s:/ })).toHaveText(/^Pour\s:\sorganisateurs \(Guide administrateur\), bénévoles \(Guide bénévole\)$/)
+  await expect(page.locator("main p", { hasText: /^Pour\s:/ })).toHaveText(/^Pour\s:\sorganisateurs \(Guide organisateur\), bénévoles \(Guide bénévole\)$/)
   await expect(page.getByRole("heading", { level: 2, name: "Côté organisation" })).toBeVisible()
   await expect(page.getByRole("heading", { level: 2, name: "Côté bénévole" })).toBeVisible()
   expect.soft(await seriousViolations(page)).toEqual([])
   // The volunteers' half comes first, as the jump links offer it.
   await page.goto("/doc/rappels")
   await expect(page.locator("main h2").filter({ hasText: /^Côté / })).toHaveText(["Côté bénévole", "Côté organisation"])
+})
+
+test("an example quote is a figure named by its caption, without added quotation marks", async ({ page }) => {
+  await page.goto("/doc/s-inscrire")
+  const figure = page.getByRole("figure", { name: "Léa, bénévole occasionnelle", exact: true })
+  await expect(figure).toBeVisible()
+  const quote = figure.locator("blockquote p")
+  await expect(quote).toHaveText(/^«\sJe peux donner deux heures samedi\./)
+  expect(await quote.evaluate((p) => [getComputedStyle(p, "::before").content, getComputedStyle(p, "::after").content])).toEqual(["none", "none"])
+  await expect(page.locator("main")).not.toContainText("fictifs")
+  expect.soft(await seriousViolations(page)).toEqual([])
 })
 
 test("the volunteer guide's page lists its units, each linked by its site path", async ({ page }) => {
@@ -202,8 +213,8 @@ test.describe("a unit's navigation on a wide screen", () => {
     expect(new Set(groups).size).toBe(groups.length)
     expect(onRappels).toEqual([
       ["Bénévoles", ["S'inscrire à un créneau"]],
-      ["Organisateurs", ["Démarrer", "Préparer l'événement", "Publier et partager", "Suivre l'événement", "Le jour J", "Membres et invitations", "Communiquer avec les bénévoles", "Paramètres de l'organisation", "Aide"]],
-      ["Commun", ["Après l'inscription", "Règles d'inscription"]],
+      ["Organisateurs", ["Démarrer", "Préparer l'événement", "Publier et partager", "Suivre l'événement", "Le jour J", "Membres et invitations", "Communiquer avec les bénévoles", "Paramètres de l'organisation"]],
+      ["Commun", ["Après l'inscription", "Règles d'inscription", "Aide"]],
     ])
     expect.soft(await seriousViolations(page)).toEqual([])
     // Another group opens from the keyboard and leads to its units.
@@ -254,7 +265,7 @@ test.describe("a unit's navigation on a phone", () => {
     await expect(page.getByRole("navigation", { name: "Documentation" })).toBeHidden()
     const theme = page.getByRole("region", { name: "Dans ce thème" })
     await expect(theme).toBeVisible()
-    await expect(theme.getByRole("listitem")).toHaveText(["Ma page personnelle", "Ton lien personnel", "Revenir sur la page d'inscription", "Questions fréquentes des bénévoles"])
+    await expect(theme.getByRole("listitem")).toHaveText(["Mes inscriptions", "Ton lien personnel", "Revenir sur la page d'inscription", "Questions fréquentes des bénévoles"])
     await expect(theme.getByRole("link", { name: "Après l'inscription" })).toHaveAttribute("href", "/doc#apres-inscription")
     await expect(page.getByRole("navigation", { name: "Pages du thème" }).getByRole("link")).toHaveCount(2)
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
@@ -271,19 +282,20 @@ test("the filter over the index narrows the list as you type, hides empty groups
   // Every link of the page's lists: the four frequent questions, then one per unit.
   const allLinks = await page.locator("main li").getByRole("link").count()
 
-  // Accents and case don't matter; every word must match.
+  // Accents and case don't matter. While filtering, one ranked list (best unit first, with its
+  // group) replaces the groups; the index arrives on the first interaction (#1319).
+  const firstResult = page.locator("main h3:text-is('Résultats') + ul > li > a.font-medium").first()
   await field.fill("LIEN perdu")
-  await expect(status).toHaveText(/^1 fiche sur \d+ correspond à « LIEN perdu »\.$/)
-  await expect(page.locator("main li").getByRole("link", { name: "Ton lien personnel", exact: true })).toBeVisible()
-  await expect(page.locator("main li").getByRole("link", { name: "S'inscrire", exact: true })).toBeHidden()
-  // A group without any match is hidden whole, heading included.
+  await expect(status).toHaveText(/^\d+ fiches? sur \d+ correspond(ent)? à « LIEN perdu »\.$/)
+  await expect(firstResult).toHaveText("Ton lien personnel")
+  await expect(page.locator("main h3:text-is('Résultats') + ul > li").first()).toContainText(/Rubrique\s*:\s*Après l'inscription/)
+  // The groups are hidden whole, headings included: only the « Résultats » heading is left.
   await expect(page.getByRole("heading", { level: 3, name: "S'inscrire à un créneau" })).toHaveCount(0)
-  await expect(page.getByRole("heading", { level: 3, name: "Après l'inscription" })).toBeVisible()
-  await expect(page.getByRole("region", { name: "Toutes les fiches" }).getByRole("heading", { level: 3 })).toHaveCount(1)
+  await expect(page.getByRole("region", { name: "Toutes les fiches" }).getByRole("heading", { level: 3 })).toHaveText(["Résultats"])
   await expect(field).toBeFocused()
 
   await field.fill("creneau changer")
-  await expect(page.locator("main li").getByRole("link", { name: "Ma page personnelle", exact: true })).toBeVisible()
+  await expect(page.locator("main h3:text-is('Résultats') + ul").getByRole("link", { name: "Mes inscriptions", exact: true })).toBeVisible()
 
   // A unit found by one of its questions links to it, under its result.
   await field.fill("oublier")

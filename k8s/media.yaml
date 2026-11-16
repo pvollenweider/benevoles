@@ -83,11 +83,24 @@ spec:
       labels:
         app: benevoles-media
     spec:
+      # nginx never calls the Kubernetes API (#1050).
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: nginx
           image: nginx:1.27-alpine
           ports:
             - containerPort: 8080
+          # The nginx master starts as root and runs its workers as the nginx user (CHOWN, SETUID,
+          # SETGID). `make video-publish` extracts files as root with `kubectl exec ... tar`, keeping
+          # the owner they have in the archive: CHOWN, DAC_OVERRIDE, FOWNER and FSETID for that.
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+              add: [CHOWN, DAC_OVERRIDE, FOWNER, FSETID, SETGID, SETUID]
           volumeMounts:
             - name: media
               mountPath: /usr/share/nginx/html

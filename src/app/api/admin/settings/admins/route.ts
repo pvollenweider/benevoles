@@ -16,9 +16,10 @@ import { validationError } from "@/lib/api-error"
 import { ORG_ROLES, ORGANIZER_ROLE } from "@/lib/permissions"
 import { apexBaseUrl } from "@/lib/urls"
 import { ADMIN_INVITE_PENDING_ERROR, canInviteAdmins } from "@/lib/org-approval"
-import { ADMIN_INVITE_SAME_ORG_ERROR, ADMIN_INVITE_UNAVAILABLE_ERROR, adminInviteCheck } from "@/lib/admin-invitation"
+import { ADMIN_INVITE_SAME_ORG_ERROR, ADMIN_INVITES_PER_DAY, adminInviteCheck } from "@/lib/admin-invitation"
 import { findAdminEmailHolder, releaseExpiredInvitation } from "@/lib/admin-invitation-server"
 import { isUniqueViolation } from "@/lib/registration-capacity"
+import { rateLimit } from "@/lib/rate-limit"
 
 const postSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -29,6 +30,14 @@ const postSchema = z.object({
 
 /** The address was taken, or its expired invitation renewed, between the check and the write. */
 class AddressTakenMeanwhile extends Error {}
+
+/**
+ * The answer to an invitation that was not refused for the caller's own team: the same whether an
+ * account was created and the email queued, or the address is held elsewhere, so the answer never
+ * says whether an address is an administrator of another organisation. The team list shows the
+ * pending invitation when there is one.
+ */
+const INVITE_ACCEPTED = () => NextResponse.json({ accepted: true }, { status: 202 })
 
 function generateToken(): string {
   return randomBytes(32).toString("hex")
@@ -66,7 +75,7 @@ export async function POST(req: Request) {
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
-  const body = await req.json()
+  const body = await req.json().catch(() => null)
   const parsed = postSchema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
   const { email, name, role } = parsed.data
@@ -76,14 +85,19 @@ export async function POST(req: Request) {
   // A space awaiting validation invites nobody yet (#1045): before any account or email exists.
   if (!canInviteAdmins(org)) return NextResponse.json({ error: ADMIN_INVITE_PENDING_ERROR, code: "org_pending" }, { status: 403 })
 
+  // Counted before the address is looked up, whatever the outcome, so the budget also bounds
+  // attempts on addresses that receive nothing.
+  const rl = await rateLimit(`org:${organizationId}`, "admin-invite", ADMIN_INVITES_PER_DAY, 24 * 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop d'invitations aujourd'hui. Réessayez demain." }, { status: 429, headers: { "Retry-After": String(rl.retryAfter) } })
+
   // An expired, never-activated invitation into a team with an active admin no longer holds the
   // address (#1053); an active account, a valid invitation or a space's first account does.
-  // Another organisation's holder gets an answer that names nothing.
+  // Another organisation's holder gets the same answer as a sent invitation.
   const now = new Date()
   const holder = await findAdminEmailHolder(prisma, email, now)
   const check = adminInviteCheck(holder, organizationId, now)
   if (check === "same_org") return NextResponse.json({ error: ADMIN_INVITE_SAME_ORG_ERROR }, { status: 409 })
-  if (check === "unavailable") return NextResponse.json({ error: ADMIN_INVITE_UNAVAILABLE_ERROR }, { status: 409 })
+  if (check === "unavailable") return INVITE_ACCEPTED()
 
   const setupToken = generateToken()
   const setupTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -122,9 +136,7 @@ export async function POST(req: Request) {
       return { admin, outboxIds }
     })
   } catch (e) {
-    if (e instanceof AddressTakenMeanwhile || isUniqueViolation(e)) {
-      return NextResponse.json({ error: ADMIN_INVITE_UNAVAILABLE_ERROR }, { status: 409 })
-    }
+    if (e instanceof AddressTakenMeanwhile || isUniqueViolation(e)) return INVITE_ACCEPTED()
     throw e
   }
   const { admin, outboxIds } = created
@@ -140,5 +152,5 @@ export async function POST(req: Request) {
 
   deliverAfterResponse(outboxIds)
 
-  return NextResponse.json({ ...admin, pending: true }, { status: 201 })
+  return INVITE_ACCEPTED()
 }

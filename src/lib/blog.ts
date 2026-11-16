@@ -14,7 +14,7 @@ import { META_DESCRIPTION_MAX, META_DESCRIPTION_MIN, auditedLength } from "@/lib
 
 /**
  * The blog (#944): the product newsletters, archived at /blog, one Markdown file per post in the
- * root folder `blog/`, named `YYYY-MM-DD-slug.md` and rendered at `/blog/<slug>`. Each file opens
+ * folder `content/blog/`, named `YYYY-MM-DD-slug.md` and rendered at `/blog/<slug>`. Each file opens
  * with a small flat front matter (the same parser as the documentation units, src/lib/doc-units.ts):
  *
  *     ---
@@ -31,7 +31,7 @@ import { META_DESCRIPTION_MAX, META_DESCRIPTION_MIN, auditedLength } from "@/lib
  */
 
 /** The folder of the posts, at the repo root. */
-export const BLOG_DIR = "blog"
+export const BLOG_DIR = "content/blog"
 
 /** `2026-10-12-benevol-app-passe-en-2-3.md`: the date, then the slug. */
 const FILE_RE = /^(\d{4}-\d{2}-\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/
@@ -65,7 +65,7 @@ export type BlogPost = {
   image?: string
   /** The Markdown after the front matter. */
   body: string
-  /** Path of the source from the repo root, e.g. `blog/2026-10-12-x.md`. */
+  /** Path of the source from the repo root, e.g. `content/blog/2026-10-12-x.md`. */
   source: string
 }
 
@@ -127,7 +127,7 @@ export function sortBlogPosts(posts: readonly BlogPost[]): BlogPost[] {
   return [...posts].sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug))
 }
 
-/** Reads, parses and checks every post of `blog/` (server only); throws on the first broken file or any problem. */
+/** Reads, parses and checks every post of `content/blog/` (server only); throws on the first broken file or any problem. */
 export function readBlogPosts(dir: string = path.join(/*turbopackIgnore: true*/ process.cwd(), BLOG_DIR)): BlogPost[] {
   if (!fs.existsSync(dir)) return []
   const files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"))

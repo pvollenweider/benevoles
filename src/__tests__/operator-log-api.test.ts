@@ -19,7 +19,9 @@ vi.mock("@/lib/prisma", () => {
   const tx = {
     operatorLog: { create: m.operatorLogCreate },
     orgLog: { create: vi.fn() },
-    organization: { update: m.orgUpdate, delete: m.orgDelete },
+    // Re-read under the row lock (PATCH): the same state the route read just before.
+    organization: { update: m.orgUpdate, delete: m.orgDelete, findUnique: vi.fn(async () => (await m.orgFindUnique.mock.results.at(-1)?.value) ?? null) },
+    $queryRaw: vi.fn().mockResolvedValue([]),
     orgSlugHistory: { deleteMany: vi.fn(), create: vi.fn() },
     volunteer: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn() },
     adminUser: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn(), updateMany: vi.fn() },

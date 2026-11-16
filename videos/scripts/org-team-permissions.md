@@ -27,11 +27,11 @@ personnes qui en portent réellement la responsabilité.
 ## Points d’attention
 
 - Avoir deux propriétaires actifs est une précaution recommandée, pas une obligation du logiciel.
-- Un espace en attente de validation ne peut pas inviter d’autres administrateurs.
-- Une invitation expirée et jamais acceptée libère l’adresse après une heure si son espace compte déjà un administrateur actif ; les comptes actifs et invitations valables sont conservés.
+- Un espace en attente de validation ne peut pas inviter d’autres organisateurs.
+- Une invitation expirée et jamais acceptée libère l’adresse après une heure si son espace compte déjà un organisateur actif ; les comptes actifs et invitations valables sont conservés.
 - Un rôle n’est changé qu’après le bouton « Appliquer ».
 - Retirer un accès ne supprime pas l’historique.
-- Les réglages sensibles et les suppressions définitives restent réservés aux propriétaires.
+- Les paramètres sensibles et les suppressions définitives restent réservés aux propriétaires.
 
 
 ## Révision du 2026-10-16 — lot 22-6

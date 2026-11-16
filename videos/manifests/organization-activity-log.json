@@ -26,7 +26,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Quand plusieurs personnes préparent une fête, on peut facilement se demander qui a changé une fiche ou un réglage. Le journal de l'organisation aide à retrouver ces actions transversales. Ouvrons Journal d'activité depuis les paramètres. Les noms de notre équipe et les données sont fictifs. Nous allons lire les actions, filtrer la liste et ouvrir le fichier exporté. Ce journal ne remplace pas celui d'un événement : les horaires et les inscriptions se consultent dans leur propre historique.",
+      "transcript": "Quand plusieurs personnes préparent une fête, on peut facilement se demander qui a changé une fiche ou un paramètre. Le journal de l'organisation aide à retrouver ces actions transversales. Ouvrons Journal d'activité depuis les paramètres. Les noms de notre équipe et les données sont fictifs. Nous allons lire les actions, filtrer la liste et ouvrir le fichier exporté. Ce journal ne remplace pas celui d'un événement : les horaires et les inscriptions se consultent dans leur propre historique.",
       "fallbackDurationMs": 49000
     },
     {
@@ -41,12 +41,12 @@
     },
     {
       "id": "team",
-      "transcript": "Les invitations de comptes admin, les changements de rôle et les retraits de l'équipe ont aussi leur place ici. Retrouvons une invitation puis un changement de rôle. Le journal décrit ce qui a été fait ; il n'accorde pas le droit de refaire cette action. Les permissions du compte connecté restent applicables. On peut aussi retrouver un changement des réglages de notification. Un email renvoyé apparaît comme une action d'envoi, pas comme la preuve qu'il a été lu.",
+      "transcript": "Les invitations de comptes organisateurs, les changements de rôle et les retraits de l'équipe ont aussi leur place ici. Retrouvons une invitation puis un changement de rôle. Le journal décrit ce qui a été fait ; il n'accorde pas le droit de refaire cette action. Les permissions du compte connecté restent applicables. On peut aussi retrouver un changement des paramètres de notification. Un email renvoyé apparaît comme une action d'envoi, pas comme la preuve qu'il a été lu.",
       "fallbackDurationMs": 50000
     },
     {
       "id": "filters",
-      "transcript": "Filtrer par type permet de se concentrer sur les membres, les comptes admin, les emails ou l'organisation. Choisissons Membres, puis Comptes admin, et regardons les lignes changer. Revenons ensuite à Tous les types. Le filtre ne supprime rien ; il limite la liste affichée. Cet écran n'a pas les mêmes filtres ni les modes Rejouer et Récit que le journal d'un événement. Inutile de chercher une commande qui n'est pas proposée ici.",
+      "transcript": "Filtrer par type permet de se concentrer sur les membres, les comptes organisateurs, les emails ou l'organisation. Choisissons Membres, puis Comptes organisateurs, et regardons les lignes changer. Revenons ensuite à Tous les types. Le filtre ne supprime rien ; il limite la liste affichée. Cet écran n'a pas les mêmes filtres ni les modes Rejouer et Récit que le journal d'un événement. Inutile de chercher une commande qui n'est pas proposée ici.",
       "fallbackDurationMs": 49000
     },
     {
@@ -76,7 +76,7 @@
       "Dans les paramètres, ouvrez le journal d'activité.",
       "Lisez chaque ligne : auteur, action et date.",
       "Repérez les actions sur les fiches membres, puis ouvrez l'activité d'une personne pour comprendre ses inscriptions.",
-      "Retrouvez les invitations de comptes admin, les changements de rôle et les retraits de l'équipe.",
+      "Retrouvez les invitations de comptes organisateurs, les changements de rôle et les retraits de l'équipe.",
       "Filtrez par type, revenez à « Tous les types », et utilisez « Charger plus » pour lire la suite.",
       "Cliquez sur « Exporter tout le journal » pour télécharger le fichier CSV."
     ],

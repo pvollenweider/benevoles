@@ -5,6 +5,18 @@
 
 set -e
 
+# docker-compose.yml gives the app the database's own variables, not a URL: the URL is built here,
+# each part encoded, so any password works and the two never disagree. An explicit DATABASE_URL
+# (Kubernetes, another host) is used as is.
+if [ -z "${DATABASE_URL:-}" ]; then
+  if [ -z "${POSTGRES_PASSWORD:-}" ]; then
+    echo "✗ DATABASE_URL ou POSTGRES_PASSWORD requis (voir docs/deploiement.md)" >&2
+    exit 1
+  fi
+  DATABASE_URL="$(node scripts/database-url.mjs)"
+  export DATABASE_URL
+fi
+
 echo "⏳ Attente de PostgreSQL…"
 until node -e "
   const net = require('net');

@@ -1,0 +1,11 @@
+{
+  "stoppedServerPid": 97658,
+  "port": 43102,
+  "containers": [
+    "codex-batch39-pg",
+    "codex-batch39-mailpit"
+  ],
+  "otherProcessesOrContainersTouched": false,
+  "artifacts": "/tmp/codex-video/batch39/videos/output",
+  "snapshot": "/tmp/benevoles-video-production.Batch39"
+}

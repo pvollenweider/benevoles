@@ -11,10 +11,12 @@ import { confirmationVariables, fillVariables } from "../../message-variables"
 import { renderMarkdownWithVariables } from "../../markdown"
 import { dayLabel, spokenShift } from "../../spoken-time"
 import type { NotificationPayload } from "../types"
+import { digestItems } from "../digest-items"
 import { eventPublicUrl } from "@/lib/urls"
 import { clockTime } from "../../gantt-utils"
-import { shiftInfoText, type ShiftInfo } from "../../shift-info"
-import { myPageUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { shiftInfoText, withReadBeforeOnce, type ShiftInfo } from "../../shift-info"
+import { myPageUrl, docUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { SECTION_DOC_LINKS } from "@/lib/help-links"
 
 /** « samedi 10 octobre » from the « 10/10/2026 » the senders format, for {date} mid-sentence; as given otherwise. */
 function spokenDay(date: string): string {
@@ -39,6 +41,8 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
   }
   const editUrl = myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
+  // One link per page, even when several confirmed shifts are on the same poste (#1324).
+  const shiftsWithPages = withReadBeforeOnce(shifts)
   // The organizer's message may use {prénom}, {créneau}, {date}, {heure}: filled here as on the
   // confirmation page and the personal page, never sent raw. The text part substitutes plainly;
   // the HTML part parses the organizer's Markdown first and inserts the values as literal text,
@@ -47,6 +51,9 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
   const message = confirmationMessage ? fillVariables(confirmationMessage, vars) : undefined
   const messageHtml = confirmationMessage ? renderMarkdownWithVariables(confirmationMessage, vars) : undefined
   const subject = `Inscription confirmée — ${eventTitle} 🎉`
+  // What the personal page is for (#1096): the guide's page, a text link under the button.
+  const guideUrl = docUrl(SECTION_DOC_LINKS.benevole.personalPage)
+  const guideLabel = "Comment fonctionne ta page « Mes inscriptions »"
 
   const text = [
     `Hello ${firstName} !`,
@@ -54,12 +61,15 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Super, ton inscription pour ${eventTitle} est confirmée !`,
     ``,
     `Tes créneaux :`,
-    ...shifts.flatMap((s) => [`  • ${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
+    ...shiftsWithPages.flatMap((s) => [`  • ${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
     ``,
     ...(message ? [message, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
     editUrl,
     ...(cancelNotice ? [cancelNotice] : []),
+    ``,
+    `${guideLabel} :`,
+    guideUrl,
     ``,
     `Un grand M E R C I et à très vite !`,
   ].join("\n")
@@ -69,7 +79,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 🎉</h2>
     <p style="margin:0 0 1.25em;color:#555">Super, ton inscription pour <strong>${escapeHtml(eventTitle)}</strong> est confirmée !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px">
-      ${shifts.map((s) => `
+      ${shiftsWithPages.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong style="color:#111">${escapeHtml(s.label)}</strong>
           <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>
@@ -79,6 +89,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     ${messageHtml ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${messageHtml}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>${cancelNotice ? `
     <p style="color:#555;font-size:0.9em">${escapeHtml(cancelNotice)}</p>` : ""}
+    <p style="color:#555;font-size:0.9em"><a href="${guideUrl}" style="color:#1d4ed8;text-decoration:underline">${guideLabel}</a></p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
   `, preheader)
 
@@ -214,7 +225,7 @@ export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail
     <p style="color:#555">L'organisation de <strong>${escapeHtml(d.eventTitle)}</strong> a annulé ton inscription ${several ? "à ces créneaux" : "à ce créneau"} :</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
     <p style="color:#555">${escapeHtml(next)}</p>
-    <p style="margin-top:1.5em">${btn(linkUrl, d.editToken ? "Voir mes créneaux" : "Voir les créneaux")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, d.editToken ? "Gérer mes inscriptions" : "Voir les créneaux")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ton engagement !</p>
   `, several ? `${lines.length} créneaux annulés pour ${d.eventTitle}.` : `Créneau annulé : ${lines[0] ?? d.eventTitle}.`)
 
@@ -223,40 +234,64 @@ export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail
 
 // ── Retrait fait par le bénévole depuis son lien ─────────────────────────────
 
+type WithdrawnShift = { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }
+type Withdrawn = { what: string; when: string; shift: WithdrawnShift }
+
 /**
  * The volunteer cancelled, left a waitlist, refused an offered place or withdrew a request from
  * their personal link (#809): what changed and when, and what to do if it wasn't them. Sent with
  * the organisation's reply-to: answering reaches the organisers. No link: the one that was used
  * may be in someone else's hands, and the organisers can put things back.
+ * Grouped per event (#1190, src/lib/withdrawal-confirmation.ts): one withdrawal reads as before;
+ * several are listed, oldest first, each with what was done, when, and the shift.
  */
 export function renderRegistrationWithdrawn(p: NotificationPayload): RenderedEmail {
-  const d = p.data as {
-    volunteerName: string
-    eventTitle: string
-    what: string
-    when: string
-    shift: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }
-  }
-  const firstName = d.volunteerName.split(" ")[0]
-  const line = spokenShift(d.shift)
-  const subject = `${d.what} : ${d.eventTitle}`
+  const data = p.data as Record<string, unknown>
+  const items = digestItems<Withdrawn>(data)
+  const base = data as { volunteerName: string; eventTitle: string }
+  const firstName = base.volunteerName.split(" ")[0]
   const notYou = "Ce n'était pas toi ? Réponds à cet email pour prévenir l'organisation."
 
+  if (items.length <= 1) {
+    const d = items[0]
+    const line = spokenShift(d.shift)
+    const subject = `${d.what} : ${base.eventTitle}`
+    const text = [
+      `Hello ${firstName},`,
+      ``,
+      `${d.what}, ${d.when}, depuis ton lien personnel :`,
+      `- ${base.eventTitle}, ${line}`,
+      ``,
+      notYou,
+    ].join("\n")
+
+    const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
+    <p style="color:#555">${escapeHtml(d.what)}, ${escapeHtml(d.when)}, depuis ton lien personnel :</p>
+    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li><strong>${escapeHtml(base.eventTitle)}</strong>, ${escapeHtml(line)}</li></ul>
+    <p style="color:#555">${escapeHtml(notYou)}</p>
+  `, `${d.what} : ${base.eventTitle}.`)
+
+    return { subject, html, text }
+  }
+
+  const subject = `${items.length} retraits effectués depuis ton lien personnel : ${base.eventTitle}`
+  const lines = items.map((d) => ({ head: `${d.what}, ${d.when}`, shift: spokenShift(d.shift) }))
   const text = [
     `Hello ${firstName},`,
     ``,
-    `${d.what}, ${d.when}, depuis ton lien personnel :`,
-    `- ${d.eventTitle}, ${line}`,
+    `${items.length} retraits effectués depuis ton lien personnel pour ${base.eventTitle} :`,
+    ...lines.map((l) => `- ${l.head} : ${l.shift}`),
     ``,
     notYou,
   ].join("\n")
 
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
-    <p style="color:#555">${escapeHtml(d.what)}, ${escapeHtml(d.when)}, depuis ton lien personnel :</p>
-    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li><strong>${escapeHtml(d.eventTitle)}</strong>, ${escapeHtml(line)}</li></ul>
+    <p style="color:#555">${items.length} retraits effectués depuis ton lien personnel pour <strong>${escapeHtml(base.eventTitle)}</strong> :</p>
+    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li style="margin:0.25em 0">${escapeHtml(l.head)} : ${escapeHtml(l.shift)}</li>`).join("")}</ul>
     <p style="color:#555">${escapeHtml(notYou)}</p>
-  `, `${d.what} : ${d.eventTitle}.`)
+  `, `${items.length} retraits effectués depuis ton lien personnel : ${base.eventTitle}.`)
 
   return { subject, html, text }
 }
@@ -292,7 +327,7 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     `- ${line}`,
     ``,
     ...(d.newLink ? [renewed, ``] : []),
-    `Ton lien personnel pour voir ou gérer tes créneaux :`,
+    `Ton lien personnel pour gérer tes inscriptions :`,
     linkUrl,
     ``,
     unwanted,
@@ -303,7 +338,7 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     <p style="color:#555">${escapeHtml(what)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>${escapeHtml(line)}</li></ul>
     ${d.newLink ? `<p style="color:#555"><strong>${escapeHtml(renewed)}</strong></p>` : ""}
-    <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes créneaux")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
   `, `${d.status === "requested" ? "Demande rétablie" : "Inscription rétablie"} : ${line}.`)
 
@@ -347,7 +382,7 @@ export function renderRegistrationAddedByOrganizer(p: NotificationPayload): Rend
     what,
     ...lines.map((l) => `- ${l}`),
     ``,
-    `Ton lien personnel pour voir ou gérer tes créneaux :`,
+    `Ton lien personnel pour gérer tes inscriptions :`,
     linkUrl,
     ``,
     unwanted,
@@ -357,7 +392,7 @@ export function renderRegistrationAddedByOrganizer(p: NotificationPayload): Rend
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
     <p style="color:#555">${escapeHtml(what)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
-    <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes créneaux")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
   `, several ? `Inscrit·e sur ${lines.length} créneaux : ${d.eventTitle}.` : `Inscrit·e : ${lines[0] ?? d.eventTitle}.`)
 
@@ -404,7 +439,7 @@ export function renderShiftModified(p: NotificationPayload): RenderedEmail {
       <div style="font-weight:600;margin-top:4px">→ ${escapeHtml(d.newDate)} · ${escapeHtml(d.newStart)}–${escapeHtml(d.newEnd)}</div>
     </div>
     <p style="color:#555;font-size:0.9em">Si ces nouveaux horaires ne te conviennent pas, tu peux gérer ton inscription ci-dessous.</p>
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
+    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
   `, `Nouvel horaire : ${d.newDate} · ${d.newStart}–${d.newEnd} (était ${d.oldStart}–${d.oldEnd})`)
 
   return { subject, html, text }
@@ -450,31 +485,96 @@ export function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
 // ── Renvoi du lien de gestion ─────────────────────────────────────────────────
 
 export function renderRegistrationLinkResend(p: NotificationPayload): RenderedEmail {
-  const { volunteerName, eventTitle, orgSlug, editToken } = p.data as {
+  const { volunteerName, eventTitle, orgSlug, editToken, notRecorded } = p.data as {
     volunteerName: string
     eventTitle: string
     orgSlug?: string
-    editToken: string
+    /** Absent from a notice when the volunteer holds no live registration on the event. */
+    editToken?: string | null
+    /**
+     * A sign-up without proof of the address that the owner's own registrations stopped (AUTHZ-01):
+     * the form answered as usual, this email says what was not recorded and why.
+     */
+    notRecorded?: { reason: string }
   }
-  const editUrl = myPageUrl(orgSlug, editToken)
+  const editUrl = editToken ? myPageUrl(orgSlug, editToken) : null
   const firstName = volunteerName.split(" ")[0]
-  const subject = `Ton lien pour gérer ton inscription — ${eventTitle}`
+  if (notRecorded) return renderNotRecorded({ firstName, eventTitle, reason: notRecorded.reason, editUrl })
+  const subject = `Ton lien pour gérer tes inscriptions — ${eventTitle}`
 
   const text = [
     `Hello ${firstName} !`,
     ``,
-    `Voici ton lien personnel pour voir ou modifier ton inscription à ${eventTitle} :`,
-    editUrl,
+    `Voici ton lien personnel pour gérer tes inscriptions à ${eventTitle} :`,
+    editUrl ?? "",
     ``,
     `À très vite !`,
   ].join("\n")
 
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
-    <p style="color:#555;margin:0 0 1.25em">Voici ton lien personnel pour voir ou modifier ton inscription à <strong>${escapeHtml(eventTitle)}</strong>.</p>
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
+    <p style="color:#555;margin:0 0 1.25em">Voici ton lien personnel pour gérer tes inscriptions à <strong>${escapeHtml(eventTitle)}</strong>.</p>
+    ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>` : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !</p>
   `, `Ton lien pour ${escapeHtml(eventTitle)}`)
 
+  return { subject, html, text }
+}
+
+/** The notice of a sign-up not recorded (AUTHZ-01): what, why, and the personal link if any. */
+function renderNotRecorded(o: { firstName: string; eventTitle: string; reason: string; editUrl: string | null }): RenderedEmail {
+  const subject = `Demande d'inscription non enregistrée — ${o.eventTitle}`
+  const lead = `Une demande d'inscription à ${o.eventTitle} a été faite avec ton adresse email. Elle n'a pas été enregistrée : ${o.reason}.`
+  const ifYou = o.editUrl
+    ? "Si c'était toi, utilise ton lien personnel pour consulter tes inscriptions et choisir d'autres créneaux :"
+    : "Si c'était toi, choisis d'autres créneaux sur la page de l'événement."
+  const ifNot = "Si ce n'était pas toi, tu n'as rien à faire : cette demande n'a rien changé."
+  const text = [`Bonjour ${o.firstName},`, ``, lead, ``, ifYou, ...(o.editUrl ? [o.editUrl] : []), ``, ifNot].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Bonjour ${escapeHtml(o.firstName)},</h2>
+    <p style="color:#555;margin:0 0 1em">Une demande d'inscription à <strong>${escapeHtml(o.eventTitle)}</strong> a été faite avec ton adresse email. Elle n'a pas été enregistrée : ${escapeHtml(o.reason)}.</p>
+    <p style="color:#555;margin:0 0 1em">${escapeHtml(ifYou)}</p>
+    ${o.editUrl ? `<p style="margin-top:1em">${btn(o.editUrl, "Gérer mes inscriptions")}</p>` : ""}
+    <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(ifNot)}</p>
+  `, `Demande d'inscription non enregistrée pour ${escapeHtml(o.eventTitle)}`)
+  return { subject, html, text }
+}
+
+// ── Confirmation de l'adresse avant de tenir les places (#1253) ──────────────
+
+export function renderSignupEmailConfirmation(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    confirmUrl: string
+    expiresAt: string
+    shifts: { label: string; roleName?: string; date: string; startTime: string; endTime: string; waitlist?: boolean; requiresApproval?: boolean }[]
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const subject = `Confirme ton inscription — ${d.eventTitle}`
+  const line = (s: (typeof d.shifts)[number]) =>
+    `${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}${s.waitlist ? " (liste d'attente à confirmer)" : s.requiresApproval ? " (demande à valider)" : ""}`
+  const text = [
+    `Hello ${firstName} !`,
+    ``,
+    `Nous avons bien reçu ta demande pour ${d.eventTitle}. Ouvre ce lien et clique sur « Confirmer mon inscription » : c'est ce clic qui enregistre tes créneaux.`,
+    d.confirmUrl,
+    ``,
+    `Tes créneaux :`,
+    ...d.shifts.map((s) => `  • ${line(s)}`),
+    ``,
+    `Tes places sont réservées jusqu'au ${d.expiresAt}. Passé ce délai, elles redeviendront disponibles.`,
+    ...(d.shifts.some((s) => s.waitlist) ? [``, `Les créneaux complets ne réservent rien avant ta confirmation : tu entreras en liste d'attente à ce moment-là.`] : []),
+  ].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! ✉️</h2>
+    <p style="margin:0 0 1em;color:#555">Nous avons bien reçu ta demande pour <strong>${escapeHtml(d.eventTitle)}</strong>. Ouvre ce lien et clique sur « Confirmer mon inscription » : c'est ce clic qui enregistre tes créneaux.</p>
+    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:1.9">
+      ${d.shifts.map((s) => `<div>📅 ${escapeHtml(line(s))}</div>`).join("")}
+    </div>
+    <p style="margin-top:1.5em">${btn(d.confirmUrl, "Confirmer mon inscription")}</p>
+    <p style="color:#b91c1c;font-size:0.85em;margin-top:1em">⏱ Tes places sont réservées jusqu'au <strong>${escapeHtml(d.expiresAt)}</strong>. Passé ce délai, elles redeviendront disponibles.</p>
+    ${d.shifts.some((s) => s.waitlist) ? `<p style="color:#555;font-size:0.9em">Les créneaux complets ne réservent rien avant ta confirmation : tu entreras en liste d'attente à ce moment-là.</p>` : ""}
+  `, `Un email pour confirmer ton inscription — places réservées jusqu'au ${d.expiresAt}.`)
   return { subject, html, text }
 }

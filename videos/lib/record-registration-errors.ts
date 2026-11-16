@@ -6,14 +6,15 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { linkToken } from "../../src/lib/token-vault"
 import { loadManifest, type AudioMetadata } from "./manifest"
 import { prepareRegistrationErrorFixture, registrationErrorFixtureIp } from "./prepare-registration-error-fixture"
 import type { Cue } from "./sentence-timing"
+import { surnameOf } from "./fixture-names"
 
 const eventId = "video-errors-event", publicPath = "/atelier-inscription?org=formation-erreurs"
-function database() { return new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) }) }
+function database() { return new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) }) }
 
 export async function validateRegistrationErrorNarration(directory: string) {
   const manifest = await loadManifest("VOLUNTEER_CONFIRMATION_ERRORS")
@@ -42,7 +43,7 @@ export async function prepareRegistrationErrorRecording(page: Page, base: string
   await page.getByLabel("Email", { exact: true }).fill("video.errors.owner@example.org")
   await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
   await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-  await page.waitForURL(/\/admin\/events/)
+  await page.waitForURL(/\/admin\/dashboard/)
   await page.goto(`${base}${publicPath}`)
   await page.getByRole("heading", { name: "Inscription robuste — démonstration", exact: true }).waitFor()
 }
@@ -73,7 +74,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       if (!token) {
         // Les champs restent visiblement remplis, sans consommer les phrases suivantes.
-        for (const [label, value] of [["Prénom *", name], ["Nom *", "Exemple"], ["Email *", email]]) {
+        for (const [label, value] of [["Prénom *", name], ["Nom *", surnameOf(name)], ["Email *", email]]) {
           const field = page.getByLabel(label, { exact: true })
           await tap(page, field)
           await field.fill(value)
@@ -92,21 +93,23 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       assert.equal(actual.status(), expected)
       return actual.json()
     }
-    const mailFor = async (recipient: string) => {
+    const mailFor = async (recipient: string, subject = "Inscription confirmée") => {
       for (let n = 0; n < 40; n++) {
         const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
-        const mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorIds.has(item.ID) && item.Subject.includes("Inscription confirmée") && item.To.some((to: { Address: string }) => to.Address === recipient))
+        const mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorIds.has(item.ID) && item.Subject.includes(subject) && item.To.some((to: { Address: string }) => to.Address === recipient))
         if (mail) { await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page); return mail.ID }
         await page.waitForTimeout(250)
       }
-      throw new Error("New actual confirmation email required")
+      throw new Error(`New actual email « ${subject} » required`)
     }
+    // A public sign-up without proof of the address: one neutral page, whatever happened (AUTHZ-01).
+    const receivedHeading = () => page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true })
     await scene("welcome", async () => { await page.screencast.showChapter(title, { description: "Comprendre l'erreur, reprendre et vérifier le résultat", duration: 2300 }) })
     await scene("form", async () => {
       await tap(page, page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       await write(page.getByLabel("Prénom *", { exact: true }), "Alex")
-      await write(page.getByLabel("Nom *", { exact: true }), "Exemple")
+      await write(page.getByLabel("Nom *", { exact: true }), surnameOf("Alex"))
       await write(page.getByLabel("Email *", { exact: true }), "video.errors.alex@example.org")
       await write(page.getByLabel(/Téléphone/), "079 000 12 34")
       await agree()
@@ -135,9 +138,9 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       checks.interruptionBeforeCommit = true
     })
     await scene("success", async at => {
-      await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      await receivedHeading().waitFor()
       assert.equal(await page.getByRole("link", { name: "Accéder à mon inscription" }).count(), 0)
-      await at("il n’est pas affiché simplement")
+      await at("n'affiche pas le lien de gestion")
       checks.publicSuccessDoesNotExposeToken = true
     })
     await scene("email", async () => { checks.publicConfirmationMailId = await mailFor("video.errors.alex@example.org") })
@@ -145,17 +148,18 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await form("Vestiaire", "Aline", "video.errors.aline@example.org", undefined, undefined, async () => { await at("Essayons le vestiaire") })
       const before = await db.registration.count({ where: { eventId } })
       await at("Remplissons le formulaire et confirmons.")
-      const refusal = await post(409)
-      assert(/chevauch/i.test(refusal.error))
-      const overlapMessage = page.locator('[role="alert"]').filter({ hasText: /chevauch/i }).first()
-      await overlapMessage.waitFor()
-      await overlapMessage.scrollIntoViewIfNeeded()
+      // The same answer as any sign-up without proof: nothing says Aline's own shifts.
+      const answer = await post(201)
+      assert.equal(answer.editToken, null)
+      assert(!/chevauch|Accueil/i.test(JSON.stringify(answer)))
+      await receivedHeading().waitFor()
       await settle(page)
-      // The response assertion alone can finish before the browser paints the error.
-      // Keep the actual result on screen even when slow typing exhausts the cue.
-      await at("Pour continuer, reviens au planning")
-      await page.waitForTimeout(1800)
+      await at("Aucune nouvelle inscription n'a été ajoutée")
       assert.equal(await db.registration.count({ where: { eventId } }), before)
+      await at("Ouvrons sa boîte")
+      checks.overlapNoticeMailId = await mailFor("video.errors.aline@example.org", "Demande d'inscription non enregistrée")
+      await page.getByText(/chevauche ton créneau/).first().waitFor()
+      await page.waitForTimeout(1800)
       checks.actualOverlapRefused = true
     })
     await scene("response-loss", async at => {
@@ -167,10 +171,8 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       assert.equal(committed, 201)
       await page.unroute("**/api/public/registrations")
       await at("Rétablissons la connexion et confirmons")
-      assert(/^Tu as déjà une inscription pour l'un de ces créneaux\./.test((await post(409)).error))
-      const duplicateMessage = page.locator('[role="alert"]').filter({ hasText: /Tu as déjà une inscription/ }).first()
-      await duplicateMessage.waitFor()
-      await duplicateMessage.scrollIntoViewIfNeeded()
+      assert.equal((await post(201)).editToken, null)
+      await receivedHeading().waitFor()
       await settle(page)
       const regs = await db.registration.findMany({ where: { eventId, volunteer: { email: "video.errors.nicolas@example.org" } } })
       assert.equal(regs.length, 1)
@@ -181,7 +183,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
     await scene("invitation-success", async at => {
       await form("Vestiaire", "Zoé", "video.errors.zoe@example.org", undefined, async () => { await at("Après ses informations et les consentements") }, async () => { await at("Zoé choisit le vestiaire") })
       assert.equal((await post(201)).editToken, null)
-      await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      await receivedHeading().waitFor()
       assert.equal(await page.getByRole("link", { name: "Accéder à mon inscription" }).count(), 0)
       await at("Aline a ensuite reçu une")
       const response = await page.request.post(`${base}/api/admin/events/${eventId}/invitations`, { data: { volunteerIds: ["video-errors-aline"], message: "Invitation fictive à choisir une autre mission disponible." } })

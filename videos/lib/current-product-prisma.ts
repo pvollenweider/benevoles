@@ -17,7 +17,7 @@ export function assertCurrentVideoPrismaEnvironment(base: string, databaseUrl: s
   assert.equal(nodeEnv, "production", "Never reuse a development Prisma singleton")
   const database = new URL(databaseUrl ?? "")
   assert(database.protocol === "postgresql:" || database.protocol === "postgres:", "PostgreSQL video database required")
-  assert(["localhost", "127.0.0.1", "[::1]"].includes(database.hostname) && database.port === "45433" && database.pathname === "/benevoles_video", "Isolated video database required")
+  assert(["localhost", "127.0.0.1", "[::1]"].includes(database.hostname) && ["45433", "45434"].includes(database.port) && database.pathname === "/benevoles_video", "Isolated video database required")
 }
 
 /** Reject root paths and broad tmp paths independently of the server proof. */

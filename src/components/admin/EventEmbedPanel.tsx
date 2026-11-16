@@ -16,7 +16,7 @@ export const EMBED_COPIED = "Code copié."
 export const EMBED_COPY_FAILED = "Copie impossible : le code est sélectionné, copiez-le."
 
 /**
- * « Intégrer à votre site » (#948), in the event's « Partager l'événement » area of a published
+ * « Intégrer à votre site » (#948), in the event's « Liens à partager » page of a published
  * event: the HTML to paste into the association's own site (an iframe of the embeddable sign-up),
  * for the whole event or one group link (#947), with or without the auto-resize, a copy button,
  * a live preview and short instructions for site builders. Closed by default: a disclosure button.
@@ -99,7 +99,7 @@ export default function EventEmbedPanel({ publicUrl, eventTitle, eventSlug, grou
               checked={autoResize}
               onChange={(e) => setAutoResize(e.target.checked)}
               aria-describedby={`${id}-resize-hint`}
-              className="h-4 w-4 rounded border-gray-400"
+              className="h-4 w-4 rounded border-gray-500"
             />
             Ajuster la hauteur automatiquement
           </label>

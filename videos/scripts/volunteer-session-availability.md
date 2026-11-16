@@ -14,7 +14,7 @@ Retrouver ses inscriptions sans créer de compte, protéger sa session sur un ap
 4. Rouvrir le lien valide. Descendre jusqu'à « Ton lien personnel », cliquer « Recevoir ce lien par email », attendre le résultat et ouvrir le vrai message dans Mailpit.
 5. Ouvrir un lien invalide et suivre la récupération proposée par l'interface. Comparer une adresse ayant une inscription et une adresse fictive inconnue : même réponse publique, email uniquement pour l'adresse concernée. Ne pas présenter la réponse comme une preuve qu'un compte existe.
 6. Démontrer une limitation de renvoi dans la base isolée et lire le message effectivement affiché. Ne pas simuler une erreur pour la présenter comme un comportement réel.
-7. Sur la page personnelle, ouvrir « Mes disponibilités ». Choisir matin et soir, saisir lentement une note courte « Pas le dimanche matin », enregistrer et lire le résultat.
+7. Sur la page Mes inscriptions, ouvrir « Mes disponibilités ». Choisir matin et soir, saisir lentement une note courte « Pas le dimanche matin », enregistrer et lire le résultat.
 8. Recharger la page pour prouver la persistance. Montrer ensuite où l'organisateur retrouve cette information, puis revenir côté bénévole.
 9. Expliquer qu'il s'agit d'une indication : elle ne réserve pas une place, ne modifie pas les inscriptions et ne filtre pas automatiquement le planning. Effacer les préférences et vérifier le résultat enregistré.
 

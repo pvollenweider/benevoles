@@ -16,4 +16,6 @@ Quand l'aperçu vous convient, confirmez l'import. Cette fois, les fiches sont e
 
 Si vous analysez de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email : le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas. Ne confirmez donc pas une seconde fois machinalement. Regardez toujours le nombre de créations prévues, puis annulez si vous ne souhaitez rien ajouter.
 
+Quelques fiches sont en trop. Filtrons la liste, puis cochons Tout sélectionner : la sélection suit le filtre affiché. Avec Supprimer la sélection, une seule confirmation indique les fiches supprimées et celles qui restent. Les membres qui ont des inscriptions ne sont jamais supprimés. Cochons la case pour les désactiver, puis confirmons. Les autres fiches sélectionnées sont supprimées ; les inscriptions restent dans l'historique.
+
 Votre liste est prête à être utilisée pour les prochaines invitations. Gardez un fichier simple, vérifiez les coordonnées et lisez l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoutez-les manuellement. Et si leurs disponibilités changent, complétez leur fiche séparément. L'import fait gagner du temps, tout en vous laissant le dernier mot sur ce qui sera enregistré.

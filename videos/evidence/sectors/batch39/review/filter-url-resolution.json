@@ -1,0 +1,11 @@
+{
+  "scene": "sectors-filter",
+  "disposition": "resolved after frame and recorder inspection",
+  "observation": "Browser chrome is outside every screencast. Narration explains that the selection is encoded in the URL; it does not promise to display the address bar. The next sentence reopens the exact URL and visibly retains Parking and five active registrations.",
+  "runtimeAssertions": "chooseParking waits for URL searchParams secteur == parkingId; after page.goto(page.url()), sectorFilter.inputValue == parkingId is asserted in this successful capture.",
+  "frames": [
+    "sectors-filter-before.png",
+    "sectors-filter-after.png"
+  ],
+  "rawObservationPreserved": true
+}

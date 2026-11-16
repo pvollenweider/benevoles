@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T19:52:07.068Z",
+  "videoSha256": "6a81b1d9046cb9cf8b43b23c2d9302c565fc8fd8f7206da7134cecaa4eab158f",
+  "promptSha256": "743a4fd9fc6702e3bcf7981168fda74c360d2e057424a751709bd297cc63513b",
+  "clipSha256": "5ef115d37ac7ad45f3514b7785d445d416c2c3430cd8e60da140abc835c075df",
+  "scene": "beta-operator",
+  "review": {
+    "heardOpening": "Dans l'espace super admin",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "ouvrons Fonctions bêta depuis le menu Super Admin",
+        "visibleSeconds": 2.2,
+        "visible": "Sélection de Fonctions bêta dans le menu déroulant et affichage de la page Fonctions bêta",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "Cochons Échanges de créneaux",
+        "visibleSeconds": 10.9,
+        "visible": "La case à cocher Échanges de créneaux est activée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "et enregistrons",
+        "visibleSeconds": 12.7,
+        "visible": "Clic sur le bouton Enregistrer et apparition du message de confirmation Fonctions ouvertes enregistrées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -21,6 +21,10 @@ metadata:
   namespace: benevoles
 spec:
   replicas: 1
+  # Never two PostgreSQL servers on the same data directory: the old pod stops before the new one
+  # starts (a rolling update would start the new one first, on the same local-path volume).
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: postgres
@@ -29,11 +33,25 @@ spec:
       labels:
         app: postgres
     spec:
+      # PostgreSQL never calls the Kubernetes API (#1050).
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: postgres
           image: postgres:16-alpine
           ports:
             - containerPort: 5432
+          # The image's entrypoint starts as root, makes sure the data directory belongs to the
+          # postgres user (uid 70), then drops to it with su-exec: it keeps only the capabilities
+          # it needs for that, and the server itself runs as uid 70 (#1050). The data volume keeps
+          # its current ownership: no runAsUser, no fsGroup.
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+              add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
           env:
             - name: POSTGRES_DB
               value: benevoles

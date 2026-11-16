@@ -84,7 +84,9 @@ describe("MilestonesSection — edit a milestone", () => {
     const date = screen.getByLabelText(/^Échéance/)
     fireEvent.change(date, { target: { value: "" } })
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
-    expect(screen.getByRole("alert")).toHaveTextContent("Indiquez l'échéance.")
+    // The date takes the focus and the message as its description: no alert, so nothing repeats it.
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+    expect(screen.getByText("Indiquez l'échéance.")).toBeVisible()
     expect(date).toHaveAttribute("aria-invalid", "true")
     expect(date).toHaveFocus()
     expect(fetchMock).not.toHaveBeenCalled()
@@ -221,7 +223,9 @@ describe("MilestonesSection — owner", () => {
     fireEvent.click(editButton("Commander les t-shirts"))
     fireEvent.change(ownerSelect(), { target: { value: "a-col" } })
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Choisissez qui s'en occupe parmi les membres actifs de l'équipe."))
+    // The select takes the focus and the message as its description: no alert, so nothing repeats it.
+    await waitFor(() => expect(screen.getByText("Choisissez qui s'en occupe parmi les membres actifs de l'équipe.")).toBeVisible())
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
     expect(ownerSelect()).toHaveAttribute("aria-invalid", "true")
     expect(ownerSelect()).toHaveAccessibleDescription("Choisissez qui s'en occupe parmi les membres actifs de l'équipe.")
     expect(ownerSelect()).toHaveFocus()

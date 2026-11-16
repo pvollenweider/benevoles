@@ -40,16 +40,22 @@ Les PRs doivent passer la CI avant d'être fusionnées. Contrôles de `ci.yml` e
 
 | Job CI | Contrôle | En local |
 |--------|----------|----------|
+| Draft content | Aucune source publique encore en brouillon | `node scripts/check-no-draft-content.mjs` |
 | Type-check, lint & tests | `tsc --noEmit` | `make typecheck` |
 | | ESLint | `make lint` |
 | | Vitest et seuils de couverture | `npm run test:coverage` |
+| | Dépendances de production sans avis `high` ou `critical` | `npm audit --omit=dev --audit-level=high` |
 | | `SECURITY.md` suit la version de `package.json` | `node scripts/check-security-md.mjs` |
 | | Migrations compatibles avec la version précédente | `node scripts/check-migrations.mjs origin/main` |
-| E2E (Playwright) | Tests d'intégration sur un vrai PostgreSQL | `npm run test:integration` (avec `DATABASE_URL`) |
-| | Tests Playwright, dont l'accessibilité (axe-core) | `make e2e` |
+| | Captures de la documentation à jour des écrans qu'elles montrent | `node scripts/check-doc-screenshots.mjs origin/main` |
+| Build (Next.js) | Le `next build` du run, partagé par les jobs E2E et Lighthouse | `npm run build` |
+| E2E (Playwright, 1/2) | Tests d'intégration sur un vrai PostgreSQL | `npm run test:integration` (avec `DATABASE_URL`) |
+| E2E (Playwright, 1/2 et 2/2) | Tests Playwright, dont l'accessibilité (axe-core), répartis par fichier entre les deux jobs | `make e2e` |
 | Lighthouse | Scores Lighthouse mobile et bureau des pages publiques, sur la base E2E : échoue sous 100 en accessibilité, bonnes pratiques et SEO, et sous 95 en performance sur bureau | `LHCI_FORM_FACTOR=mobile npx lhci collect --config=lighthouserc.cjs` (après `npm run build`, avec `DATABASE_URL` vers la base E2E) |
 
-Lighthouse CI (#773) : le job mesure une URL par type de page publique (liste dans `lighthouserc.cjs`), en mobile puis en bureau, sur `next build` + `next start` et la même base que les tests E2E. Le tableau des scores est dans le résumé du run, les rapports HTML dans l'artefact `lighthouse-reports` et sur le stockage public temporaire de Lighthouse (liens dans le journal). Le job échoue si une page descend sous 100 en accessibilité, bonnes pratiques ou SEO (mobile et bureau), ou sous 95 en performance sur bureau (et non 100 : un point perdu sur le runner partagé ne doit pas faire échouer un build). Deux catégories ne font qu'avertir : la performance mobile, que le runner partagé et `next start` sans la compression du site placent une vingtaine de points sous la production pour les pages les plus lourdes, et le SEO de la bibliothèque vidéo, en `noindex` voulu en CI faute de serveur de médias. Les deux mesures (mobile et bureau) sont toujours faites et publiées avant l'échec.
+Les jobs E2E et Lighthouse ne construisent pas l'application : ils démarrent le build du job Build après avoir vérifié qu'il vient du même commit, des mêmes dépendances et des mêmes réglages publics (fonctionnement, relances et artefact manquant : [docs/deploiement.md](docs/deploiement.md#construction-partagée-en-ci)).
+
+Lighthouse CI (#773) : le job mesure une URL par type de page publique (liste dans `lighthouserc.cjs`), en mobile puis en bureau, sur `next start` (le build du job Build) et la même base que les tests E2E. Le tableau des scores est dans le résumé du run, les rapports HTML dans l'artefact `lighthouse-reports` et sur le stockage public temporaire de Lighthouse (liens dans le journal). Le job échoue si une page descend sous 100 en accessibilité, bonnes pratiques ou SEO (mobile et bureau), ou sous 95 en performance sur bureau (et non 100 : un point perdu sur le runner partagé ne doit pas faire échouer un build). Deux catégories ne font qu'avertir : la performance mobile, que le runner partagé et `next start` sans la compression du site placent une vingtaine de points sous la production pour les pages les plus lourdes, et le SEO de la bibliothèque vidéo, en `noindex` voulu en CI faute de serveur de médias. Les deux mesures (mobile et bureau) sont toujours faites et publiées avant l'échec.
 
 `make typecheck` (ou `npm run typecheck`) régénère le client Prisma avant `tsc` : après un changement de schéma ou de branche, un client obsolète produit de faux échecs.
 
@@ -62,6 +68,24 @@ Deux projets Playwright : `chromium` (toute la suite, sauf `e2e/mobile/`) et `we
 TypeScript est installé en deux versions côte à côte, selon la procédure officielle de TypeScript 7 : `@typescript/native` (TypeScript 7) fournit la commande `tsc` utilisée pour le type-check, et le paquet `typescript` pointe vers `@typescript/typescript6`, dont l'API reste nécessaire à typescript-eslint et au build Next.js. `tsc6` lance la vérification avec TypeScript 6 si besoin de comparer.
 
 Les messages de commit et les titres de PR sont rédigés en anglais.
+
+## Labels des issues
+
+Une issue triée porte un label par axe, pas plus :
+
+| Axe | Labels | Ce qu'il dit |
+| --- | --- | --- |
+| Type | `bug`, `enhancement`, `documentation`, `decision`, `epic`, `maintenance` | La nature du travail. `decision` : un choix à faire avant toute réalisation. `maintenance` : travail technique sans fonctionnalité visible. |
+| Statut | `status:NOW`, `status:LATER`, `status:PREPARE`, `status:VALIDATE` | `NOW` : défini, utile, à faire. `LATER` : gardé, pas maintenant (le propriétaire décide quand il bouge). `PREPARE` : préparer l'architecture seulement. `VALIDATE` : hypothèse à vérifier auprès des utilisateurs avant de construire. |
+| Domaine | `area:registration`, `area:event-management`, `area:day-of`, `area:communication`, `area:access`, `area:site`, `area:self-hosting`, `area:platform`, `area:business` | La partie du produit touchée en premier. |
+
+Les domaines : `registration` (côté bénévole : inscription, page personnelle, attestation), `event-management` (côté organisateur : créneaux, postes, listes, membres, contreparties), `day-of` (présences, pointage, accueil), `communication` (emails, rappels, notifications), `access` (comptes d'organisation, rôles, droits, cycle de vie), `site` (site public, guides, vidéos, visibilité), `self-hosting`, `platform` (socle technique : build, navigateurs, sécurité, outillage d'accessibilité, internationalisation), `business` (service hébergé : tarifs, offres, mesures et retours).
+
+- Une issue qui touche deux domaines prend celui du parcours principal. Un rappel envoyé le jour J est `communication` ; un droit d'accès à l'accueil est `day-of`.
+- Un epic porte le statut de la prochaine action de l'ensemble, indépendamment de ses tickets. Les jalons (milestones) regroupent par thème ; ils ne disent rien de la priorité.
+- Hors axes, au besoin : `security` (travail de sécurité ; un signalement de faille passe par `SECURITY.md`, pas par une issue publique), `good first issue` et `help wanted` (travail cadré et documenté, ouvert aux contributions), `dependencies` et `go` (posés par Dependabot).
+- Les autres labels (`feature`, `amélioration`, `discussion`, `plus tard`, `phase:*`, `sprint-*`, `mvp`, `ui`, `ux`, `ops`…) sont anciens : ils restent sur les issues fermées pour l'historique, leur description le dit, et ne s'appliquent plus.
+- Une issue qui vient d'être ouverte peut attendre son tri ; les modèles d'issue posent le type.
 
 ## Conventions de commit
 
@@ -101,7 +125,7 @@ src/
     super-admin/            # organizations, product-updates, health, profile (rôle super_admin)
     api/
       public/ admin/ super-admin/
-      cron/                 # reminders, cleanup (purge RGPD), heartbeat (sauvegardes)
+      cron/                 # reminders, outbox (emails en attente), cleanup (purge RGPD), release-check, heartbeat (sauvegardes)
       health/               # Sonde Kubernetes
   components/               # admin/, super-admin/, public/, __tests__/ (*.react.test.tsx, jsdom)
   lib/                      # Logique métier pure et testée (__tests__/), notifications/
@@ -117,7 +141,12 @@ prisma/                     # schema.prisma, migrations/, seed.ts
 e2e/                        # Specs Playwright (dont accessibility.spec.ts), helpers/
 scripts/                    # check-*.mjs (CI), seed-demo.ts, screenshots.mjs, retention-docs.ts
 k8s/                        # Manifestes Kubernetes
-gandi-webhook/              # Webhook DNS Gandi pour cert-manager (Go)
+k8s/gandi-webhook/          # Webhook DNS Gandi pour cert-manager (Go)
+content/                    # Sources Markdown des pages publiques (src/lib/doc-pages.ts)
+  pages/                    # Fonctionnalités, pages éditoriales et « Pour qui ? », tarifs, FAQ de l'accueil, accessibilité
+  legal/                    # Accord de sous-traitance, liste des sous-traitants
+  guide/                    # Documentation par tâche (#649), une page par fichier : /doc/<page> ; GUIDE_ADMIN.md et GUIDE_BENEVOLE.md, introductions de /doc/admin et /doc/benevole
+  blog/                     # Articles du blog (#944) : /blog/<slug>
 ```
 
 ## Base de données
@@ -178,11 +207,11 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 
 | Fichier | Rôle |
 |---------|------|
-| `FEATURES.md`, `GUIDE_ADMIN.md`, `ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
-| `GUIDE_BENEVOLE.md` | Mot d'accueil du guide bénévole, rendu en tête de `/doc/benevole` : le guide est entièrement découpé en pages de `guide/`, dont `/doc/benevole` est l'index |
-| `guide/*.md` | Documentation par tâche (#649), celle des bénévoles et des organisateurs, une page par fichier rendue à `/doc/<fichier>` ; le tableau des durées de conservation d'`exporter-et-conserver-ses-donnees.md` est généré par `npm run retention:docs` ; en-tête et règles d'écriture dans `guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
-| `blog/*.md` | Articles du blog (#944), un par fichier `AAAA-MM-JJ-slug.md`, rendus à `/blog/<slug>`, listés sur `/blog` et dans le flux `/blog/feed.xml` (voir « Ajouter un article au blog ») |
-| `FONCTIONNALITES.md` | Inventaire détaillé pour l'équipe |
+| `content/pages/FEATURES.md`, `content/guide/GUIDE_ADMIN.md`, `content/pages/ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
+| `content/guide/GUIDE_BENEVOLE.md` | Mot d'accueil du guide bénévole, rendu en tête de `/doc/benevole` : le guide est entièrement découpé en pages de `content/guide/`, dont `/doc/benevole` est l'index |
+| `content/guide/*.md` | Documentation par tâche (#649), celle des bénévoles et des organisateurs, une page par fichier rendue à `/doc/<fichier>` ; le tableau des durées de conservation d'`exporter-et-conserver-ses-donnees.md` est généré par `npm run retention:docs` ; en-tête et règles d'écriture dans `content/guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
+| `content/blog/*.md` | Articles du blog (#944), un par fichier `AAAA-MM-JJ-slug.md`, rendus à `/blog/<slug>`, listés sur `/blog` et dans le flux `/blog/feed.xml` (voir « Ajouter un article au blog ») |
+| `docs/fonctionnalites.md` | Inventaire détaillé pour l'équipe |
 | `DESIGN.md`, `PRODUCT.md` | Système visuel et contexte produit, à relire avant tout changement d'interface |
 | `docs/accessibilite.md` | Vérifications d'accessibilité, à dater |
 | `docs/retention.md` | Durées de conservation ; tableaux générés par `npm run retention:docs` depuis `src/lib/retention.ts` |
@@ -192,21 +221,21 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 
 Les guides et les pages publiques décrivent l'état actuel du produit, jamais « depuis la version X » : l'historique va dans `CHANGELOG.md`.
 
-Les titres des pages publiques ont une ancre stable, le slug de leur texte (`/doc/creer-un-evenement#page-blanche`, `src/lib/heading-anchors.ts`). Les liens « Aide : … » des pages d'administration ouvrent une page de `guide/` (et, s'il est indiqué, un de ses titres) listée dans `src/lib/help-links.ts` : renommer ou supprimer une de ces pages ou un de ces titres demande de mettre ce fichier à jour dans le même changement (`src/lib/__tests__/help-links.test.ts` échoue sinon, comme pour un lien `](autre-page.md#ancre)` vers un titre qui n'existe plus).
+Les titres des pages publiques ont une ancre stable, le slug de leur texte (`/doc/creer-un-evenement#page-blanche`, `src/lib/heading-anchors.ts`). Les liens « Aide : … » des pages d'administration ouvrent une page de `content/guide/` (et, s'il est indiqué, un de ses titres) listée dans `src/lib/help-links.ts` : renommer ou supprimer une de ces pages ou un de ces titres demande de mettre ce fichier à jour dans le même changement (`src/lib/__tests__/help-links.test.ts` échoue sinon, comme pour un lien `](autre-page.md#ancre)` vers un titre qui n'existe plus).
 
 ### Principes de rédaction de la documentation
 
-Pour toute section nouvelle ou réécrite des guides (`GUIDE_ADMIN.md`, pages de `guide/`) :
+Pour toute section nouvelle ou réécrite des guides (`content/guide/GUIDE_ADMIN.md`, pages de `content/guide/`) :
 
 - **La tâche d'abord** : le titre dit ce que la personne veut faire (« Créer une série de créneaux », « Gérer son inscription »), pas le nom d'un écran ou d'un composant. La première phrase dit où cela se passe et à quoi cela sert.
 - **Des sections courtes** : une tâche par section, une procédure en étapes quand il y en a plusieurs, les cas rares dans les questions fréquentes. Une explication qui vaut pour plusieurs rôles est écrite une seule fois, au bon endroit, et les autres sections y renvoient par un lien.
 - **La vidéo par son identifiant** : quand une vidéo de la bibliothèque montre cette tâche, ajouter sous le titre, sur sa propre ligne entourée de lignes vides, `<!-- video: ID -->` avec l'identifiant stable de `videos/catalog.json` (jamais son titre, sa durée ni son adresse : ils viennent du catalogue). La page publique en fait un encadré « Voir la vidéo : titre (durée) » si la vidéo est publiée et son film en ligne, et rien sinon : dans une fiche, un bouton qui ouvre le lecteur sur place ; dans un guide, un lien vers la bibliothèque ; GitHub n'affiche rien. Une vidéo au plus par section, et une seule fois par fichier. Un identifiant inconnu ou mal écrit fait échouer `src/lib/__tests__/doc-video-references.test.ts`.
 - **L'état actuel seulement** : décrire ce que fait le produit aujourd'hui, jamais « depuis la version X » ni « nouveau » ; l'historique va dans `CHANGELOG.md`.
-- **Un seul registre par page**, celui de son public (`PRODUCT.md`) : « vous » dans le guide administrateur et les pages pour les organisateurs ; « tu » dans les pages pour les bénévoles, comme dans le produit, ses emails et ses vidéos ; une page pour les deux rôles explique une fois, puis « Côté organisation » (vous) et « Côté bénévole » (tu).
+- **Un seul registre par page**, celui de son public (`PRODUCT.md`) : « vous » dans le guide organisateur et les pages pour les organisateurs ; « tu » dans les pages pour les bénévoles, comme dans le produit, ses emails et ses vidéos ; une page pour les deux rôles explique une fois, puis « Côté organisation » (vous) et « Côté bénévole » (tu).
 
 ### Ajouter un article au blog
 
-Un article est un fichier Markdown de `blog/`, nommé `AAAA-MM-JJ-slug.md` (la date d'envoi, puis l'adresse de l'article : `/blog/slug`). Il commence par un en-tête `---` : `title` (l'objet de la newsletter tel qu'envoyé, emoji compris), `date` (`AAAA-MM-JJ`, la même que dans le nom du fichier), `summary` (une ou deux phrases de 70 à 160 caractères, tirées de l'ouverture de l'article, aussi la description de la page), et au besoin `version` (`2.3`, qui affiche le badge et renvoie vers ses notes sur `/nouveautes`) et `image` (une image PNG de 1200 x 630 servie par le site, sinon la carte du site). Le texte suit, sans titre `#` (la page affiche `title` en titre) ; les liens vers le site sont relatifs (`/doc/s-inscrire`, `/videos/ID`). L'index, la page, le plan du site et le flux Atom suivent sans autre changement ; `src/lib/__tests__/blog.test.ts` vérifie chaque fichier et chaque lien interne.
+Un article est un fichier Markdown de `content/blog/`, nommé `AAAA-MM-JJ-slug.md` (la date d'envoi, puis l'adresse de l'article : `/blog/slug`). Il commence par un en-tête `---` : `title` (l'objet de la newsletter tel qu'envoyé, emoji compris), `date` (`AAAA-MM-JJ`, la même que dans le nom du fichier), `summary` (une ou deux phrases de 70 à 160 caractères, tirées de l'ouverture de l'article, aussi la description de la page), et au besoin `version` (`2.3`, qui affiche le badge et renvoie vers ses notes sur `/nouveautes`) et `image` (une image PNG de 1200 x 630 servie par le site, sinon la carte du site). Le texte suit, sans titre `#` (la page affiche `title` en titre) ; les liens vers le site sont relatifs (`/doc/s-inscrire`, `/videos/ID`). L'index, la page, le plan du site et le flux Atom suivent sans autre changement ; `src/lib/__tests__/blog.test.ts` vérifie chaque fichier et chaque lien interne.
 
 ### Le CHANGELOG et la page Nouveautés
 
@@ -225,9 +254,9 @@ Checklist à suivre à chaque changement de version :
 1. **`CHANGELOG.md`** : `[Unreleased]` est complété à chaque PR fusionnée, étape par étape. À la release seulement, le nettoyer : une entrée par fonctionnalité telle qu'elle existe maintenant (fusionner les étapes successives), retirer les corrections de ce qui a été introduit depuis la dernière version publiée, puis vérifier qu'il ne manque rien et le renommer `[x.y.z] — AAAA-MM-JJ`. Omettre les chores purement internes (bump de dépendance, CI) sans impact utilisateur. Pour une version majeure, ouvrir la section par « Mise à jour depuis x » (voir 2.0.0).
 2. **`package.json` et `package-lock.json`** : bump du champ `"version"` (les deux fichiers : `package-lock.json` a sa propre copie du numéro à la racine et dans `packages[""]`).
 3. **`SECURITY.md`** : dans le même commit que le bump de `package.json`, mettre à jour la première ligne `X.Y.x` de la table « Versions supportées » à chaque changement de version mineure ou majeure (un correctif ne la change pas). **Vérifié en CI** (`scripts/check-security-md.mjs`, job « Type-check, lint & tests ») : la CI échoue si cette ligne ne correspond pas à la version majeure et mineure de `package.json`.
-4. **`FONCTIONNALITES.md`** : vérifier que les fonctionnalités ajoutées ou retirées depuis la dernière relecture y figurent. Pas de vérification automatique : audit manuel périodique.
-5. **`FEATURES.md`** (page publique `/fonctionnalites`) : chaque fonctionnalité livrée y figure, aucune fonctionnalité non livrée n'y est annoncée (règle d'`AGENTS.md`).
-6. **`GUIDE_ADMIN.md` / `guide/*.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/<page>` (même source) ; `/doc/benevole` et `/doc/admin` listent les pages de leur rôle.
+4. **`docs/fonctionnalites.md`** : vérifier que les fonctionnalités ajoutées ou retirées depuis la dernière relecture y figurent. Pas de vérification automatique : audit manuel périodique.
+5. **`content/pages/FEATURES.md`** (page publique `/fonctionnalites`) : chaque fonctionnalité livrée y figure, aucune fonctionnalité non livrée n'y est annoncée (règle d'`AGENTS.md`).
+6. **`content/guide/GUIDE_ADMIN.md` / `content/guide/*.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/<page>` (même source) ; `/doc/benevole` et `/doc/admin` listent les pages de leur rôle.
 7. **Changement incompatible** (variable obligatoire, manifeste, migration par Job) : section « Mise à jour depuis x » dans `docs/deploiement.md`, lien dans le README et en tête de la section du CHANGELOG.
 8. **Nouvelle variable d'environnement** : `src/lib/env.ts` si elle doit être validée au démarrage, `docs/configuration.md`, `.env.example`, l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` et le secret GitHub correspondant.
 9. **Captures de la documentation** (`public/doc-img/`, utilisées par les guides et le README) : si des écrans ont changé, les régénérer sur une base jetable avec l'événement de démonstration (`scripts/seed-demo.ts` puis `npm run screenshots`, procédure en tête de `scripts/screenshots.mjs`), et relire les textes alternatifs. Hors release, la même règle s'applique à chaque PR qui modifie un écran montré (« Captures de la documentation » dans `AGENTS.md`, vérifiée en CI).

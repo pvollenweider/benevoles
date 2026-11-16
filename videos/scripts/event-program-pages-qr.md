@@ -24,14 +24,14 @@ Donner le contexte de la journée et les consignes pratiques, puis fournir un ac
 ## Points d’attention
 
 - Tester le QR code sur un téléphone avant impression.
-- Une page publique doit rester concise et à jour.
+- Une page d’inscription doit rester concise et à jour.
 - Le programme ne crée pas de créneau de bénévolat et n’affecte personne.
 - L’ordre des pages est enregistré à chaque déplacement, sans bouton de sauvegarde supplémentaire.
 - Le scan sur un téléphone réel et la fenêtre native d’impression ne sont pas présentés comme vérifiés par la capture automatisée.
 
 ## Révision du 15 octobre 2026 — lot 22-2
 
-Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et onglets ; Dupliquer, Archiver et Journal via Autres actions ; pages et QR via Partage ; questions et suppression via Réglages ; Documents à imprimer. Libellés, narration et repères de phrases revus. Toute phrase changée impose une régénération intégrale, même voix, `continuousPauseTags: false`. Le manifeste reste le transcript canonique ; les anciennes preuves ne valident pas ce nouveau texte.
+Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et onglets ; Dupliquer, Archiver et Journal via Autres actions ; pages et QR via Partage ; questions et suppression via Paramètres ; Documents à imprimer. Libellés, narration et repères de phrases revus. Toute phrase changée impose une régénération intégrale, même voix, `continuousPauseTags: false`. Le manifeste reste le transcript canonique ; les anciennes preuves ne valident pas ce nouveau texte.
 
 
 ## Révision du 16 octobre 2026 — lot 22-9

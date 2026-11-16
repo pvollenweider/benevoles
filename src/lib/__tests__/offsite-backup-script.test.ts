@@ -38,4 +38,18 @@ describe("off-site backup CronJob (#524)", () => {
     const cronjob = readFileSync(path.join(root, "k8s/cronjob-backup-offsite.yaml"), "utf8")
     expect(cronjob).toContain('REMOTE="swissbackup:${OFFSITE_BUCKET}/benevol-backups"')
   })
+
+  // The passphrase must stay out of process lists and out of `make` output.
+  it("never passes the backup passphrase on a command line", () => {
+    const restoreScript = readFileSync(
+      path.join(root, "scripts/restore-test-offsite.sh"),
+      "utf8",
+    )
+    expect(restoreScript).toContain("-pass env:BACKUP_PASSPHRASE")
+    expect(restoreScript).not.toContain('-pass "pass:')
+    expect(restoreScript).not.toContain("pass:${BACKUP_PASSPHRASE}")
+
+    const makefile = readFileSync(path.join(root, "Makefile"), "utf8")
+    expect(makefile).not.toMatch(/BACKUP_PASSPHRASE="\$\(BACKUP_PASSPHRASE\)"/)
+  })
 })

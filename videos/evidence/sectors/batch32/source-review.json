@@ -1,0 +1,17 @@
+{
+  "videoSha256": "360d0218823ac42402d2a5ba46bd6a89cb939710c3aa2e8fd8d6325c9a84c2cc",
+  "resolvedFindings": [
+    {
+      "scene": "sectors-filter",
+      "observation": "Browser address bar is outside the content screencast while narration explains the persistent URL filter.",
+      "decision": "Informational explanation on the relevant stable filtered screen, not an announced action on browser chrome; no omitted click or result.",
+      "evidence": [
+        "review-frames/sectors-filter-end.png: Parking and five active registrations remain after real reload",
+        "record-beta-features.ts chooseParking waits for the actual secteur query value; sectors-filter reloads page.url() and asserts select inputValue equals parkingId; narrated run passed",
+        "Raw AV checkpoint itself marks sync aligned, severity none"
+      ],
+      "unresolved": false
+    }
+  ],
+  "unresolvedFindings": []
+}

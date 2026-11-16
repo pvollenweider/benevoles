@@ -11,23 +11,39 @@ type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
  * Removes secret access tokens from what is sent to Sentry. Some URLs of the
  * app carry a token that gives access to a volunteer's registration:
  *   /my/<token>, /waitlist/<token>/confirm, /api/public/registrations/<token>,
- *   /api/public/member-invite/<token>, a sector leader's /leader/<token> (page and
+ *   /api/public/member-invite/<token>, /disponibilites/<token> and /api/public/availability/<token>
+ *   (#1146), a sector leader's /leader/<token> (page and
  *   API) and ?token=<token> (invitations, password reset, account activation).
  * An error on one of these pages would otherwise attach the full URL, and the
  * token with it, to the event, its breadcrumbs and its spans. The same families are
  * kept out of the proxy's access log (k8s/ingressroute-tokens.yaml).
  */
 
-const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|leader)\/)[^/?#\s"']+/g
+const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|confirmations|confirmation|leader|disponibilites|availability)\/)[^/?#\s"']+/g
+// « Je ne peux pas » for one shift (#1303): /ne-peux-pas/<invitation|inscription>/<token>/<shiftId>,
+// the token is the second segment.
+const DECLINE_TOKEN_PATH = /(\/ne-peux-pas\/[^/?#\s"']+\/)[^/?#\s"']+/g
 // Also matches a bare query string, as stored in request.query_string.
 const TOKEN_QUERY = /((?:^|[?&])(?:token|t)=)[^&#\s"']*/gi
 // Defensive scrub (#598): an email address is personal data and must never reach Sentry, whatever
 // string it ends up in — an SMTP error message that slipped past a classifier, a log line, a
 // stack frame. Cheap (one regex pass over every string already going through scrubUrl).
-const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g
+// A match starts only where a run of address characters starts (the start of the string, or the
+// character before the run, kept as $1): without that, every position of a long run was tried
+// again up to the `@`, which costs quadratic time on a long request path. No lookbehind: a
+// browser older than Safari 16.4 refuses to parse one, and the whole script with it (#1343).
+const EMAIL_RE = /(^|[^A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g
+// What is left of an address cut by the length cap below (« jane.doe@exa »).
+const CUT_EMAIL_AT_END = /(^|[^A-Za-z0-9._%+-])[A-Za-z0-9._%+-]*@[A-Za-z0-9.-]*$/
+
+/** Longest string kept: anything longer is cut before the patterns run (bounded work per string). */
+export const SCRUB_MAX_LENGTH = 8192
 
 export function scrubUrl(value: string): string {
-  return value.replace(TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "[email]")
+  const cut = value.length > SCRUB_MAX_LENGTH
+  const kept = cut ? value.slice(0, SCRUB_MAX_LENGTH) : value
+  const scrubbed = kept.replace(TOKEN_PATH, "$1[token]").replace(DECLINE_TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "$1[email]")
+  return cut ? `${scrubbed.replace(CUT_EMAIL_AT_END, "$1[email]")}…` : scrubbed
 }
 
 export function scrubDeep<T>(value: T, depth = 0): T {
@@ -55,7 +71,15 @@ export function scrubEvent<T extends Event>(event: T): T {
   if (event.transaction) event.transaction = scrubUrl(event.transaction)
   if (event.tags) event.tags = scrubDeep(event.tags)
   if (event.breadcrumbs) event.breadcrumbs = event.breadcrumbs.map(scrubBreadcrumb)
-  if (event.contexts?.trace?.data) event.contexts.trace.data = scrubDeep(event.contexts.trace.data)
+  // The error itself: an exception's message (a failed query can quote its arguments), a captured
+  // message, and the extra data and contexts attached to the event, with the same rules.
+  if (event.message) event.message = scrubUrl(event.message)
+  if (event.logentry) event.logentry = scrubDeep(event.logentry)
+  if (event.exception?.values) {
+    event.exception.values = event.exception.values.map((ex) => (ex.value ? { ...ex, value: scrubUrl(ex.value) } : ex))
+  }
+  if (event.extra) event.extra = scrubDeep(event.extra)
+  if (event.contexts) event.contexts = scrubDeep(event.contexts)
   // Transaction events also carry spans (fetch and http calls with their URLs).
   const withSpans = event as { spans?: { description?: string; data?: Record<string, unknown> }[] }
   if (withSpans.spans) {
@@ -121,6 +145,9 @@ export const NO_PII_DATA_COLLECTION: NonNullable<InitOptions["dataCollection"]> 
  * - Microsoft's link scanners (Outlook Safe Links / Defender) open the personal links of our
  *   emails in an embedded CefSharp browser, which rejects a promise of its own with « Object Not
  *   Found Matching Id:N, MethodName:update, ParamCount:N » (seen on /my/[token], no real user).
+ * - A WebExtension (Firefox, Safari) whose content script messages a tab that is gone rejects
+ *   with « Invalid call to runtime.sendMessage(). Tab not found. »; the site never calls the
+ *   extension API (BENEVOLAPP, issue 160883622, on a public event page).
  */
 export const BROWSER_NOISE_ERRORS: RegExp[] = [
   /__firefox__/,
@@ -128,6 +155,7 @@ export const BROWSER_NOISE_ERRORS: RegExp[] = [
   /window\.ethereum/,
   /MetaMask/,
   /Object Not Found Matching Id:\d+, MethodName:\w+, ParamCount:\d+/,
+  /Invalid call to runtime\.sendMessage\(\)/,
 ]
 
 // « Event `Event` (type=error) captured as promise rejection »: what the SDK reports when a promise
@@ -148,8 +176,27 @@ export function isStacklessDomEventRejection(event: Event): boolean {
   )
 }
 
+// What browsers say when a fetch never got an answer: Safari « Load failed », Chrome « Failed to
+// fetch », Firefox « NetworkError when attempting to fetch resource. ». Seen when a tab opened
+// before a deploy asks for a file of the previous build, or the network drops; Next reloads the
+// page itself. With no stack there is no code of ours to point at.
+const NETWORK_FAILURE = /^(?:Load failed|Failed to fetch|NetworkError when attempting to fetch resource\.?)$/
+
+/** An unhandled rejection that is only a browser network failure, without any stack (client only). */
+export function isStacklessNetworkRejection(event: Event): boolean {
+  const exceptions = event.exception?.values ?? []
+  if (exceptions.length === 0) return false
+  return exceptions.every(
+    (ex) =>
+      ex.type === "TypeError" &&
+      NETWORK_FAILURE.test(ex.value ?? "") &&
+      (ex.mechanism?.type ?? "").includes("onunhandledrejection") &&
+      !ex.stacktrace?.frames?.length,
+  )
+}
+
 /** Client `beforeSend`: drops browser noise that `ignoreErrors` cannot express, then scrubs. */
 export function beforeSendClient<T extends Event>(event: T): T | null {
-  if (isStacklessDomEventRejection(event)) return null
+  if (isStacklessDomEventRejection(event) || isStacklessNetworkRejection(event)) return null
   return scrubEvent(event)
 }

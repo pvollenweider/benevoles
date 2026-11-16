@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T20:43:28.830Z",
-  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
-  "promptSha256": "cc684394360a8963cf689ce22aa1edb2e66068b1494b5944b058fe2734832da7",
-  "clipSha256": "af0fb4483864875f391edffe1e71633486fe0b6ad974a743c9804ebe2e11987e",
+  "reviewedAt": "2026-10-22T09:37:55.189Z",
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "promptSha256": "dcbce6411407da381309b0c844be88fb50596dab8a2af3a6725063d79751c084",
+  "clipSha256": "f1ea3805ae6c91a7a32405f4ce371b33fb92dacfd04f9e7d264cb0467d266482",
   "scene": "roster-withdraw",
   "review": {
-    "heardOpening": "Revenons sur la page personnelle",
+    "heardOpening": "Revenons sur la page personnelle d’Aline",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Revenons sur la page personnelle d’Aline.",
-        "visibleSeconds": 0.5,
-        "visible": "Page 'Mes inscriptions' pour Aline Martin affichée à l'écran.",
+        "spokenSeconds": 2,
+        "spoken": "Désactivez Afficher mon nom aux autres bénévoles",
+        "visibleSeconds": 2.5,
+        "visible": "Désactivation de l'interrupteur Afficher mon nom aux autres bénévoles",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
-        "spoken": "Cliquez sur Masquer mon nom.",
-        "visibleSeconds": 2.7,
-        "visible": "Clic sur le bouton 'Masquer mon nom', qui devient 'Afficher mon nom'.",
+        "spokenSeconds": 5,
+        "spoken": "L’état Masqué confirme le retrait",
+        "visibleSeconds": 4,
+        "visible": "Le texte Masqué s'affiche à côté de l'interrupteur désactivé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Sur la page ouverte par l’invitation, Aline a disparu ; sa place reste comptée.",
-        "visibleSeconds": 5.8,
-        "visible": "Affichage de la page de l'événement avec 'Sur ce créneau : 3 autres bénévoles, sans nom affiché'.",
+        "spokenSeconds": 7.2,
+        "spoken": "Sur la page ouverte par l’invitation, Aline a disparu",
+        "visibleSeconds": 7,
+        "visible": "Affichage de la liste où le créneau indique 3 autres bénévoles, sans nom affiché",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
-        "spoken": "voici la même page sans identification. Le bouton et les noms ont disparu.",
-        "visibleSeconds": 12.5,
-        "visible": "Vue sans session utilisateur connectée : absence de nom en haut à droite et bouton 'Voir qui est inscrit' retiré.",
+        "spokenSeconds": 14.4,
+        "spoken": "Pour terminer, voici la même page sans identification",
+        "visibleSeconds": 14.8,
+        "visible": "Passage à la vue publique sans utilisateur connecté ni bouton Voir qui est inscrit",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration visuelle."
+      "observation": "Voix claire, posée et bien synchronisée avec les changements d'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

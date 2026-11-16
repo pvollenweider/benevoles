@@ -39,6 +39,7 @@ type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
 export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events": { GET: "organizer", POST: "organizer" },
   "events/[id]": { GET: "organizer", PATCH: "organizer", DELETE: "owner" },
+  "events/[id]/day-of": { GET: "organizer" },
   "events/[id]/duplicate": { POST: "organizer" },
   "events/[id]/export/answers": { GET: "organizer" },
   "events/[id]/export/archive": { GET: "organizer" },
@@ -59,7 +60,7 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/messages/[messageId]/resend-failed": { POST: "organizer" },
   "events/[id]/scheduled-messages": { POST: "organizer" },
   "events/[id]/scheduled-messages/[scheduledId]/cancel": { POST: "organizer" },
-  "events/[id]/open-shifts": { POST: "organizer" },
+  "events/[id]/open-shifts": { GET: "organizer", POST: "organizer" },
   "events/[id]/milestones": { GET: "organizer", POST: "organizer" },
   "events/[id]/milestones/[milestoneId]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/pages": { GET: "organizer", POST: "organizer" },
@@ -72,10 +73,49 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/questions/[questionId]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/questions/reorder": { POST: "organizer" },
   "events/[id]/registrations/bulk": { POST: "organizer" },
+  "events/[id]/reminder-rules": { GET: "organizer", PUT: "organizer" },
   "events/[id]/reorder-roles": { POST: "organizer" },
   "events/[id]/roles/[roleName]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/sector-leaders": { GET: "organizer", POST: "organizer" },
+  // Sectors grouping postes (#1147), like the postes: organiser level. Joining the beta stays owner-only.
+  // Places of an event (#1171, lot 2): where missions happen, for the travel margin.
+  "events/[id]/places": { GET: "organizer", POST: "organizer" },
+  // Personal workload limits (#1171, lot 2): one person's own, stricter limits on an event.
+  "events/[id]/workload-limits": { GET: "organizer" },
+  "events/[id]/workload-limits/[volunteerId]": { PUT: "organizer", DELETE: "organizer" },
+  "events/[id]/places/[placeId]": { PATCH: "organizer" },
+  "events/[id]/sectors": { GET: "organizer", POST: "organizer" },
+  "events/[id]/sectors/[sectorId]": { PATCH: "organizer" },
+  "events/[id]/sectors/mode": { PUT: "organizer" },
+  "events/[id]/sectors/reorder": { POST: "organizer" },
   "events/[id]/sector-leaders/[leaderId]": { DELETE: "organizer" },
+  // Shift swaps between volunteers (#1174, beta): the event's option and the approvals, organiser level.
+  "events/[id]/swaps": { GET: "organizer" },
+  "events/[id]/swaps/[requestId]": { POST: "organizer" },
+  "events/[id]/swaps/mode": { PUT: "organizer" },
+  // Breaks and workload protection (#1171, beta): the event's policy and its preview, like the swaps option.
+  "events/[id]/workload-policy": { GET: "organizer", PUT: "organizer" },
+  "events/[id]/workload-policy/preview": { POST: "organizer" },
+  // Dated availability (#1146, beta): the option, the requests, who answered and corrections, organiser level.
+  "events/[id]/availability": { GET: "organizer", POST: "organizer" },
+  "events/[id]/availability/mode": { PUT: "organizer" },
+  "events/[id]/availability/remind": { POST: "organizer" },
+  "events/[id]/availability/[volunteerId]": { GET: "organizer", PUT: "organizer" },
+  // Assisted manual assignment (#1146, lot B): one person's fit for the shifts of the add form.
+  "events/[id]/availability/fit": { GET: "organizer" },
+  // Draft assignments and their publication (#1146, lot C): organisers, like the manual add.
+  "events/[id]/availability/[volunteerId]/review": { POST: "organizer" },
+  "events/[id]/drafts": { POST: "organizer" },
+  "events/[id]/drafts/[draftId]": { PATCH: "organizer", DELETE: "organizer" },
+  "events/[id]/drafts/options": { GET: "organizer" },
+  "events/[id]/drafts/publish": { POST: "organizer" },
+  // Generated assignment proposals (#1172): organisers, like the drafts they write.
+  "events/[id]/drafts/[draftId]/lock": { POST: "organizer" },
+  "events/[id]/proposals": { GET: "organizer", POST: "organizer" },
+  "events/[id]/proposals/[runId]": { GET: "organizer" },
+  "events/[id]/proposals/[runId]/cancel": { POST: "organizer" },
+  "events/[id]/proposals/[runId]/write": { POST: "organizer" },
+  "events/[id]/proposal-targets": { GET: "organizer", PUT: "organizer" },
   "events/[id]/send-reminder": { POST: "organizer" },
   "events/from-template": { POST: "organizer" },
   "members": { GET: "organizer", POST: "organizer" },
@@ -85,6 +125,13 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   // merge below, it only ever applies to a record that was already inactive with no registration
   // at all, so it's a much smaller, local action — not owner-only.
   "members/[id]/delete": { POST: "organizer" },
+  // Bulk permanent deletion (#1305): same level as the single action, with the owner-decided
+  // difference that an active record without registration can be deleted directly. The
+  // confirmation, not the role, replaces the deactivation step.
+  "members/bulk-delete": { POST: "organizer" },
+  // Bulk deactivation (#1307): the reversible counterpart of the bulk deletion, same level as the
+  // single « Désactiver » action (members/[id] DELETE).
+  "members/bulk-deactivate": { POST: "organizer" },
   // Erasure of personal data (#516): owners and organizers (owner decision), like deletion above:
   // answering a person's erasure request is part of managing the members.
   "members/[id]/erase": { POST: "organizer" },
@@ -116,6 +163,8 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "settings/organization": { PATCH: "owner" },
   // The organization's logo (#300): one of its settings, like its name and address.
   "settings/organization/logo": { PUT: "owner", DELETE: "owner" },
+  // Joining or leaving the beta (#1168) commits the whole organisation: owner only.
+  "settings/organization/beta": { PUT: "owner" },
   "settings/organization/slugs": { GET: "organizer", DELETE: "owner" },
   "settings/password": { POST: "organizer" },
   "shifts": { POST: "organizer" },
@@ -127,8 +176,11 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "shifts/recurrence/[id]/stop": { POST: "organizer" },
 }
 
-/** Routes that don't require an org session at all (the invitation acceptance). */
-export const PUBLIC_ADMIN_ROUTES = ["accept-invite"]
+/**
+ * Routes that don't require an org session at all: the invitation acceptance, and the super admin's
+ * second step at sign-in (pentest F6), which checks its own session (requireSecondFactorStep).
+ */
+export const PUBLIC_ADMIN_ROUTES = ["accept-invite", "two-factor"]
 
 /**
  * Why a change to the team can't be made: an organisation always keeps at least one active owner.

@@ -4,7 +4,7 @@ Procédure interne (#516). Elle décrit ce que fait l'effacement depuis l'admini
 
 ## Qui efface, et quoi
 
-L'organisation reçoit la demande et l'exécute elle-même : page **Activité** du membre, **Effacer les données personnelles** (propriétaires et organisateurs, `guide/effacer-ou-supprimer-un-membre.md`, « Effacer les données personnelles d'un membre »). Vérifier d'abord que la demande vient bien de la personne concernée (réponse depuis l'adresse email de la fiche, par exemple) : l'action est irréversible.
+L'organisation reçoit la demande et l'exécute elle-même : page **Activité** du membre, **Effacer les données personnelles** (propriétaires et organisateurs, `content/guide/effacer-ou-supprimer-un-membre.md`, « Effacer les données personnelles d'un membre »). Vérifier d'abord que la demande vient bien de la personne concernée (réponse depuis l'adresse email de la fiche, par exemple) : l'action est irréversible.
 
 L'effacement anonymise la fiche au lieu de la supprimer (décision du 2026-10-05) :
 
@@ -25,7 +25,7 @@ L'effacement anonymise la fiche au lieu de la supprimer (décision du 2026-10-05
 
 Le tout tient dans une transaction qui verrouille la fiche ; un second effacement ne change rien. L'effacement vaut pour une organisation : la même personne inscrite dans une autre organisation n'est pas touchée (elle doit s'adresser à chacune).
 
-Ce que l'effacement ne touche pas : les textes saisis par l'organisation elle-même (message ciblé, page d'événement, nom d'un contact de créneau) qui citeraient la personne, à corriger à la main par l'organisation ; les sauvegardes, jusqu'à la fin de leur rotation ([../retention.md](../retention.md)) ; les journaux techniques des conteneurs et les services de messagerie, selon leur propre durée.
+Ce que l'effacement ne touche pas : les textes saisis par l'organisation elle-même (message ciblé, page d'événement, nom d'un contact de créneau) qui citeraient la personne, à corriger à la main par l'organisation ; les sauvegardes, jusqu'à la fin de leur rotation ([../retention.md](../retention.md)) ; les journaux techniques des conteneurs, les journaux d'accès du proxy (adresse IP et pages demandées, 1 an, adresse réduite après 90 jours) et les services de messagerie, selon leur propre durée.
 
 ## Registre des effacements
 

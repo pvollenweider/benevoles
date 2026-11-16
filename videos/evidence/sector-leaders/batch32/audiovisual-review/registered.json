@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:53:16.182Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "promptSha256": "0046baa415cc739f7d652a4f8c13886647e90a6197de268151e266d1ae9f87f3",
+  "clipSha256": "7b22958bcd4451bcddfde5e3fd55d39cac481d1eed706611c1552f2d360d7833",
+  "scene": "registered",
+  "review": {
+    "heardOpening": "Si la personne participe déjà",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées",
+        "visibleSeconds": 1.5,
+        "visible": "Le formulaire d'ajout d'un responsable s'affiche et les coordonnées de Camille Rochat sont sélectionnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Vérifiez le poste proposé avant de confirmer.",
+        "visibleSeconds": 9.5,
+        "visible": "Le champ Poste est modifié d'Accueil en Démontage avant validation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "la nomination ne remplace pas une inscription",
+        "visibleSeconds": 13.8,
+        "visible": "Clic sur « Ajouter et envoyer le lien » et retour à la liste affichant désormais 4 responsables",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

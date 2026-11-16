@@ -1,5 +1,7 @@
 # Utiliser Benevol au clavier et adapter l'affichage
 
+État du lot 30 (22 octobre 2026) : sources et narration continue actualisées ; précontrôles du produit courant réussis. Le film reste **NOT READY**, car macOS refuse la capture native (TCC). Les constats datés ci-dessous sont historiques ; aucune ancienne prise VoiceOver ne vaut preuve pour le build courant.
+
 Vidéo autonome 52. Voix masculine Puck, une prise continue souriante et patiente.
 Expliquer pourquoi chaque geste aide, le faire réellement, puis montrer son résultat.
 Ne jamais présenter une émulation Chromium comme Windows, un iPhone réel ou un lecteur d'écran.
@@ -142,3 +144,49 @@ WAITING TTS — plafond mensuel connu ; aucun appel. Narration entière à rég�
 - Indiquez la page, le geste tenté, le résultat attendu, le navigateur et, si vous en utilisez un, le lecteur d'écran.
 
 Précontrôles sur le build du lot 22-7 : `verify-accessibility-picker.ts` et `verify-accessibility-current-pages.ts` passent. Onglets actuels, Cumul, Charte des bénévoles, sélection publique au clavier et vrai lien Accessibilité contrôlés ; largeur de document 381 px à 320 px toujours observée. Ces captures ne valident ni le zoom natif ni VoiceOver, et ne sont pas un film final.
+
+## Révision du 2026-10-22 — lot 30
+
+Une seule entrée Tab par jour dans la Frise ; ← → : même poste · ↑ ↓ : poste voisin · Tab : quitter le planning. Début/Fin : extrémités du poste ; Ctrl+Début/Ctrl+Fin : extrémités du jour. Les barres indisponibles restent atteignables et décrivent leur indisponibilité, sans permettre la sélection. La ligne d’aide apparaît au focus clavier. Narration complète à régénérer en une seule passe Puck, sans balises de pause.
+
+### Narration courante
+
+#### welcome
+
+Une souris n'est pas indispensable pour organiser une fête. Le clavier peut aussi rendre les gestes plus confortables. Dans notre organisation fictive, commençons par Tab : le contour indique où nous sommes. Le lien d'évitement permet de rejoindre directement le contenu avec Entrée. Tab avance, Majuscule et Tab reviennent au contrôle précédent. Les touches affichées correspondent aux gestes réellement effectués. Prenez votre temps : ce repère sert à savoir quel bouton ou quel champ va réagir.
+
+#### public
+
+Côté bénévole, Tab entre dans le planning du jour sur une seule barre. La ligne sous la Frise rappelle les touches. Gauche et droite parcourent le même poste. Haut et bas rejoignent le poste voisin. Tab quitte le planning. Les barres indisponibles restent atteignables et leur nom indique pourquoi elles ne peuvent pas être choisies. Revenons à Accueil, puis sélectionnons ce créneau. Continuons jusqu'au formulaire. Le récapitulatif rappelle le poste, la date et l'horaire : il permet de vérifier son choix avant de s'engager. Un champ obligatoire manque ? Lisons le message, revenons au champ et complétons-le. La validation n'est pas seulement une couleur rouge. Les personnes et adresses utilisées ici sont fictives ; nous ne contactons aucun vrai bénévole pendant cette formation.
+
+#### picker
+
+Dans les inscriptions, ouvrons l'ajout manuel. Aline a déjà un créneau à l'accueil. Renseignons son adresse, puis atteignons Créneau. Une flèche ouvre la liste et les flèches déplacent l'option active. Une lettre aide à retrouver un poste. À l'accueil, nous voyons Déjà inscrit. Le vestiaire chevauche son horaire : la mention conflit nous invite à vérifier avant de choisir. Entrée retient une option. Rouvrons, puis appuyons sur Échap : la valeur précédente reste conservée. Le filtre de créneau utilise le même principe pour retrouver les inscriptions à afficher.
+
+#### error
+
+Essayons maintenant d'ajouter une personne sans choisir de créneau. Le message Sélectionnez un créneau apparaît et le focus revient au champ concerné. Il n'est pas nécessaire de repartir du début de la page. Choisissons un créneau libre, puis ajoutons notre personne fictive. Vérifions le résultat dans les inscriptions et le compteur affiché. Une annonce de résultat, lorsqu'elle est lue par un lecteur d'écran, ne doit pas être confondue avec notre narration. Ici, nous montrons d'abord les gestes et l'état réel de l'interface.
+
+#### planning
+
+Pour préparer le planning, le clavier permet aussi de passer de Frise à Liste. Vérifions quelle vue est sélectionnée. Ouvrons l'éditeur d'un créneau, puis annulons : le focus doit revenir à un contrôle utile. Dans Gérer les postes, les flèches Monter et Descendre offrent une alternative au glisser-déposer. Déplaçons un poste, puis regardons sa nouvelle position. Rechargeons pour vérifier que l'ordre a bien été enregistré. Le but n'est pas de mémoriser toutes les touches, mais de pouvoir construire et corriger son planning sans dépendre d'un geste précis à la souris.
+
+#### zoom
+
+Si le texte est trop petit, utilisons le zoom du navigateur. Passons à deux cents pour cent, puis à quatre cents pour cent. Ce n'est pas un agrandissement ajouté au montage : le navigateur adapte réellement son affichage. Vérifions les champs et les commandes. Sur la chronologie, un défilement horizontal peut rester nécessaire pour parcourir les horaires. Revenons ensuite à cent pour cent. Le confort dépend aussi de la taille de la fenêtre et du navigateur ; cette démonstration ne garantit pas tous les appareils.
+
+#### mobile
+
+Regardons une fenêtre simulée de trois cent vingt pixels de large. Ce n'est pas un essai sur un téléphone physique. Dans la liste, vérifions les noms longs, la mention Déjà inscrit et les conflits d'horaire. Il faut parfois faire défiler pour atteindre la suite. Regardons aussi les filtres et les champs du formulaire : une liste qui tient dans l'écran ne suffit pas à valider toute la page. Si un élément gêne votre usage, décrivez l'écran et le geste dans votre retour. Cette simulation ne remplace pas un essai sur votre appareil.
+
+#### contrast
+
+Comparons maintenant l'affichage normal avec les couleurs forcées de Chromium, en clair puis en sombre. L'encart précise qu'il s'agit d'une émulation, pas d'un test Windows. Le contour du champ, le marqueur de l'option active et la coche du choix retenu n'ont pas le même rôle. Vérifions qu'ils restent repérables. Regardons aussi un interrupteur activé puis désactivé : son état ne devrait pas dépendre seulement d'une couleur. Ces images aident à examiner le contraste, sans remplacer un essai réel dans les thèmes de contraste du système.
+
+#### reader
+
+Un lecteur d'écran transforme les noms, les états et les messages en informations parlées. Écoutons maintenant une courte utilisation réelle de VoiceOver, avec le système et le navigateur indiqués à l'écran. Le nom du créneau et son état doivent aider à comprendre ce que l'on choisit. Notre voix de formation ne remplace pas cette lecture. Cet exemple porte sur ce parcours précis : il ne signifie pas que tous les écrans sont validés, ni que le comportement sera identique avec NVDA ou sur un téléphone.
+
+#### limits
+
+Pour connaître le périmètre des essais et les limites connues, ouvrons Accessibilité depuis le pied de page. La page décrit une évaluation partielle, pas une promesse que tout fonctionne partout. Vous rencontrez une difficulté ? Le lien de contact permet de la signaler. Indiquez la page, le geste tenté, le résultat attendu, le navigateur et, si vous en utilisez un, le lecteur d'écran. Nous n'envoyons pas de message dans cette démonstration. Un retour précis aide à rendre l'outil plus confortable pour tout le monde, petit à petit.

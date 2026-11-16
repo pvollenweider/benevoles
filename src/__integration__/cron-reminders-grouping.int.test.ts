@@ -19,7 +19,9 @@ vi.mock("@/lib/waitlist", () => ({
 }))
 vi.mock("@/lib/notifications/outbox", () => ({
   deliverOutbox: vi.fn().mockResolvedValue(null),
-  outboxHealth: vi.fn().mockResolvedValue({ healthy: true, stuck: false }),
+  outboxHealth: vi.fn().mockResolvedValue({
+    failedLastDay: 0, recipientFailuresLastDay: 0, otherFailuresLastDay: 0, oldestPendingMinutes: null, staleClaims: 0, healthy: true, stuck: false,
+  }),
 }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
@@ -131,5 +133,25 @@ describe.skipIf(!url)("cron reminders grouping on Postgres (#672)", () => {
     const data = await res.json()
     expect(data.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 1, failed: 0 })
     expect((await prisma.registration.findUniqueOrThrow({ where: { id: lateReg.id } })).reminderDdSent).not.toBeNull()
+  })
+
+  it("treats an event whose rules are all archived as legacy again", async () => {
+    // An archived row is history, not a custom delay: the event is back in default mode, so the
+    // legacy J-2 / J-1 / day-of path must send again.
+    await prisma.eventReminderRule.create({
+      data: { eventId, unit: "hours", value: 2, enabled: false, archivedAt: new Date("2030-05-01T00:00:00Z") },
+    })
+    try {
+      await makeShiftAndRegistration("10:00")
+      const { POST } = await import("@/app/api/cron/reminders/route")
+      const res = await POST(post())
+      const data = await res.json()
+
+      expect(data.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 1, failed: 0 })
+      expect(sendNotificationMock).toHaveBeenCalledTimes(1)
+      expect(await prisma.reminderOccurrence.count({ where: { eventId } })).toBe(0)
+    } finally {
+      await prisma.eventReminderRule.deleteMany({ where: { eventId } })
+    }
   })
 })

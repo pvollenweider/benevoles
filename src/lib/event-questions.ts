@@ -37,6 +37,13 @@ export type Question = {
    */
   parentId?: string | null
   showIfValues?: string[]
+  /**
+   * Who is asked (#1140, question-scope.ts): "event" (or absent) for everyone, "roles" for the
+   * volunteers on one of displayRoleNames. The callers keep only the questions asked before
+   * checking (`splitByScope`): an out-of-scope question is neither checked, required nor cleared.
+   */
+  displayScope?: string | null
+  displayRoleNames?: string[] | null
 }
 
 // ── Number questions (#1015) ────────────────────────────────────────────────

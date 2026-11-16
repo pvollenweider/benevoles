@@ -1,0 +1,120 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-29T06:21:51.574Z",
+  "revalidatedAt": "2026-10-29T15:06:03.842Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "swaps-welcome",
+      "audioSha256": "8915d8c525c298081ef8531b3dbc7d7899a7de0471e897ae9674e61c4b4af139",
+      "recognized": "Un bénévole ne peut plus venir à son créneau ? Avec les échanges de créneaux en bêta, il peut proposer sa place à une autre personne inscrite sans que l'organisation ait tout à refaire. Voyons l'option de l'événement, un échange sur le même poste, puis un échange entre deux postes d'un même secteur validé par l'organisation.",
+      "expected": "Un bénévole ne peut plus venir à son créneau ? Avec les échanges de créneaux, en bêta, il peut proposer sa place à une autre personne inscrite, sans que l'organisation ait tout à refaire. Voyons l'option de l'événement, un échange sur le même poste, puis un échange entre deux postes d'un même secteur, validé par l'organisation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-enable",
+      "audioSha256": "a1e78d0bc261f26cd426b56448a590d4061532cb71f2b918a8e56000486d462a",
+      "recognized": "Dans les informations de l'événement, la carte échange de créneaux propose autoriser les demandes d'échange de créneaux. Activons-la. Deux bénévoles confirmés sur le même poste ou sur deux postes du même secteur peuvent alors échanger leurs créneaux depuis leur page Mes inscriptions. Laissons pour l'instant valider chaque échange désactivé.",
+      "expected": "Dans les informations de l'événement, la carte Échanges de créneaux propose Autoriser les demandes d'échange de créneaux. Activons-la. Deux bénévoles confirmés sur le même poste, ou sur deux postes du même secteur, peuvent alors échanger leurs créneaux depuis leur page Mes inscriptions. Laissons pour l'instant Valider chaque échange désactivé.",
+      "wordErrorRate": 0.018867924528301886,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-publish",
+      "audioSha256": "28f20facaf1eb03417c41e1bdd7b96002564b7e297a6078d563c3359aac66564",
+      "recognized": "Léa ne peut plus venir au bar de la grande scène samedi après-midi. Elle ouvre sa page Mes inscriptions à la partie Échanger un créneau. Elle choisit Je cherche à échanger ce créneau. Sa demande est publiée. Les personnes inscrites sur un autre créneau du même poste peuvent lui proposer le leur jusqu'à la date limite indiquée. Son créneau ne change pas d'ici là.",
+      "expected": "Léa ne peut plus venir au bar de la Grande Scène, samedi après-midi. Elle ouvre sa page Mes inscriptions, à la partie Échanger un créneau. Elle choisit Je cherche à échanger ce créneau. Sa demande est publiée. Les personnes inscrites sur un autre créneau du même poste peuvent lui proposer le leur, jusqu'à la date limite indiquée. Son créneau ne change pas d'ici là.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-offer",
+      "audioSha256": "4935881ca06860c910f10898b05e296c87802f8fc455477d493573b0c4582e0e",
+      "recognized": "Jules est inscrit à deux créneaux du même bar le dimanche. Sur sa page, échanges proposés par d'autres bénévoles montre le créneau que Léa cède sans son nom. Jules choisit celui qu'il cède, dimanche après-midi, puis proposer cet échange. C'est maintenant à Léa de répondre.",
+      "expected": "Jules est inscrit à deux créneaux du même bar, le dimanche. Sur sa page, Échanges proposés par d'autres bénévoles montre le créneau que Léa cède, sans son nom. Jules choisit celui qu'il cède, dimanche après-midi, puis Proposer cet échange. C'est maintenant à Léa de répondre.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-accept",
+      "audioSha256": "5e5cefadbc03e1f2ebd77c029b1c730eda44816fbf3a8d7d6658d7f840fca075",
+      "recognized": "Léa reçoit un e-mail et sa page indique que Jules, initiale H, lui propose un échange. Elle relit tu cèdes et tu reçois, puis choisit accepter l'échange. Une confirmation récapitule les deux créneaux. Oui, échanger, l'échange se fait tout de suite.",
+      "expected": "Léa reçoit un email, et sa page indique que Jules, initiale H, lui propose un échange. Elle relit Tu cèdes et Tu reçois, puis choisit Accepter l'échange. Une confirmation récapitule les deux créneaux. Oui, échanger. L'échange se fait tout de suite.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-done",
+      "audioSha256": "7ac204758212d0fa305ca758ebf7811f73328c4060aa61fd8e4a48656e26a47a",
+      "recognized": "Échange effectué. Léa a maintenant le créneau du dimanche et Jules celui du samedi. Chacun garde son inscription et son lien personnel. Le nouveau créneau apparaît dans Tous mes créneaux et les rappels repartent pour ce créneau. Tous deux reçoivent un e-mail, échange effectué.",
+      "expected": "Échange effectué. Léa a maintenant le créneau du dimanche, et Jules celui du samedi. Chacun garde son inscription et son lien personnel. Le nouveau créneau apparaît dans Tous mes créneaux, et les rappels repartent pour ce créneau. Tous deux reçoivent un email Échange effectué.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-approval",
+      "audioSha256": "a5992f658918216a28e9313d1b3e004e96f81c9a8bc386787c4383611848e19c",
+      "recognized": "Côté organisation, vous pouvez faire valider chaque échange. Dans les informations de l'événement, activons valider chaque échange. Désormais, chaque échange attend votre accord, même entre deux créneaux ordinaires. Un échange qui touche un créneau sur validation l'attend toujours.",
+      "expected": "Côté organisation, vous pouvez faire valider chaque échange. Dans les informations de l'événement, activons Valider chaque échange. Désormais, chaque échange attend votre accord, même entre deux créneaux ordinaires. Un échange qui touche un créneau sur validation l'attend toujours.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-sector",
+      "audioSha256": "8802f5301c840e1e7aa17f52275d90d291d85422700fe88db1dd0a9d493e0f1f",
+      "recognized": "Dans cet événement les postes sont rangés par secteur. Noah est à l'accueil de la scène du lac samedi matin et publie sa demande. Lou est à l'accueil de la grande scène dimanche matin, un autre poste du même secteur. Sur sa page le nom du poste est toujours indiqué, jamais le secteur. Lou propose son créneau",
+      "expected": "Dans cet événement, les postes sont rangés par secteurs. Noah est à l'accueil de la Scène du Lac, samedi matin, et publie sa demande. Lou est à l'accueil de la Grande Scène, dimanche matin, un autre poste du même secteur. Sur sa page, le nom du poste est toujours indiqué, jamais le secteur. Lou propose son créneau.",
+      "wordErrorRate": 0.01694915254237288,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-sector-accept",
+      "audioSha256": "0e967a01b8f5d310f8fd25648a7fb16c7b999a57a1e39ad0675a001283b1e577",
+      "recognized": "Noah relit la proposition et l'accepte. Cette fois, la confirmation prévient que l'organisation devra encore valider l'échange. Leur planning ne change pas avant cette validation.",
+      "expected": "Noah relit la proposition et l'accepte. Cette fois, la confirmation prévient que l'organisation devra encore valider l'échange. Leur planning ne change pas avant cette validation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-validate",
+      "audioSha256": "26bff75e354adb9bcb5fce8002ed1c669cc491bb4312a2cb976db663f63c50c6",
+      "recognized": "Dans Inscription, la section Échange de créneau montre cet échange sous À valider, avec ce que chaque personne cède et reçoit, et la date limite. Valider l'échange vérifie à nouveau toutes les règles, puis échange les deux créneaux. Les deux personnes sont prévenues par email. Refuser leur laisse leur créneau.",
+      "expected": "Dans Inscriptions, la section Échanges de créneaux montre cet échange sous À valider, avec ce que chaque personne cède et reçoit, et la date limite. Valider l'échange vérifie à nouveau toutes les règles, puis échange les deux créneaux. Les deux personnes sont prévenues par email. Refuser leur laisse leur créneau.",
+      "wordErrorRate": 0.058823529411764705,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "swaps-result",
+      "audioSha256": "08db7d19b9e721ed99f031313e7443ec5813e510ec53e45e4776523607368f4e",
+      "recognized": "Un échange respecte les règles d'une inscription, chevauchement, nombre de créneaux par personne, âge minimum et postes réservés. Il se fait avant le début du premier des deux créneaux. Si l'un des créneaux change ou est annulé entre-temps, la demande prend fin et les personnes sont prévenues. Chaque étape est inscrite au journal de l'événement.",
+      "expected": "Un échange respecte les règles d'une inscription : chevauchements, nombre de créneaux par personne, âge minimum et postes réservés. Il se fait avant le début du premier des deux créneaux. Si l'un des créneaux change ou est annulé entre-temps, la demande prend fin et les personnes sont prévenues. Chaque étape est inscrite au journal de l'événement.",
+      "wordErrorRate": 0.01694915254237288,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

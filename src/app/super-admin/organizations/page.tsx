@@ -7,6 +7,9 @@ import { ORG_SORT_COLS } from "@/lib/super-admin-tables"
 import { parseSortParam } from "@/lib/table-sort"
 import { OWNER_ROLE } from "@/lib/permissions"
 import { localToday } from "@/lib/volunteer-hours"
+import { loadLimitHits } from "@/lib/limit-hits-data"
+import { zoneSentence } from "@/lib/limit-hits-view"
+import { APP_TIME_ZONE } from "@/lib/time-zone"
 import { eventActivity, eventActivityLabel, eventActivityRank, ownerActivation, ownerActivationLabel } from "@/lib/org-list-activity"
 
 export const dynamic = "force-dynamic"
@@ -45,10 +48,15 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
 
   const { tri } = await searchParams
   const now = new Date()
+  // Sending limits reached lately (#1100): the block above the list and each row's marker.
+  const limitHits = await loadLimitHits({ now })
 
   return (
     <OrgsManager
       initialSort={parseSortParam(tri, ORG_SORT_COLS)}
+      limitHits={limitHits.groups}
+      limitHitsTruncated={limitHits.truncated}
+      limitHitsZone={zoneSentence(APP_TIME_ZONE)}
       initialOrgs={orgs.map(({ timeZone, events, admins, ...o }) => {
         const zone = orgTimeZone({ timeZone })
         const today = localToday(now, zone)

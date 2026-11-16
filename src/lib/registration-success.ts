@@ -19,6 +19,12 @@ export interface SignupResult {
   activeShifts?: number | string | null
   /** What a sign-up from the personal page updated (#1013), said by the confirmation. */
   updated?: SignupUpdates | null
+  /** A request waiting for the address's confirmation (#1253). */
+  emailConfirmation?: boolean
+  confirmationHeld?: number | string | null
+  confirmationWaiting?: number | string | null
+  confirmationExpiresAt?: string | null
+  confirmationTimeZone?: string | null
 }
 
 export function successPath(eventSlug: string, result: SignupResult, current: URLSearchParams, embed: boolean): string {
@@ -32,8 +38,38 @@ export function successPath(eventSlug: string, result: SignupResult, current: UR
     params.set("active", String(result.activeShifts ?? 0))
   }
   setUpdatedParams(params, result.updated)
+  // A pending request (#1253): the result page says an email was sent, and until when the places
+  // are held. Not a secret: the link token stays in the email.
+  if (result.emailConfirmation) {
+    params.set("confirm", "1")
+    if (Number(result.confirmationHeld) > 0) params.set("held", String(result.confirmationHeld))
+    if (Number(result.confirmationWaiting) > 0) params.set("waiting", String(result.confirmationWaiting))
+    if (result.confirmationExpiresAt) params.set("expires", result.confirmationExpiresAt)
+    if (result.confirmationTimeZone) params.set("tz", result.confirmationTimeZone)
+  }
   // Embedded (#948): the frame keeps its group link, organisation and `embed=1` on the confirmation.
   if (embed) embedFlowParams(current).forEach((value, key) => params.set(key, value))
   const query = params.toString()
   return `/${eventSlug}/success${query ? `?${query}` : ""}`
+}
+
+/**
+ * The confirmation's way out (#1097): back to the event, never to the organisation's home only.
+ * Embedded (#948), back to the schedule in the frame with its flow; otherwise the event page with
+ * the organisation of the page (`?org=`, no subdomain), nothing else of the address (the token
+ * stays out).
+ */
+export function successBackLink(eventSlug: string, current: URLSearchParams, embed: boolean): { href: string; label: string } {
+  if (embed) return { href: `/${eventSlug}?${embedFlowParams(current)}`, label: "Revenir au planning" }
+  const org = current.get("org")
+  return { href: `/${eventSlug}${org ? `?${new URLSearchParams({ org })}` : ""}`, label: "Revenir à l'événement" }
+}
+
+/**
+ * Whether the confirmation says the personal link is in the email (#1097): when the page has no
+ * link of its own to show (a public sign-up without proof of the address, #285), and always in
+ * the frame (#948). Not for a waiting list only: that email carries no personal link.
+ */
+export function showsPersonalLinkEmailNote(o: { hasToken: boolean; embed: boolean; waitlistOnly: boolean }): boolean {
+  return !o.waitlistOnly && (o.embed || !o.hasToken)
 }

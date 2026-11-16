@@ -19,7 +19,7 @@ function unit(slug: string): DocUnit {
     legacy: [],
     aliases: [],
     body: "",
-    source: `guide/${slug}.md`,
+    source: `content/guide/${slug}.md`,
   }
 }
 
@@ -52,7 +52,7 @@ describe("landingQuickstartLink", () => {
   })
 })
 
-describe("the home page's links to guide/", () => {
+describe("the home page's links to content/guide/", () => {
   const units = readDocUnits()
 
   it("starts with the quickstart and reaches at least five units, all of them organisers' units", () => {

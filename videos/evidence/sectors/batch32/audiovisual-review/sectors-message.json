@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:33:06.279Z",
+  "videoSha256": "360d0218823ac42402d2a5ba46bd6a89cb939710c3aa2e8fd8d6325c9a84c2cc",
+  "promptSha256": "8e54a9a9f4f8f8966f65ad9ad07c88419578f55041d8e8fcb9c954a55c801de6",
+  "clipSha256": "b0499a50e6d6bdc8b05f0847e31da7a666f3e6c5c776f8d3d72985229b6af9ad",
+  "scene": "sectors-message",
+  "review": {
+    "heardOpening": "Revenons aux inscriptions du secteur Parking.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Revenons aux inscriptions du secteur Parking.",
+        "visibleSeconds": 0,
+        "visible": "Page des inscriptions affichée avec le filtre Secteur sur Parking et le bouton Écrire au secteur Parking.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Le bouton Écrire au secteur Parking ouvre Écrire aux bénévoles, avec ce secteur déjà choisi.",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage du formulaire Écrire aux bénévoles avec l'option Les bénévoles d'un secteur cochée et Parking sélectionné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Le compteur indique combien de personnes recevront le message.",
+        "visibleSeconds": 8.5,
+        "visible": "Défilement vers le bas révélant le compteur '5 personnes recevront ce message'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

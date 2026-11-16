@@ -4,6 +4,7 @@ import assert from "node:assert/strict"
 import type { Locator, Page } from "playwright"
 import { loadAccessibilityNativeEvidence, type NativeEvidenceContext, type NativeInsertionPlan } from "./accessibility-native-evidence"
 import type { Cue } from "./sentence-timing"
+import { surnameOf } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 /** Native media are external timeline inserts, not a still page pretending to demonstrate them. */
@@ -33,10 +34,38 @@ async function tabTo(page: Page, target: Locator) {
   await target.waitFor({ state: "visible" })
   for (let step = 0; step < 100; step++) {
     if (await target.evaluate(element => element === document.activeElement)) return
+    // A day's frise is one tab stop (#1075): inside it, the arrows reach the other bars.
+    if (await arrowsTo(page, target)) return
     await page.keyboard.press("Tab")
     await page.waitForTimeout(110)
   }
   throw new Error(`Keyboard cannot reach ${await target.getAttribute("aria-label") ?? await target.innerText()}`)
+}
+/** When the focus is on a frise bar of the target's day, walk its rows with real arrow presses. */
+async function arrowsTo(page: Page, target: Locator): Promise<boolean> {
+  const sameDay = await target.evaluate(element => {
+    const bar = document.activeElement
+    const day = element.closest("[role=region]")
+    return !!bar?.hasAttribute("data-shift-id") && !!day && day.contains(bar) && element !== bar
+  })
+  if (!sameDay) return false
+  const at = () => page.evaluate(() => document.activeElement?.getAttribute("data-shift-id") ?? "")
+  const press = async (key: string) => { await page.keyboard.press(key); await page.waitForTimeout(110) }
+  const reached = () => target.evaluate(element => element === document.activeElement)
+  await press("Control+Home")
+  for (let row = 0; row < 50; row++) {
+    await press("Home")
+    for (let bar = 0; bar < 50; bar++) {
+      if (await reached()) return true
+      const before = await at()
+      await press("ArrowRight")
+      if (await at() === before) break
+    }
+    const before = await at()
+    await press("ArrowDown")
+    if (await at() === before) return false
+  }
+  return false
 }
 async function activate(page: Page, target: Locator) {
   await tabTo(page, target)
@@ -62,11 +91,12 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
   assert.equal(zoomPlan.kind, "zoom")
   assert.equal(readerPlan.kind, "reader")
   const go = async (route: string) => { await page.goto(`${base}${route}`); await settle(page) }
-  const manual = async (first: string, email?: string) => {
+  // A cast member keeps their surname; the unique per-take person gets a common one.
+  const manual = async (first: string, email?: string, last = surnameOf(first)) => {
     await go(`${adminPath}/registrations`)
     await activate(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
     await type(page, page.getByLabel(/^Prénom(?: \*)?$/), first)
-    await type(page, page.getByLabel(/^Nom(?: \*)?$/), "Exemple")
+    await type(page, page.getByLabel(/^Nom(?: \*)?$/), last)
     if (email) await type(page, page.getByLabel("Email", { exact: true }), email)
     return page.getByRole("combobox", { name: "Créneau", exact: true })
   }
@@ -87,8 +117,19 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
   await scene("public", async at => {
     await go(publicPath)
     const slot = page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first()
-    await at("Continuons jusqu'au formulaire."); await activate(page, slot)
-    await at("il permet de vérifier son"); await activate(page, page.getByRole("button", { name: /^Continuer/ }))
+    await at("Tab entre dans le planning du jour")
+    await tabTo(page, slot)
+    await page.getByText("← → : même poste", { exact: false }).waitFor()
+    await at("Gauche et droite parcourent le même poste")
+    await page.keyboard.press("ArrowRight"); await page.keyboard.press("ArrowLeft")
+    await at("Haut et bas rejoignent le poste voisin")
+    await page.keyboard.press("ArrowDown"); await page.keyboard.press("ArrowUp")
+    await at("Tab quitte le planning")
+    await page.keyboard.press("Tab"); await page.keyboard.press("Shift+Tab")
+    await at("Revenons à Accueil")
+    await activate(page, slot)
+    await at("Continuons jusqu'au formulaire.")
+    await activate(page, page.getByRole("button", { name: /^Continuer/ }))
     await page.getByRole("textbox", { name: "Prénom", exact: true }).waitFor()
     await at("Lisons le message, revenons au")
     await activate(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
@@ -117,7 +158,7 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
   await scene("error", async at => {
     // Unique synthetic person per take; never add Aline a second time.
     const name = `Clavier ${Date.now()}`
-    const picker = await manual(name)
+    const picker = await manual(name, undefined, "Gruber")
     await at("Il n'est pas nécessaire de"); await activate(page, page.getByRole("button", { name: "Ajouter", exact: true }))
     await page.getByText("Sélectionnez un créneau.", { exact: true }).waitFor()
     await focused(picker); assert.equal(await picker.getAttribute("aria-invalid"), "true")
@@ -132,7 +173,7 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
     const submitted = page.waitForResponse(response => response.request().method() === "POST" && response.url().includes("registrations"))
     await activate(page, page.getByRole("button", { name: "Ajouter", exact: true }))
     const response = await submitted; assert(response.ok(), "Synthetic manual add must really succeed")
-    await page.getByText(`${name} Exemple`, { exact: true }).first().waitFor()
+    await page.getByText(`${name} Gruber`, { exact: true }).first().waitFor()
     await evidence("error", { genuineError: true, applicationRestoredFocus: true, actualAddedPerson: name, responseStatus: response.status() })
   })
   await scene("planning", async at => {

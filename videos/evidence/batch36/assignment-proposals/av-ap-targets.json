@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:15:45.365Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "4dbd00bf0fdbed4c677acf7bde15cb024799be48bca9ac77a83c8f4d33d83de8",
+  "clipSha256": "9ba6fb042f315d8e8d56ba7f0369b3c7479230c59cf357de4ccbaf49a5a892ce",
+  "scene": "ap-targets",
+  "review": {
+    "heardOpening": "Jules n'a pas répondu, il n'est pas inclus.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Jules n'a pas répondu, il n'est pas inclus.",
+        "visibleSeconds": 0.5,
+        "visible": "Dans le tableau, la case Inclure pour Jules Hansen est décochée et son statut indique Sans réponse.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Appliquer la suggestion les remplit",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur le bouton « Appliquer la suggestion », ce qui remplit le champ Objectif d'heures de Noah avec la valeur 12.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "tapons six.",
+        "visibleSeconds": 10.6,
+        "visible": "Le champ Objectif d'heures de Noah de Jong est sélectionné et remplacé par 6.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse féminine claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

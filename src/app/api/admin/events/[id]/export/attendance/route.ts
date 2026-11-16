@@ -8,12 +8,20 @@ import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { slugify } from "@/lib/utils"
 import { answerText } from "@/lib/event-questions"
+import { sectorFilterOfRequest } from "@/lib/sector-filter-data"
+import { sectorFileSuffix } from "@/lib/sector-filter"
 
-/** GET /api/admin/events/[id]/export/attendance (#399): the attendance sheet as CSV. */
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+/**
+ * GET /api/admin/events/[id]/export/attendance (#399): the attendance sheet as CSV. `?secteur=`
+ * (#1170) keeps the registrations on the postes of one sector, read now; an unknown or foreign
+ * sector is ignored.
+ */
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { id } = await params
+  const sector = await sectorFilterOfRequest(guard.db, id, req)
+  if (!sector) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const event = await guard.db.event.findFirst({
     where: { id },
@@ -23,7 +31,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       // Custom questions (#483), archived ones included: their answers stay until the event goes.
       questions: { orderBy: [{ archivedAt: "asc" }, { position: "asc" }], select: { id: true, label: true, archivedAt: true, answers: { select: { volunteerId: true, values: true } } } },
       registrations: {
-        where: { status: "active" },
+        where: { status: "active", ...sector.registrationWhere },
         orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }, { volunteer: { lastName: "asc" } }],
         select: {
           phone: true, checkedInAt: true, volunteerId: true,
@@ -58,7 +66,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     status: 200,
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="presences-${slugify(event.title) || event.slug}.csv"`,
+      "Content-Disposition": `attachment; filename="presences-${slugify(event.title) || event.slug}${sectorFileSuffix(sector.filter)}.csv"`,
       "Cache-Control": "no-store",
     },
   })

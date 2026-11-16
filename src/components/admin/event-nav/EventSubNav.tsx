@@ -6,7 +6,7 @@ import type { SubNavLink } from "@/lib/event-nav"
 
 /**
  * The pages of the current tab when it groups several (Créneaux, Inscriptions, Partage,
- * Réglages): lighter than the tabs, same marking rules (aria-current, underline and weight, a
+ * Paramètres): lighter than the tabs, same marking rules (aria-current, underline and weight, a
  * Canvas-coloured border in forced colours on the others so the mark stays readable there).
  */
 export default function EventSubNav({ tabLabel, links }: { tabLabel: string; links: SubNavLink[] }) {

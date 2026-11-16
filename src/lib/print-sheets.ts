@@ -4,8 +4,9 @@
 import { printLogoHtml, type OrgLogo } from "./org-logo"
 import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
-import { conditionLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
+import { conditionLine, scopeLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 import { effectiveMinimum, shiftStaffingState, staffingStateText } from "./staffing"
+import { PRINT_BUTTON_SCRIPT_TAG } from "./inline-scripts"
 
 /**
  * Printable sheets (#400): paper still matters on site. Six views of one event, each a plain
@@ -54,9 +55,12 @@ export type SheetData = {
   /** Already formatted, in the organization's time zone. */
   printedAt: string
   shifts: SheetShift[]
-  leaders: { roleName: string; name: string; email?: string | null }[]
+  /** Poste leaders (a sector leader, roleName null, is not listed on a poste's sheet in #1169). */
+  leaders: { roleName: string | null; name: string; email?: string | null }[]
   /** The answers to the custom questions (#686), only loaded for the « answers » view. */
   answers?: AnswerSummary
+  /** « Secteur : Parking » when the sheet is limited to one sector (#1170), under the title. */
+  sectorCaption?: string | null
 }
 
 export const esc = (s: string | null | undefined) =>
@@ -287,7 +291,7 @@ function answersView(d: SheetData): string {
     ${a.questions.map((q) => `
     <section class="block${q.condition ? " follow-up" : ""}">
       <table class="detail answers">
-        <caption>${esc(q.label)}${q.condition ? `<span class="caption-note">${esc(conditionLine(q.condition, waiting))}</span>` : ""}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}${q.type === "number" ? `<span class="caption-note">${esc(numberNote(waiting))}</span>` : ""}</caption>
+        <caption>${esc(q.label)}${q.condition ? `<span class="caption-note">${esc(conditionLine(q.condition, waiting))}</span>` : ""}${q.scope ? `<span class="caption-note">${esc(scopeLine(q.scope, waiting))}</span>` : ""}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}${q.type === "number" ? `<span class="caption-note">${esc(numberNote(waiting))}</span>` : ""}</caption>
         <thead><tr><th scope="col">Réponse</th><th scope="col" class="num">Confirmés</th>${waiting ? `<th scope="col" class="num">En attente</th>` : ""}</tr></thead>
         <tbody>
           ${q.rows.map((r) => `<tr>
@@ -316,7 +320,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>${esc(meta.name)} – ${esc(d.eventTitle)}</title>
+  <title>${esc(meta.name)} – ${esc(d.eventTitle)}${d.sectorCaption ? ` – ${esc(d.sectorCaption)}` : ""}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --ink: #111; --ink-2: #444; --rule: #bbb; --rule-soft: #ddd; --band: #f2f2f2; }
@@ -437,13 +441,15 @@ export function renderSheet(view: SheetView, d: SheetData): string {
       <div>
         <h1>${esc(d.eventTitle)}</h1>
         <p class="kind"><strong>${esc(meta.name)}</strong> · ${esc(d.organizationName)} · imprimé le ${esc(d.printedAt)}</p>
+        ${d.sectorCaption ? `<p class="kind"><strong>${esc(d.sectorCaption)}</strong></p>` : ""}
       </div>
     </div>
-    <button type="button" class="print-btn" onclick="window.print()">Imprimer</button>
+    <button type="button" class="print-btn" data-print>Imprimer</button>
   </header>
   <main>
-    ${d.shifts.length === 0 && view !== "answers" ? `<p class="meta">Aucun créneau.</p>` : BUILDERS[view](d)}
+    ${d.shifts.length === 0 && view !== "answers" ? `<p class="meta">${d.sectorCaption ? `Aucun créneau dans ce choix (${esc(d.sectorCaption)}).` : "Aucun créneau."}</p>` : BUILDERS[view](d)}
   </main>
+  ${PRINT_BUTTON_SCRIPT_TAG}
 </body>
 </html>`
 }

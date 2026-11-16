@@ -3,8 +3,8 @@ import fs from "node:fs"
 import path from "node:path"
 import type { ErrorEvent } from "@sentry/nextjs"
 import { isStaffPath, pathnameOf, replayAllowedFor, tracesSampleRateFor, urlCarriesSecret, STAFF_TRACES_SAMPLE_RATE } from "../sentry-client-policy"
-import { createSentryLoader, type SentryClientModule } from "../sentry-client-loader"
-import { beforeSendClient, isStacklessDomEventRejection } from "../sentry-scrub"
+import { browserSentryAllowedOn, createSentryLoader, type SentryClientModule } from "../sentry-client-loader"
+import { beforeSendClient, isStacklessDomEventRejection, isStacklessNetworkRejection } from "../sentry-scrub"
 
 // Deferred browser Sentry (#773).
 
@@ -228,7 +228,7 @@ describe("stackless DOM Event rejections (BENEVOLAPP-P)", () => {
   })
 
   it("keeps real errors", () => {
-    const real = rejection({ type: "TypeError", value: "Failed to fetch" })
+    const real = rejection({ type: "TypeError", value: "Cannot read properties of undefined (reading 'id')" })
     expect(isStacklessDomEventRejection(real)).toBe(false)
     expect(beforeSendClient(real)).toBe(real)
   })
@@ -240,7 +240,69 @@ describe("stackless DOM Event rejections (BENEVOLAPP-P)", () => {
   })
 })
 
+describe("stackless network failures (Safari « Load failed » after a deploy)", () => {
+  const rejection = (overrides: Record<string, unknown> = {}): ErrorEvent =>
+    ({
+      type: undefined,
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value: "Load failed",
+            mechanism: { type: "auto.browser.global_handlers.onunhandledrejection", handled: false },
+            ...overrides,
+          },
+        ],
+      },
+    }) as ErrorEvent
+
+  it("drops the browsers' network failure messages", () => {
+    for (const value of ["Load failed", "Failed to fetch", "NetworkError when attempting to fetch resource."]) {
+      expect(isStacklessNetworkRejection(rejection({ value }))).toBe(true)
+      expect(beforeSendClient(rejection({ value }))).toBeNull()
+    }
+  })
+
+  it("keeps it with a stack, from another mechanism, another type or another message", () => {
+    expect(isStacklessNetworkRejection(rejection({ stacktrace: { frames: [{ filename: "app.js" }] } }))).toBe(false)
+    expect(isStacklessNetworkRejection(rejection({ mechanism: { type: "generic", handled: true } }))).toBe(false)
+    expect(isStacklessNetworkRejection(rejection({ type: "Error" }))).toBe(false)
+    expect(isStacklessNetworkRejection(rejection({ value: "Load failed: /api/admin/events" }))).toBe(false)
+    expect(isStacklessNetworkRejection({ type: undefined } as ErrorEvent)).toBe(false)
+  })
+})
+
 // Regression guards: what every public page downloads (#773).
+describe("browser Sentry only on the allowed domains (#1335)", () => {
+  it("runs on benevol.app and its organisations' subdomains", () => {
+    for (const host of ["benevol.app", "www.benevol.app", "ape-chateauneuf.benevol.app", "WWW.Benevol.App", "benevol.app."]) {
+      expect(browserSentryAllowedOn(host, "benevol.app"), host).toBe(true)
+    }
+  })
+
+  it("does not run on another instance of the published image", () => {
+    for (const host of ["localhost", "127.0.0.1", "benevoles.example.org", "benevol.app.example.org", "notbenevol.app"]) {
+      expect(browserSentryAllowedOn(host, "benevol.app"), host).toBe(false)
+    }
+  })
+
+  it("runs anywhere when no domain is set (an image built with its own DSN)", () => {
+    expect(browserSentryAllowedOn("benevoles.example.org", undefined)).toBe(true)
+    expect(browserSentryAllowedOn("localhost", " , ")).toBe(true)
+  })
+
+  it("accepts a list of domains", () => {
+    expect(browserSentryAllowedOn("app.example.org", "benevol.app, example.org")).toBe(true)
+    expect(browserSentryAllowedOn("example.net", "benevol.app, example.org")).toBe(false)
+  })
+
+  it("is set to benevol.app for the published image", () => {
+    const root = path.join(__dirname, "..", "..", "..")
+    expect(fs.readFileSync(path.join(root, ".github/workflows/deploy.yml"), "utf-8")).toContain("NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS=benevol.app")
+    expect(fs.readFileSync(path.join(root, "Dockerfile"), "utf-8")).toContain("ENV NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS=$NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS")
+  })
+})
+
 describe("client bundle guards", () => {
   const root = path.join(__dirname, "..", "..", "..")
   const read = (f: string) => fs.readFileSync(path.join(root, f), "utf-8")

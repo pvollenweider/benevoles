@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 
 // Share links per group (#947): the admin routes create, list, change and delete an event's links,
 // log each change, never keep a role that isn't on the planning, and keep the code (so the printed
@@ -34,7 +36,8 @@ function makeDb() {
       update: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ id: "link-1", code: "abcd2345", name: "Amicale", roleNames: ["Bar"], hideFull: false, ...data })),
       delete: vi.fn().mockResolvedValue({ id: "link-1" }),
     },
-    eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
+    eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 1 }), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
+    eventPage: { findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
     sectorLeader: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn(), updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   }
@@ -190,6 +193,7 @@ describe("roles renamed or deleted are carried into the links", () => {
   it("a rename replaces the role in every link of the event that shows it", async () => {
     db.shift.findMany.mockResolvedValue([{ id: "s1", colorKey: null, capacity: 2, status: "open", maxPerVolunteer: null, reservedTags: [], _count: { registrations: 0 } }])
     db.eventGroupLink.findMany.mockResolvedValue([{ id: "link-1", roleNames: ["Bar", "Parking"] }])
+    db.eventQuestion.findMany.mockResolvedValue([{ id: "q-bar", displayRoleNames: ["Bar", "Parking"] }])
     const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     const res = await PATCH(req("PATCH", { name: "Buvette" }), { params: Promise.resolve({ id: "evt-1", roleName: "Bar" }) })
     expect(res.status).toBe(200)
@@ -197,17 +201,24 @@ describe("roles renamed or deleted are carried into the links", () => {
     expect(db.eventGroupLink.update).toHaveBeenCalledWith({ where: { id: "link-1" }, data: { roleNames: ["Buvette", "Parking"] } })
     // A question attached to the role (#984, part 3) follows the rename.
     expect(db.eventQuestion.updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", roleName: "Bar" }, data: { roleName: "Buvette" } })
+    // A question asked to the role (#1140) keeps being asked to it under its new name; its answers stay on the question.
+    expect(db.eventQuestion.findMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", displayRoleNames: { has: "Bar" } }, select: { id: true, displayRoleNames: true } })
+    expect(db.eventQuestion.update).toHaveBeenCalledWith({ where: { id: "q-bar" }, data: { displayRoleNames: ["Buvette", "Parking"] } })
   })
 
   it("a deletion removes the role from the links, keeping the others", async () => {
     db.shift.findMany.mockResolvedValue([{ id: "s1", registrations: [], event: { id: "evt-1" } }])
     db.eventGroupLink.findMany.mockResolvedValue([{ id: "link-1", roleNames: ["Bar", "Parking"] }])
+    db.eventQuestion.findMany.mockResolvedValue([{ id: "q-bar", displayRoleNames: ["Bar"] }, { id: "q-both", displayRoleNames: ["Bar", "Parking"] }])
     const { DELETE } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     const res = await DELETE(req("DELETE"), { params: Promise.resolve({ id: "evt-1", roleName: "Bar" }) })
     expect(res.status).toBe(200)
     expect(db.eventGroupLink.update).toHaveBeenCalledWith({ where: { id: "link-1" }, data: { roleNames: ["Parking"] } })
     // A question attached to the deleted role (#984, part 3) goes back to the organisers.
     expect(db.eventQuestion.updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", roleName: "Bar" }, data: { roleName: null } })
+    // A question asked to it (#1140) drops it: asked to that role only, it is asked to nobody, never widened to everyone.
+    expect(db.eventQuestion.update).toHaveBeenCalledWith({ where: { id: "q-bar" }, data: { displayRoleNames: [] } })
+    expect(db.eventQuestion.update).toHaveBeenCalledWith({ where: { id: "q-both" }, data: { displayRoleNames: ["Parking"] } })
   })
 })
 

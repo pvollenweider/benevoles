@@ -1,0 +1,101 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-31T14:40:44.204Z",
+  "revalidatedAt": "2026-10-31T14:40:44.205Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "va-welcome",
+      "audioSha256": "549f7562a4cf082554b1f836879f32d7fc9b8cf271c147f45312e822e890c9dc",
+      "recognized": "L'association te demande quand tu es libre pour sa prochaine fête ? Tu lui réponds pour cet événement précis, date par date, avec le lien reçu par e-mail.",
+      "expected": "L'association te demande quand tu es libre pour sa prochaine fête ? Tu lui réponds pour cet événement précis, date par date, avec le lien reçu par email.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-email",
+      "audioSha256": "ac605b1666796e404b65eb21a757b6f85a11b7f9152a516b24b420b849aebee5",
+      "recognized": "Morgane a reçu cet e-mail de l'association. Il donne la date limite pour répondre. Elle appuie sur Indiquer mes disponibilités.",
+      "expected": "Morgane a reçu cet email de l'association. Il donne la date limite pour répondre. Elle appuie sur Indiquer mes disponibilités.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-page",
+      "audioSha256": "bdc24fc073ccd2ce147b18e5f6f09e4b57692c22c9fcc372ddca00e9827da986",
+      "recognized": "La page Mes disponibilités s'ouvre. Pas besoin de compte, et seule l'organisation voit tes réponses. Juste en dessous, la date limite. Jusque-là, tu peux répondre ou changer tes réponses. Pour l'instant, Morgane n'a pas encore répondu.",
+      "expected": "La page Mes disponibilités s'ouvre. Pas besoin de compte, et seule l'organisation voit tes réponses. Juste en dessous, la date limite : jusque-là, tu peux répondre ou changer tes réponses. Pour l'instant, Morgane n'a pas encore répondu.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-hours",
+      "audioSha256": "8eaddbc4fb3319a379d95b2f4b4675ff4ce42f7953be34f79d0e119f79cab715",
+      "recognized": "Le vendredi, Morgan choisit disponible à certaines heures. Elle indique le début, neuf heures, et la fin, midi.",
+      "expected": "Le vendredi, Morgane choisit Disponible à certaines heures. Elle indique le début, neuf heures, et la fin, midi.",
+      "wordErrorRate": 0.05555555555555555,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-night",
+      "audioSha256": "b631bbf681511f228012518a6c46a6820a829d406ffcd9f96817e4c2d5fba85b",
+      "recognized": "Elle est aussi libre le soir. Ajouter un autre horaire, de vingt heures jusqu'à trois heures. Un horaire du soir peut finir le lendemain matin. La page le précise sous l'heure de fin.",
+      "expected": "Elle est aussi libre le soir : Ajouter un autre horaire, de vingt heures jusqu'à trois heures. Un horaire du soir peut finir le lendemain matin : la page le précise sous l'heure de fin.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-copy",
+      "audioSha256": "a8eda3bc7e2ad6a02b7d6eae9925bc76f2fae2b9c32d6ec0b97372361c3fdcbf",
+      "recognized": "Le samedi, reprendre les horaires du vendredi recopie les deux horaires d'un coup.",
+      "expected": "Le samedi, Reprendre les horaires du vendredi recopie les deux horaires d'un coup.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-unavailable",
+      "audioSha256": "324a1398381caca6b8f56ef288a0d2ba409c5416dacced3310032554e6361ae2",
+      "recognized": "Le dimanche, elle ne peut pas venir. Pas disponible. Si tu ne peux pas venir du tout, il y a le bouton pas disponible pendant tout l'événement.",
+      "expected": "Le dimanche, elle ne peut pas venir : Pas disponible. Si tu ne peux pas venir du tout, il y a le bouton Pas disponible pendant tout l'événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-save",
+      "audioSha256": "392780387b9bbaa957d7d111a96c6565f2011d14f8e828f8c1356df0e4575cd7",
+      "recognized": "Enfin, enregistrer mes disponibilités. La page confirme que c'est enregistré. Et jusqu'à quand, ce même lien permet de changer les réponses.",
+      "expected": "Enfin, Enregistrer mes disponibilités. La page confirme que c'est enregistré, et jusqu'à quand ce même lien permet de changer les réponses.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "va-change",
+      "audioSha256": "6eeda8650c90643f467b1b494252dcf59db8bfc3cc45323aa68f3aaca3155518",
+      "recognized": "Un changement de programme ? Rouvrons le même lien. Les réponses de Morgane sont là et elle peut encore les modifier jusqu'à la date limite.",
+      "expected": "Un changement de programme ? Rouvrons le même lien : les réponses de Morgane sont là, et elle peut encore les modifier jusqu'à la date limite.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

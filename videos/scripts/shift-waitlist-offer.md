@@ -8,8 +8,8 @@
 2. Distinguer confirmations, attente et positions côté admin.
 3. Libérer une place depuis une inscription confirmée.
 4. Montrer l’offre de vingt-quatre heures au maximum, limitée au début du créneau.
-5. Ouvrir la page personnelle de la personne promue.
-6. Ouvrir le lien « Prendre la place » : la page présente l’offre sans l’accepter. Montrer le bouton « Prendre la place », seul geste qui confirme, puis revenir à la page personnelle et montrer « Refuser la place ». Expliquer l’expiration et le passage au suivant.
+5. Ouvrir la page Mes inscriptions de la personne promue.
+6. Ouvrir le lien « Prendre la place » : la page présente l’offre sans l’accepter. Montrer le bouton « Prendre la place », seul geste qui confirme, puis revenir à la page Mes inscriptions et montrer « Refuser la place ». Expliquer l’expiration et le passage au suivant.
 7. Revenir réellement dans l’administration pour lire l’offre active et les positions restantes, sans simuler une expiration non exécutée.
 
 ## Résultat visible
@@ -21,7 +21,7 @@
 
 ## Révision du 2026-10-15 — lot 22-3
 
-Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les réglages du poste sont hérités par les nouveaux créneaux.
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les paramètres du poste sont hérités par les nouveaux créneaux.
 
 Narration à régénérer intégralement en une passe avec la même voix, `continuousPauseTags: false`. En attente du TTS (plafond mensuel connu), sans monter l’ancienne voix. Phrases modifiées :
 

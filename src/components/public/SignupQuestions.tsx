@@ -61,7 +61,7 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
           return (
             <div key={q.id}>
               <label htmlFor={fieldId} className="block text-sm font-medium text-gray-700 mb-1">{q.label}{star(q)}{optional(q)}</label>
-              <input id={fieldId} type="text" maxLength={TEXT_ANSWER_MAX} required={q.required} value={(answers[q.id] as string) ?? ""} onChange={(e) => onChange(q.id, e.target.value)} {...aria} className={`w-full border rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-300"}`} />
+              <input id={fieldId} type="text" maxLength={TEXT_ANSWER_MAX} required={q.required} value={(answers[q.id] as string) ?? ""} onChange={(e) => onChange(q.id, e.target.value)} {...aria} className={`w-full border rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-500"}`} />
               {errorLine}
             </div>
           )
@@ -84,7 +84,7 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
                 onChange={(e) => onChange(q.id, e.target.value)}
                 aria-invalid={bad || undefined}
                 aria-describedby={[hintId, bad ? `${fieldId}-error` : null].filter(Boolean).join(" ")}
-                className={`w-full sm:w-40 border rounded-xl px-3 py-3 text-sm tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-300"}`}
+                className={`w-full sm:w-40 border rounded-xl px-3 py-3 text-sm tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-500"}`}
               />
               <p id={hintId} className="text-xs text-gray-600 mt-1">{numberHint(q)}</p>
               {errorLine}
@@ -117,7 +117,7 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
                         const list = Array.isArray(current) ? current : []
                         onChange(q.id, e.target.checked ? [...list, c] : list.filter((x) => x !== c))
                       }}
-                      className="h-4 w-4 border-gray-300 text-blue-600"
+                      className="h-4 w-4 border-gray-500 text-blue-600"
                     />
                     {c || NO_ANSWER_CHOICE}
                   </label>

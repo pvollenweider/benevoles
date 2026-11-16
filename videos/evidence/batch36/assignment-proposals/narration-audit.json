@@ -1,0 +1,120 @@
+{
+  "model": "gemini-3.1-pro-preview",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-31T07:05:31.000Z",
+  "revalidatedAt": "2026-10-31T07:05:31.002Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-welcome",
+      "audioSha256": "b542f5b4cbea8c5cd7ce81a4f998a2116ad59210e8e26bc8efce4c21ae454ea3",
+      "recognized": "La proposition d'affectation, en bêta, prépare un planning en brouillon selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun. Rien n'est publié et aucun bénévole n'est prévenu sans votre décision.",
+      "expected": "La proposition d'affectations, en bêta, prépare un planning en brouillon selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun. Rien n'est publié, et aucun bénévole n'est prévenu, sans votre décision.",
+      "wordErrorRate": 0.02564102564102564,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-drafts",
+      "audioSha256": "db670f449cd069644faafeb5a3d050fbc22df963ebaea61c935a80af227f00d9",
+      "recognized": "Aux rencontres du Val d'Orcel, onze personnes ont indiqué leurs disponibilités. Depuis la page disponibilités, ouvrons affectations en brouillon, une ligne par personne, une colonne par date avec les places à pourvoir et encore aucune affectation. Cliquons sur générer une proposition.",
+      "expected": "Aux Rencontres du Val d'Orsel, onze personnes ont indiqué leurs disponibilités. Depuis la page Disponibilités, ouvrons Affectations en brouillon : une ligne par personne, une colonne par date avec les places à pourvoir, et encore aucune affectation. Cliquons sur Générer une proposition.",
+      "wordErrorRate": 0.023809523809523808,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-scope",
+      "audioSha256": "c2e865251b2964d3fb286c12a79be5663e065ded3c13d5d2f7cede2bc9194449",
+      "recognized": "Ce qui est vérifié, rappelle les règles toujours respectées, dont la protection des pauses et de la charge, ici activée. Dans périmètre, les trois dates et les cinq postes sont cochés, quatorze créneaux, trente et une places à pourvoir.",
+      "expected": "Ce qui est vérifié rappelle les règles toujours respectées, dont la protection des pauses et de la charge, ici activée. Dans Périmètre, les trois dates et les cinq postes sont cochés : quatorze créneaux, trente et une places à pourvoir.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-targets",
+      "audioSha256": "2afbb245a88b3b153fe763376a4dcc852e7389ad2a05e3e42572b064dbbd79d6",
+      "recognized": "Jules n'a pas répondu, il n'est pas inclus. Les objectifs d'heures sont vides. Appliquer la suggestion les remplit, six heures par date où la personne est libre. Noah ne veut que six heures en tout, tapons six.",
+      "expected": "Jules n'a pas répondu : il n'est pas inclus. Les objectifs d'heures sont vides : Appliquer la suggestion les remplit, six heures par date où la personne est libre. Noah ne veut que six heures en tout : tapons six.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-wishes",
+      "audioSha256": "2db1664a12549692acf210626252ad18be32d6d6f03d247502e2e62d67e373b5",
+      "recognized": "Pour Emma, bar des tilleuls comme poste souhaité, pour Lucas, parking comme poste à éviter. Ces souhaits passent après les règles et l'équilibre des heures.",
+      "expected": "Pour Emma, Bar des Tilleuls comme poste souhaité ; pour Lucas, Parking comme poste à éviter. Ces souhaits passent après les règles et l'équilibre des heures.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-launch",
+      "audioSha256": "51baa9375a728d7a78f8e13148c327cb1c90d4d935edd6c66a4276321156697a",
+      "recognized": "Rotation nue et réserve reste replié sans réglage. Dans paramètres de calcul, tapons le numéro de tirage deux mille vingt-six. Même numéro, mêmes données, même proposition. Puis générer une proposition.",
+      "expected": "Rotation, nuit et réserve reste replié, sans réglage. Dans Paramètres de calcul, tapons le numéro de tirage deux mille vingt-six : même numéro, mêmes données, même proposition. Puis Générer une proposition.",
+      "wordErrorRate": 0.03225806451612903,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-result",
+      "audioSha256": "a72248b8e9ad615535867bb042cbcd4f71252857269b36814ba58b457e0d11d0",
+      "recognized": "En quelques secondes, le résultat s'affiche en haut de la page. Vingt-neuf places couvertes sur trente-et-une, écrites dans les brouillons. Couverture complète impossible. Personne n'est disponible pour tout le rangement du kiosque dimanche soir, et la raison est écrite.",
+      "expected": "En quelques secondes, le résultat s'affiche en haut de la page : vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Couverture complète impossible : personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-load",
+      "audioSha256": "00afe634e11c22794662d74b18fda1ec6758745127a95b60fe1e13582c09deed",
+      "recognized": "La charge par personne compare les heures prévues à l'objectif de chacun. Noah a ses six heures. Dans affectations proposées, chaque ligne dit pourquoi. Emma est au bar vendredi, disponible sur tout le créneau, c'est son poste souhaité.",
+      "expected": "La charge par personne compare les heures prévues à l'objectif de chacun : Noah a ses six heures. Dans Affectations proposées, chaque ligne dit pourquoi. Emma est au bar vendredi : disponible sur tout le créneau, c'est son poste souhaité.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-lock",
+      "audioSha256": "97771083ab0868666e4d1382deb62e60d55f3d63c35b8f388565ffd6e5a49a97",
+      "recognized": "De retour au planning, chaque brouillon proposé porte la mention proposé. Ouvrons celui d'Emma, puis verrouiller. Une nouvelle proposition ne le remplacera pas. Le cadenas le signale sur le planning.",
+      "expected": "De retour au planning, chaque brouillon proposé porte la mention Proposé. Ouvrons celui d'Emma, puis Verrouiller : une nouvelle proposition ne le remplacera pas. Le cadenas le signale sur le planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-adjust",
+      "audioSha256": "82649ab857e70bd7dd370ceb8fca7f6a2e21969e90d78cad2f6b3904ad5c3d60",
+      "recognized": "Léa doit partir plus tôt vendredi. Ouvrons son brouillon de billetterie, puis, retirez ce brouillon, et confirmons. Dans la case de Lou, ajoutez, puis ajoutez en brouillon sur la billetterie. Une proposition ne remplace jamais un brouillon manuel.",
+      "expected": "Léa doit partir plus tôt vendredi : ouvrons son brouillon de billetterie, puis Retirer ce brouillon, et confirmons. Dans la case de Lou, Ajouter, puis Ajouter en brouillon sur la billetterie. Une proposition ne remplace jamais un brouillon manuel.",
+      "wordErrorRate": 0.07894736842105263,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ap-publish",
+      "audioSha256": "93e64caf91196e932224ee46c703ac9257a5c2a675fcfe3c1da9238761707e53",
+      "recognized": "Publier les affectations demande une confirmation. Alors seulement, les places sont prises et chacun reçoit son e-mail. Annulons ici. Tant que vous ne publiez pas, la proposition reste un brouillon et aucun bénévole n'est prévenu.",
+      "expected": "Publier les affectations demande une confirmation : alors seulement les places sont prises, et chacun reçoit son email. Annulons ici. Tant que vous ne publiez pas, la proposition reste un brouillon, et aucun bénévole n'est prévenu.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

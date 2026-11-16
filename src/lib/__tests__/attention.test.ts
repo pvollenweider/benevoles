@@ -83,6 +83,15 @@ describe("attentionItems", () => {
     expect(ids(attentionItems({ now, events: [ended], offers: [] }))).toEqual(["ended:e1"])
   })
 
+  it("archives an ended event from the list itself, not through a link to its overview (#1098)", () => {
+    const [item] = attentionItems({ now, events: [ev({ startDate: day(-5), endDate: day(-3) })], offers: [] })
+    expect(item).toMatchObject({ action: "L'archiver", archiveEventId: "e1" })
+    // Every other item stays a link.
+    const others = attentionItems({ now, events: [ev({ startDate: day(3), endDate: day(4), overdueMilestones: [{ title: "Louer la tente", ownerName: null }] })], offers: [] })
+    expect(others.length).toBeGreaterThan(0)
+    expect(others.every((i) => i.archiveEventId === undefined)).toBe(true)
+  })
+
   it("sorts urgent first", () => {
     const items = attentionItems({
       now,
@@ -101,6 +110,15 @@ describe("attentionItems", () => {
     expect(item).toMatchObject({ severity: "medium", href: "/admin/events/e1/registrations" })
     expect(item?.message).toBe("2 bénévoles ont une charge élevée : plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause.")
     expect(ids(attentionItems({ now, events: [ev({ overloadedVolunteers: 0 })], offers: [] }))).not.toContain("workload:e1")
+  })
+
+  it("on a protected event, names programmes over its limits, high, and an unreadable protection (#1171)", () => {
+    const item = attentionItems({ now, events: [ev({ overloadedVolunteers: 1, workloadMode: "policy" })], offers: [] }).find((i) => i.id === "workload:e1")
+    expect(item).toMatchObject({ severity: "high", href: "/admin/events/e1/registrations" })
+    expect(item?.message).toBe("Le programme de 1 bénévole dépasse les limites de pauses et de charge de l'événement, par exemple après une annulation.")
+    expect(ids(attentionItems({ now, events: [ev({ overloadedVolunteers: 0, workloadMode: "policy" })], offers: [] }))).not.toContain("workload:e1")
+    const broken = attentionItems({ now, events: [ev({ workloadMode: "incomplete" })], offers: [] }).find((i) => i.id === "workload:e1")
+    expect(broken).toMatchObject({ severity: "high", href: "/admin/events/e1/edit#protection-charge" })
   })
 
   it("flags addresses to verify, org-wide, linking to the filtered members list (#599)", () => {

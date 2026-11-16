@@ -4,6 +4,8 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { listOrgLogs } from "@/lib/org-log-read"
+import { loadSendBatches } from "@/lib/send-batches-data"
+import { batchSummary, type ActivityBatch } from "@/lib/send-batches"
 
 /**
  * Org-level activity log (#194) — Member and AdminUser changes, not tied to one event.
@@ -26,5 +28,15 @@ export async function GET(req: Request) {
     limit: limitParam ? Number(limitParam) : undefined,
   })
 
-  return NextResponse.json({ entries, nextCursor })
+  // A batch of emails (#1101) is shown with its delivery as it is now, read for this page only.
+  // A batch deleted since (its event, or past its three years) has no details left.
+  const batchIds = entries.filter((e) => e.entityType === "SendBatch").map((e) => e.entityId)
+  const batches = new Map((await loadSendBatches(organizationId, { ids: batchIds, limit: batchIds.length })).map((b) => [b.id, b]))
+  const withBatches = entries.map((e) => {
+    const b = e.entityType === "SendBatch" ? batches.get(e.entityId) : undefined
+    const batch: ActivityBatch | null = b ? { kindLabel: b.kindLabel, eventId: b.eventId, eventTitle: b.eventTitle, summary: batchSummary(b.delivery), heldSentence: b.heldSentence } : null
+    return { ...e, batch }
+  })
+
+  return NextResponse.json({ entries: withBatches, nextCursor })
 }

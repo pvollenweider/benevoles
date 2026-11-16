@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:11:17.154Z",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "promptSha256": "fb41faee6480d77874c2003aa5b99d521c8de86e6ee34635f6a7f1f54e2dc137",
+  "clipSha256": "00dda7854f14f80c5e92f73bc510cb383e737422202d75ef6d85739d845ad320",
+  "scene": "contact",
+  "review": {
+    "heardOpening": "Attention à une autre distinction",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Attention à une autre distinction",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage du formulaire Nouveau créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "le contact opérationnel indiqué sur un créneau",
+        "visibleSeconds": 2.9,
+        "visible": "Saisie de « Élodie Rochat » dans le champ Personne de contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "est la personne que les bénévoles doivent joindre sur place",
+        "visibleSeconds": 5.2,
+        "visible": "Saisie du numéro dans le champ Téléphone du contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "L'organisateur renseigne ce contact séparément dans le créneau",
+        "visibleSeconds": 12,
+        "visible": "Formulaire affiché avec les champs de contact opérationnel remplis",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -12,6 +12,7 @@ import { eventDatesLabel } from "@/lib/event-nav"
 import { localDay } from "@/lib/day-of"
 import { orgTimeZone } from "@/lib/time-zone"
 import EventHeader from "@/components/admin/event-nav/EventHeader"
+import AnnounceProvider from "@/components/admin/AnnounceProvider"
 
 export const dynamic = "force-dynamic"
 
@@ -41,7 +42,7 @@ export default async function EventLayout({ children, params }: { children: Reac
   const event = await ctx.db.event.findFirst({
     where: { id },
     select: {
-      id: true, title: true, startDate: true, endDate: true, location: true, publicStatus: true, isListed: true,
+      id: true, title: true, startDate: true, endDate: true, location: true, publicStatus: true, isListed: true, availabilityEnabled: true, availabilityAdoptedAt: true,
       organization: { select: { timeZone: true, publicationApprovedAt: true } },
       _count: { select: { shifts: { where: { status: { not: "cancelled" } } } } },
     },
@@ -59,6 +60,8 @@ export default async function EventLayout({ children, params }: { children: Reac
   const stage = currentStage({ ...facts, confirmationMessage: null, remindersEnabled: false })
 
   return (
+    // One live region for the header's actions and the overview's « L'archiver » (#1098).
+    <AnnounceProvider>
     <div className="space-y-6">
       <EventHeader
         facts={facts}
@@ -70,8 +73,10 @@ export default async function EventLayout({ children, params }: { children: Reac
         awaitingValidation={!orgCanPublish(event.organization)}
         // Permanent deletion is for owners (#469), once archived; the route refuses it otherwise too.
         canDelete={event.publicStatus === "archived" && hasLevel(ctx.session.user?.role, "owner")}
+        availabilityPage={event.availabilityEnabled || !!event.availabilityAdoptedAt}
       />
       {children}
     </div>
+    </AnnounceProvider>
   )
 }

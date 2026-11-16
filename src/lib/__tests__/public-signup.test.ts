@@ -10,6 +10,7 @@ import {
   prefillContact,
   shiftsByDay,
   toMyRegistrations,
+  signupAnswerConditionProblems,
   validateSignup,
   type SignupShift,
   proposedShiftState,
@@ -104,6 +105,17 @@ describe("validateSignup", () => {
     expect(validateSignup({ ...base, ageGatedShifts: gated, form: { ...ok, birthDate: "2015-01-01" } })).toContain("Bar (18 ans min.)")
     expect(validateSignup({ ...base, ageGatedShifts: gated, form: { ...ok, birthDate: "2000-01-01" } })).toBeNull()
   })
+
+  it("refuses a shift reserved to another answer, or to no answer, and accepts a matching one (#962)", () => {
+    const reserved = [shift("navette", { label: "Navette", roleName: "Navette", reservedAnswer: { questionId: "q1", questionLabel: "Permis de conduire", answers: ["Oui"] } })]
+    expect(validateSignup({ ...base, reservedAnswerShifts: reserved, answers: { q1: "Oui" } })).toBeNull()
+    expect(validateSignup({ ...base, reservedAnswerShifts: reserved, answers: { q1: "Non" } }))
+      .toBe("Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ».")
+    expect(validateSignup({ ...base, reservedAnswerShifts: reserved, answers: {} }))
+      .toBe("Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ».")
+    expect(signupAnswerConditionProblems(reserved, { q1: ["Oui"] })).toEqual([])
+    expect(signupAnswerConditionProblems(reserved, { q1: ["Non"] })).toHaveLength(1)
+  })
 })
 
 describe("toMyRegistrations / prefillContact", () => {
@@ -180,5 +192,16 @@ describe("proposedShiftState", () => {
   it("words each state", () => {
     expect(proposedShiftText("offer", "Bar, samedi 4 juillet, de 10 h à 12 h")).toBe("On te propose ce créneau : Bar, samedi 4 juillet, de 10 h à 12 h.")
     expect(proposedShiftText("unavailable", "")).toBe("Le créneau proposé n'est plus disponible. D'autres créneaux sont peut-être encore ouverts ci-dessous.")
+  })
+})
+
+// #1171 lot 2: the minors' protection asks the birth date too.
+describe("birth date for the minors' protection", () => {
+  it("is required, and the hint says why, with the minimum ages when any", async () => {
+    const { birthDateHint, validateSignup } = await import("../public-signup")
+    const form = { firstName: "A", lastName: "B", email: "a@b.c", phone: "", birthDate: "", comment: "", consent: true }
+    expect(validateSignup({ form, charterAccepted: true, requirePhone: false, ageGatedShifts: [], minorsProtected: true } as never)).toContain("protège les moins de 18 ans")
+    expect(birthDateHint([], true)).toBe("Requise : cet événement protège les moins de 18 ans (pauses et charge).")
+    expect(birthDateHint([{ label: "Bar", minAge: 16 }], true)).toBe("Requise : Bar (16 ans min.) ; cet événement protège aussi les moins de 18 ans (pauses et charge).")
   })
 })

@@ -4,6 +4,8 @@
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { linkToken } from "@/lib/token-vault"
@@ -42,7 +44,7 @@ export async function POST(
       eventId: true,
       declinedAt: true,
       volunteer: { select: { active: true } },
-      event: { select: { slug: true, organizationId: true } },
+      event: { select: { slug: true, organizationId: true, organization: { select: ORG_LIFECYCLE_SELECT } } },
     },
   })
 
@@ -54,6 +56,9 @@ export async function POST(
     const resolved = await resolveOrgSlug(orgSlug)
     if (!resolved || resolved.org.id !== invite.event.organizationId) return invalid()
   }
+  // After the host checks (a foreign invitation answers the same 404), and whatever the host: the
+  // main domain carries no organisation the proxy could have checked.
+  if (!orgLinksOpen(invite.event.organization)) return orgUnavailableResponse()
 
   // Conditional on declinedAt still being null (#558): a double submit (two tabs, a retried
   // request) changes nothing the second time, and is not logged twice.

@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Cross-site request forgery check of the admin APIs (#1048), applied by src/proxy.ts to every
- * state-changing request (POST, PUT, PATCH, DELETE) under /api/admin/ and /api/super-admin/.
+ * Cross-site request forgery check of the state-changing APIs (#1048), applied by src/proxy.ts to
+ * every POST, PUT, PATCH and DELETE under /api/admin/, /api/super-admin/ and the public
+ * product-updates unsubscribe endpoint (whose earlier GET wrote on opening the link).
  * Pure, no Prisma: imported by the proxy.
  *
  * Why: the session cookie is SameSite=Lax, which stops other sites, but every
@@ -47,10 +48,12 @@ export const CONTENT_TYPE_REFUSED = "Type de contenu non pris en charge : envoye
 
 const UNSAFE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"])
 
-/** The admin and super-admin APIs, the only paths this check covers. */
+/** The admin and super-admin APIs, and the public endpoints that change state at this level. */
 export function isProtectedApiPath(pathname: string): boolean {
   return pathname === "/api/admin" || pathname.startsWith("/api/admin/")
     || pathname === "/api/super-admin" || pathname.startsWith("/api/super-admin/")
+    // Public, but a state change: only the confirmation page's own form may unsubscribe.
+    || pathname === "/api/public/product-updates/unsubscribe"
 }
 
 /** Routes that read a body other than JSON, by exact method and path. */
@@ -61,6 +64,8 @@ const NON_JSON_ROUTES: { method: string; path: RegExp; accepts: (mediaType: stri
   { method: "PUT", path: /^\/api\/admin\/settings\/organization\/logo$/, accepts: (t) => t.startsWith("image/") || t === "application/octet-stream" },
   // A super admin's switch of organization, an HTML form on the confirmation page.
   { method: "POST", path: /^\/api\/super-admin\/use-org\/[^/]+$/, accepts: (t) => t === "application/x-www-form-urlencoded" },
+  // Product-updates unsubscribe: the confirmation page's plain HTML form (works without JavaScript).
+  { method: "POST", path: /^\/api\/public\/product-updates\/unsubscribe$/, accepts: (t) => t === "application/x-www-form-urlencoded" },
 ]
 
 function mediaType(contentType: string | null): string | null {

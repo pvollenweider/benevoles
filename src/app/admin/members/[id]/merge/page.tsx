@@ -7,6 +7,7 @@ import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import { hasLevel } from "@/lib/permissions"
 import MemberMergeFlow from "@/components/admin/MemberMergeFlow"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -58,6 +59,7 @@ export default async function MemberMergePage({ params, searchParams }: { params
         <span aria-hidden="true">← </span>Retour à la fiche
       </Link>
       <h1 className="text-2xl font-bold text-gray-900">Fusionner {member.firstName} {member.lastName}</h1>
+      <HelpLink route="/admin/members/[id]/merge" />
       <MemberMergeFlow member={member} initialOther={initialOther} />
     </div>
   )

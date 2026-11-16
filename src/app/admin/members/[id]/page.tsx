@@ -19,6 +19,7 @@ import { loadMemberErasurePreview } from "@/lib/member-erasure-transaction"
 import { loadMemberRecordState } from "@/lib/member-record-state-data"
 import { activityTitle, formatRecordDay, mergedPageSentence, recordSubject } from "@/lib/member-record-state"
 import MergedSentenceView from "@/components/admin/members/MergedSentenceView"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -74,6 +75,7 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
           <span aria-hidden="true">← </span>Membres
         </Link>
         <h1 className="text-2xl font-bold text-gray-900 mt-1">{title}</h1>
+        <HelpLink route="/admin/members/[id]" />
         {/* The contact line says nothing useful on an archived record (#1014): the block below does. */}
         {record.kind === "ordinary" && <p className="text-sm text-gray-700 mt-1">{member.email ?? "Sans email"}{member.active ? "" : " · fiche désactivée"}</p>}
         <p className="text-sm text-gray-700 mt-2">{activitySummary(data.sources)}</p>

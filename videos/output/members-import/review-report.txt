@@ -1,14 +1,11 @@
 STATUS: READY
-MEMBERS_IMPORT — Batch 24-2 — 2026-10-16
-Commit 50561e134531eb29b3d2898023cb7a7086ec8305; BUILD_ID GzjaqGbiwveYILVuRvQv7
-Duration 215.320 s; final SHA256 fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481
-Two narrated takes, each after guarded reseed; successful quick rehearsal before filming. Old artifacts and rejected take 1 retained in previous-* directories; unchanged continuous Kore audio reused with exact independent source-audit fingerprints. No TTS generation or sentence mixing for this video.
-Timing resolved on actual final media: first analysis click at 57.833 s, audio cut already starts « Cliqu… »; cancellation Return at 190.595 s, audio cut already includes « puis annulez si vous ne souhaitez rien… ». Source keeps sentence anchors and .38 analysis wait; cancellation wait increased .86 → .94 after reviewing take 1. Evidence review/preview-action-cut.json, repeat-action-cut.json, exact action frames and 13 sentence-anchor frames.
-All nine final audiovisual chapters (32 checkpoints), all 54 chapter frames and exact sentence/action evidence reviewed. No final AV chapter flagged. Source and final chapter ASR pass; entire actual final soundtrack transcribed in all languages, no stray English or stage directions. Final VTT raw tu=0; full ASR and VTT contain no informal viewer address. Real effects: 20 clicks and 1 key, tied to actual input events and final hash. Technical video:validate passes. 1024 video tests and explicit 198-source TypeScript check pass.
-Music: prescribed Mixkit track, 14.1–19.2 LU below voice, no music-rule failure/gap; musicOnlyWindows=0. Posters generated from final MP4 with review/renders-generated.json; videos/renders.json untouched.
-Counts checked against real API receipts and final frames: baseline 26; import 38 created / 2 updated / 0 skipped / 0 errors; 64 final members. Repeat preview 39 skipped / 1 potential no-email creation, then actual cancellation with no second import.
-COUNT OBSERVATION: final take 2 shows « Doublons possibles (1) », rather than take 1's zero or the published old film's 667. Take 2 follows the invitations fixture: its persistent ledger-backed M2 is René Meyer, while the file also creates a no-email René Meyer. A separate read-only visit confirms the sole pair is René Meyer / René Meyer, explicitly marked a possible homonym; nothing was merged, ignored or hidden. Evidence review/actual-duplicate-pair.json and .png, pending-import-receipt.json and review/repeat-action--0.1.jpg (190.495 s, http://localhost:43102/admin/members). This is fixture provenance, not a confirmed product bug. Every narration sentence about duplicates was checked: file duplicate email, matching existing email, no automatic homonym merge and no-email re-creation remain correct; no sentence claims a zero global duplicate counter. CSV/XLSX unchanged from main.
-Source changes: existing fixture/receipt guards and tests retained; .94 cancellation wait under videos/tools/record.ts. No src edit, commit, push or publication. doc-img: unchanged
-Real-time subjective listening unavailable as permitted; audio-only/AV evidence and actual media inspection retained without claiming human listening.
 
-Capture server PID 15184 stopped by SIGTERM; port listener absence verified. Evidence review/server-stop-proof.json.
+Batch 40, 2026-11-11. One narrated take. Product d3f4c4ba81356b673b1952b19c4ffe99531652f5, BUILD_ID AOuqevq41Wdo1_vo9UIzS. Duration 241.080 s.
+
+Ten independent source and final-video chapter ASRs passed after silence-based cuts; whole master has one continuous consistent Kore voice. Complete multilingual final soundtrack and VTT: zero viewer tu tokens, no stray instruction or English narration.
+
+Validator passed; music 14.2–19.9 LU under voice, zero music-rule issues; 26 actual clicks and two actual key presses have synced soft effects. Ten fresh audiovisual reviews, 35 checkpoints, zero findings. Actual confirmation and result images inspected.
+
+The real import created 38 and updated two members. Reanalysis planned 39 skips and one no-email creation, cancelled without import. Filter René selected three rows. One confirmation deleted two extra members and deactivated the retained René. Independent read-only check of the current DB proves that exact member still exists inactive and his original registration remains active; bulk-cleanup-checks.json.
+
+Source changes: manifest cleanup segment/viewer, editorial script, recorder and post-action invariant, scenario seed, exact main-demo baseline/ownership checks. No product source, guide or renders.json changed. Published on 2026-11-11: default preview then APPLY=1, five files uploaded. Real-time subjective listening unavailable; not claimed.

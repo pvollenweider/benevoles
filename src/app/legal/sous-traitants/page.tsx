@@ -20,7 +20,7 @@ export function generateMetadata(): Metadata {
 export default function SubProcessorsPage() {
   // The hosted service's own page (#760): absent on another instance, which has /legal/exploitant.
   if (!pageAvailable(publicPage("/legal/sous-traitants"))) notFound()
-  const { title, html } = renderPublicSource("SOUS-TRAITANTS.md", "Liste des sous-traitants")
+  const { title, html } = renderPublicSource("content/legal/SOUS-TRAITANTS.md", "Liste des sous-traitants")
   return (
     <>
       <JsonLd data={publicPageJsonLd("/legal/sous-traitants", apexBaseUrl())} />

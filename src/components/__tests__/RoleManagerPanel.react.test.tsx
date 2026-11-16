@@ -137,6 +137,24 @@ describe("RoleManagerPanel", () => {
     await waitFor(() => expect(screen.getByRole("button", { name: "Accès : tous, poste « Bar »" })).toHaveFocus())
   })
 
+  // « Attribué par l'organisation uniquement » (#1145), saved from « Accès »: the button says it first.
+  it("saves a role as assigned by the organisation only from « Accès », which then says so and gets the focus back", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    fireEvent.click(screen.getByRole("button", { name: "Accès : tous, poste « Bar »" }))
+    fireEvent.click(screen.getByRole("checkbox", { name: "Poste « Bar » attribué par l'organisation uniquement" }))
+    expect(screen.queryByLabelText("Étiquettes donnant accès au poste « Bar »")).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    const access = await screen.findByRole("button", { name: "Accès : par l'organisation uniquement, poste « Bar »" })
+    expect(access).toHaveTextContent("Accès : par l'organisation")
+    await waitFor(() => expect(access).toHaveFocus())
+    expect(spies.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : attribué par l'organisation uniquement.")
+    // Reopened, the box is ticked from the saved setting.
+    fireEvent.click(access)
+    expect(screen.getByRole("checkbox", { name: "Poste « Bar » attribué par l'organisation uniquement" })).toBeChecked()
+  })
+
   // « Cumul » (#986): the same disclosure as « Limite » and « Accès ».
   it("opens the « Cumul » editor, saves it, shows « Cumul : oui » and returns the focus to it", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
@@ -327,7 +345,7 @@ describe("RoleManagerPanel", () => {
     for (const [open, label] of [
       [() => fireEvent.click(renameButton("Bar")), "Nouveau nom du poste « Bar »"],
       [() => fireEvent.click(screen.getByRole("button", { name: "Limite : aucune, poste « Bar »" })), "Nombre maximal de créneaux « Bar » par personne"],
-      [() => fireEvent.click(screen.getByRole("button", { name: "Accès : tous, poste « Bar »" })), "Étiquettes donnant accès au poste « Bar »"],
+      [() => fireEvent.click(screen.getByRole("button", { name: "Accès : tous, poste « Bar »" })), "Poste « Bar » attribué par l'organisation uniquement"],
     ] as const) {
       const outside = document.createElement("button")
       document.body.appendChild(outside)

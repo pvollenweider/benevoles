@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:13:51.597Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "811454d6e3f533aa237fa7c778221852a5e023e25bcd4d781caa3c694648493d",
+  "clipSha256": "dd44303e2002d2ff6f58c33aa8860bc4292cc945f64bcc37621090a88c8c3e7e",
+  "scene": "ap-launch",
+  "review": {
+    "heardOpening": "Dans Paramètres de calcul",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Dans Paramètres de calcul",
+        "visibleSeconds": 0.8,
+        "visible": "Déroulement de la section Paramètres de calcul",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.6,
+        "spoken": "tapons la graine 2026",
+        "visibleSeconds": 2,
+        "visible": "Saisie de la valeur 2026 dans le champ Graine",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "Puis Générer une proposition.",
+        "visibleSeconds": 7.8,
+        "visible": "Clic sur le bouton Générer une proposition et lancement du calcul",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

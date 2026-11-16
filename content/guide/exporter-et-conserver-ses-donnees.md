@@ -1,0 +1,90 @@
+---
+roles: [admin]
+group: organisation
+order: 20
+summary: Exporter un événement, les membres ou le journal à tout moment, et savoir combien de temps chaque donnée est conservée.
+related: [archiver-ou-supprimer-un-evenement, effacer-ou-supprimer-un-membre, journal-d-activite-de-l-organisation]
+legacy: [admin#exporter-et-conserver-ses-donnees]
+aliases: []
+---
+
+# Exporter et conserver ses données
+
+<!-- video: DATA_EXPORTS_ARCHIVES -->
+
+Vos données vous appartiennent et sortent de l'application à tout moment, sans demande :
+
+| Export | Où | Format |
+|---|---|---|
+| Un événement complet (paramètres, créneaux, inscriptions avec les bénévoles, pages, responsables, jalons, journal) | onglet **Documents** de l'événement → **Archive de l'événement (JSON)** | JSON |
+| Tous les membres (étiquettes, disponibilités, notes, nombre d'inscriptions, membres désactivés compris) | **Membres** → **Exporter les membres (CSV)** | CSV |
+| Le journal d'activité de l'organisation | **Paramètres** → **Journal d'activité** → **Exporter tout le journal (CSV)** | CSV |
+| Le planning, la liste des bénévoles, les feuilles à imprimer | onglet **Documents** de l'événement | PDF (depuis le navigateur) |
+| La feuille de présence | **Inscriptions** de l'événement → **Exporter les présences (CSV)** | CSV |
+
+![Section « Archive » de la page « Documents à imprimer » d'un événement : le lien « Archive de l'événement (JSON) », qui télécharge dans un fichier ses paramètres, créneaux, inscriptions, pages, responsables, jalons et journal](/doc-img/admin-event-archive.png)
+
+Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-virgule). Une valeur qui commence par `=`, `+`, `-` ou `@` (un numéro `+41…`, par exemple) y est précédée d'une apostrophe : le tableur l'affiche comme du texte au lieu de l'exécuter comme une formule. Les archives ne contiennent jamais de lien personnel ni de jeton d'accès.
+
+## Durées de conservation
+
+<!-- retention:start (généré depuis src/lib/retention.ts, npm run retention:docs) -->
+| Données | Conservation |
+|---|---|
+| Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes organisateurs, doublons possibles ignorés, logo de l'organisation | tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés 30 jours après sa désactivation par l'opérateur (délai compté depuis la dernière modification de l'organisation désactivée) ; une organisation sans activité depuis 18 mois suit la ligne « Organisation désactivée faute d'activité » |
+| Les mêmes données, pour une organisation suspendue pour abus (envoi de spam, contenu abusif) ; la raison de la suspension, notée par l'opérateur | conservées pendant la suspension, jusqu'à la décision de l'opérateur : levée de la suspension (la règle ordinaire s'applique alors) ou suppression définitive |
+| Les mêmes données, pour une organisation désactivée faute d'activité : 18 mois sans activité et sans événement prévu, puis trois messages à ses organisateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels, chacun accepté par le serveur d'envoi pour au moins un organisateur, le suivant au plus tôt 30 jours de calendrier plus tard) restés sans réponse au moins 15 jours après l'envoi du dernier rappel, et au moins 75 jours après l'envoi du premier | conservées tant qu'elle est désactivée ; une réponse, une activité ou un événement prévu arrête la procédure avant la désactivation |
+| Demande d'espace faite sur le site : nom de l'association, sa description et son besoin, nom et adresse email de la personne, et la réponse facultative à « Comment avez-vous connu le site ? » | 7 jours après la demande, confirmée ou non (l'espace et le compte créés, et la description et la réponse « Comment avez-vous connu le site ? » gardées sur la fiche de l'espace pour l'opérateur, suivent ensuite les règles de l'organisation ; un espace dont le mot de passe n'a jamais été choisi est effacé avec son compte 30 jours après sa création) |
+| Inscription publique en attente de confirmation par email : prénom, nom, adresse email, téléphone, date de naissance, commentaire, réponses aux questions, empreinte du lien de confirmation et échéance | tant que l'événement existe ; les places provisoires sont libérées à l'échéance, la demande remplacée, expirée ou annulée ne tient plus de place ; effacée avec l'événement, à l'effacement des données du membre, à une fusion de fiches et à l'anonymisation de l'événement 3 ans après sa fin |
+| Liste de blocage des inscriptions : adresse email ou domaine bloqué, empreinte d'une adresse IP (jamais l'adresse elle-même), raison | jusqu'au retrait par l'opérateur ou jusqu'à l'échéance choisie ; une adresse IP est toujours bloquée pour une durée limitée, 90 jours au plus |
+| Journal des décisions de l'opérateur : espace validé, refusé, suspendu, désactivé ou supprimé (nom et identifiant de l'espace), ajout ou retrait de la liste de blocage (adresse ou domaine bloqué, jamais une adresse IP en clair), raison donnée, auteur et date | 365 jours après la décision |
+| Choix d'un bénévole d'afficher ou non son prénom et l'initiale de son nom aux autres bénévoles confirmés d'un événement : affiché, à confirmer ou masqué, version du texte accepté, manière (formulaire d'inscription ou page « Mes inscriptions ») et date ; les changements sont aussi notés dans le journal de l'événement | tant que l'événement existe ; les noms ne sont plus montrés après le dernier jour de l'événement ; effacé avec l'événement ou le membre, à l'effacement des données du membre, à une fusion de fiches (le choix ne passe jamais d'une fiche à l'autre) et à l'anonymisation de l'événement 3 ans après sa fin |
+| Événement supprimé par un organisateur | effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et programmés et son journal |
+| Organisation supprimée par l'opérateur du service | effacée immédiatement, avec ses membres et ses organisateurs |
+| Fiche absorbée par une fusion de membres : fiche inactive sans donnée personnelle, gardée pour que l'historique enregistré sous son ancien identifiant reste rattaché à la fiche conservée | 30 jours après la fusion |
+| Réponses « Je ne peux pas » d'un membre pour un créneau : une par membre et par créneau, avec la date de la réponse | tant que l'événement existe, comme son invitation ; la réponse est supprimée quand la personne prend le créneau, à l'effacement de ses données et à une fusion de fiches, et avec l'événement ou à son anonymisation 3 ans après sa fin |
+| Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions (aussi celles que le journal a notées quand un bénévole les a modifiées), invitations, réponses « Je ne peux pas » par créneau, disponibilités datées, affectations en brouillon, propositions d'affectations, objectifs d'heures et responsables de secteur | anonymisées 3 ans après la fin de l'événement : ses inscriptions passent à une fiche « Bénévole effacé » par personne, sans lien avec sa fiche de membre (effectifs, heures et présences gardés, sans nom), le reste est effacé ; l'événement lui-même (titre, dates, créneaux, totaux) et les fiches des membres restent. L'organisation est prévenue 30 jours avant la première anonymisation, puis les événements qui atteignent 3 ans sont anonymisés chaque mois. Règle appliquée lorsque l'opérateur du service l'active |
+| Disponibilités datées d'un membre pour un événement : plages libres ou « pas disponible » date par date, qui les a saisies et quand, et le lien personnel « Indiquer mes disponibilités » (son empreinte et sa copie chiffrée) ; affectations en brouillon de l'organisation (une personne sur un créneau, en attente, publiée ou retirée) et la trace de leurs publications ; propositions d'affectations (les choix de l'organisateur, les données lues pour le calcul, le résultat et ses explications) et objectifs d'heures par personne | avec l'événement : effacées 3 ans après sa fin (ligne « Événement terminé depuis plus de 3 ans »), à l'effacement des données du membre, ou avec l'événement ; le lien est révoqué quand la collecte est arrêtée, les réponses restent |
+| Membres retirés, inscriptions annulées ou refusées, questions archivées | tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions), sauf anonymisation 3 ans après la fin de l'événement (ligne précédente) et effacement des données personnelles d'un membre à sa demande (ligne suivante) |
+| Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses « Je ne peux pas » par créneau, disponibilités datées des événements, affectations en brouillon, objectifs d'heures et place dans les propositions d'affectations, réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi | effacées immédiatement ; la fiche devient « Bénévole effacé » et ses inscriptions restent, sans identité, pour les effectifs, les heures et l'historique |
+| Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec ou annulés 30 jours après leur mise en file |
+| Compteurs d'emails transactionnels : organisation (ou « plateforme » pour les emails sans organisation), jour de mise en file, type d'email, résultat (envoyé, en échec ou annulé) et classe de la raison d'annulation, nombre ; ni destinataire, ni adresse, ni contenu, ni identifiant de bénévole | 395 jours après le jour de mise en file |
+| Résultats d'envoi par destinataire : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse | 30 jours |
+| Envois groupés d'emails (invitations, relances, rappels, messages) : type d'envoi, événement, organisateur qui l'a lancé, date, nombre de destinataires et nombres d'emails envoyés, retenus par un plafond d'envoi, en échec ou annulés ; ni destinataire, ni adresse, ni contenu ; et l'entrée correspondante du journal d'activité de l'organisation | 1095 jours après l'envoi, ou avec l'événement |
+| Messages ciblés (objet, texte, public, nombres) | 365 jours, ou avec l'événement |
+| Messages programmés (objet, texte, public, heure prévue) | 365 jours après l'heure prévue, ou avec l'événement |
+| Invitations d'organisateur non acceptées | effacées 30 jours après leur dernier envoi |
+| Organisateur retiré de l'équipe | effacé immédiatement |
+| Bénévoles sans organisation ni inscription | effacés au nettoyage suivant |
+| Sauvegardes chiffrées de la base | 30 jours sur le serveur, 90 jours en copie hors site |
+<!-- retention:end -->
+
+Une donnée effacée reste dans les sauvegardes chiffrées jusqu'à leur rotation (voir la dernière ligne).
+
+## Événements terminés depuis plus de 3 ans
+
+Pour ne pas garder sans fin les données personnelles des bénévoles, les inscriptions d'un événement terminé depuis plus de 3 ans sont anonymisées, lorsque l'opérateur du service applique cette règle :
+
+- **Ce qui part** : sur ces inscriptions, le nom, l'adresse email et le téléphone des bénévoles, et leurs commentaires ; les réponses aux questions, les invitations et les responsables de secteur de l'événement.
+- **Ce qui reste** : l'événement, ses créneaux, les effectifs, les présences et les heures. Chaque bénévole y devient « Bénévole effacé », sans lien avec sa fiche de membre. Les fiches des membres restent elles aussi, mais ces événements n'apparaissent plus dans leur historique ni sur leur attestation de bénévolat.
+
+Vous êtes prévenu par email 30 jours avant la première anonymisation, avec la liste des événements concernés : exportez avant cette date ce dont vous avez besoin (onglet **Documents** → **Archive de l'événement (JSON)**, attestations des membres). Ensuite, chaque mois, les événements qui atteignent 3 ans sont anonymisés de la même façon, sans nouveau message.
+
+Un membre qui n'a participé à aucun événement depuis 3 ans garde sa fiche : vous pouvez le désactiver, ou effacer ses données, depuis **Membres** (voir [Effacer ou supprimer un membre](effacer-ou-supprimer-un-membre.md)).
+
+## Un espace qui n'est plus utilisé
+
+Pour ne pas garder sans fin des espaces dont personne n'a plus besoin, l'opérateur du service peut activer une vérification périodique. Elle ne concerne qu'un espace sans activité depuis 18 mois et sans événement prévu : un événement à venir ou en cours l'arrête toujours.
+
+- **Trois messages d'abord** : les organisateurs reçoivent « Souhaitez-vous conserver votre espace ? », puis deux rappels. Un rappel ne part qu'une fois le message précédent accepté par le serveur d'envoi pour au moins un organisateur, et au plus tôt 30 jours de calendrier après lui. Chaque message indique jusqu'à quel jour répondre ; si un rappel part plus tard que prévu, ce jour est repoussé et le rappel le signale.
+- **Le garder** : ouvrez le lien du message, puis appuyez sur « Conserver mon organisation » sur la page qui s'affiche. Créer ou modifier un événement, un créneau, un membre ou un paramètre compte aussi comme une réponse. La vérification recommence alors à zéro.
+- **Sans réponse** : l'espace est désactivé au plus tôt 15 jours après l'envoi du dernier rappel, et jamais moins de 75 jours après l'envoi du premier message. Plus personne ne peut s'y connecter ni s'inscrire à ses événements, et les liens personnels des bénévoles comme ceux des responsables de secteur n'affichent plus que « Espace indisponible », mais ses données sont gardées. Tant qu'un message n'a été accepté pour aucun organisateur, l'espace ne peut pas être désactivé, et l'opérateur du service est prévenu.
+- **Le réactiver** : sur la page de connexion, choisissez « Espace désactivé faute d'activité ? Le réactiver » et entrez l'adresse de votre compte (le message qui annonce la désactivation mène au même endroit). Un lien vous est envoyé par email. Il sert une seule fois, dans les 24 heures, et seul le dernier lien demandé fonctionne : ouvrez-le, puis appuyez sur « Réactiver l'espace ». L'espace revient tel que vous l'avez laissé.
+
+### Mon espace va-t-il être désactivé si je ne l'utilise qu'une fois par an ?
+
+Non. Tant qu'un événement est prévu, ou que vous avez modifié quelque chose dans les 18 derniers mois, rien ne se passe. Et même après ce délai, vous recevez trois messages avant toute désactivation : pour garder l'espace, il suffit d'ouvrir le lien de l'un d'eux et de confirmer.
+
+## Supprimer une organisation
+
+Exportez d'abord ce que vous voulez garder, puis demandez la désactivation à l'administrateur de la plateforme (adresse de contact sur les pages légales, liées en bas de page). L'organisation devient inaccessible immédiatement, liens des bénévoles et des responsables de secteur compris ; ses données sont effacées définitivement par le nettoyage automatique 30 jours plus tard, sauvegardes comprises à l'issue de leur propre délai. Pendant ces 30 jours, une réactivation reste possible.

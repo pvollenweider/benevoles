@@ -10,7 +10,7 @@
 
 export type ActivityFact = {
   at: Date
-  kind: "invited" | "invite_used" | "invite_declined" | "registered" | "waitlisted" | "cancelled" | "present" | "leader" | "profile"
+  kind: "invited" | "invite_used" | "invite_declined" | "shift_declined" | "registered" | "waitlisted" | "cancelled" | "present" | "leader" | "profile"
   text: string
   eventId?: string
   eventTitle?: string
@@ -18,6 +18,8 @@ export type ActivityFact = {
 
 export type ActivitySources = {
   invites: { sentAt: Date; usedAt: Date | null; declinedAt: Date | null; event: { id: string; title: string } }[]
+  /** « Je ne peux pas » answers for one shift (#1303), each with the shift they are about. */
+  shiftDeclines: { declinedAt: Date; shift: { roleName: string; label: string; date: Date }; event: { id: string; title: string } }[]
   registrations: {
     createdAt: Date
     updatedAt: Date
@@ -26,7 +28,8 @@ export type ActivitySources = {
     shift: { roleName: string; label: string; date: Date }
     event: { id: string; title: string }
   }[]
-  leaders: { createdAt: Date; roleName: string; event: { id: string; title: string } }[]
+  /** A poste (`roleName`) or, since #1169, a sector. */
+  leaders: { createdAt: Date; roleName: string | null; sector?: { name: string } | null; event: { id: string; title: string } }[]
   orgLog: { createdAt: Date; action: string }[]
 }
 
@@ -37,6 +40,7 @@ const PROFILE_ACTIONS: Record<string, string> = {
   "member.created": "Fiche créée",
   "member.updated": "Fiche modifiée",
   "member.deactivated": "Fiche désactivée",
+  "member.links_renewed": "Adresse corrigée : liens personnels renouvelés",
   "member.imported": "Importé",
 }
 
@@ -50,6 +54,9 @@ export function memberTimeline(s: ActivitySources): ActivityFact[] {
     // cleared then) — this only ever reflects the current state, like the admin invitations list.
     if (i.declinedAt) facts.push({ at: i.declinedAt, kind: "invite_declined", text: "A indiqué ne pas être disponible", eventId: i.event.id, eventTitle: i.event.title })
   }
+  for (const d of s.shiftDeclines) {
+    facts.push({ at: d.declinedAt, kind: "shift_declined", text: `A indiqué ne pas pouvoir : ${shiftName(d.shift)}`, eventId: d.event.id, eventTitle: d.event.title })
+  }
   for (const r of s.registrations) {
     const base = { eventId: r.event.id, eventTitle: r.event.title }
     const name = shiftName(r.shift)
@@ -58,7 +65,7 @@ export function memberTimeline(s: ActivitySources): ActivityFact[] {
     if (r.status === "cancelled") facts.push({ at: r.updatedAt, kind: "cancelled", text: `Inscription annulée : ${name}`, ...base })
     if (r.checkedInAt) facts.push({ at: r.checkedInAt, kind: "present", text: `Présent : ${name}`, ...base })
   }
-  for (const l of s.leaders) facts.push({ at: l.createdAt, kind: "leader", text: `Responsable du poste « ${l.roleName} »`, eventId: l.event.id, eventTitle: l.event.title })
+  for (const l of s.leaders) facts.push({ at: l.createdAt, kind: "leader", text: l.roleName ? `Responsable du poste « ${l.roleName} »` : `Responsable du secteur « ${l.sector?.name ?? ""} »`, eventId: l.event.id, eventTitle: l.event.title })
   for (const o of s.orgLog) {
     const text = PROFILE_ACTIONS[o.action]
     if (text) facts.push({ at: o.createdAt, kind: "profile", text })

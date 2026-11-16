@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return post ? blogPostMetadata(post, apexBaseUrl()) : {}
 }
 
-// A post of the blog (#944), rendered from its own blog/<date>-<slug>.md; an unknown slug is a 404,
+// A post of the blog (#944), rendered from its own content/blog/<date>-<slug>.md; an unknown slug is a 404,
 // like the documentation units.
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params

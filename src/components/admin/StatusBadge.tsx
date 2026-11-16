@@ -13,6 +13,7 @@ export default function StatusBadge({ status }: { status: string }) {
     waiting: { label: "Liste d'attente", className: "bg-amber-100 text-amber-800" },
     offered: { label: "Place proposée", className: "bg-purple-100 text-purple-800" },
     requested: { label: "Demande à traiter", className: "bg-amber-100 text-amber-900" },
+    unconfirmed: { label: "En attente de confirmation par email", className: "bg-amber-100 text-amber-800" },
     refused: { label: "Refusée", className: "bg-gray-100 text-gray-700" },
   }
 

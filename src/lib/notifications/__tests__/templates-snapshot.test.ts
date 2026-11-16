@@ -156,6 +156,8 @@ const cases: [string, NotificationPayload][] = [
   ["reminder_dd (very soon)", { kind: "reminder_dd", recipient, data: { ...reminder, hoursUntil: 0, shifts: [{ ...reminderShift, locationDetails: null, latitude: null, longitude: null }] } }],
   ["reminder_dd (group of 3, same day)", { kind: "reminder_dd", recipient, data: reminderGroup3 }],
   ["reminder_dd (group with a night shift)", { kind: "reminder_dd", recipient, data: reminderGroupNight }],
+  ["reminder_rule", { kind: "reminder_rule", recipient, data: { ...reminder, ruleHours: 24 } }],
+  ["reminder_rule (group of 3, same day)", { kind: "reminder_rule", recipient, data: { ...reminderGroup3, ruleHours: 24 } }],
   ["manual_reminder", {
     kind: "manual_reminder",
     recipient,
@@ -429,6 +431,20 @@ const cases: [string, NotificationPayload][] = [
       shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
     },
   }],
+  // #1190: several withdrawals in a row, one email listing them, oldest first.
+  ["registration_withdrawn (grouped)", {
+    kind: "registration_withdrawn",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      items: [
+        { key: "r1", value: { what: "Ton inscription a été annulée", when: "le 9 octobre à 14:05", shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" } } },
+        { key: "r2", value: { what: "Tu as quitté la liste d'attente", when: "le 9 octobre à 14:05", shift: { roleName: "Bar", label: "Bar <soir>", date: "2026-07-11", startTime: "18:00", endTime: "22:00" } } },
+        { key: "r3", value: { what: "Ta demande d'inscription a été retirée", when: "le 9 octobre à 14:06", shift: { roleName: "Caisse", label: "Caisse", date: "2026-07-12", startTime: "10:00", endTime: "12:00" } } },
+      ],
+    },
+  }],
   // #809: an organiser put back a cancelled place.
   ["registration_restored", {
     kind: "registration_restored",
@@ -439,6 +455,97 @@ const cases: [string, NotificationPayload][] = [
       orgSlug: "rhone",
       status: "active",
       shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+      editToken: "edit-tok",
+    },
+  }],
+  // #1174: a swap between two volunteers, done, or ended without a swap.
+  ["shift_swap_applied", {
+    kind: "shift_swap_applied",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      gave: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      received: { roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "14:00", endTime: "17:00", locationDetails: "Entrée <nord>", instructions: "Gilet fourni" },
+      editToken: "edit-tok",
+    },
+  }],
+  ["shift_swap_offered", {
+    kind: "shift_swap_offered",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      otherName: "Jean D.",
+      gives: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      receives: { roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "14:00", endTime: "17:00", locationDetails: "Entrée nord", instructions: null },
+      deadline: "samedi 11 juillet à 09:00",
+      editToken: "edit-tok",
+    },
+  }],
+  ["availability_request", {
+    kind: "availability_request",
+    recipient,
+    data: { firstName: "Julie", organizationName: "Comité <Rhône>", eventTitle: tricky, datesLabel: "du vendredi 10 juillet au dimanche 12 juillet", deadlineLabel: "dimanche 28 juin à 23h59", orgSlug: "rhone", token: "avail-tok" },
+  }],
+  ["availability_request (reminder, no deadline)", {
+    kind: "availability_request",
+    recipient,
+    data: { firstName: "Julie", organizationName: "Comité", eventTitle: "Festival", datesLabel: "le samedi 4 juillet", deadlineLabel: null, orgSlug: "rhone", token: "avail-tok", reminder: true },
+  }],
+  // A person with a published mission corrected their availability (#1146, lot C): one, then several.
+  ["availability_changed", {
+    kind: "availability_changed",
+    recipient: { email: "org-admin@example.org", name: "Camille" },
+    data: { eventId: "evt-1", eventTitle: tricky, items: [{ key: "c1", mergeKey: "volunteer:v1", value: { volunteerName: "Nadia <Rochat>", outside: [] } }] },
+  }],
+  ["availability_changed (mission outside, several people)", {
+    kind: "availability_changed",
+    recipient: { email: "org-admin@example.org", name: "Camille" },
+    data: {
+      eventId: "evt-1", eventTitle: "Festival",
+      items: [
+        { key: "c1", mergeKey: "volunteer:v1", value: { volunteerName: "Nadia Rochat", outside: ["Bar, samedi 11 juillet, de 10h à 14h"] } },
+        { key: "c2", mergeKey: "volunteer:v2", value: { volunteerName: "Luca Bianchi", outside: [] } },
+      ],
+    },
+  }],
+  ["shift_swap_approval_needed", {
+    kind: "shift_swap_approval_needed",
+    recipient,
+    data: {
+      eventId: "evt-1",
+      eventTitle: tricky,
+      requester: { name: "Julie Martin", shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null } },
+      counterpart: { name: "Jean Dupont", shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "14:00", endTime: "17:00", locationDetails: null, instructions: null } },
+      deadline: "samedi 11 juillet à 09:00",
+    },
+  }],
+  ["shift_swap_ended (impossible)", {
+    kind: "shift_swap_ended",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      outcome: "impossible",
+      reason: "Cet échange crée un conflit d'horaire.",
+      kept: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      editToken: "edit-tok",
+    },
+  }],
+  ["shift_swap_ended (declined)", {
+    kind: "shift_swap_ended",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      outcome: "declined",
+      reason: null,
+      kept: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
       editToken: "edit-tok",
     },
   }],
@@ -597,6 +704,20 @@ const cases: [string, NotificationPayload][] = [
     recipient: { email: "camille@example.org" },
     data: { confirmUrl: "https://www.benevol.app/inscription/confirmer?t=tok-1", hours: 24 },
   }],
+  ["signup_email_confirmation", {
+    kind: "signup_email_confirmation",
+    recipient: { email: "lea@example.org" },
+    data: {
+      volunteerName: "Léa M",
+      eventTitle: "Fête du village",
+      confirmUrl: "https://asso.benevol.app/confirmation/tok-1",
+      expiresAt: "mercredi 11 novembre à 11:00",
+      shifts: [
+        { label: "Bar", date: "samedi 14 novembre", startTime: "10:00", endTime: "12:00" },
+        { label: "Accueil", date: "dimanche 15 novembre", startTime: "14:00", endTime: "16:00", waitlist: true },
+      ],
+    },
+  }],
   ["signup_account_link", {
     kind: "signup_account_link",
     recipient: { email: "camille@example.org" },
@@ -656,6 +777,8 @@ const cases: [string, NotificationPayload][] = [
       lastActivity: "12 mars 2025",
       deactivationOn: "mardi 23 décembre 2026",
       keepUrl: "https://www.benevol.app/admin/keep?lien=abc",
+      previousSentOn: "3 octobre 2026",
+      previousDeactivationOn: "vendredi 18 décembre 2026",
     },
   }],
   ["org_inactivity_deactivated", {
@@ -677,6 +800,7 @@ const cases: [string, NotificationPayload][] = [
       ],
       signupUrl: "https://rhone.benevol.app/festival-2026?token=tok-1",
       declineUrl: "https://rhone.benevol.app/festival-2026?token=tok-1&decline=1",
+      shiftDeclineUrls: { s1: "https://rhone.benevol.app/ne-peux-pas/invitation/tok-1/s1", s2: "https://rhone.benevol.app/ne-peux-pas/invitation/tok-1/s2" },
       orgSlug: "rhone",
     },
   }],
@@ -694,10 +818,12 @@ describe("render — snapshot of every notification kind", () => {
     // Keep in sync with NotificationKind: the Record type fails to compile when a kind is added.
     const all: Record<NotificationKind, true> = {
       registration_confirmation: true,
+      signup_email_confirmation: true,
       member_invite: true,
       reminder_j2: true,
       reminder_j1: true,
       reminder_dd: true,
+      reminder_rule: true,
       manual_reminder: true,
       shift_modified: true,
       shift_cancelled: true,
@@ -734,6 +860,12 @@ describe("render — snapshot of every notification kind", () => {
       org_inactivity_notice: true,
       org_inactivity_deactivated: true,
       open_shifts: true,
+      shift_swap_applied: true,
+      shift_swap_ended: true,
+      shift_swap_offered: true,
+      shift_swap_approval_needed: true,
+      availability_request: true,
+      availability_changed: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())

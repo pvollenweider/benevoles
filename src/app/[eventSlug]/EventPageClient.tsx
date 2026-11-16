@@ -12,6 +12,8 @@ import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/li
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import { SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX } from "@/lib/signup-limits"
 import SignupRecap from "@/components/public/SignupRecap"
+import { blocksWorkload, recapWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
+import { isWaitlistShift } from "@/lib/signup-recap"
 import ShiftRow from "@/components/public/ShiftRow"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -22,12 +24,15 @@ import {
   conflictingShiftIds as computeConflictingShiftIds,
   hasAvailableShift as anyShiftAvailable,
   isShiftSelectable,
+  noAvailableShiftText,
   prefillContact,
   proposedShiftState,
   proposedShiftText,
   shiftsByDay as groupShiftsByDay,
+  signupAnswerConditionProblems,
   toMyRegistrations,
   validateSignup,
+  birthDateHint,
   type MyRegistration,
   type SignupForm,
 } from "@/lib/public-signup"
@@ -42,9 +47,12 @@ import WithdrawDialog from "@/components/public/WithdrawDialog"
 import DeclineInvite from "@/components/public/DeclineInvite"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, visibleQuestions, type Question } from "@/lib/event-questions"
+import { askedQuestions } from "@/lib/question-scope"
+import { answerConditionRefusal } from "@/lib/role-answer"
 import DayTimeline from "@/components/DayTimeline"
 import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
+import HydrationNotice from "@/components/HydrationNotice"
 import { groupDaysByMonth, isLongEvent, usesMonthView, visibleDays } from "@/lib/long-event"
 import { readShiftView, saveShiftView, type ShiftView } from "@/lib/shift-view"
 import { heldKinds } from "@/lib/public-timeline"
@@ -56,10 +64,16 @@ import {
 } from "@/lib/shift-roster"
 import {
   ROSTER_MINOR_TEXT, ROSTER_SIGNUP_HINT, ROSTER_SIGNUP_LABEL, ROSTER_SWITCH_EXPLAIN, ROSTER_SWITCH_FAILURE, ROSTER_SWITCH_LABEL,
-  ROSTER_SWITCH_LOADED, ROSTER_SWITCH_UNAVAILABLE,
+  ROSTER_SWITCH_LOADED, ROSTER_SWITCH_UNAVAILABLE, ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC,
 } from "@/lib/shift-roster-text"
 import { RosterName } from "@/components/public/RosterName"
+import Switch from "@/components/public/Switch"
+import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
+import LinkRequestForm from "@/components/LinkRequestForm"
+import { LOST_LINK_SUMMARY, PERSONAL_LINK_DOC_LINKS, showsLostLinkEntry } from "@/lib/personal-link"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
+import { tokenOrNull, tokenPath } from "@/lib/token-path"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
 import EmbedFrame from "@/components/public/EmbedFrame"
@@ -67,6 +81,7 @@ import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnounc
 import RequiredMark from "@/components/RequiredMark"
 import { startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
 import { SESSION_EMAIL_HINT, sessionFormNote, type SignupUpdates } from "@/lib/signup-updates"
+import { continueLabel } from "@/lib/continue-label"
 
 
 type Shift = {
@@ -94,6 +109,8 @@ type Shift = {
   maxPerVolunteer?: number | null
   /** Reserved to some members (#470); which tags is never sent to the page. */
   reserved?: boolean
+  /** Reserved to an answer (#962): a readable mention, checked at validation. */
+  reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
   /** Its role may overlap another shift (#986): never shown as a conflict. */
   overlapAllowed?: boolean
 }
@@ -124,9 +141,13 @@ export type EventData = {
   registrationOpensAt: string | null
   registrationClosesAt: string | null
   timeZone: string
+  /** Workload (#465 warnings, or the #1171 protection limits); absent from an older payload = warnings. */
+  workload?: WorkloadMode
   accentColorKey: string | null
   showSchedule: Show[]
   volunteerCharter: string | null
+  /** With volunteerCharter, picks the exact text the sign-up route hashes (#569). */
+  hasOrgInsurance: boolean
   shifts: Shift[]
   pages: { slug: string; title: string }[]
   /** Only in the admin preview (#370). */
@@ -159,7 +180,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   privacyHref?: string
   orgSlug: string
   eventSlug: string
-  preview?: { eventId: string; adminEventUrl: string }
+  /** `helpLink` (#1096): the preview page's « Aide : … », shown in the preview banner. */
+  preview?: { eventId: string; adminEventUrl: string; helpLink?: React.ReactNode }
   initialEvent?: EventData
   groupFilter?: GroupFilter
   embed?: boolean
@@ -170,7 +192,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const inviteToken = searchParams.get("token")
+  // Only a value shaped like a token counts as an invitation: anything else is as if there were none.
+  const inviteToken = tokenOrNull(searchParams.get("token"))
   // « Je prends ce créneau » from an organizer's email (#869): the proposed shift, offered in one click.
   const proposedShiftId = searchParams.get("creneau")
   const proposalTextRef = useRef<HTMLParagraphElement>(null)
@@ -186,6 +209,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const [limitNotice, setLimitNotice] = useState("")
   const [answers, setAnswers] = useState<Answers>({})
   const [questionErrors, setQuestionErrors] = useState<Map<string, string>>(new Map())
+  // #962: a selected shift the answers do not open, said on its row too.
+  const [answerShiftErrors, setAnswerShiftErrors] = useState<Map<string, string>>(new Map())
   // Reserved roles (#470) the visitor's invitation opens; none without an invitation.
   const [allowedReserved, setAllowedReserved] = useState<Set<string>>(new Set())
   // Whether this invitation already answered « pas disponible » (#558), from the member-invite GET.
@@ -300,7 +325,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
   const myStatus = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, r.status])), [myRegistrations])
   // Held shifts the volunteer can't cancel online any more (#946): no ✕, a sentence instead.
-  const myTokenByShift = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, `/my/${r.token}`])), [myRegistrations])
+  const myTokenByShift = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, `/my/${encodeURIComponent(r.token)}`])), [myRegistrations])
   const closedShiftIds = useMemo(() => new Set(myRegistrations.filter((r) => r.cancellable === false).map((r) => r.shiftId)), [myRegistrations])
   // Held shifts by status, for the schedule: named and drawn as the visitor's own (#534).
   const heldByShift = useMemo(() => heldKinds(myRegistrations), [myRegistrations])
@@ -325,12 +350,24 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     [event, myShiftIds, selectedShifts],
   )
 
+  // The protection's limits (#1171) the selection would break: read with the confirm button.
+  const workloadBlocked = useMemo(() => {
+    if (!event?.workload || !blocksWorkload(event.workload)) return false
+    const chosen = event.shifts.filter((shift) => selectedShifts.has(shift.id) && !isWaitlistShift(shift))
+    return recapWorkloadNotices(chosen, heldShifts, event.workload).length > 0
+  }, [event, selectedShifts, heldShifts])
+
   // Shifts among the current selection that require a minimum age (#192) — drives whether the
   // form asks for a date of birth.
   const ageGatedSelectedShifts = useMemo(
     () => (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id) && s.minAge != null),
     [event, selectedShifts, myShiftIds]
   )
+
+  // Minors protected by the event's workload protection (#1171, lot 2): the birth date is asked too.
+  const minorsProtected = !!event?.workload && workloadNeedsBirthDate(event.workload)
+  const asksBirthDate = ageGatedSelectedShifts.length > 0 || minorsProtected
+  const [birthDateInvalid, setBirthDateInvalid] = useState(false)
 
   // The shift roster's box (#1068): shown when the event has the roster, replaced by a sentence
   // when the birth date asked for an age-gated shift says under 18.
@@ -357,13 +394,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   }, [eventSlug, orgSlug, previewEventId, serverRendered])
 
   useEffect(() => {
-    if (!inviteToken || previewEventId) return
-    fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(eventSlug)}`)
+    const inviteUrl = tokenPath("/api/public/member-invite", inviteToken, `?slug=${encodeURIComponent(eventSlug)}`)
+    if (!inviteUrl || previewEventId) return
+    fetch(inviteUrl)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data?.member) return
         setForm((f) => prefillContact(f, data.member, "form"))
         setAllowedReserved(new Set<string>(data.reservedRolesAllowed ?? []))
+        // The member's own answers (#962): a poste reserved to one of them is bookable as is.
+        if (Array.isArray(data.answers)) setAnswers((a) => ({ ...startingAnswers(data.answers as MyAnswerRow[]), ...a }))
         setDeclined(!!data.declined)
       })
       .catch(() => {})
@@ -372,9 +412,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   useEffect(() => {
     if (previewEventId) return // a preview never picks up a volunteer's session on this browser
     // Storage may be refused or partitioned (a third-party frame, #948): no session then.
-    const token = readStored(storageKey)
-    if (!token) return
-    fetch(`/api/public/registrations/${token}`)
+    const token = tokenOrNull(readStored(storageKey))
+    const sessionUrl = tokenPath("/api/public/registrations", token)
+    if (!token || !sessionUrl) return
+    fetch(sessionUrl)
       .then((r) => r.ok ? r.json() : null)
       .then((data) => {
         if (!data?.registrations) return
@@ -440,7 +481,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // Only the answer for this very link and these shifts, only while the switch is on.
   const shownRoster = rosterOn && rosterUrl && rosterResult?.key === rosterKey ? rosterResult.shifts : null
 
-  if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
+  // Without an event from the server, « Chargement… » is all the first HTML holds: the notice of a
+  // page that never started (#1343) belongs here too.
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center min-h-screen px-4">
+      {!preview && <HydrationNotice kind="event" id="page-not-started" className="max-w-xl" />}
+      <div role="status" className="text-gray-500">Chargement…</div>
+    </div>
+  )
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
 
   // Registration window (#463). This page only shows published events, or a preview of what
@@ -466,6 +514,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const hasAvailableShift = anyShiftAvailable(shownShifts)
   // Coming back with the session of a sign-up on this event (#1013): the form starts from it.
   const inSession = !previewEventId && !!sessionToken && myRegistrations.length > 0
+  // The questions asked for the postes of the shifts chosen (#1140), plus those already held from
+  // the personal link, as the server decides. Recomputed with the selection: back on the form, a
+  // question of a poste no longer chosen is gone, neither checked nor sent (what was typed in it
+  // stays in memory, should the shift be chosen again).
+  const askedRoles = (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) || (inSession && myShiftIds.has(s.id))).map((s) => s.roleName)
+  const formQuestions = askedQuestions(event?.questions ?? [], askedRoles)
 
   function toggleGroupFilter() {
     if (groupFilter.kind !== "filtered") return
@@ -505,22 +559,41 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    // #962: the answer conditions of the shifts being added, checked with the stored answers.
+    const newShifts = (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id))
+    const answerProblems = signupAnswerConditionProblems(newShifts, answers)
     const invalid = validateSignup({
       form,
       charterAccepted,
       requirePhone: event?.requirePhone ?? false,
       ageGatedShifts: ageGatedSelectedShifts,
+      minorsProtected,
+      reservedAnswerShifts: newShifts,
+      answers,
     })
     if (invalid) {
-      setFailure(null); setQuestionErrors(new Map()); setError(invalid)
+      setFailure(null); setQuestionErrors(new Map()); setAnswerShiftErrors(new Map()); setError(invalid)
+      const first = answerProblems[0]
+      const conditionMessage = first ? answerConditionRefusal(first.questionLabel, first.condition.answers) : null
+      // Only when nothing more basic is wrong: the form's own order decides which field to show first.
+      if (conditionMessage && invalid === conditionMessage) {
+        setQuestionErrors(new Map([[first.condition.questionId, conditionMessage]]))
+        setAnswerShiftErrors(new Map(answerProblems.map((p) => [p.shiftId, answerConditionRefusal(p.questionLabel, p.condition.answers)])))
+        requestAnimationFrame(() => document.getElementById(`q-${first.condition.questionId}`)?.focus())
+        return
+      }
       const box = !charterAccepted ? "charter" : !form.consent ? "consent" : null
       setInvalidCheckbox(box)
+      // A missing birth date (minimum age, minors' protection) is said on its field, which takes focus.
+      const birth = !box && asksBirthDate && !form.birthDate
+      setBirthDateInvalid(birth)
       if (box) requestAnimationFrame(() => document.getElementById(`reg-${box}`)?.focus())
+      else if (birth) requestAnimationFrame(() => document.getElementById("reg-birthdate")?.focus())
       return
     }
     setInvalidCheckbox(null)
     // Custom questions (#483): the same check as the server, the first refused field focused.
-    const answerCheck = checkAnswers(event?.questions ?? [], answers)
+    const answerCheck = checkAnswers(formQuestions, answers)
     if (!answerCheck.ok) {
       setFailure(null)
       setQuestionErrors(new Map(answerCheck.errors.map((e) => [e.questionId, e.message])))
@@ -570,7 +643,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           rosterNameVisible: rosterBox === "box" && rosterNameVisible,
           // The text the box showed (#1068): its audience is the one stored with the choice.
           rosterNoticeVersion: ROSTER_NOTICE_VERSION,
-          answers,
+          // Only the questions asked (#1140): the server would ignore the others anyway.
+          answers: Object.fromEntries(Object.entries(answers).filter(([id]) => formQuestions.some((q) => q.id === id))),
           inviteToken: inviteToken ?? undefined,
           // The sign-up counts for the group link the page was opened with (#947).
           groupCode: attributionCode(groupFilter) ?? undefined,
@@ -600,7 +674,15 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     if (!res.ok) {
       // A refused answer (#483) marks its field, like the page's own check.
       const refused = (data as unknown as { questionErrors?: unknown }).questionErrors
-      if (Array.isArray(refused)) setQuestionErrors(new Map(refused.filter((x): x is { questionId: string; message: string } => typeof x?.questionId === "string" && typeof x?.message === "string").map((x) => [x.questionId, x.message])))
+      if (Array.isArray(refused)) {
+        const rows = refused.filter((x): x is { questionId: string; message: string } => typeof x?.questionId === "string" && typeof x?.message === "string")
+        setQuestionErrors(new Map(rows.map((x) => [x.questionId, x.message])))
+        // #962: the refused rows say the same, next to the shift.
+        const ids = (data as unknown as { reservedAnswerShiftIds?: unknown }).reservedAnswerShiftIds
+        if (Array.isArray(ids) && typeof rows[0]?.message === "string") {
+          setAnswerShiftErrors(new Map(ids.filter((id): id is string => typeof id === "string").map((id) => [id, rows[0].message])))
+        }
+      }
       // Errors never carry a management token (#285): the owner gets it by email instead.
       setFailure(describeSignupFailure({ status: res.status, body: data }))
       // The server refused the charter (#569): back to the checkbox, the alert is still announced.
@@ -701,13 +783,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     setWithdrawing(true)
     setWithdrawError(null)
     let failure: { status?: number; network?: boolean; error?: string } | null = null
+    const url = tokenPath("/api/public/registrations", pending.token)
     try {
-      const res = await fetch(`/api/public/registrations/${pending.token}`, {
+      // Not a token (never from the server): nothing to cancel, said like an unknown link.
+      const res = url ? await fetch(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: withdrawMessage }),
-      })
-      if (!res.ok) {
+      }) : null
+      if (!res) failure = { status: 404 }
+      else if (!res.ok) {
         // Too late to cancel online (#946): the server says why, in words for the volunteer.
         const body = res.status === 409 ? await res.json().catch(() => null) : null
         failure = { status: res.status, error: typeof body?.error === "string" ? body.error : undefined }
@@ -768,7 +853,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               <strong>Aperçu</strong> : la page telle que la verront les bénévoles
               {event.publicStatus === "published" ? "" : ", alors que l'événement n'est pas encore publié"}. Rien n'est enregistré ni envoyé.
             </p>
-            <Link href={preview.adminEventUrl} className="font-medium underline underline-offset-2">Retour à l&apos;événement</Link>
+            <div className="flex items-center gap-x-4 gap-y-1 flex-wrap">
+              <Link href={preview.adminEventUrl} className="font-medium underline underline-offset-2">Retour à l&apos;événement</Link>
+              {preview.helpLink}
+            </div>
           </div>
         </div>
       )}
@@ -827,6 +915,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           <p id="registration-window-msg" className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">{windowClosedText}</p>
         )}
         {windowUntilText && <p className="text-sm text-gray-700">{windowUntilText}</p>}
+        {/* A page that never started (#1343): shifts cannot be chosen. Not in the organiser's
+            preview, not when nothing can be chosen anyway. */}
+        {!preview && accepting && <HydrationNotice kind="event" id="page-not-started" />}
         {reservedShiftIds.size > 0 && (
           <p id="reserved-roles-msg" className="text-sm text-gray-700">Les postes marqués « Réservé » sont réservés à certains membres. Si tu en fais partie, inscris-toi avec le lien personnel reçu par email.</p>
         )}
@@ -951,9 +1042,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             )}
 
             {/* Frise or Liste (#808), once above every day; the pressed state says which is shown.
-                « Voir qui est inscrit » (#1068) beside it, a separate toggle, only for an identified
+                « Voir qui est inscrit » (#1068) beside it, a separate switch, only for an identified
                 visitor; its label never changes. */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <div role="group" aria-label="Affichage des créneaux" className="inline-flex rounded-xl border border-gray-300 text-sm">
               {(["frise", "liste"] as const).map((view) => (
                 <button
@@ -968,17 +1059,20 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               ))}
             </div>
             {rosterUrl && (
-              <button
-                type="button"
-                aria-pressed={rosterOn}
-                aria-describedby={rosterOn ? "roster-switch-explain" : undefined}
-                onClick={() => { rosterPressed.current = true; setRosterOn((on) => !on); setRosterResult(null); setRosterStatus(""); setRosterFailure("") }}
-                className={`min-h-11 rounded-xl border border-gray-300 px-4 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${rosterOn ? "bg-gray-900 text-white border-gray-900" : "text-gray-700 hover:bg-gray-50"}`}
+              // A switch (DESIGN.md §5), not a third view: an on/off display setting beside the
+              // group, its label constant, the whole line its 44 px target.
+              <Switch
+                checked={rosterOn}
+                describedBy={rosterOn ? "roster-switch-explain" : undefined}
+                onToggle={() => { rosterPressed.current = true; setRosterOn((on) => !on); setRosterResult(null); setRosterStatus(""); setRosterFailure("") }}
+                data-roster-switch
               >
                 {ROSTER_SWITCH_LABEL}
-              </button>
+              </Switch>
             )}
             </div>
+            {/* The guide's page on reading the schedule (#1096); in a sentence, not beside the switches. */}
+            <p className="text-sm text-gray-700">Comment lire le planning et choisir tes créneaux : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.chooseShifts)} about="la lecture du planning" /></p>
             {rosterUrl && rosterOn && (
               <p id="roster-switch-explain" className="text-sm text-gray-700">
                 {ROSTER_SWITCH_EXPLAIN}
@@ -1072,7 +1166,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
                 {!hasAvailableShift && (
                   <div className="text-center py-8 text-gray-500">
-                    <p className="text-lg font-medium">{groupFiltered && !showAllRoles ? "Tous les créneaux de ces postes sont complets." : "Tous les créneaux sont complets."}</p>
+                    <p className="text-lg font-medium">{noAvailableShiftText(shownShifts, groupFiltered && !showAllRoles)}</p>
                     <p className="text-sm mt-1">Merci pour ton intérêt !</p>
                   </div>
                 )}
@@ -1080,7 +1174,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 {/* Mobile: selected shifts summary card */}
                 {allSelectedShifts.length > 0 && (
                   <div data-shift-list className="lg:hidden rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} notice={answerShiftErrors.get(s.id)} />)}
                   </div>
                 )}
               </div>
@@ -1111,7 +1205,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         Créneaux sélectionnés
                       </p>
                       <div data-shift-list className="divide-y divide-gray-100">
-                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} notice={answerShiftErrors.get(s.id)} />)}
                       </div>
                       {newShiftIds.size > 0 && (
                         <div className="p-3 border-t border-gray-100">
@@ -1120,7 +1214,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                             onClick={openForm}
                             className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                           >
-                            Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                            {continueLabel(newShiftIds.size)}
                           </button>
                         </div>
                       )}
@@ -1130,6 +1224,24 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               </div>
             </div>
 
+            {/* « J'ai perdu mon lien personnel » (#1097): the request of the « Ce lien ne fonctionne
+                pas » page (same route, limits and neutral answer, no link on screen, #285) for a
+                visitor without a session. A native disclosure; under lg its controls keep clear of
+                the fixed « Continuer » bar when focused (scroll-margin, WCAG 2.4.11). */}
+            {showsLostLinkEntry({ preview: !!preview, sessionRegistrations: myRegistrations.length }) && (
+              <details className="group scroll-mb-32 lg:scroll-mb-0">
+                <summary className="inline-flex min-h-11 lg:min-h-6 cursor-pointer list-none items-center gap-1 rounded py-0.5 text-sm font-medium text-blue-700 hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 scroll-mb-32 lg:scroll-mb-0 [&::-webkit-details-marker]:hidden">
+                  {/* Underline on the words only: on the summary it would turn with the ▸ once open. */}
+                  <span aria-hidden="true" className="inline-block motion-safe:transition-transform group-open:rotate-90">▸</span>
+                  <span className="underline underline-offset-2">{LOST_LINK_SUMMARY}</span>
+                </summary>
+                <div className="mt-3 max-w-md rounded-2xl border border-gray-200 bg-white p-4 space-y-3">
+                  <LinkRequestForm variant="lost" scrollClass="scroll-mb-32 lg:scroll-mb-0" />
+                  <p className="text-xs"><DocMoreLink href={PERSONAL_LINK_DOC_LINKS.lostLink} about="le lien personnel perdu" className="scroll-mb-32 lg:scroll-mb-0" /></p>
+                </div>
+              </details>
+            )}
+
             {/* Embedded, mobile: the same button after the selection, in the flow of the page. */}
             {showMobileCta && embed && (
               <div className="lg:hidden">
@@ -1138,7 +1250,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   onClick={openForm}
                   className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                 >
-                  Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                  {continueLabel(newShiftIds.size)}
                 </button>
               </div>
             )}
@@ -1152,7 +1264,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     onClick={openForm}
                     className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all pointer-events-auto"
                   >
-                    Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                    {continueLabel(newShiftIds.size)}
                   </button>
                 </div>
               </div>
@@ -1170,9 +1282,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
-                  answeredQuestions={visibleQuestions(event.questions ?? [], answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
+                  answeredQuestions={visibleQuestions(formQuestions, answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
+                  workload={event.workload}
+                  birthDate={form.birthDate}
                   variant="sidebar"
                 />
                 <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
@@ -1196,17 +1310,21 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
-                  answeredQuestions={visibleQuestions(event.questions ?? [], answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
+                  answeredQuestions={visibleQuestions(formQuestions, answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
+                  workload={event.workload}
+                  birthDate={form.birthDate}
                   variant="card"
                 />
               </div>
 
+              {/* Above the form (#1096): not a Tab stop between its fields. */}
+              <p className="mb-4 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.signUp)} about="l'inscription" /></p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
                 {inSession && (
-                  <p className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-700">{sessionFormNote((event.questions ?? []).length > 0)}</p>
+                  <p className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-700">{sessionFormNote(formQuestions.length > 0)}</p>
                 )}
                 {usedRemembered && myRegistrations.length === 0 && (
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl bg-gray-50 border border-gray-200 px-3 py-2">
@@ -1230,7 +1348,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       autoComplete="given-name"
                       value={form.firstName}
                       onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -1242,7 +1360,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       autoComplete="family-name"
                       value={form.lastName}
                       onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -1256,7 +1374,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     aria-describedby={inSession ? "reg-email-hint" : undefined}
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                   {inSession && <p id="reg-email-hint" className="text-xs text-gray-600 mt-1">{SESSION_EMAIL_HINT}</p>}
                 </div>
@@ -1274,10 +1392,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     maxLength={SIGNUP_PHONE_MAX}
                     value={form.phone}
                     onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                {ageGatedSelectedShifts.length > 0 && (
+                {asksBirthDate && (
                   <div>
                     <label htmlFor="reg-birthdate" className="block text-sm font-medium text-gray-700 mb-1">Date de naissance<RequiredMark /></label>
                     <input
@@ -1286,22 +1404,25 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       required
                       autoComplete="bday"
                       aria-describedby="reg-birthdate-hint"
+                      aria-invalid={birthDateInvalid && !form.birthDate ? true : undefined}
                       value={form.birthDate}
-                      onChange={(e) => setForm((f) => ({ ...f, birthDate: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                      onChange={(e) => { setForm((f) => ({ ...f, birthDate: e.target.value })); setBirthDateInvalid(false) }}
+                      className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                     <p id="reg-birthdate-hint" className="text-xs text-gray-500 mt-1">
-                      Requis : {ageGatedSelectedShifts.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}
+                      {birthDateHint(ageGatedSelectedShifts, minorsProtected)}
                     </p>
                   </div>
                 )}
                 <SignupQuestions
-                  questions={event.questions ?? []}
+                  questions={formQuestions}
                   answers={answers}
                   onChange={(qid, value) => {
                     setAnswers((a) => ({ ...a, [qid]: value }))
                     // A corrected field no longer says it is invalid.
                     setQuestionErrors((m) => { if (!m.has(qid)) return m; const n = new Map(m); n.delete(qid); return n })
+                    // #962: the rows' refusals are re-checked at the next validation.
+                    if (answerShiftErrors.size > 0) setAnswerShiftErrors(new Map())
                   }}
                   errors={questionErrors}
                   clearable={inSession}
@@ -1314,7 +1435,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     maxLength={SIGNUP_COMMENT_MAX}
                     value={form.comment}
                     onChange={(e) => setForm((f) => ({ ...f, comment: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                 </div>
                 <label className="flex items-start gap-3 cursor-pointer">
@@ -1325,7 +1446,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     aria-invalid={invalidCheckbox === "charter" || undefined}
                     aria-describedby={invalidCheckbox === "charter" ? (failure ? "signup-failure" : "signup-error") : undefined}
                     onChange={(e) => { setCharterAccepted(e.target.checked); if (e.target.checked && invalidCheckbox === "charter") setInvalidCheckbox(null) }}
-                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                    className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
                   />
                   <span className="text-sm text-gray-600">
                     J&apos;ai lu et j&apos;accepte la{" "}
@@ -1350,7 +1471,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     aria-invalid={invalidCheckbox === "consent" || undefined}
                     aria-describedby={invalidCheckbox === "consent" ? "signup-error" : undefined}
                     onChange={(e) => { const checked = e.target.checked; setForm((f) => ({ ...f, consent: checked })); if (checked && invalidCheckbox === "consent") setInvalidCheckbox(null) }}
-                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                    className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
                   />
                   <span className="text-sm text-gray-600">
                     J&apos;accepte que l&apos;association qui organise cet événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants.
@@ -1377,7 +1498,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                             checked={rosterNameVisible}
                             aria-describedby="reg-roster-hint"
                             onChange={(e) => setRosterNameVisible(e.target.checked)}
-                            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                            className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
                           />
                           <span className="text-sm text-gray-600">{(() => {
                             // « Aline M. » spoken « Aline, initiale M » (not « Monsieur »).
@@ -1386,6 +1507,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           })()}</span>
                         </label>
                         <p id="reg-roster-hint" className="pl-7 mt-1 text-xs text-gray-600">{ROSTER_SIGNUP_HINT}</p>
+                        {/* Outside the hint: the box's description must not read the link. */}
+                        <p className="pl-7 text-xs"><DocMoreLink href={ROSTER_DOC_LINKS.signup} about={ROSTER_DOC_TOPIC} /></p>
                       </>
                     ) : (
                       <p className="text-sm text-gray-600">{ROSTER_MINOR_TEXT}</p>
@@ -1412,10 +1535,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   </div>
                 )}
 
+                {workloadBlocked && <p id="signup-workload-blocked" className="sr-only">Ces créneaux dépassent les limites de pauses et de charge de l&apos;événement : retire ou change un créneau.</p>}
                 <button
                   ref={submitButtonRef}
                   type="submit"
                   aria-disabled={submitting || undefined}
+                  aria-describedby={workloadBlocked ? "signup-workload-blocked" : undefined}
                   className={`w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   {submitting ? "Envoi en cours…" : preview ? "Voir la confirmation (aperçu)" : "Confirmer mon inscription"}
@@ -1435,7 +1560,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           panelClassName="max-w-lg"
         >
           <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
-            {resolveCharterText(event.volunteerCharter)}
+            {resolveCharterText(event.volunteerCharter, event.hasOrgInsurance)}
           </div>
           <div className="pt-4 mt-4 border-t border-gray-100">
             <button

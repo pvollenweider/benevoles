@@ -16,17 +16,20 @@ test("an admin invitation sends the link by email and never shows it", async ({ 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   await page.goto("/admin/settings/admins")
   await page.getByRole("button", { name: "Inviter" }).click()
-  const form = page.locator("form", { has: page.getByRole("heading", { name: "Inviter un administrateur" }) })
+  const form = page.locator("form", { has: page.getByRole("heading", { name: "Inviter un organisateur" }) })
   await form.getByLabel("Nom").fill("Invitée E2E")
   await form.getByLabel("Email").fill(email)
   await form.getByRole("button", { name: "Envoyer l'invitation" }).click()
 
-  await expect(page.getByRole("status").filter({ hasText: `Invitation envoyée à ${email}.` }))
-    .toContainText("Le lien d'activation, valable 7 jours, lui a été envoyé par email.")
+  // The same answer for every address (it never says whether one is used elsewhere); the team list,
+  // read again, shows the pending invitation.
+  await expect(page.getByRole("status").filter({ hasText: `Si ${email.toLowerCase()} peut rejoindre l'équipe` }))
+    .toContainText("un lien d'activation valable 7 jours")
+  await expect(page.getByText(email.toLowerCase(), { exact: true })).toBeVisible()
   await expect(page.getByRole("button", { name: "Inviter" })).toBeFocused()
   await expect(page.getByText(/accept-invite/)).toHaveCount(0)
   await expect(page.getByRole("button", { name: /Copier le lien/ })).toHaveCount(0)
@@ -37,7 +40,8 @@ test("an admin invitation sends the link by email and never shows it", async ({ 
   await form.getByLabel("Nom").fill("Invitée E2E")
   await form.getByLabel("Email").fill(email)
   await form.getByRole("button", { name: "Envoyer l'invitation" }).click()
-  await expect(page.getByRole("alert").filter({ hasText: "Cette adresse fait déjà partie de votre équipe, ou son invitation est encore valable." })).toBeVisible()
+  // A field error is carried by the field that takes the focus, not by the alert (#739).
+  await expect(page.getByText("Cette adresse fait déjà partie de votre équipe, ou son invitation est encore valable.")).toBeVisible()
   await form.getByRole("button", { name: "Annuler" }).click()
 
   await page.getByRole("button", { name: "Retirer Invitée E2E" }).click()

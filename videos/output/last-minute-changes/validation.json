@@ -1,83 +1,89 @@
 {
   "id": "LAST_MINUTE_CHANGES",
   "slug": "last-minute-changes",
-  "validatedAt": "2026-10-17T10:40:29.529Z",
+  "validatedAt": "2026-11-11T12:59:25.638Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 345400,
+  "captureMs": 395480,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 29600,
-      "audioMs": 29598,
-      "driftMs": 2
+      "visualMs": 29263,
+      "audioMs": 29262,
+      "driftMs": 1
     },
     {
       "id": "withdrawal",
-      "visualMs": 29451,
-      "audioMs": 29450,
-      "driftMs": 1
-    },
-    {
-      "id": "offer",
-      "visualMs": 25826,
-      "audioMs": 25826,
-      "driftMs": 0
-    },
-    {
-      "id": "coverage",
-      "visualMs": 28872,
-      "audioMs": 28870,
+      "visualMs": 30845,
+      "audioMs": 30843,
       "driftMs": 2
     },
     {
-      "id": "availability",
-      "visualMs": 30001,
-      "audioMs": 30000,
+      "id": "offer",
+      "visualMs": 26686,
+      "audioMs": 26684,
+      "driftMs": 2
+    },
+    {
+      "id": "coverage",
+      "visualMs": 29924,
+      "audioMs": 29923,
       "driftMs": 1
     },
     {
+      "id": "availability",
+      "visualMs": 39669,
+      "audioMs": 39666,
+      "driftMs": 3
+    },
+    {
       "id": "message",
-      "visualMs": 58162,
-      "audioMs": 58160,
+      "visualMs": 55663,
+      "audioMs": 55661,
+      "driftMs": 2
+    },
+    {
+      "id": "need",
+      "visualMs": 35452,
+      "audioMs": 35450,
       "driftMs": 2
     },
     {
       "id": "schedule",
-      "visualMs": 28291,
-      "audioMs": 28289,
-      "driftMs": 2
+      "visualMs": 29677,
+      "audioMs": 29676,
+      "driftMs": 1
     },
     {
       "id": "cancel",
-      "visualMs": 32066,
-      "audioMs": 32065,
-      "driftMs": 1
+      "visualMs": 30506,
+      "audioMs": 30503,
+      "driftMs": 3
     },
     {
       "id": "journal",
-      "visualMs": 28994,
-      "audioMs": 28992,
-      "driftMs": 2
+      "visualMs": 28041,
+      "audioMs": 28041,
+      "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 29791,
-      "audioMs": 29790,
-      "driftMs": 1
+      "visualMs": 32413,
+      "audioMs": 32413,
+      "driftMs": 0
     }
   ],
-  "anchorsChecked": 33,
+  "anchorsChecked": 41,
   "music": {
-    "voicedWindows": 313,
-    "musicOnlyWindows": 1,
-    "smallestGapLu": 13.6,
-    "largestGapLu": 19.2,
-    "quietestMusicOnlyLufs": -33.3,
-    "loudestMusicOnlyLufs": -33.3,
-    "medianVoiceLufs": -16.4
+    "voicedWindows": 362,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
   },
   "issues": []
 }

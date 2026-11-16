@@ -1,0 +1,138 @@
+{
+  "id": "ASSIGNMENT_PROPOSALS",
+  "status": "READY",
+  "date": "2026-10-30",
+  "narratedTakes": 2,
+  "durationMs": 160200,
+  "product": {
+    "commit": "aed410c8139e479c4730cfbce58c8307b645b878",
+    "sourceTree": "ea6fb1556a83fa4ab93d8cf0b33d68461949836d",
+    "productSourceSha256": "da7297346541261bb95dabdb3c0f5e4fad44a51363982a880905b173695f2868",
+    "buildId": "5Oaosk5GvwNjq85Z4bYwR",
+    "snapshot": "/tmp/benevoles-video-production.batch35",
+    "builtAt": "2026-10-30T20:49:12.848Z"
+  },
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "music": {
+    "voicedWindows": 134,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": -33.7,
+    "loudestMusicOnlyLufs": -33.7,
+    "medianVoiceLufs": -16.2
+  },
+  "musicGaps": 0,
+  "registerCandidates": 0,
+  "subtitleRegisterTokens": 0,
+  "tests": {
+    "files": 37,
+    "passed": 1244,
+    "explicitTypedSources": 211,
+    "eslint": "PASS"
+  },
+  "blockers": [],
+  "calculationDisplayedAfterMs": 4163,
+  "apLockVisualMs": 10322,
+  "manualCorrection": {
+    "actionSentenceMs": 2391,
+    "openClickMs": 2862,
+    "removeClickMs": 4245
+  },
+  "databaseFinalProof": {
+    "registrations": 0,
+    "activeDrafts": 29,
+    "lockedEmma": 1,
+    "manualLou": 1,
+    "activeLeaFriday": 0,
+    "notifications": 0,
+    "runs": [
+      {
+        "status": "finished",
+        "outcome": "proven_impossible",
+        "seed": 2026,
+        "writtenCount": 29,
+        "startedAt": "2026-10-30T21:10:41.757Z",
+        "finishedAt": "2026-10-30T21:10:42.004Z",
+        "writtenAt": "2026-10-30T21:10:42.004Z"
+      }
+    ]
+  },
+  "audiovisual": [
+    {
+      "scene": "ap-welcome",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "scene": "ap-drafts",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "scene": "ap-scope",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "scene": "ap-targets",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "scene": "ap-wishes",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "scene": "ap-launch",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "scene": "ap-result",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "scene": "ap-load",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "scene": "ap-lock",
+      "checkpoints": 5,
+      "issues": []
+    },
+    {
+      "scene": "ap-adjust",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "scene": "ap-publish",
+      "checkpoints": 3,
+      "issues": []
+    }
+  ],
+  "sourceChanges": [
+    "Dedicated synthetic review fixture guard",
+    "Production calculation timing assertion",
+    "Manual correction sentence anchor and600ms real-dialog hold"
+  ],
+  "narration": "One complete Kore generation;measured silence cuts independently audited;no text change or mixed generation",
+  "publication": true,
+  "notes": [
+    "Take1 rejected and retained;take2 corrects early action",
+    "Real-time subjective listening unavailable;actual frames and assisted audio/video reviews completed",
+    "No src/,content/guide/ or renders.json changes",
+    "No push or merge"
+  ],
+  "publishedFiles": 5,
+  "catalog": {
+    "published": true,
+    "revision": 1,
+    "added": "2026-10-30",
+    "updatedAt": "2026-10-30"
+  }
+}

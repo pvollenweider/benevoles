@@ -33,7 +33,7 @@ Une activité qui revient chaque semaine (épicerie participative, accueil, dist
 
 ## Révision du 2026-10-15 — lot 22-3
 
-Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les réglages du poste sont hérités par les nouveaux créneaux.
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les paramètres du poste sont hérités par les nouveaux créneaux.
 
 Narration conservée : aucun libellé cité ni comportement décrit ne contredit l’écran actuel. Les WAV référencés par les anciennes métadonnées sont absents de cette copie ; ne pas prétendre avoir réutilisé un audio disponible.
 
@@ -44,12 +44,12 @@ Nouvelle narration Puck intégrale, sans mélange de phrases. La première prise
 
 ## Révision du 2026-10-16 — lot 23-1
 
-Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des paramètres hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
 
 Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
 
 - `welcome` : Une épicerie, un accueil ou une distribution reviennent chaque semaine, toute la saison. Plutôt que de créer chaque date, décrivez la permanence une fois : toutes ses dates sont créées, jours fériés et fermetures exclus. L’événement porte la saison : ici, treize semaines. Ouvrons Répéter chaque semaine.
-- `describe` : Pour le poste, écrivons Caisse et accueil. Le texte sous le champ rappelle que les réglages du poste s’appliquent aux nouveaux créneaux. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.
+- `describe` : Pour le poste, écrivons Caisse et accueil. Le texte sous le champ rappelle que les paramètres du poste s’appliquent aux nouveaux créneaux. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.
 - `exclusions` : Les jours fériés suisses sont proposés d’après le fuseau horaire de l’organisation. Ajoutons une fermeture : un mardi où le local reste fermé. L’aperçu donne le nombre de dates et de créneaux, les premières dates, puis chaque date exclue avec sa raison : jour férié ou fermeture.
 - `create` : Créons les créneaux. La permanence rejoint la liste Permanences récurrentes, avec son rythme, sa période et le nombre de dates à venir. Chaque date est un créneau ordinaire : les bénévoles s’y inscrivent et reçoivent leurs rappels comme d’habitude.
 - `change` : Finalement, la caisse a besoin de trois personnes. Modifier à partir d’une date change le nombre de personnes sur toutes les dates suivantes, sans toucher aux dates passées. Si l’horaire change, les bénévoles inscrits sont prévenus par email.

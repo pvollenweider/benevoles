@@ -1,12 +1,12 @@
 {
-  "anchor": "Un membre qui arrive par son lien d’invitation voit aussi le",
-  "windowStart": 124.648,
+  "anchor": "Un membre qui arrive par son lien d’invitation voit aussi l’interrupteur,",
+  "windowStart": 138.84599999999998,
   "result": {
     "found": true,
-    "startSeconds": 19.3,
-    "wordsHeard": "Un membre qui arrive par son lien d’invitation voit aussi le"
+    "startSeconds": 18.2,
+    "wordsHeard": "Un membre qui arrive par son lien d’invitation voit aussi l’interrupteur"
   },
-  "onset": 143.948,
-  "proposedCut": 143.46112499999998,
+  "onset": 157.04599999999996,
+  "proposedCut": 156.536229,
   "note": "Proposal only; recut then independently audit before capture"
 }

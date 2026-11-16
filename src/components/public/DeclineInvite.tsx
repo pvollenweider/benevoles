@@ -6,6 +6,7 @@
 import { useId, useLayoutEffect, useRef, useState } from "react"
 import ModalShell from "@/components/admin/ModalShell"
 import { useHydrated } from "@/lib/use-hydrated"
+import { requireTokenPath } from "@/lib/token-path"
 
 type Props = {
   token: string
@@ -69,7 +70,7 @@ export default function DeclineInvite({ token, eventSlug, initialDeclined, autoO
     setBusy(true)
     setError(null)
     try {
-      const res = await fetch(`/api/public/member-invite/${token}/decline?slug=${encodeURIComponent(eventSlug)}`, { method: "POST" })
+      const res = await fetch(requireTokenPath("/api/public/member-invite", token, `/decline?slug=${encodeURIComponent(eventSlug)}`), { method: "POST" })
       if (!res.ok) throw new Error()
       setConfirming(false)
       setConfirmedHere(true)

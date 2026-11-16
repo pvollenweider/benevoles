@@ -6,7 +6,9 @@ import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
 import { IP_MAX_DAYS } from "@/lib/signup-blocklist"
 import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
-import { DEACTIVATION_DAYS, INACTIVITY_MONTHS, LAST_REMINDER_DAYS } from "@/lib/org-inactivity"
+import { INACTIVITY_MONTHS } from "@/lib/org-inactivity"
+import { FINAL_NOTICE_DAYS, MIN_DEACTIVATION_DAYS, REMINDER_GAP_DAYS } from "@/lib/org-inactivity-steps"
+import { REACTIVATION_LINK_HOURS } from "@/lib/org-reactivation"
 import { PAST_EVENT_NOTICE_DAYS, PAST_EVENT_RETENTION_YEARS } from "@/lib/past-event-retention"
 import { notFound } from "next/navigation"
 
@@ -23,7 +25,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 21 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 10 novembre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -35,7 +37,7 @@ export default function PrivacyPage() {
       <p>benevol.app est à la fois responsable du traitement et sous-traitant, selon les données :</p>
       <ul>
         <li>
-          <strong>Données des administrateurs d&apos;Organisations</strong> (nom, e-mail, mot de
+          <strong>Données des organisateurs d&apos;Organisations</strong> (nom, e-mail, mot de
           passe) : benevol.app est <strong>responsable du traitement</strong>.
         </li>
         <li>
@@ -43,15 +45,19 @@ export default function PrivacyPage() {
           l&apos;Organisation est <strong>responsable du traitement</strong> ; benevol.app est{" "}
           <strong>sous-traitant</strong> agissant sur instruction de l&apos;Organisation.
         </li>
+        <li>
+          <strong>Journaux du serveur</strong> (toute personne qui visite le
+          site) : benevol.app est <strong>responsable du traitement</strong>.
+        </li>
       </ul>
 
       <h2>2. Données que nous traitons en qualité de responsable</h2>
 
-      <h3 id="donnees-administrateurs">2.1 Administrateurs</h3>
+      <h3 id="donnees-administrateurs">2.1 Organisateurs</h3>
       {/* A wide table scrolls in its own focusable region, named by its heading, so the page
           reflows at 320 px (1.4.10); the hint says so where the table is wider than the screen. */}
       <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
-      <div role="region" aria-labelledby="donnees-administrateurs" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+      <div role="region" aria-labelledby="donnees-administrateurs" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
         <table>
           <thead>
             <tr>
@@ -66,7 +72,7 @@ export default function PrivacyPage() {
               <td>Nom, adresse e-mail</td>
               <td>Création et gestion du compte</td>
               <td>Exécution du contrat</td>
-              <td>Durée du compte ; effacé avec l&apos;Organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation</td>
+              <td>Durée du compte ; effacé avec l&apos;Organisation désactivée par l&apos;opérateur du service, au nettoyage quotidien qui suit {RETENTION_DAYS.deactivatedOrganization} jours sans modification de l&apos;Organisation (pas en cas de suspension ni de désactivation faute d&apos;activité)</td>
             </tr>
             <tr>
               <td>Mot de passe (hashé bcrypt)</td>
@@ -74,19 +80,17 @@ export default function PrivacyPage() {
               <td>Exécution du contrat</td>
               <td>Durée du compte</td>
             </tr>
-            <tr>
-              <td>Logs de connexion</td>
-              <td>Sécurité et débogage</td>
-              <td>Intérêt légitime</td>
-              <td>{RETENTION_DAYS.technicalLogs} jours</td>
-            </tr>
           </tbody>
         </table>
       </div>
+      <p>
+        Les connexions à votre compte figurent aussi dans les{" "}
+        <a href="#journaux-serveur">journaux du serveur</a> (section 2.3).
+      </p>
 
       <h3 id="donnees-demandes-espace">2.2 Demandes d&apos;espace et prévention des abus</h3>
       <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
-      <div role="region" aria-labelledby="donnees-demandes-espace" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+      <div role="region" aria-labelledby="donnees-demandes-espace" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
         <table>
           <thead>
             <tr>
@@ -98,10 +102,10 @@ export default function PrivacyPage() {
           </thead>
           <tbody>
             <tr>
-              <td>Demande d&apos;espace : nom de l&apos;association, sa description et son besoin, votre nom et votre adresse e-mail</td>
-              <td>Vérifier l&apos;adresse, créer l&apos;espace et son compte, examiner la demande avant d&apos;activer l&apos;espace</td>
+              <td>Demande d&apos;espace : nom de l&apos;association, sa description et son besoin, votre nom et votre adresse e-mail, et, si vous y répondez, comment vous avez connu le site</td>
+              <td>Vérifier l&apos;adresse, créer l&apos;espace et son compte, examiner la demande avant d&apos;activer l&apos;espace ; la réponse facultative sert à savoir comment les associations découvrent le service (des totaux par réponse, sans suivi)</td>
               <td>Mesures précontractuelles prises à votre demande</td>
-              <td>{RETENTION_DAYS.signupRequest} jours après la demande, confirmée ou non ; la description reste ensuite sur la fiche de l&apos;espace, visible de l&apos;opérateur seulement, et suit l&apos;Organisation</td>
+              <td>{RETENTION_DAYS.signupRequest} jours après la demande, confirmée ou non ; la description et la réponse facultative restent ensuite sur la fiche de l&apos;espace, visibles de l&apos;opérateur seulement, et suivent l&apos;Organisation</td>
             </tr>
             <tr>
               <td>Liste de blocage : adresse e-mail ou nom de domaine bloqué, ou empreinte d&apos;une adresse IP (jamais l&apos;adresse en clair), avec la raison et l&apos;échéance</td>
@@ -123,7 +127,36 @@ export default function PrivacyPage() {
         enregistré. L&apos;e-mail de confirmation ne reprend aucun texte saisi dans le formulaire.
       </p>
 
-      <h3>2.3 Cookies et stockage local</h3>
+      <h3 id="journaux-serveur">2.3 Visiteurs du site : journaux du serveur</h3>
+      <p>
+        Pour toute visite du site, que vous ayez un compte ou non, benevol.app est responsable du
+        traitement des journaux de son serveur.
+      </p>
+      <ul>
+        <li>
+          <strong>Données</strong> : date et heure, adresse IP, page demandée, navigateur et système
+          d&apos;exploitation indiqués par votre appareil. Les liens personnels d&apos;inscription et d&apos;invitation n&apos;y sont jamais écrits.
+        </li>
+        <li>
+          <strong>Finalité</strong> : sécurité, détection des abus et correction des erreurs.
+        </li>
+        <li>
+          <strong>Base légale</strong> : intérêt légitime.
+        </li>
+        <li>
+          <strong>Durée</strong> : {RETENTION_DAYS.accessLogs} jours. L&apos;adresse IP complète et le
+          navigateur sont gardés {RETENTION_DAYS.accessLogFullIp} jours ; ensuite l&apos;adresse est
+          raccourcie (sans son dernier nombre pour une adresse IPv4, réduite à ses trois premiers
+          groupes pour une adresse IPv6) et le navigateur est retiré.
+        </li>
+        <li>
+          <strong>Analyse</strong> : nous pouvons analyser ces journaux pour connaître la fréquentation
+          du site, ses erreurs et ses performances, dans les mêmes durées, sur la même base légale,
+          sans cookie et sans profil individuel.
+        </li>
+      </ul>
+
+      <h3 id="cookies">2.4 Cookies et stockage local</h3>
       <p>
         Nous utilisons un cookie de session (NextAuth) strictement nécessaire à
         l&apos;authentification. Aucun cookie de pistage, analytique ou publicitaire n&apos;est
@@ -156,18 +189,40 @@ export default function PrivacyPage() {
         invitation, avant de s&apos;inscrire. Personne d&apos;autre : ni un visiteur sans lien, ni un
         lien par groupe, ni l&apos;intégration de la page à un autre site, ni les moteurs de recherche.
         Seuls les noms des personnes qui l&apos;ont accepté sont affichés : une case facultative du
-        formulaire d&apos;inscription, à confirmer depuis la page personnelle quand rien ne prouve que
+        formulaire d&apos;inscription, à confirmer depuis la page « Mes inscriptions » quand rien ne prouve que
         l&apos;adresse est la leur. Aucun nom n&apos;est affiché sans ce choix, ni celui d&apos;une
         personne de moins de 18 ans dont la date de naissance est connue. Une personne qui l&apos;a
         accepté avant que les membres invités puissent le voir n&apos;est montrée qu&apos;aux bénévoles
-        confirmés, tant qu&apos;elle n&apos;a pas accepté le nouveau texte depuis sa page personnelle.
+        confirmés, tant qu&apos;elle n&apos;a pas accepté le nouveau texte depuis sa page « Mes inscriptions ».
         Pour chaque créneau, ces personnes voient également le nombre des autres bénévoles dont la
         place est confirmée et dont le nom reste masqué, y compris les personnes mineures ou dont le
         dossier a été effacé : un nombre seul, qui ne dit ni qui ni pourquoi. Chacun peut masquer son
-        nom à tout moment depuis sa page personnelle, sans effet sur son inscription. Le choix de
+        nom à tout moment depuis sa page « Mes inscriptions », sans effet sur son inscription. Le choix de
         chaque bénévole est conservé avec l&apos;événement, avec la version du texte accepté (voir la{" "}
         <a href="#conservation">conservation des données</a>). L&apos;Organisation informe ses
         bénévoles de ce traitement, peut le désactiver pour un événement, et en reste responsable.
+      </p>
+      {/* Dated availability (#1146, beta). */}
+      <p id="disponibilites-datees">
+        <strong>Disponibilités datées.</strong> Pour un événement où elle l&apos;active, l&apos;Organisation
+        peut demander à des membres, par un lien personnel envoyé par email, leurs plages libres date par
+        date (par exemple « de 20h à 3h le lendemain ») ou « pas disponible ». Seuls les organisateurs de
+        l&apos;Organisation voient ces réponses, jamais les autres bénévoles ni une page publique. Elles
+        sont effacées avec les données personnelles du membre s&apos;il le demande, et avec celles de
+        l&apos;événement {PAST_EVENT_RETENTION_YEARS} ans après sa fin (voir la{" "}
+        <a href="#conservation">conservation des données</a>) ; elles ne sont jamais copiées avec
+        l&apos;événement. Le lien cesse de fonctionner quand l&apos;Organisation arrête la collecte.
+        L&apos;Organisation peut aussi y préparer des affectations en brouillon (une personne sur un
+        créneau), vues par ses organisateurs seulement jusqu&apos;à leur publication, puis gardées comme
+        trace de la publication ; elles sont effacées dans les mêmes cas. Une personne à qui des
+        affectations ont été publiées peut encore corriger ses disponibilités jusqu&apos;à la fin de
+        l&apos;événement ; les organisateurs en sont prévenus par email, sans le détail des plages.
+        Elle peut aussi demander une proposition de répartition : à partir des disponibilités, des
+        âges, des étiquettes, des missions déjà prévues, des limites de charge et d&apos;un objectif
+        d&apos;heures par personne qu&apos;elle fixe, un calcul propose des
+        affectations en brouillon, jamais publiées sans un organisateur. Les données lues pour le calcul,
+        son résultat et ses explications restent visibles des organisateurs seulement et sont effacées
+        dans les mêmes cas.
       </p>
       <p>
         En tant que sous-traitant, nous nous engageons à :
@@ -249,6 +304,12 @@ export default function PrivacyPage() {
         <li>Mots de passe hashés (bcrypt, facteur de coût 12) ;</li>
         <li>Isolation des données entre Organisations (multi-tenancy strict) ;</li>
         <li>Tokens de réinitialisation de mot de passe à usage unique, expirés après 1 heure ;</li>
+        <li>
+          Double authentification obligatoire pour les comptes de l&apos;opérateur du service, qui ont accès
+          à toutes les Organisations : un code d&apos;une application d&apos;authentification en plus du mot de
+          passe. Le secret de cette application est chiffré en base de données et les codes de secours n&apos;y
+          sont conservés que sous forme d&apos;empreinte, jusqu&apos;à leur remplacement ou à la fin du compte ;
+        </li>
         <li>Accès à la base de données restreint aux composants applicatifs ;</li>
         <li>Sauvegardes régulières chiffrées.</li>
       </ul>
@@ -274,21 +335,25 @@ export default function PrivacyPage() {
         </li>
       </ul>
       <p>
-        <strong>Pour les administrateurs</strong> : exercez vos droits à{" "}
+        <strong>Pour les organisateurs</strong> : exercez vos droits à{" "}
         <a href="mailto:contact@benevol.app">contact@benevol.app</a>.
       </p>
       <p>
         <strong>Pour les bénévoles</strong> : vos données étant contrôlées par l&apos;Organisation
         qui vous a invité(e), adressez votre demande directement à cette Organisation. Nous
         transmettrons toute demande reçue par erreur à l&apos;Organisation concernée dans un délai
-        de 72 heures.
+        de 72 heures. Si l&apos;espace de l&apos;Organisation n&apos;est plus disponible, écrivez à{" "}
+        <a href="mailto:contact@benevol.app">contact@benevol.app</a> : nous vous aiderons à
+        transmettre votre demande à l&apos;Organisation concernée.
       </p>
 
       <h2 id="conservation">7. Conservation des données</h2>
       <p>
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
-        sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la désactivation du
-        compte de l&apos;Organisation par l&apos;opérateur du service.
+        sur la plateforme. Quand l&apos;opérateur du service désactive le compte de l&apos;Organisation,
+        elles sont supprimées par le nettoyage quotidien, une fois écoulés {RETENTION_DAYS.deactivatedOrganization} jours
+        depuis la dernière modification de l&apos;Organisation désactivée. Une Organisation suspendue pour abus,
+        ou désactivée faute d&apos;activité, n&apos;est pas supprimée automatiquement (voir ci-dessous).
       </p>
       <p>
         Pour un événement terminé depuis plus de {PAST_EVENT_RETENTION_YEARS} ans, les données des bénévoles peuvent être
@@ -301,16 +366,22 @@ export default function PrivacyPage() {
       <p>
         Un espace qui n&apos;est plus utilisé depuis {INACTIVITY_MONTHS} mois et qui n&apos;a aucun événement
         prévu peut être désactivé. Cette règle s&apos;applique lorsque l&apos;opérateur du service
-        l&apos;active. Avant toute désactivation, les administrateurs de l&apos;Organisation reçoivent
-        trois messages en {LAST_REMINDER_DAYS} jours ; un clic sur « Conserver mon organisation »
-        suffit pour garder l&apos;espace. Sans réponse, l&apos;espace est désactivé {DEACTIVATION_DAYS} jours après le
-        premier message. Ses données sont gardées, et ses administrateurs peuvent le réactiver
-        eux-mêmes depuis la page de connexion.
+        l&apos;active. Avant toute désactivation, trois messages sont envoyés aux organisateurs de
+        l&apos;Organisation ; pour garder l&apos;espace, il suffit d&apos;ouvrir le lien d&apos;un de ces messages,
+        puis d&apos;appuyer sur « Conserver mon organisation » sur la page qui s&apos;affiche. Chaque
+        message doit avoir été accepté par notre serveur d&apos;envoi pour au moins un organisateur (ce qui
+        ne garantit pas qu&apos;il ait été lu), et le suivant part au plus tôt {REMINDER_GAP_DAYS} jours de calendrier
+        plus tard. Sans réponse, l&apos;espace est désactivé au plus tôt {FINAL_NOTICE_DAYS} jours après l&apos;envoi du
+        dernier rappel, et jamais moins de {MIN_DEACTIVATION_DAYS} jours après l&apos;envoi du premier message ; chaque
+        message indique jusqu&apos;à quel jour répondre. Tant qu&apos;un message n&apos;a été accepté pour aucun
+        organisateur, l&apos;espace ne peut pas être désactivé. Une fois l&apos;espace désactivé, ses données sont
+        gardées, et ses organisateurs peuvent le réactiver eux-mêmes : depuis la page de connexion, ils
+        demandent un lien par email, utilisable une seule fois dans les {REACTIVATION_LINK_HOURS} heures, qui ouvre une page où
+        confirmer la réactivation.
       </p>
       <p>
-        Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
-        administrateurs d&apos;une Organisation sont supprimés avec elle, {RETENTION_DAYS.deactivatedOrganization} jours
-        après sa désactivation par l&apos;opérateur du service. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
+        Le compte d&apos;un organisateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
+        organisateurs d&apos;une Organisation sont supprimés avec elle. Une invitation d&apos;organisateur non acceptée est supprimée{" "}
         {RETENTION_DAYS.deactivatedAdmin} jours après son dernier envoi.
       </p>
       <p>Plus précisément :</p>
@@ -329,7 +400,7 @@ export default function PrivacyPage() {
       <p>
         Nous pouvons mettre à jour cette politique à tout moment. La date de dernière mise à jour
         est indiquée en haut du document. Pour les modifications substantielles, nous notifierons
-        les administrateurs par e-mail.
+        les organisateurs par e-mail.
       </p>
 
       <h2>9. Contact</h2>

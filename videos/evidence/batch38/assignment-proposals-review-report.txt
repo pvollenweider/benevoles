@@ -1,0 +1,7 @@
+STATUS: NOT READY
+Batch38; no narrated take; final rehearsal stopped in ap-result at41.795s. Verified main 0546a73f7981d3c26678cd304ff23c9d53e4d01e; BUILD_ID Q_6shklaSW6C6_W2an7HG.
+First full Kore generation rejected for independently repeated unexpected end words in ap-load; archived intact. Second complete Kore master: one consistent voice, all11 independent chapter ASR pass after silence recuts. Narration source tu/register count0; no final MP4 for this revision.
+After host ENOSPC/Docker read-only failure, portable PostgreSQL18.6 was initialized in a disposable production copy on dedicated45439; migrations pass. Same verified standalone build, serverPID52543 was not restarted during the rehearsal.
+Observed screen: « Calcul arrêté avant la fin » / « Le calcul a été interrompu par un redémarrage du service ; rien n'a été écrit. Relancez un calcul depuis Nouvelle proposition. » Expected29 drafts never appeared. URL https://www.benevol.app/admin/events/video-proposals-event/availability/proposal . Screenshot and recorder failure in videos/evidence/batch38/. Cause not diagnosed; stopped under owner's product-misbehavior rule.
+No refilm, no product workaround, no src/content/guide changes. Existing published revision3 remains; no catalog dates/revision changes, publishing, or notification.
+Source-only changes: tune removal/confirmation/add mid-sentence taps against second master (spoken labels end5.88/6.88/12.36s); allow publication seed and current generated Prisma on both dedicated database ports in video wrapper.

@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // POST /api/public/member-invite/[token]/decline (#558): the confirmation step of « Je ne suis
 // pas disponible pour cet événement ». Rate limited per IP before any read, the same 404 for an
 // unknown/foreign/inactive invite as the sibling GET route, idempotent, and logs memberinvite.declined
@@ -30,7 +33,7 @@ const invite = (over: Record<string, unknown> = {}) => ({
   eventId: "evt-1",
   declinedAt: null,
   volunteer: { active: true },
-  event: { slug: "festival", organizationId: "org-a" },
+  event: { slug: "festival", organizationId: "org-a", organization: OPEN_ORG },
   ...over,
 })
 

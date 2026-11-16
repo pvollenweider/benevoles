@@ -5,17 +5,25 @@ import {
   docFilterStatus,
   docUnitQuestionAnchors,
   docUnitQuestions,
+  docUnitSections,
+  docUnitWords,
+  isOneTypoApart,
   matchesDocQuery,
   matchingDocQuestionLinks,
   matchingDocQuestions,
+  matchingDocSectionLinks,
+  matchingDocSections,
   normalizeForSearch,
+  searchTermMatchesWord,
   searchTerms,
+  stemForSearch,
 } from "../doc-search"
 import { readDocUnits } from "../doc-units"
 import { renderDocUnit } from "../public-content"
 import { DOC_FAQ_HEADING_ID } from "../doc-faq"
 
-// The filter over the documentation's index (/doc, /doc/admin, /doc/benevole).
+// The filter over the documentation's index (/doc, /doc/admin, /doc/benevole): the fallback used
+// before the MiniSearch index arrives, and the links, status and next steps of the interface.
 
 const entry = {
   title: "Ma page personnelle",
@@ -35,6 +43,48 @@ describe("searchTerms", () => {
     expect(searchTerms("  Changer   Créneau ")).toEqual(["changer", "creneau"])
     expect(searchTerms("   ")).toEqual([])
   })
+
+  it("drops the French stop words, and shows everything when only stop words remain", () => {
+    expect(searchTerms("comment supprimer un membre")).toEqual(["supprimer", "membre"])
+    expect(searchTerms("l'événement de la semaine")).toEqual(["evenement", "semaine"])
+    expect(searchTerms("le la les")).toEqual([])
+    expect(searchTerms("qu'est-ce que")).toEqual([])
+  })
+})
+
+describe("stemForSearch", () => {
+  it("brings plurals and common endings together, keeping at least four letters", () => {
+    expect(stemForSearch("rappels")).toBe("rappel")
+    expect(stemForSearch("supprimer")).toBe("supprim")
+    expect(stemForSearch("supprimé")).toBe("supprim")
+    expect(stemForSearch("suppression")).toBe("supprim")
+    expect(stemForSearch("effacement")).toBe("effac")
+    expect(stemForSearch("page")).toBe("page")
+    expect(stemForSearch("abc")).toBe("abc")
+  })
+
+  it("maps the required verb and noun families together", () => {
+    const stems = (words: string[]) => new Set(words.map((word) => stemForSearch(word)))
+    expect(stems(["confirme", "confirmee", "confirmer"])).toEqual(new Set(["confirm"]))
+    expect(stems(["inscription", "inscrire", "inscrit"])).toEqual(new Set(["inscri"]))
+    expect(stems(["rappel", "rappels"])).toEqual(new Set(["rappel"]))
+    expect(stems(["supprimer", "suppression", "supprime"])).toEqual(new Set(["supprim"]))
+  })
+})
+
+describe("searchTermMatchesWord", () => {
+  it("matches a word, its plural, a prefix, one typo and a synonym on the title, headings and summary", () => {
+    expect(searchTermMatchesWord("rappel", "rappel")).toBe(true)
+    expect(searchTermMatchesWord("rappel", "rappels")).toBe(true)
+    expect(searchTermMatchesWord("inscri", "inscription")).toBe(true)
+    expect(searchTermMatchesWord("inscripton", "inscription")).toBe(true)
+    expect(searchTermMatchesWord("membre", "benevole")).toBe(true)
+    expect(searchTermMatchesWord("csv", "csx")).toBe(false)
+    expect(isOneTypoApart("inscripton", "inscription")).toBe(true)
+    expect(isOneTypoApart("inscription", "inscripton")).toBe(true)
+    expect(isOneTypoApart("rappel", "rapel")).toBe(true)
+    expect(isOneTypoApart("rappel", "raplpe")).toBe(false)
+  })
 })
 
 describe("matchesDocQuery", () => {
@@ -48,15 +98,32 @@ describe("matchesDocQuery", () => {
     expect(matchesDocQuery({ ...entry, summary: "creneau" }, "créneau")).toBe(true)
   })
 
-  it("needs every word, anywhere in the title, the summary or a question", () => {
+  it("needs every word, anywhere in the title, the summary or a heading", () => {
     expect(matchesDocQuery(entry, "page annuler")).toBe(true)
     expect(matchesDocQuery(entry, "page rembourser")).toBe(false)
     expect(matchesDocQuery(entry, "lien")).toBe(true)
-    expect(matchesDocQuery(entry, "n'ai plus")).toBe(true)
+    expect(matchesDocQuery({ ...entry, sections: [{ text: "Le jour J", id: "le-jour-j" }] }, "jour")).toBe(true)
   })
 
   it("matches the start of a word as the reader types it", () => {
     expect(matchesDocQuery(entry, "chang cren")).toBe(true)
+  })
+
+  it("drops the stop words of a mixed query, and shows everything when only them remain", () => {
+    expect(matchesDocQuery(entry, "le lien")).toBe(true)
+    expect(matchesDocQuery(entry, "le téléphone")).toBe(false)
+    // « le » alone no longer matches literally: it is a blank-like query (#1319).
+    expect(matchesDocQuery(entry, "le")).toBe(true)
+  })
+
+  it("keeps synonyms and one typo on the title, the headings and the summary", () => {
+    expect(matchesDocQuery({ ...entry, sections: [] }, "membre")).toBe(false)
+    expect(matchesDocQuery({ ...entry, title: "Les bénévoles", sections: [] }, "membre")).toBe(true)
+    expect(matchesDocQuery({ ...entry, summary: "Une question des bénévoles.", sections: [] }, "membre")).toBe(true)
+    expect(matchesDocQuery({ ...entry, sections: [{ text: "Côté bénévole", id: "cote-benevole" }] }, "membre")).toBe(true)
+    expect(matchesDocQuery({ ...entry, title: "Inscription", sections: [] }, "inscripton")).toBe(true)
+    expect(matchesDocQuery({ ...entry, summary: "Une inscription.", sections: [] }, "inscripton")).toBe(true)
+    expect(matchesDocQuery({ ...entry, sections: [{ text: "Inscription", id: "inscription" }] }, "inscripton")).toBe(true)
   })
 })
 
@@ -98,6 +165,61 @@ describe("docUnitQuestionAnchors", () => {
       const rendered = [...renderDocUnit(unit).matchAll(/<h3 id="([^"]+)"/g)].map((m) => m[1])
       expect(docUnitQuestionAnchors(unit.body).map((q) => q.id), unit.slug).toEqual(rendered)
     }
+  })
+})
+
+describe("docUnitSections", () => {
+  it("returns the « ## » and « ### » headings as plain text, with their ids, outside fenced code", () => {
+    const md = [
+      "# Titre de la page",
+      "## Les **créneaux**",
+      "### Où sont mes [données](donnees.md) ?",
+      "## Une ![capture](capture.png) section",
+      "```",
+      "## pas un titre",
+      "```",
+      "#### Trop profond",
+      '## <a id="ancien-ancre"></a>Une section avec un ancien ancre',
+    ].join("\n")
+    expect(docUnitSections(md)).toEqual([
+      { text: "Les créneaux", id: "les-creneaux" },
+      { text: "Où sont mes données ?", id: "ou-sont-mes-donnees" },
+      { text: "Une capture section", id: "une-capture-section" },
+      { text: "Une section avec un ancien ancre", id: "une-section-avec-un-ancien-ancre" },
+    ])
+  })
+
+  // The filter links a section to its heading: every id must be the one the unit's page renders.
+  it("matches the ids of every « ## » and « ### » heading each real unit renders", () => {
+    for (const unit of readDocUnits()) {
+      const rendered = [...renderDocUnit(unit).matchAll(/<h([23]) id="([^"]+)"/g)].map((m) => m[2])
+      expect(docUnitSections(unit.body).map((section) => section.id), unit.slug).toEqual(rendered)
+    }
+  })
+})
+
+describe("docUnitWords", () => {
+  it("keeps the link text, drops images and their alt text, code fences and HTML tags", () => {
+    const md = [
+      "## Une **section**",
+      "Voir [le guide](https://exemple.test) et ![une capture](capture.png).",
+      "```",
+      "mot cache",
+      "```",
+      "<div>Balise</div>",
+    ].join("\n")
+    const words = docUnitWords(md)
+    expect(words).toEqual(["balise", "guide", "section"])
+    for (const dropped of ["capture", "mot", "cache", "div", "img"]) expect(words).not.toContain(dropped)
+  })
+
+  it("deduplicates, sorts and normalises the real units' body words", () => {
+    const unit = readDocUnits().find((u) => u.slug === "rappels")!
+    const words = docUnitWords(unit.body)
+    expect(words).toContain("rappel")
+    expect(words).toContain("creneau")
+    expect(new Set(words).size).toBe(words.length)
+    expect([...words].sort()).toEqual(words)
   })
 })
 
@@ -151,6 +273,47 @@ describe("matchingDocQuestionLinks", () => {
   it("leaves out a question without an id (never a link to « #undefined »), and fills the cap with the next one", () => {
     expect(matchingDocQuestionLinks({ ...entry, questionIds: ["", "question-deux"] }, "question")).toEqual([{ text: "Question deux", id: "question-deux" }])
     expect(matchingDocQuestionLinks({ ...entry, questionIds: ["question-une"] }, "question")).toEqual([{ text: "Question une", id: "question-une" }])
+  })
+})
+
+describe("matchingDocSections", () => {
+  const entry = {
+    title: "Une fiche",
+    summary: "Un résumé.",
+    questions: [],
+    sections: [
+      { text: "Les rappels automatiques", id: "les-rappels-automatiques" },
+      { text: "Recevoir les rappels sur ton téléphone", id: "recevoir-les-rappels" },
+      { text: "Notifications de modification", id: "notifications-de-modification" },
+    ],
+  }
+
+  it("lists the « ## » and « ### » headings that hold every word, two at most, in page order", () => {
+    expect(matchingDocSections(entry, "rappels")).toEqual([
+      { text: "Les rappels automatiques", id: "les-rappels-automatiques" },
+      { text: "Recevoir les rappels sur ton téléphone", id: "recevoir-les-rappels" },
+    ])
+    expect(matchingDocSections(entry, "rappels", 1)).toEqual([{ text: "Les rappels automatiques", id: "les-rappels-automatiques" }])
+    expect(matchingDocSections(entry, "telephone")).toEqual([{ text: "Recevoir les rappels sur ton téléphone", id: "recevoir-les-rappels" }])
+  })
+
+  it("shows none when the title or the summary already holds every word, nor for a blank query", () => {
+    const titled = { ...entry, title: "Rappels", summary: "Avant chaque journée." }
+    expect(matchingDocSections(titled, "rappel journée")).toEqual([])
+    expect(matchingDocSections(entry, "  ")).toEqual([])
+    expect(matchingDocSections(entry, "le la")).toEqual([])
+  })
+
+  it("keeps only headings with an id, and never links the same text twice", () => {
+    const twice = {
+      ...entry,
+      sections: [
+        { text: "Les rappels", id: "les-rappels" },
+        { text: "Les rappels", id: "les-rappels-2" },
+        { text: "Rappels sans id", id: "" },
+      ],
+    }
+    expect(matchingDocSectionLinks({ ...twice, title: "Une fiche", summary: "Un résumé." }, "rappels")).toEqual([{ text: "Les rappels", id: "les-rappels" }])
   })
 })
 

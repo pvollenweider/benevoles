@@ -3,11 +3,15 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import PersonalLinkPanel from "@/components/PersonalLinkPanel"
 import LinkRequestForm from "@/components/LinkRequestForm"
+import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 import { offerDeadline, WAITLIST_STEPS, waitlistLabel } from "@/lib/waitlist-copy"
 import { fmtRange } from "@/lib/gantt-utils"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
+import OrgUnavailableNotice from "@/components/public/OrgUnavailableNotice"
+import { isOrgUnavailable, orgUnavailableContact } from "@/lib/org-lifecycle"
 import { orgPageFooterSite } from "@/lib/urls"
 import { renderMarkdownWithVariables } from "@/lib/markdown"
 import { confirmationVariables } from "@/lib/message-variables"
@@ -20,14 +24,20 @@ import WithdrawMessageField from "@/components/public/WithdrawMessageField"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import MissionBriefCard from "@/components/public/MissionBriefCard"
+import CalendarSubscribeCard from "@/components/public/CalendarSubscribeCard"
+import { calendarCard, type CalendarFeedUrls } from "@/lib/calendar-card-copy"
 import MyAnswersCard from "@/components/public/MyAnswersCard"
 import ShiftRosterCard, { type RosterData } from "@/components/public/ShiftRosterCard"
-import type { MyAnswerRow } from "@/lib/my-answers"
+import ShiftSwapsCard from "@/components/public/ShiftSwapsCard"
+import MyWorkloadCard from "@/components/public/MyWorkloadCard"
+import MyWorkloadLimits from "@/components/public/MyWorkloadLimits"
+import type { KeptAnswerRow, MyAnswerRow } from "@/lib/my-answers"
 import type { AnswersEditState } from "@/lib/answer-changes"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 import { SIGN_UP_MORE_LABEL, bottomLink, emptyPageLink } from "@/lib/personal-page-links"
 import { CANCEL_CONTACTS_INTRO, cancelClosedText, cancelContacts, cancelUntilText, type SelfCancelReason } from "@/lib/cancel-deadline"
+import { isTokenShaped, requireTokenPath, tokenPath } from "@/lib/token-path"
 
 type ShiftRef = {
   label: string
@@ -72,13 +82,19 @@ type PageData = {
   /** Where to sign up for more shifts, with the volunteer's group link; null when no sign-up is possible (#988). */
   signUpUrl?: string | null
   timeZone?: string
+  /** The calendar subscription of this link (#961): read-only, never the personal link. */
+  calendarFeed?: CalendarFeedUrls | null
   linkEmailedAt?: string | null
   contactEmail?: string | null
   confirmationMessage: string | null
   /** « Mes réponses » (#984): the event's questions with this volunteer's answers, in form order. */
   answers?: MyAnswerRow[]
+  /** Answers kept for questions of postes no longer held (#1140), read-only. */
+  keptAnswers?: KeptAnswerRow[]
   /** Whether they can still change from this page (#984): the withdrawals' lock. */
   answersEdit?: AnswersEditState
+  /** Workload protection (#1171): the event's limits this programme no longer respects. */
+  workload?: string[]
 }
 
 const LIST_TITLE_ID = "my-registrations-title"
@@ -91,7 +107,7 @@ const closedId = (regId: string) => `cancel-closed-${regId}`
 /** The roster card's data (#1068). Optional: a failure leaves the card out, never the page. */
 async function fetchRoster(token: string): Promise<RosterData | null> {
   try {
-    const res = await fetch(`/api/public/registrations/${token}/roster`)
+    const res = await fetch(requireTokenPath("/api/public/registrations", token, "/roster"))
     return res.ok ? ((await res.json()) as RosterData) : null
   } catch {
     return null
@@ -110,8 +126,11 @@ export default function MyRegistrationPage() {
   const token = params.token as string
 
   const [data, setData] = useState<PageData | null>(null)
-  const [loading, setLoading] = useState(true)
+  // Not shaped like a token: no request, the page says the link is invalid straight away.
+  const [loading, setLoading] = useState(() => isTokenShaped(token))
   const [error, setError] = useState<string | null>(null)
+  // The organisation is deactivated or suspended: a page of its own, without any registration.
+  const [orgUnavailable, setOrgUnavailable] = useState<{ contact: string | null; afterLoad?: boolean } | null>(null)
   const [cancelling, setCancelling] = useState<string | null>(null)
   const [pendingCancel, setPendingCancel] = useState<{ editToken: string } | null>(null)
   // A failed withdrawal's message, per registration id: shown under its card, the page stays.
@@ -151,10 +170,14 @@ export default function MyRegistrationPage() {
   }, [focusRequest])
 
   useEffect(() => {
-    fetch(`/api/public/registrations/${token}`)
+    const url = tokenPath("/api/public/registrations", token)
+    if (!url) return
+    fetch(url)
       .then((r) => r.json())
       .then((d) => {
-        if (d.error) {
+        if (isOrgUnavailable(d)) {
+          setOrgUnavailable({ contact: orgUnavailableContact(d) })
+        } else if (d.error) {
           setError(d.error)
         } else {
           setData(d)
@@ -172,6 +195,22 @@ export default function MyRegistrationPage() {
         setLoading(false)
       })
   }, [token])
+
+  // After a swap (#1174) the page's registrations changed: reloaded quietly (no announcement, the
+  // swap card says what was done), with the roster that depends on them. Only the latest lands.
+  const pageSeq = useRef(0)
+  const [swapsKey, setSwapsKey] = useState(0)
+  function reloadPage() {
+    const url = tokenPath("/api/public/registrations", token)
+    if (!url) return
+    const n = ++pageSeq.current
+    void fetch(url).then((r) => r.json()).then((d) => {
+      if (n !== pageSeq.current || d?.error || isOrgUnavailable(d)) return
+      setPendingCancel(null)
+      setData(d)
+      reloadRoster(rosterToken)
+    }).catch(() => undefined)
+  }
 
   function setWithdrawError(regId: string, text: string | null) {
     setWithdrawErrors((prev) => {
@@ -213,13 +252,20 @@ export default function MyRegistrationPage() {
     // The page-level error is for the initial load only: a failed withdrawal keeps the page.
     let failure: { status?: number; network?: boolean; error?: string; reason?: SelfCancelReason } | null = null
     try {
-      const res = await fetch(`/api/public/registrations/${reg.editToken}`, {
+      const res = await fetch(requireTokenPath("/api/public/registrations", reg.editToken), {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: withdrawMessage }),
       })
       if (!res.ok) {
-        const body = res.status === 409 ? await res.json().catch(() => null) : null
+        const body = res.status === 409 || res.status === 403 ? await res.json().catch(() => null) : null
+        // The organisation was closed since the page loaded: the page gives way to the notice.
+        if (res.status === 403 && isOrgUnavailable(body)) {
+          setCancelling(null)
+          setPendingCancel(null)
+          setOrgUnavailable({ contact: orgUnavailableContact(body), afterLoad: true })
+          return
+        }
         failure = { status: res.status, error: typeof body?.error === "string" ? body.error : undefined, reason: body?.reason }
       }
     } catch {
@@ -251,6 +297,8 @@ export default function MyRegistrationPage() {
     }
 
     setData((d) => d ? { ...d, registrations: d.registrations.filter((r) => r.editToken !== reg.editToken) } : d)
+    // The swap card reads again (#1174): the withdrawn place can no longer be published or swapped.
+    setSwapsKey((k) => k + 1)
     // The roster needs a confirmed place (#1068): reloaded once one is withdrawn, through a link
     // still live (the page's own may be the one just cancelled), or gone with the last one.
     const remaining = list.filter((r) => r.editToken !== reg.editToken)
@@ -274,6 +322,8 @@ export default function MyRegistrationPage() {
 
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
 
+  if (orgUnavailable) return <OrgUnavailableNotice audience="volunteer" contact={orgUnavailable.contact} focusHeading={orgUnavailable.afterLoad} />
+
   if (error || !data) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -281,6 +331,7 @@ export default function MyRegistrationPage() {
           <h1 className="text-lg font-semibold text-gray-900 mb-2">Ce lien ne fonctionne pas</h1>
           <p className="text-sm text-gray-700 mb-4">{error ?? "Ce lien est invalide ou a déjà été annulé."}</p>
           <LinkRequestForm />
+          <p className="mt-4 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.brokenLink)} about="ton lien personnel" /></p>
           <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="inline-block mt-6 text-blue-700 text-sm underline underline-offset-2">Retour à l&apos;accueil</Link>
         </div>
       </main>
@@ -289,6 +340,7 @@ export default function MyRegistrationPage() {
 
   // « Avant ta mission » (#560): the next confirmed shift not over yet, read on the visitor's clock.
   const next = nextConfirmedRegistration(data.registrations, new Date(), data.timeZone ?? APP_TIME_ZONE)
+  const calendar = calendarCard(data.registrations, data.calendarFeed, `/api/public/registrations/${encodeURIComponent(token)}/calendar`)
 
   // The status region is the fragment's first child in both views below, so React keeps the same
   // node when the last withdrawal switches to the empty view, and the result is still voiced.
@@ -327,34 +379,25 @@ export default function MyRegistrationPage() {
           <p className="text-sm text-gray-500">
             {data.volunteer.firstName} {data.volunteer.lastName} · {data.volunteer.email}
           </p>
+          <p className="text-sm text-gray-700">Comment fonctionne cette page : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.personalPage)} about="ta page « Mes inscriptions »" /></p>
         </div>
 
         {next && (
           <MissionBriefCard shift={next.shift} event={data.event} eventTitle={data.event.title} contactEmail={data.contactEmail ?? null} />
         )}
 
-        {/* Calendar file of the confirmed shifts (#480): a one-off download, not a subscription. */}
-        {data.registrations.filter((r) => r.status === "active").length > 1 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <a
-              href={`/api/public/registrations/${token}/calendar`}
-              download
-              aria-describedby="calendar-hint"
-              className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              Ajouter tout mon planning à mon calendrier (fichier .ics)
-            </a>
-            <p id="calendar-hint" className="text-xs text-gray-600 mt-1">
-              Le fichier s&apos;ouvre avec l&apos;agenda de ton téléphone ou de ton ordinateur (Google, Apple, Outlook). Seuls les créneaux confirmés sont ajoutés. Le fichier ne se met pas à jour : si un horaire change, tu recevras un email, et il faudra télécharger à nouveau le fichier.
-            </p>
-          </div>
-        )}
+        {/* « Mon calendrier » (#961): the subscription that updates itself, and the one-off file (#480). */}
+        {calendar && <CalendarSubscribeCard {...calendar} />}
 
         {/* The caveat of the one-shift calendar links (the card above only shows with several shifts). */}
-        <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email.</p>
+        <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email. Pour un agenda qui se met à jour tout seul, voir « Mon calendrier ».</p>
+
+        <MyWorkloadCard messages={data.workload ?? []} contactEmail={data.contactEmail ?? null} />
+        <MyWorkloadLimits token={token} />
 
         <section aria-labelledby="shifts-title" className="space-y-3">
           <h2 id="shifts-title" className="text-sm font-semibold text-gray-900">Tous mes créneaux</h2>
+          <p className="text-sm text-gray-700">Annuler ou changer un créneau : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.cancelShift)} about="l'annulation d'un créneau" /></p>
           {data.registrations.map((reg) => {
             // Shift dates are calendar days at midnight UTC: read them in UTC, whatever the visitor's zone.
             const date = new Date(reg.shift.date).toLocaleDateString("fr-FR", {
@@ -379,7 +422,7 @@ export default function MyRegistrationPage() {
                     {reg.status === "offered" && (
                       <p className="text-xs text-amber-900 mt-1">
                         {offerDeadline(reg.waitingExpiresAt, data.timeZone ?? APP_TIME_ZONE)}{" "}
-                        <Link href={`/waitlist/${reg.editToken}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
+                        <Link href={`/waitlist/${encodeURIComponent(reg.editToken)}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
                       </p>
                     )}
                     {/* An earlier deadline still ahead (#946): said under a confirmed shift. */}
@@ -395,7 +438,7 @@ export default function MyRegistrationPage() {
                       : <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />}
                     {reg.status === "active" && (
                       <a
-                        href={`/api/public/registrations/${token}/calendar?registration=${reg.id}`}
+                        href={`/api/public/registrations/${encodeURIComponent(token)}/calendar?registration=${encodeURIComponent(reg.id)}`}
                         download
                         aria-describedby="calendar-hint-shift"
                         className="mt-1 py-1 inline-block text-xs font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -503,6 +546,9 @@ export default function MyRegistrationPage() {
           )}
         </section>
 
+        {/* Shift swaps (#1174): renders nothing while the event has none and the person no request. */}
+        <ShiftSwapsCard token={token} timeZone={data.timeZone ?? APP_TIME_ZONE} onShiftsChanged={reloadPage} refreshKey={swapsKey} />
+
         {/* Who else is signed up (#1068): only when the event has the roster on. */}
         {roster?.available && <ShiftRosterCard token={rosterToken} data={roster} eventPageUrl={data.eventPageUrl} beginChange={() => {
           // Taken when the change is sent: an answer arriving after a withdrawal or a reload
@@ -521,7 +567,7 @@ export default function MyRegistrationPage() {
 
         {/* The answers to the event's questions (#984), under the registrations: editable while
             the volunteer can still withdraw online. */}
-        <MyAnswersCard rows={data.answers ?? []} edit={data.answersEdit} token={token} contactEmail={data.contactEmail ?? null} eventTitle={data.event.title} />
+        <MyAnswersCard rows={data.answers ?? []} kept={data.keptAnswers ?? []} edit={data.answersEdit} token={token} contactEmail={data.contactEmail ?? null} eventTitle={data.event.title} />
 
         <PersonalLinkPanel
           token={token}
@@ -559,10 +605,15 @@ export default function MyRegistrationPage() {
 
         <AvailabilityForm token={token} initialPeriods={data.volunteer.availabilityPeriods ?? []} initialNote={data.volunteer.availabilityNote ?? null} />
 
-        <div className="flex items-center justify-between gap-3 pt-2">
-          {back && <Link href={back.href} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{back.label}</Link>}
-          <PushSubscribeButton editToken={token} />
-        </div>
+        {/* Before the way out (the back link ends the page): the push button, or on an iPhone or
+            iPad in a tab the steps to add the page to the Home Screen (#593), full width. */}
+        <PushSubscribeButton editToken={token} installHint />
+
+        {back && (
+          <div className="pt-2">
+            <Link href={back.href} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{back.label}</Link>
+          </div>
+        )}
       </div>
     </main>
     {/* After </main>: a footer inside main loses its contentinfo role. */}

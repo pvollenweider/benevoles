@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T16:29:02.785Z",
-  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
+  "reviewedAt": "2026-11-11T12:41:42.729Z",
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
   "promptSha256": "eec0dc0a8e4fd080f5f44c46184aeb0bafa55be59ac8d519f9ad19a4e1a5d094",
-  "clipSha256": "130a15ceb2fae26c436dcd1c2f73881c12c2afe39c236a0969d20976db19fd08",
+  "clipSha256": "05733b5e441c277416ebfe9ac204db998f148abe3f219343c75fab698b411818",
   "scene": "preview",
   "review": {
-    "heardOpening": "Ouvrez Importer des membres et choisissez",
+    "heardOpening": "Ouvrez Importer des membres et choisissez le fichier",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
-        "visibleSeconds": 1,
-        "visible": "Ouverture de la fenêtre modale Importer des membres avec le fichier membres-a-verifier.csv sélectionné.",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture de la fenêtre « Importer des membres » avec le fichier « membres-a-verifier.csv » sélectionné",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Si un email existe déjà, l'option Ignorer conserve la fiche actuelle.",
-        "visibleSeconds": 4.5,
-        "visible": "L'option radio Ignorer est bien visible et cochée sous la section Si un email existe déjà.",
+        "spokenSeconds": 5.4,
+        "spoken": "l'option Ignorer conserve la fiche actuelle.",
+        "visibleSeconds": 5.4,
+        "visible": "L'option « Ignorer » est cochée sous « Si un email existe déjà »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.7,
+        "spokenSeconds": 8.9,
         "spoken": "Cliquez sur Analyser le fichier.",
-        "visibleSeconds": 9,
-        "visible": "Clic sur le bouton bleu Analyser le fichier et affichage du résultat de l'analyse.",
+        "visibleSeconds": 9.5,
+        "visible": "Clic sur le bouton bleu « Analyser le fichier »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 12.3,
         "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
-        "visibleSeconds": 11.5,
-        "visible": "Affichage détaillé des statistiques (créer, ignorés, en erreur) et du tableau des lignes non importées.",
+        "visibleSeconds": 10.2,
+        "visible": "Affichage du rapport d'analyse détaillant créations, présents ignorés et lignes en erreur",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement synchronisée avec la navigation à l'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

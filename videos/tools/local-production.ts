@@ -4,14 +4,16 @@
 /** Production-mode rendering of a disposable LOCAL copy, never a deployment. */
 import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
-import { access, readFile, writeFile, mkdir } from "node:fs/promises"
+import { access, readFile, writeFile, mkdir, realpath } from "node:fs/promises"
 import path from "node:path"
 import type { ProductBuild } from "../lib/product-build"
 import { verifyProductBuild } from "../lib/product-build"
 import { PUBLIC_APP_URL, videoAdminEmail } from "../lib/public-hosts"
 
+const batch35Takes = ["WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"]
+const batch35Seeds = ["assignment-publication", "workload-protection", "assignment-proposals", "volunteer-event-availability"]
 const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
-const memberSeeds = ["members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
+const memberSeeds = ["members-import", "members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -23,7 +25,7 @@ async function main() {
     TOKEN_ENCRYPTION_KEY: createHash("sha256").update("benevol-local-video-fixture-only-never-production").digest("base64"),
     TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "",
     CRON_SECRET: process.env.CRON_SECRET || "local-video-fixture-cron-only",
-    SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false",
+    SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false",
     SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" }
   let commandArgs: string[]
   let childWorkingDirectory: string | undefined
@@ -49,10 +51,10 @@ async function main() {
     // HTTP capture pages must have an HTTP deployment origin (#1062).
     Object.assign(env, { PORT: "43102", HOSTNAME: "127.0.0.1", NEXT_PUBLIC_APP_URL: mode === "serve-capture" ? "http://localhost:43102" : PUBLIC_APP_URL })
     if (mode === "serve-delivery") Object.assign(env, { PORT: "43106", NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
-    if (mode === "serve-dayof") Object.assign(env, { PORT: "43108", NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
-    if (mode === "serve-merge") Object.assign(env, { PORT: "43110", NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
-    if (mode === "serve-questions") Object.assign(env, { PORT: "43112", NEXTAUTH_URL: "http://localhost:43112", VIDEO_BASE_URL: "http://localhost:43112", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
-    if (mode === "serve-hours") Object.assign(env, { PORT: "43114", NEXTAUTH_URL: "http://localhost:43114", VIDEO_BASE_URL: "http://localhost:43114", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+    if (mode === "serve-dayof") Object.assign(env, { PORT: "43108", NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+    if (mode === "serve-merge") Object.assign(env, { PORT: "43110", NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+    if (mode === "serve-questions") Object.assign(env, { PORT: "43112", NEXTAUTH_URL: "http://localhost:43112", VIDEO_BASE_URL: "http://localhost:43112", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+    if (mode === "serve-hours") Object.assign(env, { PORT: "43114", NEXTAUTH_URL: "http://localhost:43114", VIDEO_BASE_URL: "http://localhost:43114", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-public") env.NEXTAUTH_URL = PUBLIC_APP_URL
     serving = { proof, port: Number(env.PORT) }
     commandArgs = [server]
@@ -88,6 +90,7 @@ async function main() {
     allowed.add("videos/tools/verify-last-minute.ts")
     allowed.add("videos/tools/flush-last-minute-outbox.ts")
     allowed.add("videos/tools/prepare-import-baseline.ts")
+    allowed.add("videos/tools/verify-batch40-member-cleanup.ts")
     allowed.add("videos/tools/review-main-ui.ts")
     allowed.add("videos/tools/verify-reports.ts")
     allowed.add("videos/tools/inspect-foundation.ts")
@@ -105,7 +108,8 @@ async function main() {
     }
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
       const commonTake = ["VOLUNTEER_BADGES", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "SHIFT_RECURRENCE", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_REGISTER", "VOLUNTEER_SESSION_AVAILABILITY", ...memberTakes].includes(rest[0])
-      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["SHIFT_ROSTER_VISIBILITY", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
+      if (batch35Takes.includes(rest[0]) && !["45439", "45441"].includes(url.port)) throw new Error("Batch35 requires its dedicated database")
+      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : [...batch35Takes, "SHIFT_ROSTER_VISIBILITY", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
       if (rest[0] === "SHIFT_ROSTER_VISIBILITY") Object.assign(env, { ORG_ADMIN_EMAIL: "video.roster.owner@example.org", VIDEO_ORG: "formation-roster", VIDEO_EVENT_SLUG: "fete-du-parc" })
       if (rest[0] === "ORG_FIRST_STEPS") Object.assign(env, { ORG_ADMIN_EMAIL: "video.firststeps.owner@example.org", VIDEO_ORG: "formation-premiers-pas" })
       if (rest[0] === "ADMIN_NAVIGATION") Object.assign(env, { ORG_ADMIN_EMAIL: "video.navigation.owner@example.org", VIDEO_ORG: "formation-navigation", VIDEO_EVENT_SLUG: "rencontre-0" })
@@ -115,15 +119,15 @@ async function main() {
       if (rest[0] === "DATA_EXPORTS_ARCHIVES") Object.assign(env, { NEXTAUTH_URL: "http://localhost:43102", VIDEO_BASE_URL: "http://localhost:43102", ORG_ADMIN_EMAIL: "video.exports.owner@example.org", VIDEO_ORG: "formation-exports", VIDEO_EVENT_SLUG: "fete-des-archives" })
       if (rest[0] === "MEMBERS_DUPLICATES_MERGE") {
         if (mode !== "run" || url.port !== "45433") throw new Error("Merge recording requires isolated local wrapper")
-        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", ORG_ADMIN_EMAIL: "video.merge.owner@example.org", VIDEO_ORG: "formation-fusion", VIDEO_EVENT_SLUG: "atelier-fusion", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", ORG_ADMIN_EMAIL: "video.merge.owner@example.org", VIDEO_ORG: "formation-fusion", VIDEO_EVENT_SLUG: "atelier-fusion", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
       }
       if (rest[0] === "EVENT_QUESTIONS") {
         if (mode !== "run" || url.port !== "45433") throw new Error("Questions recording requires isolated local wrapper")
-        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43112", VIDEO_BASE_URL: "http://localhost:43112", ORG_ADMIN_EMAIL: "video.questions.owner@example.org", VIDEO_ORG: "formation-questions", VIDEO_EVENT_SLUG: "atelier-questions", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43112", VIDEO_BASE_URL: "http://localhost:43112", ORG_ADMIN_EMAIL: "video.questions.owner@example.org", VIDEO_ORG: "formation-questions", VIDEO_EVENT_SLUG: "atelier-questions", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
       }
       if (rest[0] === "VOLUNTEER_HOURS_CERTIFICATE") {
         if (mode !== "run" || url.port !== "45433") throw new Error("Hours recording requires isolated local wrapper")
-        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43114", VIDEO_BASE_URL: "http://localhost:43114", ORG_ADMIN_EMAIL: "video.hours.owner@example.org", VIDEO_ORG: "formation-heures", VIDEO_EVENT_SLUG: "heures-september", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43114", VIDEO_BASE_URL: "http://localhost:43114", ORG_ADMIN_EMAIL: "video.hours.owner@example.org", VIDEO_ORG: "formation-heures", VIDEO_EVENT_SLUG: "heures-september", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
       }
       const foundation = ({ ORG_TIMEZONE_CHARTER: "charter", ORG_PUBLIC_IDENTITY: "identity", ORG_EMAIL_SETTINGS: "email", ORG_TEAM_PERMISSIONS: "team", EVENT_CREATE_BLANK: "blank", EVENT_CREATE_TEMPLATE: "template", EVENT_MILESTONES: "milestones", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[rest[0]]
       if (foundation) Object.assign(env, { ORG_ADMIN_EMAIL: `video.${foundation}.owner@example.org`, VIDEO_ORG: foundation === "identity" ? "fetes-de-montvert" : `formation-${foundation}`, VIDEO_EVENT_SLUG: "rencontre-0" })
@@ -167,7 +171,8 @@ async function main() {
       if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only exact event-log preparation accepted")
       await verifyProductBuild("http://localhost:43102")
     } else if (script === "scripts/seed-video-scenario.ts") {
-      if (rest.length !== 1 || !["last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
+      if (batch35Seeds.includes(rest[0]) && !["45439", "45441"].includes(url.port)) throw new Error("Batch35 seed requires its dedicated database")
+      if (rest.length !== 1 || ![...batch35Seeds, "last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", "shift-eligibility-rules", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
       if (["data-exports-archives", "event-activity-log"].includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Exports require the isolated video DB")
         await verifyProductBuild("http://localhost:43102")
@@ -205,7 +210,17 @@ async function main() {
       if (rest.length !== 1 || !["charter", "identity", "milestones", "pages", "email", "team", "blank", "template", "planning"].includes(rest[0])) throw new Error("Only explicit owned foundation scenario accepted")
     } else if (rest.length) throw new Error("Unexpected tool arguments")
     if (script === "videos/tools/prepare-demo.ts") await verifyProductBuild("http://localhost:43102")
-    commandArgs = ["--import", "tsx", script, ...rest]
+    let tool = script
+    if (["45433", "45439", "45441"].includes(url.port)) {
+      const proof = JSON.parse(await readFile("videos/output/product-server-43102.json", "utf8")) as ProductBuild
+      await verifyProductBuild("http://localhost:43102")
+      await import("node:fs/promises").then(async fs => {
+        for (const directory of ["videos/lib", "videos/tools", "scripts"]) await fs.cp(path.resolve(directory), path.join(proof.snapshot, directory), { recursive: true })
+      })
+      env.TSX_TSCONFIG_PATH = path.join(proof.snapshot, "tsconfig.json")
+      tool = path.join(await realpath(proof.snapshot), script)
+    }
+    commandArgs = ["--import", "tsx", tool, ...rest]
   } else throw new Error("Usage: local-production.ts serve TEMP_COPY | run VIDEO_TOOL [LAST_MINUTE_CHANGES]")
   // Auth.js prefers AUTH_URL over NEXTAUTH_URL; never inherit a different video port.
   env.AUTH_URL = env.NEXTAUTH_URL

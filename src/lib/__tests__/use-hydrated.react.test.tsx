@@ -1,19 +1,22 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi } from "vitest"
-import { act } from "react"
+import { describe, it, expect, vi, afterEach } from "vitest"
 import { hydrateRoot } from "react-dom/client"
 import "@testing-library/jest-dom/vitest"
 import { renderToString } from "react-dom/server"
-import { render, screen, fireEvent, waitFor, within } from "@testing-library/react"
+import { act, cleanup, render, screen, fireEvent, waitFor, within } from "@testing-library/react"
 import { useHydrated } from "../use-hydrated"
 
 const signIn = vi.hoisted(() => vi.fn())
+const push = vi.hoisted(() => vi.fn())
 vi.mock("next-auth/react", () => ({ signIn }))
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push, refresh: vi.fn() }) }))
 
 import LoginPage from "@/app/admin/login/page"
+
+// No Vitest globals here, so Testing Library does not unmount by itself between tests.
+afterEach(() => cleanup())
 
 function Probe() {
   return <span>{useHydrated() ? "hydrated" : "server"}</span>
@@ -51,7 +54,11 @@ describe("login page hydration", () => {
     email.value = "alice@example.org"
     password.value = "secret-typed-early"
 
-    await act(async () => { hydrateRoot(container, <LoginPage />) })
+    // Testing Library's act (not React's): it marks the environment as an act() one. The root is kept
+    // to be unmounted at the end: left mounted, React flushed its last effects after the file's
+    // jsdom was gone (« window is not defined », an unhandled error that failed the run).
+    let root: ReturnType<typeof hydrateRoot> | undefined
+    await act(async () => { root = hydrateRoot(container, <LoginPage />) })
 
     expect(email.value).toBe("alice@example.org")
     expect(password.value).toBe("secret-typed-early")
@@ -59,6 +66,12 @@ describe("login page hydration", () => {
     expect(submit).toBeEnabled()
     fireEvent.click(submit)
     await waitFor(() => expect(signIn).toHaveBeenCalledWith("credentials", { email: "alice@example.org", password: "secret-typed-early", redirect: false }))
+    // The submit ends after signIn resolves (redirect, then « Se connecter » back): wait for its end,
+    // so that no render is left to run after the test.
+    await waitFor(() => expect(push).toHaveBeenCalled())
+    await waitFor(() => expect(submit).toHaveTextContent("Se connecter"))
+    expect(submit).not.toHaveAttribute("aria-disabled")
+    act(() => root!.unmount())
     container.remove()
   })
 })

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:20:20.691Z",
+  "videoSha256": "819011bf3a95717efc2c92dc32721a4c7974fe5f11f7b8097c4f78e0e98ccf62",
+  "promptSha256": "a6845dc2d66192bf7cfcb3692a38fe5d579061314ce509fc67835c03def22d78",
+  "clipSha256": "a9bd21b7d017da6adf6a7af8703d0805384cb7b6fe9f0f115707deda9cf67f26",
+  "scene": "beta-close",
+  "review": {
+    "heardOpening": "Revenons chez l'opérateur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Revenons chez l'opérateur.",
+        "visibleSeconds": 0.7,
+        "visible": "Affichage de la vue opérateur Admin sur la page Fonctions bêta.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "L'association figure maintenant dans Organisations participantes, avec la date de son inscription.",
+        "visibleSeconds": 2,
+        "visible": "Section Organisations participantes visible en bas avec 'Association du Festival de Montvert (formation-beta), depuis le 29 octobre 2026'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Si l'opérateur ferme une fonction, seules les nouvelles adoptions sont bloquées",
+        "visibleSeconds": 8,
+        "visible": "Liste des Fonctions ouvertes à l'essai avec cases à cocher visibles à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

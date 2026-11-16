@@ -50,7 +50,7 @@ describe("GET /api/admin/events/[id]/log", () => {
     const { GET } = await import("@/app/api/admin/events/[id]/log/route")
     const res = await GET(get("/api/admin/events/evt-1/log?chainOf=log-1"), { params: Promise.resolve({ id: "evt-1" }) })
     expect(res.status).toBe(200)
-    expect(getCausalChain).toHaveBeenCalledWith("log-1")
+    expect(getCausalChain).toHaveBeenCalledWith("evt-1", "log-1")
     expect(listEventLogs).not.toHaveBeenCalled()
   })
 
@@ -59,5 +59,19 @@ describe("GET /api/admin/events/[id]/log", () => {
     const { GET } = await import("@/app/api/admin/events/[id]/log/route")
     const res = await GET(get("/api/admin/events/evt-1/log?chainOf=log-1"), { params: Promise.resolve({ id: "evt-1" }) })
     expect(res.status).toBe(404)
+  })
+
+  it.each(["abc", "-5", "1.5", "1e9"])("answers 400 for a malformed limit (%s), without querying", async (limit) => {
+    const { GET } = await import("@/app/api/admin/events/[id]/log/route")
+    const res = await GET(get(`/api/admin/events/evt-1/log?limit=${limit}`), { params: Promise.resolve({ id: "evt-1" }) })
+    expect(res.status).toBe(400)
+    expect(listEventLogs).not.toHaveBeenCalled()
+  })
+
+  it("answers 400 for a date that does not parse", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/log/route")
+    const res = await GET(get("/api/admin/events/evt-1/log?since=yesterday"), { params: Promise.resolve({ id: "evt-1" }) })
+    expect(res.status).toBe(400)
+    expect(listEventLogs).not.toHaveBeenCalled()
   })
 })

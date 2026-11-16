@@ -1,0 +1,186 @@
+{
+  "checkedAt": "2026-11-10T20:04:18.149Z",
+  "scenario": "sector-leaders",
+  "eventName": "Fête du village de Montvert",
+  "recipient": "camille.rochat@example.org",
+  "deletedMessages": [
+    {
+      "ID": "0W8UVqDxp21Y8iaKsRU9T0",
+      "MessageID": "outbox-cmwb45uhy001ccqa5unfh7x9s@localhost",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "sam.organizer@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Nouvelle inscription — Fête du village de Montvert",
+      "Created": "2026-11-10T19:59:24.233Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 2903,
+      "Attachments": 0,
+      "Snippet": "Nora Perrin · 1 créneau Nora Perrin (nora.team@example.org) vient de s'inscrire à Fête du village de Montvert. Buvette · 15/11/2026 · 10:00–14:00 benevol.app"
+    },
+    {
+      "ID": "1Vi4lSsxwaODpaLfGbqG9g",
+      "MessageID": "outbox-cmwb45uhw001bcqa5v9i16e2d@localhost",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "colette.owner@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Nouvelle inscription — Fête du village de Montvert",
+      "Created": "2026-11-10T19:59:24.211Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 2903,
+      "Attachments": 0,
+      "Snippet": "Nora Perrin · 1 créneau Nora Perrin (nora.team@example.org) vient de s'inscrire à Fête du village de Montvert. Buvette · 15/11/2026 · 10:00–14:00 benevol.app"
+    },
+    {
+      "ID": "5rspgIiOPgHGJrj97AVJ5W",
+      "MessageID": "outbox-cmwb45uht001acqa5jg0p8lg7@localhost",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "elodie.rochat@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Nouvelle inscription — Fête du village de Montvert",
+      "Created": "2026-11-10T19:59:24.19Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 2903,
+      "Attachments": 0,
+      "Snippet": "Nora Perrin · 1 créneau Nora Perrin (nora.team@example.org) vient de s'inscrire à Fête du village de Montvert. Buvette · 15/11/2026 · 10:00–14:00 benevol.app"
+    },
+    {
+      "ID": "4SRqajGLETpvnyxjBVknUN",
+      "MessageID": "outbox-cmwb45uhr0019cqa5mrkun8vf@localhost",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-11-10T19:59:24.155Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 4997,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 15/11/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "0ZJVXDurJGamkrZcEHPDGi",
+      "MessageID": "outbox-cmwb45ego0013cqa5fj9u9p0a@localhost",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "camille.rochat@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Vous êtes responsable de « Démontage » — Fête du village de Montvert",
+      "Created": "2026-11-10T19:59:03.313Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3672,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Démontage ». Bonjour Camille, Vous avez été désigné·e responsable du poste Démontage pour Fête du village de Montvert. Voir qui est inscrit ..."
+    },
+    {
+      "ID": "5ktRYJsgo85c7IiDsRkReX",
+      "MessageID": "outbox-cmwb45ayu000zcqa59fm9l78f@localhost",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-11-10T19:58:58.853Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3640,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "3lOZZSAcYGzknMhLqvickt",
+      "MessageID": "outbox-cmwb45uhz001dcqa5kmh6o1we@localhost",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "elodie.rochat@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Nouvelle inscription — Buvette",
+      "Created": "2026-11-10T19:59:24.26Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3226,
+      "Attachments": 0,
+      "Snippet": "Nora Perrin vient de s'inscrire sur Buvette. Nora Perrin vient de s'inscrire sur Buvette (15/11/2026 · 10:00–14:00), dont vous êtes responsable pour Fête du village de Montvert. Voir la liste com..."
+    }
+  ],
+  "preservedMessageIds": [],
+  "deletedPendingIds": [],
+  "remainingPreviousPending": 0
+}

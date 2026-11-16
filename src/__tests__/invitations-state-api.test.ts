@@ -1,12 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 // Invitation state and decline exclusions (#558): GET lists the state per member and the
-// counters that add up; the relaunch route skips declined members and says how many.
+// counters that add up.
+
+vi.mock("@/lib/env", () => ({ env: {} }))
+vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
 vi.mock("@/lib/token-vault", () => ({ linkToken: { reveal: (r: { tokenLegacy: string }) => r.tokenLegacy } }))
-vi.mock("@/lib/notification-helpers", () => ({ sendMemberInvite: vi.fn().mockResolvedValue({ ok: true }) }))
 
 function params(id = "evt-1") {
   return { params: Promise.resolve({ id }) }
@@ -39,24 +41,5 @@ describe("GET /api/admin/events/[id]/invitations — state and counters (#558)",
   })
 })
 
-describe("POST /api/admin/events/[id]/invitations/remind — excludes declined (#558)", () => {
-  beforeEach(() => vi.clearAllMocks())
-
-  it("does not relaunch a declined member and reports how many were skipped", async () => {
-    const db = {
-      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-1", title: "Fête", slug: "fete", startDate: new Date("2026-06-01"), location: null, organization: { name: "Org", slug: "org" } }) },
-      memberInvite: {
-        findMany: vi.fn().mockResolvedValue([
-          { tokenLegacy: "tok-dan", declinedAt: null, volunteer: { firstName: "Dan", email: "dan@x.ch", active: true } },
-          { tokenLegacy: "tok-fred", declinedAt: new Date("2026-06-02"), volunteer: { firstName: "Fred", email: "fred@x.ch", active: true } },
-        ]),
-      },
-      registration: { findMany: vi.fn().mockResolvedValue([]) },
-    }
-    requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: { user: { id: "adm-1" } } })
-    const { POST } = await import("@/app/api/admin/events/[id]/invitations/remind/route")
-    const res = await POST(new Request("http://localhost/api/admin/events/evt-1/invitations/remind", { method: "POST" }), params())
-    const body = await res.json()
-    expect(body).toMatchObject({ sent: 1, declinedSkipped: 1 })
-  })
-})
+// The relaunch route's exclusions (declined, registered, emailed less than 48 h ago) are covered
+// with the outbox in src/__tests__/invitations-outbox-api.test.ts (#1105).

@@ -17,7 +17,7 @@ Réserver les missions sensibles aux profils appropriés sans demander à l’é
 ## Résultat visible
 
 - La demande occupe une place sans être présentée comme confirmée.
-- La décision est visible dans l’administration et sur la page personnelle.
+- La décision est visible dans l’administration et sur la page Mes inscriptions.
 - L’email de décision est envoyé dans la pile vidéo isolée.
 
 ## Points d’attention
@@ -29,7 +29,7 @@ Réserver les missions sensibles aux profils appropriés sans demander à l’é
 
 ## Révision du 2026-10-15 — lot 22-3
 
-Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les réglages du poste sont hérités par les nouveaux créneaux.
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les paramètres du poste sont hérités par les nouveaux créneaux.
 
 Narration à régénérer intégralement en une passe avec la même voix, `continuousPauseTags: false`. En attente du TTS (plafond mensuel connu), sans monter l’ancienne voix. Phrases modifiées :
 

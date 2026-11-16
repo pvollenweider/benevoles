@@ -18,7 +18,7 @@ test("counts confirmed volunteers once, pending apart, and exports the summary",
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const stamp = Date.now()
   const post = async (url: string, body: unknown, headers?: Record<string, string>) => {
@@ -80,7 +80,7 @@ test("a « Nombre » question is summed: one volunteer answers 3, another 2, the
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const stamp = Date.now()
   const post = async (url: string, body: unknown, headers?: Record<string, string>) => {
@@ -156,7 +156,7 @@ test("a follow-up « Nombre » shown only after « Oui », summed for those conc
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const stamp = Date.now()
   const post = async (url: string, body: unknown) => {

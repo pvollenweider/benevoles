@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { renderEventPageMarkdown } from "../event-page-markdown"
+import { isExampleQuote, renderEventPageMarkdown } from "../event-page-markdown"
 
 describe("renderEventPageMarkdown", () => {
   it("renders basic Markdown formatting", () => {
@@ -48,10 +48,39 @@ describe("renderEventPageMarkdown", () => {
     expect(html).not.toContain("style=")
   })
 
-  it("preserves an image with its alt text (needed for embedding screenshots in the /doc guides)", () => {
-    const html = renderEventPageMarkdown("![Le planning des créneaux](/doc-img/admin-shifts.png)")
+  it("preserves an image with its alt text when images are allowed (the repo's own /doc guides)", () => {
+    const html = renderEventPageMarkdown("![Le planning des créneaux](/doc-img/admin-shifts.png)", { allowImages: true })
     expect(html).toContain('src="/doc-img/admin-shifts.png"')
     expect(html).toContain('alt="Le planning des créneaux"')
+  })
+
+  // An admin-authored event page loads nothing from another host for its visitors: an image becomes
+  // a link to it, labelled with its alt text or its address.
+  it("renders an image of an admin-authored page as a link to it, never as an <img>", () => {
+    const html = renderEventPageMarkdown('![Plan d\'accès](https://tracker.example/plan.png "Le plan")\n\n![](https://tracker.example/p.gif?e=fete)')
+    expect(html).not.toContain("<img")
+    expect(html).not.toContain("src=")
+    expect(html).toContain('<a href="https://tracker.example/plan.png" title="Le plan">Plan d\'accès</a>')
+    expect(html).toContain('<a href="https://tracker.example/p.gif?e=fete">https://tracker.example/p.gif?e=fete</a>')
+  })
+
+  it("drops an <img> written as raw HTML in an admin-authored page, whatever its address", () => {
+    for (const source of ['<img src="https://tracker.example/p.gif" alt="x">', '<img src="/doc-img/admin-shifts.png">', "<p><img src=&#47;&#47;tracker.example/p.gif></p>"]) {
+      const html = renderEventPageMarkdown(source)
+      expect(html, source).not.toContain("<img")
+      expect(html, source).not.toContain("tracker.example")
+    }
+  })
+
+  it("escapes the label and the address of an image turned into a link", () => {
+    const html = renderEventPageMarkdown('![<b>x</b> & "y"](https://example.org/a.png?a=1&b=2)')
+    expect(html).not.toContain("<b>")
+    expect(html).toContain('href="https://example.org/a.png?a=1&amp;b=2"')
+    expect(html).toContain("&lt;b&gt;x&lt;/b&gt; &amp; \"y\"</a>")
+  })
+
+  it("keeps a javascript: address out of an image turned into a link", () => {
+    expect(renderEventPageMarkdown("![x](javascript:alert(1))")).not.toContain("javascript:")
   })
 
   it("preserves a table (GFM)", () => {
@@ -82,5 +111,52 @@ describe("renderEventPageMarkdown", () => {
   it("still strips an id written by hand in inline HTML when headingIds is off", () => {
     const html = renderEventPageMarkdown('<p id="main">x</p>')
     expect(html).not.toContain('id="main"')
+  })
+})
+
+describe("example quotes (exampleQuotes)", () => {
+  const source = "> « Je peux donner deux heures samedi. »\n>\n> Léa, bénévole occasionnelle"
+
+  it("renders a quote and its caption as a figure, the caption naming the quote", () => {
+    const html = renderEventPageMarkdown(source, { exampleQuotes: true })
+    expect(html).toBe(
+      "<figure>\n<blockquote>\n<p>« Je peux donner deux heures samedi. »</p>\n</blockquote>\n<figcaption>Léa, bénévole occasionnelle</figcaption>\n</figure>\n",
+    )
+  })
+
+  it("leaves any other blockquote unchanged", () => {
+    for (const other of [
+      "> Pour {événement}, vous pouvez maintenant voir qui est inscrit.\n>\n> C'est facultatif.",
+      "> « Une citation seule. »",
+      "> « x »\n>\n> Léa, bénévole\n>\n> Une troisième ligne.",
+      "> « x »\n>\n> « y »",
+    ]) {
+      const html = renderEventPageMarkdown(other, { exampleQuotes: true })
+      expect(html).not.toContain("<figure>")
+      expect(html).toBe(renderEventPageMarkdown(other))
+    }
+  })
+
+  it("keeps the plain blockquote when the option is off, and strips a figure written by hand", () => {
+    expect(renderEventPageMarkdown(source)).not.toContain("<figure>")
+    expect(renderEventPageMarkdown(source)).toContain("<blockquote>")
+    expect(renderEventPageMarkdown('<figure><figcaption><span aria-hidden="true">x</span></figcaption></figure>')).not.toMatch(/<fig|<span|aria-hidden/)
+  })
+
+  it("sanitizes the quote and the caption like the rest of the page", () => {
+    const html = renderEventPageMarkdown("> « x <script>alert(1)</script> »\n>\n> Léa <img src=x onerror=alert(1)>", { exampleQuotes: true })
+    expect(html).toContain("<figure>")
+    expect(html).not.toContain("<script")
+    expect(html).not.toContain("onerror")
+  })
+
+  it("wants a quote between « » and a short one-line caption", () => {
+    expect(isExampleQuote("« x »", "Léa, bénévole")).toBe(true)
+    expect(isExampleQuote("x", "Léa, bénévole")).toBe(false)
+    expect(isExampleQuote("« x", "Léa, bénévole")).toBe(false)
+    expect(isExampleQuote("« x »", "")).toBe(false)
+    expect(isExampleQuote("« x »", "« y »")).toBe(false)
+    expect(isExampleQuote("« x »", "a\nb")).toBe(false)
+    expect(isExampleQuote("« x »", "a".repeat(81))).toBe(false)
   })
 })

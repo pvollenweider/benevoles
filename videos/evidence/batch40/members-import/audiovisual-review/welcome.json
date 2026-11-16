@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:41:17.611Z",
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
+  "promptSha256": "6e19c1d161c7499ae1618c38b2ba224f29781894ddc9dd7180915fb980f8a331",
+  "clipSha256": "9f2858a42a618e58b8069472655e9eb9dbb3810fc4308ca0391d9fca3cec9d94",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Vous utilisez Benevol pour la première fois",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ?",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction « Importer ses membres sans repartir de zéro » affiché en superposition sur la page Membres.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Nous allons utiliser quarante fiches fictives, vérifier les erreurs",
+        "visibleSeconds": 11.2,
+        "visible": "Page Membres affichée de manière stable pour poser le contexte avant la manipulation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "créer les membres manuellement avec Nouveau membre.",
+        "visibleSeconds": 19.5,
+        "visible": "Le bouton bleu « + Nouveau membre » est visible en haut à droite de l'interface.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire, posée et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

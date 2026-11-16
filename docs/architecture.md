@@ -9,7 +9,7 @@ Navigateur ──► Traefik (ingress) ──► Next.js (server.js, port 3000) 
                                           ├──► Service push (Web Push, VAPID)
                                           └──► Sentry (navigateur via le tunnel /monitoring)
 
-CronJobs Kubernetes ──► /api/cron/reminders (toutes les heures), /api/cron/outbox (toutes les 5 min), /api/cron/cleanup (02:00 UTC)
+CronJobs Kubernetes ──► /api/cron/reminders (toutes les heures), /api/cron/outbox (toutes les 5 min), /api/cron/cleanup (02:00 UTC), /api/cron/release-check (03:00 UTC)
 CronJobs de sauvegarde ──► pg_dump chiffré (01:00 UTC), copie hors site (01:30 UTC) ──► /api/cron/heartbeat
 Job de migration (k8s/job-migrate.yaml) ──► prisma migrate deploy, à chaque déploiement, avant la mise à jour de l'application
 ```
@@ -27,15 +27,16 @@ Job de migration (k8s/job-migrate.yaml) ──► prisma migrate deploy, à chaq
 | `src/app/admin/` | Administration d'une organisation |
 | `src/app/super-admin/` | Gestion des organisations, nouveautés produit, profil, page santé (`health/`) |
 | `src/app/legal/` | Politique de confidentialité, conditions d'utilisation |
-| `src/app/doc/`, `src/app/fonctionnalites/`, `src/app/accessibilite/` | Pages de contenu publiques rendues depuis `GUIDE_*.md`, `FEATURES.md`, `ACCESSIBILITE.md` (déclarées dans `src/lib/doc-pages.ts`) |
-| `src/app/product-updates/unsubscribed/` | Confirmation du désabonnement des nouveautés produit |
+| `src/app/doc/`, `src/app/fonctionnalites/`, `src/app/accessibilite/` | Pages de contenu publiques rendues depuis `content/guide/GUIDE_*.md`, `content/pages/FEATURES.md`, `content/pages/ACCESSIBILITE.md` (déclarées dans `src/lib/doc-pages.ts`) |
+| `src/app/product-updates/unsubscribe/` | Page de confirmation du désabonnement des nouveautés produit (le bouton envoie le POST) |
+| `src/app/product-updates/unsubscribed/` | Résultat du désabonnement des nouveautés produit |
 | `src/app/api/` | Routes HTTP, voir [api.md](api.md) |
 | `src/components/` | Composants (`admin/`, `super-admin/`, timeline publique `DayTimeline.tsx`) |
 | `src/lib/` | Logique métier partagée |
 | `src/proxy.ts` | Proxy (ex-middleware) : authentification des pages et routage par sous-domaine |
 | `prisma/` | Schéma, migrations, seed |
 | `k8s/`, `Dockerfile`, `docker-compose*.yml` | Déploiement |
-| `gandi-webhook/` | Webhook DNS Gandi pour cert-manager (Go, hors application) |
+| `k8s/gandi-webhook/` | Webhook DNS Gandi pour cert-manager (Go, hors application) |
 
 Modules `src/lib/` à connaître :
 
@@ -88,22 +89,22 @@ Dépendances principales, en nombre d'imports d'un fichier vers un autre (graphe
 ## Multi-tenant
 
 - Chaque organisation (`Organization`) possède ses événements, créneaux, membres et admins.
-- L'organisation courante d'une page publique vient du sous-domaine : `src/proxy.ts` extrait `[orgSlug]` de `[orgSlug].benevol.app` (`orgSlugFromHost`, `src/lib/org-subdomain.ts`) et le passe dans l'en-tête `x-org-slug`, sauf pour `www`, `app`, `admin`, `api` et `staging`. Sans sous-domaine d'organisation (domaine principal, `localhost`), `?org=<slug>` joue le même rôle. Un en-tête `x-org-slug` envoyé par le client est toujours supprimé avant (`withOrgHeader`) : les routes publiques qui s'en servent ne voient que la valeur du proxy. Un slug historique redirige vers le slug actuel (`resolveOrgSlug`, `src/lib/resolve-org.ts`).
+- L'organisation courante d'une page publique vient du sous-domaine : `src/proxy.ts` extrait `[orgSlug]` de `[orgSlug].benevol.app` (`orgSlugFromHost`, `src/lib/org-subdomain.ts`) et le passe dans l'en-tête `x-org-slug`, sauf pour `www`, `app`, `admin`, `api`, `staging` et `medias`. Sans sous-domaine d'organisation, `?org=<slug>` joue le même rôle hors production et, en production, seulement sur un hôte local (`localhost`, `*.localhost`, adresse de bouclage : `next start` des tests de bout en bout) ; sur le domaine principal en production, il est ignoré (`orgQueryAllowed`), et les routes publiques ne lisent jamais `?org=` elles-mêmes. Un en-tête `x-org-slug` envoyé par le client est toujours supprimé avant (`withOrgHeader`) : les routes publiques qui s'en servent ne voient que la valeur du proxy. Un slug historique redirige vers le slug actuel (`resolveOrgSlug`, `src/lib/resolve-org.ts`).
 - Côté admin, l'organisation vient de la session (pour le super admin, du cookie `sa-org-id`). `requireOrgSession()` renvoie un client `db` (`getOrgClient`) qui limite chaque opération à l'organisation ; une ligne d'une autre organisation se comporte comme une ligne inexistante. La liste des modèles couverts et les autres garde-fous sont dans [roles-et-permissions.md](roles-et-permissions.md).
 - Un changement de slug archive l'ancien dans `OrgSlugHistory` pour rediriger les anciens liens.
 - Le slug d'un événement est unique au sein d'une organisation, pas globalement.
 
 ## Modèle de données
 
-Modèles Prisma (`prisma/schema.prisma`) :
+Principaux modèles Prisma (`prisma/schema.prisma`) :
 
 | Modèle | Rôle |
 |--------|------|
-| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`), fuseau horaire (`timeZone`, vide = `APP_TIME_ZONE`), adresse de réponse (`replyToEmail`), réglages des emails (`notificationSettings`) |
+| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`), fuseau horaire (`timeZone`, vide = `APP_TIME_ZONE`), adresse de réponse (`replyToEmail`), paramètres des emails (`notificationSettings`) |
 | `OrgSlugHistory` | Anciens slugs |
 | `AdminUser` | Compte propriétaire (`admin`), organisateur (`organizer`) ou super admin ; empreintes des jetons d'activation et de réinitialisation ; `sessionVersion` ; abonnement aux nouveautés produit (`receiveProductUpdates`, #200) |
 | `Event` | Événement : dates, statut de publication, répertorié ou non (`isListed`), fenêtre d'inscription (`registrationsOpen`, `registrationOpensAt`, `registrationClosesAt`), téléphone obligatoire, rappels activés |
-| `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre, âge minimum optionnel (`minAge`, #192), validation requise (`requiresApproval`), plafond par bénévole (`maxPerVolunteer`), étiquettes réservées (`reservedTags`), poste cumulable avec un autre créneau (`overlapAllowed`, #986) |
+| `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre, âge minimum optionnel (`minAge`, #192), validation requise (`requiresApproval`), plafond par bénévole (`maxPerVolunteer`), étiquettes réservées (`reservedTags`), poste cumulable avec un autre créneau (`overlapAllowed`, #986), poste attribué par l'organisation uniquement (`assignedOnly`, #1145) |
 | `Volunteer` | Bénévole d'une organisation, unique par email et organisation ; `birthDate` optionnel, collecté seulement si un créneau l'exige |
 | `Registration` | Inscription d'un bénévole à un créneau : statut, jeton (empreinte et copie chiffrée), position en liste d'attente, dates d'envoi des rappels |
 | `MemberInvite` | Invitation d'un membre à un événement : jeton (empreinte et copie chiffrée) |
@@ -117,7 +118,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `QuestionAnswer` | Réponse d'un bénévole à une question, unique par question et bénévole |
 | `TargetedMessage` | Message ciblé envoyé : objet, texte, audience, compteurs email et push (#467) |
 | `MessageTemplate` | Modèle de message réutilisable de l'organisation (#482) |
-| `JobRun` | Dernier état de chaque tâche planifiée : rappels, nettoyage, sauvegardes, test de restauration (#383) |
+| `JobRun` | Dernier état de chaque tâche planifiée : rappels, envoi des emails en attente, nettoyage, sauvegardes, test de restauration (#383) |
 | `ProductUpdateSend` | Historique des communications de nouveautés produit diffusées aux administrateurs (#200) |
 | `NotificationOutbox` | File d'envoi des notifications (voir Notifications) |
 | `RateLimit` | Compteurs des limites de tentatives, partagés entre instances (#322) |
@@ -144,7 +145,7 @@ Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` 
 3. Vérification que les créneaux existent, appartiennent à l'événement et sont ouverts (`409` sinon) ; deux créneaux choisis qui se chevauchent : `400`.
 4. Postes réservés : seul un membre invité portant l'une des étiquettes du poste peut s'y inscrire (`403`). Réponses aux questions de l'événement validées (`400`). Âge minimum : date de naissance requise (`400`) et vérifiée (`403`). Chevauchement avec les inscriptions existantes d'un bénévole connu : `409`.
 5. Dans une transaction qui verrouille les créneaux puis le bénévole : chevauchement vérifié à nouveau, plafond par bénévole du poste, créneau complet (refus, ou liste d'attente si elle est activée). Création du `Volunteer` s'il n'existe pas (unique par organisation et email), d'une `Registration` par créneau avec son jeton (`requested` sur un créneau « Sur validation »), des réponses aux questions et des notifications dans l'outbox.
-6. Emails de confirmation (ou d'accusé de demande), notification aux admins de l'organisation si le réglage `signupAdminEmail` est actif (à défaut d'admin, `ADMIN_NOTIFICATION_EMAIL`), aux responsables du poste (après acceptation pour une demande), email de liste d'attente pour les inscriptions `waiting` : envoyés juste après la réponse (voir Notifications).
+6. Emails de confirmation (ou d'accusé de demande), notification aux admins de l'organisation si le paramètre `signupAdminEmail` est actif (à défaut d'admin, `ADMIN_NOTIFICATION_EMAIL`), aux responsables du poste (après acceptation pour une demande), email de liste d'attente pour les inscriptions `waiting` : envoyés juste après la réponse (voir Notifications).
 
 ### Liste d'attente
 
@@ -165,7 +166,7 @@ Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` 
 
 Chaque envoi est enregistré (`reminderJ2Sent`, `reminderJ1Sent`, `reminderDdSent`) : un rappel n'est envoyé qu'une fois par inscription.
 
-Seules les inscriptions `active` d'un événement publié, aux rappels activés, sur un créneau non annulé, sont concernées. L'organisation peut couper chaque rappel dans ses réglages (#381). Les fenêtres sont calculées dans le fuseau horaire de l'organisation.
+Seules les inscriptions `active` d'un événement publié, aux rappels activés, sur un créneau non annulé, sont concernées. L'organisation peut couper chaque rappel dans ses paramètres (#381). Les fenêtres sont calculées dans le fuseau horaire de l'organisation.
 
 ### Purge
 
@@ -173,16 +174,16 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 
 ## Notifications
 
-- Tous les emails passent par `sendNotification()` : aucune route n'appelle Nodemailer directement. Les types de notification sont listés dans [FONCTIONNALITES.md](../FONCTIONNALITES.md).
+- Tous les emails passent par `sendNotification()` : aucune route n'appelle Nodemailer directement. Les types de notification sont listés dans [fonctionnalites.md](fonctionnalites.md).
 - Sans `SMTP_HOST` : en production, l'envoi échoue (« SMTP_HOST manquant ») sans rien écrire du destinataire ni du contenu, l'outbox le retente puis alerte Sentry ; en développement et en test, le contenu est affiché dans la console.
 - Le push est envoyé séparément (`src/lib/push.ts`) : `sendPushToVolunteer()` pour les rappels, `sendTargetedPush()` pour un message ciblé quand l'admin le demande. Il n'a d'effet que si les clés VAPID sont configurées.
 - **Outbox** (`src/lib/notifications/outbox.ts`, table `NotificationOutbox`) :
-  - Passent par l'outbox : inscription publique, offre et confirmation de liste d'attente, décision sur une demande, créneau modifié ou annulé, invitation d'un responsable, bienvenue et invitation d'un admin, réinitialisation de mot de passe, renvoi du lien par le bénévole, messages ciblés et renvoi de leurs échecs, email de test des réglages.
+  - Passent par l'outbox : inscription publique, offre et confirmation de liste d'attente, décision sur une demande, créneau modifié ou annulé, invitation d'un responsable, bienvenue et invitation d'un admin, réinitialisation de mot de passe, renvoi du lien par le bénévole, messages ciblés et renvoi de leurs échecs, email de test des paramètres.
   - Restent synchrones, parce que la réponse indique si l'email est parti : invitations de membres et relances, rappel manuel, « renvoyer le lien » depuis l'admin, communications produit, invitation envoyée par le super admin, lien renvoyé après une inscription en double.
   - Transactionnelle : chaque action écrit ses notifications avec le client de la transaction qui fait la modification (`enqueueNotifications(payloads, tx)`, y compris avec `db.$transaction` du client limité à l'organisation), puis les livre après validation (`deliverAfterResponse`, `after()` de Next). La modification et ses emails sont validés ou annulés ensemble. Pour l'inscription publique, les helpers (`sendConfirmationEmail`, `sendAdminNotification`, `notifySectorLeadersOfSignup`) reçoivent un collecteur au lieu de `sendNotification`.
-  - Nouvelles tentatives : `/api/cron/reminders` retente les échecs avec un délai croissant (5, 10, 20, 40, 80 min) ; après 6 tentatives, la ligne passe en `failed` et Sentry est prévenu. Un propriétaire ou un organisateur peut la relancer depuis les réglages.
+  - Nouvelles tentatives : `/api/cron/outbox` (toutes les 5 minutes) et `/api/cron/reminders` (toutes les heures) retentent les échecs dont le délai est écoulé, avec un délai croissant (5, 10, 20, 40, 80 min) ; après 6 tentatives, ou dès le premier refus définitif (5xx), la ligne passe en `failed` et Sentry est prévenu, sauf si le refus porte sur l'adresse du destinataire elle-même (boîte ou domaine inexistant, 5.1.x, `recipient-rejection.ts`) : une donnée à corriger, pas une erreur de l'application, journalisée en avertissement. Un propriétaire ou un organisateur peut la relancer depuis les paramètres.
   - Concurrence : chaque ligne est réservée par une mise à jour conditionnelle ; une réservation abandonnée depuis 15 minutes est reprise. Livraison « au moins une fois » : un plantage entre l'acceptation SMTP et le passage à `sent` peut produire un doublon, préféré à un email perdu, qui porte le même `Message-ID` ; une clé métier (`dedupeKey`) évite de mettre deux fois en file la même notification.
-  - Santé : le cron horaire alerte Sentry en cas d'échec dans les dernières 24 h, d'email en attente depuis plus de 2 h ou de réservation abandonnée ; la page `/super-admin/health` affiche le même état.
+  - Santé : le cron horaire alerte Sentry seulement quand l'envoi est bloqué (email en attente depuis plus de 2 h ou réservation abandonnée) ; une ligne passée en `failed` est signalée à son échec (voir ci-dessus), pas à nouveau. La page `/super-admin/health` affiche aussi les échecs des dernières 24 h.
   - Purge : `/api/cron/cleanup` supprime chaque nuit les lignes envoyées, et les échecs et annulations de plus de 30 jours, car elles contiennent des données personnelles.
   - Plafonds d'envoi (#810, `src/lib/notifications/send-limits.ts`) : chaque email, quel que soit son destinataire, est compté dans `sendNotification`, après la vérification de l'organisation et avant SMTP, sur des fenêtres fixes de la table `RateLimit` partagées entre réplicas : plateforme par minute, organisation par minute et par jour, envois en masse et emails de compte par jour. Au-delà, l'email est retenu (`held`) : l'outbox le laisse en attente jusqu'à la fin de la fenêtre sans compter de tentative, un envoi direct le signale à l'appelant ; une seule alerte par fenêtre. Valeurs par défaut et variables : [configuration.md](configuration.md).
   - Organisation en attente de validation (#810, `src/lib/org-approval.ts`) : deux autorisations séparées, `publicationApprovedAt` (publier un événement, pages publiques de l'organisation : `PUBLIC_ORG_WHERE` dans `resolveOrgSlug`, les routes publiques, le logo et l'index des sitemaps) et `outboundEmailApprovedAt` (écrire à des tiers). Accordées par défaut à la création (valeur par défaut de la base) ; seule l'inscription en libre-service créera une organisation avec les deux à null. Sans la seconde, `sendNotification` n'envoie qu'aux comptes administrateurs de l'organisation (raison `org_pending`, ligne annulée) et aucun push ne part ; sans la première, le PATCH d'un événement refuse la publication (409, `publication_pending`).
@@ -191,7 +192,8 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 
 ## Observabilité
 
-- Sentry : `sentry.server.config.ts` et `sentry.edge.config.ts` sont chargés par `src/instrumentation.ts`, qui exporte aussi `onRequestError` et lance au démarrage les vérifications de `production-guards.ts`. Côté navigateur, `instrumentation-client.ts` ne fait qu'écouter les erreurs : le SDK (`src/lib/sentry-client-init.ts`) est importé quand la page est inactive ou à la première erreur (`src/lib/sentry-client-loader.ts`), et passe par le tunnel `/monitoring`. Session Replay est chargé à part, sur l'espace d'administration seulement (`src/lib/sentry-client-policy.ts`). Les trois configurations filtrent jetons et données personnelles (`src/lib/sentry-scrub.ts`).
-- `/api/health` répond `200` si la base est joignable, `503` sinon ; les sondes Kubernetes l'interrogent.
+- Sentry : `sentry.server.config.ts` et `sentry.edge.config.ts` sont chargés par `src/instrumentation.ts`, qui exporte aussi `onRequestError` et lance au démarrage les vérifications de `production-guards.ts`. Côté navigateur, `instrumentation-client.ts` ne fait qu'écouter les erreurs : le SDK (`src/lib/sentry-client-init.ts`) est importé quand la page est inactive ou à la première erreur (`src/lib/sentry-client-loader.ts`), et passe par le relais `/monitoring` (`src/app/monitoring/route.ts`), qui ne transmet qu'au projet Sentry de l'instance. Session Replay est chargé à part, sur l'espace d'administration seulement (`src/lib/sentry-client-policy.ts`). Les trois configurations filtrent jetons et données personnelles (`src/lib/sentry-scrub.ts`).
+- `/api/health` répond `200` si la base est joignable, `503` sinon ; la sonde de vie Kubernetes l'interroge, la sonde de disponibilité interroge `/api/health/ready` (503 tant que le préchauffage n'est pas fini).
 - `/super-admin/health` : base, migrations, file d'envoi, dernière exécution de chaque tâche planifiée (`JobRun`, alimenté par `recordJobRun` dans les crons et par `/api/cron/heartbeat` pour les sauvegardes et le test de restauration), version et commit déployés (`GIT_SHA`).
 - Les requêtes qui portent un jeton personnel ne sont pas écrites dans le journal d'accès de Traefik (`k8s/ingressroute-tokens.yaml`, #485).
+- Les journaux d'accès de Traefik sont un fichier JSON du nœud (`/var/log/traefik/access.log`), gardé 1 an, l'adresse du client réduite à son réseau après 90 jours ([`k8s/log-rotation.md`](../k8s/log-rotation.md)).

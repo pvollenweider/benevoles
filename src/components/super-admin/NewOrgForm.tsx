@@ -15,7 +15,7 @@ export default function NewOrgForm() {
   const [name, setName] = useState("")
   const [adminEmail, setAdminEmail] = useState("")
   const [adminName, setAdminName] = useState("")
-  const { submit: run, busy: submitting, error, fail, isInvalid, reset } = useSubmit()
+  const { submit: run, busy: submitting, error, fail, isInvalid, reset, quiet, alertShown } = useSubmit()
   const id = useId()
   const [result, setResult] = useState<{ orgId: string; orgName: string; inviteUrl: string } | null>(null)
   const [inviteSent, setInviteSent] = useState<"idle" | "sending" | "sent" | "error">("idle")
@@ -38,7 +38,7 @@ export default function NewOrgForm() {
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (name.trim().length < 2) { fail("Indiquez le nom de l'organisation (2 caractères au moins).", "name", document.getElementById(`${id}-name`)); return }
-    if (!adminName.trim()) { fail("Indiquez le nom de l'administrateur.", "adminName", document.getElementById(`${id}-adminName`)); return }
+    if (!adminName.trim()) { fail("Indiquez le nom de l'organisateur.", "adminName", document.getElementById(`${id}-adminName`)); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(adminEmail.trim())) { fail("Indiquez une adresse email complète.", "adminEmail", document.getElementById(`${id}-adminEmail`)); return }
     const outcome = await run<{ org: { id: string; name: string }; inviteUrl: string }>(() => fetch("/api/super-admin/organizations", {
       method: "POST",
@@ -74,13 +74,13 @@ export default function NewOrgForm() {
         <div>
           <h1 ref={doneHeadingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Organisation créée</h1>
           <p className="text-sm text-gray-500 mt-1">
-            L'organisation <strong>{result.orgName}</strong> et son premier administrateur ont été créés.
+            L'organisation <strong>{result.orgName}</strong> et son premier organisateur ont été créés.
           </p>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-3">
           <p className="text-sm font-semibold text-blue-900">
-            Lien d'invitation — à envoyer à l'administrateur
+            Lien d'invitation — à envoyer à l'organisateur
           </p>
           <p className="text-xs text-blue-700">
             Ce lien est valable 7 jours. Il sera révoqué dès que le mot de passe sera créé.
@@ -90,7 +90,7 @@ export default function NewOrgForm() {
               readOnly
               aria-label="Lien d'invitation (lecture seule)"
               value={result.inviteUrl}
-              className="flex-1 font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
+              className="flex-1 font-mono text-xs bg-white border border-gray-500 rounded-lg px-3 py-2 text-blue-900 select-all"
               onClick={(e) => (e.target as HTMLInputElement).select()}
             />
             <button
@@ -152,7 +152,7 @@ export default function NewOrgForm() {
       <div>
         <h1 className="text-xl font-bold text-gray-900">Nouvelle organisation</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Créez une organisation et son premier administrateur. Un lien d’invitation lui permettra de choisir son mot de passe.
+          Créez une organisation et son premier organisateur. Un lien d’invitation lui permettra de choisir son mot de passe.
         </p>
       </div>
 
@@ -173,7 +173,7 @@ export default function NewOrgForm() {
         </div>
 
         <div>
-          <p className="text-xs font-semibold text-gray-600 mb-3">Premier administrateur</p>
+          <p className="text-xs font-semibold text-gray-600 mb-3">Premier organisateur</p>
           <div className="space-y-3">
             <Field
               id={`${id}-adminName`}
@@ -199,7 +199,7 @@ export default function NewOrgForm() {
           </div>
         </div>
 
-        <FormStatus error={error} errorId={`${id}-error`} />
+        <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
 
         <div className="flex justify-end gap-3 pt-1">
           <button
@@ -258,7 +258,7 @@ function Field({
         aria-invalid={invalid}
         aria-describedby={invalid ? errorId : undefined}
         aria-required={required || undefined}
-        className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
+        className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
       />
     </div>
   )

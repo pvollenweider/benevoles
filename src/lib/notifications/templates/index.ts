@@ -11,15 +11,18 @@
 import type { NotificationPayload } from "../types"
 import { withOrgLogo, type RenderedEmail } from "./shared"
 import { emailLogoHtml, type OrgLogo } from "../../org-logo"
-import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend, renderRegistrationRemoved, renderRegistrationWithdrawn, renderRegistrationRestored, renderRegistrationAddedByOrganizer } from "./registration"
+import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend, renderRegistrationRemoved, renderRegistrationWithdrawn, renderRegistrationRestored, renderRegistrationAddedByOrganizer, renderSignupEmailConfirmation } from "./registration"
 import { renderMemberInvite, renderAdminInvite } from "./invitations"
-import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
+import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderReminderRule, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-leaders"
 import { renderOpenShifts } from "./open-shifts"
 import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated, renderMilestoneOwnerReminder } from "./administration"
 import { renderSectorLeaderWithdrawalDigest, renderWithdrawalAdminDigest } from "./withdrawal-digest"
 import { renderAnswersChanged, renderSectorLeaderAnswersChanged } from "./answers-changed"
+import { renderAvailabilityRequest } from "./availability"
+import { renderAvailabilityChanged } from "./availability-changed"
+import { renderShiftSwapApplied, renderShiftSwapApprovalNeeded, renderShiftSwapEnded, renderShiftSwapOffered } from "./shift-swaps"
 
 export type { RenderedEmail } from "./shared"
 
@@ -36,6 +39,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
   switch (payload.kind) {
     case "registration_confirmation":
       return renderConfirmation(payload)
+    case "signup_email_confirmation":
+      return renderSignupEmailConfirmation(payload)
     case "member_invite":
       return renderMemberInvite(payload)
     case "reminder_j2":
@@ -44,6 +49,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderReminderJ1(payload)
     case "reminder_dd":
       return renderReminderDd(payload)
+    case "reminder_rule":
+      return renderReminderRule(payload)
     case "manual_reminder":
       return renderManualReminder(payload)
     case "shift_modified":
@@ -116,5 +123,17 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderAnswersChanged(payload)
     case "sector_leader_answers_changed":
       return renderSectorLeaderAnswersChanged(payload)
+    case "shift_swap_applied":
+      return renderShiftSwapApplied(payload)
+    case "shift_swap_ended":
+      return renderShiftSwapEnded(payload)
+    case "shift_swap_offered":
+      return renderShiftSwapOffered(payload)
+    case "availability_request":
+      return renderAvailabilityRequest(payload)
+    case "availability_changed":
+      return renderAvailabilityChanged(payload)
+    case "shift_swap_approval_needed":
+      return renderShiftSwapApprovalNeeded(payload)
   }
 }

@@ -8,7 +8,7 @@
     "steps": [
       "Vérifiez les inscriptions, les invitations, le journal et les rapports avant d'archiver.",
       "Annulez les créneaux si des bénévoles doivent être prévenus.",
-      "Cliquez sur Archiver et confirmez : la page publique disparaît, mais l'équipe garde accès aux données.",
+      "Cliquez sur Archiver et confirmez : la page d'inscription disparaît, mais l'équipe garde accès aux données.",
       "Téléchargez l'export PDF si vous voulez garder une archive du planning et des bénévoles.",
       "Pour supprimer définitivement (réservé aux propriétaires, après archivage), vérifiez le récapitulatif.",
       "Saisissez le titre de l'événement pour confirmer la suppression."
@@ -41,7 +41,7 @@
     },
     {
       "id": "archive",
-      "transcript": "Le bouton Archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.",
+      "transcript": "Le bouton Archiver demande une confirmation claire. Après validation, la page d’inscription disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.",
       "fallbackDurationMs": 25000
     },
     {

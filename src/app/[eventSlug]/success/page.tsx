@@ -2,7 +2,8 @@
 
 import { useParams, useSearchParams } from "next/navigation"
 import { WAITLIST_STEPS } from "@/lib/waitlist-copy"
-import { outcomeHeading, readOutcome, requestNotice } from "@/lib/signup-outcome"
+import { outcomeHeading, readOutcome, requestNotice, UNPROVEN_HEADING, UNPROVEN_RETRY_TEXT, UNPROVEN_TEXT } from "@/lib/signup-outcome"
+import { confirmationDeadlineLabel, confirmationRequestNotice } from "@/lib/signup-confirmation"
 import Link from "next/link"
 import { Suspense, useEffect, useRef, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
@@ -13,7 +14,11 @@ import { dayLabel } from "@/lib/spoken-time"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
 import EmbedFrame from "@/components/public/EmbedFrame"
 import { readUpdatedParams, updatedNotice } from "@/lib/signup-updates"
-import { EMBED_PARAM, EMBED_PERSONAL_LINK_NOTE, NEW_TAB_HINT, embedFlowParams, isEmbedMode, markReturnToSchedule } from "@/lib/embed"
+import { EMBED_PARAM, NEW_TAB_HINT, isEmbedMode, markReturnToSchedule } from "@/lib/embed"
+import { PERSONAL_LINK_DOC_LINKS, PERSONAL_LINK_EMAIL_NOTE } from "@/lib/personal-link"
+import { showsPersonalLinkEmailNote, successBackLink } from "@/lib/registration-success"
+import DocMoreLink from "@/components/DocMoreLink"
+import { tokenOrNull, tokenPath } from "@/lib/token-path"
 
 type RegistrationData = {
   volunteer: { firstName: string; email: string }
@@ -24,7 +29,8 @@ type RegistrationData = {
 function SuccessContent() {
   const params = useSearchParams()
   const { eventSlug } = useParams<{ eventSlug: string }>()
-  const token = params.get("token")
+  // Only a value shaped like a token is used: anything else is as if the address had none.
+  const token = tokenOrNull(params.get("token"))
   // The embedded sign-up (#948): same confirmation inside the association's site, without the site
   // footer; the personal page opens in a new tab, and push reminders are offered there instead
   // (a third-party frame may not ask for notifications).
@@ -39,15 +45,29 @@ function SuccessContent() {
   // Only requests, no place yet (#484): no celebration, no confirmation message.
   const onlyRequests = outcome.requested > 0 && outcome.active === 0
   const notice = requestNotice(outcome)
+  // A request waiting for the address's confirmation (#1253): no place is firm yet, and the page
+  // says which email to open and until when the places are held.
+  const confirmationNotice = outcome.emailConfirmation
+    ? confirmationRequestNotice({
+        held: outcome.held,
+        waiting: outcome.waiting,
+        deadline: confirmationDeadlineLabel(outcome.expiresAt, outcome.timeZone ?? "Europe/Zurich"),
+      })
+    : null
   // What a sign-up from the personal page updated (#1013), from the address: there at first render.
   const updatedLine = updatedNotice(readUpdatedParams(params))
+  // No dead end (#1097): back to the event, and where the personal link is when the page has
+  // none to show (a public sign-up: the link only goes out by email, #285).
+  const back = successBackLink(eventSlug, params, embed)
+  const emailNote = !outcome.emailConfirmation && showsPersonalLinkEmailNote({ hasToken: !!token, embed, waitlistOnly: isWaitlist })
 
   const [regData, setRegData] = useState<RegistrationData | null>(null)
   const [fetching, setFetching] = useState(!!token)
 
   useEffect(() => {
-    if (!token) return
-    fetch(`/api/public/registrations/${token}`)
+    const url = tokenPath("/api/public/registrations", token)
+    if (!url) return
+    fetch(url)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d && !d.error) setRegData(d)
@@ -67,6 +87,30 @@ function SuccessContent() {
     return renderMarkdownWithVariables(regData.confirmationMessage, vars)
   })()
 
+  // Without a link of its own (a public sign-up without proof of the address, AUTHZ-01): one
+  // neutral page, whatever happened; the emails say what was recorded.
+  const card = !token ? (
+    confirmationNotice ? (
+      <>
+        <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{confirmationNotice.heading}</h1>
+        <p className="text-gray-700 text-sm mb-3">{confirmationNotice.text}</p>
+        {confirmationNotice.deadline && (
+          <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 text-left mb-3">{confirmationNotice.deadline}</p>
+        )}
+        {confirmationNotice.waitlist && <p className="text-gray-700 text-sm mb-6">{confirmationNotice.waitlist}</p>}
+      </>
+    ) : (
+      <>
+        <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{UNPROVEN_HEADING}</h1>
+        <p className="text-gray-700 text-sm mb-3">{UNPROVEN_TEXT}</p>
+        <p className="text-gray-700 text-sm mb-6">
+          {UNPROVEN_RETRY_TEXT}{" "}
+          <DocMoreLink href={PERSONAL_LINK_DOC_LINKS.personalLink} about="ton lien personnel" />
+        </p>
+      </>
+    )
+  ) : null
+
   const content = (
     <>
     <main className={`${embed ? "" : "flex-1"} bg-gray-50 flex flex-col px-4`}>
@@ -76,7 +120,9 @@ function SuccessContent() {
           aria-live="polite"
           className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center"
         >
-          <span aria-hidden="true" className="text-5xl block mb-4">{isWaitlist || onlyRequests ? "🕐" : "🎉"}</span>
+          {card ?? (
+            <>
+          <span aria-hidden="true" className="text-5xl block mb-4">{outcome.emailConfirmation ? "✉️" : isWaitlist || onlyRequests ? "🕐" : "🎉"}</span>
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{outcomeHeading(outcome)}</h1>
           {notice && (
             <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 text-left mb-4">{notice}</p>
@@ -115,7 +161,12 @@ function SuccessContent() {
             </p>
           )}
 
-          {embed && <p className="text-gray-700 text-sm mb-6">{EMBED_PERSONAL_LINK_NOTE}</p>}
+          {emailNote && (
+            <p className="text-gray-700 text-sm mb-6">
+              {PERSONAL_LINK_EMAIL_NOTE}{" "}
+              <DocMoreLink href={PERSONAL_LINK_DOC_LINKS.personalLink} about="ton lien personnel" />
+            </p>
+          )}
 
           {token && (
             <div className="bg-gray-50 rounded-xl p-4 mb-6 space-y-3">
@@ -123,7 +174,7 @@ function SuccessContent() {
                 <p className="text-xs text-gray-500 mb-2">Lien pour modifier ou annuler</p>
                 {embed ? (
                   <a
-                    href={`/my/${token}`}
+                    href={`/my/${encodeURIComponent(token)}`}
                     target="_blank"
                     rel="noopener"
                     className="text-blue-600 text-sm font-medium underline break-all"
@@ -132,7 +183,7 @@ function SuccessContent() {
                   </a>
                 ) : (
                   <Link
-                    href={`/my/${token}`}
+                    href={`/my/${encodeURIComponent(token)}`}
                     className="text-blue-600 text-sm font-medium underline break-all"
                   >
                     Accéder à mon inscription
@@ -145,13 +196,19 @@ function SuccessContent() {
             </div>
           )}
 
-          {/* Embedded: back to the event's schedule in the frame; the organisation's home can't be framed. */}
+            </>
+          )}
+
+          {/* Back to the event (#1097); embedded, to its schedule in the frame. Not prefetched in
+              view: the prefetch request drops the query, so without an organisation subdomain
+              (`?org=`, local runs and Lighthouse) it answered 404 in the console. */}
           <Link
-            href={embed ? `/${eventSlug}?${embedFlowParams(params)}` : "/"}
+            href={back.href}
+            prefetch={false}
             onClick={embed ? markReturnToSchedule : undefined}
-            className="block w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
+            className="block w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
-            {embed ? "Revenir au planning" : <>Retour à l&apos;accueil</>}
+            {back.label}
           </Link>
         </div>
       </div>

@@ -1,4 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
+
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
 
 // Reserved roles (#470): enforced at sign-up from the member invitation only.
 const m = vi.hoisted(() => ({
@@ -8,24 +17,29 @@ const m = vi.hoisted(() => ({
   inviteFindUnique: vi.fn(),
   txCreate: vi.fn(),
 }))
-vi.mock("@/lib/prisma", () => ({
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
+  return ({
   prisma: {
+      charterVersion: { upsert: vi.fn() },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
     event: { findFirst: m.eventFindFirst },
-    shift: { findMany: m.shiftFindMany },
+    shift: { findMany: locked.top(m.shiftFindMany) },
     volunteer: { findFirst: vi.fn().mockResolvedValue(null) },
     registration: { findMany: vi.fn().mockResolvedValue([]) },
     memberInvite: { findFirst: m.inviteFindFirst, findUnique: m.inviteFindUnique, updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
-      $queryRaw: vi.fn(),
-      shift: { findMany: vi.fn().mockResolvedValue([]) },
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]), // the member lock (#285): the row it locked
+      shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) },
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
-      registration: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
+      shiftDecline: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+      registration: { findFirst: vi.fn().mockResolvedValue(null), findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
     })),
   },
-}))
+})
+})
 vi.mock("@/lib/notification-helpers", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn() }))
 vi.mock("@/lib/notifications/outbox", () => ({ collectNotifications: () => ({ send: vi.fn(), payloads: [] }), enqueueNotifications: vi.fn().mockResolvedValue([]), deliverAfterResponse: vi.fn() }))
@@ -88,7 +102,7 @@ describe("GET /api/public/member-invite/[token]", () => {
   it("says which reserved roles the invitation opens, never the member's tags", async () => {
     m.inviteFindUnique.mockResolvedValue({
       volunteer: { id: "v", firstName: "Léa", lastName: "M", email: "lea@x.ch", phone: null, active: true, tags: ["sécurité", "privé"] },
-      event: { slug: "fete", organizationId: "org-a", shifts: [{ roleName: "Sécurité", reservedTags: ["sécurité"] }, { roleName: "Loge", reservedTags: ["artistes"] }, { roleName: "Bar", reservedTags: [] }] },
+      event: { slug: "fete", organizationId: "org-a", organization: OPEN_ORG, shifts: [{ roleName: "Sécurité", reservedTags: ["sécurité"] }, { roleName: "Loge", reservedTags: ["artistes"] }, { roleName: "Bar", reservedTags: [] }] },
     })
     const { GET } = await import("@/app/api/public/member-invite/[token]/route")
     const res = await GET(new Request("http://localhost/api/public/member-invite/tok?slug=fete"), { params: Promise.resolve({ token: "tok" }) })

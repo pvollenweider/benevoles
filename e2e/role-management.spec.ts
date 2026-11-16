@@ -15,7 +15,7 @@ test.describe("role management", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
   })
 
   test("renaming a role updates every one of its shifts and carries its sector leader (#1001)", async ({ page }) => {
@@ -299,7 +299,7 @@ test.describe("role management", () => {
     await expect(poste).toHaveAttribute("aria-describedby", /\S/)
     const hint = page.locator(`[id="${await poste.getAttribute("aria-describedby")}"]`)
     await expect(hint).toBeVisible()
-    await expect(hint).toHaveText(/Les réglages du poste\W+Sécurité\W+s'appliquent/)
+    await expect(hint).toHaveText(/Les paramètres du poste\W+Sécurité\W+s'appliquent/)
     await page.getByLabel("Début").fill("14:00")
     await page.getByRole("button", { name: "Ajouter", exact: true }).click()
 

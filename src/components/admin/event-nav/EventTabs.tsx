@@ -57,6 +57,9 @@ export default function EventTabs({ tabs }: { tabs: EventTab[] }) {
                 }`}
               >
                 {t.label}
+                {/* The main navigation also has a « Paramètres » link (the organisation's): the
+                    hidden suffix tells them apart in a screen reader's list of links. */}
+                {t.id === "settings" && <span className="sr-only"> de l&apos;événement</span>}
               </Link>
             </li>
           ))}

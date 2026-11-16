@@ -9,6 +9,7 @@ import { parseFeaturesPage } from "../features-page"
 import { publicPageJsonLd } from "../structured-data"
 import { loadVideoCatalog } from "../video-catalog-load"
 import { readDocUnits } from "../doc-units"
+import { slugifyHeading } from "../heading-anchors"
 import { LANDING_FAQ_SOURCE } from "../landing-seo"
 
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
@@ -18,11 +19,12 @@ const BASE = "https://www.benevol.app"
 const EDITORIAL = [AUDIENCE_INDEX_PATH, ...AUDIENCE_PAGES.map((p) => p.path), "/tarifs"]
 
 describe("the audience pages (#872)", () => {
-  it("are the first four situations, in the order of the « Pour qui ? » list, then their index", () => {
+  it("are the five situations, in the order of the « Pour qui ? » list, then their index", () => {
     expect(AUDIENCE_PAGES.map((p) => p.path)).toEqual([
       "/benevoles-fete-de-village",
       "/benevoles-festival",
       "/benevoles-manifestation-sportive",
+      "/benevoles-mairie-commune",
       "/planning-permanences-benevoles",
     ])
     expect(audienceNav(true).map((l) => l.path)).toEqual([...AUDIENCE_PAGES.map((p) => p.path), AUDIENCE_INDEX_PATH])
@@ -40,16 +42,16 @@ describe("the audience pages (#872)", () => {
   })
 
   it("are each linked from the index page, the index from the home, the features page and the editorial page", () => {
-    const index = linkSourcesToRoutes(read("POUR-QUI.md"))
+    const index = linkSourcesToRoutes(read("content/pages/POUR-QUI.md"))
     for (const page of AUDIENCE_PAGES) expect(index, page.path).toContain(`](${page.path})`)
     expect(read("src/app/page.tsx")).toContain('href="/pour-qui"')
-    for (const source of ["FEATURES.md", "LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/pour-qui)")
+    for (const source of ["content/pages/FEATURES.md", "content/pages/LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/pour-qui)")
   })
 })
 
 // #760: a self-hosted instance has no presentation page; a shared source must not link to a 404.
 describe("links to the presentation pages from a shared source", () => {
-  const md = "[a](TARIFS.md) [b](POUR-QUI.md#une-fete-de-village) [c](LOGICIEL-PLANNING-BENEVOLES.md) [d](guide/rappels.md) [e](GUIDE_ADMIN.md) [f](FEATURES.md) [g](/videos/SHIFT_RECURRENCE) [h](CHANGELOG.md)"
+  const md = "[a](TARIFS.md) [b](POUR-QUI.md#une-fete-de-village) [c](LOGICIEL-PLANNING-BENEVOLES.md) [d](content/guide/rappels.md) [e](GUIDE_ADMIN.md) [f](FEATURES.md) [g](/videos/SHIFT_RECURRENCE) [h](CHANGELOG.md)"
 
   it("stay relative on the hosted service", () => {
     expect(linkSourcesToRoutes(md, true)).toBe("[a](/tarifs) [b](/pour-qui#une-fete-de-village) [c](/logiciel-planning-benevoles) [d](/doc/rappels) [e](/doc/admin) [f](/fonctionnalites) [g](/videos/SHIFT_RECURRENCE) [h](/nouveautes)")
@@ -62,7 +64,7 @@ describe("links to the presentation pages from a shared source", () => {
   })
 
   it("are rewritten in FEATURES.md as another instance renders it", () => {
-    const site = linkSourcesToRoutes(read("FEATURES.md"), false)
+    const site = linkSourcesToRoutes(read("content/pages/FEATURES.md"), false)
     for (const page of AUDIENCE_PAGES) expect(site, page.path).toContain(`](https://www.benevol.app${page.path})`)
     expect(site).toContain("](https://www.benevol.app/tarifs)")
     expect(site).not.toMatch(/\]\(\/(tarifs|pour-qui|benevoles-|planning-permanences|logiciel-planning)/)
@@ -74,12 +76,12 @@ describe("links to the presentation pages from a shared source", () => {
 describe("the pricing page (#950)", () => {
   it("is linked from the home, the features page and the editorial page", () => {
     expect(read("src/app/page.tsx")).toContain('href="/tarifs"')
-    for (const source of ["FEATURES.md", "LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/tarifs)")
+    for (const source of ["content/pages/FEATURES.md", "content/pages/LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/tarifs)")
   })
 
   it("has a title and a heading about « gratuit », and its structured data states the free offer", () => {
     expect(publicPage("/tarifs").metaTitle.toLowerCase()).toContain("gratuit")
-    expect(splitTitle(read("TARIFS.md")).title?.toLowerCase()).toContain("gratuit")
+    expect(splitTitle(read("content/pages/TARIFS.md")).title?.toLowerCase()).toContain("gratuit")
     const graph = publicPageJsonLd("/tarifs", BASE)["@graph"] as Record<string, unknown>[]
     expect(graph.find((n) => n["@type"] === "SoftwareApplication")).toMatchObject({ isAccessibleForFree: true, offers: { price: "0" } })
   })
@@ -88,7 +90,7 @@ describe("the pricing page (#950)", () => {
   it("states the technical limits the code enforces", async () => {
     const { SERIES_MAX_SHIFTS } = await import("../shift-series")
     const { RECURRENCE_MAX_SHIFTS } = await import("../shift-recurrence")
-    const md = read("TARIFS.md")
+    const md = read("content/pages/TARIFS.md")
     expect(md).toContain(`au plus ${SERIES_MAX_SHIFTS} créneaux`)
     expect(md).toContain(`une permanence au plus ${RECURRENCE_MAX_SHIFTS}`)
   })
@@ -101,7 +103,7 @@ describe.each(EDITORIAL)("%s", (pagePath) => {
   const faq = featuresPageFaq(rendered)
 
   it("is declared with its own source, copied into the image, and a title and description that fit search results", () => {
-    expect(page.source).toMatch(/^[A-Z-]+\.md$/)
+    expect(page.source).toMatch(/^content\/pages\/[A-Z-]+\.md$/)
     expect(read("Dockerfile")).toContain(`/app/${page.source} ./${page.source}`)
     expect(metaLengthProblems(pageTitle(page.metaTitle), page.metaDescription)).toEqual([])
   })
@@ -170,11 +172,59 @@ describe.each(AUDIENCE_PAGES.map((p) => p.path))("audience page %s", (pagePath) 
   })
 })
 
+// #1325: the town hall page, a fifth audience page. Its hosting claims and links are the site's.
+describe("BENEVOLES-MAIRIE-COMMUNE.md, the town hall audience page (#1325)", () => {
+  const page = publicPage("/benevoles-mairie-commune")
+  const source = read(page.source!)
+  const parsed = parseFeaturesPage(source)
+
+  it("is the fifth audience page, after the sports page and before the weekly one", () => {
+    expect(AUDIENCE_PAGES.map((p) => p.path)).toEqual([
+      "/benevoles-fete-de-village",
+      "/benevoles-festival",
+      "/benevoles-manifestation-sportive",
+      "/benevoles-mairie-commune",
+      "/planning-permanences-benevoles",
+    ])
+  })
+
+  // The service's countries are FEATURES.md's: developed in Switzerland, hosted in France, with an
+  // encrypted backup in Switzerland. A page never claims another place for the same data.
+  it("names the same countries as FEATURES.md, encrypted backup in Switzerland included", () => {
+    const hosting = /développé en ([A-Za-zÀ-ÿ]+)[^.]*hébergé en ([A-Za-zÀ-ÿ]+)[^.]*sauvegarde chiffrée en ([A-Za-zÀ-ÿ]+)/i
+    const features = read("content/pages/FEATURES.md").match(hosting)?.slice(1)
+    expect(features).toEqual(["Suisse", "France", "Suisse"])
+    expect(source.match(hosting)?.slice(1)).toEqual(features)
+  })
+
+  it("has four questions under « Questions fréquentes » and ends on « Démarrer », like the other audience pages", () => {
+    const faq = parsed.sections.find((section) => section.id === "questions-frequentes")?.faq
+    expect(faq).toHaveLength(4)
+    expect(parsed.sections.at(-1)?.heading).toBe("Démarrer")
+  })
+
+  // Every relative link of the source is a file of the repository, and its anchor a heading of that
+  // file: `linkSourcesToRoutes` then turns it into the page's site link.
+  it("links only to source files that exist, anchors included", () => {
+    const links = [...source.matchAll(/\]\(([^)\s]+)\)/g)].map((match) => match[1])
+    const relative = links.filter((href) => !href.startsWith("/") && !href.startsWith("#") && !/^[a-z][a-z0-9+.-]*:/i.test(href))
+    expect(relative.length).toBeGreaterThan(0)
+    for (const href of relative) {
+      const [file, anchor] = href.split("#")
+      const target = path.resolve(path.dirname(page.source!), file)
+      expect(fs.existsSync(target), href).toBe(true)
+      if (!anchor) continue
+      const headings = [...read(path.relative(process.cwd(), target)).matchAll(/^#{1,6} +(.+?) *#*$/gm)].map((match) => slugifyHeading(match[1]))
+      expect(headings, href).toContain(anchor)
+    }
+  })
+})
+
 // #951: a question may be answered on several pages (owner's decision). Repeats are reported, for
 // the owner's review, never a failure.
 describe("the FAQs of the editorial pages, the features page and the home", () => {
   it("report the questions asked on several pages", () => {
-    const sources = ["FEATURES.md", ...PUBLIC_PAGES.filter((p) => p.path === "/logiciel-planning-benevoles" || EDITORIAL.includes(p.path)).map((p) => p.source!)]
+    const sources = ["content/pages/FEATURES.md", ...PUBLIC_PAGES.filter((p) => p.path === "/logiciel-planning-benevoles" || EDITORIAL.includes(p.path)).map((p) => p.source!)]
     const questions = [
       ...sources.flatMap((s) => renderFeaturesPage(null, s).sections.flatMap((sec) => sec.faq ?? []).map((q) => q.question)),
       ...renderFaqSource(LANDING_FAQ_SOURCE).map((q) => q.question),

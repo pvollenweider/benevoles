@@ -1,28 +1,62 @@
-# Bénévoles
+# benevol.app
 
-Application **SaaS multi-tenant** de gestion de bénévoles pour événements. Chaque organisation dispose de son propre espace isolé ; les bénévoles s'inscrivent via une timeline Gantt interactive accessible sans compte.
+benevol.app est un logiciel libre de planning pour bénévoles : l'association partage un lien, et chacun choisit ses créneaux depuis son téléphone, sans compte.
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 [![Node.js 26](https://img.shields.io/badge/Node.js-26-green.svg)](https://nodejs.org/)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-support-ffdd00.svg)](https://buymeacoffee.com/benevol.app)
 
-Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son développement, un café est toujours apprécié : [buymeacoffee.com/benevol.app](https://buymeacoffee.com/benevol.app).
+**[www.benevol.app](https://www.benevol.app)** · [Fonctionnalités](https://www.benevol.app/fonctionnalites) · [Tutoriels vidéo](https://www.benevol.app/videos) · [Documentation](https://www.benevol.app/doc) · [Tarifs](https://www.benevol.app/tarifs) · [Manifeste](https://www.benevol.app/manifeste)
+
+> **In English.** benevol.app is free, open source software for planning volunteer shifts. An association creates its roles and shifts, then shares a link. Each volunteer picks shifts from a phone, with no account or password. The interface is in French.
+
+## Trois façons de s'en servir
+
+- **Utiliser le service hébergé.** Il est gratuit aujourd'hui, sans abonnement ni fonction payante : [demandez un espace](https://www.benevol.app/inscription), puis suivez [Créer son premier événement](content/guide/creer-son-premier-evenement.md). La page [Tarifs](https://www.benevol.app/tarifs) dit ce qui est compris et comment le projet est financé.
+- **L'installer sur votre serveur.** Le code est libre, sous licence AGPL : voir [Déploiement](docs/deploiement.md) et [Configuration](docs/configuration.md), ou [l'essayer d'abord sur votre machine](#essayer-sur-votre-machine).
+- **Contribuer.** [CONTRIBUTING.md](CONTRIBUTING.md) décrit la mise en place, les conventions et les tests ; le [démarrage rapide](#démarrage-rapide-dev) est plus bas.
+
+Si vous utilisez benevol.app et voulez soutenir son développement, un café est toujours apprécié : [buymeacoffee.com/benevol.app](https://buymeacoffee.com/benevol.app).
+
+## Essayer sur votre machine
+
+Avec Docker, sans télécharger le code :
+
+```bash
+curl -fO https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
+docker compose -f docker-compose.essai.yml up
+```
+
+Au bout d'une minute environ, ouvrez http://localhost:3000/admin et connectez-vous avec `admin@example.org` et le mot de passe donnés dans l'encadré « benevol.app est prêt », à la fin de la sortie de la commande (à retrouver avec `docker compose -f docker-compose.essai.yml logs ready`). Il est tiré au hasard au premier lancement, comme les clés de l'application. Ce compte de super admin demande d'activer la double authentification : gardez une application d'authentification sous la main (Aegis, Google Authenticator, un gestionnaire de mots de passe). Créez ensuite une organisation depuis l'espace super admin. Les emails envoyés par l'application arrivent sur http://localhost:8025, sans quitter votre machine.
+
+Retrouver l'encadré et le mot de passe plus tard :
+
+```bash
+docker logs benevoles-essai-ready-1
+# Même encadré, mot de passe masqué, pour le copier dans un message ou une capture :
+docker logs benevoles-essai-ready-1 2>&1 | sed 's/Mot de passe  .*/Mot de passe  [masqué]/'
+```
+
+Pour tout arrêter et effacer : `docker compose -f docker-compose.essai.yml down -v`.
+
+Ce fichier sert à essayer, pas à installer : les ports ne répondent que sur votre machine, et l'image `latest` change à chaque mise à jour du service. Pour une vraie installation, voir [Déploiement](docs/deploiement.md). Sur un Mac Apple Silicon, l'image (construite pour amd64) tourne en émulation, un peu plus lentement.
 
 ## Documentation
 
 | Document | Destinataires |
 |----------|---------------|
-| [Guide bénévole](guide/README.md) | Personnes qui s'inscrivent comme bénévoles (une page par tâche, dans `guide/`) |
-| [Guide administrateur](GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
-| [Fonctionnalités](FONCTIONNALITES.md) | Liste exhaustive de tout ce que fait l'application |
-| [Présentation des fonctionnalités](FEATURES.md) | Page publique `/fonctionnalites`, par besoins |
+| [Guide bénévole](content/guide/README.md) | Personnes qui s'inscrivent comme bénévoles (une page par tâche, dans `content/guide/`) |
+| [Guide organisateur](content/guide/GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
+| [Fonctionnalités](docs/fonctionnalites.md) | Liste exhaustive de tout ce que fait l'application |
+| [Présentation des fonctionnalités](content/pages/FEATURES.md) | Page publique `/fonctionnalites`, par besoins |
 | [Architecture](docs/architecture.md) | Découpage du code, multi-tenant, flux principaux |
 | [Configuration](docs/configuration.md) | Toutes les variables d'environnement |
 | [Déploiement](docs/deploiement.md) | Docker, Kubernetes, CI/CD, sauvegardes |
+| [Double authentification](docs/double-authentification.md) | Second facteur du super admin : activation, codes de secours, réinitialisation d'urgence |
 | [Rôles et permissions](docs/roles-et-permissions.md) | Bénévoles, admins, super admin, isolation entre organisations |
 | [API](docs/api.md) | Routes HTTP de l'application |
 | [Conservation des données](docs/retention.md) | Durées, déclencheurs et mécanismes de purge |
-| [Accessibilité](ACCESSIBILITE.md) | Déclaration publique (`/accessibilite`) ; vérifications : [docs/accessibilite.md](docs/accessibilite.md) |
+| [Accessibilité](content/pages/ACCESSIBILITE.md) | Déclaration publique (`/accessibilite`) ; vérifications : [docs/accessibilite.md](docs/accessibilite.md) |
 | [Dossier RGPD](docs/rgpd/README.md) | Travail interne (non publié) : inventaire, sous-traitants, vérifications en production |
 | [Contribuer](CONTRIBUTING.md) | Mise en place, conventions, tests |
 | [Sécurité](SECURITY.md) | Signaler une vulnérabilité |
@@ -30,28 +64,11 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 
 ## Aperçu
 
-**Côté public**
-- Listing des événements publiés
-- Inscription à un ou plusieurs créneaux via une timeline Gantt interactive (scroll horizontal sur mobile)
-- Détection de conflits d'horaires en temps réel
-- Liste d'attente sur les créneaux complets (offre de place valable 24 h)
-- Gestion personnelle via un lien unique envoyé par email
-- Rappels par notification push navigateur (optionnel, sur abonnement du bénévole)
+- **Pour les bénévoles** : ouvrir le lien, choisir un ou plusieurs créneaux sur le planning, confirmer, sans compte ni mot de passe. Un lien personnel permet ensuite de retrouver ses créneaux, d'en changer ou de les ajouter à son agenda. Liste d'attente quand un créneau est complet, rappels par email.
+- **Pour les organisateurs** : créer les postes et les créneaux (à la main, en série, depuis un modèle ou l'édition précédente), partager le lien, voir où il manque du monde, écrire aux personnes concernées, pointer les arrivées le jour J, imprimer les plannings, puis tirer le bilan et les heures.
+- **Pour l'opérateur d'une instance** : chaque organisation a son espace isolé (événements, membres, équipe d'organisation). Le super admin gère les organisations, la santé du service et les nouveautés envoyées aux organisateurs.
 
-**Côté admin**
-- Multi-tenant : chaque organisation a ses propres événements, membres et admins, isolés des autres
-- Création et gestion des événements, créneaux et programme des spectacles ; archivage, puis suppression définitive avec confirmation et sauvegarde PDF préalable
-- Gestion de la liste des membres (pool de bénévoles) et envoi d'invitations tokenisées
-- Rappels automatiques (J-2, J-1, Jour J) et rappel manuel avec message personnalisé
-- Suivi des inscriptions en temps réel, export Gantt PDF
-- Tableau de bord : événements, taux de remplissage, membres
-- Réglages de l'organisation : nom, titre de la page publique, slug, charte du bénévole, équipe admin
-
-**Super admin**
-- CRUD des organisations
-- Invitation des premiers admins par lien sécurisé (token révocable)
-- Santé du service (`/super-admin/health`) : base, file d'emails, tâches planifiées, sauvegardes, migrations, configuration
-- Nouveautés produit envoyées aux admins (`/super-admin/product-updates`)
+Cette liste est volontairement courte. La présentation publique, par besoins, est dans [content/pages/FEATURES.md](content/pages/FEATURES.md) (page [/fonctionnalites](https://www.benevol.app/fonctionnalites)) ; l'inventaire détaillé, avec les fichiers concernés, est dans [docs/fonctionnalites.md](docs/fonctionnalites.md). Ce que l'outil ne fait pas, volontairement, figure en bas de la présentation publique.
 
 ## Captures d'écran
 
@@ -150,7 +167,7 @@ SMTP_HOST="smtp.votre-fournisseur.com"
 SMTP_PORT="587"
 SMTP_USER="..."
 SMTP_PASSWORD="..."
-EMAIL_FROM="Bénévoles <notifications@votre-domaine.com>"
+EMAIL_FROM="Mon instance <notifications@votre-domaine.com>"
 ```
 
 Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de la clé de chiffrement : [docs/configuration.md](docs/configuration.md).
@@ -174,10 +191,10 @@ Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de l
 | `npm run db:studio` | Interface graphique Prisma Studio |
 | `npm run db:generate` | Régénérer le client Prisma |
 | `npm run screenshots` | Génère les captures d'écran (`scripts/screenshots.mjs`) |
-| `npm run retention:docs` | Régénère les tableaux de conservation de `guide/exporter-et-conserver-ses-donnees.md` et `docs/retention.md` depuis `src/lib/retention.ts` |
-| `npm run doc:index` | Régénère la liste des pages de `guide/README.md` depuis les fichiers de `guide/` |
+| `npm run retention:docs` | Régénère les tableaux de conservation de `content/guide/exporter-et-conserver-ses-donnees.md` et `docs/retention.md` depuis `src/lib/retention.ts` |
+| `npm run doc:index` | Régénère la liste des pages de `content/guide/README.md` depuis les fichiers de `content/guide/` |
 
-`db:migrate`, `db:push`, `db:seed` et `db:studio` ne chargent pas `.env` : exporter `DATABASE_URL` avant, ou passer par `make` (voir « Setup manuel »). `npm run dev` et `npm run test:e2e` vérifient d'abord la version de Node (`scripts/check-node-version.mjs`).
+`db:migrate`, `db:push`, `db:seed` et `db:studio` ne chargent pas `.env` : exporter `DATABASE_URL` avant, ou passer par `make` (voir « Setup manuel »). Les commandes `dev`, `build`, `lint`, `typecheck`, `test`, `test:coverage` et `test:e2e` vérifient d'abord la version de Node (`scripts/check-node-version.mjs`).
 
 En production, les migrations sont appliquées une fois par déploiement, par un Job Kubernetes lancé avant la mise à jour de l'application (voir [docs/deploiement.md](docs/deploiement.md#ordre-de-déploiement)).
 
@@ -187,9 +204,9 @@ Cinq endpoints, protégés par `Authorization: Bearer $CRON_SECRET` :
 
 | Endpoint | Méthodes | Rôle | Fréquence |
 |----------|----------|------|-----------|
-| `/api/cron/reminders` | `GET`, `POST` | Rappels J-2, J-1 et Jour J (email et push) selon les réglages de l'organisation ; expiration des offres de liste d'attente et promotion du suivant ; nouvel essai des emails en échec (file d'envoi) | toutes les heures |
+| `/api/cron/reminders` | `GET`, `POST` | Rappels J-2, J-1 et Jour J (email et push) selon les paramètres de l'organisation ; expiration des offres de liste d'attente et promotion du suivant ; nouvel essai des emails en échec (file d'envoi) | toutes les heures |
 | `/api/cron/outbox` | `POST` | Envoi des messages programmés arrivés à leur heure, puis des emails de la file arrivés à échéance, dont les emails groupés (« inscrit par un organisateur », désistements d'un même événement) qui attendent quelques minutes pour regrouper les créneaux ; sans lui, les messages programmés ne partent pas et les emails groupés partent au passage horaire des rappels | toutes les 5 minutes |
-| `/api/cron/cleanup` | `GET`, `POST` | Purge RGPD : organisations désactivées depuis plus de 30 jours avec leurs comptes admin, comptes admin inactifs (désactivés ou invitation jamais acceptée) depuis plus de 30 jours, bénévoles orphelins, jetons de réinitialisation expirés, emails envoyés (en échec : après 30 jours), messages ciblés et messages programmés terminés de plus de 12 mois, compteurs de limites expirés ; chiffrement des anciens liens personnels | une fois par jour |
+| `/api/cron/cleanup` | `GET`, `POST` | Purge RGPD : organisations désactivées depuis plus de 30 jours avec leurs comptes organisateurs, comptes organisateurs inactifs (désactivés ou invitation jamais acceptée) depuis plus de 30 jours, bénévoles orphelins, jetons de réinitialisation expirés, emails envoyés (en échec : après 30 jours), messages ciblés et messages programmés terminés de plus de 12 mois, compteurs de limites expirés, et les autres durées de [docs/retention.md](docs/retention.md) ; chiffrement des anciens liens personnels ; résumé quotidien des adresses à vérifier ; procédure d'inactivité des organisations et anonymisation des événements passés, si elles sont activées | une fois par jour |
 | `/api/cron/release-check` | `GET`, `POST` | Instances auto-hébergées (#612) : compare la version déployée à la dernière release publique GitHub (sans jeton), prévient les super admins par email une fois par nouvelle version, affiche la dernière version connue sur `/super-admin/health`. Sans effet si `RELEASE_CHECK=off` (aucune requête sortante) | une fois par jour |
 | `/api/cron/heartbeat` | `POST` | Signal de vie des tâches extérieures à l'application (`backup`, `backup-offsite`, `restore-test`), affiché sur `/super-admin/health` | à la fin de chaque sauvegarde réussie |
 
@@ -207,16 +224,20 @@ Si `CRON_SECRET` est vide, les endpoints refusent toutes les requêtes en produc
 
 Sur Kubernetes, `k8s/` fournit les CronJobs `app-reminders` (toutes les heures), `app-outbox` (toutes les 5 minutes), `app-cleanup` (02:00 UTC), `app-release-check` (03:00 UTC), `postgres-backup` (`pg_dump` chiffré à 01:00 UTC, rétention 30 jours) et `backup-offsite` (copie des fichiers chiffrés vers Infomaniak Swiss Backup à 01:30 UTC, rétention 90 jours).
 
+Avec Docker Compose, le service `cron` de `docker-compose.yml` fait ces quatre appels aux mêmes heures, sans cron de l'hôte ; les sauvegardes restent à mettre en place.
+
 ## Déploiement
 
 ### Docker Compose
 
 ```bash
-docker compose up -d                       # première installation
+docker compose up -d                       # première installation, après avoir écrit .env
 git pull && docker compose up -d --build   # mise à jour
 ```
 
-Variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement.md#docker-compose).
+`POSTGRES_PASSWORD` est obligatoire et PostgreSQL n'est pas publié sur l'hôte. Fichier `.env`, variables transmises, tâches planifiées et contrôle de santé : [docs/deploiement.md](docs/deploiement.md#docker-compose). Installation existante : [Mettre à jour une installation Compose existante](docs/deploiement.md#mettre-à-jour-une-installation-compose-existante).
+
+**Depuis 2.5.x**, Docker Compose demande `POSTGRES_PASSWORD` et `AUTH_SECRET` avant la mise à jour, et chaque organisateur se reconnecte une fois : voir [Mise à jour depuis 2.5.x](docs/deploiement.md#mise-à-jour-depuis-25x).
 
 **Depuis 2.2.x**, ajouter l'appel de `/api/cron/outbox` toutes les 5 minutes (CronJob `k8s/cronjob-outbox.yaml` sur Kubernetes) : voir [Mise à jour depuis 2.2.x](docs/deploiement.md#mise-à-jour-depuis-22x).
 
@@ -224,9 +245,9 @@ Variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement
 
 ### Kubernetes
 
-Les manifestes sont dans `k8s/` (application, Job de migration, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `gandi-webhook/`). Les migrations passent par un Job dédié, **avant** la mise à jour de l'application ; l'ordre complet des étapes, pour un déploiement manuel comme automatique, est dans [docs/deploiement.md](docs/deploiement.md#kubernetes).
+Les manifestes sont dans `k8s/` (application, Job de migration, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `k8s/gandi-webhook/`). Les migrations passent par un Job dédié, **avant** la mise à jour de l'application ; l'ordre complet des étapes, pour un déploiement manuel comme automatique, est dans [docs/deploiement.md](docs/deploiement.md#kubernetes).
 
-Le CI/CD GitHub Actions (`.github/workflows/`) exécute le type-check, le lint et les tests, construit l'image (GHCR) puis déploie sur Kubernetes à chaque push vers `main`. La CI de pull request exécute en plus la couverture de tests, les contrôles `check-security-md.mjs` et `check-migrations.mjs`, les tests d'intégration sur PostgreSQL et les tests E2E Playwright (détail : [docs/deploiement.md](docs/deploiement.md#cicd)).
+Le CI/CD GitHub Actions (`.github/workflows/`) exécute le type-check, le lint et les tests, construit l'image (GHCR) puis déploie sur Kubernetes à chaque push vers `main`. La CI de pull request exécute en plus la couverture de tests, l'audit des dépendances de production (`npm audit --omit=dev --audit-level=high`), les contrôles `check-security-md.mjs` et `check-migrations.mjs`, les tests d'intégration sur PostgreSQL et les tests E2E Playwright (détail : [docs/deploiement.md](docs/deploiement.md#cicd)).
 
 ## Structure du projet
 
@@ -269,7 +290,8 @@ prisma/                                   # schema.prisma, migrations/, seed.ts
 e2e/                                      # Tests Playwright
 scripts/                                  # Captures, seed de démo, contrôles CI
 k8s/                                      # Manifestes Kubernetes
-gandi-webhook/                            # Webhook DNS Gandi pour cert-manager (Go)
+k8s/gandi-webhook/                        # Webhook DNS Gandi pour cert-manager (Go)
+content/                                  # Sources Markdown des pages publiques : pages/, legal/, guide/ (documentation par tâche, /doc/<page>), blog/
 .github/workflows/                        # CI/CD
 ```
 
@@ -297,7 +319,7 @@ L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol
 
 ## Auteur
 
-**Bénévoles** a été créé et est maintenu par **Philippe Vollenweider**.
+**benevol.app** a été créé et est maintenu par **Philippe Vollenweider**.
 
 Copyright © 2026 Philippe Vollenweider.\
 Distribué sous licence [GNU Affero General Public License v3.0](LICENSE).

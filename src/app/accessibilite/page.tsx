@@ -19,7 +19,7 @@ export function generateMetadata(): Metadata {
 export default function AccessibilityPage() {
   // The hosted service's own page (#760): absent on another instance, which has /legal/exploitant.
   if (!pageAvailable(publicPage("/accessibilite"))) notFound()
-  const { title, html } = renderPublicSource("ACCESSIBILITE.md", "Accessibilité")
+  const { title, html } = renderPublicSource("content/pages/ACCESSIBILITE.md", "Accessibilité")
   return (
     <>
       <JsonLd data={publicPageJsonLd("/accessibilite", apexBaseUrl())} />

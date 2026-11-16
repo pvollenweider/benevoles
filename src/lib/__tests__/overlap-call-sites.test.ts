@@ -102,7 +102,7 @@ describe("member merge (member-merge)", () => {
     shifts,
     keepRegistrations: [{ id: "r1", eventId: "e1", shiftId: shifts[0].id, status: "active", checkedInAt: null }],
     absorbRegistrations: [{ id: "r2", eventId: "e1", shiftId: shifts[1].id, status: "active", checkedInAt: null }],
-    keepInvites: [], absorbInvites: [], keepAnswers: [], absorbAnswers: [], absorbPushSubscriptions: [], absorbDeliveryOutcomes: [], sectorLeadersMatchingAbsorbed: [], keepAddressHash: null,
+    keepInvites: [], absorbInvites: [], keepShiftDeclines: [], absorbShiftDeclines: [], keepAnswers: [], absorbAnswers: [], absorbPushSubscriptions: [], absorbDeliveryOutcomes: [], sectorLeadersMatchingAbsorbed: [], keepAddressHash: null,
   })
 
   it("does not report an overlap with a cumulable role", () => {

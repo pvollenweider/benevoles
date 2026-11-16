@@ -1,7 +1,7 @@
 ---
 name: Amélioration / fonctionnalité
 about: Proposer une idée ou une amélioration
-labels: amélioration
+labels: enhancement
 ---
 
 ## Problème ou besoin

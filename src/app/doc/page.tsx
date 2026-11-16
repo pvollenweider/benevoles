@@ -16,7 +16,7 @@ export function generateMetadata(): Metadata {
 }
 
 // The guides come from one registry (src/lib/doc-pages.ts), shared with the navigation and the
-// sitemap: a new guide is added there once. Then every documentation unit (#649, guide/), by
+// sitemap: a new guide is added there once. Then every documentation unit (#649, content/guide/), by
 // group; a group's heading is the target of a unit's breadcrumb (/doc#<group>).
 export default function DocIndexPage() {
   const units = loadDocUnits()

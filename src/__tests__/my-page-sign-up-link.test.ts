@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // « S'inscrire à d'autres créneaux » on the personal page (#988): the API sends the sign-up URL
 // while a sign-up is possible, with the organisation (`?org=` locally) and the volunteer's group
 // link, and the event page's URL while it is published.
@@ -30,7 +33,7 @@ function stub(event: Record<string, unknown>, groupLink: { code: string } | null
       id: "e1", title: "Fête", slug: "fete", confirmationMessage: null, pages: [], sectorLeaders: [],
       publicStatus: "published", registrationsOpen: true, registrationOpensAt: null, registrationClosesAt: null,
       endDate: new Date("2099-07-04T00:00:00Z"),
-      organization: { slug: "asso-a", timeZone: "Europe/Zurich", replyToEmail: null },
+      organization: { ...OPEN_ORG, slug: "asso-a", timeZone: "Europe/Zurich", replyToEmail: null },
       ...event,
     },
   })

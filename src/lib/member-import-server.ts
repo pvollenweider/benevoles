@@ -23,6 +23,20 @@ export type ImportAnalysis = {
 
 export type AnalysisResult = { ok: true; analysis: ImportAnalysis } | { ok: false; status: number; error: string }
 
+/**
+ * The upload form of the preview and of the import: a multipart body, or a refusal (415 for any
+ * other content type, 400 for a body that does not parse) instead of a server error.
+ */
+export async function readImportForm(req: Request): Promise<{ ok: true; form: FormData } | { ok: false; status: 400 | 415; error: string }> {
+  const type = req.headers.get("content-type")?.toLowerCase() ?? ""
+  if (!type.startsWith("multipart/form-data")) return { ok: false, status: 415, error: "Envoyez le fichier par le formulaire d'import." }
+  try {
+    return { ok: true, form: await req.formData() }
+  } catch {
+    return { ok: false, status: 400, error: "Formulaire d'import illisible." }
+  }
+}
+
 const sha256 = (data: string | Buffer) => createHash("sha256").update(data).digest("hex")
 
 export async function analyseImport(file: unknown, db: OrgScopedPrisma, organizationId: string, onDuplicate: OnDuplicate): Promise<AnalysisResult> {

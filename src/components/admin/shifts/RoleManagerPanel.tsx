@@ -10,17 +10,32 @@ import { requestJson } from "@/lib/use-submit"
 import { getRoleAccent } from "@/lib/roles"
 import { roleLimits } from "@/lib/role-limit"
 import { reservedRoles } from "@/lib/role-reservation"
+import { answerConditionQuestions, reservedAnswerConditionOf } from "@/lib/role-answer"
+import { roleAssignedOnly } from "@/lib/role-assignment"
 import { roleOverlapAllowed } from "@/lib/shift-overlap"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
-import { moveRole, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
-import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm } from "./RoleSettings"
+import { moveRole, moveRoleInGroup, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
+import { RoleColorPicker, RoleLimitForm, RoleMealForm, RoleOverlapForm, RoleReserveForm, RoleSectorForm } from "./RoleSettings"
+import { posteMealOnTheGo, posteMealOnTheGoLabel } from "@/lib/meal-on-the-go"
 import type { RawShift } from "./types"
+import SectorsSection from "./SectorsSection"
+import type { AdminSectorsState } from "../ShiftsManager"
+import { roleSectorOf } from "@/lib/role-settings"
+import { activeSectors, groupRolesBySector, managePostesLabel, sectorsAdopted, sectorsManaged, type SectorGroup } from "@/lib/sectors"
 
 /** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
 function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
   if (el) buttons.set(role, el)
   else buttons.delete(role)
+}
+
+/**
+ * Draws one group's poste rows with the panel's `render`, as an element: the rows' ref callbacks and
+ * handlers run at commit and on events, never while the panel renders.
+ */
+function PosteRows({ render, group }: { render: (group: SectorGroup) => React.ReactNode; group: SectorGroup }) {
+  return <>{render(group)}</>
 }
 
 /**
@@ -34,9 +49,20 @@ function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el
  * row button that opened it, or to the panel's heading when that row is gone; never to <body>.
  */
 
+/** An active event question as « Gérer les postes » reads it (#962). */
+export type RoleManagerQuestion = {
+  id: string
+  label: string
+  type: string
+  options: string[]
+  parentId: string | null
+  displayScope: string
+}
+
 export default function RoleManagerPanel({
-  open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onAnnounce,
+  open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onRequestClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
+  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste, mealOnTheGoShown = false, questions = [],
 }: {
   open:             boolean
   /** Id of the panel's root, which « Gérer les postes » controls (`aria-controls`). */
@@ -47,7 +73,10 @@ export default function RoleManagerPanel({
   /** The roles in the order being edited; the parent resets it when it opens the panel. */
   roles:            string[]
   setRoles:         React.Dispatch<React.SetStateAction<string[]>>
+  /** Closes the panel (after the order was saved). */
   onClose:          () => void
+  /** « Fermer »: the parent asks first when the order is changed and not saved; else as onClose. */
+  onRequestClose?:  () => void
   onAnnounce:       (text: string) => void
   /** Asks the parent's confirmation modal (#379) for a role deletion; `run` deletes once confirmed. */
   onRequestDelete:  (pending: { recap: ActionRecap; run: () => Promise<void> }) => void
@@ -55,6 +84,17 @@ export default function RoleManagerPanel({
   onDeleteError:    (error: string) => void
   /** The role is deleted server-side: the parent closes the modal, drops its shifts and announces. */
   onRoleDeleted:    (role: string, unpublished: boolean | undefined) => void
+  /** Sectors (#1147): null for an event without the option, which keeps the panel as it was. */
+  sectorsState?:    AdminSectorsState | null
+  setSectorsState?: React.Dispatch<React.SetStateAction<AdminSectorsState | null>>
+  /** Closes the parent's confirmation modal once a confirmed action is done (archiving a sector). */
+  onConfirmDone?:   () => void
+  /** « Ajouter un poste dans « S » » (#1147): the parent opens the shift form in that sector. */
+  onAddPoste?:      (sector: { id: string; name: string }, opener: () => HTMLElement | null | undefined) => void
+  /** « Repas sur le pouce possible » (#1171, lot 2): only where the workload protection can be used. */
+  mealOnTheGoShown?: boolean
+  /** The event's active questions (#962): the « Accès » editor offers the choice ones asked to all. */
+  questions?: RoleManagerQuestion[]
 }) {
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
@@ -73,11 +113,25 @@ export default function RoleManagerPanel({
   // Reserved roles (#470): the inline editor, like the limit's.
   const [reserveRole, setReserveRole] = useState<string | null>(null)
   const [reserveValue, setReserveValue] = useState("")
+  // « Attribué par l'organisation uniquement » (#1145), in the same editor: kept like the typed tags.
+  const [assignedOnlyValue, setAssignedOnlyValue] = useState(false)
+  // Answer condition (#962): the chosen question and its accepted answers, kept like the tags.
+  const [reserveQuestionId, setReserveQuestionId] = useState("")
+  const [reserveAnswers, setReserveAnswers] = useState<string[]>([])
   const reserveBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Cumulable avec un autre créneau » (#986): the inline editor, like the limit's.
   const [overlapRole, setOverlapRole] = useState<string | null>(null)
   const [overlapValue, setOverlapValue] = useState(false)
   const overlapBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  // « Repas sur le pouce possible » (#1171, lot 2): the inline editor, like « Cumul ». null = a
+  // mixed value left untouched.
+  const [mealRole, setMealRole] = useState<string | null>(null)
+  const [mealValue, setMealValue] = useState<boolean | null>(null)
+  const mealBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  // « Déplacer… » a poste to another sector (#1147): the inline editor, like the limit's.
+  const [sectorRole, setSectorRole] = useState<string | null>(null)
+  const [sectorValue, setSectorValue] = useState("")
+  const sectorBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Limite » buttons per role: focus returns there when the inline form closes (#466).
   const limitBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Renommer » and colour buttons per role, and the heading, the fallback when the row is gone (#554).
@@ -118,7 +172,9 @@ export default function RoleManagerPanel({
   function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
     e.preventDefault()
     if (dragRoleIdx === null || dragRoleIdx === toIdx) return
-    setRoles(prev => moveItem(prev, dragRoleIdx, toIdx))
+    // Grouped by sector: a poste is dragged inside its sector only; « Déplacer… » moves it to another.
+    if (groupOf(displayRoles[dragRoleIdx]) !== groupOf(displayRoles[toIdx])) return
+    setRoles(moveItem(displayRoles, dragRoleIdx, toIdx))
     setDragRoleIdx(toIdx)
   }
 
@@ -128,7 +184,9 @@ export default function RoleManagerPanel({
    */
   function moveRoleBy(role: string, dir: MoveDirection) {
     if (savingOrder || renamingRole === role) return
-    const moved = moveRole(roles, role, dir)
+    const moved: { roles: string[]; index: number; total: number } | null = grouped
+      ? moveRoleInGroup(roleGroups, role, dir)
+      : (() => { const m = moveRole(roles, role, dir); return m && { ...m, total: m.roles.length } })()
     if (!moved) { onAnnounce(roleMoveBoundaryMessage(role, dir)); return }
     setRoles(moved.roles)
     setFocusRequest({ candidates: [
@@ -136,7 +194,7 @@ export default function RoleManagerPanel({
       () => moveBtnRefs.current.get(`${dir === "up" ? "down" : "up"}:${role}`),
       () => headingRef.current,
     ] })
-    onAnnounce(roleMoveMessage(role, moved.index, moved.roles.length))
+    onAnnounce(roleMoveMessage(role, moved.index, moved.total))
   }
 
   async function saveRoleOrder() {
@@ -146,21 +204,23 @@ export default function RoleManagerPanel({
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/reorder-roles`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ roleOrder: roles }),
+      body: JSON.stringify({ roleOrder: displayRoles }),
     }), "L'ordre n'a pas pu être enregistré.")
     setSavingOrder(false)
     if (!outcome.ok) { setRoleActionError(outcome.error); return }
-    setShifts(prev => applyRoleOrder(prev, roles))
+    setShifts(prev => applyRoleOrder(prev, displayRoles))
     onClose()
     onAnnounce("Ordre des postes enregistré.")
   }
 
   function startRenameRole(role: string) {
     setEditorAutoFocus(true)
+    setSectorRole(null)
     setRoleActionError(null)
     setLimitRole(null)
     setReserveRole(null)
     setOverlapRole(null)
+    setMealRole(null)
     setColorPickerRole(null)
     setRenameError(null)
     setRenamingRole(role)
@@ -236,12 +296,14 @@ export default function RoleManagerPanel({
 
   function startRoleLimit(role: string) {
     setEditorAutoFocus(true)
+    setSectorRole(null)
     setRoleActionError(null)
     setLimitError(null)
     setColorPickerRole(null)
     setRenamingRole(null)
     setReserveRole(null)
     setOverlapRole(null)
+    setMealRole(null)
     setLimitRole(limitRole === role ? null : role)
     setLimitValue(String(roleLimitOf(role) ?? ""))
   }
@@ -252,21 +314,56 @@ export default function RoleManagerPanel({
 
   function startReserve(role: string) {
     setEditorAutoFocus(true)
+    setSectorRole(null)
     setRoleActionError(null)
     setColorPickerRole(null)
     setRenamingRole(null)
     setLimitRole(null)
     setOverlapRole(null)
+    setMealRole(null)
     setReserveRole(reserveRole === role ? null : role)
     setReserveValue(reservedTagsOf(role).join(", "))
+    setAssignedOnlyValue(assignedOnlyOf(role))
+    const condition = reservedAnswerConditionOf(shifts, role)
+    setReserveQuestionId(condition?.questionId ?? "")
+    setReserveAnswers(condition?.answers ?? [])
   }
+
+  function assignedOnlyOf(role: string): boolean {
+    return roleAssignedOnly(shifts, role)
+  }
+
+  /** The active questions the « Accès » editor can use (#962): choice questions asked to everyone. */
+  const conditionQuestions = answerConditionQuestions(questions)
 
   function overlapAllowedOf(role: string): boolean {
     return roleOverlapAllowed(shifts, role)
   }
 
+  function startMeal(role: string) {
+    setEditorAutoFocus(true)
+    setSectorRole(null)
+    setRoleActionError(null)
+    setColorPickerRole(null)
+    setRenamingRole(null)
+    setLimitRole(null)
+    setReserveRole(null)
+    setOverlapRole(null)
+    setMealRole(mealRole === role ? null : role)
+    const saved = posteMealOnTheGo(shifts, role)
+    setMealValue(saved === "some" ? null : saved === "all")
+  }
+
+  function closeMeal(role: string) {
+    setMealRole(null)
+    setRoleActionError(null)
+    focusRoleButton(mealBtnRefs, role)
+  }
+
   function startOverlap(role: string) {
     setEditorAutoFocus(true)
+    setMealRole(null)
+    setSectorRole(null)
     setRoleActionError(null)
     setColorPickerRole(null)
     setRenamingRole(null)
@@ -278,6 +375,7 @@ export default function RoleManagerPanel({
 
   function closeOverlap(role: string) {
     setOverlapRole(null)
+    setMealRole(null)
     setRoleActionError(null)
     focusRoleButton(overlapBtnRefs, role)
   }
@@ -295,6 +393,48 @@ export default function RoleManagerPanel({
     focusRoleButton(limitBtnRefs, role)
   }
 
+  const sectorsShown = sectorsManaged(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)
+  const sectorsInUse = !!sectorsState && sectorsAdopted({ sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt })
+  const liveSectors = sectorsState ? activeSectors(sectorsState.sectors) : []
+
+  function sectorOfRole(role: string): string | null {
+    const id = roleSectorOf(shifts.filter((s) => s.roleName === role && s.status !== "cancelled"))
+    return id && liveSectors.some((s) => s.id === id) ? id : null
+  }
+
+  // Once the event uses sectors, one tree: every active sector (empty ones too, a poste is created
+  // from its sector), its postes under it, then « Autres postes », like the timeline. The order
+  // shown is the order saved.
+  const grouped = sectorsInUse
+  const roleGroups: SectorGroup[] = grouped ? groupRolesBySector(roles, sectorOfRole, liveSectors, { keepEmptySectors: true }) : [{ id: null, name: "", roles }]
+
+  /** The poste's place in the group it would move to (« Déplacer… »), for the announcement. */
+  function placeAfterMove(role: string, next: string | null): { index: number; total: number } {
+    const moved = groupRolesBySector(roles, (r) => (r === role ? next : sectorOfRole(r)), liveSectors).find((g) => g.roles.includes(role))
+    return moved ? { index: moved.roles.indexOf(role), total: moved.roles.length } : { index: 0, total: 1 }
+  }
+  const displayRoles = roleGroups.flatMap((g) => g.roles)
+  const groupOf = (role: string | undefined) => roleGroups.find((g) => role !== undefined && g.roles.includes(role))
+
+  function startSector(role: string) {
+    setEditorAutoFocus(true)
+    setRoleActionError(null)
+    setColorPickerRole(null)
+    setRenamingRole(null)
+    setLimitRole(null)
+    setReserveRole(null)
+    setOverlapRole(null)
+    setMealRole(null)
+    setSectorRole(sectorRole === role ? null : role)
+    setSectorValue(sectorOfRole(role) ?? "")
+  }
+
+  function closeSector(role: string) {
+    setSectorRole(null)
+    setRoleActionError(null)
+    focusRoleButton(sectorBtnRefs, role)
+  }
+
   function closeColorPicker(role: string) {
     setColorPickerRole(null)
     focusRoleButton(colorBtnRefs, role)
@@ -302,25 +442,26 @@ export default function RoleManagerPanel({
 
   if (!open) return null
 
-  return (
-    <div id={panelId} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-      <div>
-        {/* Focused by code only, when the row whose button should get focus back is gone. */}
-        <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h2>
-        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
-      </div>
-      {roleActionError && (
-        <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
-      )}
-      {/* role="list": Safari drops the list role of an <ol> without bullets. */}
-      <ol role="list" aria-label="Ordre des postes" className="space-y-1.5">
-        {roles.map((role, i) => {
+  /** The poste rows of one group (the whole list without sectors), in their own <ol>. */
+  function renderRoleList(group: SectorGroup) {
+    // role="list": Safari drops the list role of an <ol> without bullets.
+    return (
+      <ol role="list" aria-label={grouped ? `Ordre des postes, ${group.name}` : "Ordre des postes"} className="space-y-1.5">
+        {group.roles.map((role) => {
+          const i = displayRoles.indexOf(role)
+          const siblings = group.roles
           const isRenaming = renamingRole === role
           const isBusy = roleActionBusy === role
           const isPickingColor = colorPickerRole === role
           const limit = roleLimitOf(role)
           const reservedTags = reservedTagsOf(role)
+          const assignedOnly = assignedOnlyOf(role)
+          const answerCondition = reservedAnswerConditionOf(shifts, role)
+          const answerQuestion = conditionQuestions.find((q) => q.id === answerCondition?.questionId)
           const cumulable = overlapAllowedOf(role)
+          const meal = posteMealOnTheGo(shifts, role)
+          const mealLabel = posteMealOnTheGoLabel(meal, role)
+          const roleSectorId = sectorsInUse ? sectorOfRole(role) : null
           return (
           <li key={role}>
             <div
@@ -337,10 +478,10 @@ export default function RoleManagerPanel({
                 <circle cx="5" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/>
                 <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
               </svg>
-              {roles.length > 1 && (
+              {siblings.length > 1 && (
                 <span className="flex gap-0.5 flex-shrink-0">
                   {(["up", "down"] as const).map((dir) => {
-                    const atEnd = dir === "up" ? i === 0 : i === roles.length - 1
+                    const atEnd = dir === "up" ? siblings[0] === role : siblings[siblings.length - 1] === role
                     return (
                       // aria-disabled, not disabled: the button just pressed keeps focus at an end.
                       <button
@@ -365,7 +506,7 @@ export default function RoleManagerPanel({
               <button
                 ref={(el) => setRoleButton(colorBtnRefs.current, role, el)}
                 type="button"
-                onClick={() => { setLimitRole(null); setReserveRole(null); setOverlapRole(null); setColorPickerRole(isPickingColor ? null : role) }}
+                onClick={() => { setLimitRole(null); setReserveRole(null); setOverlapRole(null); setMealRole(null); setColorPickerRole(isPickingColor ? null : role) }}
                 disabled={isBusy || isRenaming}
                 aria-label={`Changer la couleur du poste ${role}`}
                 aria-expanded={isPickingColor}
@@ -429,11 +570,12 @@ export default function RoleManagerPanel({
                     disabled={isBusy}
                     aria-expanded={reserveRole === role}
                     aria-controls={reserveRole === role ? `reserve-form-${i}` : undefined}
-                    aria-label={reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
+                    // Assigned by the organisation only (#1145) wins over tags still stored.
+                    aria-label={assignedOnly ? `Accès : par l'organisation uniquement, poste « ${role} »` : answerCondition ? `Accès : réservé aux réponses ${answerCondition.answers.join(" ou ")} à « ${answerQuestion?.label ?? "une question"} », poste « ${role} »` : reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
                     className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 text-left min-w-0 [overflow-wrap:anywhere]"
                   >
                     {/* A long list of tags wraps, whole (#606). */}
-                    {reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
+                    {assignedOnly ? "Accès : par l'organisation" : answerCondition ? "Accès : réponse" : reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
                   </button>
                   <button
                     ref={(el) => setRoleButton(overlapBtnRefs.current, role, el)}
@@ -447,6 +589,34 @@ export default function RoleManagerPanel({
                   >
                     {cumulable ? "Cumul : oui" : "Cumul : non"}
                   </button>
+                  {mealOnTheGoShown && (
+                    <button
+                      ref={(el) => setRoleButton(mealBtnRefs.current, role, el)}
+                      type="button"
+                      onClick={() => startMeal(role)}
+                      disabled={isBusy}
+                      aria-expanded={mealRole === role}
+                      aria-controls={mealRole === role ? `meal-form-${i}` : undefined}
+                      aria-label={mealLabel.name}
+                      className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                    >
+                      {mealLabel.text}
+                    </button>
+                  )}
+                  {sectorsInUse && (liveSectors.length > 0 || roleSectorId) && (
+                    <button
+                      ref={(el) => setRoleButton(sectorBtnRefs.current, role, el)}
+                      type="button"
+                      onClick={() => startSector(role)}
+                      disabled={isBusy}
+                      aria-expanded={sectorRole === role}
+                      aria-controls={sectorRole === role ? `sector-form-${i}` : undefined}
+                      aria-label={`Déplacer le poste « ${role} »`}
+                      className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 min-h-6 flex-shrink-0"
+                    >
+                      Déplacer…
+                    </button>
+                  )}
                   <button
                     ref={(el) => setRoleButton(renameBtnRefs.current, role, el)}
                     type="button"
@@ -479,8 +649,18 @@ export default function RoleManagerPanel({
                 role={role}
                 index={i}
                 reservedTags={reservedTags}
+                assignedOnly={assignedOnly}
                 value={reserveValue}
                 onValueChange={setReserveValue}
+                assignedOnlyValue={assignedOnlyValue}
+                onAssignedOnlyChange={setAssignedOnlyValue}
+                questions={conditionQuestions}
+                reservedQuestionId={answerCondition?.questionId ?? null}
+                reservedAnswers={answerCondition?.answers ?? []}
+                questionIdValue={reserveQuestionId}
+                onQuestionIdChange={(id) => { setReserveQuestionId(id); setReserveAnswers([]) }}
+                acceptedAnswersValue={reserveAnswers}
+                onAcceptedAnswersChange={setReserveAnswers}
                 busyRole={roleActionBusy}
                 onBusyRoleChange={setRoleActionBusy}
                 onActionError={setRoleActionError}
@@ -504,6 +684,41 @@ export default function RoleManagerPanel({
                 onClose={closeOverlap}
                 setShifts={setShifts}
                 onAnnounce={onAnnounce}
+              />
+            )}
+            {mealRole === role && mealOnTheGoShown && (
+              <RoleMealForm
+                eventId={eventId}
+                autoFocus={editorAutoFocus}
+                role={role}
+                index={i}
+                saved={meal}
+                value={mealValue}
+                onValueChange={setMealValue}
+                busyRole={roleActionBusy}
+                onBusyRoleChange={setRoleActionBusy}
+                onActionError={setRoleActionError}
+                onClose={closeMeal}
+                setShifts={setShifts}
+                onAnnounce={onAnnounce}
+              />
+            )}
+            {sectorRole === role && sectorsInUse && (
+              <RoleSectorForm
+                eventId={eventId}
+                autoFocus={editorAutoFocus}
+                role={role}
+                index={i}
+                sectorId={sectorOfRole(role)}
+                sectors={liveSectors}
+                value={sectorValue}
+                onValueChange={setSectorValue}
+                busyRole={roleActionBusy}
+                onBusyRoleChange={setRoleActionBusy}
+                onClose={closeSector}
+                setShifts={setShifts}
+                onAnnounce={onAnnounce}
+                placeAfter={(next) => placeAfterMove(role, next)}
               />
             )}
             {limitRole === role && (
@@ -543,12 +758,57 @@ export default function RoleManagerPanel({
           )
         })}
       </ol>
+    )
+  }
+
+  return (
+    <div id={panelId} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+      <div>
+        {/* Focused by code only, when the row whose button should get focus back is gone. */}
+        <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">{managePostesLabel(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)}</h2>
+        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou à l&apos;organisation, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
+      </div>
+      {roleActionError && (
+        <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
+      )}
+      {sectorsShown && sectorsState && setSectorsState ? (
+        <>
+          <SectorsSection
+            eventId={eventId}
+            panelId={panelId}
+            state={sectorsState}
+            setState={setSectorsState}
+            shifts={shifts}
+            setShifts={setShifts}
+            groups={grouped ? roleGroups : []}
+            renderPostes={renderRoleList}
+            onAddPoste={(sector, opener) => onAddPoste?.(sector, opener)}
+            fallbackFocus={() => headingRef.current}
+            onAnnounce={onAnnounce}
+            onRequestConfirm={onRequestDelete}
+            onConfirmBusy={onDeletingChange}
+            onConfirmError={onDeleteError}
+            onConfirmDone={() => onConfirmDone?.()}
+            // A poste editor offering an archived sector closes; its value would be refused.
+            onSectorGone={(id) => { if (sectorValue === id) setSectorRole(null) }}
+          />
+          {/* Before the first sector, the postes follow under their own heading (outline). */}
+          {!grouped && roles.length > 0 && (
+            <div>
+              <h3 className="sr-only">Postes</h3>
+              <PosteRows render={renderRoleList} group={roleGroups[0]} />
+            </div>
+          )}
+        </>
+      ) : <PosteRows render={renderRoleList} group={roleGroups[0]} />}
       <div className="flex gap-3">
-        <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
-          Enregistrer l'ordre
-        </button>
-        <button type="button" onClick={onClose}
+        {roles.length > 0 && (
+          <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
+            className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
+            Enregistrer l'ordre
+          </button>
+        )}
+        <button type="button" onClick={onRequestClose ?? onClose}
           className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">
           Fermer
         </button>

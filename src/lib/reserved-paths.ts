@@ -14,7 +14,7 @@
  * page, the product-updates page and the llms.txt files. An organisation's host answered them in
  * 200 too, and their relative links made crawlers walk the whole public site again on every
  * organisation's host. Everything else stays on that host: its events and their pages, its root,
- * /my, /leader, /waitlist, /admin, /api, robots.txt and its own sitemap.
+ * /my, /leader, /waitlist, /disponibilites, /admin, /api, robots.txt and its own sitemap.
  */
 export const APEX_ONLY_PATHS: readonly string[] = [
   "/fonctionnalites",
@@ -23,10 +23,17 @@ export const APEX_ONLY_PATHS: readonly string[] = [
   "/benevoles-fete-de-village",
   "/benevoles-festival",
   "/benevoles-manifestation-sportive",
+  "/benevoles-mairie-commune",
   "/planning-permanences-benevoles",
   "/tarifs",
+  "/tableur-ou-outil-dedie",
+  "/logiciel-libre-benevoles",
+  "/continuite-du-service",
+  "/manifeste",
+  "/citer",
   "/nouveautes",
   "/blog",
+  "/ressources",
   "/accessibilite",
   "/legal",
   "/doc",
@@ -40,9 +47,9 @@ export const APEX_ONLY_PATHS: readonly string[] = [
 
 /**
  * The application's own routes that stay on an organisation's host (administration, personal
- * links, API): not apex-only, but just as unreachable for an event.
+ * links, API, the error-report relay /monitoring): not apex-only, but just as unreachable for an event.
  */
-export const APP_ROUTE_SEGMENTS: readonly string[] = ["admin", "super-admin", "api", "my", "leader", "waitlist"]
+export const APP_ROUTE_SEGMENTS: readonly string[] = ["admin", "super-admin", "api", "my", "leader", "waitlist", "disponibilites", "ne-peux-pas", "confirmation", "monitoring"]
 
 /** The first segment of every top-level address of the site: what an event slug may never be. */
 export const RESERVED_PATH_SEGMENTS: readonly string[] = [...new Set([...APEX_ONLY_PATHS.map((p) => p.split("/")[1]), ...APP_ROUTE_SEGMENTS])]

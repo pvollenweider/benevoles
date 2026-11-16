@@ -42,11 +42,12 @@ test.beforeEach(async ({ page }) => {
 })
 
 /** Signs up for every shift of the event and opens the personal page, hydrated. */
-async function openMyPage(page: Page, answers?: Record<string, unknown>) {
+async function openMyPage(page: Page, answers?: Record<string, unknown>): Promise<string> {
   const token = await publicSignUp(page, event, event.shifts.map((s) => s.id), answers)
   await page.goto(`/my/${token}`)
   await expect(page.getByRole("heading", { level: 1, name: "Mes inscriptions" })).toBeVisible()
   await waitForHydration(trigger(page, "Bar"))
+  return token
 }
 
 const trigger = (page: Page, label: string) => page.getByRole("button", { name: `Annuler le créneau ${label}` })
@@ -105,11 +106,46 @@ test("links to the event's sign-up page for more shifts, the bottom link gone (#
   await openMyPage(page)
   const more = page.getByRole("link", { name: "S'inscrire à d'autres créneaux" })
   await expect(more).toBeVisible()
-  await expect(page.getByRole("link", { name: "Voir la page de l'événement" })).toHaveCount(0)
+  await expect(page.getByRole("link", { name: "Voir la page d'inscription" })).toHaveCount(0)
   await expect(page.getByRole("link", { name: "Retour à l'accueil" })).toHaveCount(0)
   await more.click()
   await expect(page).toHaveURL((url) => url.pathname === `/${event.slug}`)
   await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible()
+})
+
+test("« Mon calendrier »: a read-only subscription, never the personal link, that follows a withdrawal (#961)", async ({ page }) => {
+  const token = await openMyPage(page)
+  const card = page.getByRole("region", { name: "Mon calendrier" })
+  const subscribe = card.getByRole("link", { name: "S'abonner avec l'agenda de cet appareil" })
+  await expect(subscribe).toHaveAttribute("href", /^webcal:\/\/.+\/calendar\.ics$/)
+  expect(await subscribe.getAttribute("href")).not.toContain(token)
+  await expect(card.getByRole("link", { name: "Télécharger tout mon planning (fichier .ics)" })).toBeVisible()
+
+  await card.getByText("Google Agenda ou autre agenda en ligne").click()
+  const address = (await card.locator("span[translate=no]").textContent())!.trim()
+  expect(address).toMatch(/^https?:\/\/.+\/calendar\.ics$/)
+  const path = new URL(address).pathname
+  const fetchFeed = async () => {
+    const res = await page.request.get(path, { headers: { "x-forwarded-for": randomIp() } })
+    expect(res.status(), await res.text()).toBe(200)
+    expect(res.headers()["cache-control"]).toBe("private, no-store")
+    expect(res.headers()["referrer-policy"]).toBe("no-referrer")
+    return res.text()
+  }
+  const before = await fetchFeed()
+  expect(before.split("BEGIN:VEVENT")).toHaveLength(4)
+  expect(before).not.toContain(token)
+  expect(before).not.toContain("/my/")
+
+  // The personal token itself opens no calendar at that address.
+  expect((await page.request.get(`/api/public/registrations/${token}/calendar.ics`, { headers: { "x-forwarded-for": randomIp() } })).status()).toBe(404)
+
+  // A withdrawn shift drops out of the next fetch.
+  await trigger(page, "Bar").click()
+  await page.getByRole("button", { name: "Oui, annuler" }).click()
+  await expect(trigger(page, "Bar")).toHaveCount(0)
+  const after = await fetchFeed()
+  expect(after.split("BEGIN:VEVENT")).toHaveLength(3)
 })
 
 test("a message left on withdrawal reaches the organizer's email (#559)", async ({ page }) => {
@@ -242,7 +278,7 @@ test("a question attached to a poste: its change goes to the poste's leader, the
   await admin.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await admin.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await admin.getByRole("button", { name: "Se connecter" }).click()
-  await expect(admin).toHaveURL(/\/admin\/events/)
+  await expect(admin).toHaveURL(/\/admin\/dashboard/)
   const lead = await admin.request.post(`/api/admin/events/${event.eventId}/sector-leaders`, { data: { roleName: "Accueil", name: "Chef Accueil", email: leaderEmail } })
   expect(lead.ok(), await lead.text()).toBeTruthy()
   await admin.goto(`/admin/events/${event.eventId}/questions`)
@@ -322,4 +358,29 @@ test.describe("at 320 px", () => {
       expect(box!.height).toBeGreaterThanOrEqual(24)
     }
   })
+})
+
+// A link of a deactivated or suspended organisation: the API refuses it (403 « org_unavailable »,
+// covered against Postgres by src/__integration__/org-lifecycle-links.int.test.ts); the page shows
+// « Espace indisponible » and the contact address, nothing else, for a volunteer and a sector leader.
+test("a link of a closed organisation shows « Espace indisponible », nothing of the link", async ({ page }) => {
+  const refusal = { error: "Cet espace n'est pas disponible.", code: "org_unavailable", contact: "aide@example.org" }
+  await page.route("**/api/public/registrations/closed-org-link", (route) => route.fulfill({ status: 403, json: refusal }))
+  await page.route("**/api/public/leader/closed-org-link", (route) => route.fulfill({ status: 403, json: refusal }))
+
+  await page.goto("/my/closed-org-link")
+  await expect(page.getByRole("heading", { level: 1, name: "Espace indisponible" })).toBeVisible()
+  // The instance's name (#1340): benevol.app on a local address.
+  await expect(page).toHaveTitle("Espace indisponible — benevol.app")
+  await expect(page.getByText("ce lien ne donne plus accès à tes inscriptions")).toBeVisible()
+  await expect(page.getByRole("link", { name: "aide@example.org" })).toHaveAttribute("href", "mailto:aide@example.org")
+  await expect(page.getByText("Ce lien ne fonctionne pas")).toHaveCount(0)
+  await expect(page.getByRole("button")).toHaveCount(0)
+  expect.soft(await seriousViolations(page)).toEqual([])
+
+  await page.goto("/leader/closed-org-link")
+  await expect(page.getByRole("heading", { level: 1, name: "Espace indisponible" })).toBeVisible()
+  await expect(page.getByText("ce lien ne donne plus accès à la liste des bénévoles")).toBeVisible()
+  await expect(page.getByText(/écrivez à/)).toBeVisible()
+  expect.soft(await seriousViolations(page)).toEqual([])
 })

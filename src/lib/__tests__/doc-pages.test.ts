@@ -68,7 +68,7 @@ describe("every public page's link preview", () => {
 })
 
 describe("FEATURES.md, the source of /fonctionnalites", () => {
-  const md = read("FEATURES.md")
+  const md = read("content/pages/FEATURES.md")
 
   it("has one title and the main categories", () => {
     expect(md.match(/^# /gm)).toHaveLength(1)
@@ -79,11 +79,11 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
   })
 
   it("links the guides by file (readable on GitHub), rendered as site links", () => {
-    expect(md).toContain("](GUIDE_ADMIN.md)")
+    expect(md).toContain("](../guide/GUIDE_ADMIN.md)")
     const site = linkSourcesToRoutes(md)
     expect(site).toContain("](/doc/admin)")
     expect(site).toContain("](/doc/benevole)")
-    expect(site).not.toContain("](GUIDE_ADMIN.md)")
+    expect(site).not.toContain("GUIDE_ADMIN.md")
   })
 
   it("announces nothing that isn't built yet (audit of the open tickets)", () => {
@@ -98,7 +98,7 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
   })
 
   it("is copied into the runtime image, like the guides", () => {
-    expect(read("Dockerfile")).toContain("/app/FEATURES.md ./FEATURES.md")
+    expect(read("Dockerfile")).toContain("/app/content/pages/FEATURES.md ./content/pages/FEATURES.md")
   })
 })
 
@@ -106,10 +106,10 @@ describe("/logiciel-planning-benevoles, the editorial page on volunteer scheduli
   const page = PUBLIC_PAGES.find((p) => p.path === "/logiciel-planning-benevoles")!
 
   it("is a public page rendered from its own source, copied into the image, outside the header navigation", () => {
-    expect(page.source).toBe("LOGICIEL-PLANNING-BENEVOLES.md")
+    expect(page.source).toBe("content/pages/LOGICIEL-PLANNING-BENEVOLES.md")
     expect(splitTitle(read(page.source!)).title).toBe(page.title)
     expect(CONTENT_NAV.map((p) => p.path)).not.toContain(page.path)
-    expect(read("Dockerfile")).toContain("/app/LOGICIEL-PLANNING-BENEVOLES.md ./LOGICIEL-PLANNING-BENEVOLES.md")
+    expect(read("Dockerfile")).toContain("/app/content/pages/LOGICIEL-PLANNING-BENEVOLES.md ./content/pages/LOGICIEL-PLANNING-BENEVOLES.md")
   })
 
   it("has a title and a description that fit search results", () => {
@@ -119,7 +119,7 @@ describe("/logiciel-planning-benevoles, the editorial page on volunteer scheduli
 
   it("is linked from the home and from /fonctionnalites (internal links), its source link made a site link", () => {
     expect(read("src/app/page.tsx")).toContain('href="/logiciel-planning-benevoles"')
-    expect(read("FEATURES.md")).toContain("](LOGICIEL-PLANNING-BENEVOLES.md)")
+    expect(read("content/pages/FEATURES.md")).toContain("](LOGICIEL-PLANNING-BENEVOLES.md)")
     expect(linkSourcesToRoutes("[a](LOGICIEL-PLANNING-BENEVOLES.md)")).toBe("[a](/logiciel-planning-benevoles)")
   })
 
@@ -139,7 +139,7 @@ describe("/logiciel-planning-benevoles, the editorial page on volunteer scheduli
 describe("/inscription, the sign-up page", () => {
   const page = PUBLIC_PAGES.find((p) => p.path === "/inscription")!
 
-  it("has a branded title of 30 to 65 characters, a canonical on www and its own link preview", () => {
+  it("has a branded title of 30 to 66 characters, a canonical on www and its own link preview", () => {
     const m = publicPageMetadata("/inscription", "https://www.benevol.app")
     expect(m.title).toEqual({ absolute: "Demander un espace pour votre association | benevol.app" })
     expect(metaLengthProblems(pageTitle(page.metaTitle), page.metaDescription)).toEqual([])
@@ -169,14 +169,24 @@ describe("linkSourcesToRoutes", () => {
     expect(linkSourcesToRoutes("[a](../GUIDE_ADMIN.md#creer-un-evenement)")).toBe("[a](/doc/admin#creer-un-evenement)")
   })
 
+  // The sources live in content/ (pages/, legal/, guide/, blog/): a link between them, or from them to the
+  // root, is relative to the file so that it works on GitHub, and leads to the same page.
+  it("rewrites the relative links between the folders of content/ and to the root", () => {
+    expect(linkSourcesToRoutes("[a](../guide/GUIDE_ADMIN.md) [b](../legal/SOUS-TRAITANTS.md#x) [c](TARIFS.md)")).toBe("[a](/doc/admin) [b](/legal/sous-traitants#x) [c](/tarifs)")
+    expect(linkSourcesToRoutes("[a](../../CHANGELOG.md) [b](../guide/rappels.md#y) [c](rappels.md)")).toBe("[a](/nouveautes) [b](/doc/rappels#y) [c](/doc/rappels)")
+    expect(linkSourcesToRoutes("[a](../content/guide/GUIDE_ADMIN.md) [b](content/pages/FEATURES.md)")).toBe("[a](/doc/admin) [b](/fonctionnalites)")
+  })
+
   it("rewrites links to the documentation units (#649), by path from the root or relative from another unit", () => {
-    expect(linkSourcesToRoutes("[a](guide/revenir-sur-la-page.md)")).toBe("[a](/doc/revenir-sur-la-page)")
-    expect(linkSourcesToRoutes("[a](guide/confirmation.md#le-lien)")).toBe("[a](/doc/confirmation#le-lien)")
+    expect(linkSourcesToRoutes("[a](content/guide/revenir-sur-la-page.md)")).toBe("[a](/doc/revenir-sur-la-page)")
+    expect(linkSourcesToRoutes("[a](content/guide/confirmation.md#le-lien)")).toBe("[a](/doc/confirmation#le-lien)")
+    // The path before the move to content/ (#1106 phase 2), as older texts still write it.
+    expect(linkSourcesToRoutes("[a](guide/confirmation.md#le-lien) [b](../../guide/s-inscrire.md)")).toBe("[a](/doc/confirmation#le-lien) [b](/doc/s-inscrire)")
     expect(linkSourcesToRoutes("[a](confirmation.md#le-lien) et [b](s-inscrire.md)")).toBe("[a](/doc/confirmation#le-lien) et [b](/doc/s-inscrire)")
   })
 
   it("leaves other links alone: site paths, URLs, the guide index, files elsewhere", () => {
-    const md = "[a](/doc/admin) [b](https://example.org/x.md) [c](README.md) [d](guide/README.md) [e](docs/retention.md) [f](SECURITY.md)"
+    const md = "[a](/doc/admin) [b](https://example.org/x.md) [c](README.md) [d](content/guide/README.md) [e](docs/retention.md) [f](SECURITY.md) [g](../../docs/retention.md) [h](../x.md) [i](https://github.com/pvollenweider/benevoles/blob/main/CHANGELOG.md)"
     expect(linkSourcesToRoutes(md)).toBe(md)
   })
 
@@ -190,16 +200,16 @@ describe("apexSitemap", () => {
   // Privacy and terms too (#747), like the data processing documents.
   it("lists the home, the features page, the legal pages and the documentation on the apex host, with the source file's date", () => {
     const d = new Date("2026-09-30T10:00:00Z")
-    const entries = apexSitemap("https://www.benevol.app/", (src) => (src === "FEATURES.md" ? d : null))
+    const entries = apexSitemap("https://www.benevol.app/", (src) => (src === "content/pages/FEATURES.md" ? d : null))
     expect(entries[0]).toEqual({ url: "https://www.benevol.app/", changeFrequency: "weekly", priority: 1 })
-    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/logiciel-planning-benevoles", "https://www.benevol.app/pour-qui", "https://www.benevol.app/benevoles-fete-de-village", "https://www.benevol.app/benevoles-festival", "https://www.benevol.app/benevoles-manifestation-sportive", "https://www.benevol.app/planning-permanences-benevoles", "https://www.benevol.app/tarifs", "https://www.benevol.app/inscription", "https://www.benevol.app/nouveautes", "https://www.benevol.app/blog", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
+    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/logiciel-planning-benevoles", "https://www.benevol.app/pour-qui", "https://www.benevol.app/benevoles-fete-de-village", "https://www.benevol.app/benevoles-festival", "https://www.benevol.app/benevoles-manifestation-sportive", "https://www.benevol.app/benevoles-mairie-commune", "https://www.benevol.app/planning-permanences-benevoles", "https://www.benevol.app/tarifs", "https://www.benevol.app/tableur-ou-outil-dedie", "https://www.benevol.app/logiciel-libre-benevoles", "https://www.benevol.app/continuite-du-service", "https://www.benevol.app/manifeste", "https://www.benevol.app/citer", "https://www.benevol.app/ressources", "https://www.benevol.app/inscription", "https://www.benevol.app/nouveautes", "https://www.benevol.app/blog", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
     expect(entries.find((e) => e.url.endsWith("/fonctionnalites"))).toMatchObject({ lastModified: d, priority: 0.9 })
     expect(entries.find((e) => e.url.endsWith("/doc/benevole"))).not.toHaveProperty("lastModified")
   })
 
   it("lists the documentation units after the pages, with their own file's date (#649)", () => {
     const d = new Date("2026-10-01T10:00:00Z")
-    const entries = apexSitemap("https://www.benevol.app", (src) => (src === "guide/b.md" ? d : null), [{ slug: "a", source: "guide/a.md" }, { slug: "b", source: "guide/b.md" }])
+    const entries = apexSitemap("https://www.benevol.app", (src) => (src === "content/guide/b.md" ? d : null), [{ slug: "a", source: "content/guide/a.md" }, { slug: "b", source: "content/guide/b.md" }])
     expect(entries.slice(-2)).toEqual([
       { url: "https://www.benevol.app/doc/a", changeFrequency: "monthly", priority: DOC_UNIT_PRIORITY },
       { url: "https://www.benevol.app/doc/b", changeFrequency: "monthly", priority: DOC_UNIT_PRIORITY, lastModified: d },

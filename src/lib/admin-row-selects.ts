@@ -17,6 +17,8 @@ export const SECTOR_LEADER_ADMIN_SELECT = {
   id: true,
   eventId: true,
   roleName: true,
+  // A sector leader (#1169): roleName is null, sectorId set.
+  sectorId: true,
   name: true,
   email: true,
   createdAt: true,

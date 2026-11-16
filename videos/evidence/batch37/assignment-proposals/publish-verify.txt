@@ -1,0 +1,9 @@
+npm run video:publish -- --context "default"   ASSIGNMENT_PROPOSALS
+
+> benevoles@2.5.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default ASSIGNMENT_PROPOSALS
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (0) :
+Inchangés : 5
+Présents seulement sur le serveur (laissés tels quels) : 559

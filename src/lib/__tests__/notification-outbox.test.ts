@@ -14,9 +14,19 @@ const m = vi.hoisted(() => ({
   sendNotification: vi.fn(),
   after: vi.fn(),
   reported: vi.fn(),
+  volunteerFindUnique: vi.fn(),
+  registrationFindUnique: vi.fn(),
+  leaderFindUnique: vi.fn(),
+  adminFindUnique: vi.fn(),
+  queryRaw: vi.fn(),
+  emailLimitHitUpsert: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
   prisma: {
+    volunteer: { findUnique: m.volunteerFindUnique },
+    registration: { findUnique: m.registrationFindUnique },
+    sectorLeader: { findUnique: m.leaderFindUnique },
+    adminUser: { findUnique: m.adminFindUnique },
     notificationOutbox: {
       findMany: m.findMany, updateMany: m.updateMany, update: m.update, create: m.create,
       createMany: m.createMany, count: m.count, findFirst: m.findFirst,
@@ -24,13 +34,17 @@ vi.mock("../prisma", () => ({
       findUniqueOrThrow: (args: { where: { id?: string; dedupeKey?: string } }) =>
         args.where.dedupeKey ? m.findUniqueOrThrowByKey(args) : m.findUniqueOrThrow(args),
     },
+    emailLimitHit: { upsert: m.emailLimitHitUpsert },
+    $queryRaw: m.queryRaw,
   },
 }))
 vi.mock("../notifications/index", () => ({ sendNotification: m.sendNotification }))
+vi.mock("../env", () => ({ env: {} })) // notification-helpers, for the invitation payload (#1105)
 vi.mock("next/server", () => ({ after: m.after }))
 vi.mock("../report-error", () => ({ reportError: (ctx: string) => (e: unknown) => m.reported(ctx, e) }))
 
-import { backoffMs, collectNotifications, deliverAfterResponse, deliverOutbox, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
+import { backoffMs, collectNotifications, isRecipientDataFailure, deliverAfterResponse, deliverOutbox, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
+import { hourStart } from "../notifications/limit-hits"
 
 const payload = { kind: "registration_confirmation" as const, recipient: { email: "a@x.com" }, data: {} }
 const now = new Date("2030-01-01T12:00:00Z")
@@ -40,6 +54,8 @@ beforeEach(() => {
   m.updateMany.mockResolvedValue({ count: 1 })
   m.findMany.mockResolvedValue([{ id: "n1", status: "pending", claimedAt: null }])
   m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload })
+  m.queryRaw.mockResolvedValue([{ countedThisHour: true }])
+  m.emailLimitHitUpsert.mockResolvedValue({})
 })
 
 describe("collectNotifications / enqueueNotifications / deliverAfterResponse", () => {
@@ -140,6 +156,43 @@ describe("deliverOutbox", () => {
     })
   })
 
+  // Sentry 154728595: a member's address on a domain that doesn't exist is their data, not an
+  // application error. The row fails exactly as before, a warning is logged, nothing goes to Sentry.
+  it("a nonexistent recipient address (550 5.1.2) fails the row without reporting it", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp:rejected_permanent:domain_not_found:550:5.1.2", permanent: true, recipientRejected: true })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1, cancelled: 0, held: 0 })
+    expect(m.update).toHaveBeenCalledWith({
+      where: { id: "n1" },
+      data: expect.objectContaining({ status: "failed", attempts: 1, lastError: "smtp:rejected_permanent:domain_not_found:550:5.1.2" }),
+    })
+    expect(m.reported).not.toHaveBeenCalled()
+    expect(warn).toHaveBeenCalledOnce()
+    const line = String(warn.mock.calls[0][0])
+    expect(line).toContain("outbox.gave_up.registration_confirmation")
+    expect(line).toContain("5.1.2")
+    expect(line).not.toContain("a@x.com")
+    warn.mockRestore()
+  })
+
+  it("any other permanent rejection is still reported (5.7.1, or permanent without the recipient flag)", async () => {
+    m.sendNotification.mockResolvedValueOnce({ ok: false, reason: "smtp:rejected_permanent:policy_rejected:550:5.7.1", permanent: true })
+    await deliverOutbox({ now })
+    expect(m.reported).toHaveBeenCalledWith("outbox.gave_up.registration_confirmation", expect.any(Error))
+    m.reported.mockReset()
+    // The flag alone, without permanent, isn't enough either: that row is retried, not given up.
+    m.sendNotification.mockResolvedValueOnce({ ok: false, reason: "smtp:failed_temporary:other:-:-", recipientRejected: true })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0, held: 0 })
+    expect(m.reported).not.toHaveBeenCalled()
+  })
+
+  it("isRecipientDataFailure needs both permanent and the recipient flag", () => {
+    expect(isRecipientDataFailure({ permanent: true, recipientRejected: true })).toBe(true)
+    expect(isRecipientDataFailure({ permanent: true })).toBe(false)
+    expect(isRecipientDataFailure({ recipientRejected: true })).toBe(false)
+    expect(isRecipientDataFailure({ permanent: false, recipientRejected: true })).toBe(false)
+  })
+
   it("treats a thrown error as a failed attempt", async () => {
     m.sendNotification.mockRejectedValue(new Error("boom"))
     expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0, held: 0 })
@@ -200,6 +253,168 @@ describe("outbox payload at rest (#290)", () => {
   })
 })
 
+describe("member invitation through the outbox (#1105)", () => {
+  afterEach(() => vi.unstubAllEnvs())
+
+  it("seals the invite token and delivers the invitation email with its personal link", async () => {
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY", randomBytes(32).toString("base64"))
+    const { memberInvitePayload } = await import("../notification-helpers")
+    const { render } = await import("../notifications/templates")
+    const invite = memberInvitePayload({
+      to: "m@x.ch", memberName: "Mia", organizationName: "Org", eventTitle: "Fête", eventDate: "samedi 1 juin",
+      eventLocation: null, orgSlug: "org", eventSlug: "fete", message: null, token: "clear-invite-token", volunteerId: "vol-1", organizationId: "org-a",
+    }, "member_invite:inv-1:1")
+    const { dedupeKey, ...stored } = invite
+    expect(dedupeKey).toBe("member_invite:inv-1:1")
+    const sealed = sealPayload(stored)
+    expect(JSON.stringify(sealed)).not.toContain("clear-invite-token")
+    expect(JSON.stringify(sealed)).not.toContain("m@x.ch")
+
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, organizationId: "org-a", payload: sealed })
+    m.sendNotification.mockResolvedValue({ ok: true })
+    m.volunteerFindUnique.mockResolvedValue({ email: "M@x.ch" }) // same address, any case
+    await deliverOutbox({ now })
+    const sent = m.sendNotification.mock.calls.at(-1)![0]
+    expect(sent).toMatchObject({ kind: "member_invite", organizationId: "org-a", volunteerId: "vol-1", outboxId: "n1" })
+    expect(render(sent).html).toContain("token=clear-invite-token")
+  })
+
+  it("cancels a queued invitation or manual reminder whose member's address changed meanwhile, never sends it", async () => {
+    for (const kind of ["member_invite", "manual_reminder"] as const) {
+      m.sendNotification.mockReset()
+      m.update.mockReset()
+      m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, organizationId: "org-a", payload: { kind, volunteerId: "vol-1", recipient: { email: "typo@x.ch" }, data: {} } })
+      m.volunteerFindUnique.mockResolvedValue({ email: "right@x.ch" })
+      const res = await deliverOutbox({ now })
+      expect(res).toMatchObject({ cancelled: 1, sent: 0 })
+      expect(m.sendNotification).not.toHaveBeenCalled()
+      expect(m.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ status: "cancelled", lastError: "member_address_changed" }) }))
+    }
+  })
+
+  it("checks every email to a member, not only invitations and reminders", async () => {
+    for (const kind of ["targeted_message", "registration_link_resend", "registration_confirmation", "waitlist_offered", "shift_modified"] as const) {
+      m.sendNotification.mockReset().mockResolvedValue({ ok: true })
+      m.update.mockReset()
+      m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: { kind, volunteerId: "vol-1", recipient: { email: "a@x.ch" }, data: { editToken: "t" } } })
+      m.volunteerFindUnique.mockResolvedValue({ email: "a@x.ch" })
+      expect(await deliverOutbox({ now })).toMatchObject({ sent: 1 })
+      m.volunteerFindUnique.mockResolvedValue({ email: "corrected@x.ch" })
+      expect(await deliverOutbox({ now })).toMatchObject({ cancelled: 1, sent: 0 })
+      expect(m.sendNotification).toHaveBeenCalledOnce()
+    }
+  })
+
+  it("an invitation held over a sending limit stays pending, never failed", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, organizationId: "org-a", payload: { kind: "member_invite", recipient: { email: "m@x.ch" }, data: {} } })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000 })
+    const res = await deliverOutbox({ now })
+    expect(res).toMatchObject({ held: 1, failed: 0 })
+    expect(m.queryRaw).toHaveBeenCalledOnce()
+    expect(m.update).not.toHaveBeenCalled()
+  })
+
+  it("writes a sending-limit hold, its markers and its deadline in one fenced statement (#1139)", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({
+      id: "n1", attempts: 0, payload, organizationId: "org-a", firstHeldAt: null, lastHeldAt: null, deliveryNotBefore: null,
+    })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000 })
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 1 })
+    // The rescheduler can never see a pending row without its hold: one statement carries them all.
+    expect(m.update).not.toHaveBeenCalled()
+    expect(m.queryRaw).toHaveBeenCalledOnce()
+    const [strings, ...values] = m.queryRaw.mock.calls[0] as [TemplateStringsArray, ...unknown[]]
+    const sql = strings.join("?")
+    // Fenced by the claim marker this worker wrote: a reclaimed row is never overwritten.
+    expect(sql).toContain('UPDATE "NotificationOutbox"')
+    expect(sql).toContain('o."claimedAt" = ?')
+    // The hour is decided from the row's own previous lastHeldAt, in the statement.
+    expect(sql).toContain('p."lastHeldAt" < ?')
+    expect(sql).toContain("RETURNING")
+    expect(values).toContain("n1")
+    expect(values).toContain(now.toISOString()) // claim marker, and the new hold marker
+    expect(values).toContain(hourStart(now).toISOString())
+  })
+
+  it("records the limit hit only when the fenced update applied and had not been held this hour", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload, organizationId: "org-a", lastHeldAt: null })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000, limit: "org_per_minute" })
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 1 })
+    expect(m.emailLimitHitUpsert).toHaveBeenCalledOnce()
+
+    m.queryRaw.mockResolvedValue([{ countedThisHour: false }])
+    m.emailLimitHitUpsert.mockClear()
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 1 })
+    expect(m.emailLimitHitUpsert).not.toHaveBeenCalled()
+  })
+
+  it("a worker whose claim was reclaimed writes no hold and counts no hit", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload, organizationId: "org-a", lastHeldAt: null })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000 })
+    m.queryRaw.mockResolvedValue([])
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 0 })
+    expect(m.emailLimitHitUpsert).not.toHaveBeenCalled()
+  })
+})
+
+describe("recipient checked right before the send: links revoked since the email was queued", () => {
+  const deliver = async (payload: Record<string, unknown>) => {
+    m.sendNotification.mockReset().mockResolvedValue({ ok: true })
+    m.update.mockReset()
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, organizationId: "org-a", payload })
+    const res = await deliverOutbox({ now })
+    const lastError = m.update.mock.calls.at(-1)?.[0]?.data?.lastError
+    return { ...res, lastError }
+  }
+
+  it("a personal link without a member id: cancelled when the link's member has another address or the link no longer exists", async () => {
+    const payload = { kind: "registration_link_resend", recipient: { email: "old@x.ch" }, data: { editToken: "tok" } }
+    m.registrationFindUnique.mockResolvedValue({ volunteer: { email: "new@x.ch" } })
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "member_address_changed" })
+    m.registrationFindUnique.mockResolvedValue({ volunteer: { email: "OLD@x.ch" } })
+    expect(await deliver(payload)).toMatchObject({ sent: 1 })
+    m.registrationFindUnique.mockResolvedValue(null)
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "personal_link_revoked" })
+  })
+
+  it("a sector leader email: cancelled once the leader is gone or has another address", async () => {
+    const payload = { kind: "sector_leader_new_signup", recipient: { email: "lead@x.ch" }, data: { token: "lt" } }
+    m.leaderFindUnique.mockResolvedValue({ email: "lead@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ sent: 1 })
+    m.leaderFindUnique.mockResolvedValue(null)
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "leader_link_revoked" })
+    m.leaderFindUnique.mockResolvedValue({ email: "someone-else@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "leader_link_revoked" })
+  })
+
+  it("an account link: sent only while it is still the account's link, for this address", async () => {
+    const payload = { kind: "password_reset", recipient: { email: "admin@x.ch" }, data: { resetUrl: "https://app.test/admin/reset-password?token=abc" } }
+    m.adminFindUnique.mockResolvedValue({ email: "admin@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ sent: 1 })
+    const { hashToken } = await import("../token-hash")
+    expect(m.adminFindUnique).toHaveBeenLastCalledWith({ where: { passwordResetTokenHash: hashToken("abc") }, select: { email: true } })
+    // Replaced by a newer request, revoked by a password change: no account holds it any more.
+    m.adminFindUnique.mockResolvedValue(null)
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "account_link_revoked" })
+    // The account's address changed since.
+    m.adminFindUnique.mockResolvedValue({ email: "new-admin@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "account_link_revoked" })
+  })
+
+  it("organiser and platform emails are not looked up", async () => {
+    m.volunteerFindUnique.mockReset(); m.registrationFindUnique.mockReset(); m.leaderFindUnique.mockReset(); m.adminFindUnique.mockReset()
+    expect(await deliver({ kind: "admin_notification", recipient: { email: "admin@x.ch" }, data: { volunteerName: "A" } })).toMatchObject({ sent: 1 })
+    expect(await deliver({ kind: "release_available", recipient: { email: "sa@x.ch" }, data: {} })).toMatchObject({ sent: 1 })
+    for (const fn of [m.volunteerFindUnique, m.registrationFindUnique, m.leaderFindUnique, m.adminFindUnique]) expect(fn).not.toHaveBeenCalled()
+  })
+
+  it("a failed lookup is an ordinary failed attempt, retried, never a send", async () => {
+    m.volunteerFindUnique.mockRejectedValue(new Error("db down"))
+    expect(await deliver({ kind: "targeted_message", volunteerId: "vol-1", recipient: { email: "a@x.ch" }, data: {} })).toMatchObject({ retried: 1, sent: 0 })
+    expect(m.sendNotification).not.toHaveBeenCalled()
+  })
+})
+
 describe("idempotency (#315)", () => {
   it("a payload with a dedupeKey is stored once; an already-known key isn't delivered again", async () => {
     m.createMany.mockResolvedValueOnce({ count: 1 }).mockResolvedValueOnce({ count: 0 })
@@ -230,30 +445,78 @@ describe("idempotency (#315)", () => {
 
 describe("outboxHealth (#316)", () => {
   it("healthy when nothing failed, nothing stuck", async () => {
+    m.findMany.mockResolvedValue([])
     m.count.mockResolvedValue(0)
-    m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 5 * 60000) })
-    expect(await outboxHealth(now)).toEqual({ failedLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true, stuck: false })
+    m.findFirst.mockResolvedValue({ nextAttemptAt: new Date(now.getTime() - 5 * 60000) })
+    expect(await outboxHealth(now)).toEqual({
+      failedLastDay: 0, recipientFailuresLastDay: 0, otherFailuresLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true, stuck: false,
+    })
   })
 
-  it("unhealthy on a failure, a stale claim, or a pending row older than 2 h", async () => {
-    m.count.mockResolvedValueOnce(1).mockResolvedValueOnce(0)
+  it("unhealthy on another failure, a stale claim, or a pending row older than 2 h", async () => {
+    m.findMany.mockResolvedValue([{ lastError: "smtp:rejected_permanent:policy_rejected:550:5.7.1" }])
+    m.count.mockResolvedValue(0)
     m.findFirst.mockResolvedValue(null)
-    expect((await outboxHealth(now)).healthy).toBe(false)
+    expect(await outboxHealth(now)).toMatchObject({ recipientFailuresLastDay: 0, otherFailuresLastDay: 1, healthy: false, stuck: false })
 
-    m.count.mockResolvedValueOnce(0).mockResolvedValueOnce(0)
-    m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 3 * 60 * 60000) })
+    m.findMany.mockResolvedValue([])
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue({ nextAttemptAt: new Date(now.getTime() - 3 * 60 * 60000) })
     expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: 180, healthy: false, stuck: true })
 
-    m.count.mockResolvedValueOnce(0).mockResolvedValueOnce(2)
+    m.findMany.mockResolvedValue([])
+    m.count.mockResolvedValue(2)
     m.findFirst.mockResolvedValue(null)
     expect(await outboxHealth(now)).toMatchObject({ staleClaims: 2, healthy: false, stuck: true })
   })
 
+  it("does not count an email waiting for its scheduled retry as late (regression 2026-11-10)", async () => {
+    m.findMany.mockResolvedValue([])
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: null, healthy: true, stuck: false })
+    // Only rows already due are read, oldest due first.
+    const args = m.findFirst.mock.calls.at(-1)![0]
+    expect(args.where).toMatchObject({ status: { in: ["pending", "sending"] }, nextAttemptAt: { lte: now } })
+    expect(args.orderBy).toEqual({ nextAttemptAt: "asc" })
+  })
+
   // Regression: one row that gave up (already reported when it failed) made the hourly cron alert
   // « Notification outbox unhealthy » every hour for a day. Unhealthy for the health page, not stuck.
-  it("a row that gave up, with nothing pending, is unhealthy but not stuck: no hourly alert", async () => {
-    m.count.mockResolvedValueOnce(1).mockResolvedValueOnce(0)
+  it("a row that gave up for another reason, with nothing pending, is unhealthy but not stuck: no hourly alert", async () => {
+    m.findMany.mockResolvedValue([{ lastError: "smtp:rejected_permanent:relay_error:550:5.0.0" }])
+    m.count.mockResolvedValue(0)
     m.findFirst.mockResolvedValue(null)
-    expect(await outboxHealth(now)).toEqual({ failedLastDay: 1, oldestPendingMinutes: null, staleClaims: 0, healthy: false, stuck: false })
+    expect(await outboxHealth(now)).toEqual({
+      failedLastDay: 1, recipientFailuresLastDay: 0, otherFailuresLastDay: 1, oldestPendingMinutes: null, staleClaims: 0, healthy: false, stuck: false,
+    })
+  })
+
+  // A mistyped or unknown address says nothing about the platform. Healthy for the queue,
+  // and not stuck, so the hourly Sentry alert doesn't fire for it either.
+  it("recipient-address failures alone stay healthy and not stuck", async () => {
+    m.findMany.mockResolvedValue([
+      { lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1" },
+      { lastError: "smtp:rejected_permanent:mailbox_disabled:550:5.2.1" },
+      { lastError: "smtp:rejected_permanent:domain_not_found:550:5.1.2" },
+    ])
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toEqual({
+      failedLastDay: 3, recipientFailuresLastDay: 3, otherFailuresLastDay: 0, oldestPendingMinutes: null, staleClaims: 0, healthy: true, stuck: false,
+    })
+  })
+
+  it("counts both groups when recipient-address and other failures are mixed", async () => {
+    m.findMany.mockResolvedValue([
+      { lastError: "smtp:rejected_permanent:domain_not_found:550:5.1.2" },
+      { lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1" },
+      { lastError: "smtp:rejected_permanent:policy_rejected:550:5.7.1" },
+    ])
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toMatchObject({
+      failedLastDay: 3, recipientFailuresLastDay: 2, otherFailuresLastDay: 1, healthy: false, stuck: false,
+    })
   })
 })

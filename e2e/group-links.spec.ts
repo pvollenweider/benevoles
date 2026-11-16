@@ -29,7 +29,7 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   // ── Admin: create the link ────────────────────────────────────────────────
   await page.goto(`/admin/events/${event.eventId}/share`)
@@ -43,14 +43,18 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
 
   // Nothing typed: refused on the name, which keeps the focus and carries the message.
   await form.getByRole("button", { name: "Créer le lien" }).click()
-  await expect(form.getByRole("alert")).toHaveText("Donnez un nom au lien, par exemple celui du club.")
+  // The click left the name: it takes the focus back with the message as its description, and
+  // the alert stays silent (#739).
+  await expect(form.getByText("Donnez un nom au lien, par exemple celui du club.")).toBeVisible()
+  await expect(name).toHaveAccessibleDescription(/Donnez un nom au lien, par exemple celui du club\./)
+  await expect(form.getByRole("alert")).toHaveText("")
   await expect(name).toBeFocused()
   await expect(name).toHaveAttribute("aria-invalid", "true")
 
   // A name but no role: refused on the roles.
   await name.fill("Amicale E2E")
   await form.getByRole("button", { name: "Créer le lien" }).click()
-  await expect(form.getByRole("alert")).toHaveText("Choisissez au moins un poste.")
+  await expect(form.getByText("Choisissez au moins un poste.")).toBeVisible()
   await expect(form.getByRole("checkbox", { name: "Bar" })).toBeFocused()
 
   await form.getByRole("checkbox", { name: "Bar" }).check()

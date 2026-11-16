@@ -88,11 +88,26 @@ export async function anonymisePastEvent(
     // Answers changed from a personal page (#984) are in the log too: they go with the answers.
     await tx.$executeRaw`UPDATE "EventLog" SET changes = changes - ${ANSWER_LOG_FIELD}::text WHERE "eventId" = ${eventId} AND action = ${ANSWER_CHANGED_ACTION}`
     const invites = await tx.memberInvite.deleteMany({ where: { eventId } })
+    // Pending requests waiting for an email confirmation (#1253): their name, address, phone and
+    // token hash are personal data, and the event is over. Their provisional rows are cancelled,
+    // then anonymised above like the other registrations.
+    await tx.registration.updateMany({ where: { eventId, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
+    await tx.signupConfirmation.deleteMany({ where: { eventId } })
+    // « Je ne peux pas » answers for one shift (#1303): personal, and done with once the event is over.
+    const shiftDeclines = await tx.shiftDecline.deleteMany({ where: { shift: { eventId } } })
     const sectorLeaders = await tx.sectorLeader.deleteMany({ where: { eventId } })
     // Shift roster choices (#1068): personal, and the roster is closed for good.
     await tx.rosterConsent.deleteMany({ where: { eventId } })
+    // Dated availability (#1146): personal, and of no use once the event is over.
+    await tx.availabilityRequest.deleteMany({ where: { eventId } })
+    // Draft assignments and their publications (#1146, lot C): plans for named people, done with.
+    await tx.draftAssignment.deleteMany({ where: { eventId } })
+    await tx.draftPublication.deleteMany({ where: { eventId } })
+    // Generated proposals and hour targets (#1172): planning data about named people, done with.
+    await tx.proposalRun.deleteMany({ where: { eventId } })
+    await tx.eventVolunteerTarget.deleteMany({ where: { eventId } })
     await tx.event.update({ where: { id: eventId }, data: { personalDataAnonymizedAt: now } })
-    const counts = { registrations: registrations.length, anonymousRecords, answers: answers.count, invites: invites.count, sectorLeaders: sectorLeaders.count }
+    const counts = { registrations: registrations.length, anonymousRecords, answers: answers.count, invites: invites.count, shiftDeclines: shiftDeclines.count, sectorLeaders: sectorLeaders.count }
     await tx.eventLog.create({
       data: {
         eventId,
@@ -101,7 +116,7 @@ export async function anonymisePastEvent(
         action: "event.personal_data_anonymized",
         entityType: "Event",
         entityId: eventId,
-        changes: { registrations: { from: counts.registrations, to: counts.registrations }, answers: { from: counts.answers, to: 0 }, invites: { from: counts.invites, to: 0 }, sectorLeaders: { from: counts.sectorLeaders, to: 0 } },
+        changes: { registrations: { from: counts.registrations, to: counts.registrations }, answers: { from: counts.answers, to: 0 }, invites: { from: counts.invites, to: 0 }, shiftDeclines: { from: counts.shiftDeclines, to: 0 }, sectorLeaders: { from: counts.sectorLeaders, to: 0 } },
       },
     })
     return counts
@@ -112,7 +127,7 @@ export async function anonymisePastEvent(
 export async function runPastEventBatch(organizationId: string, now: Date): Promise<PastEventBatchCounts> {
   const events = await prisma.event.findMany({ where: concernedEventsWhere(organizationId, now), select: { id: true }, orderBy: { endDate: "asc" } })
   const anonymousIds = new Map<string, string>()
-  const total: PastEventBatchCounts = { events: 0, registrations: 0, anonymousRecords: 0, answers: 0, invites: 0, sectorLeaders: 0 }
+  const total: PastEventBatchCounts = { events: 0, registrations: 0, anonymousRecords: 0, answers: 0, invites: 0, shiftDeclines: 0, sectorLeaders: 0 }
   for (const e of events) {
     const c = await anonymisePastEvent(e.id, organizationId, anonymousIds, now)
     total.events++
@@ -120,6 +135,7 @@ export async function runPastEventBatch(organizationId: string, now: Date): Prom
     total.anonymousRecords += c.anonymousRecords
     total.answers += c.answers
     total.invites += c.invites
+    total.shiftDeclines += c.shiftDeclines
     total.sectorLeaders += c.sectorLeaders
   }
   await prisma.organization.update({ where: { id: organizationId }, data: { pastEventBatchAt: now } })

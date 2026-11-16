@@ -1,0 +1,40 @@
+Verified 2309 product inputs against main eefc160dfd39f86413b9c2940d2da6d44adff2d0; building locally
+Command failed: /Users/pol/.nvm/versions/node/v26.9.0/bin/node --import tsx videos/tools/local-production.ts build /tmp/benevoles-video-production.lXLR52
+Error: Failed to collect configuration for /api/admin/events/[id]/availability/[volunteerId]
+    at ignore-listed frames {
+  [cause]: Error: ENOENT: no such file or directory, open '/private/tmp/benevoles-video-production.lXLR52/browser/default-stylesheet.css'
+      at k (webpack://benevoles/webpack/bootstrap:21:1)
+      at k (webpack://benevoles/webpack/bootstrap:21:1)
+      at k (webpack://benevoles/webpack/bootstrap:21:1)
+      at k (webpack://benevoles/webpack/bootstrap:21:1)
+    19 | 	var threw = true;
+    20 | 	try {
+  > 21 | 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+       | ^
+    22 | 		threw = false;
+    23 | 	} finally {
+    24 | 		if(threw) delete __webpack_module_cache__[moduleId]; {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/benevoles-video-production.lXLR52/browser/default-stylesheet.css'
+  }
+}
+
+> Build error occurred
+Error: Failed to collect page data for /api/admin/events/[id]/availability/[volunteerId]
+    at ignore-listed frames {
+  type: 'Error'
+}
+
+▲ Next.js 16.4.5 (webpack)
+✓ Running next.config.ts took 182ms
+- Experiments (use with caution):
+  · clientTraceMetadata
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 50s
+  Running TypeScript ...
+  Finished TypeScript in 24.0s ...
+  Collecting page data using 9 workers ...
+

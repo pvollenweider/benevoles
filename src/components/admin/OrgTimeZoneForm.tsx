@@ -80,7 +80,7 @@ export default function OrgTimeZoneForm({
           }}
           aria-describedby={error ? `${helpId} ${errorId}` : helpId}
           aria-invalid={error ? true : undefined}
-          className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Par défaut ({defaultTimeZone})</option>
           {choices.map((tz) => (

@@ -8,7 +8,7 @@ import { env } from "./env"
 import { prisma } from "./prisma"
 import { reportError } from "./report-error"
 import { siteDomain } from "@/lib/site"
-import { isAllowedPushEndpoint, safePushLookup } from "./push-endpoint"
+import { boundPushSocket, isAllowedPushEndpoint, PUSH_RESPONSE_MAX_BYTES, safePushLookup } from "./push-endpoint"
 
 /**
  * Socket inactivity timeout handed to web-push (#1041). Push services answer in well under a
@@ -26,9 +26,19 @@ export const PUSH_SEND_DEADLINE_MS = 60_000
  * resolves to a non-public address, so a stored endpoint cannot reach an internal host, even by
  * changing its DNS answer after it was accepted. web-push 3.6.7 takes it as the `agent` option.
  */
-export const pushAgent = new https.Agent({ lookup: safePushLookup as unknown as https.AgentOptions["lookup"] })
+class BoundedPushAgent extends https.Agent {
+  // Each connection is closed at the send deadline or past the answer size cap (push-endpoint.ts).
+  createConnection(...args: Parameters<https.Agent["createConnection"]>) {
+    const socket = super.createConnection(...args)
+    if (socket) boundPushSocket(socket, { deadlineMs: PUSH_SEND_DEADLINE_MS, maxBytes: PUSH_RESPONSE_MAX_BYTES })
+    return socket
+  }
+}
+export const pushAgent = new BoundedPushAgent({ lookup: safePushLookup as unknown as https.AgentOptions["lookup"] })
 /** Recipients of a targeted message sent to in parallel. */
 const TARGETED_PUSH_CONCURRENCY = 5
+/** Default time to live of a push: three days, as before (#468). An « open shifts » push ends with its shift (#1304). */
+export const DEFAULT_PUSH_TTL_SECONDS = 3 * 24 * 3600
 
 function withDeadline<T>(promise: Promise<T>, ms: number): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined
@@ -66,7 +76,7 @@ export type PushOutcome = { sent: number; failed: number; removed: number }
  */
 export async function sendPushToVolunteer(
   volunteerId: string,
-  payload: { title: string; body: string; url?: string; tag?: string }
+  payload: { title: string; body: string; url?: string; tag?: string; ttlSeconds?: number }
 ): Promise<PushOutcome> {
   ensureConfigured()
   if (!configured) return { sent: 0, failed: 0, removed: 0 }
@@ -87,7 +97,7 @@ export async function sendPushToVolunteer(
           webpush.sendNotification(
             { endpoint: sub.endpoint, keys: { auth: sub.auth, p256dh: sub.p256dh } },
             JSON.stringify(payload),
-            { TTL: 3 * 24 * 3600, timeout: PUSH_SEND_TIMEOUT_MS, agent: pushAgent }
+            { TTL: payload.ttlSeconds ?? DEFAULT_PUSH_TTL_SECONDS, timeout: PUSH_SEND_TIMEOUT_MS, agent: pushAgent }
           ),
           PUSH_SEND_DEADLINE_MS,
         )
@@ -124,9 +134,9 @@ export async function pushDeviceCount(volunteerIds: string[]): Promise<number> {
  */
 export async function sendTargetedPush(
   targetedMessageId: string,
-  /** Per recipient: their link, and their own title and body when the text has variables (#482). */
-  targets: { volunteerId: string; url: string; title?: string; body?: string }[],
-  payload: { title: string; body: string; tag: string },
+  /** Per recipient: their link, their own title and body when the text has variables (#482), and the shift's TTL (#1304). */
+  targets: { volunteerId: string; url: string; title?: string; body?: string; ttlSeconds?: number }[],
+  payload: { title: string; body: string; tag: string; ttlSeconds?: number },
 ): Promise<PushOutcome> {
   const total: PushOutcome = { sent: 0, failed: 0, removed: 0 }
   // A few recipients at a time: each send is bounded, so a slow service cannot stall the rest.
@@ -134,7 +144,13 @@ export async function sendTargetedPush(
   const worker = async () => {
     while (next < targets.length) {
       const t = targets[next++]
-      const o = await sendPushToVolunteer(t.volunteerId, { ...payload, ...(t.title ? { title: t.title } : {}), ...(t.body ? { body: t.body } : {}), url: t.url }).catch((e) => { reportError("push.targeted")(e); return { sent: 0, failed: 0, removed: 0 } })
+      const o = await sendPushToVolunteer(t.volunteerId, {
+        ...payload,
+        ...(t.title ? { title: t.title } : {}),
+        ...(t.body ? { body: t.body } : {}),
+        ...(t.ttlSeconds !== undefined ? { ttlSeconds: t.ttlSeconds } : {}),
+        url: t.url,
+      }).catch((e) => { reportError("push.targeted")(e); return { sent: 0, failed: 0, removed: 0 } })
       total.sent += o.sent
       total.failed += o.failed
       total.removed += o.removed

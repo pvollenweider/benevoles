@@ -53,17 +53,24 @@ describe("RegistrationRow", () => {
   })
 
   it("shows only the workload warnings that involve this row's shift, and the waiting position", () => {
-    const { unmount } = renderRow({
-      workload: [
-        { kind: "daily", day: "2026-07-04", minutes: 600, shiftIds: ["s1"] },
-        { kind: "daily", day: "2026-07-05", minutes: 600, shiftIds: ["s9"] },
-      ],
-    })
+    const n = (key: string, shiftIds: string[]) => ({ key, text: "Samedi 4 juillet : 10 h de créneaux dans la journée.", shiftIds })
+    const { unmount } = renderRow({ workload: [n("a", ["s1"]), n("b", ["s9"])] })
     expect(screen.getAllByText(/Charge élevée/)).toHaveLength(1)
     unmount()
-    renderRow({ reg: reg({ status: "waiting", waitingPosition: 2 }), workload: [{ kind: "daily", day: "2026-07-04", minutes: 600, shiftIds: ["s1"] }] })
+    renderRow({ reg: reg({ status: "waiting", waitingPosition: 2 }), workload: [n("a", ["s1"])] })
     expect(screen.queryByText(/Charge élevée/)).toBeNull()
     expect(screen.getByText("position 2")).toBeInTheDocument()
+  })
+
+  // #1171: on a protected event, a limit the event enforces, on a request too.
+  it("says « Limite dépassée » on a protected event, a pending request included", () => {
+    const notice = { key: "k", text: "Sur tout l'événement : 30 h de missions. La limite de cet événement est de 24 h.", shiftIds: ["s1"] }
+    const { unmount } = renderRow({ workload: [notice], workloadBlocks: true })
+    expect(screen.getByText(/Limite dépassée/)).toBeInTheDocument()
+    expect(screen.queryByText(/Charge élevée/)).toBeNull()
+    unmount()
+    renderRow({ reg: reg({ status: "requested" }), workload: [notice], workloadBlocks: true })
+    expect(screen.getByText(/Limite dépassée/)).toBeInTheDocument()
   })
 
   // #582: everything a screen reader reads in the row is in words.

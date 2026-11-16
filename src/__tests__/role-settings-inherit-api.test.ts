@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 
 // A shift created in an existing poste, or moved to one, takes the poste's settings (#1002):
 // colour, limit per volunteer, reserved access, cumulable (#986) and order. A new poste keeps the

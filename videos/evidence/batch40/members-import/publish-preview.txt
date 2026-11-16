@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   MEMBERS_IMPORT
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default MEMBERS_IMPORT
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + members-import/members-import-og.jpg
+  + members-import/members-import.jpg
+  + members-import/members-import.mp4
+  + members-import/members-import.txt
+  + members-import/members-import.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 569
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

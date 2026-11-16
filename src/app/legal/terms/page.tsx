@@ -19,7 +19,7 @@ export default function TermsPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/terms", apexBaseUrl())} />
       <h1>Conditions générales d&apos;utilisation</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 6 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 15 novembre 2026</p>
 
       <h2>1. Objet</h2>
       <p>
@@ -48,7 +48,7 @@ export default function TermsPage() {
       <h2>3. Accès et comptes</h2>
       <p>
         L&apos;accès à l&apos;interface d&apos;administration est réservé aux personnes invitées
-        par un administrateur d&apos;Organisation. Tout compte est nominatif et non cessible.
+        par un organisateur d&apos;Organisation. Tout compte est nominatif et non cessible.
       </p>
       <p>
         L&apos;utilisateur est responsable de la confidentialité de ses identifiants et de toute
@@ -82,7 +82,7 @@ export default function TermsPage() {
       </p>
       <ul>
         <li>
-          <strong>Données des administrateurs</strong> (nom, adresse e-mail, mot de passe hashé) :
+          <strong>Données des organisateurs</strong> (nom, adresse e-mail, mot de passe hashé) :
           traitées par benevol.app en qualité de responsable du traitement, conformément à notre{" "}
           <Link href="/legal/privacy">Politique de confidentialité</Link>.
         </li>
@@ -131,6 +131,15 @@ export default function TermsPage() {
       <p>
         Une Organisation peut demander la suppression de son compte et de l&apos;ensemble de ses
         données en nous contactant à <a href="mailto:contact@benevol.app">contact@benevol.app</a>.
+      </p>
+      <p>
+        Ce qui précède concerne l&apos;accès d&apos;une Organisation ou d&apos;un utilisateur, pas
+        l&apos;arrêt du Service lui-même. Si nous décidons d&apos;arrêter définitivement le
+        Service, nous en informons les Organisations au moins trois mois à l&apos;avance, pour
+        qu&apos;elles puissent exporter leurs données ou préparer une autre solution. Ce délai ne
+        peut pas être tenu si l&apos;arrêt nous est imposé par un événement indépendant de notre
+        volonté (défaillance d&apos;un prestataire, obligation légale, force majeure). Nous
+        prévenons alors dès que nous le savons.
       </p>
 
       <h2>8. Modifications</h2>

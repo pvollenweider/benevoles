@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:37:23.177Z",
+  "videoSha256": "ad7442efc7c0d84818cd9d9ee645a49d1db053d5fa3fd37cdabbe8bf1d15479f",
+  "promptSha256": "7ccdea291ddccc2f3112964561f5398d0b7bf4d6821c263deb556a7710570d91",
+  "clipSha256": "a8b15c9f7fdb1cb3e27127a74ebf1a31027bc031bbad283733447eb1f6eef551",
+  "scene": "swaps-accept",
+  "review": {
+    "heardOpening": "Léa reçoit un e-mail",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "sa page indique que Jules, initiale H, lui propose un échange",
+        "visibleSeconds": 1.2,
+        "visible": "L'encadré d'échange mentionne Jules H. avec les détails du créneau du dimanche 15 novembre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "puis choisit Accepter l'échange",
+        "visibleSeconds": 9,
+        "visible": "Le bouton 'Accepter l'échange' n'est pas cliqué ; le bloc de confirmation 'Faire l'échange ?' est déjà ouvert à l'écran depuis le début",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Oui, échanger",
+        "visibleSeconds": 13.1,
+        "visible": "Le curseur clique sur le bouton bleu 'Oui, échanger'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "L'échange se fait tout de suite",
+        "visibleSeconds": 14.5,
+        "visible": "L'affichage bascule sous 'Échanges terminés' avec la mention 'Échange effectué'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:01, un clic involontaire est effectué sur 'Recevoir ce lien par email'.",
+      "Entre 00:08 et 00:10, la voix annonce que Léa choisit 'Accepter l'échange', mais le bouton n'est jamais cliqué car le récapitulatif 'Faire l'échange ?' était déjà affiché."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, fluide et très claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

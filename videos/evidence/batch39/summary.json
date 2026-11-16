@@ -1,0 +1,80 @@
+[
+  {
+    "id": "BETA_ACCESS",
+    "status": "READY",
+    "publishedAt": "2026-11-10",
+    "revision": 2,
+    "takes": 1,
+    "product": {
+      "commit": "058f35c463cf3b1e6b47596201d0ab6f78ab3015",
+      "sourceTree": "f878bdfea985e4cf39353d2e205a004b253ae915",
+      "productSourceSha256": "68f61fda53b49926a671a94b7488368ec30981aa1b0e3c945a858b0e3d36bfba",
+      "buildId": "rLDQoLz1bzvkYVRMNsVYi",
+      "snapshot": "/tmp/benevoles-video-production.Batch39",
+      "builtAt": "2026-11-10T19:46:13.768Z"
+    },
+    "music": {
+      "voicedWindows": 103,
+      "musicOnlyWindows": 1,
+      "smallestGapLu": 15.4,
+      "largestGapLu": 19.2,
+      "quietestMusicOnlyLufs": -33.7,
+      "loudestMusicOnlyLufs": -33.7,
+      "medianVoiceLufs": -16.4
+    },
+    "tuCount": 0,
+    "subtitleTuCount": 0
+  },
+  {
+    "id": "SECTORS",
+    "status": "READY",
+    "publishedAt": "2026-11-10",
+    "revision": 2,
+    "takes": 2,
+    "product": {
+      "commit": "058f35c463cf3b1e6b47596201d0ab6f78ab3015",
+      "sourceTree": "f878bdfea985e4cf39353d2e205a004b253ae915",
+      "productSourceSha256": "68f61fda53b49926a671a94b7488368ec30981aa1b0e3c945a858b0e3d36bfba",
+      "buildId": "rLDQoLz1bzvkYVRMNsVYi",
+      "snapshot": "/tmp/benevoles-video-production.Batch39",
+      "builtAt": "2026-11-10T19:46:13.768Z"
+    },
+    "music": {
+      "voicedWindows": 182,
+      "musicOnlyWindows": 9,
+      "smallestGapLu": 14.6,
+      "largestGapLu": 19.3,
+      "quietestMusicOnlyLufs": -34.1,
+      "loudestMusicOnlyLufs": -32.9,
+      "medianVoiceLufs": -16.6
+    },
+    "tuCount": 0,
+    "subtitleTuCount": 0
+  },
+  {
+    "id": "SECTOR_LEADERS",
+    "status": "READY",
+    "publishedAt": "2026-11-10",
+    "revision": 7,
+    "takes": 1,
+    "product": {
+      "commit": "058f35c463cf3b1e6b47596201d0ab6f78ab3015",
+      "sourceTree": "f878bdfea985e4cf39353d2e205a004b253ae915",
+      "productSourceSha256": "68f61fda53b49926a671a94b7488368ec30981aa1b0e3c945a858b0e3d36bfba",
+      "buildId": "rLDQoLz1bzvkYVRMNsVYi",
+      "snapshot": "/tmp/benevoles-video-production.Batch39",
+      "builtAt": "2026-11-10T19:46:13.768Z"
+    },
+    "music": {
+      "voicedWindows": 265,
+      "musicOnlyWindows": 2,
+      "smallestGapLu": 13.9,
+      "largestGapLu": 19,
+      "quietestMusicOnlyLufs": -32.9,
+      "loudestMusicOnlyLufs": -32.7,
+      "medianVoiceLufs": -16.6
+    },
+    "tuCount": 0,
+    "subtitleTuCount": 0
+  }
+]

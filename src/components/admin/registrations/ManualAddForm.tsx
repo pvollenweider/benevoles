@@ -3,15 +3,22 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react"
+import { useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react"
+import { flushSync } from "react-dom"
 import ShiftSelect from "./ShiftSelect"
-import { workloadMessage, workloadWarnings } from "@/lib/workload"
+import { blocksWorkload, newWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
+import { WORKLOAD_BIRTHDATE_REQUIRED } from "@/lib/workload-policy"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { addConflictMessage, chosenOverlapMessage, isAddFormPerson, MEMBER_CHOICES_SHOWN, memberChoiceLabel, memberResultsSentence, shiftsOfAddFormPerson, type MemberChoice, type ShiftRef } from "@/lib/registrations-list"
 import type { AddFormValues, Registration } from "./types"
 import { spokenShiftName } from "@/lib/spoken-time"
 import { manualAddNotice, manualAddNoticeSentence } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc } from "@/lib/time-zone"
+import { ackLabel } from "@/lib/availability-assist"
+import type { PersonFit } from "@/lib/availability-assist-data"
+import ConfirmActionModal from "../ConfirmActionModal"
+import { shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
+import { NETWORK_ERROR } from "@/lib/use-submit"
 
 type Props = {
   eventId: string
@@ -20,8 +27,16 @@ type Props = {
   registrations: Registration[]
   /** Organisation time zone, for the workload warnings (#465). */
   timeZone: string
+  /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
+  workloadMode?: WorkloadMode
   /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
   organizerEmail?: string | null
+  /**
+   * The event uses dated availability (#1146, lot B): once a member and shifts are chosen, each
+   * shift says what the person answered, and a shift they said they are not available for needs
+   * the acknowledgement ticked before the addition.
+   */
+  availability?: boolean
   /** The values typed so far: kept by the parent so they survive closing and reopening the form. */
   form: AddFormValues
   onFormChange: Dispatch<SetStateAction<AddFormValues>>
@@ -31,7 +46,7 @@ type Props = {
 }
 
 // ── Manual registration by the organizer ─────────────────────────────────────
-export default function ManualAddForm({ eventId, shifts, registrations, timeZone, organizerEmail = null, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
+export default function ManualAddForm({ eventId, shifts, registrations, timeZone, workloadMode, organizerEmail = null, availability = false, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
   // The request the role-limit warning is about: the override only applies to that exact form.
   const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   // Manual addition: what this shift would add to the workload of a volunteer already registered.
@@ -40,14 +55,98 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   // empty line is simply left out.
   const chosenIds = useMemo(() => [...new Set([addForm.shiftId, ...addForm.extraShiftIds].filter(Boolean))], [addForm.shiftId, addForm.extraShiftIds])
   const chosenShifts = useMemo(() => chosenIds.flatMap((id) => shifts.filter((s) => s.id === id)), [chosenIds, shifts])
+
+  // Dated availability (#1146, lot B): the chosen member's fit for each chosen shift, read from the
+  // server (never the ranges themselves), and the acknowledgements ticked, by key: a key changes
+  // with the shift, the person or their answer, so an acknowledgement never outlives its context.
+  // The fits of the current choice only: a result for another person or other shifts is ignored
+  // (derived, never cleared by an effect). `served`: fits the server sent with a refusal.
+  const chosenKey = chosenIds.join(",")
+  const fitQuery = availability && addForm.volunteerId && chosenKey ? `${addForm.volunteerId}|${chosenKey}` : ""
+  const [fetched, setFetched] = useState<{ query: string; fits: Record<string, PersonFit> } | null>(null)
+  const [served, setServed] = useState<{ form: string; fits: Record<string, PersonFit> } | null>(null)
+  const fits: Record<string, PersonFit> = {
+    ...(fetched && fetched.query === fitQuery ? fetched.fits : {}),
+    ...(served && served.form === `${addForm.volunteerId}|${addForm.email}|${chosenKey}` ? served.fits : {}),
+  }
+  const fitsLoading = fitQuery !== "" && fetched?.query !== fitQuery
+  const [acked, setAcked] = useState<Set<string>>(new Set())
+  const [ackErrors, setAckErrors] = useState<Set<string>>(new Set())
+  // Boxes that came back from a refusal under a new key: the answer changed since it was shown.
+  const [changedKeys, setChangedKeys] = useState<Set<string>>(new Set())
+  useEffect(() => {
+    if (!fitQuery) return
+    let current = true
+    const qs = new URLSearchParams([["volunteerId", addForm.volunteerId], ...chosenKey.split(",").map((id) => ["shiftId", id] as [string, string])])
+    fetch(`/api/admin/events/${eventId}/availability/fit?${qs}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .catch(() => null)
+      .then((data: { inUse: boolean; fits: PersonFit[] } | null) => {
+        // An answer to an older choice is dropped: only the latest request is shown.
+        if (!current) return
+        setFetched({ query: fitQuery, fits: Object.fromEntries((data?.fits ?? []).map((f) => [f.shiftId, f])) })
+        const outside = (data?.fits ?? []).filter((f) => f.ackKey)
+        if (outside.length > 0) say(`Disponibilités indiquées : ${outside.map((f) => `${spokenShiftName(shifts.find((s) => s.id === f.shiftId) ?? { roleName: "créneau" })}, ${f.label.toLowerCase()}`).join(" ; ")}. Une confirmation est demandée.`)
+      })
+    return () => { current = false }
+    // The request depends on the person and the shifts only (`say` and `shifts` are read when it answers).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fitQuery])
+  const fitIdOf = (n: number) => `add-shift-fit-${n}`
+  function toggleAck(key: string, on: boolean) {
+    setAcked((a) => { const next = new Set(a); if (on) next.add(key); else next.delete(key); return next })
+    if (on) setAckErrors((e) => { const next = new Set(e); next.delete(key); return next })
+  }
+  // The availability line under a shift field, and its acknowledgement when one is needed.
+  function fitLine(shiftId: string, n: number) {
+    if (!shiftId) return null
+    const fit = fits[shiftId]
+    if (!fit) return fitsLoading && availability && addForm.volunteerId ? <p id={fitIdOf(n)} className="text-xs text-gray-700 mt-1">Vérification des disponibilités…</p> : null
+    const key = fit.ackKey
+    return (
+      <div className="mt-1">
+        <p id={fitIdOf(n)} className="text-xs text-gray-700">Disponibilités indiquées : {fit.label}.{fit.detail ? ` ${fit.detail}` : ""}</p>
+        {key && (
+          <>
+            <label className="flex min-h-11 items-start gap-2 py-1 text-sm text-gray-900 cursor-pointer">
+              <input
+                id={`add-ack-${n}`}
+                data-ack-key={key}
+                type="checkbox"
+                checked={acked.has(key)}
+                onChange={(e) => toggleAck(key, e.target.checked)}
+                aria-invalid={ackErrors.has(key) || undefined}
+                aria-describedby={[ackErrors.has(key) && `add-ack-error-${n}`, fitIdOf(n)].filter(Boolean).join(" ")}
+                className="mt-0.5 h-6 w-6 shrink-0 accent-blue-600"
+              />
+              <span>{ackLabel(addForm.firstName || "cette personne")}<span className="sr-only">{` (créneau ${n})`}</span></span>
+            </label>
+            {ackErrors.has(key) && <p id={`add-ack-error-${n}`} className="text-xs text-red-700">{changedKeys.has(key) ? "Les disponibilités ont changé entre-temps : relisez-les, puis cochez de nouveau. " : ""}Cochez cette case pour ajouter cette personne sur ce créneau malgré ses disponibilités : rien n&apos;a encore été ajouté.</p>}
+          </>
+        )}
+      </div>
+    )
+  }
+  // On a protected event (#1171) the same check as the server's: what the addition creates or worsens,
+  // on the confirmed places and pending requests; otherwise the non-blocking #465 warnings.
+  const mode: WorkloadMode = useMemo(() => workloadMode ?? { kind: "warnings", timeZone }, [workloadMode, timeZone])
+  const blocks = blocksWorkload(mode)
+  // The event protects minors (#1171, lot 2): the form asks for a birth date.
+  const minorsProtected = workloadNeedsBirthDate(mode)
+  const [birthError, setBirthError] = useState<string | null>(null)
   const addWarnings = useMemo(() => {
     if (chosenShifts.length === 0) return []
-    const held = registrations.filter((r) => r.status === "active" && isAddFormPerson(r.volunteer, person) && !chosenIds.includes(r.shift.id))
-    if (held.length === 0 && chosenShifts.length === 1) return []
-    const before = new Set(workloadWarnings(held.map((r) => r.shift), timeZone).map(workloadMessage))
-    return workloadWarnings([...held.map((r) => r.shift), ...chosenShifts], timeZone).map(workloadMessage).filter((m) => !before.has(m))
-  }, [person, chosenIds, chosenShifts, registrations, timeZone])
+    const counted = blocks ? ["active", "requested"] : ["active"]
+    const held = registrations.filter((r) => counted.includes(r.status) && isAddFormPerson(r.volunteer, person) && !chosenIds.includes(r.shift.id))
+    if (!blocks && held.length === 0 && chosenShifts.length === 1) return []
+    return newWorkloadNotices(held.map((r) => r.shift), [...held.map((r) => r.shift), ...chosenShifts], mode).map((n) => n.text)
+  }, [person, chosenIds, chosenShifts, registrations, mode, blocks])
   const overLimit = overLimitFor === JSON.stringify(addForm)
+  // A full or closed shift (AUTHZ-15): the server's refusal opens a confirmation; once confirmed,
+  // its keys go with every submit of this same form (a role-limit warning after it included).
+  const [overrideAsk, setOverrideAsk] = useState<{ form: string; shifts: ShiftOverrideBody["shifts"] } | null>(null)
+  const [overrideKeys, setOverrideKeys] = useState<{ form: string; keys: string[] } | null>(null)
+  const submitRef = useRef<HTMLButtonElement>(null)
   // What the volunteer will receive (#916), said before submitting, once a shift is chosen. The
   // server decides the same way; « now » is the moment the form opened.
   const [openedAt] = useState(() => new Date())
@@ -87,7 +186,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       requestAnimationFrame(() => setAnnouncement(memberResultsSentence(rows.length)))
     } catch {
       setChoices(null)
-      setSearchError("Connexion interrompue : la recherche n'a pas abouti. Réessayez.")
+      setSearchError("Connexion interrompue : la recherche n'a pas abouti. Réessayez.")
     } finally {
       setSearching(false)
     }
@@ -169,7 +268,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     requestAnimationFrame(() => addAnotherRef.current?.focus())
   }
 
-  async function handleAdd(e: React.FormEvent | null, allowOverLimit = false) {
+  async function handleAdd(e: React.FormEvent | null, allowOverLimit = false, confirmedKeys?: string[]) {
     e?.preventDefault()
     if (adding) return
     if (!addForm.shiftId) {
@@ -182,32 +281,77 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       requestAnimationFrame(() => document.getElementById("add-shift")?.focus())
       return
     }
+    // Dated availability (#1146, lot B): a shift outside the person's declared availability needs
+    // its acknowledgement; the box is marked and focused, nothing is sent.
+    const missingAcks = chosenIds.map((id) => fits[id]?.ackKey).filter((k): k is string => !!k && !acked.has(k))
+    if (missingAcks.length > 0) {
+      flushSync(() => setAckErrors(new Set(missingAcks)))
+      document.querySelector<HTMLInputElement>(`input[data-ack-key="${CSS.escape(missingAcks[0])}"]`)?.focus()
+      return
+    }
     setAdding(true)
     // Forcing past the role limit: the alert and its button stay until the answer, so focus stays put.
     if (!allowOverLimit) { setAddError(null); setErrorFor(null); setOverLimitFor(null) }
 
-    const res = await fetch("/api/admin/registrations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        eventId,
-        volunteerId: addForm.volunteerId,
-        firstName: addForm.firstName,
-        lastName: addForm.lastName,
-        email: addForm.email,
-        phone: addForm.phone,
-        comment: addForm.comment,
-        shiftIds: chosenIds,
-        ...(allowOverLimit ? { allowOverLimit: true } : {}),
-      }),
-    })
+    // A failed request (network, or a proxy error page during a deploy) must end the busy state
+    // and say so (#1272): the same alert as any refusal, never a button stuck on « Ajout en cours… ».
+    let res: Response
+    try {
+      res = await fetch("/api/admin/registrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId,
+          volunteerId: addForm.volunteerId,
+          firstName: addForm.firstName,
+          lastName: addForm.lastName,
+          email: addForm.email,
+          phone: addForm.phone,
+          comment: addForm.comment,
+          ...(minorsProtected && addForm.birthDate ? { birthDate: addForm.birthDate } : {}),
+          shiftIds: chosenIds,
+          ...(allowOverLimit ? { allowOverLimit: true } : {}),
+          ...(confirmedKeys ? { shiftOverride: confirmedKeys } : overrideKeys && overrideKeys.form === JSON.stringify(addForm) ? { shiftOverride: overrideKeys.keys } : {}),
+          ...(acked.size > 0 ? { availabilityAck: chosenIds.map((id) => fits[id]?.ackKey).filter((k): k is string => !!k && acked.has(k)) } : {}),
+        }),
+      })
+    } catch {
+      setAdding(false)
+      setAddError(NETWORK_ERROR)
+      setErrorFor(JSON.stringify(addForm))
+      return
+    }
 
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
     setAdding(false)
 
+    // A full or closed shift (AUTHZ-15): the confirmation dialog, nothing added yet.
+    const toConfirm = res.status === 409 ? shiftOverrideOf(data) : null
+    if (toConfirm) { setAddError(null); setErrorFor(null); setOverrideAsk({ form: JSON.stringify(addForm), shifts: toConfirm }); return }
     // The role's limit per person (#466): the organiser may go over it, after reading why.
     if (res.status === 409 && data.code === "role_limit") { setAddError(data.error); setOverLimitFor(JSON.stringify(addForm)); return }
     setOverLimitFor(null)
+    // A birth date the minors' protection needs (#1171, lot 2): said on the field too, which takes focus.
+    const missingBirth = res.status === 409 && Array.isArray(data.workload) && data.workload[0] === WORKLOAD_BIRTHDATE_REQUIRED
+    setBirthError(missingBirth ? WORKLOAD_BIRTHDATE_REQUIRED : null)
+    if (missingBirth) requestAnimationFrame(() => document.getElementById("add-birthdate")?.focus())
+    // Availability (#1146, lot B): answered meanwhile, or a member found by their email: the shifts
+    // to acknowledge come back with the refusal; the first box takes focus.
+    if (res.status === 409 && data.code === "availability" && Array.isArray(data.outside)) {
+      const outside = data.outside as { shiftId: string; key: string; state: PersonFit["state"]; label: string; detail: string }[]
+      flushSync(() => {
+        setServed({ form: `${addForm.volunteerId}|${addForm.email}|${chosenKey}`, fits: Object.fromEntries(outside.map((o) => [o.shiftId, { shiftId: o.shiftId, state: o.state, label: o.label, detail: o.detail, ackKey: o.key }])) })
+        setAckErrors(new Set(outside.filter((o) => !acked.has(o.key)).map((o) => o.key)))
+        // « changed » when a different key was shown for that shift; a box never shown is just missing.
+        setChangedKeys(new Set(outside.filter((o) => { const shown = fits[o.shiftId]?.ackKey; return !!shown && shown !== o.key }).map((o) => o.key)))
+        // The refusal is said by the box that takes focus (its error), never a second time by an alert.
+        setAddError(null)
+        setErrorFor(null)
+      })
+      const first = outside.find((o) => !acked.has(o.key)) ?? outside[0]
+      if (first) document.querySelector<HTMLInputElement>(`input[data-ack-key="${CSS.escape(first.key)}"]`)?.focus()
+      return
+    }
     if (!res.ok) { setAddError(data.error ?? "Erreur."); setErrorFor(JSON.stringify(addForm)); return }
     setAddError(null)
     setErrorFor(null)
@@ -246,7 +390,24 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     }))
   }
 
+  // The dialog closes first; focus goes to « Ajouter », which then shows the addition running.
+  function confirmOverride() {
+    if (!overrideAsk) return
+    const keys = overrideAsk.shifts.map((n) => n.key)
+    const sameForm = overrideAsk.form === JSON.stringify(addForm)
+    flushSync(() => { setOverrideAsk(null); if (sameForm) setOverrideKeys({ form: overrideAsk.form, keys }) })
+    submitRef.current?.focus()
+    if (sameForm) void handleAdd(null, overLimit, keys)
+    else say("Le formulaire a changé\u00a0: validez à nouveau.")
+  }
+  function cancelOverride() {
+    flushSync(() => setOverrideAsk(null))
+    submitRef.current?.focus()
+  }
+  const overrideWords = overrideAsk ? shiftOverrideWords("manual_add", addForm.firstName.trim() || "cette personne", overrideAsk.shifts) : null
+
   return (
+    <>
     <form onSubmit={handleAdd} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
       <h3 className="font-semibold text-gray-800">Inscription manuelle</h3>
       {/* Always mounted, so the search results and the choice are announced. */}
@@ -260,7 +421,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
             {addForm.phone && <span>, {addForm.phone}</span>}
           </p>
           {knownVolunteer && hasAvailability(knownVolunteer) && (
-            <p className="text-xs text-gray-700 mt-1">Disponible en général : {availabilityLabel(knownVolunteer)}</p>
+            <p className="text-xs text-gray-700 mt-1">Disponible en général : {availabilityLabel(knownVolunteer)}</p>
           )}
           <button type="button" onClick={changeMember} className="mt-2 min-h-11 sm:min-h-6 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Changer de personne
@@ -289,7 +450,8 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
             {searching ? "Recherche…" : "Chercher"}
           </button>
         </div>
-        {searchError && <p role="alert" className="text-xs text-red-700 mt-1">{searchError}</p>}
+        {/* Always mounted, filled on error: an alert that appears with its text is not always read. */}
+        <p role="alert" className={searchError ? "text-xs text-red-700 mt-1" : "sr-only"}>{searchError}</p>
         {choices && choices.length > 0 && (
           <ul role="list" aria-label="Membres trouvés" className="mt-2 space-y-1">
             {choices.slice(0, MEMBER_CHOICES_SHOWN).map((m) => (
@@ -303,7 +465,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           </ul>
         )}
         {choices && choices.length > MEMBER_CHOICES_SHOWN && (
-          <p className="text-xs text-gray-700 mt-1">{choices.length} membres trouvés, les {MEMBER_CHOICES_SHOWN} premiers affichés : précisez la recherche.</p>
+          <p className="text-xs text-gray-700 mt-1">{choices.length} membres trouvés, les {MEMBER_CHOICES_SHOWN} premiers affichés : précisez la recherche.</p>
         )}
         {choices && choices.length === 0 && <p className="text-xs text-gray-700 mt-1">Aucun membre trouvé.</p>}
       </div>
@@ -323,13 +485,30 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           <input id="add-email" type="email" value={addForm.email} aria-describedby={knownVolunteer && hasAvailability(knownVolunteer) ? "add-email-availability" : undefined} onChange={(e) => setAddForm((f) => ({ ...f, email: e.target.value }))} className="input" />
           {/* Always mounted, so the polite region announces the text when it appears. */}
           <p id="add-email-availability" aria-live="polite" className={knownVolunteer && hasAvailability(knownVolunteer) ? "text-xs text-gray-700 mt-1" : "sr-only"}>
-            {knownVolunteer && hasAvailability(knownVolunteer) ? `Disponible en général : ${availabilityLabel(knownVolunteer)}` : ""}
+            {knownVolunteer && hasAvailability(knownVolunteer) ? `Disponible en général : ${availabilityLabel(knownVolunteer)}` : ""}
           </p>
         </div>
         <div>
           <label htmlFor="add-phone" className="block text-xs font-medium text-gray-600 mb-1">Téléphone</label>
           <input id="add-phone" type="tel" value={addForm.phone} onChange={(e) => setAddForm((f) => ({ ...f, phone: e.target.value }))} className="input" />
         </div>
+        {minorsProtected && (
+          <div>
+            <label htmlFor="add-birthdate" className="block text-xs font-medium text-gray-600 mb-1">Date de naissance</label>
+            <input
+              id="add-birthdate"
+              type="date"
+              autoComplete="off"
+              value={addForm.birthDate ?? ""}
+              aria-invalid={birthError ? true : undefined}
+              aria-describedby={["add-birthdate-hint", birthError && "add-birthdate-error"].filter(Boolean).join(" ")}
+              onChange={(e) => { setAddForm((f) => ({ ...f, birthDate: e.target.value })); setBirthError(null) }}
+              className="input"
+            />
+            <p id="add-birthdate-hint" className="text-xs text-gray-600 mt-1">Nécessaire si la personne n&apos;en a pas encore : cet événement protège les moins de 18 ans. Une date déjà enregistrée n&apos;est pas remplacée.</p>
+            {birthError && <p id="add-birthdate-error" className="text-sm text-red-700 mt-1">{birthError}</p>}
+          </div>
+        )}
       </div>
       </>
       )}
@@ -341,7 +520,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           required
           invalid={shiftInvalid}
           // The conflict is a warning, not an error: it describes the field without making it invalid.
-          describedBy={[shiftInvalid && "add-shift-error", conflictMessage && "add-shift-conflict"].filter(Boolean).join(" ") || undefined}
+          describedBy={[shiftInvalid && "add-shift-error", conflictMessage && "add-shift-conflict", addForm.shiftId && fits[addForm.shiftId] && fitIdOf(1)].filter(Boolean).join(" ") || undefined}
           shifts={offeredFor(addForm.shiftId)}
           value={addForm.shiftId}
           onChange={(id) => chooseShift((f) => ({ ...f, shiftId: id }), id)}
@@ -352,6 +531,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         {conflictMessage && (
           <p id="add-shift-conflict" className="text-xs text-orange-800 mt-1 ml-0.5">{conflictMessage}</p>
         )}
+        {fitLine(addForm.shiftId, 1)}
       </div>
       {/* More shifts for the same person (#918): one line each, all added together. */}
       {addForm.extraShiftIds.map((id, index) => {
@@ -368,7 +548,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
             <ShiftSelect
               id={`add-shift-${n}`}
               labelledBy={`add-shift-${n}-label`}
-              describedBy={lineConflict ? `add-shift-${n}-conflict` : undefined}
+              describedBy={[lineConflict && `add-shift-${n}-conflict`, id && fits[id] && fitIdOf(n)].filter(Boolean).join(" ") || undefined}
               shifts={offeredFor(id)}
               value={id}
               onChange={(value) => setShiftLine(index, value)}
@@ -376,6 +556,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
               existingShifts={volunteerShifts}
             />
             {lineConflict && <p id={`add-shift-${n}-conflict`} className="text-xs text-orange-800 mt-1 ml-0.5">{lineConflict}</p>}
+            {fitLine(id, n)}
           </div>
         )
       })}
@@ -391,33 +572,56 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
 
       {/* Always mounted, so the warning is announced when the email and shift make it appear. */}
       <div id="add-workload" role="status" className={addWarnings.length > 0 ? "" : "sr-only"}>
-        {addWarnings.length > 0 && (
+        {addWarnings.length > 0 && (blocks ? (
+          <div className="bg-red-50 border border-red-300 rounded-xl p-3 text-sm text-red-800">
+            <p className="font-semibold">L&apos;ajout sera refusé : {chosenShifts.length > 1 ? "avec ces créneaux" : "avec ce créneau"}, le programme de cette personne ne respecterait plus les limites de pauses et de charge de l&apos;événement.</p>
+            <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
+            <p className="mt-1">Choisissez un autre créneau ou une autre personne.</p>
+          </div>
+        ) : (
           <div className="bg-amber-50 border border-amber-300 rounded-xl p-3 text-sm text-amber-950">
-            <p className="font-medium">{chosenShifts.length > 1 ? "Si vous ajoutez ces créneaux" : "Si vous ajoutez ce créneau"}, cette personne aura :</p>
+            <p className="font-medium">{chosenShifts.length > 1 ? "Si vous ajoutez ces créneaux" : "Si vous ajoutez ce créneau"}, cette personne aura :</p>
             <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="mt-1">L&apos;ajout reste possible.</p>
           </div>
-        )}
+        ))}
       </div>
-      {showError && (
-        <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
+      {/* Always mounted, so a refusal that appears (a cancelled shift, a duplicate) is read. */}
+      <div role="alert" className={showError ? "bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700" : "sr-only"}>
+        {showError && <>
           <p id="add-error">{addError}</p>
-          {overLimitFor !== null && !overLimit && <p className="mt-1">Le formulaire a changé : validez à nouveau.</p>}
+          {overLimitFor !== null && !overLimit && <p className="mt-1">Le formulaire a changé : validez à nouveau.</p>}
           {overLimit && (
             <button type="button" onClick={() => { if (!adding) handleAdd(null, true) }} aria-disabled={adding || undefined} aria-describedby="add-error" className={`mt-2 min-h-11 sm:min-h-6 text-sm font-medium text-red-800 underline underline-offset-2 hover:text-red-950 ${adding ? "opacity-60 cursor-wait" : ""}`}>
-              {adding ? "Ajout en cours…" : "Ajouter quand même"}
+              {adding ? "Ajout en cours…" : "Ajouter malgré la limite"}
             </button>
           )}
-        </div>
-      )}
+        </>}
+      </div>
 
       {notice && <p id="add-notice" className="text-sm text-gray-700">{manualAddNoticeSentence(notice)}</p>}
       <div className="flex gap-3">
-        <button type="submit" aria-disabled={adding || undefined} aria-describedby={[addWarnings.length > 0 && "add-workload", notice && "add-notice"].filter(Boolean).join(" ") || undefined} className={`min-h-11 sm:min-h-6 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
+        <button ref={submitRef} type="submit" aria-disabled={adding || undefined} aria-describedby={[addWarnings.length > 0 && "add-workload", notice && "add-notice"].filter(Boolean).join(" ") || undefined} className={`min-h-11 sm:min-h-6 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
           {adding ? "Ajout en cours…" : "Ajouter"}
         </button>
         <button type="button" onClick={onCancel} className="min-h-11 sm:min-h-6 text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>
       </div>
     </form>
+    {/* Outside the form: the dialog has its own. */}
+    {overrideAsk && overrideWords && (
+      <ConfirmActionModal
+        recap={{
+          title: overrideWords.title,
+          lead: overrideWords.lead,
+          lines: [...overrideWords.lines, "L'ajout est journalisé, avec la confirmation."],
+          confirmLabel: overrideWords.confirmLabel,
+          danger: false,
+        }}
+        busy={false}
+        onConfirm={confirmOverride}
+        onCancel={cancelOverride}
+      />
+    )}
+    </>
   )
 }

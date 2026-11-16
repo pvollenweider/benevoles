@@ -7,20 +7,30 @@ import bcrypt from "bcryptjs"
 import { authConfig } from "./auth.config"
 import { prisma } from "@/lib/prisma"
 import { getClientIp } from "@/lib/rate-limit"
-import { beginLoginAttempt, refreshAdminToken } from "@/lib/admin-session"
+import { beginLoginAttempt, refreshAdminToken, revokeSession } from "@/lib/admin-session"
 import { verifyAdminLogin } from "@/lib/admin-login"
 import { normalizeEmail } from "@/lib/email-address"
 import { MAX_LOGIN_PASSWORD_LENGTH } from "@/lib/password"
+import { acceptSecondFactorUpdate } from "@/lib/second-factor-update"
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   ...authConfig,
   callbacks: {
     ...authConfig.callbacks,
     // Node-only extension of the edge-safe jwt callback: revalidates the admin against the DB on
-    // every auth() call — see refreshAdminToken().
+    // every auth() call — see refreshAdminToken(). A session update completes the second factor only
+    // with the server's proof (second-factor-update.ts); any other update data is ignored.
     async jwt(params) {
       const token = await authConfig.callbacks!.jwt!(params)
-      return token ? refreshAdminToken(token) : null
+      const refreshed = token ? await refreshAdminToken(token) : null
+      if (refreshed && params.trigger === "update") acceptSecondFactorUpdate(refreshed, params.session, Date.now())
+      return refreshed
+    },
+  },
+  events: {
+    // « Se déconnecter » ends the session on the server, not only in this browser (revokeSession).
+    async signOut(message) {
+      if ("token" in message) await revokeSession(message.token)
     },
   },
   providers: [
@@ -38,7 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           { email: normalizeEmail(credentials.email as string), password: credentials.password as string, ip: getClientIp(request) },
           {
             beginAttempt: beginLoginAttempt,
-            findUser: (email) => prisma.adminUser.findUnique({ where: { email }, include: { organization: { select: { active: true } } } }),
+            findUser: (email) => prisma.adminUser.findUnique({ where: { email }, include: { organization: { select: { active: true, suspendedAt: true } } } }),
             compare: (password, hash) => bcrypt.compare(password, hash),
             sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
           },

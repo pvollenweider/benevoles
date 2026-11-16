@@ -9,13 +9,15 @@ import { catalogEntry, loadManifest, videoDir, type AudioMetadata, type Timeline
 import { pinProductBuildForCapture } from "../lib/product-build"
 import { estimateSentences, sentenceFor, type Cue, type SentenceAnchor, type TimedSentence } from "../lib/sentence-timing"
 import { sentenceTimingsFromAudio } from "../lib/sentence-audio"
+import { fullNameOf } from "../lib/fixture-names"
 
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
 
 const localBaseUrl = (process.env.VIDEO_BASE_URL ?? "http://localhost:43100").replace(/\/$/, "")
-const publicOperator = reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
-const baseUrl = publicOperator ? "https://www.benevol.app" : localBaseUrl
+const batch40Public = ["LAST_MINUTE_CHANGES", "SHIFT_ELIGIBILITY_RULES", "MEMBERS_IMPORT"].includes(reference)
+const publicOperator = batch40Public || ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"].includes(reference) || reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
+const baseUrl = batch40Public ? `https://${reference === "LAST_MINUTE_CHANGES" ? "formation-imprevus" : "default"}.benevol.app` : publicOperator ? "https://www.benevol.app" : localBaseUrl
 const host = new URL(localBaseUrl).hostname
 if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
   throw new Error(`Refusing to record against non-local host ${host}`)
@@ -23,6 +25,7 @@ if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
 
 const org = process.env.VIDEO_ORG ?? "default"
 const eventSlug = process.env.VIDEO_EVENT_SLUG ?? "fete-du-village"
+const mailpitBase = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
 const gapMs = 450
 const rehearsal = process.argv.includes("--rehearse")
 const quickRehearsal = process.argv.includes("--quick-rehearse")
@@ -42,7 +45,7 @@ async function metadata(file: string): Promise<AudioMetadata | null> {
 async function settle(page: Page) {
   // Public maps may keep tile requests open; the seven batch 22-7 journeys
   // assert their actual headings and controls after DOM and font readiness.
-  const publicRefresh = ["LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
+  const publicRefresh = ["LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
   await page.waitForLoadState(publicRefresh ? "domcontentloaded" : "networkidle")
   await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" })
   await page.evaluate(() => document.fonts?.ready)
@@ -51,7 +54,7 @@ async function settle(page: Page) {
 
 async function verifyRegistrationTakeMailbox(page: Page, dir: string, query = 'subject:"Fête du village de Montvert"') {
   const reset = JSON.parse(await readFile(path.join(dir, "mailbox-reset-proof.json"), "utf8")) as { preservedMessageIds: string[] }
-  const response = await page.request.get("http://localhost:48026/api/v1/search", { params: { query, limit: 500 } })
+  const response = await page.request.get(`${mailpitBase}/api/v1/search`, { params: { query, limit: 500 } })
   if (!response.ok()) throw new Error("Take mailbox search unavailable")
   const result = await response.json() as { messages: { ID: string; Subject: string; To: { Address: string }[] }[]; messages_count: number }
   if (!result.messages.length || result.messages.length !== result.messages_count || result.messages.some(m => reset.preservedMessageIds.includes(m.ID))) throw new Error("Mailpit list contains an earlier or unverified email")
@@ -65,7 +68,7 @@ async function verifyRegistrationTakeMailbox(page: Page, dir: string, query = 's
 
 async function openRegistrationTakeMailbox(page: Page, dir: string, id: string, query = 'subject:"Fête du village de Montvert"') {
   const messages = await verifyRegistrationTakeMailbox(page, dir, query)
-  await page.goto(`http://localhost:48026/search?q=${encodeURIComponent(query)}`); await settle(page)
+  await page.goto(`${mailpitBase}/search?q=${encodeURIComponent(query)}`); await settle(page)
   // Preserve Mailpit's in-memory searched list by following its result link.
   await tap(page, page.locator(`a[href="/view/${id}"]`).first()); await settle(page)
   const visibleIds = await page.locator('a[href^="/view/"]').evaluateAll(links => links.filter(link => link.textContent?.trim()).map(link => link.getAttribute("href")!.slice("/view/".length)))
@@ -105,6 +108,9 @@ async function ensureTouchMarker(page: Page) {
   })
 }
 
+// Mailpit sandboxed iframes do not run context init scripts. Retain the actual
+// mouse-down dispatch timestamp, then relay it without inventing a click.
+let reportIframePointerDown: ((epochMs: number) => void) | undefined
 async function tap(page: Page, target: Locator) {
   await target.scrollIntoViewIfNeeded()
   const box = await target.boundingBox()
@@ -123,7 +129,16 @@ async function tap(page: Page, target: Locator) {
     void marker.getBoundingClientRect()
     marker.classList.add("video-tap")
   })
-  await target.click()
+  const inFrame = await target.evaluate(element => element.ownerDocument.defaultView !== element.ownerDocument.defaultView?.top)
+  if (inFrame) {
+    // The sandbox also blocks injected event callbacks. Dispatch the actual mouse
+    // press explicitly, retaining its timestamp only after the command succeeds.
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+    const epochMs = Date.now()
+    await page.mouse.down()
+    reportIframePointerDown?.(epochMs)
+    await page.mouse.up()
+  } else await target.click()
   await page.waitForTimeout(300)
   await page.evaluate(() => {
     const marker = document.getElementById("video-touch-marker")
@@ -187,6 +202,8 @@ async function main() {
   const product = await pinProductBuildForCapture(localBaseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
   const slug = manifest.slug
+  // The beta videos (#1168): their own organisation and recorder (videos/lib/record-beta-features.ts).
+  const betaSlugs = ["beta-access", "sectors", "shift-swaps"]
   const dir = videoDir(manifest.slug)
   const rawVideo = path.join(dir, "capture.webm")
   const timelineFile = path.join(dir, "timeline.json")
@@ -213,9 +230,9 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const batch22French = ["shift-roster-visibility", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
+  const batch22French = ["shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
-  const frenchChromiumRevision = batch22French || slug === "members-import" ? "1248" : "1243"
+  const frenchChromiumRevision = batch22French || slug === "members-import" ? "1254" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
   const browser = await launchVideoBrowser(chromium, {
     headless: true,
@@ -243,6 +260,11 @@ async function main() {
   let recording = false
   let captureFailed = false
   const inputEvents: NonNullable<Timeline["inputEvents"]> = []
+  reportIframePointerDown = epochMs => {
+    if (!recording) return
+    const atMs = Math.round(performance.now() - startedAt - (Date.now() - epochMs))
+    if (!inputEvents.some(event => event.kind === "click" && Math.abs(event.atMs - atMs) < 80)) inputEvents.push({ kind: "click", atMs })
+  }
   await context.exposeBinding("videoInputSound", (_source, kind: "click" | "key") => {
     if (recording && (kind === "click" || kind === "key")) inputEvents.push({ kind, atMs: Math.round(performance.now() - startedAt) })
   })
@@ -303,7 +325,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -330,7 +352,8 @@ async function main() {
       await page.getByLabel("Email").fill(videoAdminEmail())
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
-      await page.waitForURL(/\/admin\/events/)
+      await page.waitForURL(/\/admin\/dashboard/)
+      await page.goto(`${baseUrl}/admin/events`)
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       featureEventId = href!.split("/").at(-1)!
       await page.evaluate(async (eventId) => {
@@ -353,9 +376,10 @@ async function main() {
       if (!(await heading.isVisible())) throw new Error("Demo event not found; run scripts/seed-demo.ts on the local database first")
     } else if (slug !== "volunteer-form-recap" && slug !== "volunteer-confirmation-errors") {
       await page.goto(`${baseUrl}/admin/login`)
-      await page.getByLabel("Email").fill(slug === "platform-internal-administration" ? "video.operator.platform@example.org" : slug === "privacy-personal-links" ? "video.privacy.a.owner@example.org" : slug === "last-minute-changes" ? "video.last-minute.owner@example.org" : slug === "organization-activity-log" ? "video.org-activity.owner@example.org" : slug === "data-exports-archives" ? "video.exports.owner@example.org" : videoAdminEmail())
+      await page.getByLabel("Email").fill(slug === "platform-internal-administration" ? "video.operator.platform@example.org" : slug === "privacy-personal-links" ? "video.privacy.a.owner@example.org" : slug === "last-minute-changes" ? "video.last-minute.owner@example.org" : slug === "organization-activity-log" ? "video.org-activity.owner@example.org" : slug === "data-exports-archives" ? "video.exports.owner@example.org" : betaSlugs.includes(slug) ? (await import("../lib/record-beta-features")).BETA_OWNER_EMAIL : slug === "workload-protection" ? (await import("../lib/record-workload-protection")).WORKLOAD_OWNER_EMAIL : slug === "assignment-proposals" ? (await import("../lib/record-assignment-proposals")).PROPOSALS_OWNER_EMAIL : slug === "assignment-publication" ? (await import("../lib/record-assignment-publication")).PUBLICATION_OWNER_EMAIL : slug === "volunteer-event-availability" ? (await import("../lib/record-volunteer-event-availability")).VOLUNTEER_AVAILABILITY_OWNER_EMAIL : videoAdminEmail())
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
+      if (slug === "platform-internal-administration") await (await import("../lib/operator-second-factor")).passOperatorSecondFactor(page)
       await page.waitForURL(slug === "platform-internal-administration" ? /\/super-admin\/organizations/ : /\/admin\/(events|dashboard)/)
       if (slug !== "platform-internal-administration") await page.goto(`${baseUrl}/admin/events`)
       await settle(page)
@@ -498,6 +522,24 @@ async function main() {
     const operatorRecording = slug === "platform-internal-administration"
       ? await (await import("../lib/record-operator")).prepareOperatorRecording(page, baseUrl, dir, rehearsal)
       : undefined
+    // Real sessions of the beta videos, opened before the screencast: no login form is filmed.
+    const betaSessions = slug === "beta-access" || slug === "sector-leaders"
+      ? await (async () => {
+        const beta = await import("../lib/record-beta-features")
+        return {
+          owner: slug === "beta-access" ? await page.context().cookies() : await beta.betaSessionCookies(page, baseUrl, beta.BETA_OWNER_EMAIL),
+          operator: slug === "beta-access" ? await beta.betaSessionCookies(page, baseUrl, beta.BETA_OPERATOR_EMAIL) : [],
+        }
+      })()
+      : undefined
+    // The volunteer's dated availability (#1146): asked off screen through the organisers' real route, then signed out.
+    const volunteerAvailabilitySetup = slug === "volunteer-event-availability"
+      ? await (await import("../lib/record-volunteer-event-availability")).prepareVolunteerAvailability(page, baseUrl)
+      : undefined
+    // Publishing the drafts (#1172): Emma's availability link sent off screen, the owner's session kept.
+    const publicationSetup = slug === "assignment-publication"
+      ? await (await import("../lib/record-assignment-publication")).preparePublication(page, baseUrl)
+      : undefined
 
     await page.screencast.start({
       path: rawVideo,
@@ -509,6 +551,24 @@ async function main() {
 
     if (slug === "shift-roster-visibility") {
       await (await import("../lib/record-shift-roster")).recordShiftRoster({ page, base: baseUrl, dir, scene, tap, settle, fill: fillVisibly })
+    } else if (betaSlugs.includes(slug)) {
+      const beta = await import("../lib/record-beta-features")
+      const tools = { page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally }
+      if (slug === "beta-access") await beta.recordBetaAccess({ ...tools, operator: betaSessions!.operator, owner: betaSessions!.owner })
+      else if (slug === "sectors") await beta.recordSectors(tools)
+      else await beta.recordShiftSwaps(tools)
+    } else if (slug === "workload-protection") {
+      // Breaks and workload protection (#1171): its own organisation and recorder.
+      await (await import("../lib/record-workload-protection")).recordWorkloadProtection({ page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally })
+    } else if (slug === "assignment-proposals") {
+      // Assignment proposals (#1172): its own organisation and recorder.
+      await (await import("../lib/record-assignment-proposals")).recordAssignmentProposals({ page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally })
+    } else if (slug === "assignment-publication" && publicationSetup) {
+      // Publishing the drafts and what volunteers can do next (#1172): its own organisation and recorder.
+      await (await import("../lib/record-assignment-publication")).recordAssignmentPublication({ page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally, setup: publicationSetup })
+    } else if (slug === "volunteer-event-availability" && volunteerAvailabilitySetup) {
+      // The volunteer's dated availability (#1146): its own organisation and recorder.
+      await (await import("../lib/record-volunteer-event-availability")).recordVolunteerEventAvailability({ page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally, setup: volunteerAvailabilitySetup })
     } else if (slug === "platform-internal-administration" && operatorRecording) {
       const { recordOperator } = await import("../lib/record-operator")
       await recordOperator({ page, base: baseUrl, directory: dir, title: manifest.title, setup: operatorRecording, scene, tap, settle })
@@ -558,11 +618,12 @@ async function main() {
       await submit.scrollIntoViewIfNeeded()
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
-      await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
     })
 
     await scene("success", async () => {
-      const emailNotice = page.getByText("Merci pour ton engagement. Un email de confirmation a été envoyé.")
+      // A public sign-up without proof of the address: the neutral page sends to the emails (AUTHZ-01).
+      const emailNotice = page.getByText(/^Merci pour ton engagement\. Vérifie tes emails/)
       await emailNotice.scrollIntoViewIfNeeded()
       await page.waitForTimeout(900)
     })
@@ -572,7 +633,7 @@ async function main() {
         await page.getByRole("heading", { name: "Événements" }).waitFor()
       })
 
-      await page.screencast.showChapter("Toute l’organisation", { description: "Événements, membres et réglages communs", duration: 1_400 })
+      await page.screencast.showChapter("Toute l’organisation", { description: "Événements, membres et paramètres communs", duration: 1_400 })
       await scene("organization-navigation", async (at) => {
         await at("Le Tableau de bord rassemble")
         await tap(page, page.getByRole("link", { name: "Tableau de bord", exact: true }).first())
@@ -582,7 +643,7 @@ async function main() {
         await at("Membres réunit les personnes connues")
         await tap(page, page.getByRole("link", { name: "Membres", exact: true }).first())
         await page.getByRole("heading", { name: "Membres" }).waitFor()
-        await at("Paramètres concerne les réglages communs.")
+        await at("Paramètres concerne les paramètres communs.")
         await tap(page, page.getByRole("link", { name: "Paramètres", exact: true }).first())
         await page.getByRole("heading", { name: "Paramètres" }).waitFor()
         await at(0.91) /* mid-sentence */
@@ -598,8 +659,8 @@ async function main() {
         await page.getByRole("navigation", { name: "Sections de l'événement" }).scrollIntoViewIfNeeded()
         await at("Partage rassemble le lien public")
         await tap(page, page.getByRole("link", { name: "Partage", exact: true }))
-        await at("Réglages donne accès aux questions")
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await at("Paramètres donne accès aux questions")
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await at("Le menu Autres actions contient")
         await tap(page, page.getByRole("button", { name: "Autres actions" }))
         await page.getByRole("link", { name: "Journal", exact: true }).waitFor()
@@ -890,7 +951,7 @@ async function main() {
       await scene("result", async (at) => {
         await page.goto(`${baseUrl}/?org=${encodeURIComponent(org)}`); await identitySettle()
         await page.getByText("Les bénévoles des Fêtes de Montvert").first().waitFor()
-        await at("Ces réglages sont réservés au")
+        await at("Ces paramètres sont réservés au")
         await page.goto(`${baseUrl}/admin/settings/admins`); await identitySettle()
         await page.getByRole("heading", { name: "Nom de l'organisation", exact: true }).scrollIntoViewIfNeeded()
         await at("Pour corriger un texte visible")
@@ -936,7 +997,7 @@ async function main() {
         const panel = heading.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')]")
         const charter = panel.locator("textarea")
         const insurance = panel.getByRole("switch", { name: "Assurance RC fournie par l'organisation" })
-        await at("Le réglage Assurance RC fournie")
+        await at("Le paramètre Assurance RC fournie")
         await tap(page, insurance)
         await at(0.23) /* mid-sentence */
         await tap(page, insurance)
@@ -994,7 +1055,7 @@ async function main() {
         await page.getByRole("heading", { name: "Charte des bénévoles", exact: true }).scrollIntoViewIfNeeded()
         await at("Pour une information urgente, utilisez")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
-        await page.getByRole("heading", { name: "Communication", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("result", async () => {
@@ -1071,7 +1132,7 @@ async function main() {
       await scene("calendar", async (at) => {
         // Demonstrate the real volunteer command, not an unrelated admin list.
         await page.goto(`${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
-        const calendar = page.getByRole("link", { name: "Ajouter tout mon planning à mon calendrier (fichier .ics)", exact: true })
+        const calendar = page.getByRole("link", { name: "Télécharger tout mon planning (fichier .ics)", exact: true })
         await calendar.scrollIntoViewIfNeeded()
         await at(0.22)
         const downloading = page.waitForEvent("download")
@@ -1409,7 +1470,7 @@ async function main() {
       await scene("describe", async (at) => {
         await typeNaturally(page, form.getByLabel(/^Poste/), "Caisse et accueil")
         await at("Le texte sous le champ rappelle")
-        await form.locator("p[id$='-role-hint']").filter({ hasText: /Les réglages du poste/ }).waitFor()
+        await form.locator("p[id$='-role-hint']").filter({ hasText: /Les paramètres du poste/ }).waitFor()
         await at("Cochez les jours")
         await tap(page, form.getByRole("checkbox", { name: "mardi", exact: true }))
         await tap(page, form.getByRole("checkbox", { name: "jeudi", exact: true }))
@@ -1857,7 +1918,7 @@ async function main() {
         const age = page.getByLabel("Âge minimum (optionnel)", { exact: true })
         await age.scrollIntoViewIfNeeded()
         if (await age.inputValue() !== "18") throw new Error("Evening Buvette must genuinely require eighteen years")
-        await at("La limite et les étiquettes")
+        await at("La limite, les étiquettes réservées")
         await tap(page, page.getByRole("button", { name: "Annuler" }))
         await tap(page, page.getByRole("button", { name: "Gérer les postes" }))
         await page.getByRole("heading", { name: "Gérer les postes" }).waitFor()
@@ -1943,9 +2004,58 @@ async function main() {
         if (await page.getByLabel("Nom *", { exact: true }).inputValue() !== "Favre") throw new Error("Wrong invitation member shown")
       })
 
+      await scene("answer", async at => {
+        page.setDefaultTimeout(15000)
+        console.log("Answer: access editor")
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settleEligibility()
+        await at("Dans Gérer les postes")
+        await tap(page, page.getByRole("button", { name: "Gérer les postes", exact: true }))
+        await tap(page, page.getByRole("button", { name: /Accès : tous, poste « Navette »/ }))
+        const condition = page.getByLabel(/Condition d'accès.*poste « Navette »/)
+        await at("Choisissons la question Permis de conduire")
+        await condition.selectOption({ label: "Permis de conduire" })
+        const access = page.locator("form").filter({ has: condition })
+        await tap(page, access.getByRole("checkbox", { name: "Oui", exact: true }))
+        const saved = page.waitForResponse(r => r.url().includes("/roles/Navette") && r.request().method() === "PATCH")
+        await tap(page, access.getByRole("button", { name: "Enregistrer", exact: true }))
+        if (!(await saved).ok()) throw new Error("Navette answer condition did not save")
+        console.log("Answer: public planning")
+        await at("Sur la page publique")
+        await clearVolunteerSession()
+        await page.goto(`${publicPlanning}&token=demo-invite-julien-security-0001`); await settleEligibility()
+        await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+        const navette = page.getByRole("button", { name: /Navette/ }).filter({ hasText: /Réponse requise/ }).first()
+        await navette.scrollIntoViewIfNeeded()
+        if (!(await navette.innerText()).includes("Réponse requise : Permis de conduire, Oui")) throw new Error("Public answer condition missing")
+        console.log("Answer: contact form")
+        await at("Essayons de nous inscrire avec Non")
+        await tap(page, navette)
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        if (await page.getByLabel("Prénom *", { exact: true }).inputValue() !== "Julien") throw new Error("The actual invitation must prefill Julien")
+        const birth = page.getByLabel("Date de naissance *", { exact: true })
+        if (await birth.count() && !await birth.inputValue()) await fillVisibly(page, birth, "1995-11-28")
+        await tap(page, page.getByRole("group", { name: /Taille de t-shirt/ }).getByRole("radio", { name: "M", exact: true }))
+        const permis = page.getByRole("group", { name: /Permis de conduire/ })
+        await tap(page, permis.getByRole("radio", { name: "Non", exact: true }))
+        await tap(page, page.getByRole("checkbox", { name: /J'ai lu et j'accepte/ }))
+        await tap(page, page.getByRole("checkbox", { name: /J'accepte que l'association/ }))
+        console.log("Answer: wrong answer submit")
+        await at("Au moment de confirmer")
+        await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
+        await page.getByText(/Ce poste est réservé aux personnes qui répondent Oui/).first().waitFor()
+        await page.screenshot({ path: path.join(dir, "review", "answer-refused.png") })
+        await at("Choisissons maintenant Oui et confirmons")
+        await tap(page, permis.getByRole("radio", { name: "Oui", exact: true }))
+        const accepted = page.waitForResponse(r => r.url().endsWith("/api/public/registrations") && r.request().method() === "POST")
+        await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
+        if (!(await accepted).ok()) throw new Error("Accepted answer was refused")
+        await page.getByRole("heading", { name: /Merci|inscription.*confirm|C.est noté/i }).first().waitFor()
+        await page.screenshot({ path: path.join(dir, "review", "answer-accepted.png") })
+      })
+
       await scene("result", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settleEligibility()
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await settleEligibility()
         await page.getByLabel("Description", { exact: true }).scrollIntoViewIfNeeded()
         await at("Vérifions aussi le téléphone obligatoire")
@@ -2302,8 +2412,8 @@ async function main() {
         await page.getByRole("heading", { name: "Toutes tes inscriptions ont été annulées" }).waitFor()
         if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Refusing personal state verification outside video DB")
         const { PrismaClient } = await import("../../src/generated/prisma/client")
-        const { PrismaPg } = await import("@prisma/adapter-pg")
-        const verificationDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+        const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+        const verificationDb = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
         try {
           const remaining = await verificationDb.registration.count({ where: {
             eventId: featureEventId, volunteer: { email: "camille.rochat@example.org" },
@@ -2347,7 +2457,7 @@ async function main() {
         await file.saveAs(target)
         return (await readFile(target, "utf8")).replace(/\r\n[ \t]/g, "")
       }
-      const allLink = () => page.getByRole("link", { name: /^Ajouter tout mon planning/ })
+      const allLink = () => page.getByRole("link", { name: /^Télécharger tout mon planning/ })
       const events = (ics: string) => ics.split("BEGIN:VEVENT").slice(1).map(block => block.split("END:VEVENT")[0])
       let oldPlanning = ""
       let newPlanning = ""
@@ -2359,7 +2469,7 @@ async function main() {
         const one = await download(page.getByRole("link", { name: /Ajouter à mon calendrier.*Accueil/ }), "accueil.ics")
         if (events(one).length !== 1 || !one.includes("Accueil")) throw new Error("Single calendar download is not exactly Accueil")
         await at("Ce téléchargement ne crée pas")
-        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
       })
       await scene("all", async at => {
         oldPlanning = await download(allLink(), "planning-original.ics")
@@ -2373,7 +2483,7 @@ async function main() {
         // control and its hint; do not fabricate or claim a calendar-client result.
         await allLink().scrollIntoViewIfNeeded()
         await at(0.48) /* mid-sentence */
-        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
       })
       await scene("details", async at => {
         for (const expected of ["Arrive 15 minutes avant", "Manon Aebi", "/my/", "GEO:"]) {
@@ -2412,7 +2522,7 @@ async function main() {
         if (!night?.includes(`DTSTART:${icsInstant(nightDate, "23:00")}`)) throw new Error("Updated calendar does not contain 23:00 Zurich start")
         if (!night.includes(`DTEND:${icsInstant(nextDate, "02:00")}`)) throw new Error("PRODUCT BUG: shifting overnight start also changed its 02:00 end; refuse a misleading calendar take")
         await at(0.52) /* mid-sentence */
-        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
       })
       await scene("result", async at => {
         await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).scrollIntoViewIfNeeded()
@@ -2446,14 +2556,14 @@ async function main() {
       const { recordDayOf } = await import("../lib/record-day-of")
       const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       if (baseUrl !== "http://localhost:43108") throw new Error("Attendance requires its independent Jour J server")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       try {
         await verifyDayOfReviewFixture(db)
         await recordAttendance({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, personPrefix: "video-dayof-attendance-person-", scene, tap, settle })
         await recordDayOf({ page, base: baseUrl, productCommit: product.commit, scene, tap, settle, typeNaturally,
-          fixture: { eventId: "video-dayof-event-live", registrationId: "video-dayof-registration-zoe", volunteerName: "Zoé Exemple", volunteerEmail: "video.attendance.7@example.org", phone: "079 000 00 01", runningShiftId: "video-dayof-shift-running", upcomingShiftId: "video-dayof-shift-upcoming", earlierShiftId: "video-dayof-shift-earlier", nightShiftId: "video-dayof-shift-night", roleSearch: "Accueil", accentSearch: "zoe", expectedAccentName: "Zoé Exemple" },
+          fixture: { eventId: "video-dayof-event-live", registrationId: "video-dayof-registration-zoe", volunteerName: fullNameOf("Zoé"), volunteerEmail: "video.attendance.7@example.org", phone: "079 000 00 01", runningShiftId: "video-dayof-shift-running", upcomingShiftId: "video-dayof-shift-upcoming", earlierShiftId: "video-dayof-shift-earlier", nightShiftId: "video-dayof-shift-night", roleSearch: "Accueil", accentSearch: "zoe", expectedAccentName: fullNameOf("Zoé") },
           verifyFixture: async () => {
             await verifyDayOfReviewFixture(db)
             const r = await db.registration.findUniqueOrThrow({ where: { id: "video-dayof-registration-zoe" }, include: { volunteer: true } })
@@ -2476,9 +2586,9 @@ async function main() {
     } else if (slug === "targeted-messages") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Messages require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       const { selectRecipients, selectInvitedWithoutShift } = await import("../../src/lib/targeted-message")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const url = `${baseUrl}/admin/events/${featureEventId}/message`
       const templatesUrl = `${baseUrl}/admin/settings/message-templates`
       const modelName = "Briefing avant le créneau"
@@ -2625,7 +2735,7 @@ async function main() {
           const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string; Subject: string; To: { Address: string }[]; Created: string }[] }
           const mails = inbox.messages.filter(m => m.Subject.includes("Ton briefing pour Buvette") && Date.parse(m.Created) >= history.createdAt.getTime() - 1000)
           if (mails.length !== recipients.length || mails.filter(m => m.To.some(t => t.Address === "lea.giroud@example.org")).length !== 1) throw new Error("Actual campaign mail deduplication failed")
-          for (const [index, recipient] of recipients.slice(0, 2).entries()) {
+          for (const recipient of recipients.slice(0, 2)) {
             await at("Dans notre boîte de test, ouvrons les emails")
             const mail = mails.find(m => m.To.some(t => t.Address === recipient.volunteer.email)); if (!mail) throw new Error("Recipient mail missing")
             await openRegistrationTakeMailbox(page, dir, mail.ID, 'subject:"Ton briefing pour Buvette" "Fête du village de Montvert"')
@@ -2655,14 +2765,14 @@ async function main() {
     } else if (slug === "staffing-gaps") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Staffing checks require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       const { staffingSummary } = await import("../../src/lib/staffing")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const staffingUrl = `${baseUrl}/admin/events/${featureEventId}/staffing`
       const readSummary = async () => {
         const shifts = await db.shift.findMany({ where: { eventId: featureEventId, status: { not: "cancelled" } }, include: { registrations: true } })
         const leaders = await db.sectorLeader.findMany({ where: { eventId: featureEventId } })
-        return staffingSummary(shifts.map(s => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10), startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, active: s.registrations.filter(r => r.status === "active").length, waiting: s.registrations.filter(r => r.status === "waiting" || r.status === "offered").length, requested: s.registrations.filter(r => r.status === "requested").length, closed: s.status === "closed" })), leaders.map(l => l.roleName))
+        return staffingSummary(shifts.map(s => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10), startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, active: s.registrations.filter(r => r.status === "active").length, waiting: s.registrations.filter(r => r.status === "waiting" || r.status === "offered").length, requested: s.registrations.filter(r => r.status === "requested").length, closed: s.status === "closed" })), leaders.flatMap(l => (l.roleName ? [l.roleName] : [])))
       }
       const initial = await readSummary()
       const checks: Record<string, unknown> = { initialTotals: initial.totals }
@@ -2762,7 +2872,7 @@ async function main() {
           await tap(page, page.getByRole("button", { name: "Choisir Julien Favre", exact: true }))
           await at("nous choisissons le bon horaire et enregistrons")
           await tap(page, page.getByRole("combobox", { name: "Créneau", exact: true }))
-          await tap(page, page.getByRole("option", { name: /^sam\..*de 10h à 12h, Photos/ }))
+          await tap(page, page.getByRole("option", { name: /^sam\..*10h–12h, Photos/ }))
           await at("nous choisissons le bon horaire et enregistrons")
           const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
           await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
@@ -2782,8 +2892,8 @@ async function main() {
     } else if (slug === "registrations-place-member") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Placement requires isolated video database")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const member = await db.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "sarah.jaquet@example.org" } })
       const shiftIds = (await db.shift.findMany({ where: { eventId: featureEventId, OR: [{ roleName: "Accueil", startTime: "15:00" }, { roleName: "Démontage", startTime: "15:00" }] } })).map(s => s.id)
       const choose = async (name: string, option: RegExp) => {
@@ -2815,12 +2925,12 @@ async function main() {
         })
         await scene("shifts", async at => {
           await at("Choisissons un premier créneau")
-          await choose("Créneau", /de 15h à 18h, Accueil/)
+          await choose("Créneau", /15h–18h, Accueil/)
           await at("Cliquez ensuite sur Ajouter un autre créneau")
           await tap(page, page.getByRole("button", { name: "+ Ajouter un autre créneau", exact: true }))
           await page.getByRole("combobox", { name: "Créneau 2 (facultatif)", exact: true }).waitFor()
           await at("Choisissons le démontage du lendemain")
-          await choose("Créneau 2 (facultatif)", /de 15h à 18h, Démontage/)
+          await choose("Créneau 2 (facultatif)", /15h–18h, Démontage/)
         })
         await scene("add", async at => {
           await at("Avant de valider, lisez la phrase sous la note")
@@ -2864,8 +2974,8 @@ async function main() {
     } else if (slug === "registrations-management") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Registration checks require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const checks: Record<string, unknown> = {}
       const adminUrl = `${baseUrl}/admin/events/${featureEventId}/registrations`
       const search = () => page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
@@ -2914,7 +3024,7 @@ async function main() {
           await fillVisibly(page, search(), "Léon")
           await at("Nous choisissons Accueil, et seulement")
           await page.getByRole("combobox", { name: "Filtrer par poste", exact: true }).selectOption({ label: "Accueil" })
-          await at("la liste se réduit aux"); await chooseShift("Filtrer par créneau", /de 15h à 18h, Accueil/)
+          await at("la liste se réduit aux"); await chooseShift("Filtrer par créneau", /15h–18h, Accueil/)
           await page.getByRole("link", { name: "Écrire à ce créneau", exact: true }).waitFor()
           checks.filteredAfternoonRows = await page.locator("tbody tr").count()
           await at("Pour retrouver toute la liste"); await page.getByRole("combobox", { name: "Filtrer par poste", exact: true }).selectOption("")
@@ -2950,7 +3060,7 @@ async function main() {
           await typeNaturally(page, page.getByLabel("Note", { exact: true }), "Horaire convenu par téléphone")
         })
         await scene("manual-check", async at => {
-          await chooseShift("Créneau *", /de 9h à 12h, Accueil.*déjà inscrit/)
+          await chooseShift("Créneau *", /9h–12h, Accueil.*Déjà inscrit/)
           await at("Si nous essayons de l'ajouter")
           const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
           await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
@@ -2958,11 +3068,11 @@ async function main() {
           if (result.status() !== 409) throw new Error("Duplicate registration was not refused")
           await page.getByText("Cette personne est déjà inscrite sur ce créneau.", { exact: true }).waitFor()
           checks.duplicateRejected = true
-          await at("Sur la buvette du matin"); await chooseShift("Créneau *", /de 10h à 14h, Buvette.*conflit d'horaire/)
+          await at("Sur la buvette du matin"); await chooseShift("Créneau *", /10h–14h, Buvette.*conflit/)
           await page.locator("#add-shift-conflict").waitFor()
           checks.overlapWarningObservedWithoutSubmitting = true
           await at("Choisissons plutôt un horaire compatible")
-          await chooseShift("Créneau *", /de 15h à 18h, Accueil/)
+          await chooseShift("Créneau *", /15h–18h, Accueil/)
           if (await page.locator("#add-shift-conflict").isVisible()) throw new Error("Narrated compatible shift still has an overlap warning; correct the management fixture before filming")
           checks.compatibleShiftWithoutWarning = true
         })
@@ -2992,7 +3102,7 @@ async function main() {
           if (!cron.ok()) throw new Error(`Actual cron failed: ${cron.status()}`)
           await openNewMail("camille.rochat@example.org", before)
           const confirmationText = await page.frameLocator("iframe").locator("body").innerText()
-          if (!confirmationText.includes("Élodie Rochat") || !confirmationText.includes("Accueil") || !confirmationText.includes("15h") || !confirmationText.includes("Voir mes créneaux")) throw new Error("Actual organizer confirmation content differs from expected fixture")
+          if (!confirmationText.includes("Élodie Rochat") || !confirmationText.includes("Accueil") || !confirmationText.includes("15h") || !confirmationText.includes("Gérer mes inscriptions")) throw new Error("Actual organizer confirmation content differs from expected fixture")
           const sent = await db.notificationOutbox.findUniqueOrThrow({ where: { id: pending[0].id } })
           if (sent.status !== "sent") throw new Error("Organizer confirmation was not sent")
           checks.manualConfirmationRealCron = true
@@ -3117,9 +3227,9 @@ async function main() {
       const initialSummary = await summary()
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Reminder checks require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       const { linkToken } = await import("../../src/lib/token-vault")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const originalInvites = await db.memberInvite.findMany({ where: { eventId: featureEventId }, select: { id: true, volunteerId: true, volunteer: { select: { email: true } }, ...linkToken.select } })
       const originalTokens = new Map(originalInvites.map(i => [i.id, linkToken.reveal(i)]))
       await db.$disconnect()
@@ -3153,9 +3263,9 @@ async function main() {
         await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Relancer", exact: true }))
         const result = await response
         const sent = await result.json()
-        if (!result.ok() || sent.failed || sent.sent < 1) throw new Error("Reminder delivery failed")
+        if (!result.ok() || !(sent.queued >= 1)) throw new Error("Reminder delivery failed")
         checks.simpleReminder = sent
-        await page.getByText(`${sent.sent} relances envoyées`, { exact: true }).waitFor()
+        await page.getByText(`${sent.queued} relances en cours d'envoi.`, { exact: true }).waitFor()
       })
       await scene("link", async at => {
         await at("Ouvrons l'email reçu dans")
@@ -3305,7 +3415,7 @@ async function main() {
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await at("Nous faisons une vraie inscription")
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+        await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
       })
       await scene("reserved", async at => {
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
@@ -3434,9 +3544,9 @@ async function main() {
         const dbUrl = new URL(process.env.DATABASE_URL ?? "")
         if (!["localhost", "127.0.0.1"].includes(dbUrl.hostname) || dbUrl.port !== "45433" || dbUrl.pathname !== "/benevoles_video") throw new Error("Import ownership requires isolated video DB")
         const { PrismaClient } = await import("../../src/generated/prisma/client")
-        const { PrismaPg } = await import("@prisma/adapter-pg")
+        const { pgAdapter } = await import("../../src/lib/prisma-adapter")
         const { collectImportOwnership } = await import("../lib/member-import-ownership")
-        const ownershipDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: dbUrl.href }) })
+        const ownershipDb = new PrismaClient({ adapter: pgAdapter(dbUrl.href) })
         try {
         const beforeMembers = await ownershipDb.volunteer.findMany({ where: { organizationId: "default" } })
         await at("Quand l'aperçu vous convient")
@@ -3485,6 +3595,28 @@ async function main() {
         await at(0.94) /* mid-sentence: final-audio cut at 0.86 still ended before « puis annulez »; wait for the actual clause */
         await tap(page, form().getByRole("button", { name: "Retour", exact: true }))
         await tap(page, form().getByRole("button", { name: "Annuler", exact: true }))
+      })
+      await scene("cleanup", async at => {
+        await at("Filtrons la liste")
+        await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "René")
+        await page.getByRole("row").filter({ hasText: "René" }).first().waitFor()
+        await tap(page, page.getByRole("checkbox", { name: "Tout sélectionner", exact: true }))
+        await at("Avec Supprimer la sélection")
+        await tap(page, page.getByRole("button", { name: "Supprimer la sélection", exact: true }))
+        const confirm = page.getByRole("alertdialog")
+        await confirm.waitFor()
+        await at("Les membres qui ont des inscriptions")
+        const keep = confirm.getByRole("checkbox", { name: /Désactiver le membre qui a des inscriptions/ })
+        await keep.waitFor()
+        await at("Cochons la case pour les désactiver")
+        await tap(page, keep)
+        const deleted = page.waitForResponse(r => r.url().includes("/api/admin/members/bulk") && r.request().method() === "POST")
+        await tap(page, confirm.getByRole("button", { name: "Supprimer", exact: true }))
+        if (!(await deleted).ok()) throw new Error("Bulk cleanup failed")
+        await page.getByRole("status").filter({ hasText: /supprimé/ }).first().waitFor()
+        checks.bulkCleanup = await (await import("../lib/record-member-cleanup")).verifyRecordedMemberCleanup(dir)
+        await at("Les autres fiches sélectionnées sont supprimées")
+        await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "")
       })
       await scene("result", async () => {
         await page.getByRole("heading", { name: "Membres", exact: true }).scrollIntoViewIfNeeded()
@@ -3761,8 +3893,8 @@ async function main() {
         // journeys, never the resend counters whose real limit is demonstrated above.
         if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Read-counter fixture requires isolated video DB")
         const { PrismaClient } = await import("../../src/generated/prisma/client")
-        const { PrismaPg } = await import("@prisma/adapter-pg")
-        const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+        const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+        const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
         try { await db.rateLimit.deleteMany({ where: { key: { startsWith: "reg-token-read:" } } }) }
         finally { await db.$disconnect() }
       }
@@ -3783,10 +3915,10 @@ async function main() {
         await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
         await at("Avec Recevoir ce lien par")
         await tap(page, page.getByRole("button", { name: "Recevoir ce lien par email", exact: true }))
-        await page.getByText("Un nouvel email avec ton lien vient de partir.", { exact: true }).waitFor()
+        await page.getByText(/^Demande enregistrée : tu vas recevoir ce lien par email/).waitFor()
         await at("Attendons le résultat, puis ouvrons")
         await page.goto("http://localhost:48026"); await settle(page)
-        await tap(page, page.getByText(/Ton lien pour gérer ton inscription/).first())
+        await tap(page, page.getByText(/Ton lien pour gérer tes inscriptions/).first())
         await page.frameLocator("iframe").locator('a[href*="/my/"]').first().waitFor()
       })
       await scene("recover", async at => {
@@ -3839,7 +3971,7 @@ async function main() {
         await section().scrollIntoViewIfNeeded()
       })
       await scene("result", async at => {
-        await at("Reviens sur ta page personnelle")
+        await at("Reviens sur ta page Mes inscriptions")
         await tap(page, section().getByLabel("Matin", { exact: true }))
         await tap(page, section().getByLabel("Soir", { exact: true }))
         await fillVisibly(page, section().getByLabel(/Sauf/), "")
@@ -3860,7 +3992,7 @@ async function main() {
       })
       await scene("nominate", async (at) => {
         await at("Dans l'événement, ouvrez les responsables")
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await tap(page, page.getByRole("link", { name: "Responsables de secteur", exact: true }))
         await tap(page, page.getByRole("button", { name: "+ Ajouter un responsable", exact: true }))
         await at("Choisissez le poste, puis renseignez")
@@ -3886,7 +4018,7 @@ async function main() {
       })
       let nominationMail: { ID: string } | undefined
       for (let attempt = 0; attempt < 40 && !nominationMail; attempt++) {
-        const response = await page.request.get("http://localhost:48026/api/v1/search", { params: { query: 'subject:"Fête du village de Montvert"', limit: 500 } })
+        const response = await page.request.get(`${mailpitBase}/api/v1/search`, { params: { query: 'subject:"Fête du village de Montvert"', limit: 500 } })
         const result = await response.json() as { messages: { ID: string; Subject: string; To: { Address: string }[] }[] }
         nominationMail = result.messages.find(m => m.To.some(to => to.Address === "samira.perrin@example.org") && /responsable/i.test(m.Subject))
         if (!nominationMail) await page.waitForTimeout(250)
@@ -3926,7 +4058,8 @@ async function main() {
         await page.locator("section").last().scrollIntoViewIfNeeded()
       })
       await scene("new-signup", async (at) => {
-        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settleSector()
+        // Production public routes identify the organisation by host, never by ?org=.
+        await page.goto(`https://${org}.benevol.app/${eventSlug}`); await settleSector()
         await tap(page, page.getByRole("button", { name: /^10h–14h \d+\/\d+, Buvette : sélectionner/ }).last())
         await at("Nora choisit ce créneau, puis")
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
@@ -3944,7 +4077,7 @@ async function main() {
         await page.getByLabel(/^Prénom(?: \*)?$/).evaluate(element => element.scrollIntoView({ block: "center" }))
         await at("Nous confirmons maintenant")
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+        await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
       })
       const signupQuery = 'to:elodie.rochat@example.org subject:"Nouvelle inscription" "Fête du village de Montvert"'
       let notificationMail: { ID: string } | undefined
@@ -3985,6 +4118,8 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "+ Ajouter un responsable", exact: true }))
         await page.getByLabel(/^Email(?: \*)?$/).waitFor()
       })
+      // Sector leaders (#1169): the same page in an event organised by sectors (beta organisation).
+      await (await import("../lib/record-beta-features")).recordSectorLeadersBySector({ page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally, owner: betaSessions!.owner })
     } else if (slug === "event-archive-delete") {
       const disposableTitle = "Ancienne fête de Montvert — copie de démonstration"
       await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)
@@ -4012,14 +4147,14 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Autres actions", exact: true }))
         await tap(page, page.getByRole("button", { name: "Archiver" }))
         await page.getByRole("button", { name: "Confirmer", exact: true }).waitFor()
-        await at("Après validation, la page publique disparaît")
+        await at("Après validation, la page d’inscription disparaît")
         await tap(page, page.getByRole("button", { name: "Confirmer" }))
         await page.getByText("Archivé", { exact: true }).first().waitFor()
       })
 
       await scene("delete-open", async (at) => {
         await at("La suppression définitive")
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await settle(page)
         await page.getByRole("heading", { name: "Suppression définitive" }).scrollIntoViewIfNeeded()
         await at("Le récapitulatif indique précisément combien")
@@ -4142,7 +4277,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/edit`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Informer, orienter et partager", duration: 2_300 })
-        await page.getByRole("heading", { name: "Modifier l'événement" }).waitFor()
+        await page.getByRole("heading", { name: "Informations de l'événement" }).waitFor()
       })
 
       await scene("program", async (at) => {
@@ -4292,8 +4427,8 @@ async function main() {
         await page.getByRole("group", { name: "Ce qui est copié" }).scrollIntoViewIfNeeded()
         await at(0.22) /* mid-sentence */
         await page.getByRole("checkbox", { name: "Les créneaux" }).hover()
-        await at("Les réglages reprennent les messages")
-        await page.getByRole("checkbox", { name: "Les messages et réglages d'inscription" }).hover()
+        await at("Les paramètres reprennent les messages")
+        await page.getByRole("checkbox", { name: "Les messages et paramètres d'inscription" }).hover()
         await at("Les pages personnalisées peuvent aussi")
         await page.getByRole("checkbox", { name: "Les pages personnalisées" }).hover()
       })
@@ -4325,7 +4460,7 @@ async function main() {
         await page.getByRole("heading", { name: "Fête du village de Montvert 2027" }).waitFor()
         await at("Elle s’ouvre dans l’administration")
         await page.getByText("Prêt à publier", { exact: true }).first().scrollIntoViewIfNeeded()
-        await at("Vérifions ses réglages")
+        await at("Vérifions ses paramètres")
         await page.goto(`${baseUrl}/admin/events/${copyId}/edit`); await settle(page)
         await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).scrollIntoViewIfNeeded()
         if (await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).isChecked()) throw new Error("Copied event registrations must be closed")
@@ -4370,7 +4505,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/edit`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Qui voit la page, et quand peut-on s’inscrire ?", duration: 2_300 })
-        await page.getByRole("heading", { name: "Modifier l'événement" }).waitFor()
+        await page.getByRole("heading", { name: "Informations de l'événement" }).waitFor()
       })
 
       await scene("statuses", async (at) => {
@@ -4660,7 +4795,7 @@ async function main() {
         await tap(page, phone)
         await at("Choisissons Émeraude et regardons l’aperçu.")
         await tap(page, page.getByRole("radio", { name: /Émeraude/ }))
-        await at("Ces deux réglages pourront être")
+        await at("Ces deux paramètres pourront être")
         await page.getByText("Aperçu de l'en-tête").scrollIntoViewIfNeeded()
       })
 
@@ -4696,16 +4831,16 @@ async function main() {
       await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       await scene("welcome", async (at) => {
         await page.screencast.showChapter(manifest.title, { description: "Le bon accès pour chaque personne", duration: 2_300 })
-        await page.getByRole("heading", { name: /^Administrateurs/ }).waitFor()
+        await page.getByRole("heading", { name: /^Organisateurs/ }).waitFor()
         await at("Ici, trois personnes sont déjà")
         await page.getByText("Samira Diallo", { exact: true }).scrollIntoViewIfNeeded()
       })
 
-      await page.screencast.showChapter("Deux rôles complémentaires", { description: "Protéger les réglages sans bloquer l’équipe", duration: 1_400 })
+      await page.screencast.showChapter("Deux rôles complémentaires", { description: "Protéger les paramètres sans bloquer l’équipe", duration: 1_400 })
       await scene("roles", async (at) => {
         await at("L’organisateur prépare les événements, les")
         await tap(page, page.getByRole("button", { name: "Inviter" }))
-        await page.getByRole("heading", { name: "Inviter un administrateur" }).waitFor()
+        await page.getByRole("heading", { name: "Inviter un organisateur" }).waitFor()
         await at(0.34) /* mid-sentence */
         await page.getByText(/Tous les droits, dont l'équipe/).scrollIntoViewIfNeeded()
         await at("désigné pour un événement, il")
@@ -4716,19 +4851,19 @@ async function main() {
       await scene("invite", async (at) => {
         await at("Pour inviter Léa, ouvrez le")
         await tap(page, page.getByRole("button", { name: "Inviter" }))
-        const form = page.getByRole("heading", { name: "Inviter un administrateur" }).locator("xpath=ancestor::form")
+        const form = page.getByRole("heading", { name: "Inviter un organisateur" }).locator("xpath=ancestor::form")
         await fillVisibly(page, form.getByLabel("Nom"), "Léa Martin")
         await fillVisibly(page, form.getByLabel("Email"), "video.team.lea@example.org")
         await at("Prenons Organisateur")
         await tap(page, form.getByRole("radio", { name: /Organisateur/ }))
         await at("Cliquez sur Envoyer l’invitation ")
         await tap(page, form.getByRole("button", { name: "Envoyer l'invitation" }))
-        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org. Le lien d'activation, valable 7 jours, lui a été envoyé par email." }).waitFor()
+        await page.getByRole("status").filter({ hasText: "Si video.team.lea@example.org peut rejoindre l'équipe, cette adresse reçoit une invitation par email, avec un lien d'activation valable 7 jours." }).waitFor()
       })
 
       await scene("invite-result", async (at) => {
         await at("La confirmation indique")
-        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org." }).scrollIntoViewIfNeeded()
+        await page.getByRole("status").filter({ hasText: "Si video.team.lea@example.org peut rejoindre l'équipe" }).scrollIntoViewIfNeeded()
         if (await page.getByRole("button", { name: "Copier le lien", exact: true }).count()) throw new Error("Owner must never receive the activation link")
         await at("Son accès ne devient actif")
         await page.getByText("Léa Martin", { exact: true }).scrollIntoViewIfNeeded()
@@ -4784,7 +4919,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Rappels, alertes et réponses", duration: 2_300 })
-        await page.getByRole("heading", { name: "Réglages des emails" }).waitFor()
+        await page.getByRole("heading", { name: "Paramètres des emails" }).waitFor()
       })
 
       await page.screencast.showChapter("Les rappels automatiques", { description: "Choisir les moments vraiment utiles", duration: 1_400 })
@@ -4821,15 +4956,15 @@ async function main() {
         await tap(page, enabled)
         if (!(await saved).ok()) throw new Error("Event reminder disable was not saved")
         await page.getByText(/^Modifications enregistrées à/).waitFor()
-        await at("Son onglet Communication")
+        await at("Son onglet Messages")
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/message`); await settle(page)
-        await page.getByRole("heading", { name: "Communication", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
         await page.getByText("Rappels automatiques coupés pour cet événement", { exact: true }).waitFor()
       })
 
       await scene("admin-alert", async (at) => {
         await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
-        const alert = page.getByRole("checkbox", { name: /Prévenir les administrateurs/ })
+        const alert = page.getByRole("checkbox", { name: /Prévenir les organisateurs/ })
         await alert.scrollIntoViewIfNeeded()
         await at(0.30)
         if (await alert.isChecked()) await tap(page, alert)
@@ -4865,15 +5000,15 @@ async function main() {
         await replyTo.pressSequentially("benevoles@example.org", { delay: 115 })
         if (await replyTo.inputValue() !== "benevoles@example.org") throw new Error("Reply address must be fully entered before showing its result")
         await at(0.72)
-        await page.getByText(/Cette adresse figure aussi sur la page personnelle/).scrollIntoViewIfNeeded()
+        await page.getByText(/Cette adresse figure aussi sur la page « Mes inscriptions »/).scrollIntoViewIfNeeded()
       })
 
       await scene("save", async (at) => {
-        await at("Enregistrez les réglages avant de les tester")
+        await at("Enregistrez les paramètres avant de les tester")
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
-        await page.getByRole("status").filter({ hasText: "Réglages enregistrés." }).waitFor()
-        await at("Le message Réglages enregistrés")
-        await page.getByRole("status").filter({ hasText: "Réglages enregistrés." }).scrollIntoViewIfNeeded()
+        await page.getByRole("status").filter({ hasText: "Paramètres enregistrés." }).waitFor()
+        await at("Le message Paramètres enregistrés")
+        await page.getByRole("status").filter({ hasText: "Paramètres enregistrés." }).scrollIntoViewIfNeeded()
       })
 
       await page.screencast.showChapter("Tester avant d’envoyer", { description: "Contrôler le transport et l’expéditeur", duration: 1_400 })
@@ -4903,9 +5038,9 @@ async function main() {
       })
 
       await scene("result", async (at) => {
-        await at("Les réglages sont enregistrés")
+        await at("Les paramètres sont enregistrés")
         await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
-        await page.getByRole("heading", { name: "Réglages des emails" }).waitFor()
+        await page.getByRole("heading", { name: "Paramètres des emails" }).waitFor()
         await at("Dans Emails envoyés")
         await page.getByRole("heading", { name: "Emails envoyés", exact: true }).scrollIntoViewIfNeeded()
         await page.getByRole("row").filter({ hasText: "video.email.owner@example.org" }).first().waitFor()
@@ -5105,7 +5240,7 @@ async function main() {
 
       await scene("team", async (at) => {
         await at(0.05) /* mid-sentence */
-        await page.getByRole("heading", { name: /Administrateurs/ }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: /^Organisateurs/ }).scrollIntoViewIfNeeded()
         await at("Les responsables de secteur reçoivent")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/sector-leaders`); await settle(page)
         await page.getByRole("heading", { name: "Responsables de secteur" }).waitFor()
@@ -5125,10 +5260,10 @@ async function main() {
 
       await scene("appearance", async (at) => {
         await at(0.08) /* mid-sentence */
-        const editHeading = page.getByRole("heading", { name: "Modifier l'événement" })
+        const editHeading = page.getByRole("heading", { name: "Informations de l'événement" })
         if (await editHeading.isVisible()) await editHeading.scrollIntoViewIfNeeded()
         await at(0.35) /* mid-sentence: color in the first sentence */
-        await page.getByText("Couleur de la page publique").scrollIntoViewIfNeeded()
+        await page.getByText("Couleur de la page d'inscription").scrollIntoViewIfNeeded()
         await at("Le lieu peut recevoir des")
         await page.getByLabel("Lieu").scrollIntoViewIfNeeded()
         const coordinates = page.getByText(/coordonnées/i).first()
@@ -5253,7 +5388,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
       await page.screencast.showChapter("Communiquer", { description: "Messages, modèles et rappels", duration: 1_400 })
       await scene("messages", async (at) => {
-        await page.getByRole("heading", { name: "Communication", exact: true }).waitFor()
+        await page.getByRole("heading", { name: "Messages", exact: true }).waitFor()
         await page.getByText("Destinataires", { exact: true }).scrollIntoViewIfNeeded()
         await at("Les modèles réutilisables acceptent des")
         await page.goto(`${baseUrl}/admin/settings/message-templates`); await settle(page)
@@ -5301,7 +5436,7 @@ async function main() {
         await page.screencast.showChapter(manifest.title, { description: "Du premier inscrit au jour J", duration: 2_300 })
         await page.getByRole("heading", { name: "Fête du village de Montvert" }).waitFor()
         await at(0.58) /* mid-sentence */
-        await page.getByRole("heading", { name: "Communication", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/staffing`); await settle(page)
@@ -5445,7 +5580,6 @@ async function main() {
         await page.screencast.showChapter("Un suivi clair jusqu’au jour J", { description: "Voir, cibler, préparer", duration: 2_300 })
       })
     } else {
-      let onboardingEventId = ""
       let onboardingPublicUrl = ""
 
       await page.goto(`${baseUrl}/admin/events`); await settle(page)
@@ -5493,7 +5627,7 @@ async function main() {
         await at(0.22) /* mid-sentence */
         await timezone.selectOption("Europe/Zurich")
         const timezoneForm = timezone.locator("xpath=ancestor::form")
-        await at("Changer ce réglage adapte les")
+        await at("Changer ce paramètre adapte les")
         await tap(page, timezoneForm.getByRole("button", { name: "Enregistrer" }))
         await timezoneForm.getByText(/Fuseau horaire enregistré/).waitFor()
       })
@@ -5513,7 +5647,6 @@ async function main() {
         await fillVisibly(page, page.getByLabel("Date fin *"), "2031-06-14")
         await tap(page, page.getByRole("button", { name: "Créer l'événement" }))
         await page.waitForURL(/\/admin\/events\/[^/]+\/shifts\?wizard=1$/)
-        onboardingEventId = new URL(page.url()).pathname.split("/")[3]
       })
 
       await scene("shift", async (at) => {
@@ -5558,7 +5691,7 @@ async function main() {
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+        await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
       })
 
       await page.goto(`${baseUrl}/admin/events`); await settle(page)

@@ -1,0 +1,23 @@
+{
+  "auditedAt": "2026-11-11T12:53:03.038569+00:00",
+  "descriptions": [
+    {
+      "id": "LAST_MINUTE_CHANGES",
+      "description": "Réagir à un désistement, déplacer un horaire, chercher un remplacement et vérifier le nouveau planning.",
+      "utf8Bytes": 108,
+      "limit": 160
+    },
+    {
+      "id": "SHIFT_ELIGIBILITY_RULES",
+      "description": "Configurer des règles d’accès simples et montrer leurs effets avant l’inscription.",
+      "utf8Bytes": 88,
+      "limit": 160
+    },
+    {
+      "id": "MEMBERS_IMPORT",
+      "description": "Préparer un CSV ou un Excel, vérifier l'analyse et importer les bonnes fiches sans confondre doublons et homonymes.",
+      "utf8Bytes": 117,
+      "limit": 160
+    }
+  ]
+}

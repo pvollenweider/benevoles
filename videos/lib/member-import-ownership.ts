@@ -49,9 +49,15 @@ async function recordedContactEvidence(): Promise<RecordedContact[]> {
   return recordedMembers()
 }
 export function validateImportBaseline(people: ImportPerson[], recorded: RecordedContact[], now = Date.now(), seedProof: SeedProofV2 | null = null) {
-  assert(people.length === 26 && new Set(people.map(person => person.id)).size === 26 && people.every(person => person.organizationId === "default"), "Baseline requires 24 email-bearing fixtures and two exact persistent no-email seeds")
+  assert([26, 29].includes(people.length) && new Set(people.map(person => person.id)).size === people.length && people.every(person => person.organizationId === "default"), "Baseline requires 24 email-bearing fixtures and two exact persistent no-email seeds")
   const emailMembers = people.filter(person => person.email !== null)
-  assert(emailMembers.length === 24 && emailMembers.every(person => person.email?.endsWith("@example.org")), "Exactly 24 fictional email-bearing baseline members required")
+  assert([24, 27].includes(emailMembers.length) && emailMembers.every(person => person.email?.endsWith("@example.org")), "Exactly 24 fictional email-bearing baseline members required")
+  if (emailMembers.length === 27) {
+    // Main's additive documentation witnesses (#1305): two Sofia homonyms and inactive Antoine.
+    for (const [firstName, lastName, email] of [["Sofia", "Martin", "sofia.martin@example.org"], ["Sofia", "Martin", "sofia.martn@example.org"], ["Antoine", "Bovard", "antoine.bovard@example.org"]]) {
+      assert(emailMembers.filter(person => person.firstName === firstName && person.lastName === lastName && person.email === email).length === 1, "Exact additive main demo witnesses required")
+    }
+  }
   const missingEmail = people.filter(person => person.email === null)
   const candidates = missingEmail.filter(person => recorded.some(entry => entry.id === person.id && exactRecordedContact(entry, now) && (!entry.actualCreatedAt || Number.isFinite(Date.parse(entry.actualCreatedAt)) && Date.parse(entry.actualCreatedAt) === new Date(person.createdAt).getTime())))
   assert(candidates.length === 1, "Exactly one current contact must match a recent actual 201 creation ledger")
@@ -67,7 +73,7 @@ export async function collectImportOwnership(before: ImportPerson[], after: Impo
   const seedProof = await readSeedProofV2()
   assert(seedProof, "Current natural-name fixture proof required for a new import")
   const manualContact = validateImportBaseline(before, await recordedContactEvidence(), Date.now(), seedProof)
-  assert(after.length === 64, "Exact baseline plus 38 import creations required")
+  assert(after.length === before.length + 38, "Exact baseline plus 38 import creations required")
   const beforeIds = before.map(person => person.id)
   assert(new Set(beforeIds).size === before.length && before.every(person => person.organizationId === "default"))
   const created = after.filter(person => !beforeIds.includes(person.id))
@@ -86,7 +92,7 @@ export async function collectImportOwnership(before: ImportPerson[], after: Impo
   return { schemaVersion: 3, manualContact, seedProof, scenario: "members-import", csvSha256: correctedCsvShaV2, xlsxSha256: correctedXlsxShaV2, provenance: "actual-api-before-after", responseStatus: 200, receipt, observedAt: finishedAt, beforeIds, beforeCount: before.length, afterCount: after.length, members: created }
 }
 export function ownsImportedNoEmailMember(person: Partial<ImportPerson>, ledger: ImportOwnership | null, now = Date.now()) {
-  if (!ledger || ![1, 2, 3].includes(ledger.schemaVersion) || ledger.scenario !== "members-import" || ledger.csvSha256 !== (ledger.schemaVersion === 3 ? correctedCsvShaV2 : correctedCsvSha) || !(ledger.schemaVersion === 3 ? [correctedXlsxShaV2, "f38d0b69c98db4144fc02068999af0f4a83a5cfbc16fdfc7b2b92648d853a444"].includes(ledger.xlsxSha256) : ledger.xlsxSha256 === correctedXlsxSha) || ledger.responseStatus !== 200 || ledger.beforeCount !== 26 || ledger.afterCount !== 64 || ledger.beforeIds.length !== 26 || new Set(ledger.beforeIds).size !== 26 || !ledger.beforeIds.includes("video-member-management-2") || ledger.receipt.created !== 38 || ledger.receipt.updated !== 2 || ledger.receipt.skipped !== 0 || ledger.receipt.errors.length || ledger.members.length !== 38) return false
+  if (!ledger || ![1, 2, 3].includes(ledger.schemaVersion) || ledger.scenario !== "members-import" || ledger.csvSha256 !== (ledger.schemaVersion === 3 ? correctedCsvShaV2 : correctedCsvSha) || !(ledger.schemaVersion === 3 ? [correctedXlsxShaV2, "f38d0b69c98db4144fc02068999af0f4a83a5cfbc16fdfc7b2b92648d853a444"].includes(ledger.xlsxSha256) : ledger.xlsxSha256 === correctedXlsxSha) || ledger.responseStatus !== 200 || ![26, 29].includes(ledger.beforeCount) || ledger.afterCount !== ledger.beforeCount + 38 || ledger.beforeIds.length !== ledger.beforeCount || new Set(ledger.beforeIds).size !== ledger.beforeCount || !ledger.beforeIds.includes("video-member-management-2") || ledger.receipt.created !== 38 || ledger.receipt.updated !== 2 || ledger.receipt.skipped !== 0 || ledger.receipt.errors.length || ledger.members.length !== 38) return false
   if (ledger.schemaVersion === 1 ? !ledger.beforeIds.includes("cmuww4yid000an3a5bttlnq7r") : !exactRecordedContact(ledger.manualContact, now) || !ledger.beforeIds.includes(ledger.manualContact!.id)) return false
   if (!Number.isFinite(Date.parse(ledger.observedAt)) || Date.parse(ledger.observedAt) > now + 60_000 || Date.parse(ledger.observedAt) < now - 30 * 86_400_000) return false
   if (ledger.schemaVersion === 3 && (!ledger.seedProof || !ownsNaturalMemberSeed(ledger.seedProof.members.find(member => member.id === "video-member-management-2") ?? {}, ledger.seedProof, now))) return false
@@ -98,7 +104,7 @@ export async function readImportOwnership(file: "owned-import-members.json" | "r
   try {
     assert(["owned-import-members.json", "recovered-import-members.json", "owned-import-members-v2.json"].includes(file), "Only exact ownership ledger files accepted")
     const ledger = JSON.parse(await readFile(path.resolve("videos/output/members-import", file), "utf8")) as ImportOwnership
-    assert([1, 2, 3].includes(ledger.schemaVersion) && ledger.scenario === "members-import" && Array.isArray(ledger.members) && ledger.members.length === 38 && Array.isArray(ledger.beforeIds) && ledger.beforeIds.length === 26, "Invalid import ownership ledger")
+    assert([1, 2, 3].includes(ledger.schemaVersion) && ledger.scenario === "members-import" && Array.isArray(ledger.members) && ledger.members.length === 38 && Array.isArray(ledger.beforeIds) && [26, 29].includes(ledger.beforeIds.length), "Invalid import ownership ledger")
     await correctedImportRows(ledger.schemaVersion === 3 ? 2 : 1)
     return ledger
   } catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return null; throw error }

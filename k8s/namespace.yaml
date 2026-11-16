@@ -1,7 +1,15 @@
 # SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 # SPDX-License-Identifier: AGPL-3.0-only
 
+# Cluster-scoped: applied by hand, never by deploy.yml (its ServiceAccount has rights only inside
+# the namespace, k8s/rbac-ci-deployer.yaml). The Pod Security « baseline » level refuses
+# privileged, hostPath, hostNetwork and hostPID pods: whoever holds the deploy credential cannot
+# escape from the namespace to the node. Every pod of the namespace fits it (postgres and
+# media only add capabilities that baseline allows).
 apiVersion: v1
 kind: Namespace
 metadata:
   name: benevoles
+  labels:
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/enforce-version: latest

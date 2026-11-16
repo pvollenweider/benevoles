@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:50:02.677Z",
-  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
+  "reviewedAt": "2026-10-29T06:54:00.143Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
   "promptSha256": "9e1c41918bfb701f5c3241dcf92cbce881609e46930f5483d70ab476293d180e",
-  "clipSha256": "cd5055df7a50df896f6862d73ccbcbf285e53956cf5a87ff41de3f7c3eca0347",
+  "clipSha256": "3ace9109e9d20b723a94ad1d6beed2b18df08ea0d73d19e9ac2296205cf5bac9",
   "scene": "scope",
   "review": {
     "heardOpening": "Cet espace est en lecture seule",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Cet espace est en lecture seule",
+        "spokenSeconds": 0.5,
+        "spoken": "Cet espace est en lecture seule : le responsable ne modifie pas les créneaux",
         "visibleSeconds": 0.5,
-        "visible": "Page 'Responsable - Buvette' présentant les créneaux et bénévoles en affichage passif sans boutons d'action",
+        "visible": "Affichage de la page 'Responsable - Buvette' listant les bénévoles inscrits sans bouton d'édition",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.3,
-        "spoken": "le responsable ne modifie pas les créneaux et ne retire pas les inscriptions",
-        "visibleSeconds": 2,
-        "visible": "Détail des créneaux et des inscrits en consultation pure",
+        "spokenSeconds": 6.3,
+        "spoken": "Il ne voit pas les équipes des autres postes.",
+        "visibleSeconds": 6.7,
+        "visible": "Défilement vers le bas affichant les autres créneaux dédiés exclusivement au poste Buvette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
-        "spoken": "Il ne voit pas les équipes des autres postes",
-        "visibleSeconds": 6,
-        "visible": "Seuls les créneaux et inscrits du poste 'Buvette' sont affichés",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 8.5,
-        "spoken": "Pour une modification du planning ou une décision d'inscription",
-        "visibleSeconds": 8.5,
-        "visible": "Défilement de la page montrant la suite des créneaux et le bas de page",
+        "spokenSeconds": 8.8,
+        "spoken": "Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
+        "visibleSeconds": 9,
+        "visible": "Affichage fixe du bas de page et des créneaux Buvette sans action d'édition possible",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et intelligible, parfaitement synchronisée avec la présentation."
+      "observation": "Voix off masculine posée, claire et bien articulée, parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

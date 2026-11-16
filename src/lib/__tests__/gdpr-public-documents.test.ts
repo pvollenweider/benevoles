@@ -9,8 +9,8 @@ import { slugifyHeading } from "../heading-anchors"
 // leak into them, and every provider they name must be backed by docs/rgpd/sous-traitants.md, the
 // dated source of the facts (and the reverse: none of its current providers is left out).
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
-const AGREEMENT = "ACCORD-SOUS-TRAITANCE.md"
-const LIST = "SOUS-TRAITANTS.md"
+const AGREEMENT = "content/legal/ACCORD-SOUS-TRAITANCE.md"
+const LIST = "content/legal/SOUS-TRAITANTS.md"
 
 describe("public GDPR documents", () => {
   it("are declared as public pages under /legal", () => {
@@ -30,7 +30,7 @@ describe("public GDPR documents", () => {
     expect(md).not.toMatch(/[·—]/)
   })
 
-  it.each([[AGREEMENT, "21 octobre 2026"], [LIST, "6 octobre 2026"]])("%s carries its version date and the contact address", (file, date) => {
+  it.each([[AGREEMENT, "23 octobre 2026"], [LIST, "6 octobre 2026"]])("%s carries its version date and the contact address", (file, date) => {
     const md = read(file)
     expect(md).toContain(`Version du ${date}.`)
     expect(md).toContain("contact@benevol.app")

@@ -2,11 +2,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { blocksWorkload, workloadModeOf, workloadNotices, type WorkloadMode } from "@/lib/workload-view"
 import { orgTimeZone } from "@/lib/time-zone"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { signUpUrl, volunteerGroupCode } from "@/lib/personal-page-links"
-import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
+import { keptAnswerRows, myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
+import { splitByScope } from "@/lib/question-scope"
 import { answersEditState } from "@/lib/answer-changes"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
@@ -14,15 +18,28 @@ import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
+import { calendarFeedKeyFromEnv, calendarFeedToken, calendarFeedUrls } from "@/lib/calendar-feed"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
+import { pagesForPostes } from "@/lib/event-page-postes"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
-import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawalConfirmation, withdrawalMoment } from "@/lib/volunteer-withdraw"
+import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
 import { withdrawRequestSchema } from "@/lib/volunteer-withdraw-schema"
 import { queueWithdrawalNotifications } from "@/lib/withdrawal-notifications"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { queueWithdrawalConfirmation } from "@/lib/withdrawal-confirmation"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
 import { cancelRefusedError, isLateWithdrawal, selfCancelState, shiftStartsAt } from "@/lib/cancel-deadline"
+import { endSwapsAfter } from "@/lib/shift-swap-server"
+import { readWorkloadPerson, withPlaceNames } from "@/lib/workload-guard"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+
+/** The personal page's workload notices (#1171): protected events only, committed missions only. */
+async function personalWorkload(regs: { status: string; shift: { id: string; date: Date; startTime: string; endTime: string; status: string; placeId?: string | null } }[], mode: WorkloadMode, eventId: string, volunteerId: string): Promise<string[]> {
+  if (!blocksWorkload(mode)) return []
+  const held = regs.filter((r) => (r.status === "active" || r.status === "requested") && r.shift.status !== "cancelled").map((r) => r.shift)
+  // The places' names for the travel messages, the person's birth date and own limits (#1171, lot 2).
+  return workloadNotices(await withPlaceNames(prisma, held), mode, await readWorkloadPerson(prisma, eventId, volunteerId)).map((n) => n.text)
+}
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   // Failed lookups count per IP, valid use per link (#609).
@@ -42,12 +59,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
           location: true, latitude: true, longitude: true, publicInstructions: true,
           dayContactName: true, dayContactPhone: true,
           cancelDeadlineDays: true, cancelDeadlineHours: true,
+          // Workload protection (#1171): the limits this person's own programme is judged against.
+          workloadProtectionEnabled: true, workloadPolicy: true, startDate: true,
           // Whether a sign-up for more shifts is possible (#988).
           endDate: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
-          pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },
+          pages: { select: { slug: true, title: true, roleNames: true }, orderBy: { displayOrder: "asc" } },
           // The sector leaders' names only (#560): never their email nor their link.
           sectorLeaders: { select: { roleName: true, name: true } },
-          organization: { select: { slug: true, timeZone: true, replyToEmail: true } },
+          organization: { select: { slug: true, timeZone: true, replyToEmail: true, ...ORG_LIFECYCLE_SELECT } },
         },
       },
     },
@@ -57,6 +76,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     await recordTokenMiss(req)
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  // Nothing of the page while the organisation is deactivated or suspended (src/lib/org-lifecycle.ts).
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "read"))) return tooManyAttempts()
 
   // Toutes les inscriptions actives du même bénévole pour le même événement
@@ -72,7 +93,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   // « Mes réponses » (#984): the event's questions with this volunteer's own answers only, the
   // volunteer being the one of the link's registration.
-  const questions = await prisma.eventQuestion.findMany(myAnswersQuery(registration.eventId, registration.volunteerId))
+  // Only the questions asked for the postes of their live registrations (#1140); the answers kept
+  // for the others are shown apart, read-only.
+  const { asked: questions, outOfScope } = splitByScope(
+    await prisma.eventQuestion.findMany(myAnswersQuery(registration.eventId, registration.volunteerId)),
+    allRegistrations.map((r) => r.shift.roleName),
+  )
 
   const orgSlug = registration.event.organization.slug
   const baseUrl = orgBaseUrl(orgSlug)
@@ -84,6 +110,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   // volunteer's group link, only while a sign-up is possible; for the page itself, while published.
   const publicUrl = eventPublicUrl(orgSlug, event.slug)
   const groupCode = volunteerGroupCode(allRegistrations, registration.id)
+  const feedKey = calendarFeedKeyFromEnv()
+  // Pages attached to a poste (#1324), for a confirmed place only, and only while the event is
+  // published: the page opens on its public URL. A page attached to no poste stays in the general
+  // « Infos de l'événement » list instead.
+  const readBeforeFor = (roleName: string) =>
+    event.publicStatus === "published"
+      ? pagesForPostes(event.pages, [roleName]).map((p) => ({ title: p.title, url: `${eventUrl}/${p.slug}` }))
+      : []
   return NextResponse.json({
     // What the « Avant ta mission » block falls back on (#560). The information pages only
     // open once the event is published: no link to a page that would answer 404.
@@ -99,6 +133,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     },
     confirmationMessage: registration.event.confirmationMessage ?? null,
     answers: myAnswerRows(questions),
+    keptAnswers: keptAnswerRows(outOfScope),
     // Whether the answers can still change from this page (#984): the withdrawals' lock (#946).
     answersEdit: answersEditState({ registrations: allRegistrations, setting: event, timeZone, now }),
     orgHomeUrl: baseUrl,
@@ -106,6 +141,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     eventPageUrl: event.publicStatus === "published" ? publicUrl : null,
     signUpUrl: signUpUrl({ event, eventUrl: publicUrl, groupCode, now, timeZone }),
     timeZone,
+    // Workload protection (#1171): the limits the person's own programme no longer respects (left
+    // by a cancellation, say), from their confirmed places and pending requests. Their own data,
+    // behind their link; nothing for an event without protection.
+    workload: await personalWorkload(allRegistrations, workloadModeOf(event, timeZone), registration.eventId, registration.volunteerId),
+    // The calendar subscription of this link (#961): a read-only address of its own, never the link.
+    calendarFeed: feedKey ? calendarFeedUrls(baseUrl, calendarFeedToken(registration.id, registration.editTokenHash, feedKey)) : null,
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).
     linkEmailedAt: allRegistrations.reduce<Date | null>((m, r) => (r.linkEmailedAt && (!m || r.linkEmailedAt > m) ? r.linkEmailedAt : m), null),
     contactEmail: registration.event.organization.replyToEmail || process.env.EMAIL_REPLY_TO || null,
@@ -145,7 +186,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         // sector leaders are named, for a confirmed place only: never shown to someone on a
         // waitlist or awaiting approval.
         ...(r.status === "active"
-          ? withSectorLeaders(withDayContact(pickShiftInfo(r.shift, event), event), r.shift.roleName, event.sectorLeaders)
+          ? { ...withSectorLeaders(withDayContact(pickShiftInfo(r.shift, event), event), r.shift.roleName, event.sectorLeaders), readBefore: readBeforeFor(r.shift.roleName) }
           : pickShiftInfo(r.shift, event)),
       },
     })),
@@ -171,7 +212,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },
       shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true } },
-      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { slug: true, timeZone: true } } } },
+      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { slug: true, timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
     },
   })
   const plan = registration && planVolunteerWithdraw(registration.status)
@@ -180,6 +221,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     await recordTokenMiss(req)
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  // No withdrawal either: the registrations stay as they are while the organisation is closed.
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "withdraw"))) return tooManyAttempts()
 
   // Never once the shift has started, nor past the event's earlier deadline for a confirmed place
@@ -203,6 +246,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   if (count === 0) {
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  // A swap request built on this place can no longer happen (#1174): ended, the other person told.
+  await endSwapsAfter(prisma, { registrationIds: [registration.id] }, "registration_gone", { type: "volunteer", id: registration.volunteerId }, now)
 
   const cancelLogId = await logEvent({
     eventId: registration.eventId,
@@ -250,23 +295,18 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   }
 
   // Says back to the volunteer what was just done from their link (#809): if the link is in
-  // someone else's hands, they learn it and can tell the organisation. Best-effort too.
+  // someone else's hands, they learn it and can tell the organisation. Grouped (#1190): several
+  // withdrawals of the event in a row make one email listing them. Best-effort too.
   if (registration.volunteer.email) {
     try {
-      const outboxIds = await enqueueNotifications([{
-        kind: "registration_withdrawn",
-        recipient: { email: registration.volunteer.email, name: `${registration.volunteer.firstName} ${registration.volunteer.lastName}` },
-        organizationId: registration.event.organizationId,
-        volunteerId: registration.volunteerId,
-        dedupeKey: `registration_withdrawn:${registration.id}`,
-        data: {
-          volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
-          eventTitle: registration.event.title,
-          what: withdrawalConfirmation(registration.status),
-          when: withdrawalMoment(now, timeZone),
-          shift: { roleName: registration.shift.roleName, label: registration.shift.label, date: registration.shift.date.toISOString().slice(0, 10), startTime: registration.shift.startTime, endTime: registration.shift.endTime },
-        },
-      }], prisma, { organizationId: registration.event.organizationId })
+      const outboxIds = await queueWithdrawalConfirmation({
+        registrationId: registration.id,
+        previousStatus: registration.status,
+        event: registration.event,
+        shift: registration.shift,
+        volunteer: { id: registration.volunteerId, firstName: registration.volunteer.firstName, lastName: registration.volunteer.lastName, email: registration.volunteer.email },
+        timeZone,
+      }, now)
       deliverAfterResponse(outboxIds)
     } catch (e) {
       reportError("withdrawal.confirm")(e)

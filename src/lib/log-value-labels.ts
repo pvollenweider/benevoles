@@ -9,6 +9,7 @@
  *
  * Only display: the stored log and its CSV/JSON exports keep the raw values.
  */
+import type { SwapEndReason } from "./shift-swaps"
 import type { EventPublicStatus, RegistrationSource, RegistrationStatus, ShiftStatus } from "./statuses"
 
 export const REGISTRATION_STATUS_LOG_LABELS: Record<RegistrationStatus, string> = {
@@ -16,6 +17,7 @@ export const REGISTRATION_STATUS_LOG_LABELS: Record<RegistrationStatus, string> 
   waiting: "liste d'attente",
   offered: "place proposée",
   requested: "demande à traiter",
+  unconfirmed: "en attente de confirmation par email",
   cancelled: "annulée",
   refused: "refusée",
   deleted: "supprimée",
@@ -31,6 +33,7 @@ export const SHIFT_STATUS_LOG_LABELS: Record<ShiftStatus, string> = {
 export const REGISTRATION_SOURCE_LOG_LABELS: Record<RegistrationSource, string> = {
   public_form: "formulaire",
   admin_manual: "manuel",
+  admin_draft: "affectation publiée",
 }
 
 export const EVENT_PUBLIC_STATUS_LOG_LABELS: Record<EventPublicStatus, string> = {
@@ -50,6 +53,57 @@ export const ROSTER_CHOICE_LOG_LABELS: Record<string, string> = {
 export const ROSTER_AUDIENCE_LOG_LABELS: Record<string, string> = {
   confirmed: "bénévoles confirmés",
   confirmed_and_invited: "bénévoles confirmés et membres invités",
+}
+
+/** A shift swap request's state (#1174), « demande d'échange : ouverte → proposition en attente ». */
+export const SWAP_STATUS_LOG_LABELS: Record<string, string> = {
+  open: "ouverte",
+  offered: "proposition en attente",
+  approval: "validation attendue",
+  applied: "échange effectué",
+  withdrawn: "retirée",
+  refused: "non validée",
+  expired: "expirée",
+  impossible: "devenue impossible",
+  cancelled: "annulée par l'organisation",
+}
+
+/** Why a shift swap request ended (#1174): the codes of SwapEndReason (src/lib/shift-swaps.ts). */
+export const SWAP_REASON_LOG_LABELS: Record<SwapEndReason, string> = {
+  overlap: "conflit d'horaire",
+  role_limit: "limite de créneaux par personne",
+  min_age: "âge minimum",
+  reserved: "poste réservé",
+  already_on_shift: "déjà inscrit sur l'autre créneau",
+  not_possible: "conditions d'une des deux personnes",
+  deadline: "délai passé",
+  volunteer_gone: "inscription plus confirmée",
+  registration_gone: "inscription plus confirmée",
+  not_confirmed: "inscription plus confirmée",
+  shift_cancelled: "créneau annulé",
+  shift_changed: "créneau modifié",
+  link_revoked: "lien personnel renouvelé",
+  option_off: "échanges désactivés",
+  organiser: "refus de l'organisation",
+  assigned_only: "poste attribué par l'organisation",
+  other_poste: "postes différents",
+  other_sector: "postes de secteurs différents",
+  sector_changed: "poste déplacé dans un autre secteur",
+  same_person: "même personne",
+  same_registration: "même inscription",
+  same_shift: "même créneau",
+  other_event: "autre événement",
+  workload_continuous: "durée sans vraie pause",
+  workload_daily: "durée par journée de service",
+  workload_event: "durée sur l'événement",
+  workload_rest: "repos minimum",
+  workload_idle: "attente entre deux missions",
+  workload_incomplete: "protection des pauses incomplète",
+  workload_offday: "jours sans mission",
+  workload_meal: "pause repas",
+  workload_travel: "trajet entre deux lieux",
+  workload_places: "deux lieux à la fois",
+  workload_birthdate: "date de naissance manquante",
 }
 
 function lookup(map: Record<string, string>, value: string): string | undefined {
@@ -77,6 +131,10 @@ export function logValueLabel(field: string, value: unknown, entityType?: string
       return lookup(ROSTER_CHOICE_LOG_LABELS, value)
     case "rosterAudience":
       return lookup(ROSTER_AUDIENCE_LOG_LABELS, value)
+    case "swapStatus":
+      return lookup(SWAP_STATUS_LOG_LABELS, value)
+    case "swapReason":
+      return lookup(SWAP_REASON_LOG_LABELS as Record<string, string>, value)
     default:
       return undefined
   }

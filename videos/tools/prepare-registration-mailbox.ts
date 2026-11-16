@@ -4,17 +4,17 @@
 import assert from "node:assert/strict"
 import { mkdir, writeFile } from "node:fs/promises"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { openPayload } from "../../src/lib/notifications/outbox"
 import { expectedMemberV2 } from "../lib/member-fixture-v2"
 
 const scenario = process.argv[2]
 assert(["members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(scenario))
 const url = new URL(process.env.DATABASE_URL ?? "")
-assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
-const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+assert(["localhost", "127.0.0.1"].includes(url.hostname) && (url.port === "45433" || scenario === "sector-leaders" && url.port === "45436") && url.pathname === "/benevoles_video")
+const db = new PrismaClient({ adapter: pgAdapter(url.href) })
 type Message = { ID: string; Subject: string; To: { Address: string }[]; Cc?: { Address: string }[]; Bcc?: { Address: string }[] }
-const mailbox = "http://localhost:48026"
+const mailbox = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
 const inventory = async () => {
   const messages: Message[] = []
   for (let start = 0; ; start += 500) {
@@ -29,8 +29,11 @@ async function main() {
   try {
     if (["last-minute-changes", "reminders-changes"].includes(scenario)) {
       const lastMinute = scenario === "last-minute-changes"
-      const org = await db.organization.findUniqueOrThrow({ where: { id: lastMinute ? "video-last-minute" : "default" } })
-      assert.equal(org.name, lastMinute ? "Formation — imprévus" : "Fêtes de Montvert")
+      const org = await db.organization.findUnique({ where: { id: lastMinute ? "video-last-minute" : "default" } })
+      // The dedicated imprévus organization does not exist before its first seed.
+      // The exact reserved recipient namespace and event-title checks below still apply.
+      assert(org || lastMinute, "Existing reminder classroom required")
+      if (org) assert.equal(org.name, lastMinute ? "Formation — imprévus" : "Fêtes de Montvert")
       const titles = lastMinute ? ["Fête des imprévus"] : ["Atelier des rappels", "Atelier en brouillon", "Atelier sans rappels"]
       const address = lastMinute ? /^video\.last-minute\.(?:person\.[0-5]|owner)@example\.org$/ : /^video\.reminder\.[a-z0-9.-]+@example\.org$/
       const before = await inventory()

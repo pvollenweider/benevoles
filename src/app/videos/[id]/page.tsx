@@ -86,17 +86,17 @@ export default async function VideoDetailPage({ params, searchParams }: { params
       {/* VideoObject + BreadcrumbList, only for an indexed video; « < » escaped (serializeJsonLd). */}
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />}
       <div>
-        <Link href="/videos" className="text-sm text-blue-600 hover:underline">← Bibliothèque vidéo</Link>
+        <Link href="/videos" className="text-sm text-blue-600 dark:text-blue-400 hover:underline rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">← Bibliothèque vidéo</Link>
       </div>
 
       {/* The player comes right under the title (watch page): Google indexed these pages with the
           video as « contenu complémentaire » while the description and the text sections came first
           or around it. The text stays on the page, after the video or in disclosures. */}
       <div className="space-y-4">
-        <h1 className="text-xl font-bold text-gray-900">{video.title}</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">{video.title}</h1>
         <VideoPlayer title={video.title} mediaUrls={mediaUrls} frame={videoFrame(video)} />
         <div>
-          <p className="max-w-[70ch] text-sm text-gray-600 leading-relaxed">{video.description}</p>
+          <p className="max-w-[70ch] text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{video.description}</p>
           <FreshnessNote dates={video.freshness} subject="Vidéo" className="mt-2" />
         </div>
       </div>
@@ -107,8 +107,8 @@ export default async function VideoDetailPage({ params, searchParams }: { params
           narration — never the internal editorial script (Utilité/Démonstration/Résultat
           visible/Points d'attention), which is production material and isn't shown here. */}
       <section aria-labelledby="video-summary-heading" className="space-y-2">
-        <h2 id="video-summary-heading" className="text-sm font-semibold text-gray-900">Dans cette vidéo</h2>
-        <p className="max-w-[70ch] text-sm text-gray-600 leading-relaxed">{viewer.summary}</p>
+        <h2 id="video-summary-heading" className="text-sm font-semibold text-gray-900 dark:text-gray-100">Dans cette vidéo</h2>
+        <p className="max-w-[70ch] text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{viewer.summary}</p>
       </section>
 
       {/* One visible heading for the group, plain-text summaries (accessibility review): a heading
@@ -116,23 +116,23 @@ export default async function VideoDetailPage({ params, searchParams }: { params
           read the same label twice. Closed by default, still in the DOM, reachable by keyboard and
           screen reader. The transcript comes from the manifest's segments, committed to the repo. */}
       <section aria-labelledby="video-more-heading" className="space-y-3">
-        <h2 id="video-more-heading" className="text-sm font-semibold text-gray-900">Pour aller plus loin</h2>
+        <h2 id="video-more-heading" className="text-sm font-semibold text-gray-900 dark:text-gray-100">Pour aller plus loin</h2>
         <Disclosure label={`Les étapes (${viewer.steps.length})`}>
-          <ol className="mt-3 max-w-[70ch] list-decimal list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+          <ol className="mt-3 max-w-[70ch] list-decimal list-inside space-y-1.5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
             {viewer.steps.map((step) => (
               <li key={step}>{step}</li>
             ))}
           </ol>
         </Disclosure>
         <Disclosure label={`À retenir (${viewer.remember.length})`}>
-          <ul className="mt-3 max-w-[70ch] list-disc list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+          <ul className="mt-3 max-w-[70ch] list-disc list-inside space-y-1.5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
             {viewer.remember.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </Disclosure>
         <Disclosure label="Transcription complète">
-          <div className="mt-3 max-w-[70ch] text-sm text-gray-600 leading-relaxed space-y-3">
+          <div className="mt-3 max-w-[70ch] text-sm text-gray-600 dark:text-gray-400 leading-relaxed space-y-3">
             {video.manifest.segments.map((segment) => (
               <p key={segment.id}>{segment.transcript}</p>
             ))}
@@ -145,49 +145,49 @@ export default async function VideoDetailPage({ params, searchParams }: { params
         <h2 id="video-about-heading" className="sr-only">À propos de cette vidéo</h2>
         <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
           <div>
-            <dt className="text-xs font-medium text-gray-500">Durée</dt>
-            <dd className="text-gray-800">{formatDuration(video.durationMs)}</dd>
+            <dt className="text-xs font-medium text-gray-500 dark:text-gray-400">Durée</dt>
+            <dd className="text-gray-800 dark:text-gray-200">{formatDuration(video.durationMs)}</dd>
           </div>
           <div>
-            <dt className="text-xs font-medium text-gray-500">Niveau</dt>
-            <dd className="text-gray-800">{LEVEL_LABELS[video.level]}</dd>
+            <dt className="text-xs font-medium text-gray-500 dark:text-gray-400">Niveau</dt>
+            <dd className="text-gray-800 dark:text-gray-200">{LEVEL_LABELS[video.level]}</dd>
           </div>
           <div>
-            <dt className="text-xs font-medium text-gray-500">Public</dt>
-            <dd className="text-gray-800">{video.audience.map((a) => AUDIENCE_LABELS[a]).join(", ")}</dd>
+            <dt className="text-xs font-medium text-gray-500 dark:text-gray-400">Public</dt>
+            <dd className="text-gray-800 dark:text-gray-200">{video.audience.map((a) => AUDIENCE_LABELS[a]).join(", ")}</dd>
           </div>
           <div>
-            <dt className="text-xs font-medium text-gray-500">Fonctionnalité liée</dt>
-            <dd className="text-gray-800">{video.feature}</dd>
+            <dt className="text-xs font-medium text-gray-500 dark:text-gray-400">Fonctionnalité liée</dt>
+            <dd className="text-gray-800 dark:text-gray-200">{video.feature}</dd>
           </div>
           <div>
-            <dt className="text-xs font-medium text-gray-500">Mise à jour</dt>
-            <dd className="text-gray-800">{updatedAtLabel}</dd>
+            <dt className="text-xs font-medium text-gray-500 dark:text-gray-400">Mise à jour</dt>
+            <dd className="text-gray-800 dark:text-gray-200">{updatedAtLabel}</dd>
           </div>
         </dl>
 
         <div className="flex flex-wrap gap-1.5">
           {video.themes.map((t) => (
-            <span key={t} className="inline-flex items-center rounded-full bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5">{themeLabel(t)}</span>
+            <span key={t} className="inline-flex items-center rounded-full border border-transparent bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 text-xs font-medium px-2 py-0.5">{themeLabel(t)}</span>
           ))}
           {video.tags.map((t) => (
-            <span key={t} className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 text-xs font-medium px-2 py-0.5">{t}</span>
+            <span key={t} className="inline-flex items-center rounded-full border border-transparent bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-200 text-xs font-medium px-2 py-0.5">{t}</span>
           ))}
           {!video.published && (
-            <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5">À venir</span>
+            <span className="inline-flex items-center rounded-full border border-transparent bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200 text-xs font-medium px-2 py-0.5">À venir</span>
           )}
         </div>
       </section>
 
       {related.length > 0 && (
         <section aria-labelledby="video-related-heading">
-          <h2 id="video-related-heading" className="text-sm font-semibold text-gray-900 mb-3">Vidéos liées</h2>
+          <h2 id="video-related-heading" className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Vidéos liées</h2>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {related.map((r) => (
               <li key={r.id}>
-                <AutoplayLink href={`/videos/${r.id}`} className="block bg-white border border-gray-200 rounded-xl p-4 hover:border-blue-200 hover:shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                  <span className="block text-sm font-medium text-gray-900">{r.title}</span>
-                  <span className="block text-xs text-gray-500 mt-0.5">{formatDuration(r.durationMs)}</span>
+                <AutoplayLink href={`/videos/${r.id}`} className="block bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
+                  <span className="block text-sm font-medium text-gray-900 dark:text-gray-100">{r.title}</span>
+                  <span className="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{formatDuration(r.durationMs)}</span>
                 </AutoplayLink>
               </li>
             ))}
@@ -203,7 +203,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
 function Disclosure({ label, children }: { label: string; children: ReactNode }) {
   return (
     <details className="group">
-      <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden text-sm font-semibold text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+      <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden text-sm font-semibold text-gray-900 dark:text-gray-100 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
         <span aria-hidden="true" className="inline-block mr-1 transition-transform group-open:rotate-90 motion-reduce:transition-none">▸</span>
         {label}
       </summary>

@@ -1,43 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T16:29:15.904Z",
-  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
+  "reviewedAt": "2026-11-11T12:41:52.983Z",
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
   "promptSha256": "70cc41e6a6d03ba0b694544ea0644be9ae3c9119fad6ef22e19de14ff73d9185",
-  "clipSha256": "4eef90f00e04225c61a624df3808f847b5e30bb49e1f4bcebe156edcb74551ee",
+  "clipSha256": "13dc6a345829f802346958c721ec09fee8c4c242e49f67091c46275e6a4ab51f",
   "scene": "errors",
   "review": {
     "heardOpening": "Ici, la ligne six n'a pas de prénom",
     "checkpoints": [
       {
-        "spokenSeconds": 0.9,
+        "spokenSeconds": 1.1,
         "spoken": "la ligne six n'a pas de prénom",
         "visibleSeconds": 0,
+        "visible": "Affichage dans la boîte orange 'Lignes en erreur' : Ligne 6 Prénom manquant",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Section 'Lignes en erreur, non importées' affichant la ligne 6 avec la raison 'Prénom manquant'"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 3,
-        "spoken": "et la ligne sept contient une adresse email invalide",
+        "spokenSeconds": 3.2,
+        "spoken": "la ligne sept contient une adresse email invalide",
         "visibleSeconds": 0,
+        "visible": "Affichage : Ligne 7 Email invalide : adresse-incomplete",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Tableau affichant la ligne 7 avec 'Email invalide : adresse incomplète'"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 6.3,
         "spoken": "La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé",
         "visibleSeconds": 0,
+        "visible": "Affichage : Ligne 9 Même email que la ligne 8",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Ligne 9 signalée avec la mention 'Même email que la ligne 8'"
+        "severity": "none"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement audible, débit régulier."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'écran modal d'importation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:10:51.325Z",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "promptSha256": "71e9915e46bd0167f2f73a6064bea0845b1a6b44cd5c875f98d3291bcdc522f8",
+  "clipSha256": "d7ed732cba91f59791b1c77de4bf23a620d7905ec1e8e7d872cdba3c49d2b4fc",
+  "scene": "mobile",
+  "review": {
+    "heardOpening": "Sur téléphone, la même page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Sur téléphone, la même page accompagne le responsable sur le terrain.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page Responsable - Buvette au format mobile avec les créneaux et bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
+        "visibleSeconds": 4,
+        "visible": "Présence des adresses email et des numéros de téléphone sous chaque bénévole.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires.",
+        "visibleSeconds": 9.5,
+        "visible": "Défilement vertical affichant les créneaux horaires suivants (18:00-22:00 et dimanche).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
+import { LINKS_OPEN_WHERE } from "@/lib/org-lifecycle"
 import { getClientIp, rateLimit } from "@/lib/rate-limit"
 import { linkTargetInclude, LIVE_STATUSES, sendPersonalLink } from "@/lib/personal-link-send"
 import { LINK_REQUEST_RESPONSE } from "@/lib/personal-link"
@@ -33,7 +34,8 @@ export async function POST(req: Request) {
   const regs = await prisma.registration.findMany({
     where: {
       status: { in: [...LIVE_STATUSES] },
-      volunteer: { email: { equals: parsed.data.email, mode: "insensitive" }, organization: { slug: orgSlug } },
+      // Never for a deactivated or suspended organisation: its links open nothing (src/lib/org-lifecycle.ts).
+      volunteer: { email: { equals: parsed.data.email, mode: "insensitive" }, organization: { slug: orgSlug, ...LINKS_OPEN_WHERE } },
       event: { endDate: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
     },
     include: linkTargetInclude,

@@ -18,7 +18,7 @@ Trouver pourquoi une information n'a pas été remise, choisir entre réessayer 
 
 ## Démonstration
 
-1. **Trouver le suivi.** Ouvrir Paramètres puis Emails. Montrer les lignes récentes : date, type, destinataire, état et détail. Distinguer le propriétaire, qui peut changer les réglages d'emails, et l'organisateur, qui peut consulter les livraisons et renvoyer un échec sans changer ces réglages.
+1. **Trouver le suivi.** Ouvrir Paramètres puis Emails. Montrer les lignes récentes : date, type, destinataire, état et détail. Distinguer le propriétaire, qui peut changer les paramètres d'emails, et l'organisateur, qui peut consulter les livraisons et renvoyer un échec sans changer ces paramètres.
 2. **Lire les quatre états.** En attente d'envoi signifie mis en file ; Nouvel essai prévu signifie un échec temporaire ; Envoyé signifie remis au serveur, pas lu. Échec définitif arrive après six tentatives temporaires échouées, ou immédiatement après un refus SMTP permanent. Montrer Emma à six essais temporaires 451 et Léa arrêtée après un seul refus permanent 550, sans confondre ces causes.
 3. **Comprendre la raison.** Lire les phrases françaises réellement affichées, pas le rejet SMTP brut : refus définitif avec boîte aux lettres introuvable et adresse à vérifier, ou échec temporaire avec nouvel essai. Une acceptation SMTP ne prouve pas que l'adresse finale existe : certains rejets arrivent après cette acceptation et ne sont pas forcément visibles dans ce tableau. Ne pas prétendre afficher tous les bounces possibles.
 4. **Renvoyer après une panne résolue.** Sur un échec définitif issu d'une panne locale réellement provoquée, rétablir le service de test. Cliquer sur Renvoyer, constater le retour en file puis l'email réellement reçu et l'état Envoyé. Ce bouton réessaie le même email ; ce n'est pas un nouvel envoi à tous les bénévoles.
@@ -122,7 +122,7 @@ tournage ou de synchronisation.
 La troisième répétition a réussi les huit chapitres ; sa capture brute, sa
 timeline et ses contrôles sont conservés dans `owner-rehearsal`. L'introduction
 est ensuite complétée par une connexion réelle au compte Marc, organisateur :
-réglages en lecture seule, puis renvoi et campagnes avec ses propres droits.
+paramètres en lecture seule, puis renvoi et campagnes avec ses propres droits.
 La quatrième répétition de cette version a réussi les huit chapitres. Aucun rôle n'est injecté
 et aucun formulaire n'est masqué pour simuler une restriction.
 

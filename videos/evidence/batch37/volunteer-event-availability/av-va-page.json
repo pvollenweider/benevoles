@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:40:34.876Z",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "promptSha256": "b86625445440e8080a25540109bb602c93d38080ae0f787066491eadbfc0077a",
+  "clipSha256": "56074ff69873ff43ea4d718b5051c299c3159e4d0efb1b717c6a2d2cac140757",
+  "scene": "va-page",
+  "review": {
+    "heardOpening": "La page Mes disponibilités s'ouvre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La page Mes disponibilités s'ouvre",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page avec le titre « Mes disponibilités pour Fête des Lanternes de Combe-Aurel »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Juste en dessous, la date limite",
+        "visibleSeconds": 6.3,
+        "visible": "Mention visible à l'écran : « Tu peux répondre ou changer les réponses jusqu'au vendredi 13 novembre à 20h. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Pour l'instant, Morgane n'a pas encore répondu",
+        "visibleSeconds": 11.2,
+        "visible": "Section « Tes réponses » avec l'indication « Tu n'as pas encore répondu. »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et chaleureuse, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

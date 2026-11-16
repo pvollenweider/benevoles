@@ -6,8 +6,8 @@ Travail de l'issue #485. **Les documents de ce dossier ne sont pas publiés, n'o
 |---|---|
 | [inventaire.md](inventaire.md) | données traitées, rôles, journaux, hébergement, droits des personnes, établis depuis le code avec leur source |
 | [sous-traitants.md](sous-traitants.md) | sous-traitants ultérieurs et ce qu'il reste à prouver pour chacun ; services techniques hors liste |
-| [ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md) | accord de sous-traitance art. 28 RGPD / art. 9 nLPD et ses annexes, **publié** sur `/legal/sous-traitance` (version du 6 octobre 2026, révisable) |
-| [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md) | liste publique des sous-traitants (annexe III de l'accord), **publiée** sur `/legal/sous-traitants` ; ses faits viennent de [sous-traitants.md](sous-traitants.md), vérifié par un test |
+| [ACCORD-SOUS-TRAITANCE.md](../../content/legal/ACCORD-SOUS-TRAITANCE.md) | accord de sous-traitance art. 28 RGPD / art. 9 nLPD et ses annexes, **publié** sur `/legal/sous-traitance` (version du 6 octobre 2026, révisable) |
+| [SOUS-TRAITANTS.md](../../content/legal/SOUS-TRAITANTS.md) | liste publique des sous-traitants (annexe III de l'accord), **publiée** sur `/legal/sous-traitants` ; ses faits viennent de [sous-traitants.md](sous-traitants.md), vérifié par un test |
 | [convention-benevoles-variantes-brouillon.md](convention-benevoles-variantes-brouillon.md) | brouillon des variantes par pays de la convention de bénévolat (#569) — **brouillon à relire** |
 | [prompt-relecture-juridique.md](prompt-relecture-juridique.md) | prompt de relecture juridique combiné (#485 et #569), pour une personne qualifiée ou une IA juridique spécialisée |
 | [procedure-violation.md](procedure-violation.md) | procédure interne en cas de violation, registre des incidents |
@@ -19,7 +19,7 @@ Les durées de conservation viennent de [../retention.md](../retention.md), gén
 
 ## Décision de l'opérateur (2026-10-06)
 
-L'accord de sous-traitance et la liste des sous-traitants sont publiés sans attendre la relecture juridique (« on modifiera au besoin plus tard ») : sources [ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md) et [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md), pages `/legal/sous-traitance` et `/legal/sous-traitants`. Les choix faits pour publier, à confirmer à la relecture : information 30 jours avant un changement de sous-traitant ; notification des violations « sans délai injustifié, aussi rapidement que possible », sans délai chiffré ; audit sur demande écrite, aux frais de l'organisation ; responsabilité et droit applicable renvoyés aux CGU. L'accord d'Infomaniak pour Swiss Backup reste présenté comme « en cours de vérification ».
+L'accord de sous-traitance et la liste des sous-traitants sont publiés sans attendre la relecture juridique (« on modifiera au besoin plus tard ») : sources [ACCORD-SOUS-TRAITANCE.md](../../content/legal/ACCORD-SOUS-TRAITANCE.md) et [SOUS-TRAITANTS.md](../../content/legal/SOUS-TRAITANTS.md), pages `/legal/sous-traitance` et `/legal/sous-traitants`. Les choix faits pour publier, à confirmer à la relecture : information 30 jours avant un changement de sous-traitant ; notification des violations « sans délai injustifié, aussi rapidement que possible », sans délai chiffré ; audit sur demande écrite, aux frais de l'organisation ; responsabilité et droit applicable renvoyés aux CGU. L'accord d'Infomaniak pour Swiss Backup reste présenté comme « en cours de vérification ».
 
 ## Décision de l'opérateur (2026-10-05)
 

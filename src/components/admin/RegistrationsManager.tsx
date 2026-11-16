@@ -18,7 +18,8 @@ import BulkActionsBar from "./registrations/BulkActionsBar"
 import UndoRemovalBar, { type HoldReason } from "./registrations/UndoRemovalBar"
 import RegistrationRow from "./registrations/RegistrationRow"
 import { EMPTY_ADD_FORM, personName, type AddFormValues, type Registration } from "./registrations/types"
-import { workloadByVolunteer } from "@/lib/workload"
+import { blocksWorkload, workloadByPerson, type WorkloadMode } from "@/lib/workload-view"
+import type { PersonalLimits } from "@/lib/workload-policy"
 import {
   cancelAnnouncement,
   heldAnnouncement,
@@ -33,6 +34,7 @@ import {
   type ShiftRef,
 } from "@/lib/registrations-list"
 import { statusBoxClass } from "@/lib/status-message"
+import { messagePageHref, writeToSectorLabel } from "@/lib/targeted-message"
 
 /** Typing in the search box: its count is announced once typing has paused this long. */
 const SEARCH_ANNOUNCE_MS = 500
@@ -48,6 +50,10 @@ type Props = {
   initialRequestsOnly?: boolean
   /** Organisation time zone, for the workload warnings (#465). */
   timeZone: string
+  /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
+  workloadMode?: WorkloadMode
+  /** Personal workload limits by volunteer (#1171, lot 2), for the rows' findings. */
+  personalLimits?: Record<string, PersonalLimits>
   /** Answers to the event's custom questions (#483), by volunteer. */
   answersByVolunteer?: Record<string, { label: string; text: string }[]>
   /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
@@ -56,15 +62,26 @@ type Props = {
   groupLinks?: { id: string; name: string }[]
   /** `?lien=`: a link id, or "none" for the sign-ups through no group link. */
   initialGroupFilter?: string
+  /** The page's « Secteur » filter (#1170) when one is chosen: « Écrire au secteur … » writes to it. */
+  sectorFilter?: { value: string; label: string } | null
+  /** The event uses dated availability (#1146, lot B): the add form shows each person's fit, a shift filter links to « Affecter selon les disponibilités ». */
+  availability?: boolean
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "" }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, personalLimits, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null, availability = false }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
-  // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
+  // Workload per volunteer, from the registrations shown here: the non-blocking #465 warnings, or,
+  // on a protected event (#1171), the limits it enforces that a programme no longer respects.
+  const mode: WorkloadMode = useMemo(() => workloadMode ?? { kind: "warnings", timeZone }, [workloadMode, timeZone])
   const workload = useMemo(
-    () => workloadByVolunteer(registrations.map((r) => ({ volunteerId: r.volunteer.id, status: r.status, shift: r.shift })), timeZone),
-    [registrations, timeZone],
+    () => workloadByPerson(
+      registrations.map((r) => ({ volunteerId: r.volunteer.id, status: r.status, shift: r.shift })),
+      mode,
+      // Each person's birth date and own limits (#1171, lot 2): the minors' and personal limits.
+      new Map(registrations.map((r) => [r.volunteer.id, { birthDate: r.volunteer.birthDate ?? null, personal: personalLimits?.[r.volunteer.id] ?? null }])),
+    ),
+    [registrations, mode, personalLimits],
   )
   const [search, setSearch] = useState(initialSearch ?? "")
   const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null
@@ -182,6 +199,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   // "N sélectionnée(s)" count already promises.
   const selectedRegs = registrations.filter((r) => selectedIds.has(r.id))
   const selectedActiveRegs = selectedRegs.filter((r) => r.status === "active")
+  // A provisional place waiting for its email confirmation (#1253) can be removed like a
+  // registration; the organizer cannot confirm it in the volunteer's place.
+  const selectedCancellableRegs = selectedRegs.filter((r) => r.status === "active" || r.status === "unconfirmed")
 
   function toggleSelected(id: string) {
     setSelectedIds((prev) => {
@@ -269,11 +289,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   }
 
   function handleBulkCancel() {
-    if (selectedActiveRegs.length === 0) return
-    const shiftIds = new Set(selectedActiveRegs.map((r) => r.shift.id))
-    const waitlisted = registrations.filter((r) => r.status !== "active" && shiftIds.has(r.shift.id)).length
+    if (selectedCancellableRegs.length === 0) return
+    const shiftIds = new Set(selectedCancellableRegs.map((r) => r.shift.id))
+    const waitlisted = registrations.filter((r) => (r.status === "waiting" || r.status === "offered") && shiftIds.has(r.shift.id)).length
     setPending({
-      recap: bulkCancelRecap({ ...bulkCancelCounts(selectedRegs), waitlisted: Math.min(waitlisted, selectedActiveRegs.length) }),
+      recap: bulkCancelRecap({ ...bulkCancelCounts(selectedRegs), waitlisted: Math.min(waitlisted, selectedCancellableRegs.length) }),
       run: holdBulkCancel,
     })
   }
@@ -288,7 +308,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   // one is already waiting joins it: one window for all of them, restarted, so no batch is
   // committed behind the person's back.
   async function holdBulkCancel() {
-    const rows = selectedActiveRegs
+    const rows = selectedCancellableRegs
     const ids = new Set(rows.map((r) => r.id))
     const all = [...held, ...rows]
     setPending(null)
@@ -410,8 +430,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       {decision && (
         <RequestDecisionModal
           key={`${decision.reg.id}-${decision.kind}`}
+          eventId={eventId}
           reg={decision.reg}
           kind={decision.kind}
+          availability={availability}
           waitlist={registrations.some((r) => r.shift.id === decision.reg.shift.id && r.status === "waiting")}
           onCancel={() => setDecision(null)}
           onDecided={(startedAt) => handleDecided(decision.reg, decision.kind, startedAt)}
@@ -460,7 +482,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           placeholder="Rechercher (nom, email…)"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-48 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-w-48 border border-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         <label htmlFor="role-filter" className="sr-only">Filtrer par poste</label>
         <select
@@ -473,7 +495,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               if (s && e.target.value && s.roleName !== e.target.value) setShiftFilter("")
             }
           }}
-          className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+          className="border border-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Tous les postes</option>
           {uniqueRoles.map(r => <option key={r} value={r}>{r}</option>)}
@@ -485,7 +507,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               id="group-link-filter"
               value={groupFilter}
               onChange={(e) => setGroupFilter(e.target.value)}
-              className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Tous les liens de groupe</option>
               {groupLinks.map((l) => <option key={l.id} value={l.id}>Lien : {l.name}</option>)}
@@ -495,7 +517,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         )}
         {(requestCount > 0 || requestsOnly) && (
           <label className="flex items-center gap-2 border border-amber-300 bg-amber-50 text-amber-950 rounded-xl px-3 py-2 text-sm font-medium cursor-pointer">
-            <input ref={requestsFilterRef} type="checkbox" checked={requestsOnly} onChange={(e) => setRequestsOnly(e.target.checked)} className="h-4 w-4 rounded border-gray-300" />
+            <input ref={requestsFilterRef} type="checkbox" checked={requestsOnly} onChange={(e) => setRequestsOnly(e.target.checked)} className="h-4 w-4 rounded border-gray-500" />
             Demandes à traiter ({requestCount})
           </label>
         )}
@@ -514,10 +536,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           />
         </div>
         <Link
-          href={`/admin/events/${eventId}/message${shiftFilter ? `?shift=${encodeURIComponent(shiftFilter)}` : roleFilter ? `?role=${encodeURIComponent(roleFilter)}` : ""}`}
+          href={messagePageHref(eventId, { shiftId: shiftFilter, roleName: roleFilter, sector: sectorFilter?.value })}
           className="border border-gray-300 text-gray-800 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
-          {shiftFilter ? "Écrire à ce créneau" : roleFilter ? "Écrire à ce poste" : "Écrire aux bénévoles"}
+          {shiftFilter ? "Écrire à ce créneau" : roleFilter ? "Écrire à ce poste" : sectorFilter ? writeToSectorLabel(sectorFilter) : "Écrire aux bénévoles"}
         </Link>
         <button
           ref={addButtonRef}
@@ -526,6 +548,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         >
           + Ajouter manuellement
         </button>
+        {availability && shiftFilter && (
+          <Link
+            href={`/admin/events/${eventId}/availability/assign?shift=${encodeURIComponent(shiftFilter)}`}
+            className="min-h-11 inline-flex items-center text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Voir qui est disponible pour ce créneau
+          </Link>
+        )}
       </div>
 
       {showAddForm && (
@@ -535,7 +565,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           shifts={shifts}
           registrations={registrations}
           timeZone={timeZone}
+          workloadMode={mode}
           organizerEmail={organizerEmail}
+          availability={availability}
           form={addForm}
           onFormChange={setAddForm}
           onAdded={handleAdded}
@@ -548,7 +580,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           selectedCount={selectedIds.size}
           toCheckInCount={selectedToCheckIn.length}
           toUndoCount={selectedToUndo.length}
-          activeCount={selectedActiveRegs.length}
+          activeCount={selectedCancellableRegs.length}
           noneWithEmail={selectedRegs.every((r) => !r.volunteer.email)}
           noActiveWithEmail={selectedActiveRegs.every((r) => !r.volunteer.email)}
           busy={bulkBusy}
@@ -580,7 +612,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                       if (el) el.indeterminate = selectedIds.size > 0 && !filtered.every((r) => selectedIds.has(r.id))
                     }}
                     onChange={toggleSelectAllVisible}
-                    className="rounded border-gray-300"
+                    className="rounded border-gray-500"
                   />
                 </th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Bénévole</th>
@@ -599,6 +631,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                   onDecision={(kind) => openDecision(reg, kind)}
                   answers={answersByVolunteer[reg.volunteer.id] ?? []}
                   workload={workload.get(reg.volunteer.id) ?? []}
+                workloadBlocks={blocksWorkload(mode)}
                 />
               ))}
             </tbody>

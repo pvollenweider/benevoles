@@ -10,20 +10,19 @@ import { fmtHour, fmtShortDate, type ShiftRef } from "./registrations-list"
  */
 
 /**
- * Accessible name of a shift option, e.g. « sam. 4 juil., de 10h à 12h, Bar, 1 inscrit sur 3,
- * déjà inscrit ». « de … à » instead of the en dash, which screen readers read badly; it starts
- * with the same date text as the visible row (WCAG 2.5.3).
+ * Accessible name of a shift option: its visible row in order, then the filling in words, e.g.
+ * « sam. 4 juil., 10h–12h, Bar, Soir, Déjà inscrit, 1/3, 1 inscrit sur 3 ». The visible words in a
+ * row let a voice command reach the option (WCAG 2.5.3, axe `label-content-name-mismatch`); the
+ * « 1/3 » that screen readers read « barre » is then said in words. « ⚠ conflit » is « conflit ».
  */
 export function shiftOptionLabel(s: ShiftRef, f: { alreadyRegistered: boolean; conflict: boolean }): string {
   const n = s.registrationCount
   const fill = n >= s.capacity
-    ? "complet"
-    : n === 0
-      ? `aucun inscrit sur ${s.capacity}`
-      : `${n} inscrit${n > 1 ? "s" : ""} sur ${s.capacity}`
-  return `${fmtShortDate(s.date)}, de ${fmtHour(s.startTime)} à ${fmtHour(s.endTime)}, ${s.roleName}`
-    + `${s.label !== s.roleName ? `, ${s.label}` : ""}, ${fill}`
-    + `${f.alreadyRegistered ? ", déjà inscrit" : ""}${f.conflict ? ", conflit d'horaire" : ""}`
+    ? "Complet"
+    : `${n}/${s.capacity}, ${n === 0 ? "aucun inscrit" : `${n} inscrit${n > 1 ? "s" : ""}`} sur ${s.capacity}`
+  return `${fmtShortDate(s.date)}, ${fmtHour(s.startTime)}–${fmtHour(s.endTime)}, ${s.roleName}`
+    + `${s.label !== s.roleName ? `, ${s.label}` : ""}`
+    + `${f.alreadyRegistered ? ", Déjà inscrit" : ""}${f.conflict ? ", conflit" : ""}, ${fill}`
 }
 
 /**

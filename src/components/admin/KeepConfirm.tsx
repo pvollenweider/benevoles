@@ -54,7 +54,7 @@ export default function KeepConfirm({ secret, organizationName }: { secret: stri
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
       <input type="hidden" name="token" value={secret} />
       <p className="text-sm text-gray-800">
-        Vous souhaitez conserver l&apos;espace de <strong>{organizationName}</strong> ? Il suffit d&apos;appuyer sur le bouton : il restera actif, avec ses événements, ses membres et ses réglages.
+        Vous souhaitez conserver l&apos;espace de <strong>{organizationName}</strong> ? Il suffit d&apos;appuyer sur le bouton : il restera actif, avec ses événements, ses membres et ses paramètres.
       </p>
       <FormStatus error={error} errorId={`${id}-error`} />
       <button

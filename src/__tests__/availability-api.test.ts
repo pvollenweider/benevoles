@@ -11,11 +11,18 @@ vi.mock("@/lib/token-vault", () => ({ registrationToken: { where: (t: string) =>
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
+// Address changes renew the member's links: covered by src/__integration__/member-address-revocation.int.test.ts.
+vi.mock("@/lib/member-address-revocation", () => ({ renewMemberLinks: vi.fn() }))
+vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse: vi.fn() }))
 vi.mock("@/lib/org-log", () => ({ adminActor: () => ({ type: "admin" }), logOrgEvent: vi.fn(), diffFields: () => null }))
 
 const patch = (body: unknown) =>
   new Request("http://localhost/api/public/registrations/tok/availability", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
 const params = { params: Promise.resolve({ token: "tok" }) }
+
+// The link's organisation, open (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+const liveLink = { volunteerId: "v1", event: { organization: OPEN_ORG } }
 
 // Optional availability (#402).
 describe("PATCH /api/public/registrations/[token]/availability", () => {
@@ -23,7 +30,7 @@ describe("PATCH /api/public/registrations/[token]/availability", () => {
     vi.clearAllMocks()
     rateLimit.mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 })
     isRateLimited.mockResolvedValue(false)
-    findFirst.mockResolvedValue({ volunteerId: "v1" })
+    findFirst.mockResolvedValue(liveLink)
     update.mockResolvedValue({ count: 1 })
     readBack.mockResolvedValue({ availabilityPeriods: ["morning"], availabilityNote: null })
   })
@@ -52,13 +59,22 @@ describe("PATCH /api/public/registrations/[token]/availability", () => {
     findFirst.mockResolvedValue(null)
     expect((await PATCH(patch({ availabilityPeriods: [], availabilityNote: null }), params)).status).toBe(404)
     // A valid link that used up its own limit (#609).
-    findFirst.mockResolvedValue({ volunteerId: "v1" })
+    findFirst.mockResolvedValue(liveLink)
     rateLimit.mockResolvedValue({ ok: false, remaining: 0, retryAfter: 60 })
     expect((await PATCH(patch({ availabilityPeriods: [], availabilityNote: null }), params)).status).toBe(429)
     // A connection that used up its failed lookups.
     rateLimit.mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 })
     isRateLimited.mockResolvedValue(true)
     expect((await PATCH(patch({ availabilityPeriods: [], availabilityNote: null }), params)).status).toBe(429)
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it("changes nothing while the organisation is deactivated or suspended", async () => {
+    findFirst.mockResolvedValue({ volunteerId: "v1", event: { organization: { active: false, suspendedAt: null } } })
+    const { PATCH } = await import("@/app/api/public/registrations/[token]/availability/route")
+    const res = await PATCH(patch({ availabilityPeriods: ["morning"], availabilityNote: null }), params)
+    expect(res.status).toBe(403)
+    expect(await res.json()).toMatchObject({ code: "org_unavailable" })
     expect(update).not.toHaveBeenCalled()
   })
 })

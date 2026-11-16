@@ -11,6 +11,8 @@ type Props = {
   startDate: string
   endDate: string
   publicUrl: string
+  /** « Aide : … » (#1096): the page's HelpLink, a server component rendered by the page. */
+  helpLink?: React.ReactNode
 }
 
 function formatDateRange(startISO: string, endISO: string) {
@@ -30,6 +32,7 @@ export default function QrPrintView({
   startDate,
   endDate,
   publicUrl,
+  helpLink,
 }: Props) {
   const pngUrl = `/api/admin/events/${eventId}/qr?format=png`
   const svgUrl = `/api/admin/events/${eventId}/qr?format=svg`
@@ -39,6 +42,7 @@ export default function QrPrintView({
       <div className="no-print flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">QR code</h1>
+          {helpLink}
         </div>
         <div className="flex gap-2">
           <a

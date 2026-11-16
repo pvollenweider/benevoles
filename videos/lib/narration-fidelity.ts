@@ -12,6 +12,8 @@ export function narrationWords(text: string): string[] {
     .replace(/\bfetes?-de-montvert\b|\bfetes? tiret de mont ?vert\b/g, "fetes de montvert")
     .replace(/\bbenevole? point app\b/g, "benevol point app")
     .replace(/\butf[-\s]?8\b/g, "utf huit")
+    // Browser zoom levels: ASR often prints the exact spoken percentages as digits.
+    .replace(/\b(100|200|400)\s*%/g, (_, value: string) => ({ "100": "cent pour cent", "200": "deux cents pour cent", "400": "quatre cents pour cent" })[value]!)
     .replace(/\+41\b/g, "plus quarante et un")
     .replace(/=\s*1\s*\+\s*1\b/g, "egal un plus un")
     .replace(/=/g, " egal ").replace(/\+/g, " plus ").replace(/@/g, " arobase ")

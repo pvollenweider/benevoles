@@ -32,3 +32,14 @@ describe("static cache headers (#773, #759 F3)", () => {
     for (const rule of STATIC_CACHE_HEADERS) expect(rules).toContainEqual(rule)
   })
 })
+
+describe("calendar subscription headers (#961)", () => {
+  it("sends no Referer at all from the feed, by a rule after the global strict-origin one", async () => {
+    const { CALENDAR_FEED_HEADER_RULES } = await import("../security-headers")
+    const rules = await nextConfig.headers!()
+    const feedIndex = rules.findIndex((r) => r.source === "/api/public/registrations/:token/calendar.ics")
+    expect(feedIndex).toBeGreaterThan(0)
+    expect(rules[feedIndex].headers).toContainEqual({ key: "Referrer-Policy", value: "no-referrer" })
+    expect(CALENDAR_FEED_HEADER_RULES[0].source).toBe(rules[feedIndex].source)
+  })
+})

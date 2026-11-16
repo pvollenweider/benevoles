@@ -55,6 +55,9 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
     const question = await prisma.eventQuestion.create({ data: { eventId: old.id, label: "Taille de t-shirt", type: "text" } })
     await prisma.questionAnswer.create({ data: { questionId: question.id, eventId: old.id, volunteerId: alice.id, values: ["M"] } })
     await prisma.memberInvite.create({ data: { eventId: old.id, volunteerId: alice.id, ...linkToken.data(`${tag}-invite`) } })
+    // « Je ne peux pas » for one shift (#1303): gone with the old event, kept on the recent one.
+    await prisma.shiftDecline.create({ data: { shiftId: oldShift.id, volunteerId: alice.id } })
+    await prisma.shiftDecline.create({ data: { shiftId: recentShift.id, volunteerId: bruno.id } })
     await prisma.sectorLeader.create({ data: { eventId: old.id, roleName: "Bar", name: "Chef Bar", email: `${tag}-chef@example.org`, ...linkToken.data(`${tag}-leader`) } })
     await prisma.eventLog.create({ data: { eventId: old.id, actorType: "volunteer", actorId: alice.id, action: "registration.cancelled", entityType: "Registration", entityId: oldA.id } })
     // An answer changed from the personal page (#984): on the old event it goes with the answers,
@@ -71,7 +74,7 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
     expect((await loadPastEventOrganizations(NOW)).find((o) => o.id === orgId)).toMatchObject({ concernedEvents: 1, pastEventNoticeAt: null })
 
     const counts = await runPastEventBatch(orgId, NOW)
-    expect(counts).toEqual({ events: 1, registrations: 2, anonymousRecords: 2, answers: 1, invites: 1, sectorLeaders: 1 })
+    expect(counts).toEqual({ events: 1, registrations: 2, anonymousRecords: 2, answers: 1, invites: 1, shiftDeclines: 1, sectorLeaders: 1 })
 
     const regs = await prisma.registration.findMany({ where: { id: { in: [oldA.id, oldB.id, oldErased.id, recentB.id] } }, include: { volunteer: true } })
     const byId = new Map(regs.map((r) => [r.id, r]))
@@ -97,6 +100,8 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
 
     expect(await prisma.questionAnswer.count({ where: { eventId: old.id } })).toBe(0)
     expect(await prisma.memberInvite.count({ where: { eventId: old.id } })).toBe(0)
+    expect(await prisma.shiftDecline.count({ where: { shift: { eventId: old.id } } })).toBe(0)
+    expect(await prisma.shiftDecline.count({ where: { shift: { eventId: recent.id } } })).toBe(1)
     expect(await prisma.sectorLeader.count({ where: { eventId: old.id } })).toBe(0)
     expect(await prisma.rosterConsent.count({ where: { eventId: old.id } })).toBe(0)
     expect(await prisma.rosterConsent.count({ where: { eventId: recent.id } })).toBe(1)

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:05:01.978Z",
+  "videoSha256": "eaa9a44b7afc91cfbde9b6abc9ef27bb8d8fb00fac628ed746ea94225a53891f",
+  "promptSha256": "c3e7209c9c11537b57e758c203b48b754b2e492ecc5e5e75c4a52a6d5e2b0c82",
+  "clipSha256": "c64dcbb38541e7573d6bb22fb0d27f751b380695bc0b24a340fb36cd4a9ec808",
+  "scene": "wl-registrations",
+  "review": {
+    "heardOpening": "Dans Inscriptions, ses deux créneaux",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Dans Inscriptions",
+        "visibleSeconds": 0,
+        "visible": "Onglet Inscriptions affiché avec la liste des inscriptions actives",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "ses deux créneaux restants portent maintenant la mention Limite dépassée",
+        "visibleSeconds": 2.1,
+        "visible": "Défilement montrant les deux créneaux de Sarah Smith avec l'étiquette rouge Limite dépassée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "avec la règle, les heures et l'écart",
+        "visibleSeconds": 5,
+        "visible": "Détail du message affiché précisant la règle de la journée de service, les 6 h d'écart et la limite de 9 h 30",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "L'organisation voit tout de suite quel programme revoir.",
+        "visibleSeconds": 8,
+        "visible": "Vue d'ensemble stable sur les alertes de planning",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation fluide avec le défilement de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

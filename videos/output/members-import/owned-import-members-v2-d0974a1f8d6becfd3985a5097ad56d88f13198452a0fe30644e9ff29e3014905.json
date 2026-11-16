@@ -1,0 +1,1739 @@
+{
+  "schemaVersion": 3,
+  "manualContact": {
+    "id": "cmwc3qww0006jzra51bajth3s",
+    "organizationId": "default",
+    "firstName": "René",
+    "lastName": "Aubert",
+    "phone": "079 000 90 02",
+    "email": null,
+    "responseStatus": 201,
+    "createdAt": "2026-11-11T12:35:33.519Z",
+    "actualCreatedAt": "2026-11-11T12:35:33.504Z"
+  },
+  "seedProof": {
+    "schemaVersion": 2,
+    "scenario": "natural-member-seeds",
+    "provenance": "actual-seed-write",
+    "observedAt": "2026-11-11T12:35:28.609Z",
+    "members": [
+      {
+        "id": "video-member-management-0",
+        "organizationId": "default",
+        "firstName": "Stéphane",
+        "lastName": "Favre",
+        "email": "stephane.favre@example.org",
+        "phone": "079 000 00 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.537Z",
+        "updatedAt": "2026-11-11T12:35:28.537Z"
+      },
+      {
+        "id": "video-member-management-1",
+        "organizationId": "default",
+        "firstName": "Stéphane",
+        "lastName": "Favre",
+        "email": "favre.stephane@example.org",
+        "phone": "079 000 01 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.545Z",
+        "updatedAt": "2026-11-11T12:35:28.545Z"
+      },
+      {
+        "id": "video-member-management-2",
+        "organizationId": "default",
+        "firstName": "René",
+        "lastName": "Meyer",
+        "email": null,
+        "phone": "079 000 02 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": "Contact à joindre par téléphone pour les horaires.",
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.549Z",
+        "updatedAt": "2026-11-11T12:35:28.549Z"
+      },
+      {
+        "id": "video-member-management-3",
+        "organizationId": "default",
+        "firstName": "Aline",
+        "lastName": "Mercier",
+        "email": "aline.mercier@example.org",
+        "phone": "079 000 03 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": "Pas le dimanche",
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.552Z",
+        "updatedAt": "2026-11-11T12:35:28.552Z"
+      },
+      {
+        "id": "video-member-management-4",
+        "organizationId": "default",
+        "firstName": "Nicolas",
+        "lastName": "Renaud",
+        "email": "nicolas.renaud@example.org",
+        "phone": "079 000 04 00",
+        "tags": [
+          "sécurité",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.555Z",
+        "updatedAt": "2026-11-11T12:35:28.555Z"
+      },
+      {
+        "id": "video-member-management-5",
+        "organizationId": "default",
+        "firstName": "Léon",
+        "lastName": "Dumont",
+        "email": "leon.dumont@example.org",
+        "phone": "079 000 05 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.557Z",
+        "updatedAt": "2026-11-11T12:35:28.557Z"
+      },
+      {
+        "id": "video-member-management-6",
+        "organizationId": "default",
+        "firstName": "Aline",
+        "lastName": "Berger",
+        "email": "aline.berger@example.org",
+        "phone": "079 000 06 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.559Z",
+        "updatedAt": "2026-11-11T12:35:28.559Z"
+      },
+      {
+        "id": "video-member-management-7",
+        "organizationId": "default",
+        "firstName": "Émilie",
+        "lastName": "Perrin",
+        "email": "emilie.perrin@example.org",
+        "phone": "079 000 07 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.561Z",
+        "updatedAt": "2026-11-11T12:35:28.561Z"
+      },
+      {
+        "id": "video-member-management-8",
+        "organizationId": "default",
+        "firstName": "Sébastien",
+        "lastName": "Perret",
+        "email": "sebastien.perret@example.org",
+        "phone": "079 000 08 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.562Z",
+        "updatedAt": "2026-11-11T12:35:28.562Z"
+      },
+      {
+        "id": "video-member-management-9",
+        "organizationId": "default",
+        "firstName": "Anaïs",
+        "lastName": "Roux",
+        "email": "anais.roux@example.org",
+        "phone": "079 000 09 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.564Z",
+        "updatedAt": "2026-11-11T12:35:28.564Z"
+      },
+      {
+        "id": "video-member-management-10",
+        "organizationId": "default",
+        "firstName": "Nicolas",
+        "lastName": "Leroy",
+        "email": "nicolas.leroy@example.org",
+        "phone": "079 000 10 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.565Z",
+        "updatedAt": "2026-11-11T12:35:28.565Z"
+      },
+      {
+        "id": "video-member-management-11",
+        "organizationId": "default",
+        "firstName": "Léon",
+        "lastName": "Dubois",
+        "email": "leon.dubois@example.org",
+        "phone": "079 000 11 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.566Z",
+        "updatedAt": "2026-11-11T12:35:28.566Z"
+      },
+      {
+        "id": "video-member-management-12",
+        "organizationId": "default",
+        "firstName": "Aline",
+        "lastName": "Girard",
+        "email": "aline.girard@example.org",
+        "phone": "079 000 12 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.568Z",
+        "updatedAt": "2026-11-11T12:35:28.568Z"
+      },
+      {
+        "id": "video-member-management-13",
+        "organizationId": "default",
+        "firstName": "Émilie",
+        "lastName": "Martin",
+        "email": "emilie.martin@example.org",
+        "phone": "079 000 13 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.570Z",
+        "updatedAt": "2026-11-11T12:35:28.570Z"
+      },
+      {
+        "id": "video-member-management-14",
+        "organizationId": "default",
+        "firstName": "Sébastien",
+        "lastName": "Blanc",
+        "email": "sebastien.blanc@example.org",
+        "phone": "079 000 14 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.571Z",
+        "updatedAt": "2026-11-11T12:35:28.571Z"
+      },
+      {
+        "id": "video-member-management-15",
+        "organizationId": "default",
+        "firstName": "Anaïs",
+        "lastName": "Fontaine",
+        "email": "anais.fontaine@example.org",
+        "phone": "079 000 15 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.573Z",
+        "updatedAt": "2026-11-11T12:35:28.573Z"
+      },
+      {
+        "id": "video-member-management-16",
+        "organizationId": "default",
+        "firstName": "Nicolas",
+        "lastName": "Chevalier",
+        "email": "nicolas.chevalier@example.org",
+        "phone": "079 000 16 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.574Z",
+        "updatedAt": "2026-11-11T12:35:28.574Z"
+      },
+      {
+        "id": "video-member-management-17",
+        "organizationId": "default",
+        "firstName": "Léon",
+        "lastName": "Meyer",
+        "email": "leon.meyer@example.org",
+        "phone": "079 000 17 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.576Z",
+        "updatedAt": "2026-11-11T12:35:28.576Z"
+      },
+      {
+        "id": "video-member-management-18",
+        "organizationId": "default",
+        "firstName": "Aline",
+        "lastName": "Garnier",
+        "email": "aline.garnier@example.org",
+        "phone": "079 000 18 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.577Z",
+        "updatedAt": "2026-11-11T12:35:28.577Z"
+      },
+      {
+        "id": "video-member-management-19",
+        "organizationId": "default",
+        "firstName": "Émilie",
+        "lastName": "Rochat",
+        "email": "emilie.rochat@example.org",
+        "phone": "079 000 19 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.579Z",
+        "updatedAt": "2026-11-11T12:35:28.579Z"
+      },
+      {
+        "id": "video-member-management-20",
+        "organizationId": "default",
+        "firstName": "Sébastien",
+        "lastName": "Chappuis",
+        "email": "sebastien.chappuis@example.org",
+        "phone": "079 000 20 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.580Z",
+        "updatedAt": "2026-11-11T12:35:28.580Z"
+      },
+      {
+        "id": "video-member-management-21",
+        "organizationId": "default",
+        "firstName": "Anaïs",
+        "lastName": "Baud",
+        "email": "anais.baud@example.org",
+        "phone": "079 000 21 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.581Z",
+        "updatedAt": "2026-11-11T12:35:28.581Z"
+      },
+      {
+        "id": "video-member-management-22",
+        "organizationId": "default",
+        "firstName": "Nicolas",
+        "lastName": "Henry",
+        "email": "nicolas.henry@example.org",
+        "phone": "079 000 22 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.583Z",
+        "updatedAt": "2026-11-11T12:35:28.583Z"
+      },
+      {
+        "id": "video-member-management-23",
+        "organizationId": "default",
+        "firstName": "Léon",
+        "lastName": "Pasche",
+        "email": "leon.pasche@example.org",
+        "phone": "079 000 23 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.584Z",
+        "updatedAt": "2026-11-11T12:35:28.584Z"
+      },
+      {
+        "id": "video-member-management-24",
+        "organizationId": "default",
+        "firstName": "Aline",
+        "lastName": "Richard",
+        "email": "aline.richard@example.org",
+        "phone": "079 000 24 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.585Z",
+        "updatedAt": "2026-11-11T12:35:28.585Z"
+      },
+      {
+        "id": "video-member-management-25",
+        "organizationId": "default",
+        "firstName": "Émilie",
+        "lastName": "Colin",
+        "email": "emilie.colin@example.org",
+        "phone": "079 000 25 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.586Z",
+        "updatedAt": "2026-11-11T12:35:28.586Z"
+      },
+      {
+        "id": "video-member-management-26",
+        "organizationId": "default",
+        "firstName": "Sébastien",
+        "lastName": "Besson",
+        "email": "sebastien.besson@example.org",
+        "phone": "079 000 26 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.588Z",
+        "updatedAt": "2026-11-11T12:35:28.588Z"
+      },
+      {
+        "id": "video-member-management-27",
+        "organizationId": "default",
+        "firstName": "Anaïs",
+        "lastName": "Gaillard",
+        "email": "anais.gaillard@example.org",
+        "phone": "079 000 27 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.589Z",
+        "updatedAt": "2026-11-11T12:35:28.589Z"
+      },
+      {
+        "id": "video-member-management-28",
+        "organizationId": "default",
+        "firstName": "Nicolas",
+        "lastName": "Picard",
+        "email": "nicolas.picard@example.org",
+        "phone": "079 000 28 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.590Z",
+        "updatedAt": "2026-11-11T12:35:28.590Z"
+      },
+      {
+        "id": "video-member-management-29",
+        "organizationId": "default",
+        "firstName": "Léon",
+        "lastName": "Rey",
+        "email": "leon.rey@example.org",
+        "phone": "079 000 29 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.591Z",
+        "updatedAt": "2026-11-11T12:35:28.591Z"
+      },
+      {
+        "id": "video-member-management-30",
+        "organizationId": "default",
+        "firstName": "Aline",
+        "lastName": "Vonlanthen",
+        "email": "aline.vonlanthen@example.org",
+        "phone": "079 000 30 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.592Z",
+        "updatedAt": "2026-11-11T12:35:28.592Z"
+      },
+      {
+        "id": "video-member-management-31",
+        "organizationId": "default",
+        "firstName": "Émilie",
+        "lastName": "Schmid",
+        "email": "emilie.schmid@example.org",
+        "phone": "079 000 31 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.593Z",
+        "updatedAt": "2026-11-11T12:35:28.593Z"
+      },
+      {
+        "id": "video-member-management-32",
+        "organizationId": "default",
+        "firstName": "Sébastien",
+        "lastName": "Laurent",
+        "email": "sebastien.laurent@example.org",
+        "phone": "079 000 32 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.595Z",
+        "updatedAt": "2026-11-11T12:35:28.595Z"
+      },
+      {
+        "id": "video-member-management-33",
+        "organizationId": "default",
+        "firstName": "Anaïs",
+        "lastName": "Bovet",
+        "email": "anais.bovet@example.org",
+        "phone": "079 000 33 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.596Z",
+        "updatedAt": "2026-11-11T12:35:28.596Z"
+      },
+      {
+        "id": "video-member-management-34",
+        "organizationId": "default",
+        "firstName": "Nicolas",
+        "lastName": "Bonnet",
+        "email": "nicolas.bonnet@example.org",
+        "phone": "079 000 34 00",
+        "tags": [
+          "logistique",
+          "permis-b"
+        ],
+        "active": true,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "evening"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.597Z",
+        "updatedAt": "2026-11-11T12:35:28.597Z"
+      },
+      {
+        "id": "video-member-management-35",
+        "organizationId": "default",
+        "firstName": "Léon",
+        "lastName": "Fischer",
+        "email": "leon.fischer@example.org",
+        "phone": "079 000 35 00",
+        "tags": [
+          "accueil"
+        ],
+        "active": false,
+        "notes": null,
+        "birthDate": null,
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": null,
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-11-11T12:35:28.598Z",
+        "updatedAt": "2026-11-11T12:35:28.598Z"
+      }
+    ],
+    "sha256": "256f5a6efc601074f458bd92bbaf6f15ef089a5b2c65c9fff3c340ffcea40b09"
+  },
+  "scenario": "members-import",
+  "csvSha256": "efed64cceffadc0038934b21511bd5f39598aa0ff402e54c7a9f676cf160b855",
+  "xlsxSha256": "d8e0afdf942d0cababa32402b1ff34bcd8f23056197d4049c0c7ecaf73d39d6b",
+  "provenance": "actual-api-before-after",
+  "responseStatus": 200,
+  "receipt": {
+    "created": 38,
+    "updated": 2,
+    "skipped": 0,
+    "errors": [],
+    "detectedColumns": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "tags": "Tags"
+    },
+    "totalParsed": 40
+  },
+  "observedAt": "2026-11-11T12:38:14.937Z",
+  "beforeIds": [
+    "cmwc3qu430015ega5oor2ubb5",
+    "cmwc3qu4j0016ega5q80i52xk",
+    "cmwc3qww0006jzra51bajth3s",
+    "video-member-management-2",
+    "cmwc3qu2y000gega5mcbaw8dh",
+    "cmwc3qu30000hega540g5x0yr",
+    "cmwc3qu33000iega5x00z9mki",
+    "cmwc3qu35000jega5zdr97keb",
+    "cmwc3qu37000kega5pa2ljprq",
+    "cmwc3qu39000lega5l2v93i8r",
+    "cmwc3qu3b000mega5sw3sbtnr",
+    "cmwc3qu3d000nega5ug9gj053",
+    "cmwc3qu3f000oega5q3amav1s",
+    "cmwc3qu3h000pega5p353qy14",
+    "cmwc3qu3j000qega5fqupvcb8",
+    "cmwc3qu3k000rega512rgbi8f",
+    "cmwc3qu3m000sega5u0770who",
+    "cmwc3qu3n000tega5w3w9krmy",
+    "cmwc3qu3p000uega5rw411how",
+    "cmwc3qu3q000vega5n3qnkfy5",
+    "cmwc3qu3r000wega5dxt7wql3",
+    "cmwc3qu3t000xega5u8pn0zhm",
+    "cmwc3qu3u000yega5v8hxq1kx",
+    "cmwc3qu3w000zega5tz0w9pvm",
+    "cmwc3qu3x0010ega5sr9f6vi6",
+    "cmwc3qu3y0011ega5xle6qwsy",
+    "cmwc3qu400012ega5g95hnmqm",
+    "cmwc3qu410013ega5v4mi5111",
+    "cmwc3qu430014ega5m1tslxp8"
+  ],
+  "beforeCount": 29,
+  "afterCount": 67,
+  "members": [
+    {
+      "id": "cmwc3ud9k006lzra5zo11jrh7",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Meyer",
+      "email": null,
+      "phone": "+41 79 000 10 03",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.696Z",
+      "updatedAt": "2026-11-11T12:38:14.696Z"
+    },
+    {
+      "id": "cmwc3ud9x006nzra56m2df8on",
+      "organizationId": "default",
+      "firstName": "Aline",
+      "lastName": "Renaud",
+      "email": "import.membre.4@example.org",
+      "phone": "+41 79 000 04 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.709Z",
+      "updatedAt": "2026-11-11T12:38:14.709Z"
+    },
+    {
+      "id": "cmwc3uda3006pzra5z9wnmea8",
+      "organizationId": "default",
+      "firstName": "Sophie",
+      "lastName": "Berger",
+      "email": "import.membre.6@example.org",
+      "phone": "+41 79 000 06 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.715Z",
+      "updatedAt": "2026-11-11T12:38:14.715Z"
+    },
+    {
+      "id": "cmwc3uda9006rzra5deixr981",
+      "organizationId": "default",
+      "firstName": "Maya",
+      "lastName": "Perret",
+      "email": "import.membre.8@example.org",
+      "phone": "+41 79 000 08 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.721Z",
+      "updatedAt": "2026-11-11T12:38:14.721Z"
+    },
+    {
+      "id": "cmwc3udag006tzra5vixgi0p1",
+      "organizationId": "default",
+      "firstName": "Émilie",
+      "lastName": "Leroy",
+      "email": "import.membre.10@example.org",
+      "phone": "+41 79 000 10 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.728Z",
+      "updatedAt": "2026-11-11T12:38:14.728Z"
+    },
+    {
+      "id": "cmwc3udao006vzra5z0d2y9jq",
+      "organizationId": "default",
+      "firstName": "Théo",
+      "lastName": "Girard",
+      "email": "import.membre.12@example.org",
+      "phone": "+41 79 000 12 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.736Z",
+      "updatedAt": "2026-11-11T12:38:14.736Z"
+    },
+    {
+      "id": "cmwc3udat006xzra5kd8sqa54",
+      "organizationId": "default",
+      "firstName": "Léon",
+      "lastName": "Blanc",
+      "email": "import.membre.14@example.org",
+      "phone": "+41 79 000 14 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.741Z",
+      "updatedAt": "2026-11-11T12:38:14.741Z"
+    },
+    {
+      "id": "cmwc3udb0006zzra5z85mxm5l",
+      "organizationId": "default",
+      "firstName": "Sophie",
+      "lastName": "Chevalier",
+      "email": "import.membre.16@example.org",
+      "phone": "+41 79 000 16 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.748Z",
+      "updatedAt": "2026-11-11T12:38:14.748Z"
+    },
+    {
+      "id": "cmwc3udb70071zra52i5pw7dk",
+      "organizationId": "default",
+      "firstName": "Anaïs",
+      "lastName": "Rochat",
+      "email": "import.membre.18@example.org",
+      "phone": "+41 79 000 18 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.755Z",
+      "updatedAt": "2026-11-11T12:38:14.755Z"
+    },
+    {
+      "id": "cmwc3udbd0073zra528sgosjh",
+      "organizationId": "default",
+      "firstName": "Émilie",
+      "lastName": "Baud",
+      "email": "import.membre.20@example.org",
+      "phone": "+41 79 000 20 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.761Z",
+      "updatedAt": "2026-11-11T12:38:14.761Z"
+    },
+    {
+      "id": "cmwc3udbl0075zra516sdy5f6",
+      "organizationId": "default",
+      "firstName": "Théo",
+      "lastName": "Dutoit",
+      "email": "import.membre.22@example.org",
+      "phone": "+41 79 000 22 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.769Z",
+      "updatedAt": "2026-11-11T12:38:14.769Z"
+    },
+    {
+      "id": "cmwc3udbr0077zra5kwolukr3",
+      "organizationId": "default",
+      "firstName": "Léon",
+      "lastName": "Colin",
+      "email": "import.membre.24@example.org",
+      "phone": "+41 79 000 24 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.775Z",
+      "updatedAt": "2026-11-11T12:38:14.775Z"
+    },
+    {
+      "id": "cmwc3udby0079zra5j98uvlj0",
+      "organizationId": "default",
+      "firstName": "Sophie",
+      "lastName": "Gaillard",
+      "email": "import.membre.26@example.org",
+      "phone": "+41 79 000 26 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.782Z",
+      "updatedAt": "2026-11-11T12:38:14.782Z"
+    },
+    {
+      "id": "cmwc3udc6007bzra5b904frc1",
+      "organizationId": "default",
+      "firstName": "Anaïs",
+      "lastName": "Rey",
+      "email": "import.membre.28@example.org",
+      "phone": "+41 79 000 28 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.790Z",
+      "updatedAt": "2026-11-11T12:38:14.790Z"
+    },
+    {
+      "id": "cmwc3udce007dzra59umvrlp0",
+      "organizationId": "default",
+      "firstName": "Émilie",
+      "lastName": "Schmid",
+      "email": "import.membre.30@example.org",
+      "phone": "+41 79 000 30 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.798Z",
+      "updatedAt": "2026-11-11T12:38:14.798Z"
+    },
+    {
+      "id": "cmwc3udcn007fzra5inglww61",
+      "organizationId": "default",
+      "firstName": "Théo",
+      "lastName": "Bovet",
+      "email": "import.membre.32@example.org",
+      "phone": "+41 79 000 32 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.807Z",
+      "updatedAt": "2026-11-11T12:38:14.807Z"
+    },
+    {
+      "id": "cmwc3udcu007hzra5rjk7no4f",
+      "organizationId": "default",
+      "firstName": "Léon",
+      "lastName": "Fischer",
+      "email": "import.membre.34@example.org",
+      "phone": "+41 79 000 34 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.814Z",
+      "updatedAt": "2026-11-11T12:38:14.814Z"
+    },
+    {
+      "id": "cmwc3udd2007jzra57799e2zt",
+      "organizationId": "default",
+      "firstName": "Sophie",
+      "lastName": "Monnier",
+      "email": "import.membre.36@example.org",
+      "phone": "+41 79 000 36 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.822Z",
+      "updatedAt": "2026-11-11T12:38:14.822Z"
+    },
+    {
+      "id": "cmwc3udd8007lzra5ci2i33nv",
+      "organizationId": "default",
+      "firstName": "Anaïs",
+      "lastName": "Robert",
+      "email": "import.membre.38@example.org",
+      "phone": "+41 79 000 38 00",
+      "tags": [
+        "logistique",
+        "permis-b"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.828Z",
+      "updatedAt": "2026-11-11T12:38:14.828Z"
+    },
+    {
+      "id": "cmwc3ud9s006mzra5tapf37ig",
+      "organizationId": "default",
+      "firstName": "Anaïs",
+      "lastName": "Mercier",
+      "email": "import.membre.3@example.org",
+      "phone": "+41 79 000 03 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.704Z",
+      "updatedAt": "2026-11-11T12:38:14.704Z"
+    },
+    {
+      "id": "cmwc3uda0006ozra5wgtwnjr7",
+      "organizationId": "default",
+      "firstName": "Émilie",
+      "lastName": "Dumont",
+      "email": "import.membre.5@example.org",
+      "phone": "+41 79 000 05 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.712Z",
+      "updatedAt": "2026-11-11T12:38:14.712Z"
+    },
+    {
+      "id": "cmwc3uda6006qzra5ibdqik32",
+      "organizationId": "default",
+      "firstName": "Théo",
+      "lastName": "Perrin",
+      "email": "import.membre.7@example.org",
+      "phone": "+41 79 000 07 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.718Z",
+      "updatedAt": "2026-11-11T12:38:14.718Z"
+    },
+    {
+      "id": "cmwc3udad006szra5tgvoqdz7",
+      "organizationId": "default",
+      "firstName": "Léon",
+      "lastName": "Roux",
+      "email": "import.membre.9@example.org",
+      "phone": "+41 79 000 09 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.725Z",
+      "updatedAt": "2026-11-11T12:38:14.725Z"
+    },
+    {
+      "id": "cmwc3udak006uzra5oykxtup1",
+      "organizationId": "default",
+      "firstName": "Sophie",
+      "lastName": "Dubois",
+      "email": "import.membre.11@example.org",
+      "phone": "+41 79 000 11 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.732Z",
+      "updatedAt": "2026-11-11T12:38:14.732Z"
+    },
+    {
+      "id": "cmwc3udar006wzra597796k5u",
+      "organizationId": "default",
+      "firstName": "Anaïs",
+      "lastName": "Martin",
+      "email": "import.membre.13@example.org",
+      "phone": "+41 79 000 13 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.739Z",
+      "updatedAt": "2026-11-11T12:38:14.739Z"
+    },
+    {
+      "id": "cmwc3udax006yzra5ua737vcj",
+      "organizationId": "default",
+      "firstName": "Émilie",
+      "lastName": "Fontaine",
+      "email": "import.membre.15@example.org",
+      "phone": "+41 79 000 15 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.745Z",
+      "updatedAt": "2026-11-11T12:38:14.745Z"
+    },
+    {
+      "id": "cmwc3udb40070zra59rnat9gf",
+      "organizationId": "default",
+      "firstName": "Théo",
+      "lastName": "Garnier",
+      "email": "import.membre.17@example.org",
+      "phone": "+41 79 000 17 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.752Z",
+      "updatedAt": "2026-11-11T12:38:14.752Z"
+    },
+    {
+      "id": "cmwc3udbb0072zra5ef00pov2",
+      "organizationId": "default",
+      "firstName": "Léon",
+      "lastName": "Chappuis",
+      "email": "import.membre.19@example.org",
+      "phone": "+41 79 000 19 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.759Z",
+      "updatedAt": "2026-11-11T12:38:14.759Z"
+    },
+    {
+      "id": "cmwc3udbh0074zra5z2z1cqxi",
+      "organizationId": "default",
+      "firstName": "Sophie",
+      "lastName": "Henry",
+      "email": "import.membre.21@example.org",
+      "phone": "+41 79 000 21 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.765Z",
+      "updatedAt": "2026-11-11T12:38:14.765Z"
+    },
+    {
+      "id": "cmwc3udbp0076zra5r1frw65d",
+      "organizationId": "default",
+      "firstName": "Anaïs",
+      "lastName": "Richard",
+      "email": "import.membre.23@example.org",
+      "phone": "+41 79 000 23 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.773Z",
+      "updatedAt": "2026-11-11T12:38:14.773Z"
+    },
+    {
+      "id": "cmwc3udbu0078zra5wyuu79fp",
+      "organizationId": "default",
+      "firstName": "Émilie",
+      "lastName": "Besson",
+      "email": "import.membre.25@example.org",
+      "phone": "+41 79 000 25 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.778Z",
+      "updatedAt": "2026-11-11T12:38:14.778Z"
+    },
+    {
+      "id": "cmwc3udc2007azra5mcs4jmkg",
+      "organizationId": "default",
+      "firstName": "Théo",
+      "lastName": "Picard",
+      "email": "import.membre.27@example.org",
+      "phone": "+41 79 000 27 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.787Z",
+      "updatedAt": "2026-11-11T12:38:14.787Z"
+    },
+    {
+      "id": "cmwc3udca007czra5iysmjxsi",
+      "organizationId": "default",
+      "firstName": "Léon",
+      "lastName": "Gautier",
+      "email": "import.membre.29@example.org",
+      "phone": "+41 79 000 29 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.794Z",
+      "updatedAt": "2026-11-11T12:38:14.794Z"
+    },
+    {
+      "id": "cmwc3udcj007ezra5yavi2r79",
+      "organizationId": "default",
+      "firstName": "Sophie",
+      "lastName": "Laurent",
+      "email": "import.membre.31@example.org",
+      "phone": "+41 79 000 31 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.803Z",
+      "updatedAt": "2026-11-11T12:38:14.803Z"
+    },
+    {
+      "id": "cmwc3udcq007gzra5937byxnq",
+      "organizationId": "default",
+      "firstName": "Anaïs",
+      "lastName": "Bonnet",
+      "email": "import.membre.33@example.org",
+      "phone": "+41 79 000 33 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.810Z",
+      "updatedAt": "2026-11-11T12:38:14.810Z"
+    },
+    {
+      "id": "cmwc3udcw007izra52xwa3v95",
+      "organizationId": "default",
+      "firstName": "Émilie",
+      "lastName": "Pasquier",
+      "email": "import.membre.35@example.org",
+      "phone": "+41 79 000 35 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.816Z",
+      "updatedAt": "2026-11-11T12:38:14.816Z"
+    },
+    {
+      "id": "cmwc3udd5007kzra5raaatrpt",
+      "organizationId": "default",
+      "firstName": "Théo",
+      "lastName": "Jeanneret",
+      "email": "import.membre.37@example.org",
+      "phone": "+41 79 000 37 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.825Z",
+      "updatedAt": "2026-11-11T12:38:14.825Z"
+    },
+    {
+      "id": "cmwc3uddc007mzra5kotnjz6y",
+      "organizationId": "default",
+      "firstName": "Léon",
+      "lastName": "Moreau",
+      "email": "import.membre.39@example.org",
+      "phone": "+41 79 000 39 00",
+      "tags": [
+        "accueil"
+      ],
+      "active": true,
+      "notes": null,
+      "birthDate": null,
+      "availabilityPeriods": [],
+      "availabilityNote": null,
+      "mergedIntoId": null,
+      "mergedAt": null,
+      "erasedAt": null,
+      "createdAt": "2026-11-11T12:38:14.832Z",
+      "updatedAt": "2026-11-11T12:38:14.832Z"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-const db = vi.hoisted(() => ({ adminUser: { findMany: vi.fn() } }))
+const db = vi.hoisted(() => ({ adminUser: { findMany: vi.fn() }, notificationOutbox: { findFirst: vi.fn() } }))
 const outbox = vi.hoisted(() => ({ enqueueNotifications: vi.fn(), deliverAfterResponse: vi.fn() }))
 const reported = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({ prisma: db }))
@@ -18,6 +18,7 @@ describe("operator alerts (#810)", () => {
   beforeEach(() => {
     reported.mockReset()
     db.adminUser.findMany.mockReset().mockResolvedValue([{ email: "ops@example.org" }, { email: "ops2@example.org" }])
+    db.notificationOutbox.findFirst.mockReset().mockResolvedValue(null)
     outbox.enqueueNotifications.mockReset().mockResolvedValue(["o1", "o2"])
     outbox.deliverAfterResponse.mockReset()
   })
@@ -30,13 +31,43 @@ describe("operator alerts (#810)", () => {
     expect(ntfyConfig({ NTFY_URL: TOPIC, ...access })?.token).toBe("test-value")
   })
 
-  it("puts title, priority, tag and link in headers, the sentence in the body", () => {
+  it("publishes title, priority, tag and link in the JSON body, not in headers", () => {
     const { url, init } = ntfyRequest(alert, { url: TOPIC, token: "test-value" })
-    expect(url).toBe(TOPIC)
+    expect(url).toBe("https://ntfy.sh/")
     expect(init.method).toBe("POST")
-    expect(init.body).toBe("Emails retenus.")
-    expect(init.headers).toEqual({ Title: alert.title, Priority: "4", Tags: "warning", Click: alert.url, Authorization: "Bearer test-value" })
-    expect(ntfyRequest({ key: "k", title: "t", message: "m" }, { url: TOPIC, token: null }).init.headers).toEqual({ Title: "t", Priority: "3", Tags: "bell" })
+    expect(init.headers).toEqual({ "Content-Type": "application/json", Authorization: "Bearer test-value" })
+    expect(JSON.parse(String(init.body))).toEqual({
+      topic: "benevol-ops-test", title: alert.title, message: "Emails retenus.", priority: 4, tags: ["warning"], click: alert.url,
+    })
+    const plain = ntfyRequest({ key: "k", title: "t", message: "m" }, { url: TOPIC, token: null })
+    expect(plain.init.headers).toEqual({ "Content-Type": "application/json" })
+    expect(JSON.parse(String(plain.init.body))).toEqual({ topic: "benevol-ops-test", title: "t", message: "m", priority: 3, tags: ["bell"] })
+  })
+
+  it("keeps accents in the title by sending it in the JSON body", () => {
+    const title = "Sauvegarde chiffrée à vérifier"
+    const body = JSON.parse(String(ntfyRequest({ ...alert, title }, { url: TOPIC, token: null }).init.body))
+    expect(body.title).toBe(title)
+  })
+
+  it("sends neither the push nor the email when an outbox row exists for the alert key", async () => {
+    db.notificationOutbox.findFirst.mockResolvedValue({ id: "o1" })
+    const ok = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    await notifyOperator(alert, { fetch: ok as unknown as typeof fetch, env: { NTFY_URL: TOPIC } })
+    expect(db.notificationOutbox.findFirst).toHaveBeenCalledWith({
+      where: { dedupeKey: { startsWith: "operator_alert:k1:" } }, select: { id: true },
+    })
+    expect(ok).not.toHaveBeenCalled()
+    expect(outbox.enqueueNotifications).not.toHaveBeenCalled()
+  })
+
+  it("still sends when the deduplication lookup fails, and reports it", async () => {
+    db.notificationOutbox.findFirst.mockRejectedValue(new Error("db down"))
+    const ok = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    await notifyOperator(alert, { fetch: ok as unknown as typeof fetch, env: { NTFY_URL: TOPIC } })
+    expect(ok).toHaveBeenCalledTimes(1)
+    expect(outbox.enqueueNotifications).toHaveBeenCalledTimes(1)
+    expect(reported).toHaveBeenCalledWith("operator_alert.dedupe", expect.any(Error))
   })
 
   it("never throws: a push that keeps failing is tried a few times, then reported once", async () => {

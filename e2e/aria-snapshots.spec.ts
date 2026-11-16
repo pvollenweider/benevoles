@@ -22,7 +22,7 @@ async function login(page: Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 /** Two shifts on 2030-10-01 (« mardi 1 octobre »): Bar in the morning, Accueil in the afternoon. */
@@ -106,12 +106,17 @@ test.describe("public sign-up page, shift picker", () => {
       - main:
         - paragraph: ${message}
         - region "Planning du mardi 1 octobre":
-          - button /^10h–12h \\d+.\\d+, Bar/ [disabled]
-          - button /^14h–16h \\d+.\\d+, Accueil/ [disabled]
+          - paragraph: /^Flèches gauche et droite\\W+créneaux du même poste/
+          - button /^10h–12h \\d+.\\d+, Bar.*inscriptions fermées$/ [disabled]
+          - button /^14h–16h \\d+.\\d+, Accueil.*inscriptions fermées$/ [disabled]
     `)
+    // aria-disabled, not disabled (#1075): one bar in the Tab order, the arrows reach the other.
+    await expect(region.locator("[data-shift-id][tabindex='0']")).toHaveCount(1)
+    for (const b of await region.getByRole("button").all()) await expect(b).not.toHaveAttribute("disabled")
     // Not toggle buttons while closed: no pressed state at all.
     for (const b of await region.getByRole("button").all()) await expect(b).not.toHaveAttribute("aria-pressed")
-    await expect(region).toHaveAccessibleDescription(message)
+    // The keys first, then the reason.
+    await expect(region).toHaveAccessibleDescription(new RegExp(`^Flèches gauche et droite.*${message.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`))
     await expect(page.getByRole("button", { name: /^Continuer/ })).toHaveCount(0)
   })
 })
@@ -212,16 +217,16 @@ test.describe("admin", () => {
     `)
     await expect(combo).toHaveAccessibleDescription("Sélectionnez un créneau.")
     await expect(combo).toBeFocused()
-    // The message is tied to the field, not repeated by an alert.
-    await expect(form.getByRole("alert")).toHaveCount(0)
+    // The message is tied to the field, not repeated by an alert (the search's alert is mounted empty).
+    await expect(form.getByRole("alert").filter({ hasText: /\S/ })).toHaveCount(0)
 
     await page.keyboard.press("ArrowDown")
     await expect(form).toMatchAriaSnapshot(`
       - combobox "Créneau" [expanded] [invalid]
       - listbox "Créneau":
         - /children: equal
-        - option /^mar\\. 1 oct\\., de 10h à 12h, Bar, (aucun inscrit|\\d+ inscrits?) sur 3$/
-        - option /^mar\\. 1 oct\\., de 14h à 16h, Accueil, (aucun inscrit|\\d+ inscrits?) sur 2$/
+        - option /^mar\\. 1 oct\\., 10h.12h, Bar, \\d+\\W3, (aucun inscrit|\\d+ inscrits?) sur 3$/
+        - option /^mar\\. 1 oct\\., 14h.16h, Accueil, \\d+\\W2, (aucun inscrit|\\d+ inscrits?) sur 2$/
       - paragraph: Sélectionnez un créneau.
     `)
 

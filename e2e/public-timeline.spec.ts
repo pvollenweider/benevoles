@@ -1,5 +1,7 @@
 import { test, expect, type Page } from "@playwright/test"
 import { waitForHydration } from "./helpers/hydration"
+import { seriousViolations } from "./helpers/axe"
+import { FRISE_KEYS_SHOWN } from "../src/lib/frise-keyboard"
 import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./helpers/public-signup"
 
 /**
@@ -11,8 +13,10 @@ import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./h
  * 1 px and 3 px outside each side, the element under the point must be the bar, one of its
  * ancestors, or a positioned element stacked below it.
  *
- * #534: a shift the visitor already holds is named « … : inscription confirmée », disabled, and
- * tagged « Ton créneau ».
+ * #534: a shift the visitor already holds is named « … : inscription confirmée », not offered
+ * (aria-disabled), and tagged « Ton créneau ».
+ *
+ * #1075: one tab stop per day; the arrows reach every bar, a held one included, and Tab leaves.
  *
  * #1023: once the role's limit per person is reached, its other bars say so under the bar, in the
  * words of their name, and in the list view.
@@ -91,9 +95,10 @@ test("a focused bar's outline is not covered by the role labels, the next bar or
   await waitForHydration(first)
 
   await first.focus()
+  // The arrows go from bar to bar (#1075): one row, in time order, lanes merged.
   const expected = [/^08h–10h \d+\/\d+, Bar : sélectionner/, /^09h–11h \d+\/\d+, Bar : sélectionner/, /^10h–12h \d+\/\d+, Bar : sélectionner/]
   for (const [i, name] of expected.entries()) {
-    if (i > 0) await page.keyboard.press("Tab")
+    if (i > 0) await page.keyboard.press("ArrowRight")
     const focused = page.locator(":focus")
     await expect(focused).toHaveAttribute("aria-label", name)
     const outline = await focused.evaluate((el) => getComputedStyle(el).outlineStyle)
@@ -114,11 +119,71 @@ test("a held shift is named and tagged as the visitor's own, and not offered (#5
 
   const held = page.getByRole("button", { name: /: inscription confirmée$/ })
   await expect(held).toHaveAccessibleName("10h–12h, Bar : inscription confirmée")
-  await expect(held).toBeDisabled()
+  await expect(held).toHaveAttribute("aria-disabled", "true")
   await expect(held).not.toHaveAttribute("aria-pressed")
   await expect(page.getByText("Ton créneau", { exact: true })).toBeVisible()
   // The other shift is still offered.
-  await expect(page.getByRole("button", { name: /^14h–16h \d+\/\d+, Accueil : sélectionner/ })).toBeEnabled()
+  const accueil = page.getByRole("button", { name: /^14h–16h \d+\/\d+, Accueil : sélectionner/ })
+  await expect(accueil).toBeEnabled()
+  await expect(accueil).not.toHaveAttribute("aria-disabled")
+
+  // #1075, with real keys: Tab reaches the day's single tab stop, the first bar that can be chosen.
+  const region = page.getByRole("region", { name: /^Planning du / })
+  await expect(region.locator("[data-shift-id][tabindex='0']")).toHaveCount(1)
+  await page.getByRole("button", { name: "Frise", exact: true }).focus()
+  for (let i = 0; i < 15 && !(await accueil.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab")
+  await expect(accueil).toBeFocused()
+  // The keys are shown under the chart while a bar has the keyboard focus, and only then.
+  const keys = page.locator("[data-frise-keys]")
+  await expect(keys).toBeVisible()
+  await expect(keys).toHaveText(FRISE_KEYS_SHOWN)
+  // Up to the held bar: reachable, says why it is not offered, and Enter does nothing.
+  await page.keyboard.press("ArrowUp")
+  await expect(held).toBeFocused()
+  await page.keyboard.press("Enter")
+  await expect(held).toBeFocused()
+  await expect(page.getByRole("button", { name: /^Continuer/ })).toHaveCount(0)
+  // Tab leaves the schedule; Shift+Tab comes back to the bar focused last.
+  await page.keyboard.press("Tab")
+  expect(await region.evaluate((r) => r.contains(document.activeElement))).toBe(false)
+  await expect(keys).toBeHidden()
+  await page.keyboard.press("Shift+Tab")
+  await expect(held).toBeFocused()
+  expect(await seriousViolations(page)).toEqual([])
+})
+
+test("a mouse click shows no key hint and changes nothing on a full bar (#1075)", async ({ page, browser }) => {
+  const full = await createPublicEvent(browser, `E2E Planning complet ${Date.now()}`, [
+    { label: "Bar", startTime: "10:00", endTime: "12:00", capacity: 1 },
+    { label: "Accueil", startTime: "14:00", endTime: "16:00" },
+  ])
+  // Someone else fills Bar, from their own browser.
+  const otherContext = await browser.newContext()
+  const other = await otherContext.newPage()
+  await other.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
+  await publicSignUp(other, full, [full.shifts[0].id])
+  await otherContext.close()
+  await page.goto(publicUrl(full))
+  const bar = page.getByRole("button", { name: /^Complet, Bar 10h–12h/ })
+  await waitForHydration(page.getByRole("button", { name: /, Accueil : sélectionner/ }))
+  await expect(bar).toHaveAttribute("aria-disabled", "true")
+  await expect(bar).toHaveAttribute("tabindex", "-1")
+  // Playwright's click waits on aria-disabled: a real mouse press at the bar's centre instead.
+  const box = (await bar.boundingBox())!
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
+  await expect(page.locator("[data-frise-keys]")).toBeHidden()
+  await expect(page.getByRole("button", { name: /^Continuer/ })).toHaveCount(0)
+  // The keyboard now starts from it.
+  await page.keyboard.press("ArrowDown")
+  await expect(page.getByRole("button", { name: /, Accueil : sélectionner/ })).toBeFocused()
+  await expect(page.locator("[data-frise-keys]")).toBeVisible()
+  // Back up with the keyboard: the full bar's focus outline is painted (its faint frame was inline
+  // and hid it), whole.
+  await page.keyboard.press("ArrowUp")
+  await expect(bar).toBeFocused()
+  // Polled: the bar's colours, outline included, ease in over 150 ms (transition-colors).
+  await expect.poll(() => bar.evaluate((el) => { const s = getComputedStyle(el); return `${s.outlineStyle} ${s.outlineWidth} ${s.outlineColor}` })).toBe("solid 2px rgb(29, 78, 216)")
+  expect(await coveredSides(page)).toEqual([])
 })
 
 test("a bar of a role whose limit per person is reached says so under the bar and in the list (#1023)", async ({ page, browser }) => {

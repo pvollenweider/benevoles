@@ -5,15 +5,16 @@ import assert from "node:assert/strict"
 import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { fullNameOf, surnameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { linkToken, registrationToken } from "../../src/lib/token-vault"
 
 async function main() {
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.pathname !== "/benevoles_video") throw new Error("Isolated local video environment required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const a = await browser.newPage(), b = await browser.newPage(), publicPage = await browser.newPage()
@@ -22,7 +23,7 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(`video.privacy.${side}.owner@example.org`)
       await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-      await page.waitForURL(/\/admin\/events/)
+      await page.waitForURL(/\/admin\/dashboard/)
       const response = await page.request.get(`${base}/api/admin/events/video-privacy-${side}-event`)
       assert.equal(response.status(), 200, "Own event must be accessible")
       const other = await page.request.get(`${base}/api/admin/events/video-privacy-${side === "a" ? "b" : "a"}-event`)
@@ -35,7 +36,7 @@ async function main() {
     const leaB = people.find(person => person.id === "video-privacy-b-member-0")!
     assert.equal(leaA.firstName, leaB.firstName)
     assert.notEqual(leaA.email, leaB.email)
-    const assigned = await a.request.post(`${base}/api/admin/events/video-privacy-a-event/sector-leaders`, { data: { roleName: "Accueil", name: "Camille Exemple", email: "video.privacy.a.leader@example.org" } })
+    const assigned = await a.request.post(`${base}/api/admin/events/video-privacy-a-event/sector-leaders`, { data: { roleName: "Accueil", name: fullNameOf("Camille"), email: "video.privacy.a.leader@example.org" } })
     assert.equal(assigned.status(), 201, "Actual leader creation required; rerun seed before repeating")
     const leader = await db.sectorLeader.findFirstOrThrow({ where: { eventId: "video-privacy-a-event", roleName: "Accueil" } })
     const rosterResponse = await publicPage.request.get(`${base}/api/public/leader/${linkToken.reveal(leader)}`)
@@ -57,7 +58,7 @@ async function main() {
     assert.equal(personal.volunteer.email, leaA.email)
     assert.equal(personal.volunteer.notes, undefined)
     assert.equal(personal.volunteer.availabilityPeriods[0], "morning")
-    const registrationResponse = await publicPage.request.post(`${base}/api/public/registrations?org=formation-confidentialite-a`, { data: { eventId: "video-privacy-a-event", shiftIds: ["video-privacy-a-shift-0"], firstName: "Jules", lastName: "Exemple", email: "video.privacy.a.new@example.org", phone: "+41 79 000 1999", consent: true, charterAccepted: true } })
+    const registrationResponse = await publicPage.request.post(`${base}/api/public/registrations?org=formation-confidentialite-a`, { data: { eventId: "video-privacy-a-event", shiftIds: ["video-privacy-a-shift-0"], firstName: "Jules", lastName: surnameOf("Jules"), email: "video.privacy.a.new@example.org", phone: "+41 79 000 1999", consent: true, charterAccepted: true } })
     assert.equal(registrationResponse.status(), 201)
     const signup = await registrationResponse.json()
     assert.equal(signup.editToken, null)

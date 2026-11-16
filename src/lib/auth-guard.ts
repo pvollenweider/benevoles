@@ -9,6 +9,8 @@ import { auth } from "@/auth"
 import { getOrgClient } from "./prisma-org"
 import { prisma } from "./prisma"
 import { adminEventIdFromPath, orgSwitchUrl, REQUEST_PATH_HEADER } from "./admin-next"
+import { secondFactorRequired } from "./second-factor-guard"
+import { secondFactorUrl } from "./second-factor-session"
 
 type GuardError = NextResponse
 
@@ -63,6 +65,9 @@ async function isOrgActive(organizationId: string): Promise<boolean> {
 export async function requireOrgSession(level: Level = "organizer") {
   const session = await auth()
   if (!session?.user) return unauthorized()
+  // Super admin who hasn't given the second factor yet (pentest F6): role and organization are
+  // masked anyway, this says why.
+  if (session.secondFactor?.pending) return secondFactorRequired()
   if (!hasLevel(session.user.role, level)) {
     return NextResponse.json({ error: OWNER_ONLY_MESSAGE }, { status: 403 })
   }
@@ -89,6 +94,7 @@ export async function requireOrgSession(level: Level = "organizer") {
 export async function requireSuperAdmin() {
   const session = await auth()
   if (!session?.user) return unauthorized()
+  if (session.secondFactor?.pending) return secondFactorRequired()
   if (session.user.role !== "super_admin") return forbidden()
   return { session, db: prisma }
 }
@@ -96,6 +102,10 @@ export async function requireSuperAdmin() {
 export async function getOrgContext() {
   const session = await auth()
   if (!session?.user) return null
+  if (session.secondFactor?.pending) {
+    const path = (await headers()).get(REQUEST_PATH_HEADER)
+    redirect(secondFactorUrl(path))
+  }
 
   let organizationId = session.user.organizationId
   if (!organizationId && session.user.role === "super_admin") {

@@ -11,12 +11,19 @@
 import { AVAILABILITY_PERIODS, type AvailabilityPeriod } from "./availability"
 import { clockTime, crossesMidnight, toMin, toMinEnd } from "./gantt-utils"
 import { memberMayTake } from "./role-reservation"
+import { answerValuesMatch, type ReservedAnswerCondition } from "./role-answer"
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
+import { declinedShiftsOf, shiftDeclineReason, type ShiftDeclineRef } from "./shift-declines"
+import { shiftInstants } from "./ics"
+import { localDateTimeToUtc } from "./time-zone"
+import { PUSH_BODY_MAX, PUSH_TITLE_MAX } from "./targeted-message"
 
 export const OPEN_SHIFTS_MAX_SHIFTS = 20
 export const OPEN_SHIFTS_MAX_RECIPIENTS = 200
 export const OPEN_SHIFTS_NOTE_MAX = 500
+/** Push of an « open shifts » send (#1304): shorter, like a targeted message. */
+const PUSH_CLIP = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s)
 
 /** Subject of the history row (#467); the email adds the event title in front. */
 export const OPEN_SHIFTS_SUBJECT = "On cherche encore du monde"
@@ -30,6 +37,8 @@ export type EventShiftRef = { id: string; roleName: string; label: string; date:
 
 /** An underfilled shift the organizer picked: places left, and the tags its role is reserved to (#470). */
 export type OpenShift = EventShiftRef & { placesLeft: number; reservedTags?: string[]
+  /** The poste's answer condition (#962): a member whose stored answer misses it is not offered the shift. */
+  answerCondition?: ReservedAnswerCondition | null
   /** Shift.minAge (#869): a member known to be younger on the shift's day is not offered it. */
   minAge?: number | null
   /** « sous le minimum (2) », « minimum atteint » (#949), shown to the organizer, never in the email; null without a minimum. */
@@ -48,6 +57,8 @@ export type PoolMember = {
   availabilityNote?: string | null
   /** "YYYY-MM-DD" when known; unknown means the sign-up form will ask it, as for anyone. */
   birthDate?: string | null
+  /** Their stored answers on this event, by question id (#962). */
+  answers?: Record<string, string[]>
 }
 
 /** A live registration (active, requested, waiting or offered) of a member on this event. */
@@ -112,6 +123,39 @@ export function availabilityFit(member: { availabilityPeriods?: string[] | null 
   return covered > 0 ? "partial" : "no_match"
 }
 
+// ── « Inscrits aujourd'hui » (#1304) ────────────────────────────────────────
+
+/**
+ * Whether a shift overlaps the local calendar day `day` in `timeZone`: a night shift begun the
+ * day before and still running counts, one ending at midnight sharp does not, and daylight-saving
+ * days are read on real instants (`shiftInstants`).
+ */
+export function shiftOverlapsLocalDay(
+  shift: { date: DateLike; startTime: string; endTime: string },
+  day: string,
+  timeZone: string,
+): boolean {
+  const { start, end } = shiftInstants(shift, timeZone)
+  const dayStart = localDateTimeToUtc(new Date(`${day}T00:00:00Z`), "00:00", timeZone)
+  const nextDay = new Date(Date.parse(`${day}T00:00:00Z`) + 86_400_000)
+  const dayEnd = localDateTimeToUtc(nextDay, "00:00", timeZone)
+  return start.getTime() < dayEnd.getTime() && end.getTime() > dayStart.getTime()
+}
+
+/**
+ * The volunteers with an active registration on a shift overlapping the local day: the audience of
+ * « Inscrits aujourd'hui ». Recomputed on the server at send time, with the same rule as the page.
+ */
+export function registeredOnLocalDay(
+  registrations: LiveRegistration[],
+  shifts: EventShiftRef[],
+  day: string,
+  timeZone: string,
+): Set<string> {
+  const overlapping = new Set(shifts.filter((s) => shiftOverlapsLocalDay(s, day, timeZone)).map((s) => s.id))
+  return new Set(registrations.filter((r) => r.status === "active" && overlapping.has(r.shiftId)).map((r) => r.volunteerId))
+}
+
 // ── Candidates ──────────────────────────────────────────────────────────────
 
 export type ShiftFit = {
@@ -137,6 +181,8 @@ export type Candidate = {
   selectable: boolean
   /** Their confirmed shifts (active or requested) on this event. */
   registeredShifts: EventShiftRef[]
+  /** Their « Je ne peux pas » answers among the selected shifts, with the date. */
+  declinedShifts: { shiftId: string; declinedAt: Date }[]
   invite: "none" | "pending" | "declined"
   /**
    * The link the email carries. invitation: their existing invitation link. new_invitation: an
@@ -169,6 +215,8 @@ export function findCandidates(input: {
   members: PoolMember[]
   registrations: LiveRegistration[]
   invites: InviteRef[]
+  /** The event's per-shift « Je ne peux pas » answers (#1303). Optional: older callers read none. */
+  declines?: ShiftDeclineRef[]
   /** Only members carrying this tag (case-insensitive); empty: everyone. */
   tag?: string
   includeDeclined?: boolean
@@ -193,6 +241,7 @@ export function findCandidates(input: {
       const availability = availabilityFit(member, shift)
       if (regs.some((r) => r.shiftId === shift.id)) return { shiftId: shift.id, status: "registered", availability }
       if (!memberMayTake(member.tags, shift.reservedTags ?? [])) return { shiftId: shift.id, status: "reserved", availability }
+      if (shift.answerCondition && !answerValuesMatch(shift.answerCondition, member.answers?.[shift.answerCondition.questionId])) return { shiftId: shift.id, status: "reserved", availability }
       if (member.birthDate && shiftsTooYoungFor(member.birthDate, [{ minAge: shift.minAge ?? null, date: shift.date }]).length > 0) {
         return { shiftId: shift.id, status: "too_young", availability }
       }
@@ -221,13 +270,17 @@ export function findCandidates(input: {
       .map((r) => eventShifts.get(r.shiftId))
       .filter((s): s is EventShiftRef => !!s)
       .sort((a, b) => shiftInterval(a).start - shiftInterval(b).start)
-    const offersReserved = offer.some((id) => (input.shifts.find((s) => s.id === id)?.reservedTags ?? []).length > 0)
+    const offersReserved = offer.some((id) => {
+      const shift = input.shifts.find((s) => s.id === id)
+      return (shift?.reservedTags ?? []).length > 0 || !!shift?.answerCondition
+    })
     candidates.push({
       member,
       offer,
       fits,
       selectable: offer.length > 0,
       registeredShifts,
+      declinedShifts: declinedShiftsOf(input.declines ?? [], member.id, input.shifts.map((s) => s.id)),
       invite: invite ? (invite.declined ? "declined" : "pending") : "none",
       // A reserved role is only bookable through an invitation (#470): they get one then.
       link: invite ? "invitation" : registeredShifts.length > 0 && !offersReserved ? "event" : "new_invitation",
@@ -242,6 +295,41 @@ export function findCandidates(input: {
 export function selectedRecipients(candidates: Candidate[], selectedIds: string[]): Candidate[] {
   const wanted = new Set(selectedIds)
   return candidates.filter((c) => c.selectable && wanted.has(c.member.id))
+}
+
+/**
+ * « Tout cocher » (#1304): adds the selectable people of the list shown, in order, without ever
+ * going past the recipient cap. Non-selectable rows (overlap, already on the shift…) are never
+ * ticked, and people already ticked elsewhere stay ticked.
+ */
+export function checkAllSelectable(selected: Set<string>, candidates: Candidate[], max = OPEN_SHIFTS_MAX_RECIPIENTS): Set<string> {
+  const next = new Set(selected)
+  for (const c of candidates) {
+    if (next.size >= max) break
+    if (c.selectable) next.add(c.member.id)
+  }
+  return next
+}
+
+/** The push of an « open shifts » send (#1304): the event and the need, short. */
+export function openShiftsPush(shifts: OpenShift[], eventTitle: string): { title: string; body: string } {
+  const title = PUSH_CLIP(`${eventTitle} : on cherche encore du monde`, PUSH_TITLE_MAX)
+  const first = shifts[0]
+  if (!first) return { title, body: "Des créneaux cherchent encore du monde." }
+  const body = shifts.length === 1
+    ? `${shiftName(first)} : ${placesLeftLabel(first.placesLeft)}.`
+    : `${shifts.length} créneaux à compléter, à partir de ${shiftName(first)}.`
+  return { title, body: PUSH_CLIP(body, PUSH_BODY_MAX) }
+}
+
+/**
+ * How long the push may wait (#1304): until the last offered shift ends, never the three days of
+ * other pushes. Zero once every need is over (the notification must not outlive it).
+ */
+export function openShiftsPushTtlSeconds(shifts: OpenShift[], now: Date, timeZone: string): number {
+  let end = 0
+  for (const s of shifts) end = Math.max(end, shiftInstants(s, timeZone).end.getTime())
+  return Math.max(0, Math.floor((end - now.getTime()) / 1000))
 }
 
 // ── Words ───────────────────────────────────────────────────────────────────
@@ -334,6 +422,14 @@ export function candidateReasons(c: Candidate, shifts: OpenShift[]): string[] {
     } else if (f.status === "too_young") {
       out.push(`${which.charAt(0).toUpperCase()}${which.slice(1)} : âge minimum non atteint, pas proposé`)
     }
+  }
+
+  // #1303: a « Je ne peux pas » is about one precise shift, shown next to the others. The person
+  // stays listed and can be ticked by the organiser, who decides whether to ask again.
+  for (const d of c.declinedShifts) {
+    const s = byId.get(d.shiftId)
+    if (!s) continue
+    out.push(single ? shiftDeclineReason(d.declinedAt) : `${shiftDeclineReason(d.declinedAt)} pour ${shiftName(s)}, ${shiftDay(s.date, "short")}`)
   }
 
   if (c.invite === "declined") out.push("A répondu « pas disponible » à son invitation")

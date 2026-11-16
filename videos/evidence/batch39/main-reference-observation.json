@@ -1,0 +1,6 @@
+{
+  "initialFetchedAndFilmedMain": "058f35c463cf3b1e6b47596201d0ab6f78ab3015",
+  "workspaceOriginMainAtFinalCheck": "22945bd83883bfc601216bd79bf936c9479e213c",
+  "refReflogAction": "pull --ff-only --autostash -q: fast-forward",
+  "note": "The shared origin/main reference was advanced by another process during the batch. The isolated capture copy stayed pinned to the initial fetched main. Published media are verified against the filmed commit, not revalidated against #1313. No additional build, rebase, push or merge performed."
+}

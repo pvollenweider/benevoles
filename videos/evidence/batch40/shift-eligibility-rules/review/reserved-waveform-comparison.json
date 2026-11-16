@@ -1,0 +1,175 @@
+{
+  "files": [
+    "videos/output/shift-eligibility-rules/audio/reserved.wav",
+    "/tmp/codex-video/b40-reserved-final.wav"
+  ],
+  "sha256": [
+    "48bfbf3dea51559c4ea95c0344db61c1e8b481f9358ca0dcaab421dcec1348d8",
+    "ef48dab3be877a936a2d02de3fb61c846a31d99e13ac26a0508dc1fb043658af"
+  ],
+  "method": "Voice-band 200–3000 Hz; normalized waveform cross-correlation in voiced 0.4 s windows at 8 kHz; ±30 ms lag search. Amplitude changes and background music do not imply another speaker.",
+  "windows": [
+    {
+      "startSeconds": 0.5,
+      "endSeconds": 0.9,
+      "correlation": 0.9893662367656163,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 1,
+      "endSeconds": 1.4,
+      "correlation": 0.9829622535573659,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 1.5,
+      "endSeconds": 1.9,
+      "correlation": 0.9802931302753212,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 2,
+      "endSeconds": 2.4,
+      "correlation": 0.989289009890362,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 2.5,
+      "endSeconds": 2.9,
+      "correlation": 0.9869703147607649,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 3,
+      "endSeconds": 3.4,
+      "correlation": 0.9869088175947838,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 3.5,
+      "endSeconds": 3.9,
+      "correlation": 0.9815937064360756,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 4,
+      "endSeconds": 4.4,
+      "correlation": 0.9694154379015759,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 4.5,
+      "endSeconds": 4.9,
+      "correlation": 0.9921769248218395,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 5,
+      "endSeconds": 5.4,
+      "correlation": 0.9897432034310113,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 6,
+      "endSeconds": 6.4,
+      "correlation": 0.9781746019950895,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 6.5,
+      "endSeconds": 6.9,
+      "correlation": 0.9934056449996603,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 7,
+      "endSeconds": 7.4,
+      "correlation": 0.9599331853050167,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 7.5,
+      "endSeconds": 7.9,
+      "correlation": 0.9809703462131037,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 8,
+      "endSeconds": 8.4,
+      "correlation": 0.9704113331357123,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 8.5,
+      "endSeconds": 8.9,
+      "correlation": 0.9795798572673918,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 9,
+      "endSeconds": 9.4,
+      "correlation": 0.9911881117388821,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 9.5,
+      "endSeconds": 9.9,
+      "correlation": 0.9767216790993996,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 10,
+      "endSeconds": 10.4,
+      "correlation": 0.9769115438244016,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 10.5,
+      "endSeconds": 10.9,
+      "correlation": 0.9876498823384388,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 11,
+      "endSeconds": 11.4,
+      "correlation": 0.9932214994428725,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 12,
+      "endSeconds": 12.4,
+      "correlation": 0.9893047553627317,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 12.5,
+      "endSeconds": 12.9,
+      "correlation": 0.9787030910287025,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 13,
+      "endSeconds": 13.4,
+      "correlation": 0.9851339824791955,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 13.5,
+      "endSeconds": 13.9,
+      "correlation": 0.9608368028320342,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 14,
+      "endSeconds": 14.4,
+      "correlation": 0.9688865643365033,
+      "lagSamples": 0
+    },
+    {
+      "startSeconds": 14.5,
+      "endSeconds": 14.9,
+      "correlation": 0.978368221057221,
+      "lagSamples": 0
+    }
+  ]
+}

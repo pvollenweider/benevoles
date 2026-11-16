@@ -29,6 +29,11 @@ dev-setup: ## Setup complet : .env, deps, postgres, migrations, seed
 		fi; \
 		echo "→ AUTH_SECRET généré"; \
 	fi
+	@if ! grep -q '^TOKEN_ENCRYPTION_KEY=".\+"' .env; then \
+		grep -v '^TOKEN_ENCRYPTION_KEY=' .env > .env.tmp; mv .env.tmp .env; \
+		echo "TOKEN_ENCRYPTION_KEY=\"$$(openssl rand -base64 32 | tr -d '\n')\"" >> .env; \
+		echo "→ TOKEN_ENCRYPTION_KEY générée (chiffrement des liens et du second facteur)"; \
+	fi
 	@$(MAKE) install
 	@$(MAKE) db-generate
 	@$(MAKE) dev-up
@@ -127,6 +132,11 @@ e2e-setup: ## Crée .env.e2e (ou .env.e2e.N) si absent, migre + seed la DB e2e
 		fi; \
 		echo "→ AUTH_SECRET (e2e) généré"; \
 	fi
+	@if ! grep -q '^TOKEN_ENCRYPTION_KEY=".\+"' $(E2E_ENV_FILE); then \
+		grep -v '^TOKEN_ENCRYPTION_KEY=' $(E2E_ENV_FILE) > $(E2E_ENV_FILE).tmp; mv $(E2E_ENV_FILE).tmp $(E2E_ENV_FILE); \
+		echo "TOKEN_ENCRYPTION_KEY=\"$$(openssl rand -base64 32 | tr -d '\n')\"" >> $(E2E_ENV_FILE); \
+		echo "→ TOKEN_ENCRYPTION_KEY (e2e) générée (chiffrement des liens et du second facteur)"; \
+	fi
 	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma generate
 	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma migrate deploy
 	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma db seed
@@ -198,12 +208,8 @@ video-media-serve: ## Sert videos/output en local pour VIDEO_MEDIA_BASE_URL (POR
 test-offsite-backup: ## Test hors ligne (faux rclone/wget) du script du CronJob et du script de restauration
 	sh scripts/test-offsite-backup.sh
 
-restore-test-offsite: ## Test de restauration réel depuis Swiss Backup (OFFSITE_BUCKET=…, BACKUP_PASSPHRASE=…)
-	@test -n "$(BACKUP_PASSPHRASE)" || (echo "BACKUP_PASSPHRASE est obligatoire"; exit 1)
-	@test -n "$(OFFSITE_BUCKET)" || (echo "OFFSITE_BUCKET (container Swiss Backup) est obligatoire"; exit 1)
-	OFFSITE_BUCKET="$(OFFSITE_BUCKET)" BACKUP_PASSPHRASE="$(BACKUP_PASSPHRASE)" \
-		RCLONE_CONFIG="$(or $(RCLONE_CONFIG),$(HOME)/.config/rclone/rclone.conf)" \
-		sh scripts/restore-test-offsite.sh
+restore-test-offsite: ## Test de restauration réel (montage Swiss Backup ou OFFSITE_BUCKET=…, phrase secrète demandée sur le terminal)
+	@sh scripts/restore-test-offsite.sh
 
 # ── Qualité ──────────────────────────────────────────────────────────────────
 

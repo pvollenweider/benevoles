@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-11-11T12:40:08.257Z",
+  "product": {
+    "commit": "d3f4c4ba81356b673b1952b19c4ffe99531652f5",
+    "sourceTree": "4bb62d63506b550b61814ed281817464115520fe",
+    "productSourceSha256": "f2f35e94ce8b850fc86d6bac5d883e4ad8f19a89646fd7dc226ee356459097ec",
+    "buildId": "AOuqevq41Wdo1_vo9UIzS",
+    "snapshot": "/tmp/benevoles-video-production.6ff2AH",
+    "builtAt": "2026-11-11T12:19:31.213Z"
+  },
+  "retainedMemberId": "video-member-management-2",
+  "memberDeactivated": true,
+  "retainedRegistrationId": "video-import-kept-registration",
+  "registrationStatus": "active",
+  "extraRowsRemaining": 0
+}

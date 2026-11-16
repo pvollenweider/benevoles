@@ -28,7 +28,7 @@ async function json(file: string): Promise<any | null> {
   try { return JSON.parse(await readFile(file, "utf8")) } catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return null; throw error }
 }
 async function main() {
-  const changed = git("diff", "--name-only", previous, target, "--", "src", "GUIDE_ADMIN.md", "GUIDE_BENEVOLE.md").split("\n").filter(Boolean)
+  const changed = git("diff", "--name-only", previous, target, "--", "src", "content/guide/GUIDE_ADMIN.md", "content/guide/GUIDE_BENEVOLE.md").split("\n").filter(Boolean)
   const latestChanges = git("diff", "--name-only", recentCaptureBuild, target, "--", "src").split("\n").filter(Boolean)
   const rows = []
   for (const entry of (await loadCatalog()).videos) {

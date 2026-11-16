@@ -58,12 +58,40 @@ export function timeZoneChoices(current?: string | null): string[] {
 }
 
 /** Offset (ms) of `timeZone` from UTC at `instant`: local wall time minus UTC. */
+const offsetFormats = new Map<string, Intl.DateTimeFormat>()
+
+/** One formatter per zone: building one costs far more than formatting with it (#1172, the proposal's search). */
+function offsetFormat(timeZone: string): Intl.DateTimeFormat {
+  let f = offsetFormats.get(timeZone)
+  if (!f) {
+    // An unknown zone throws here, before anything is cached.
+    f = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      hourCycle: "h23",
+      year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit",
+    })
+    offsetFormats.set(timeZone, f)
+  }
+  return f
+}
+
+/** Offsets already computed, per zone and instant: a pure function of both, bounded in size. */
+const offsetMemo = new Map<string, Map<number, number>>()
+const OFFSET_MEMO_MAX = 50_000
+
 function zoneOffsetMs(instant: number, timeZone: string): number {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    hourCycle: "h23",
-    year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit",
-  }).formatToParts(new Date(instant))
+  let memo = offsetMemo.get(timeZone)
+  const known = memo?.get(instant)
+  if (known !== undefined) return known
+  const offset = computeZoneOffsetMs(instant, timeZone)
+  if (!memo) offsetMemo.set(timeZone, (memo = new Map()))
+  if (memo.size >= OFFSET_MEMO_MAX) memo.clear()
+  memo.set(instant, offset)
+  return offset
+}
+
+function computeZoneOffsetMs(instant: number, timeZone: string): number {
+  const parts = offsetFormat(timeZone).formatToParts(new Date(instant))
   const get = (type: string) => Number(parts.find((p) => p.type === type)?.value)
   const asUtc = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"), get("second"))
   return asUtc - (instant - (instant % 1000))

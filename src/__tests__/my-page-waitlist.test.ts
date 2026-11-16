@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // The personal page shows waitlist registrations too (#374): a waiting or offered token opens
 // the page, siblings include the live statuses, and each row carries its waitlist state.
 
@@ -26,7 +29,7 @@ describe("GET /api/public/registrations/[token] — waitlist", () => {
     findFirst.mockResolvedValue({
       id: "r1", volunteerId: "v1", eventId: "e1", phone: null, status: "waiting",
       volunteer: { firstName: "A", lastName: "B", email: "a@x.com", phone: null },
-      event: { id: "e1", title: "F", slug: "f", confirmationMessage: null, organization: { slug: "a", timeZone: "Europe/Zurich" } },
+      event: { id: "e1", title: "F", slug: "f", confirmationMessage: null, organization: { ...OPEN_ORG, slug: "a", timeZone: "Europe/Zurich" } },
     })
     findMany.mockResolvedValue([
       { id: "r1", editTokenLegacy: "t1", editTokenEnc: null, phone: null, status: "waiting", waitingPosition: 2, waitingExpiresAt: null, shift },

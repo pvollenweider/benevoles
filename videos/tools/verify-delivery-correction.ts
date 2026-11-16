@@ -6,7 +6,7 @@ import { writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { registrationToken } from "../../src/lib/token-vault"
 
 async function main() {
@@ -14,7 +14,7 @@ async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert.equal(base, "http://localhost:43102")
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   const orgId = "video-delivery", eventId = "video-delivery-event", shiftId = "video-delivery-shift", registrationId = "video-delivery-registration"
   try {
@@ -36,7 +36,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.delivery.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/events/${eventId}/message`)
     await page.getByLabel("Objet *", { exact: true }).fill("Formation — adresse corrigée")
     await page.getByLabel("Message *", { exact: true }).fill("Bonjour {prénom}, voici ton nouveau message, préparé après correction de ton adresse. Merci pour ton aide !")

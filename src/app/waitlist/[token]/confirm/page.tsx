@@ -5,6 +5,8 @@ import type { Metadata } from "next"
 import { cache } from "react"
 import { prisma } from "@/lib/prisma"
 import { registrationToken } from "@/lib/token-vault"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { contactEmail } from "@/lib/site"
 import { orgTimeZone } from "@/lib/time-zone"
 import { offerDeadline } from "@/lib/waitlist-copy"
 import { dayLabel, spokenTimeRange } from "@/lib/spoken-time"
@@ -22,11 +24,11 @@ const loadOffer = cache(async (token: string) => {
           status: true,
           waitingExpiresAt: true,
           shift: { select: { label: true, date: true, startTime: true, endTime: true, requiresApproval: true } },
-          event: { select: { title: true, organization: { select: { timeZone: true } } } },
+          event: { select: { title: true, organization: { select: { timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
         },
       })
     : null
-  const state = waitlistOfferPageState(reg, new Date())
+  const state = waitlistOfferPageState(reg, new Date(), orgLinksOpen(reg?.event.organization))
   const details: WaitlistOfferDetails | null = reg && state === "offered"
     ? {
         eventTitle: reg.event.title,
@@ -58,7 +60,7 @@ export default async function WaitlistConfirmPage({ params }: { params: Promise<
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-        <WaitlistOfferConfirm token={token} state={state} details={details} />
+        <WaitlistOfferConfirm token={token} state={state} details={details} contact={contactEmail()} />
       </div>
     </main>
   )

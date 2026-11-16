@@ -22,7 +22,8 @@
     "schedule": "Décaler un horaire",
     "cancel": "Annuler un créneau entier",
     "journal": "Retrouver l'enchaînement",
-    "result": "Revenir au planning à jour"
+    "result": "Revenir au planning à jour",
+    "need": "Ajouter un besoin le jour J"
   },
   "segments": [
     {
@@ -47,13 +48,18 @@
     },
     {
       "id": "availability",
-      "transcript": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque. Ce renseignement aide à lui proposer un créneau ; il ne l'inscrit pas automatiquement et ne garantit pas qu'elle soit libre ce jour-là. Regardons aussi ses inscriptions pour éviter un chevauchement. Si la mission demande un âge ou une compétence particulière, vérifiez ces conditions et échangez avec la personne. Une disponibilité n'est pas un consentement à être déplacée.",
+      "transcript": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque. Ce renseignement aide à lui proposer un créneau ; il ne l'inscrit pas automatiquement et ne garantit pas qu'elle soit libre ce jour-là. Regardons aussi ses inscriptions pour éviter un chevauchement. Si la mission demande un âge ou une compétence particulière, vérifiez ces conditions et échangez avec la personne. Une disponibilité n'est pas un consentement à être déplacée. Depuis le lien de l'email On cherche encore du monde, Sarah répond Je ne peux pas pour ce seul créneau. Dans Chercher des bénévoles, A répondu non le indique sa réponse, sans la retirer de la liste.",
       "fallbackDurationMs": 49000
     },
     {
       "id": "message",
       "transcript": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau, puis Installation du matériel. Emma y est déjà inscrite : ce message lui sera adressé, pas à toute l'organisation. Écrivons un objet clair et une courte demande. Il reste une place de midi à quatorze heures ; connaît-elle quelqu'un qui pourrait aider ? Le poste, l'horaire et la manière de répondre doivent être compréhensibles. Vérifions l'aperçu et le destinataire, puis confirmons l'envoi. Ouvrons le vrai email reçu. Ce message ne crée aucune inscription. Pour la suite de la démonstration, supposons que Zoé a donné son accord. Revenons aux inscriptions et ouvrons l'ajout manuel. Saisissons son prénom, son nom et la même adresse email que sa fiche membre. Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la. Enfin, revenons à la couverture : le poste est rempli. Nous avons vérifié une nouvelle inscription, pas seulement envoyé une demande d'aide.",
       "fallbackDurationMs": 70000
+    },
+    {
+      "id": "need",
+      "transcript": "Le matériel arrive plus tôt et une paire de mains supplémentaire serait utile. Sur la page Jour J, ouvrons Ajouter un besoin. Indiquons le poste Renfort matériel, le début, la fin et une place. Ajouter le créneau enregistre d'abord le besoin. L'étape suivante permet de prévenir les bénévoles. Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone. Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons. L'email propose le créneau ; il n'inscrit personne automatiquement.",
+      "fallbackDurationMs": 50000
     },
     {
       "id": "schedule",
@@ -77,21 +83,21 @@
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous gérez un imprévu : un désistement, une place proposée à la liste d'attente, un remplacement, un horaire décalé et un créneau annulé, en vérifiant chaque résultat.",
+    "summary": "Vous gérez un désistement, cherchez un remplacement, ajoutez un besoin le jour J et vérifiez le planning après chaque changement.",
     "steps": [
-      "Après un désistement, vérifiez dans les inscriptions que la place a été proposée à la personne en liste d'attente.",
-      "Attendez que la personne accepte la place proposée avant de la compter comme confirmée.",
+      "Après un désistement, vérifiez dans les inscriptions que la place a été proposée à la personne en liste d'attente, et attendez qu'elle l'accepte avant de la compter comme confirmée.",
       "Ouvrez « Où manque-t-il du monde ? » pour lire le créneau précis qui manque encore de bénévoles.",
+      "Sur « Jour J », créez le créneau avec « Ajouter un besoin », puis proposez-le aux bénévoles avec « Inscrits aujourd'hui ».",
       "Une fois l'accord d'un bénévole obtenu, ajoutez-le avec « Ajouter manuellement » sur le bon créneau.",
       "Pour décaler un horaire, modifiez le créneau et enregistrez : les personnes confirmées reçoivent un email de changement.",
       "Pour une mission qui n'a plus lieu, supprimez le créneau entier après avoir lu la confirmation.",
       "Relisez ensuite le journal de l'événement et la vue « Où manque-t-il du monde ? » pour vérifier le nouveau planning."
     ],
     "remember": [
-      "Une place proposée n'est pas encore une participation confirmée.",
-      "Une disponibilité indiquée dans une fiche n'inscrit personne et ne vaut pas accord.",
+      "Une place proposée n'est pas encore une participation confirmée, et une disponibilité indiquée n'inscrit personne ni ne vaut accord.",
       "Ne partagez jamais le lien personnel d'un bénévole pour lui trouver un remplaçant.",
-      "Un email envoyé n'est pas une preuve de lecture : pour un changement urgent, contactez aussi les personnes."
+      "Un email envoyé n'est pas une preuve de lecture : pour un changement urgent, contactez aussi les personnes.",
+      "« Je ne peux pas » vaut pour un seul créneau : « Chercher des bénévoles » conserve la personne et affiche sa réponse."
     ]
   }
 }

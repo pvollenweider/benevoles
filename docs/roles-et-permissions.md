@@ -7,7 +7,7 @@ responsables de secteur s'authentifient par un jeton dans l'URL, sans compte à 
 |--------|------------------|-----------|
 | Bénévole | aucune ; jeton unique par inscription | Ses propres inscriptions |
 | Responsable de secteur | aucune ; jeton unique par désignation | Lecture seule du roster de son poste (#186) |
-| Organisateur (`organizer`) | email + mot de passe | Une organisation, sans l'équipe ni les réglages sensibles |
+| Organisateur (`organizer`) | email + mot de passe | Une organisation, sans l'équipe ni les paramètres sensibles |
 | Propriétaire (`admin`) | email + mot de passe | Tous les droits sur une organisation |
 | Super admin (`super_admin`) | email + mot de passe | Toutes les organisations |
 
@@ -26,7 +26,7 @@ Le rôle est stocké dans `AdminUser.role` : `admin` (valeur par défaut), `orga
 | Journaux, exports, rapports | — | — | oui | oui | oui |
 | Voir l'équipe, relancer un email en échec, email de test | — | — | oui | oui | oui |
 | Inviter, retirer un admin, changer son niveau | — | — | — | oui | oui |
-| Réglages de l'organisation et des emails | — | — | — | oui | oui |
+| Paramètres de l'organisation et des emails | — | — | — | oui | oui |
 | Supprimer définitivement un événement archivé | — | — | — | oui | oui |
 | Créer, désactiver, supprimer une organisation ; nouveautés produit | — | — | — | — | oui |
 
@@ -38,14 +38,15 @@ Une session est un JWT NextAuth v5 (`src/auth.config.ts`, `src/auth.ts`), mais e
 
 - à chaque appel de `auth()` côté serveur (pages admin, `requireOrgSession()`, `requireSuperAdmin()`), le compte est relu en base (`refreshAdminToken`, `src/lib/admin-session.ts`) : un compte supprimé ou désactivé, dont l'organisation est désactivée ou n'existe plus, perd l'accès immédiatement ; le rôle, l'organisation, l'email et le nom sont réévalués sans reconnexion ;
 - `AdminUser.sessionVersion` est copiée dans le JWT à la connexion et incrémentée à chaque changement ou réinitialisation du mot de passe : toute session ouverte auparavant est alors refusée. La session depuis laquelle le mot de passe est changé se reconnecte aussitôt avec le nouveau mot de passe ;
-- la connexion est limitée, sur 15 minutes, à 30 échecs par adresse IP et à 10 échecs par adresse IP pour une même adresse email ; au-delà de 5 échecs sur un compte, toutes adresses IP confondues, chaque tentative attend 1 s, puis 2 s, 4 s et au plus 8 s, sans jamais bloquer le compte. Une adresse inconnue ou un compte inactif coûte le même calcul bcrypt qu'un mauvais mot de passe. La vérification du mot de passe actuel (changement de mot de passe, profil du super admin) est limitée à 5 échecs par compte et 20 par adresse IP.
+- la connexion est limitée, sur 15 minutes, à 30 échecs par adresse IP et à 10 échecs par adresse IP pour une même adresse email ; au-delà de 5 échecs sur un compte, toutes adresses IP confondues, chaque tentative attend 1 s, puis 2 s, 4 s et au plus 8 s, sans jamais bloquer le compte. Une adresse inconnue ou un compte inactif coûte le même calcul bcrypt qu'un mauvais mot de passe. La vérification du mot de passe actuel (changement de mot de passe, profil du super admin) est limitée à 5 échecs par compte et 20 par adresse IP ;
+- le super admin donne en plus un code à 6 chiffres d'une application d'authentification (TOTP), ou un code de secours. Tant qu'il ne l'a pas fait, la session ne porte ni rôle ni organisation : les pages mènent à `/admin/two-factor`, `requireSuperAdmin()` et `requireOrgSession()` répondent 401. Le code est redemandé après 12 heures. Détails, codes de secours et réinitialisation d'urgence : [Double authentification du super admin](double-authentification.md).
 
 Le proxy (`src/proxy.ts`, la convention Next.js 16 qui remplace le middleware) ne fait qu'un premier filtrage sur les pages, à partir du JWT seul. Les contrôles faisant autorité sont côté serveur : les guards et `auth()` relisent le compte à chaque requête.
 
 ## Bénévole
 
 - Accède aux pages publiques : liste des événements, page d'un événement (`https://<orgSlug>.benevol.app/<eventSlug>` ; en local, sans sous-domaine, `?org=<orgSlug>`), pages légales.
-- S'inscrit sans compte. Chaque inscription reçoit un `editToken` unique, envoyé par email, qui ouvre `/my/[token]` pour consulter ses créneaux, annuler une inscription ou une demande, se retirer d'une liste d'attente, indiquer ses disponibilités, ajouter ses créneaux à son calendrier et activer les notifications du navigateur.
+- S'inscrit sans compte. Chaque inscription reçoit un `editToken` unique, envoyé par email, qui ouvre `/my/[token]` pour consulter ses créneaux, annuler une inscription ou une demande, se retirer d'une liste d'attente, indiquer ses disponibilités, ajouter ses créneaux à son calendrier (fichier ponctuel, ou abonnement par une adresse en lecture seule dérivée du lien, #961) et activer les notifications du navigateur.
 - Une invitation (`?token=` sur la page de l'événement) pré-remplit le formulaire ; elle est réutilisable, et une nouvelle invitation au même événement renvoie le même lien. Il n'y a pas de révocation individuelle : le lien cesse de fonctionner si le membre est désactivé ou l'événement supprimé.
 - Une offre de liste d'attente se confirme via `/waitlist/[token]/confirm`, dans les 24 heures.
 - Les endpoints publics à jeton ou sensibles sont limités par IP (`src/lib/rate-limit.ts`) : inscription, lecture, annulation, disponibilités, calendrier et renvoi du lien d'une inscription, demande de lien, confirmation de liste d'attente, page du responsable, push, mot de passe oublié, réinitialisation, vérification d'une invitation admin, lecture d'une invitation de membre (pré-remplissage). Les valeurs sont dans [api.md](api.md#limites-de-requêtes) ; l'inscription (`POST /api/public/registrations`) est limitée à 20 requêtes par heure. Les compteurs sont stockés dans PostgreSQL : ils sont communs à toutes les instances de l'application et survivent à un redémarrage.
@@ -67,7 +68,7 @@ Un admin peut désigner un ou plusieurs bénévoles responsables d'un poste (`Sh
 Deux niveaux, pas davantage :
 
 - **Propriétaire** (rôle stocké `admin`) : tous les droits de l'organisation.
-- **Organisateur** (`organizer`) : les événements, postes, créneaux, inscriptions, présences, membres et leurs invitations, les messages, les exports et les journaux. Il voit la liste de l'équipe mais ne la gère pas, ne change pas les réglages de l'organisation (nom, adresse publique (slug) et anciennes adresses, logo, titre public, fuseau horaire, charte, assurance, réglages des emails, masquage de la liste « Premiers pas ») et ne supprime pas définitivement un événement.
+- **Organisateur** (`organizer`) : les événements, postes, créneaux, inscriptions, présences, membres et leurs invitations, les messages, les exports et les journaux. Il voit la liste de l'équipe mais ne la gère pas, ne change pas les paramètres de l'organisation (nom, adresse publique (slug) et anciennes adresses, logo, titre public, fuseau horaire, charte, assurance, paramètres des emails, masquage de la liste « Premiers pas ») et ne supprime pas définitivement un événement.
 
 La matrice route × méthode × niveau est `PERMISSIONS` dans `src/lib/permissions.ts`. Chaque route la respecte côté serveur (`requireOrgSession("owner")` pour les routes réservées aux propriétaires, 403 sinon), pas seulement en masquant l'interface. Un test vérifie que chaque route admin et chaque méthode y figurent, avec le bon appel. Un autre vérifie qu'un organisateur reçoit 403 sur chaque route réservée, sans qu'aucune donnée ne soit lue. Un changement de rôle s'applique aux sessions ouvertes dès leur requête suivante, car la session relit le rôle à chaque appel.
 
@@ -99,6 +100,8 @@ Isolation entre organisations :
 2. Le client `db` renvoyé par le guard est un client Prisma étendu (`getOrgClient`, `src/lib/prisma-org.ts`) qui limite toutes les opérations à l'organisation, sur tous les modèles qui lui appartiennent (`Event`, `Volunteer`, `OrgLog`, `OrgSlugHistory`, `TargetedMessage`, `MessageTemplate`, `DuplicateDismissal`, `OrganizationLogo` directement ; `Shift`, `Registration`, `MemberInvite`, `EventPage`, `SectorLeader`, `EventMilestone`, `EventLog`, `EventQuestion`, `QuestionAnswer` via leur événement). `Organization`, `AdminUser`, `NotificationOutbox` et `PushSubscription` n'y sont pas : les routes qui les lisent filtrent explicitement par organisation. Les requêtes multi-lignes reçoivent le filtre ; les opérations par clé unique (`update`, `delete`, `findUnique`, `upsert`) vérifient d'abord à quelle organisation appartient la ligne ; les créations sont rattachées d'office à l'organisation ou refusées si l'événement visé n'en fait pas partie.
 3. Le code admin ne peut pas importer le client brut `prisma` (règle ESLint `no-restricted-imports` sur `src/app/api/admin/**` et `src/app/admin/**`) ; les rares exceptions (`Organization`, `AdminUser`, contrôle volontairement inter-organisations d'un slug) sont annotées avec leur justification.
 4. Les tests `src/__tests__/security/cross-tenant-isolation.test.ts` et `src/lib/__tests__/prisma-org.test.ts` vérifient l'isolation route par route et opération par opération.
+
+**Écritures imbriquées.** Le client étendu inspecte `where` et les champs de premier niveau de `data`, mais ne parcourt pas les écritures imbriquées de Prisma (`connect`, `connectOrCreate`, `create`, `createMany`, `set`, `disconnect`, `update`, `updateMany`, `upsert`, `delete` sous un champ de relation) : elles partent dans la même requête, sans repasser par l'extension pour le modèle enfant. Une route qui écrirait `registrations: { connect: { id } }` avec un identifiant venu de la requête pourrait donc rattacher une ligne d'une autre organisation sans être vue. Règle : jamais de `connect`/`connectOrCreate` vers un identifiant fourni par la requête, et toute écriture imbriquée déclarée avec sa justification dans `src/lib/__tests__/prisma-nested-writes-guard.test.ts` ; le test échoue aussi sur une entrée périmée.
 
 Toute nouvelle route admin doit ajouter son test d'isolation (voir [CONTRIBUTING.md](../CONTRIBUTING.md)).
 

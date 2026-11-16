@@ -6,12 +6,13 @@ import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
+import { OPERATOR_PLATFORM_EMAIL, passOperatorSecondFactor } from "../lib/operator-second-factor"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video_operator" || process.env.VIDEO_BASE_URL !== "http://localhost:43104") throw new Error("Isolated operator video environment required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const platform = await browser.newPage(), owner = await browser.newPage(), anonymous = await browser.newPage()
@@ -20,7 +21,8 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(email)
       await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-      await page.waitForURL(/\/(?:admin\/events|super-admin\/organizations)/)
+      if (email === OPERATOR_PLATFORM_EMAIL) await passOperatorSecondFactor(page)
+      await page.waitForURL(/\/(?:admin\/dashboard|super-admin\/organizations)/)
     }
     await platform.goto("http://localhost:43104/super-admin/organizations")
     await platform.getByRole("heading", { name: "Organisations", exact: true }).waitFor()

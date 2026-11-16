@@ -7,6 +7,9 @@ vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock })
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn(), adminActor: () => ({ type: "admin", id: "a" }), diffFields: () => null }))
 vi.mock("@/lib/org-log", () => ({ diffFields: () => null }))
 vi.mock("@/lib/prisma", () => ({ prisma: {} }))
+// New dates of a protected event are judged under the workload lock (#1171, lot 2; Postgres: workload-policy.int.test.ts).
+const datesCheck = vi.hoisted(() => vi.fn(async (): Promise<unknown[]> => []))
+vi.mock("@/lib/workload-policy-data", async (orig) => ({ ...(await orig<typeof import("@/lib/workload-policy-data")>()), eventDatesWorkloadCheck: datesCheck }))
 
 // Publication needs at least one live shift, enforced by the API for every interface.
 describe("publishBlocker", () => {
@@ -113,13 +116,13 @@ describe("PATCH /api/admin/events/[id] — dates", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     update.mockImplementation(async ({ data }: { data: object }) => ({ id: "evt-a", publicStatus: "draft", ...data }))
-    requireOrgSessionMock.mockResolvedValue({
-      db: {
-        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"), publicInstructions: null, remindersEnabled: true, requirePhone: false, organization: { timeZone: null, publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } }), update },
-        shift: { count: vi.fn().mockResolvedValue(1) },
-      },
-      organizationId: "org-a", session: {},
-    })
+    datesCheck.mockResolvedValue([])
+    const db: Record<string, unknown> = {
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"), publicInstructions: null, remindersEnabled: true, requirePhone: false, organization: { timeZone: null, publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } }), update },
+      shift: { count: vi.fn().mockResolvedValue(1) },
+    }
+    db.$transaction = (fn: (tx: unknown) => unknown) => fn(db)
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: {} })
   })
 
   it("refuses an unreal day and an end moved before the stored start, and saves nothing", async () => {
@@ -130,5 +133,19 @@ describe("PATCH /api/admin/events/[id] — dates", () => {
     expect((await inverted.json()).error).toBe("La date de fin ne peut pas précéder la date de début.")
     expect(update).not.toHaveBeenCalled()
     expect((await PATCH(patch({ endDate: "2026-07-04" }), params)).status).toBe(200)
+    expect(datesCheck).toHaveBeenCalledWith(expect.anything(), "evt-a", { startDate: "2026-07-04", endDate: "2026-07-04" })
+  })
+
+  it("refuses new dates the days-off rule would break, saving nothing, and skips the check when the dates stay", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/route")
+    datesCheck.mockResolvedValue([{ volunteerId: "v", name: "Sami Martin", findings: [], messages: ["Du samedi 4 juillet au vendredi 10 juillet : seulement 1 jour sans mission."] }])
+    const res = await PATCH(patch({ endDate: "2026-07-10" }), params)
+    expect(res.status).toBe(409)
+    const body = await res.json()
+    expect(body).toMatchObject({ code: "workload", workload: ["Sami Martin : Du samedi 4 juillet au vendredi 10 juillet : seulement 1 jour sans mission."] })
+    expect(update).not.toHaveBeenCalled()
+    datesCheck.mockClear()
+    expect((await PATCH(patch({ endDate: "2026-07-05", title: "G" }), params)).status).toBe(200)
+    expect(datesCheck).not.toHaveBeenCalled()
   })
 })

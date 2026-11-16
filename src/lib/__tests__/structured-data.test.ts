@@ -26,7 +26,7 @@ const unit: DocUnit = {
   legacy: [],
   aliases: [],
   body: "Texte.\n",
-  source: "guide/presences-le-jour-j.md",
+  source: "content/guide/presences-le-jour-j.md",
 }
 
 describe("shared nodes", () => {
@@ -64,7 +64,7 @@ describe("publicPageJsonLd", () => {
     expect(types(doc)).toEqual(["WebPage", "BreadcrumbList", "WebSite", "Organization"])
     const [page, crumbs] = graphOf(doc)
     expect(page).toMatchObject({ "@id": `${BASE}/doc/admin#webpage`, url: `${BASE}/doc/admin`, inLanguage: "fr", breadcrumb: { "@id": `${BASE}/doc/admin#breadcrumb` } })
-    expect((crumbs.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Documentation", "Guide administrateur"])
+    expect((crumbs.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Documentation", "Guide organisateur"])
   })
 
   it("makes /doc a collection, and the features page describe the application", () => {
@@ -72,6 +72,26 @@ describe("publicPageJsonLd", () => {
     expect(types(publicPageJsonLd("/fonctionnalites", BASE))).toContain("SoftwareApplication")
     expect(types(publicPageJsonLd("/legal/privacy", BASE))).not.toContain("SoftwareApplication")
     expect(types(publicPageJsonLd("/logiciel-planning-benevoles", BASE))).toContain("SoftwareApplication")
+    // #1326: the free software page presents the application too.
+    expect(types(publicPageJsonLd("/logiciel-libre-benevoles", BASE))).toContain("SoftwareApplication")
+  })
+
+  // #1323: the citation page describes the application and its publisher by their stable @ids,
+  // never as another software (no alternateName).
+  it("links /citer's page to the application and the organisation nodes, without alternateName", () => {
+    const doc = publicPageJsonLd("/citer", BASE)
+    expect(types(doc)).toContain("SoftwareApplication")
+    const page = graphOf(doc)[0]
+    expect(page.about).toEqual([{ "@id": `${BASE}/#application` }, { "@id": `${BASE}/#organization` }])
+    expect(page).not.toHaveProperty("alternateName")
+  })
+
+  // #1326: the free software page's visible FAQ becomes its FAQPage, through the same mechanism.
+  it("passes the free software page's FAQ to a FAQPage node", () => {
+    const faq = featuresPageFaq(renderFeaturesPage(null, "content/pages/LOGICIEL-LIBRE-BENEVOLES.md"))
+    expect(faq.length).toBeGreaterThanOrEqual(3)
+    const node = graphOf(publicPageJsonLd("/logiciel-libre-benevoles", BASE, faq)).find((n) => n["@type"] === "FAQPage")!
+    expect((node.mainEntity as { name: string }[]).map((q) => q.name)).toEqual(faq.map((q) => q.question))
   })
 
   // #767: only the questions a page renders, word for word, never a FAQ the page doesn't show.
@@ -99,6 +119,9 @@ describe("the audience and pricing pages", () => {
     ])
     const index = graphOf(publicPageJsonLd("/pour-qui", BASE)).find((n) => n["@type"] === "BreadcrumbList")!
     expect((index.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Pour qui ?"])
+    // #1325: the town hall page sits under the same index.
+    const townHall = graphOf(publicPageJsonLd("/benevoles-mairie-commune", BASE)).find((n) => n["@type"] === "BreadcrumbList")!
+    expect((townHall.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Pour qui ?", "Mairies, communes et collectivités"])
   })
 
   it("describes the application on the pricing page, not on an audience page", () => {

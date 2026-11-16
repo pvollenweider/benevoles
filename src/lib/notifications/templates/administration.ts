@@ -157,26 +157,26 @@ export function renderAdminWelcome(p: NotificationPayload): RenderedEmail {
     organizationName: string
     adminUrl: string
   }
-  const subject = `Bienvenue sur Bénévoles — ${d.organizationName}`
+  const subject = `Bienvenue sur ${siteName()} — ${d.organizationName}`
 
   const text = [
     `Bonjour ${d.adminName},`,
     ``,
-    `Votre compte administrateur pour ${d.organizationName} est maintenant actif.`,
+    `Votre compte organisateur pour ${d.organizationName} est maintenant actif.`,
     ``,
     `Gérez vos événements et bénévoles ici :`,
     d.adminUrl,
     ``,
     `Bonne organisation !`,
-    `L'équipe Bénévoles`,
+    `L'équipe ${siteName()}`,
   ].join("\n")
 
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Bienvenue, ${escapeHtml(d.adminName)} !</h2>
-    <p>Votre compte administrateur pour <strong>${escapeHtml(d.organizationName)}</strong> est maintenant actif.</p>
-    <p style="margin-top:1.5em">${btn(d.adminUrl, "Accéder à mon espace admin")}</p>
+    <p>Votre compte organisateur pour <strong>${escapeHtml(d.organizationName)}</strong> est maintenant actif.</p>
+    <p style="margin-top:1.5em">${btn(d.adminUrl, "Ouvrir mon espace organisateur")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Vous pouvez utiliser ce lien à tout moment pour gérer vos événements et vos bénévoles.</p>
-  `, `Votre espace admin est prêt — gérez vos événements et bénévoles dès maintenant.`)
+  `, `Votre espace organisateur est prêt — gérez vos événements et bénévoles dès maintenant.`)
 
   return { subject, html, text }
 }
@@ -193,14 +193,14 @@ export function renderProductUpdate(p: NotificationPayload): RenderedEmail {
   const text = [
     content,
     ``,
-    `Vous recevez cet email en tant qu'administrateur ${siteName()}.`,
+    `Vous recevez cet email en tant qu'organisateur sur ${siteName()}.`,
     `Se désabonner de ces communications : ${unsubscribeUrl}`,
   ].join("\n")
 
   const html = wrap(`
     <div style="line-height:1.6">${renderMarkdown(content)}</div>
     <p style="color:#666;font-size:0.8em;margin-top:2em;padding-top:1em;border-top:1px solid #f0f0f0">
-      Vous recevez cet email en tant qu'administrateur ${escapeHtml(siteName())}.
+      Vous recevez cet email en tant qu'organisateur sur ${escapeHtml(siteName())}.
       <a href="${unsubscribeUrl}" style="color:#666">Se désabonner</a> de ces communications.
     </p>
   `, subject)
@@ -248,7 +248,7 @@ export function renderReleaseAvailable(p: NotificationPayload): RenderedEmail {
   const subject = `Nouvelle version disponible : ${d.version}`
 
   const text = [
-    `Une nouvelle version de Bénévoles est disponible : ${d.version} (vous utilisez ${d.currentVersion}).`,
+    `Une nouvelle version de ${siteName()} est disponible : ${d.version} (vous utilisez ${d.currentVersion}).`,
     ``,
     `Notes de version :`,
     d.releaseUrl,
@@ -259,7 +259,7 @@ export function renderReleaseAvailable(p: NotificationPayload): RenderedEmail {
 
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Nouvelle version disponible</h2>
-    <p>Une nouvelle version de Bénévoles est disponible : <strong>${escapeHtml(d.version)}</strong> (vous utilisez ${escapeHtml(d.currentVersion)}).</p>
+    <p>Une nouvelle version de ${escapeHtml(siteName())} est disponible : <strong>${escapeHtml(d.version)}</strong> (vous utilisez ${escapeHtml(d.currentVersion)}).</p>
     <p style="margin-top:1.5em">${btn(d.releaseUrl, "Voir les notes de version")}</p>
     <p style="margin-top:0.75em"><a href="${d.upgradeDocsUrl}" style="color:#2563eb">Documentation de mise à jour</a></p>
   `, `${d.version} est disponible, vous utilisez ${d.currentVersion}.`)
@@ -457,7 +457,7 @@ export function renderOrgReactivation(p: NotificationPayload): RenderedEmail {
   const d = p.data as { adminName: string; organizationName: string; reactivateUrl: string; hours: number }
   const subject = `Réactiver l'espace ${d.organizationName}`
   const title = "Réactiver votre espace"
-  const intro = `Vous avez demandé à réactiver l'espace de ${d.organizationName} sur ${siteName()}, désactivé faute d'activité. Ses événements, ses membres et ses réglages sont toujours là.`
+  const intro = `Vous avez demandé à réactiver l'espace de ${d.organizationName} sur ${siteName()}, désactivé faute d'activité. Ses événements, ses membres et ses paramètres sont toujours là.`
   const how = `Ouvrez le lien ci-dessous, puis appuyez sur « Réactiver l'espace ». Le lien fonctionne une seule fois, pendant ${d.hours} heures.`
   const after = "Une fois l'espace réactivé, connectez-vous comme d'habitude."
   const notYou = "Si vous n'avez pas fait cette demande, ignorez cet email : l'espace reste désactivé."
@@ -499,12 +499,16 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
     organizationName: string
     /** « 12 mars 2025 », or null when never measured. */
     lastActivity: string | null
-    /** « mardi 23 décembre 2026 »: the deactivation without an answer. */
+    /** « mardi 23 décembre 2026 »: the last day to answer; the space may be deactivated after it. */
     deactivationOn: string
     keepUrl: string
+    /** « 3 septembre 2026 »: when the previous message left (#1114); absent in older payloads. */
+    previousSentOn?: string | null
+    /** The last day an earlier message announced, when this one moves it later (#1114). */
+    previousDeactivationOn?: string | null
   }
   const subject = d.step === "last"
-    ? `Dernier rappel : l'espace ${d.organizationName} sera désactivé le ${d.deactivationOn}`
+    ? `Dernier rappel : sans réponse d'ici le ${d.deactivationOn} inclus, l'espace ${d.organizationName} pourra être désactivé`
     : d.step === "second"
       ? `Rappel : souhaitez-vous conserver l'espace ${d.organizationName} ?`
       : `Souhaitez-vous conserver l'espace ${d.organizationName} ?`
@@ -512,11 +516,15 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
   const loginUrl = `${BASE_URL}/admin/login`
   const since = d.lastActivity ? `depuis le ${d.lastActivity}` : "depuis longtemps"
   const intro = `L'espace de ${d.organizationName} sur ${siteName()} n'a pas été utilisé ${since}, et aucun événement n'y est prévu. Souhaitez-vous le conserver ?`
-  const deadline = `Sans réponse, l'espace sera désactivé le ${d.deactivationOn}.`
-  const keep = "Pour le conserver, appuyez sur le bouton ci-dessous : il n'y a rien d'autre à faire. Créer ou modifier un événement compte aussi comme une réponse."
+  const deadline = `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace pourra être désactivé à partir du lendemain.`
+  const changed = d.previousDeactivationOn
+    ? `Cette date remplace celle du ${d.previousDeactivationOn}, indiquée dans notre message précédent : ce rappel part plus tard que prévu, vous avez donc plus de temps pour répondre.`
+    : null
+  const keep = "Pour le conserver, ouvrez le lien ci-dessous, puis appuyez sur « Conserver mon organisation » sur la page qui s'affiche : il n'y a rien d'autre à faire. Créer ou modifier un événement compte aussi comme une réponse."
   const consequence = "Une fois l'espace désactivé, plus personne ne peut s'y connecter ni s'inscrire à ses événements. Ses données sont gardées, et vous pouvez le réactiver vous-même depuis la page de connexion, avec « Espace désactivé faute d'activité ? Le réactiver »."
   const why = `Nous posons régulièrement cette question pour ne pas garder sans fin des données dont personne n'a plus besoin.`
-  const reminder = d.step === "first" ? null : d.step === "second" ? "Nous vous avons écrit il y a un mois, sans réponse." : "C'est notre dernier message avant la désactivation."
+  const wrote = d.previousSentOn ? `Nous avons écrit aux organisateurs de l'espace le ${d.previousSentOn}, sans réponse.` : "Nous avons déjà écrit aux organisateurs de l'espace, sans réponse."
+  const reminder = d.step === "first" ? null : d.step === "second" ? wrote : `${wrote} C'est notre dernier message avant la désactivation.`
 
   const text = [
     title,
@@ -527,6 +535,7 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
     intro,
     ``,
     deadline,
+    ...(changed ? [changed] : []),
     ``,
     keep,
     `Conserver mon organisation : ${d.keepUrl}`,
@@ -544,13 +553,14 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
     ${reminder ? `<p>${escapeHtml(reminder)}</p>` : ""}
     <p>${escapeHtml(intro)}</p>
     <p><strong>${escapeHtml(deadline)}</strong></p>
+    ${changed ? `<p>${escapeHtml(changed)}</p>` : ""}
     <p>${escapeHtml(keep)}</p>
     <p style="margin-top:1.5em">${btn(d.keepUrl, "Conserver mon organisation")}</p>
     <p style="font-size:0.9em;word-break:break-all">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur : ${escapeHtml(d.keepUrl)}</p>
     <p>${escapeHtml(consequence)}</p>
     <p>${escapeHtml(why)}</p>
     <p><a href="${escapeHtml(loginUrl)}" style="color:#1d4ed8;text-decoration:underline">Se connecter à l'espace</a></p>
-  `, `Sans réponse, l'espace sera désactivé le ${d.deactivationOn}. Il suffit d'appuyer sur un bouton pour le conserver.`)
+  `, `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace pourra être désactivé. Pour le conserver, ouvrez le lien de ce message et confirmez.`)
 
   return { subject, html, text }
 }
@@ -561,7 +571,7 @@ export function renderOrgInactivityDeactivated(p: NotificationPayload): Rendered
   const title = "Votre espace a été désactivé"
   const reactivateUrl = `${BASE_URL}/admin/reactivate`
   const what = `Sans réponse à nos trois messages, l'espace de ${d.organizationName} sur ${siteName()} a été désactivé le ${d.deactivatedOn} : plus personne ne peut s'y connecter ni s'inscrire à ses événements.`
-  const kept = "Ses événements, ses membres et ses réglages sont gardés. Pour le réactiver, entrez l'adresse email de votre compte sur la page de réactivation. Vous recevrez un lien : ouvrez-le, puis appuyez sur « Réactiver l'espace »."
+  const kept = "Ses événements, ses membres et ses paramètres sont gardés. Pour le réactiver, entrez l'adresse email de votre compte sur la page de réactivation. Vous recevrez un lien : ouvrez-le, puis appuyez sur « Réactiver l'espace »."
 
   const text = [title, ``, `Bonjour,`, ``, what, ``, kept, `Réactiver mon espace : ${reactivateUrl}`].join("\n")
   const html = wrap(`

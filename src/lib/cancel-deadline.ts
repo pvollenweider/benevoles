@@ -147,7 +147,7 @@ export function cancelClosedText(reason: SelfCancelReason): string {
 
 /** On the public event page, under a held shift that can't be cancelled online any more. */
 export const CANCEL_CLOSED_SHORT = "Plus annulable en ligne : qui prévenir est indiqué sur"
-export const CANCEL_CLOSED_LINK = "ta page personnelle"
+export const CANCEL_CLOSED_LINK = "ta page « Mes inscriptions »"
 
 /** The line before the contacts, when the volunteer can't cancel online any more. */
 export const CANCEL_CONTACTS_INTRO = "Si tu ne peux pas venir, préviens directement :"

@@ -1,0 +1,21 @@
+Scene swaps-welcome: narration-timed
+Scene swaps-enable: narration-timed
+Scene swaps-publish: narration-timed
+Scene swaps-offer: narration-timed
+Scene swaps-accept: narration-timed
+Scene swaps-done: narration-timed
+Scene swaps-approval: narration-timed
+Scene swaps-sector: narration-timed
+Scene swaps-sector-accept: narration-timed
+Scene swaps-validate: narration-timed
+Scene swaps-result: narration-timed
+Error: Scene swaps-result failed
+    at scene (/private/tmp/benevoles-video-production.h6qj9dqj/videos/tools/record.ts:315:13)
+    at async Object.recordShiftSwaps (/private/tmp/benevoles-video-production.h6qj9dqj/videos/lib/record-beta-features.ts:443:3)
+    at async main (/private/tmp/benevoles-video-production.h6qj9dqj/videos/tools/record.ts:532:12) {
+  [cause]: ReferenceError: event is not defined
+      at <anonymous> (/private/tmp/benevoles-video-production.h6qj9dqj/videos/lib/record-beta-features.ts:448:17)
+      at async scene (/private/tmp/benevoles-video-production.h6qj9dqj/videos/tools/record.ts:308:7)
+      at async Object.recordShiftSwaps (/private/tmp/benevoles-video-production.h6qj9dqj/videos/lib/record-beta-features.ts:443:3)
+      at async main (/private/tmp/benevoles-video-production.h6qj9dqj/videos/tools/record.ts:532:12)
+}

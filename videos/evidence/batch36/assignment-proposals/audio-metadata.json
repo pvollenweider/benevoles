@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-10-31T07:00:44.764Z",
+  "segments": {
+    "ap-welcome": {
+      "file": "audio/ap-welcome.wav",
+      "durationMs": 13776,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-drafts": {
+      "file": "audio/ap-drafts.wav",
+      "durationMs": 16388,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-scope": {
+      "file": "audio/ap-scope.wav",
+      "durationMs": 12728,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-targets": {
+      "file": "audio/ap-targets.wav",
+      "durationMs": 11641,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-wishes": {
+      "file": "audio/ap-wishes.wav",
+      "durationMs": 9550,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-launch": {
+      "file": "audio/ap-launch.wav",
+      "durationMs": 12822,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-result": {
+      "file": "audio/ap-result.wav",
+      "durationMs": 13646,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-load": {
+      "file": "audio/ap-load.wav",
+      "durationMs": 13586,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-lock": {
+      "file": "audio/ap-lock.wav",
+      "durationMs": 12845,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-adjust": {
+      "file": "audio/ap-adjust.wav",
+      "durationMs": 17453,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    },
+    "ap-publish": {
+      "file": "audio/ap-publish.wav",
+      "durationMs": 13604,
+      "generationSha256": "64bcba66e2a7ed225c8cf15195beafcd852bd251110d71c028059b9a9aadc637"
+    }
+  }
+}

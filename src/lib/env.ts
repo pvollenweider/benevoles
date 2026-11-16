@@ -3,10 +3,10 @@
 
 import { z } from "zod"
 
-// Variables runtime indispensables à l'app. ADMIN_EMAIL / ADMIN_PASSWORD
-// ne sont utilisées que par `prisma/seed.ts` (jamais par l'app), donc
-// elles n'ont pas leur place ici — elles cassaient le build d'image
-// Docker quand elles n'étaient pas fournies en build args.
+// Variables runtime indispensables à l'app. ADMIN_EMAIL, ADMIN_PASSWORD et ADMIN_NAME
+// (premier super admin d'une instance auto-hébergée, src/lib/admin-bootstrap.ts) sont
+// facultatives : sans elles le démarrage ne crée rien, et le build d'image Docker n'en a
+// jamais besoin (aucun build arg).
 const schema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL est requis"),
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET doit faire au moins 32 caractères"),
@@ -21,6 +21,12 @@ const schema = z.object({
   EMAIL_FROM: z.string().optional(),
   EMAIL_REPLY_TO: z.string().optional(),
   ADMIN_NOTIFICATION_EMAIL: z.string().optional(),
+  // First super admin of a self-hosted instance started from the published image, which has no
+  // seed (#1334): read at startup, never required (the build does not see them). Once a super
+  // admin exists they are ignored; ADMIN_NAME defaults to « Administrateur ».
+  ADMIN_EMAIL: z.string().optional(),
+  ADMIN_PASSWORD: z.string().optional(),
+  ADMIN_NAME: z.string().optional(),
   // Operator alerts by ntfy (#810, src/lib/operator-alerts.ts): topic URL (https) and optional access value.
   NTFY_URL: z.string().optional(),
   NTFY_TOKEN: z.string().optional(),

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:06:01.514Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "6c8a171985312153253b5727adb029808ae7f3138e88b402433f37e4e698a1d0",
+  "clipSha256": "61e5953e82b504526edc1a0f6d6b3a5de2b3a2d1d7882a165fd13e6ee10d53b6",
+  "scene": "sectors-pdf",
+  "review": {
+    "heardOpening": "Le planning imprimé suit le même ordre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le planning imprimé suit le même ordre.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la grille de planning en ligne avec les secteurs et postes ordonnés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Dans Documents, ouvrons l'export complet.",
+        "visibleSeconds": 3.4,
+        "visible": "Navigation vers l'onglet Documents et clic sur le lien Export complet.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "La frise de chaque jour et le récapitulatif par poste sont rangés secteur par secteur, puis Autres postes.",
+        "visibleSeconds": 5,
+        "visible": "Affichage de l'export complet avec le planning sous forme de frise puis le tableau récapitulatif trié par secteur et Autres postes.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et posée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

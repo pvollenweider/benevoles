@@ -109,8 +109,29 @@ export function createSentryLoader({ load, win, idleTimeoutMs = 4000 }: SentryLo
   }
 }
 
+/**
+ * Whether the browser SDK may run on this host (#1335). The published image carries benevol.app's
+ * DSN, baked in at build time: without this check, every instance run from it (a local try-out, a
+ * self-hosted association) would send its visitors' errors to benevol.app's Sentry project.
+ * `allowedHosts` is NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS, a comma-separated list of domains, also
+ * baked in at build time (deploy.yml: benevol.app); a host matches a listed domain or one of its
+ * subdomains (an organisation's own address). Unset or blank: any host, so an operator who builds
+ * an image with their own DSN keeps their reports.
+ */
+export function browserSentryAllowedOn(hostname: string, allowedHosts: string | undefined): boolean {
+  const domains = (allowedHosts ?? "")
+    .split(",")
+    .map((d) => d.trim().toLowerCase().replace(/^\.+|\.+$/g, ""))
+    .filter(Boolean)
+  if (domains.length === 0) return true
+  const host = hostname.toLowerCase().replace(/\.$/, "")
+  return domains.some((d) => host === d || host.endsWith(`.${d}`))
+}
+
 const browserLoader =
-  typeof window === "undefined" ? null : createSentryLoader({ load: () => import("@/lib/sentry-client-init"), win: window })
+  typeof window === "undefined" || !browserSentryAllowedOn(window.location.hostname, process.env.NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS)
+    ? null
+    : createSentryLoader({ load: () => import("@/lib/sentry-client-init"), win: window })
 
 export function startSentryClient(): void {
   browserLoader?.start()

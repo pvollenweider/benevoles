@@ -1,0 +1,22 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:50.255Z",
+  "revalidatedAt": "2026-11-01T08:03:53.865Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "recognitionTransport": "Lossless FLAC transcoded from the hash-verified actual final WAV; same unprompted multilingual ASR instructions",
+  "segments": [
+    {
+      "id": "ap-result",
+      "audioSha256": "ceb1eead6bfc62e306b82263c05571ebb90adcdb0022a54ed22e8dd726ab6849",
+      "recognized": "En quelques secondes, le résultat s'affiche en haut de la page. 29 places couvertes sur 31, écrit dans les brouillons. Couverture complète impossible, personne n'est disponible pour tout le rangement du kiosque dimanche soir et la raison est écrite. Proposer une autre répartition en chercherait une autre sur le même périmètre.",
+      "expected": "En quelques secondes, le résultat s'affiche en haut de la page : vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Couverture complète impossible : personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite. Proposer une autre répartition en chercherait une autre, sur le même périmètre.",
+      "wordErrorRate": 0.10714285714285714,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

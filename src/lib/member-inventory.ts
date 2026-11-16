@@ -35,17 +35,53 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "scrub",
     why: "history of the events: kept without identity on erasure (comment, phone cleared, token regenerated) so counts, hours and history stay right",
   },
+  SignupConfirmation: {
+    merge: "drop",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "a public sign-up waiting for its email confirmation (#1253): name, address, phone, token hash. A merge is not that person's confirmation, so the absorbed record's pending requests go; erased with the person's data",
+  },
   MemberInvite: {
     merge: "reassign",
     deletion: "cascade",
     erasure: "delete",
     why: "a personal link, and the « not available » answer (#558) is the person's own",
   },
+  ShiftDecline: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the person's own « Je ne peux pas » answer for one shift (#1303): on a merge the answers of both records are united, dropping any on a shift the kept record already holds live; erased with the person's data",
+  },
   QuestionAnswer: {
     merge: "reassign",
     deletion: "cascade",
     erasure: "delete",
     why: "free answers given by the person",
+  },
+  EventVolunteerLimit: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the person's own workload limits on an event (#1171): moved to the kept record, the stricter value of each field kept where both had a row; erased with the person's data",
+  },
+  AvailabilityRequest: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the person's dated availability on an event (#1146), with its days and ranges: moved to the kept record; where both records answered on the same event, the kept record's answers stay and are flagged for review when they differ, never united into more availability (src/lib/event-availability.ts); erased with the person's data",
+  },
+  DraftAssignment: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "an organiser's draft assignment of the person (#1146, lot C), pending or kept as provenance once published or discarded: moved to the kept record and marked « à revoir », a pending draft on a shift the kept record already has one on is discarded; erased with the person's data (the registrations it became stay, scrubbed like any other)",
+  },
+  EventVolunteerTarget: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the organiser's hour target of the person on an event (#1172), a wish for generated proposals, never a limit: moved to the kept record where it has none on that event, else the kept record's stays (never summed); erased with the person's data. The person's place in proposal runs (JSON) is scrubbed on erasure and merge (src/lib/proposal-runs-lifecycle.ts)",
   },
   RosterConsent: {
     merge: "drop",
@@ -59,6 +95,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "a device of the person",
   },
+  ReminderOccurrence: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "custom reminder send state of one person, event, local day and rule (#1139): ids and timing only, no personal content. Merged by key in the merge transaction: a sent occurrence wins over any other (a reminder already delivered is never sent again), a queued conflict keeps one row and cancels the superseded outbox row, and the other keys move with the registrations; deleted with the person's data. No age-based cleanup yet (see src/lib/retention.ts)",
+  },
   DeliveryOutcome: {
     merge: "reassign",
     deletion: "cascade",
@@ -70,6 +112,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     deletion: "cascade",
     erasure: "delete",
     why: "pair-specific (#601): an erased record is never suggested again, so the dismissal is useless",
+  },
+  ShiftSwapRequest: {
+    merge: "out_of_scope",
+    deletion: "no_fk",
+    erasure: "keep",
+    why: "a swap request between two volunteers (#1174): ids and states only, no personal data. Tied to the registrations (deleted with them); a live request of a merged or erased member can no longer be applied (its registration or member no longer matches, src/lib/shift-swap-server.ts) and ends as impossible at its next step",
   },
   ErasureRecord: {
     merge: "out_of_scope",
@@ -143,6 +191,9 @@ export const REGISTRATION_FIELDS_ON_ERASURE: Record<string, "clear" | "keep" | "
   charterAcceptedAt: "keep",
   // The share link per group it came through (#947): the club's link, not the person.
   groupLinkId: "keep",
+  // The pending confirmation (#1253) is deleted on erasure; its provisional rows stay, scrubbed,
+  // and the foreign key is set to null.
+  signupConfirmationId: "keep",
   createdAt: "keep",
   updatedAt: "keep",
 }

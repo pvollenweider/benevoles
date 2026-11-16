@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:43:07.298Z",
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
+  "promptSha256": "2740fe833c72dc345bbe43f92474132f43c09ed07a36c07027b4a73ee84301cd",
+  "clipSha256": "0bf8122c3ae4a8ee94ddd562f22d4d97f0883431b1ff74d3ce054210e14a7dd9",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Votre liste est prête à être utilisée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Votre liste est prête à être utilisée pour les prochaines invitations",
+        "visibleSeconds": 0,
+        "visible": "Page Membres affichant la liste finalisée après l'import",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Si quelques personnes manquent, ajoutez-les manuellement",
+        "visibleSeconds": 9.2,
+        "visible": "Écran stable montrant le bouton '+ Nouveau membre' et les membres existants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.7,
+        "spoken": "L'import fait gagner du temps, tout en vous laissant le dernier mot",
+        "visibleSeconds": 16.7,
+        "visible": "Vue d'ensemble de la liste des membres pour clore le module",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, calme et chaleureuse, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

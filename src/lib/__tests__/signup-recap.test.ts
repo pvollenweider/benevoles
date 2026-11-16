@@ -58,3 +58,12 @@ describe("signup recap", () => {
     expect(totalLabel(recapShifts([s("a", {}), s("b", { startTime: "14:00", endTime: "17:30", label: "x" })]))).toBe("2 créneaux, 5 h 30 au total")
   })
 })
+
+describe("signup recap, a poste reserved to an answer (#962)", () => {
+  const base: RecapShiftInput = { id: "n1", roleName: "Navette", label: "Navette", date: "2026-07-04", startTime: "14:00", endTime: "18:00", status: "open", waitlistEnabled: false, minAge: null }
+  it("carries the required answer as a mention, and null without a condition", () => {
+    const [withCondition] = recapShifts([{ ...base, reservedAnswer: { questionLabel: "Permis de conduire", answers: ["Oui", "En cours"] } }])
+    expect(withCondition.answerMention).toBe("Réponse requise : Permis de conduire, Oui ou En cours")
+    expect(recapShifts([base])[0].answerMention).toBeNull()
+  })
+})

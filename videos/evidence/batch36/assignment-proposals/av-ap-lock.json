@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:30.204Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "902c298d2c433bc606bad42ee9416c496b2a4dcc02b3f08784a25b43e5237a0b",
+  "clipSha256": "2ec4db648e0e425815f84b4be64d8560cfdbad1244db5e6e29e4b3aaf49cf9e6",
+  "scene": "ap-lock",
+  "review": {
+    "heardOpening": "De retour au planning",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "De retour au planning",
+        "visibleSeconds": 0.6,
+        "visible": "Retour à la page des affectations en brouillon affichant le planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2,
+        "spoken": "chaque brouillon proposé porte la mention Proposé",
+        "visibleSeconds": 1.5,
+        "visible": "La mention « Proposé » apparaît sur les créneaux affectés du planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Ouvrons celui d'Emma",
+        "visibleSeconds": 4.8,
+        "visible": "Ouverture de la fenêtre de détail du brouillon d'Emma Johansson",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "puis Verrouiller",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur le bouton Verrouiller dans la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Le cadenas le signale sur le planning",
+        "visibleSeconds": 8.5,
+        "visible": "L'icône de cadenas et la mention « Verrouillé » apparaissent sur le créneau d'Emma",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

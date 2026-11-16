@@ -40,7 +40,7 @@
     },
     {
       "id": "success",
-      "transcript": "La connexion est rétablie et l’inscription réussit. La page confirme le résultat et indique l’envoi de l’email. Avec un formulaire public ordinaire, le lien de gestion reste dans cet email : il n’est pas affiché simplement parce qu’une adresse a été saisie. Garde le message pour retrouver ton planning ou annuler plus tard.",
+      "transcript": "La connexion est rétablie et la demande est envoyée. La page affiche Demande d'inscription reçue et invite à regarder tes emails : c'est l'email qui dit ce qui est enregistré. Avec un formulaire public ordinaire, la page n'affiche pas le lien de gestion : saisir une adresse ne prouve pas qu'elle est la tienne. Garde le message pour retrouver ton planning ou annuler plus tard.",
       "fallbackDurationMs": 29000
     },
     {
@@ -50,17 +50,17 @@
     },
     {
       "id": "overlap",
-      "transcript": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à l'accueil de dix heures à midi. Essayons le vestiaire de onze à treize heures avec sa même adresse. Remplissons le formulaire et confirmons. Le refus nomme le créneau qui chevauche cette demande. Les informations restent remplies et aucune nouvelle inscription n'a été ajoutée. Ce contrôle évite de compter une personne sur deux postes en même temps. Pour continuer, reviens au planning et choisis un horaire compatible.",
+      "transcript": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à l'accueil de dix heures à midi. Essayons le vestiaire de onze à treize heures avec sa même adresse. Remplissons le formulaire et confirmons. La page répond comme pour toute demande : Demande d'inscription reçue. Elle ne dit rien des créneaux d'Aline, car rien ne prouve que c'est elle qui remplit le formulaire. Aucune nouvelle inscription n'a été ajoutée. Ouvrons sa boîte : l'email Demande d'inscription non enregistrée nomme le créneau qui chevauche le sien et donne son lien personnel pour choisir un horaire compatible.",
       "fallbackDurationMs": 70000
     },
     {
       "id": "response-loss",
-      "transcript": "Une coupure peut arriver après l'enregistrement. Nicolas choisit la logistique. Cette fois, la requête arrive réellement au serveur, qui crée son inscription ; nous interrompons volontairement seulement la réponse au navigateur. Le formulaire affiche Connexion interrompue parce qu'il ne sait pas si l'envoi a abouti. Rétablissons la connexion et confirmons à nouveau. Le message indique qu'il est déjà inscrit et que son lien lui a été envoyé par email. Vérifions côté organisation : une seule ligne de Nicolas apparaît sur ce créneau. Le nouvel essai n'a pas créé une deuxième inscription.",
+      "transcript": "Une coupure peut arriver après l'enregistrement. Nicolas choisit la logistique. Cette fois, la requête arrive réellement au serveur, qui crée son inscription ; nous interrompons volontairement seulement la réponse au navigateur. Le formulaire affiche Connexion interrompue parce qu'il ne sait pas si l'envoi a abouti. Rétablissons la connexion et confirmons à nouveau. La page affiche de nouveau Demande d'inscription reçue, et ses emails contiennent la confirmation de son premier envoi. Vérifions côté organisation : une seule ligne de Nicolas apparaît sur ce créneau. Le nouvel essai n'a pas créé une deuxième inscription.",
       "fallbackDurationMs": 85000
     },
     {
       "id": "invitation-success",
-      "transcript": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le formulaire public ordinaire. Après ses informations et les consentements, confirmons. La page annonce le succès mais ne montre pas son lien personnel : saisir une adresse ne prouve pas que l'on possède cette boîte. Aline a ensuite reçu une invitation personnelle envoyée par l'organisation. Ouvrons ce lien pour choisir la logistique. Ses informations sont préremplies ; vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements. Cette confirmation peut afficher Accéder à mon inscription, car l'invitation apporte la preuve d'adresse. Ouvrons ce lien : Aline retrouve ses deux créneaux. Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+      "transcript": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le formulaire public ordinaire. Après ses informations et les consentements, confirmons. La page affiche Demande d'inscription reçue, sans son lien personnel : saisir une adresse ne prouve pas que l'on possède cette boîte. Aline a ensuite reçu une invitation personnelle envoyée par l'organisation. Ouvrons ce lien pour choisir la logistique. Ses informations sont préremplies ; vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements. Cette confirmation peut afficher Accéder à mon inscription, car l'invitation apporte la preuve d'adresse. Ouvrons ce lien : Aline retrouve ses deux créneaux. Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
       "fallbackDurationMs": 110000
     },
     {
@@ -74,9 +74,9 @@
     "steps": [
       "Remplis le formulaire et relis ton adresse email avant d'envoyer.",
       "Si une question obligatoire manque, complète-la : tes autres réponses sont conservées.",
-      "Si ta sélection n'est plus disponible ou chevauche un de tes créneaux, reviens au planning pour choisir un autre horaire.",
+      "Si ta sélection n'est plus disponible, reviens au planning pour choisir un autre horaire.",
       "En cas de coupure réseau, vérifie ta connexion puis clique à nouveau sur « Confirmer mon inscription ».",
-      "Retrouve l'email de confirmation, qui contient ton lien personnel."
+      "Après l'envoi, regarde tes emails : la confirmation, ou un email « Demande d'inscription non enregistrée » si ton adresse avait déjà un créneau à la même heure."
     ],
     "remember": [
       "Confirmer de nouveau après une coupure ne crée pas une deuxième inscription.",
@@ -91,9 +91,9 @@
     "validation": "Corriger une réponse",
     "capacity": "Une place devenue indisponible",
     "network": "Une requête interrompue",
-    "success": "Vérifier la confirmation",
+    "success": "Demande reçue, la suite par email",
     "email": "Retrouver le vrai email",
-    "overlap": "Le serveur vérifie les horaires",
+    "overlap": "Un horaire qui chevauche le tien",
     "response-loss": "Une réponse perdue, pas deux inscriptions",
     "invitation-success": "Public et invitation : deux confirmations",
     "result": "Vérifier le résultat côté organisation"

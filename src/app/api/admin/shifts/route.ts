@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { placeChoiceProblem } from "@/lib/places"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -9,32 +10,45 @@ import { z } from "zod"
 import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { SHIFT_DESCRIPTION_MAX, SHIFT_INTERNAL_NOTES_MAX, SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
+import { newShiftsSector } from "@/lib/sector-adoption"
 
 const schema = z.object({
   eventId: z.string(),
-  roleName: z.string().min(1),
-  label: z.string().min(1),
-  description: z.string().optional(),
+  roleName: cappedText(SHIFT_ROLE_NAME_MAX, "Le nom du poste").min(1),
+  label: cappedText(SHIFT_LABEL_MAX, "Le libellé du créneau").min(1),
+  description: cappedText(SHIFT_DESCRIPTION_MAX, "La description du créneau").optional(),
   date: civilDateSchema,
   startTime: clockSchema,
   endTime: clockSchema,
   capacity: z.number().int().min(1),
   // Minimum per shift (#949): 1 to capacity, null = none (the same as capacity).
   minVolunteers: z.number().nullable().optional(),
-  locationDetails: z.string().optional(),
+  locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
   contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
   instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),
   displayOrder: z.number().int().optional(),
-  internalNotes: z.string().optional(),
+  internalNotes: cappedText(SHIFT_INTERNAL_NOTES_MAX, "Les notes internes").optional(),
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
+  /** « Repas sur le pouce possible » (#1171, lot 2): the meal can be taken during this mission. */
+  mealOnTheGo: z.boolean().optional(),
+  /** Place of the mission (#1171, lot 2): an active place of the event, or null (not checked for travel). */
+  placeId: z.string().min(1).nullable().optional(),
+  /**
+   * Sector chosen in the form (#1147), for an event that adopted sectors: an active sector of the
+   * event, or null for « Autres postes ». A new poste is created in it; an existing poste keeps its
+   * own sector, and a different one is refused (409). Absent: as before, the poste's sector or none.
+   */
+  sectorId: z.string().min(1).nullable().optional(),
 }).refine((d) => d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
   .superRefine((d, ctx) => {
     const problem = minVolunteersProblem(d.minVolunteers, d.capacity)
@@ -57,13 +71,36 @@ export async function POST(req: Request) {
   const owned = await db.event.findFirst({ where: { id: data.eventId }, select: { id: true, startDate: true, endDate: true } })
   if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
   if (!isDayInPeriod(data.date, owned.startDate, owned.endDate)) return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
+  if (data.placeId) {
+    const placeProblem = placeChoiceProblem(await db.eventPlace.findMany({ where: { eventId: data.eventId }, select: { id: true, name: true, archivedAt: true } }), data.placeId, null)
+    if (placeProblem) return NextResponse.json({ error: placeProblem, field: "placeId" }, { status: 400 })
+  }
 
-  // A shift added to an existing poste takes its settings (#986, #1002): colour, limit, access,
-  // cumulable and order belong to the poste. A new poste keeps the defaults and the form's order.
-  const poste = roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(data.eventId, data.roleName), select: ROLE_SETTINGS_SELECT }), data.roleName)
-  const shift = await db.shift.create({
-    data: { ...data, date: new Date(data.date), status: "open", ...poste },
-  })
+  let shift: Awaited<ReturnType<typeof db.shift.create>>
+  let sectorName: string | null = null
+  if (data.sectorId === undefined) {
+    // A shift added to an existing poste takes its settings (#986, #1002): colour, limit, access,
+    // cumulable, order and sector belong to the poste. A new poste keeps the defaults and the form's order.
+    const poste = roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(data.eventId, data.roleName), select: ROLE_SETTINGS_SELECT }), data.roleName)
+    shift = await db.shift.create({
+      data: { ...data, date: new Date(data.date), status: "open", ...poste },
+    })
+  } else {
+    // Sector first (#1147): the sector is checked under the locks a sector write takes (never an
+    // archived one or another event's), and the shift is written in the same transaction; an
+    // existing poste in another sector is refused, never moved by a shift (newShiftsSector).
+    const outcome = await db.$transaction(async (tx) => {
+      const target = await newShiftsSector(tx, guard.organizationId, data.eventId, data.roleName, data.sectorId ?? null)
+      if (!target.ok) return target
+      const created = await tx.shift.create({
+        data: { ...data, date: new Date(data.date), status: "open", ...target.value.poste, sectorId: target.value.sectorId },
+      })
+      return { ok: true as const, value: { shift: created, name: target.value.sectorName } }
+    })
+    if (!outcome.ok) return NextResponse.json({ error: outcome.error }, { status: outcome.status })
+    shift = outcome.value.shift
+    sectorName = outcome.value.name
+  }
 
   await logEvent({
     eventId: data.eventId,
@@ -78,6 +115,7 @@ export async function POST(req: Request) {
       endTime: { from: null, to: data.endTime },
       capacity: { from: null, to: data.capacity },
       ...(data.minVolunteers != null ? { minVolunteers: { from: null, to: data.minVolunteers } } : {}),
+      ...(sectorName ? { sector: { from: null, to: sectorName } } : {}),
     },
   })
 

@@ -3,7 +3,7 @@
 
 import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { addMinutes } from "../../src/lib/gantt-utils"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -15,7 +15,7 @@ type Mail = { ID: string; To: { Address: string }[]; Subject: string }
 export async function recordReminders(options: { page: Page; base: string; eventId: string; directory: string; title: string; scene: Scene; tap: (page: Page, locator: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, title, scene, tap, settle } = options
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video DB required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const eventUrl = `${base}/admin/events/${eventId}`
   const go = async (url: string) => { await page.goto(url); await settle(page) }
   const inbox = async (): Promise<Mail[]> => {
@@ -69,10 +69,12 @@ export async function recordReminders(options: { page: Page; base: string; event
       const response = page.waitForResponse(r => r.url().endsWith("/send-reminder") && r.request().method() === "POST")
       await tap(page, dialog.getByRole("button", { name: "Envoyer", exact: true }))
       const sent = await response; const result = await sent.json()
-      if (!sent.ok() || result.sent !== 3 || result.failed) throw new Error("Manual reminder delivery failed")
-      await dialog.getByText("3 rappels envoyés", { exact: true }).waitFor()
+      if (!sent.ok() || result.queued !== 3) throw new Error("Manual reminder delivery failed")
+      await dialog.getByText("3 rappels en cours d'envoi", { exact: true }).waitFor()
       await at("Ouvrons l'email de Léa")
-      const mails = (await inbox()).filter(m => !prior.has(m.ID))
+      // Queued, then delivered right after the response (#1105): wait for the three to arrive.
+      let mails = (await inbox()).filter(m => !prior.has(m.ID))
+      for (let i = 0; i < 30 && mails.length < 3; i++) { await page.waitForTimeout(500); mails = (await inbox()).filter(m => !prior.has(m.ID)) }
       if (mails.length !== 3 || mails.some(m => m.To.some(t => /request|waiting/.test(t.Address)))) throw new Error("Manual reminder audience incorrect")
       await openMail(mails, "video.reminder.dd@example.org", ["Prends une gourde", ...activeLea.flatMap(r => [r.shift.startTime, r.shift.endTime])])
       checks.manualReminder = { sent: 3, cancelledWithoutEmail: true, twoShiftsInOneEmail: true, mailIds: mails.map(m => m.ID) }
@@ -87,7 +89,7 @@ export async function recordReminders(options: { page: Page; base: string; event
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
         const result = await response
         if (!result.ok() || (await result.json()).settings.reminders.j1 !== enabled) throw new Error("Organization reminder setting not persisted")
-        await page.getByText("Réglages enregistrés.", { exact: true }).waitFor()
+        await page.getByText("Paramètres enregistrés.", { exact: true }).waitFor()
       }
       if (!await checkbox.isChecked()) throw new Error("J-1 fixture must start enabled")
       await at("Nous coupons celui de la veille"); await save(false)

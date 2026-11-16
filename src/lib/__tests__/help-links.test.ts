@@ -1,14 +1,14 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { ADMIN_HELP_LINKS, FEEDBACK_SECTION, adminHelpLink, docHref, type AdminHelpRoute, type AdminHelpTarget } from "../help-links"
+import { ADMIN_HELP_LINKS, FEEDBACK_SECTION, SECTION_DOC_LINKS, adminHelpLink, docHref, type AdminHelpRoute, type AdminHelpTarget } from "../help-links"
 import { readDocUnits, type DocUnit } from "../doc-units"
 import { renderDocUnit, renderPublicSource } from "../public-content"
 import { CONTACT_EMAIL, REPOSITORY_URL } from "../landing-seo"
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 // #568, #649: every contextual help link opens an existing page of the documentation (a unit of
-// guide/ for organisers), at an existing heading when it names one. Renaming or removing a unit or
+// content/guide/ for organisers), at an existing heading when it names one. Renaming or removing a unit or
 // a heading a page links to fails here: update src/lib/help-links.ts in the same change.
 const root = path.join(__dirname, "..", "..", "..")
 const units = readDocUnits()
@@ -29,7 +29,7 @@ const decode = (s: string) => {
 const headingsOf = (html: string) => [...html.matchAll(/<h([2-6])(?: id="([^"]*)")?>([\s\S]*?)<\/h\1>/g)].map((m) => ({ id: m[2], text: decode(m[3]) }))
 const unitBySlug = (slug: string): DocUnit => {
   const unit = units.find((u) => u.slug === slug)
-  expect(unit, `guide/${slug}.md`).toBeDefined()
+  expect(unit, `content/guide/${slug}.md`).toBeDefined()
   return unit!
 }
 
@@ -41,7 +41,7 @@ describe("docHref", () => {
 })
 
 describe("ADMIN_HELP_LINKS", () => {
-  it.each(routes)("%s opens an organisers' unit of guide/, and the heading it names, with the same wording", (route) => {
+  it.each(routes)("%s opens an organisers' unit of content/guide/, and the heading it names, with the same wording", (route) => {
     const target: AdminHelpTarget = ADMIN_HELP_LINKS[route]
     const unit = unitBySlug(target.unit)
     expect(unit.roles, unit.slug).toContain("admin")
@@ -72,6 +72,40 @@ describe("ADMIN_HELP_LINKS", () => {
     expect(adminHelpLink("/admin/events/[id]/edit", units)).toEqual({ section: "Modifier un événement", href: "/doc/creer-un-evenement#modifier-un-evenement" })
     expect(adminHelpLink("/admin/events/new", units)).toEqual({ section: "Créer un événement", href: "/doc/creer-un-evenement" })
   })
+
+  // #1096: the settings page shows the organisation's settings first, the team last.
+  it("sends the settings page to the organisation's settings, not to the admin team", () => {
+    expect(adminHelpLink("/admin/settings/admins", units)).toEqual({ section: "Personnaliser l'organisation", href: "/doc/personnaliser-l-organisation" })
+  })
+
+  // #1096: every admin screen of the navigation audit with a page of its own now links to it.
+  it.each([
+    "/admin/dashboard", "/admin/events", "/admin/events/[id]", "/admin/events/[id]/log", "/admin/events/[id]/duplicate",
+    "/admin/events/[id]/qr", "/admin/events/[id]/pages", "/admin/events/[id]/preview", "/admin/events/[id]/staffing/search",
+    "/admin/members", "/admin/members/[id]", "/admin/members/[id]/certificate", "/admin/members/[id]/merge",
+    "/admin/members/duplicates", "/admin/settings/message-templates", "/admin/settings/activity", "/admin/search", "/admin/account",
+  ])("%s has a help link", (route) => {
+    expect(routes).toContain(route)
+  })
+})
+
+describe("SECTION_DOC_LINKS", () => {
+  const entries = (Object.entries(SECTION_DOC_LINKS) as [keyof typeof SECTION_DOC_LINKS, Record<string, AdminHelpTarget>][])
+    .flatMap(([role, links]) => Object.entries(links).map(([name, target]) => [role, name, target] as const))
+
+  it.each(entries)("%s/%s opens a unit for that role, at the heading it names", (role, _name, target) => {
+    const unit = unitBySlug(target.unit)
+    expect(unit.roles, unit.slug).toContain(role)
+    const [pathname, anchor] = docHref(target).split("#")
+    expect(pathname).toBe(`/doc/${unit.slug}`)
+    if (target.heading) expect(headingsOf(renderDocUnit(unit)).find((h) => h.id === anchor)?.text.replace(/&nbsp;/g, " "), `#${anchor} in ${unit.source}`).toBe(target.heading)
+    else expect(anchor).toBeUndefined()
+  })
+
+  it("points the broken-link page and the cancel button to their own sections", () => {
+    expect(docHref(SECTION_DOC_LINKS.benevole.brokenLink)).toBe("/doc/lien-personnel#la-page-ce-lien-ne-fonctionne-pas-s-affiche")
+    expect(docHref(SECTION_DOC_LINKS.benevole.cancelShift)).toBe("/doc/ma-page-personnelle#annuler-un-creneau")
+  })
 })
 
 describe("the units' heading ids", () => {
@@ -84,6 +118,8 @@ describe("the units' heading ids", () => {
     }
   })
 
+  // Renders every unit, and the target unit again for each cross-unit link: over the 5 s default on
+  // a busy CI runner.
   it("resolve every in-page link of a unit, and every link to another unit's heading", () => {
     for (const unit of units) {
       const html = renderDocUnit(unit)
@@ -95,10 +131,10 @@ describe("the units' heading ids", () => {
         expect(headingsOf(renderDocUnit(other)).map((h) => h.id), `${unit.slug} → /doc/${slug}#${id}`).toContain(id)
       }
     }
-  })
+  }, 20_000)
 
   it("link to the admin guide only at a heading it still has", () => {
-    const guideIds = new Set(headingsOf(renderPublicSource("GUIDE_ADMIN.md", "x").html).map((h) => h.id))
+    const guideIds = new Set(headingsOf(renderPublicSource("content/guide/GUIDE_ADMIN.md", "x").html).map((h) => h.id))
     for (const unit of units) {
       for (const [, id] of renderDocUnit(unit).matchAll(/href="\/doc\/admin#([^"]+)"/g)) expect(guideIds.has(id), `${unit.slug} → /doc/admin#${id}`).toBe(true)
     }
@@ -113,7 +149,7 @@ describe("feedback section", () => {
 
   it("exists in its unit, and the admin guide's introduction links to it", () => {
     expect(headingsOf(html).find((h) => h.id === anchor)?.text).toBe(FEEDBACK_SECTION.heading)
-    const guide = renderPublicSource("GUIDE_ADMIN.md", "x").html
+    const guide = renderPublicSource("content/guide/GUIDE_ADMIN.md", "x").html
     expect(guide.indexOf(`href="${href}"`)).toBeGreaterThan(-1)
   })
 

@@ -1,0 +1,23 @@
+[
+  {
+    "file": "volunteer-event-availability.mp4",
+    "status": 200,
+    "contentType": "video/mp4",
+    "cors": "https://www.benevol.app",
+    "bytes": "4034964"
+  },
+  {
+    "file": "volunteer-event-availability.vtt",
+    "status": 200,
+    "contentType": "text/vtt",
+    "cors": "https://www.benevol.app",
+    "bytes": "1961"
+  },
+  {
+    "file": "volunteer-event-availability.jpg",
+    "status": 200,
+    "contentType": "image/jpeg",
+    "cors": "https://www.benevol.app",
+    "bytes": "65745"
+  }
+]

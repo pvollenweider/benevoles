@@ -16,7 +16,7 @@ export type LoginCandidate = {
   isActive: boolean
   role: string
   passwordHash: string
-  organization: { active: boolean } | null
+  organization: { active: boolean; suspendedAt?: Date | string | null } | null
 }
 
 export type LoginDeps<U extends LoginCandidate> = {

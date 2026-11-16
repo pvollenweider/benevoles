@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:37:01.795Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "53b340e3f3474fca48d9524087ff46efe5ec944f5bcefcd55aed24773a716406",
+  "clipSha256": "a155b40e462f6c1d0804b5932612fc7d7a9b7d2cfd85c636648fc2a42f422d14",
+  "scene": "ap-scope",
+  "review": {
+    "heardOpening": "Ce qui est vérifié rappelle les règles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ce qui est vérifié rappelle les règles toujours respectées, dont la protection des pauses et de la charge, ici activée.",
+        "visibleSeconds": 0.5,
+        "visible": "Section « Ce qui est vérifié » affichée avec la mention « Protection des pauses et de la charge : activée ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Dans Périmètre, les trois dates et les cinq postes sont cochés",
+        "visibleSeconds": 7,
+        "visible": "Défilement vers la section « Périmètre » montrant les 3 cases de dates et les 5 cases de postes cochées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "quatorze créneaux, trente et une places à pourvoir.",
+        "visibleSeconds": 10.5,
+        "visible": "Ligne de récapitulatif affichant « 14 créneaux, 31 places à pourvoir ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, fluide et parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

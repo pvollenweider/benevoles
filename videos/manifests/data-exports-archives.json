@@ -56,7 +56,7 @@
     },
     {
       "id": "contents",
-      "transcript": "Ouvrons les différentes parties du vrai fichier. On retrouve les réglages, les créneaux et les inscriptions avec les données des bénévoles concernés. Les pages, les questions et leurs réponses, les responsables, les jalons et le journal sont également présents. Des nombres récapitulent plusieurs de ces collections. Vérifions un créneau et une réponse de notre exemple. Les jetons d'accès et les liens personnels ne sont pas exportés. Cela ne rend pas le fichier anonyme : les coordonnées et d'autres informations personnelles restent dans les données.",
+      "transcript": "Ouvrons les différentes parties du vrai fichier. On retrouve les paramètres, les créneaux et les inscriptions avec les données des bénévoles concernés. Les pages, les questions et leurs réponses, les responsables, les jalons et le journal sont également présents. Des nombres récapitulent plusieurs de ces collections. Vérifions un créneau et une réponse de notre exemple. Les jetons d'accès et les liens personnels ne sont pas exportés. Cela ne rend pas le fichier anonyme : les coordonnées et d'autres informations personnelles restent dans les données.",
       "fallbackDurationMs": 55000
     },
     {

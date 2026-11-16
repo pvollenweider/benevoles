@@ -1,0 +1,12 @@
+
+ RUN  v5.1.0 /private/tmp/codex-video/batch39
+
+
+ Test Files  39 passed (39)
+      Tests  1303 passed (1303)
+   Start at  20:58:53
+   Duration  1.51s (import 57%, tests 29%, transform 13%, worker 2%)
+
+    Isolate  39 workers spawned · ~89ms startup each (spawn + environment, per file)
+             at least ~297ms faster with isolate: false — reuses workers across files instead of one per file
+

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:11:12.850Z",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "promptSha256": "da9e5bcccd2005c8c2da85a1633b65752f4426987efca5076c3d4d8840475740",
+  "clipSha256": "2c6d1163826f54e4c09f82a3e606e111f40e9989a948f5e38cc2b592ddc7a23d",
+  "scene": "new-signup",
+  "review": {
+    "heardOpening": "Pour voir comment une équipe évolue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Nora choisit ce créneau, puis continue vers le formulaire.",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le bouton Continuer et affichage du formulaire d'inscription.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone.",
+        "visibleSeconds": 8.5,
+        "visible": "Saisie successive des champs Prénom, Nom, Email et Téléphone.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Elle choisit une taille, accepte la convention et l'utilisation de ses données",
+        "visibleSeconds": 16.5,
+        "visible": "Sélection de la taille M puis coche des deux cases de consentement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée.",
+        "visibleSeconds": 25.1,
+        "visible": "Validation et chargement de la page de confirmation affichant Demande d'inscription reçue.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, en bonne synchronisation avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

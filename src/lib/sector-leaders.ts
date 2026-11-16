@@ -2,14 +2,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Sector leader notifications (#186). A sector leader is scoped to one roleName within an
- * event; when a volunteer signs up for a shift under that role, every leader for that role
- * gets an email pointing back to their read-only roster.
+ * Sector leader notifications (#186). A leader is scoped to one roleName within an event, or to
+ * one sector (#1169); when a volunteer signs up for a shift of a poste, every leader whose scope
+ * covers it gets an email (once per address) pointing back to their read-only roster.
  */
 import { prisma } from "./prisma"
 import { sendNotification, type Send } from "./notifications"
 import { reportError } from "./report-error"
 import { linkToken } from "./token-vault"
+import { leadersCoveringRole } from "./leader-scope-data"
 
 export async function notifySectorLeadersOfSignup(params: {
   eventId: string
@@ -18,9 +19,8 @@ export async function notifySectorLeadersOfSignup(params: {
   volunteerName: string
   shift: { roleName: string; label: string; date: Date; startTime: string; endTime: string }
 }, send: Send = sendNotification): Promise<void> {
-  const leaders = await prisma.sectorLeader.findMany({
-    where: { eventId: params.eventId, roleName: params.shift.roleName },
-  })
+  // The poste's leaders and its current sector's (#1169), once per address.
+  const leaders = await leadersCoveringRole(prisma, params.eventId, params.shift.roleName)
   if (leaders.length === 0) return
 
   await Promise.all(
@@ -30,7 +30,9 @@ export async function notifySectorLeadersOfSignup(params: {
         recipient: { email: leader.email, name: leader.name },
         data: {
           leaderName: leader.name,
-          roleName: leader.roleName,
+          // The poste of the shift: a sector leader's row has none (#1169), the email names the sector.
+          roleName: params.shift.roleName,
+          ...(leader.sectorId ? { sectorName: leader.sector?.name ?? null } : {}),
           eventTitle: params.eventTitle,
           volunteerName: params.volunteerName,
           shiftLabel: params.shift.label,
@@ -81,14 +83,15 @@ export async function untagVolunteerIfNoLongerResponsable(organizationId: string
  * SectorLeader is keyed by (eventId, roleName, email), not a volunteerId FK (a leader isn't
  * necessarily a registered volunteer and doesn't need an account), so matching is by role + email.
  */
-export type SectorLeaderRef = { roleName: string; email: string }
+export type SectorLeaderRef = { roleName: string | null; email: string }
 
 function leaderKey(roleName: string, email: string): string {
   return `${roleName}\0${email.toLowerCase()}`
 }
 
 export function leaderKeySet(leaders: SectorLeaderRef[]): Set<string> {
-  return new Set(leaders.map((l) => leaderKey(l.roleName, l.email)))
+  // Poste leaders only: the registrations list's « Responsable » flag and « Rendre responsable » are per poste.
+  return new Set(leaders.flatMap((l) => (l.roleName ? [leaderKey(l.roleName, l.email)] : [])))
 }
 
 // True when `email` is a registered sector leader of `roleName` for this event. Emails are

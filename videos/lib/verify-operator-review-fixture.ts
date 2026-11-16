@@ -4,6 +4,7 @@ import assert from "node:assert/strict"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 import type { PrismaClient } from "../../src/generated/prisma/client"
+import { fullNameOf, surnameOf } from "./fixture-names"
 
 /** The operator's global screens require proof for its entire separate database. */
 export async function verifyOperatorReviewFixture(db: PrismaClient, directory: string) {
@@ -23,7 +24,7 @@ export async function verifyOperatorReviewFixture(db: PrismaClient, directory: s
   const admins = await db.adminUser.findMany({ select: { id: true, name: true, email: true, organizationId: true, role: true } })
   assert.equal(admins.length, 4)
   for (const admin of admins) {
-    assert(["Morgane Exemple", "Élodie Exemple", "Samira Exemple", "Paul Exemple"].includes(admin.name))
+    assert(["Morgane", "Élodie", "Samira", "Paul"].map(fullNameOf).includes(admin.name))
     if (admin.id === "video-operator-platform") assert(admin.email === "video.operator.platform@example.org" && admin.organizationId === null && admin.role === "super_admin")
     else assert(/^video-operator-org-[abc]-owner$/.test(admin.id) && admin.email === `video.operator.${admin.id.split("-")[3]}.owner@example.org` && orgs.some(org => org.id === admin.organizationId))
   }
@@ -32,7 +33,7 @@ export async function verifyOperatorReviewFixture(db: PrismaClient, directory: s
   for (const member of members) {
     const match = /^video-operator-org-([ab])-member-([0-5])$/.exec(member.id)
     assert(match)
-    assert(member.organizationId === `video-operator-org-${match[1]}` && member.email === `video.operator.${match[1]}.member.${match[2]}@example.org` && member.lastName === "Exemple" && member.firstName === ["Léa", "Emma", "Nicolas", "Zoé", "Sarah", "Lucas"][Number(match[2])] && !member.phone && member.notes === "Donnée fictive pour la formation interne uniquement.")
+    assert(member.organizationId === `video-operator-org-${match[1]}` && member.email === `video.operator.${match[1]}.member.${match[2]}@example.org` && member.firstName === ["Léa", "Emma", "Nicolas", "Zoé", "Sarah", "Lucas"][Number(match[2])] && member.lastName === surnameOf(member.firstName) && !member.phone && member.notes === "Donnée fictive pour la formation interne uniquement.")
   }
   const events = await db.event.findMany({ select: { id: true, organizationId: true, title: true, description: true } })
   assert.equal(events.length, 3)

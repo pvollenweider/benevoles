@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:50:45.857Z",
-  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
+  "reviewedAt": "2026-11-11T12:35:57.474Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
   "promptSha256": "e1dc0b2e15fd46e41dd4b39dfee0222dbc369ed154b0d3066924ee4de34d4463",
-  "clipSha256": "df15d6a2eb379808cab771a94b0cc82640a8bf3df0763e501a3d7d475a806caa",
+  "clipSha256": "d93919ea6105abdbbdd125557ce05723ee7b18cbf6a058915b113e9a6e9be7d3",
   "scene": "reserved",
   "review": {
-    "heardOpening": "Sans invitation, le poste Sécurité",
+    "heardOpening": "Sans invitation, le poste Sécurité reste visible",
     "checkpoints": [
       {
         "spokenSeconds": 1.5,
         "spoken": "le poste Sécurité reste visible mais marqué réservé à certains membres",
-        "visibleSeconds": 1.5,
-        "visible": "La ligne Sécurité est visible dans le planning avec le créneau hachuré annoté Réservé",
+        "visibleSeconds": 2,
+        "visible": "Le défilement affiche le créneau « 20h–02h - Sécurité » avec la mention « réservé à certains membres »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.5,
         "spoken": "il demande simplement d’utiliser le lien personnel reçu par email",
-        "visibleSeconds": 7.5,
-        "visible": "Le texte explicatif en haut de page indique de s'inscrire avec le lien personnel reçu par email",
+        "visibleSeconds": 9.5,
+        "visible": "L'écran remonte sur le bandeau supérieur indiquant d'utiliser le lien personnel reçu par email",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,16 +28,18 @@
         "spokenSeconds": 12,
         "spoken": "Une invitation sans la bonne étiquette ne donne pas davantage accès",
         "visibleSeconds": 12,
-        "visible": "Écran stable montrant le planning où le poste reste verrouillé sous condition",
+        "visible": "L'écran redescend sur la liste des créneaux incluant le poste Sécurité réservé",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:12, changement inattendu d'orateur : la voix féminine est brutalement remplacée par une voix masculine pour la dernière phrase."
+    ],
     "voice": {
-      "consistent": true,
+      "consistent": false,
       "warm": true,
-      "observation": "Voix féminine calme, intelligible et parfaitement calée sur les éléments textuels et visuels de l'interface."
+      "observation": "Voix féminine claire et posée jusqu'à 00:11, puis bascule soudaine sur une voix masculine pour la phrase finale."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

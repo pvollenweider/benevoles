@@ -12,7 +12,7 @@ import { apexHomeHref, apexHref } from "@/lib/apex-links"
  * rest and full on hover; at least 24 px tall (WCAG 2.5.8); the focus outline of DESIGN.md §4.
  */
 const linkClass =
-  "inline-flex items-center min-h-6 max-w-full break-words rounded underline underline-offset-2 decoration-gray-300 dark:decoration-gray-600 hover:decoration-current hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
+  "inline-flex items-center min-h-6 max-w-full [overflow-wrap:anywhere] rounded underline underline-offset-2 decoration-gray-300 dark:decoration-gray-600 hover:decoration-current hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
 const NEW_TAB = "(ouvre dans un nouvel onglet)"
 const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
@@ -62,6 +62,9 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
           links: [
             { href: "/pour-qui", label: "Pour qui ?" },
             { href: "/tarifs", label: "Tarifs" },
+            { href: "/logiciel-libre-benevoles", label: "Logiciel libre" },
+            { href: "/manifeste", label: "Manifeste" },
+            { href: "/ressources", label: "Guides pratiques" },
           ],
         }]
       : []),
@@ -81,6 +84,7 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
       links: [
         { href: "/admin/login", label: "Espace organisateur" },
         { href: REPOSITORY_URL, label: `Code source v${APP_VERSION}`, external: true, github: true },
+        ...(hosted ? [{ href: "/citer", label: "Presse" }] : []),
         ...(support ? [{ href: support, label: "Soutenir le projet", external: true }] : []),
       ],
     },
@@ -152,7 +156,7 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  */
 export default function PublicFooter({ variant = "event", site }: { variant?: "site" | "event" | "embed"; site?: FooterSite }) {
   const apexBase = site?.apexBase ?? null
-  if (variant === "embed") return <EmbedFooter apexBase={apexBase} />
+  if (variant === "embed") return <EmbedFooter apexBase={apexBase} name={site?.name ?? siteName()} />
   const columns = variant === "site" ? footerSiteColumns() : footerEventColumns(apexBase)
   const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
@@ -160,7 +164,7 @@ export default function PublicFooter({ variant = "event", site }: { variant?: "s
       <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-6 ${variant === "event" ? "" : columns.length > 3 ? "md:grid-cols-4" : "sm:grid-cols-3"}`}>
         {columns.map((col) => (
           <div key={col.id} role="group" aria-labelledby={`footer-${variant}-${col.id}`} className="min-w-0">
-            <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100">{col.title}</p>
+            <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100 [overflow-wrap:anywhere]">{col.title}</p>
             <ul className="mt-2 space-y-1">
               {col.links.map((l) => (
                 <li key={l.href}><FooterAnchor link={l} /></li>
@@ -185,25 +189,25 @@ export default function PublicFooter({ variant = "event", site }: { variant?: "s
 }
 
 /**
- * The embedded sign-up's footer (#948): no site chrome, a single line with the legal links and the
- * tool's name, every link in a new tab (the site around the frame stays where it is). Still one
- * `<footer>` and one `<nav>` « Liens utiles », after the `</main>`.
+ * The embedded sign-up's footer (#948): no site chrome, a single line with the legal links,
+ * « Propulsé par <instance> » to the site's home (#1117) and the code, every link in a new tab (the
+ * site around the frame stays where it is). Still one `<footer>` and one `<nav>` « Liens utiles », after the
+ * `</main>`.
  */
-function EmbedFooter({ apexBase }: { apexBase: string | null }) {
+function EmbedFooter({ apexBase, name }: { apexBase: string | null; name: string }) {
+  const links: readonly FooterLink[] = [
+    ...footerEmbedLinks(apexBase),
+    { href: apexHomeHref(apexBase), label: `Propulsé par ${name}`, newTab: true },
+    // The source offer stays on the page itself (AGPL-3.0 §13): a volunteer may only ever see the frame.
+    { href: REPOSITORY_URL, label: "Code source", external: true, github: true },
+  ]
   return (
     <footer className="max-w-6xl mx-auto mt-6 pt-4 pb-4 border-t border-gray-200 text-xs text-gray-600">
       <nav aria-label="Liens utiles">
         <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          {footerEmbedLinks(apexBase).map((l) => (
+          {links.map((l) => (
             <li key={l.href}><FooterAnchor link={l} /></li>
           ))}
-          <li>
-            <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
-              <GitHubMark className="w-3.5 h-3.5" />
-              benevol.app
-              <span className="sr-only">, code source sur GitHub {NEW_TAB}</span>
-            </a>
-          </li>
         </ul>
       </nav>
     </footer>

@@ -34,16 +34,16 @@ describe("adminReachability (#811)", () => {
     const outcomes = ["a", "b"].map((h) => ({ addressHash: h, outcome: "rejected_permanent", createdAt: at("2026-10-01T00:00:00Z") }))
     const r = adminReachability(["a", "b"], outcomes, now)
     expect(noReachableAdmin(r)).toBe(true)
-    expect(reachabilityNote(r)).toBe("toutes les adresses refusées : aucun administrateur joignable")
-    expect(unreachableNote(r)).toContain("Aucun administrateur joignable")
-    expect(reachabilityNote(adminReachability(["a"], outcomes, now))).toBe("adresse refusée : administrateur injoignable")
+    expect(reachabilityNote(r)).toBe("toutes les adresses refusées : aucun organisateur joignable")
+    expect(unreachableNote(r)).toContain("Aucun organisateur joignable")
+    expect(reachabilityNote(adminReachability(["a"], outcomes, now))).toBe("adresse refusée : organisateur injoignable")
   })
 
   it("flags a space with no active administrator at all", () => {
     const r = adminReachability([], [], now)
     expect(noReachableAdmin(r)).toBe(true)
-    expect(reachabilityNote(r)).toBe("aucun administrateur actif")
-    expect(unreachableNote(r)).toContain("Aucun administrateur actif")
+    expect(reachabilityNote(r)).toBe("aucun organisateur actif")
+    expect(unreachableNote(r)).toContain("Aucun organisateur actif")
   })
 
   it("ignores outcomes older than the retention window and other addresses", () => {

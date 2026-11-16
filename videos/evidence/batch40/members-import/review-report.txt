@@ -1,0 +1,11 @@
+STATUS: READY
+
+Batch 40, 2026-11-11. One narrated take. Product d3f4c4ba81356b673b1952b19c4ffe99531652f5, BUILD_ID AOuqevq41Wdo1_vo9UIzS. Duration 241.080 s.
+
+Ten independent source and final-video chapter ASRs passed after silence-based cuts; whole master has one continuous consistent Kore voice. Complete multilingual final soundtrack and VTT: zero viewer tu tokens, no stray instruction or English narration.
+
+Validator passed; music 14.2–19.9 LU under voice, zero music-rule issues; 26 actual clicks and two actual key presses have synced soft effects. Ten fresh audiovisual reviews, 35 checkpoints, zero findings. Actual confirmation and result images inspected.
+
+The real import created 38 and updated two members. Reanalysis planned 39 skips and one no-email creation, cancelled without import. Filter René selected three rows. One confirmation deleted two extra members and deactivated the retained René. Independent read-only check of the current DB proves that exact member still exists inactive and his original registration remains active; bulk-cleanup-checks.json.
+
+Source changes: manifest cleanup segment/viewer, editorial script, recorder and post-action invariant, scenario seed, exact main-demo baseline/ownership checks. No product source, guide or renders.json changed. Published on 2026-11-11: default preview then APPLY=1, five files uploaded. Real-time subjective listening unavailable; not claimed.

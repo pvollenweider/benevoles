@@ -6,6 +6,10 @@ import { generateRecurrence, recurrenceProblem, type HolidayCalendar, type Recur
 import { civilDateSchema } from "./civil-date"
 import { duplicatedQuestionRole } from "./question-role"
 import { duplicatedParent } from "./question-follow-up"
+import { duplicatedScope } from "./question-scope"
+import { leadersForCopy } from "./leader-postes"
+import { buildPolicy, parseWorkloadPolicy, policyValues, type WorkloadPolicy } from "./workload-policy"
+import { cleanPageRoleNames } from "./event-page-postes"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -50,15 +54,26 @@ export type DuplicableShift = {
   displayOrder: number
   internalNotes: string | null
   minAge: number | null
+  /** « Repas sur le pouce possible » (#1171); optional so older callers copy it as false. */
+  mealOnTheGo?: boolean
+  /** Place of the mission (#1171): remapped to the copy of the place, or none. */
+  placeId?: string | null
   waitlistEnabled: boolean
   requiresApproval: boolean
   colorKey: string | null
   maxPerVolunteer?: number | null
   reservedTags?: string[]
+  /** Answer condition of the poste (#962), remapped to the copy of its question. */
+  reservedQuestionId?: string | null
+  reservedAnswers?: string[]
   /** Role cumulable with another shift (#986), copied with the role's other settings. */
   overlapAllowed?: boolean
+  /** Role assigned by the organisation only (#1145), copied with the role's other settings. */
+  assignedOnly?: boolean
   /** Recurring permanence (#866) the shift came from: such shifts are regenerated, not copied. */
   recurrenceId?: string | null
+  /** Sector of the poste (#1147): remapped to the copy of the sector, or none. */
+  sectorId?: string | null
 }
 
 /** A recurring permanence (#866) of the source event. */
@@ -91,6 +106,8 @@ export type DuplicableEvent = {
   reminderMessage: string | null
   remindersEnabled: boolean
   requirePhone: boolean
+  /** Confirmation by email of public sign-ups (#1253): copied with the settings only. */
+  requireEmailConfirmation?: boolean
   /** Shift roster between volunteers (#1068): the setting is copied with the settings, never anyone's choice. */
   shiftRosterEnabled?: boolean
   /** The organisation's default for new events (#1068): the copy's value when the settings are not copied. */
@@ -104,11 +121,78 @@ export type DuplicableEvent = {
   cancelDeadlineHours?: number | null
   showSchedule: unknown
   shifts: DuplicableShift[]
-  pages: { slug: string; title: string; content: string; displayOrder: number }[]
+  pages: { slug: string; title: string; content: string; displayOrder: number; roleNames?: string[] }[]
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
-  questions?: { id?: string; label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null; parentId?: string | null; showIfValues?: string[] }[]
-  leaders: { roleName: string; name: string; email: string }[]
+  questions?: { id?: string; label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null; parentId?: string | null; showIfValues?: string[]; displayScope?: string | null; displayRoleNames?: string[] | null }[]
+  /** A poste (`roleName`) or, since #1169, a sector (`sectorId`) leader. */
+  leaders: { roleName: string | null; sectorId?: string | null; name: string; email: string }[]
+  /** Postes whose every shift is cancelled (#1010): their leaders don't follow. */
+  deletedPostes?: string[]
   recurrences?: DuplicableRecurrence[]
+  /** Sectors (#1147): the source's option, its adoption and its sectors (archived ones included, left out of the copy). */
+  sectorsEnabled?: boolean
+  sectorsAdoptedAt?: Date | null
+  sectors?: { id: string; name: string; displayOrder: number; archivedAt: Date | null }[]
+  /** Places of the event (#1171, lot 2); the active ones are copied with fresh ids. */
+  places?: { id: string; name: string; displayOrder: number; archivedAt: Date | null }[]
+  /** Whether the organisation can adopt sectors now (canAdoptBeta): needed to copy the option of a source that has not adopted them. */
+  sectorsGate?: boolean
+  /** The option a new event of the organisation starts with (default and gate), when the settings are not copied. */
+  newEventSectors?: boolean
+  /** Shift swaps (#1174): the source's options, whether the organisation can adopt them now, and a new event's value. */
+  shiftSwapsEnabled?: boolean
+  shiftSwapsApproval?: boolean
+  swapsGate?: boolean
+  newEventSwaps?: boolean
+}
+
+/**
+ * The workload protection of a copy (#1171): with the settings, the source's values, only while the
+ * capability can be adopted (a copy is a new adoption), the zone snapshotted again now; else the
+ * organisation's rule for a new event. A source whose stored policy does not parse gives nothing.
+ */
+export function duplicatedWorkload(
+  source: { workloadProtectionEnabled?: boolean; workloadPolicy?: unknown },
+  copySettings: boolean,
+  opts: { gate: boolean; newEvent: { workloadProtectionEnabled: boolean; workloadPolicy?: WorkloadPolicy }; timeZone: string },
+): { workloadProtectionEnabled: boolean; workloadPolicy?: WorkloadPolicy } {
+  if (!copySettings) return opts.newEvent
+  const parsed = parseWorkloadPolicy(source.workloadPolicy)
+  if (!parsed.ok || !opts.gate) return { workloadProtectionEnabled: false }
+  return { workloadProtectionEnabled: !!source.workloadProtectionEnabled, workloadPolicy: buildPolicy(policyValues(parsed.policy), opts.timeZone) }
+}
+
+/**
+ * The shift swap options of a copy (#1174): with the settings, the source's choice, only while the
+ * capability can be adopted (a copy is a new adoption); else the organisation's rule for a new
+ * event. Never a request, an agreement or an approval: those belong to the source's registrations.
+ */
+export function duplicatedSwaps(source: Pick<DuplicableEvent, "shiftSwapsEnabled" | "shiftSwapsApproval" | "swapsGate" | "newEventSwaps">, copySettings: boolean) {
+  return {
+    shiftSwapsEnabled: copySettings ? !!source.shiftSwapsEnabled && !!source.swapsGate : !!source.newEventSwaps,
+    shiftSwapsApproval: copySettings ? !!source.shiftSwapsApproval : false,
+  }
+}
+
+/**
+ * The sectors of a copy (#1147): an event that adopted sectors gives a copy that adopted them, with
+ * its active sectors (fresh ids, same names and order) and each poste in the copy of its sector,
+ * as the issue asks (« copies sectors, the poste → sector links and the adoption »). A source that
+ * has not adopted them gives no sector; its option follows the settings, and only while the
+ * capability can be adopted (a new adoption), else the organisation's rule for a new event.
+ */
+export function duplicatedSectors(source: DuplicableEvent, copySettings: boolean, newId: () => string) {
+  const adopted = !!source.sectorsAdoptedAt
+  const sectors = adopted
+    ? (source.sectors ?? []).filter((s) => !s.archivedAt).sort((a, b) => a.displayOrder - b.displayOrder).map((s, i) => ({ from: s.id, id: newId(), name: s.name, displayOrder: i }))
+    : []
+  const ids = new Map(sectors.map((s) => [s.from, s.id]))
+  return {
+    sectors: sectors.map(({ id, name, displayOrder }) => ({ id, name, displayOrder })),
+    sectorOf: (sectorId: string | null | undefined) => (sectorId ? ids.get(sectorId) ?? null : null),
+    sectorsEnabled: adopted ? true : copySettings ? !!source.sectorsEnabled && !!source.sectorsGate : !!source.newEventSectors,
+    sectorsAdoptedAt: adopted ? new Date() : null,
+  }
 }
 
 /** What a duplicated event copies from each shift (#356): every setting, never the identity, the status or the sign-ups. */
@@ -132,12 +216,18 @@ export function copiedShift(s: DuplicableShift) {
     displayOrder: s.displayOrder,
     internalNotes: s.internalNotes,
     minAge: s.minAge,
+    mealOnTheGo: s.mealOnTheGo ?? false,
+    placeId: s.placeId ?? null,
     waitlistEnabled: s.waitlistEnabled,
     requiresApproval: s.requiresApproval,
     colorKey: s.colorKey,
     maxPerVolunteer: s.maxPerVolunteer ?? null,
     reservedTags: s.reservedTags ?? [],
+    reservedQuestionId: s.reservedQuestionId ?? null,
+    reservedAnswers: s.reservedAnswers ?? [],
     overlapAllowed: s.overlapAllowed ?? false,
+    assignedOnly: s.assignedOnly ?? false,
+    sectorId: s.sectorId ?? null,
   }
 }
 
@@ -177,10 +267,26 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
   const shows = Array.isArray(source.showSchedule) ? source.showSchedule.filter(isShow) : []
   // A permanence's shifts are regenerated from its rule (below): moved by a number of days that
   // isn't a whole number of weeks, they would land on other weekdays and miss the new holidays.
-  const shifts = copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : []
-  const recurrences = copy.shifts ? duplicatedRecurrences(source, offsetDays) : []
+  const shiftsCopied = copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : []
+  const sectorPlan = duplicatedSectors(source, copy.settings, newId)
+  // Places (#1171, lot 2): the active ones, fresh ids, same names and order; a shift keeps the copy
+  // of its place, or none when it was archived.
+  const places = (copy.shifts ? source.places ?? [] : []).filter((p) => !p.archivedAt).sort((a, b) => a.displayOrder - b.displayOrder).map((p, i) => ({ from: p.id, id: newId(), name: p.name, displayOrder: i }))
+  const placeIds = new Map(places.map((p) => [p.from, p.id]))
+  const inSector = <S extends { sectorId: string | null; placeId?: string | null }>(s: S): S => ({ ...s, sectorId: sectorPlan.sectorOf(s.sectorId), ...("placeId" in s ? { placeId: s.placeId ? placeIds.get(s.placeId) ?? null : null } : {}) })
   // A question's poste (#984, part 3) follows when the copy has that poste, by the same name.
-  const copiedRoles = new Set([...shifts.map((s) => s.roleName), ...recurrences.flatMap((r) => r.shifts.map((s) => s.roleName))])
+  const copiedRoles = new Set([...shiftsCopied.map((s) => s.roleName), ...(copy.shifts ? duplicatedRecurrences(source, offsetDays) : []).flatMap((r) => r.shifts.map((s) => s.roleName))])
+  // The copied questions, with fresh ids known beforehand: an answer condition (#962) and a
+  // follow-up (#1016) both point to the copy of their question.
+  const sourceQuestionIds = copy.settings ? duplicatedQuestionIds(source.questions ?? [], newId) : new Map<string, string>()
+  const questions = copy.settings ? duplicatedQuestions(source.questions ?? [], copiedRoles, newId, sourceQuestionIds) : []
+  // Answer conditions of the source point to the copy of their question, or are dropped with it.
+  const remapCondition = <S extends { reservedQuestionId?: string | null; reservedAnswers?: string[] }>(s: S): S => {
+    const questionId = s.reservedQuestionId ? sourceQuestionIds.get(s.reservedQuestionId) ?? null : null
+    return { ...s, reservedQuestionId: questionId, reservedAnswers: questionId ? s.reservedAnswers ?? [] : [] }
+  }
+  const shifts = shiftsCopied.map(inSector).map(remapCondition)
+  const recurrences = (copy.shifts ? duplicatedRecurrences(source, offsetDays) : []).map((r) => ({ ...r, shifts: r.shifts.map(inSector).map(remapCondition) }))
   return {
     copy,
     offsetDays,
@@ -201,6 +307,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       reminderMessage: copy.settings ? source.reminderMessage : null,
       remindersEnabled: copy.settings ? source.remindersEnabled : true,
       requirePhone: copy.settings ? source.requirePhone : false,
+      requireEmailConfirmation: copy.settings ? source.requireEmailConfirmation ?? false : false,
       shiftRosterEnabled: copy.settings ? source.shiftRosterEnabled ?? false : source.organizationRosterDefault ?? false,
       accentColorKey: copy.settings ? source.accentColorKey : null,
       dayContactName: copy.settings ? source.dayContactName ?? null : null,
@@ -208,22 +315,51 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       cancelDeadlineDays: copy.settings ? source.cancelDeadlineDays ?? null : null,
       cancelDeadlineHours: copy.settings ? source.cancelDeadlineHours ?? null : null,
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
+      sectorsEnabled: sectorPlan.sectorsEnabled,
+      sectorsAdoptedAt: sectorPlan.sectorsAdoptedAt,
+      ...duplicatedSwaps(source, !!copy.settings),
     },
+    sectors: sectorPlan.sectors,
+    places: places.map(({ id, name, displayOrder }) => ({ id, name, displayOrder })),
     shifts,
     recurrences,
-    pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
-    questions: copy.settings ? duplicatedQuestions(source.questions ?? [], copiedRoles, newId) : [],
-    leaders: copy.leaders ? source.leaders : [],
+    // The postes a page is attached to (#1324) follow only when the copy takes the shifts: a page
+    // copied without them is a general information page, never attached to a poste the copy
+    // doesn't have. A name no copied shift carries is dropped, like a stale group-link role.
+    pages: copy.pages
+      ? source.pages.map((p) => ({
+          slug: p.slug,
+          title: p.title,
+          content: p.content,
+          displayOrder: p.displayOrder,
+          roleNames: copy.shifts ? cleanPageRoleNames(p.roleNames ?? [], [...copiedRoles]) : [],
+        }))
+      : [],
+    questions,
+    // Never the leaders of a deleted poste (#1010): they would get a link to a poste the copy
+    // doesn't have. A poste typed before its shifts exist still follows. A sector leader (#1169)
+    // follows in the copy of their sector; never one of an archived sector, which is not copied.
+    leaders: copy.leaders
+      ? leadersForCopy(source.leaders, source.deletedPostes ?? [], (source.sectors ?? []).filter((s) => !s.archivedAt).map((s) => s.id)).taken
+        .flatMap((l) => {
+          if (!l.sectorId) return [{ roleName: l.roleName, name: l.name, email: l.email }]
+          const sectorId = sectorPlan.sectorOf(l.sectorId)
+          return sectorId ? [{ roleName: null, sectorId, name: l.name, email: l.email }] : []
+        })
+      : [],
   }
 }
 
 /**
- * The copied questions (#483), with their poste when the copy has it (#984) and each follow-up
+ * The copied questions (#483), with their poste when the copy has it (#984), their scope (#1140) and each follow-up
  * (#1016) pointing to the copy of its parent; a follow-up whose parent is not copied is left out,
  * as it would be asked to everyone without the question it depends on.
  */
-function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]>, copiedRoles: Set<string>, newId: () => string) {
-  const ids = new Map(questions.filter((q) => q.id).map((q) => [q.id!, newId()]))
+function duplicatedQuestionIds(questions: NonNullable<DuplicableEvent["questions"]>, newId: () => string): Map<string, string> {
+  return new Map(questions.filter((q) => q.id).map((q) => [q.id!, newId()]))
+}
+
+function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]>, copiedRoles: Set<string>, newId: () => string, ids = duplicatedQuestionIds(questions, newId)) {
   return questions
     .filter((q) => !q.parentId || ids.has(q.parentId))
     .map((q) => ({
@@ -233,10 +369,21 @@ function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]
       roleName: duplicatedQuestionRole(q.roleName, copiedRoles),
       parentId: duplicatedParent(q.parentId, ids),
       showIfValues: q.parentId ? (q.showIfValues ?? []) : [],
+      // Who is asked (#1140), postes by name, even those the copy has no shifts for yet.
+      ...duplicatedScope(q),
     }))
 }
 
-export type DuplicateCounts = { shifts: number; pages: number; leaders: number; hasSettings: boolean }
+/**
+ * `leaders` counts the leaders a copy takes; `leadersLeftOut` those it doesn't: of a poste whose every
+ * shift is cancelled (#1010) or, `leftOutSectors` of them, of an archived sector (#1169).
+ */
+export type DuplicateCounts = { shifts: number; pages: number; leaders: number; leadersLeftOut?: number; leftOutSectors?: number; hasSettings: boolean }
+
+/** Why leaders are left out: the wording of #1010 unless some lead an archived sector (#1169). */
+const leftOutReason = (c: DuplicateCounts, many: boolean) => (c.leftOutSectors ?? 0) > 0
+  ? (many ? "de postes ou de secteurs qui ne sont plus actifs" : "d'un poste ou d'un secteur qui n'est plus actif")
+  : (many ? "de postes aux créneaux tous annulés" : "d'un poste aux créneaux tous annulés")
 
 const n = (count: number, one: string, many: string) => `${count} ${count > 1 ? many : one}`
 
@@ -249,9 +396,27 @@ export function duplicateSummary(counts: DuplicateCounts, copy: CopyChoices, off
   else lines.push("Mêmes dates que l'original.")
   if (copy.pages && counts.pages > 0) lines.push(n(counts.pages, "page personnalisée copiée.", "pages personnalisées copiées."))
   if (copy.leaders && counts.leaders > 0) lines.push(`${n(counts.leaders, "responsable de secteur repris", "responsables de secteur repris")} : chacun reçoit un email avec son lien pour la copie.`)
-  lines.push(copy.settings ? "Messages et réglages d'inscription copiés." : "Messages et réglages d'inscription remis à zéro.")
+  else if (copy.leaders && (counts.leadersLeftOut ?? 0) > 0) lines.push((counts.leftOutSectors ?? 0) > 0 ? "Aucun responsable repris : leur poste ou leur secteur n'est plus actif." : "Aucun responsable de secteur repris : tous les créneaux de leur poste sont annulés.")
+  lines.push(copy.settings ? "Messages et paramètres d'inscription copiés." : "Messages et paramètres d'inscription remis à zéro.")
   lines.push("Les inscriptions et les jalons ne sont jamais copiés. La copie est un brouillon.")
   return lines
+}
+
+/** The hint of the « Les responsables de secteur » choice: who follows, and who doesn't (#1010). */
+export function leadersChoiceHint(c: DuplicateCounts): string {
+  const out = c.leadersLeftOut ?? 0
+  const leftOut = out === 0 ? "" : out > 1 ? `${out} autres, ${leftOutReason(c, true)}, ne sont pas repris.` : `1 autre, ${leftOutReason(c, false)}, n'est pas repris.`
+  if (c.leaders > 0) return `${n(c.leaders, "responsable", "responsables")} : chacun reçoit tout de suite un email avec son lien pour la copie.${leftOut ? ` ${leftOut}` : ""}`
+  if (out > 0) return `Aucun responsable repris : ${out > 1 ? `${out} responsables, ${leftOutReason(c, true)}, ne sont pas repris.` : `1 responsable, ${leftOutReason(c, false)}, n'est pas repris.`}`
+  return "Aucun responsable sur l'événement d'origine."
+}
+
+/**
+ * What a screen reader hears when a choice or the date changes: the shifts and dates lines, and
+ * the leaders' line when there is one, so checking them is heard with who follows (#1010).
+ */
+export function summaryAnnouncement(lines: string[]): string {
+  return `Résumé mis à jour : ${[...lines.slice(0, 2), ...lines.slice(2).filter((l) => l.includes("responsable"))].join(" ")}`
 }
 
 const isRecurring = (s: DuplicableShift, source: DuplicableEvent) =>

@@ -29,22 +29,22 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Deux réglages communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Charte des bénévoles explique clairement le cadre accepté avant chaque inscription.",
+      "transcript": "Deux paramètres communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Charte des bénévoles explique clairement le cadre accepté avant chaque inscription.",
       "fallbackDurationMs": 15000
     },
     {
       "id": "timezone",
-      "transcript": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos événements. Europe Zurich tient compte de l’heure d’hiver et de l’heure d’été. Ce réglage donne la bonne référence aux rappels, aux délais des offres de liste d’attente et aux dates affichées dans le journal et les documents.",
+      "transcript": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos événements. Europe Zurich tient compte de l’heure d’hiver et de l’heure d’été. Ce paramètre donne la bonne référence aux rappels, aux délais des offres de liste d’attente et aux dates affichées dans le journal et les documents.",
       "fallbackDurationMs": 24000
     },
     {
       "id": "timezone-result",
-      "transcript": "Enregistrer le fuseau ne décale pas les heures saisies dans le planning : un créneau prévu à neuf heures reste affiché à neuf heures. Le réglage permet au système de convertir correctement cette heure locale en instant réel, y compris le dimanche d’un changement d’heure.",
+      "transcript": "Enregistrer le fuseau ne décale pas les heures saisies dans le planning : un créneau prévu à neuf heures reste affiché à neuf heures. Le paramètre permet au système de convertir correctement cette heure locale en instant réel, y compris le dimanche d’un changement d’heure.",
       "fallbackDurationMs": 21000
     },
     {
       "id": "charter",
-      "transcript": "La Charte des bénévoles présente le cadre de l’engagement. Le réglage Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la charte par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
+      "transcript": "La Charte des bénévoles présente le cadre de l’engagement. Le paramètre Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la charte par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
       "fallbackDurationMs": 38000
     },
     {
@@ -64,7 +64,7 @@
     },
     {
       "id": "result",
-      "transcript": "Le résultat est prévisible : les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre. Ces deux réglages sont communs à l’organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.",
+      "transcript": "Le résultat est prévisible : les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre. Ces deux paramètres sont communs à l’organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.",
       "fallbackDurationMs": 20000
     }
   ],

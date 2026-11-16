@@ -4,8 +4,9 @@
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
 import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
+import { fullNameOf, surnameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { registrationToken } from "../../src/lib/token-vault"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -14,7 +15,7 @@ async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(url.hostname === "localhost" && url.port === "45433" && url.pathname === "/benevoles_video")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.toString() }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.toString()) })
   const orgId = "video-errors", eventId = `${orgId}-event`
   const directory = path.resolve("videos/output/volunteer-confirmation-errors/server-preflight")
   await mkdir(directory, { recursive: true })
@@ -26,8 +27,8 @@ async function main() {
       const day = new Date("2026-11-14T00:00:00Z")
       await db.$transaction(async tx => {
         await tx.organization.create({ data: { id: orgId, slug: "formation-erreurs", name: "Formation — inscription robuste", timeZone: "Europe/Zurich", active: true, hasOrgInsurance: true, replyToEmail: "video.errors.owner@example.org" } })
-        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.errors.owner@example.org", name: "Élodie Exemple", role: "admin", isActive: true, passwordHash: source.passwordHash } })
-        await tx.volunteer.create({ data: { id: `${orgId}-aline`, organizationId: orgId, firstName: "Aline", lastName: "Exemple", email: "video.errors.aline@example.org", active: true } })
+        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.errors.owner@example.org", name: fullNameOf("Élodie"), role: "admin", isActive: true, passwordHash: source.passwordHash } })
+        await tx.volunteer.create({ data: { id: `${orgId}-aline`, organizationId: orgId, firstName: "Aline", lastName: surnameOf("Aline"), email: "video.errors.aline@example.org", active: true } })
         await tx.event.create({ data: { id: eventId, organizationId: orgId, slug: "atelier-inscription", title: "Inscription robuste — démonstration", description: "Données fictives de formation uniquement.", startDate: day, endDate: day, publicStatus: "published", isListed: false, remindersEnabled: false } })
         for (const [index, [roleName, startTime, endTime]] of [["Accueil", "10:00", "12:00"], ["Vestiaire", "11:00", "13:00"], ["Logistique", "14:00", "16:00"]].entries()) await tx.shift.create({ data: { id: `${orgId}-shift-${index}`, eventId, roleName, label: `${roleName} — démonstration`, date: day, startTime, endTime, capacity: 3, status: "open", displayOrder: index } })
         await tx.registration.create({ data: { id: `${orgId}-initial`, eventId, shiftId: `${orgId}-shift-0`, volunteerId: `${orgId}-aline`, status: "active", source: "admin_manual", ...registrationToken.data("demo-errors-aline-initial") } })
@@ -41,7 +42,7 @@ async function main() {
       await page.getByRole("button", { name: new RegExp(`, ${role}[^:]* : sélectionner`) }).click()
       await page.getByRole("button", { name: /^Continuer/ }).click()
       await page.getByLabel("Prénom *", { exact: true }).fill(firstName)
-      await page.getByLabel("Nom *", { exact: true }).fill("Exemple")
+      await page.getByLabel("Nom *", { exact: true }).fill(surnameOf(firstName))
       await page.getByLabel("Email *", { exact: true }).fill(email)
       const size = page.getByRole("radio", { name: "M", exact: true })
       if (await size.count()) await size.check()
@@ -53,10 +54,12 @@ async function main() {
     const overlapResponse = page.waitForResponse(response => response.url().endsWith("/api/public/registrations") && response.request().method() === "POST")
     await submit.click()
     const overlap = await overlapResponse
-    assert.equal(overlap.status(), 409)
+    // Without proof of the address, the answer of any sign-up (AUTHZ-01): the owner is told by email.
+    assert.equal(overlap.status(), 201)
     const overlapBody = await overlap.json()
-    assert(/chevauch|déjà.*créneau|horaire/i.test(overlapBody.error))
-    await page.locator('[role="alert"]').first().waitFor()
+    assert.equal(overlapBody.editToken, null)
+    assert(!/chevauch|Accueil/i.test(JSON.stringify(overlapBody)))
+    await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
     await page.screenshot({ path: path.join(directory, "actual-server-overlap.png"), fullPage: true })
     assert.equal(await db.registration.count({ where: { eventId } }), 1)
     await openForm("Logistique", "Nicolas", "video.errors.nicolas@example.org")
@@ -77,16 +80,16 @@ async function main() {
     const retryResponse = page.waitForResponse(response => response.url().endsWith("/api/public/registrations") && response.request().method() === "POST")
     await submit.click()
     const retry = await retryResponse
-    assert.equal(retry.status(), 409)
+    assert.equal(retry.status(), 201)
     const retryBody = await retry.json()
-    assert(/déjà inscrit/i.test(retryBody.error))
+    assert.equal(retryBody.editToken, null)
     assert.equal((await db.registration.findMany({ where: { eventId, volunteer: { email: "video.errors.nicolas@example.org" } } })).length, 1)
     await page.screenshot({ path: path.join(directory, "retry-without-duplicate.png"), fullPage: true })
     await page.goto("http://localhost:43102/admin/login")
     await page.getByLabel("Email", { exact: true }).fill("video.errors.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`http://localhost:43102/admin/events/${eventId}/registrations`)
     assert.equal(await page.getByRole("row").filter({ hasText: "video.errors.nicolas@example.org" }).count(), 1)
     await page.screenshot({ path: path.join(directory, "single-registration-result.png"), fullPage: true })

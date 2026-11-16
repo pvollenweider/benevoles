@@ -3,8 +3,8 @@
 
 /**
  * CHANGELOG.md, the only editorial source of what changed (Keep a Changelog, in French), read for
- * people rather than for developers: the public page /nouveautes (#757) and, later, the product
- * update email started from a version (#762). Pure: the caller reads the file.
+ * people rather than for developers: the public page /nouveautes (#757) and the product
+ * update email started from a version (#762, src/lib/product-update-draft.ts). Pure: the caller reads the file.
  *
  * What is public, the convention (documented in CONTRIBUTING.md, « Le CHANGELOG ») :
  * - only released versions: a `## [x.y.z] — AAAA-MM-JJ` heading. `[Unreleased]` is never shown (not

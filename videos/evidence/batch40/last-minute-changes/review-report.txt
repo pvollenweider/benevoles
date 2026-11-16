@@ -1,0 +1,15 @@
+STATUS: READY
+
+Batch 40, 2026-11-11. Two narrated takes, one re-film; no third take. Product d3f4c4ba81356b673b1952b19c4ffe99531652f5, BUILD_ID AOuqevq41Wdo1_vo9UIzS. Duration 395.480 s.
+
+Take 1 was NOT READY because the message email appeared about four seconds after its announcement. The source moved both send confirmations under the preceding confirmation sentence, then opened the actual email on its own sentence anchor. Take 2 message review passes. The phone-notification checkbox is visibly checked on its spoken clause. No narration was regenerated between these takes.
+
+Eleven fresh audiovisual reviews / 47 checkpoints. One model row-association finding is resolved with real final frames: at 13 s the registration page has just opened; Nicolas's entire Accueil du matin row is visible at 15.5 s, before the measured sentence ends at 15.829 s. Preparation belongs to Sarah, not Nicolas. Exact DB query confirms his active Accueil registration. Raw model finding, before/settled frames, sentence anchor and DB receipt are retained in review/offer-review-resolution.json. No product bug or missing registration was observed.
+
+All source and final-video chapter recognitions pass after silence-based cuts. One continuous Kore master, independently observed as one consistent voice throughout. Complete multilingual final soundtrack and VTT: zero viewer tu tokens, no stray instruction or English narration. No beta wording. Real-time subjective listening unavailable; not claimed.
+
+Validator passed. Music 14.7–19.9 LU below voice, zero music-rule issues; 41 actual clicks and 231 actual key presses have synced soft effects. Four real Mailpit intervals use body-only pixel crops, without mailbox headers or fabricated content. Eleven actual SMTP receipts are verified.
+
+Jour J is live today; the event spans today and tomorrow without a fake clock. Add Need creates the real shift before offering it to today's registered volunteer, with notification selected and the actual zero-device count stated. Offering creates no registration. Sarah's shift-specific answer page is opened directly from the actual email link, then the finder keeps her row with « A répondu non le … » and its date. Existing withdrawal, offer acceptance, manual replacement, moved time, cancellation with retained prior attendance and causal journal are real writes and checked outcomes.
+
+Source changes: manifest narration/segments/viewer, editorial script, recorder and sentence anchor repair, live-day fixture and review/SMTP guards. No src/, guide or renders.json change. Published on 2026-11-11: default preview then APPLY=1, five files uploaded.

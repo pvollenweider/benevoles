@@ -1,0 +1,30 @@
+{
+  "product": {
+    "commit": "47eeb91fb15328f523ff5b00f646752fab6a6cb5",
+    "sourceTree": "8aa70efb085e486d52bf2e8fc20c76d0963f6713",
+    "productSourceSha256": "460c3d90b9110e864be43cd3512473ddf769b911a5a64db8a99a7fff6a924dfd",
+    "buildId": "REmZmWYDIzWOi44KXOwl-",
+    "snapshot": "/tmp/benevoles-video-production.batch30",
+    "builtAt": "2026-10-22T09:18:11.291Z"
+  },
+  "nativeZoom": false,
+  "nativeScreenReader": false,
+  "synchronizedVideo": false,
+  "editorCancelRestoresFocus": true,
+  "actualReorderPersistedAndRestored": true,
+  "currentTabs": true,
+  "listView": true,
+  "roleCumulAndReorderControls": true,
+  "charterAndSwitch": true,
+  "actualSkipLink": true,
+  "friseKeyboard": {
+    "oneTabStopPerDay": true,
+    "leftRightSamePoste": true,
+    "upDownNeighbour": true,
+    "tabLeaves": true,
+    "returnsToLastBar": true,
+    "realHint": true
+  },
+  "publicKeyboardSelectionAndForm": true,
+  "actualFooterStatementLink": "https://www.benevol.app/accessibilite"
+}

@@ -19,7 +19,7 @@ describe("csv", () => {
       birthDate: new Date("2000-05-06T00:00:00Z"), availabilityPeriods: ["matin"], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 3,
     }], "Europe/Zurich")
     const line = csv.split("\r\n")[1]
-    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00;;")
+    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00;;;")
   })
 
   // #569: proof of acceptance of the volunteer charter is the member's own data too.
@@ -51,6 +51,25 @@ describe("csv", () => {
     expect(line).toContain("05/07/2026 10:00 Confirmation d'inscription : refus définitif (boîte aux lettres introuvable)")
   })
 
+  // #1139: the occurrence rows identify the member's event, day, rule and delivery state; the
+  // access-request export carries them in plain French words, with the timestamps.
+  it("members: reminder occurrence history in French, with the event day, state and timing", () => {
+    const csv = membersCsv([{
+      firstName: "Zoé", lastName: "Roy", email: "z@x.ch", phone: null, tags: [], active: true, notes: null,
+      birthDate: null, availabilityPeriods: [], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 1,
+      reminderOccurrences: [
+        { eventTitle: "Fête", localDay: "2030-06-01", status: "sent", dueAt: new Date("2030-06-01T06:00:00Z"), sentAt: new Date("2030-06-01T06:00:00Z"), ruleHours: 2 },
+        { eventTitle: "Fête", localDay: "2030-06-02", status: "failed", dueAt: new Date("2030-06-02T06:00:00Z"), sentAt: null, ruleHours: 24 },
+        { eventTitle: "Autre", localDay: "2030-06-03", status: "cancelled", dueAt: new Date("2030-06-03T06:00:00Z"), sentAt: null, ruleHours: null },
+      ],
+    }], "Europe/Zurich")
+    const line = csv.split("\r\n")[1]
+    expect(csv.split("\r\n")[0]).toContain("Rappels automatiques (historique)")
+    expect(line).toContain("01/06/2030 « Fête » : envoyé le 01/06/2030 08:00, 2 h avant")
+    expect(line).toContain("02/06/2030 « Fête » : échec de l'envoi (prévu le 02/06/2030 08:00), 24 h avant")
+    expect(line).toContain("03/06/2030 « Autre » : annulé (prévu le 03/06/2030 08:00)")
+  })
+
   it("hours by volunteer: one row per member, a total line, and neutralised formula-like names (#557, #567)", () => {
     const csv = memberHoursCsv([
       { firstName: "Zoé", lastName: "Roy", eventsCount: 2, shiftsCount: 3, plannedHours: 4.5, attestedHours: 2 },
@@ -61,6 +80,27 @@ describe("csv", () => {
     expect(lines[1]).toBe("Zoé;Roy;2;3;4.5;2")
     expect(lines[2]).toBe("'=cmd;Dupont;1;1;0;2")
     expect(lines[3]).toBe("Total;;;4;4.5;4")
+  })
+
+  it("hours by volunteer with an hourly rate (#867): estimated amounts from the minutes, rate and currency on every line", () => {
+    const rate = { cents: 2550, currency: "CHF" as const, setAt: null }
+    const csv = memberHoursCsv([
+      // 2 h 50 planned, 1 h 20 attested: amounts from the minutes (72.25 and 34.00), not from the rounded hours.
+      { firstName: "Zoé", lastName: "Roy", eventsCount: 2, shiftsCount: 3, plannedHours: 2.83, attestedHours: 1.33, plannedMinutes: 170, attestedMinutes: 80 },
+      { firstName: "Léo", lastName: "Dupont", eventsCount: 1, shiftsCount: 1, plannedHours: 1, attestedHours: 0, plannedMinutes: 60, attestedMinutes: 0 },
+    ], rate)
+    const lines = csv.split("\r\n")
+    expect(lines[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Valorisation estimée des heures prévues;Valorisation estimée des heures attestées;Taux horaire;Devise")
+    expect(lines[1]).toBe("Zoé;Roy;2;3;2.83;1.33;72.25;34;25.5;CHF")
+    expect(lines[2]).toBe("Léo;Dupont;1;1;1;0;25.5;0;25.5;CHF")
+    // The total adds up the members' amounts; the rate is repeated, never summed.
+    expect(lines[3]).toBe("Total;;;4;3.83;1.33;97.75;34;25.5;CHF")
+  })
+
+  it("hours by volunteer without a rate: the same file as before (#867)", () => {
+    const rows = [{ firstName: "Zoé", lastName: "Roy", eventsCount: 1, shiftsCount: 1, plannedHours: 1, attestedHours: 1, plannedMinutes: 60, attestedMinutes: 60 }]
+    expect(memberHoursCsv(rows, null)).toBe(memberHoursCsv(rows))
+    expect(memberHoursCsv(rows).split("\r\n")[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
   })
 
   it("activity: changes serialized as JSON", () => {

@@ -8,12 +8,13 @@ import { docImageFile, docImageFromBytes, docImageTag, type DocImage } from "@/l
 import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, type DocUnitPart, type DocVideoPlayer } from "@/lib/doc-video-references"
 import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-catalog"
-import { parseFaqSource, parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureScreenshot, type FeatureStep } from "@/lib/features-page"
+import { parseFaqSource, parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureBlockSegment, type FeatureCitation, type FeatureImage, type FeatureScreenshot, type FeatureStep } from "@/lib/features-page"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { homeSignupVideo, type HomeSignupVideo } from "@/lib/home-signup-video"
 import type { DocUnit } from "@/lib/doc-units"
 import { hideLineArrows, type BlogPost } from "@/lib/blog"
-import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
+import type { Ressource } from "@/lib/ressources"
+import { formatReleaseDate, parseChangelog, repositoryLinks, type ChangelogRelease } from "@/lib/changelog"
 import { REPOSITORY_URL, type FaqItem } from "@/lib/structured-data"
 import { createRenderCache } from "@/lib/render-cache"
 import { localizeInstanceText } from "@/lib/site"
@@ -57,7 +58,7 @@ function docImageHtml(image: MarkdownImage, index: number): string {
 }
 
 /**
- * A public content page's HTML from its Markdown source at the repo root (server only). The file's
+ * A public content page's HTML from its Markdown source, a path from the repo root (server only). The file's
  * own "# " title becomes the page's single <h1>; the remaining headings (##, ###...) keep their
  * depth, each with a stable id, the slug of its text (#568), so links can open a given section.
  * Links to other source files become site links. The Dockerfile copies every source into
@@ -109,7 +110,7 @@ function renderDocUnitPartsNow(unit: DocUnit, mediaBaseUrl?: string | null): Doc
     players.set(id, player)
     return renderDocVideoSlot(id)
   }
-  const html = renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(unit.body)), { shiftHeadings: false, headingIds: true, videoCard: videoSlot, image: docImageHtml })
+  const html = renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(unit.body)), { shiftHeadings: false, allowImages: true, headingIds: true, videoCard: videoSlot, image: docImageHtml, exampleQuotes: true })
   return splitAtDocVideoSlots(html, players)
 }
 
@@ -131,7 +132,7 @@ function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): strin
     const link = docVideoLink(id, catalog, hasRender)
     return link ? renderDocVideoCard(link) : ""
   }
-  return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml })
+  return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, allowImages: true, headingIds: true, videoCard, image: docImageHtml, exampleQuotes: true })
 }
 
 const blogPostCache = createRenderCache<string>()
@@ -142,15 +143,45 @@ const blogPostCache = createRenderCache<string>()
  * links between sources made site links.
  */
 export function renderBlogPost(post: Pick<BlogPost, "source" | "body">): string {
-  return blogPostCache(post.source, () => hideLineArrows(renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(post.body)), { shiftHeadings: false, headingIds: true, image: docImageHtml })))
+  return blogPostCache(post.source, () => hideLineArrows(renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(post.body)), { shiftHeadings: false, allowImages: true, headingIds: true, image: docImageHtml })))
+}
+
+const ressourceCache = createRenderCache<string>()
+
+/**
+ * A practical guide's HTML (#1258), the blog's rendering: headings at their written depth under the
+ * page's <h1> (the title, from the front matter), each with an id, links between sources made site links.
+ */
+/** /ressources's introduction and charter (#1258): the source's title, then its text cut before its first « ## » section. */
+export function renderRessourcesIndex(source: string): { title: string; introHtml: string; charterHtml: string } {
+  return ressourcesIndexCache(source, () => {
+    const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
+    const { title, body } = splitTitle(raw)
+    const cut = body.search(/^## /m)
+    const intro = cut === -1 ? body : body.slice(0, cut)
+    const charter = cut === -1 ? "" : body.slice(cut)
+    return { title: title ?? "Ressources", introHtml: renderPublicMarkdown(intro), charterHtml: charter ? renderPublicMarkdown(charter) : "" }
+  })
+}
+
+const ressourcesIndexCache = createRenderCache<{ title: string; introHtml: string; charterHtml: string }>()
+
+export function renderRessource(guide: Pick<Ressource, "source" | "body">): string {
+  return ressourceCache(guide.source, () => renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(guide.body)), { shiftHeadings: false, allowImages: true, headingIds: true, image: docImageHtml }))
 }
 
 /** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */
 export type FeatureStill = { src: string; width: number; height: number; alt: string }
 
+/** The text of a citation, drawn by the page with its copy button (#1323), never through the sanitizer. */
+export type RenderedCitation = FeatureCitation
+
+/** A block in reading order: its HTML, the inline players, and each citation where its directive stood. */
+export type RenderedFeaturePart = DocUnitPart | { kind: "citation"; citation: RenderedCitation }
+
 export type RenderedFeatureBlock = {
-  /** The block's HTML, cut where its videos go (the inline player in their place). */
-  parts: DocUnitPart[]
+  /** The block's HTML, cut where its videos and citations go. */
+  parts: RenderedFeaturePart[]
   actions: FeatureAction[]
   stills: FeatureStill[]
 }
@@ -172,7 +203,7 @@ export type RenderedFeaturesPage = {
  * generated (videos/renders.json) and VIDEO_MEDIA_BASE_URL; a player, a render to play. Otherwise
  * nothing, never a broken image.
  */
-export function renderFeaturesPage(mediaBaseUrl?: string | null, source = "FEATURES.md", fallbackTitle = "Fonctionnalités"): RenderedFeaturesPage {
+export function renderFeaturesPage(mediaBaseUrl?: string | null, source = "content/pages/FEATURES.md", fallbackTitle = "Fonctionnalités"): RenderedFeaturesPage {
   return featuresPageCache(`${source}\0${mediaBaseUrl ?? ""}`, () => renderFeaturesPageNow(mediaBaseUrl, source, fallbackTitle))
 }
 
@@ -200,14 +231,26 @@ function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: 
       players.set(id, player)
       return renderDocVideoSlot(id)
     }
-    const html = block.markdown ? renderEventPageMarkdown(linkSourcesToRoutes(block.markdown), { shiftHeadings: false, videoCard: videoSlot }) : ""
+    const parts: RenderedFeaturePart[] = []
+    // Citations are drawn by the page, outside the sanitized Markdown HTML: each one cuts its
+    // block where its directive stood, so the heading above it and the text below keep their order.
+    const segments: FeatureBlockSegment[] = block.segments.length > 0 ? block.segments : [{ kind: "markdown", markdown: block.markdown }]
+    for (const segment of segments) {
+      if (segment.kind === "citation") {
+        parts.push({ kind: "citation", citation: segment.citation })
+        continue
+      }
+      if (!segment.markdown) continue
+      const html = renderEventPageMarkdown(linkSourcesToRoutes(segment.markdown), { shiftHeadings: false, allowImages: true, videoCard: videoSlot })
+      parts.push(...splitAtDocVideoSlots(html, players))
+    }
     return {
-      parts: splitAtDocVideoSlots(html, players),
+      parts,
       actions: block.actions,
       stills: [...block.images.map(still), ...block.screenshots.map(screenshot)].filter((s): s is FeatureStill => s !== null),
     }
   }
-  const markdownHtml = (markdown: string) => renderEventPageMarkdown(linkSourcesToRoutes(markdown), { shiftHeadings: false })
+  const markdownHtml = (markdown: string) => renderEventPageMarkdown(linkSourcesToRoutes(markdown), { shiftHeadings: false, allowImages: true })
   return {
     title: page.title ?? fallbackTitle,
     intro: render(page.intro),
@@ -242,7 +285,7 @@ export function renderFaqSource(source: string): RenderedQuestion[] {
     return parsed.questions.map((q) => ({
       question: q.question,
       id: q.id,
-      html: renderEventPageMarkdown(linkSourcesToRoutes(q.answer), { shiftHeadings: false }),
+      html: renderEventPageMarkdown(linkSourcesToRoutes(q.answer), { shiftHeadings: false, allowImages: true }),
       text: plainAnswer(q.answer),
     }))
   })
@@ -272,7 +315,7 @@ export function renderChangelog(): RenderedRelease[] {
 
 function renderChangelogNow(): RenderedRelease[] {
   const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "CHANGELOG.md"), "utf-8")
-  const html = (markdown: string) => (markdown ? renderEventPageMarkdown(repositoryLinks(linkSourcesToRoutes(markdown), REPOSITORY_URL), { shiftHeadings: false }) : "")
+  const html = (markdown: string) => (markdown ? renderEventPageMarkdown(repositoryLinks(linkSourcesToRoutes(markdown), REPOSITORY_URL), { shiftHeadings: false, allowImages: true }) : "")
   return parseChangelog(raw).map((r) => ({
     version: r.version,
     date: r.date,
@@ -280,4 +323,16 @@ function renderChangelogNow(): RenderedRelease[] {
     introHtml: html(r.intro),
     sections: r.sections.map((s) => ({ title: s.title, html: html(s.markdown) })),
   }))
+}
+
+const changelogReleasesCache = createRenderCache<ChangelogRelease[]>()
+
+/**
+ * CHANGELOG.md parsed as /nouveautes reads it (released versions, public sections, no internal
+ * bullet), not rendered: what a product update email starts from (#762, src/lib/product-update-draft.ts).
+ */
+export function changelogReleases(): ChangelogRelease[] {
+  return changelogReleasesCache("CHANGELOG.md", () =>
+    parseChangelog(fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "CHANGELOG.md"), "utf-8")),
+  )
 }

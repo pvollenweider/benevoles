@@ -1,0 +1,147 @@
+{
+  "slug": "beta-access",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-10T19:50:53.690Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "058f35c463cf3b1e6b47596201d0ab6f78ab3015",
+    "sourceTree": "f878bdfea985e4cf39353d2e205a004b253ae915",
+    "productSourceSha256": "68f61fda53b49926a671a94b7488368ec30981aa1b0e3c945a858b0e3d36bfba",
+    "buildId": "rLDQoLz1bzvkYVRMNsVYi",
+    "snapshot": "/tmp/benevoles-video-production.Batch39",
+    "builtAt": "2026-11-10T19:46:13.768Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "BETA_ACCESS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 25059
+    },
+    {
+      "kind": "click",
+      "atMs": 25862
+    },
+    {
+      "kind": "click",
+      "atMs": 35474
+    },
+    {
+      "kind": "click",
+      "atMs": 36258
+    },
+    {
+      "kind": "click",
+      "atMs": 63757
+    }
+  ],
+  "cues": [
+    {
+      "id": "beta-welcome",
+      "startMs": 1172,
+      "endMs": 22077
+    },
+    {
+      "id": "beta-operator",
+      "startMs": 24336,
+      "endMs": 48668
+    },
+    {
+      "id": "beta-owner",
+      "startMs": 52120,
+      "endMs": 78423
+    },
+    {
+      "id": "beta-event",
+      "startMs": 80684,
+      "endMs": 95883
+    },
+    {
+      "id": "beta-close",
+      "startMs": 98147,
+      "endMs": 120173
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "beta-operator",
+      "phrase": "ouvrons Fonctions bêta depuis le menu Super Admin",
+      "startMs": 236,
+      "endMs": 3739,
+      "cueMs": 24573
+    },
+    {
+      "segmentId": "beta-operator",
+      "phrase": "Cochons Échanges de créneaux",
+      "startMs": 10645,
+      "endMs": 12435,
+      "cueMs": 34983
+    },
+    {
+      "segmentId": "beta-operator",
+      "phrase": "Pour l'instant, aucune organisation n'y participe",
+      "startMs": 18870,
+      "endMs": 21176,
+      "cueMs": 43207
+    },
+    {
+      "segmentId": "beta-owner",
+      "phrase": "Dans Paramètres, une nouvelle carte Fonctions bêta est apparue",
+      "startMs": 4553,
+      "endMs": 8251,
+      "cueMs": 56672
+    },
+    {
+      "segmentId": "beta-owner",
+      "phrase": "Elle liste ce que la bêta permet d'essayer",
+      "startMs": 8444,
+      "endMs": 10460,
+      "cueMs": 60565
+    },
+    {
+      "segmentId": "beta-owner",
+      "phrase": "Activons l'interrupteur",
+      "startMs": 11163,
+      "endMs": 14410,
+      "cueMs": 63284
+    },
+    {
+      "segmentId": "beta-event",
+      "phrase": "Ouvrons les informations du Festival de Montvert",
+      "startMs": 4861,
+      "endMs": 7449,
+      "cueMs": 85547
+    },
+    {
+      "segmentId": "beta-event",
+      "phrase": "La carte Échanges de créneaux propose maintenant son option",
+      "startMs": 7784,
+      "endMs": 12335,
+      "cueMs": 88470
+    },
+    {
+      "segmentId": "beta-close",
+      "phrase": "Revenons chez l'opérateur",
+      "startMs": 0,
+      "endMs": 1605,
+      "cueMs": 98191
+    },
+    {
+      "segmentId": "beta-close",
+      "phrase": "Si l'opérateur ferme une fonction",
+      "startMs": 7910,
+      "endMs": 11766,
+      "cueMs": 106058
+    }
+  ]
+}

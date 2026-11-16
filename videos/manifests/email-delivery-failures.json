@@ -24,7 +24,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Vous avez envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regardez ce qui s'est passé. Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison. Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les réglages. Connectons-nous maintenant avec Marc, notre organisateur de démonstration. Il retrouve le suivi et peut traiter un échec, mais les réglages restent réservés au propriétaire. Le message de la page le précise. Nous allons poursuivre avec ce compte organisateur, sur des personnes et des emails fictifs.",
+      "transcript": "Vous avez envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regardez ce qui s'est passé. Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison. Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les paramètres. Connectons-nous maintenant avec Marc, notre organisateur de démonstration. Il retrouve le suivi et peut traiter un échec, mais les paramètres restent réservés au propriétaire. Le message de la page le précise. Nous allons poursuivre avec ce compte organisateur, sur des personnes et des emails fictifs.",
       "fallbackDurationMs": 65000
     },
     {
@@ -76,7 +76,7 @@
     "remember": [
       "« Envoyé » signifie que le serveur d'envoi a accepté l'email, pas qu'il a été lu.",
       "« Renvoyer » réutilise l'ancien destinataire : il ne tient pas compte d'une fiche corrigée.",
-      "Les organisateurs suivent les envois, mais seuls les propriétaires changent les réglages des emails.",
+      "Les organisateurs suivent les envois, mais seuls les propriétaires changent les paramètres des emails.",
       "Le suivi ne couvre que les derniers jours : les emails envoyés sont effacés chaque nuit, les échecs gardés trente jours."
     ]
   }

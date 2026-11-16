@@ -5,6 +5,8 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import DuplicateEventForm from "@/components/admin/DuplicateEventForm"
+import { deletedPosteNames, leadersForCopy } from "@/lib/leader-postes"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Dupliquer l'événement" }
@@ -19,15 +21,22 @@ export default async function DuplicateEventPage({ params }: { params: Promise<{
     where: { id },
     select: {
       id: true, title: true, startDate: true, publicInstructions: true, confirmationMessage: true, reminderMessage: true,
-      _count: { select: { shifts: { where: { status: { not: "cancelled" } } }, pages: true, sectorLeaders: true } },
+      _count: { select: { shifts: { where: { status: { not: "cancelled" } } }, pages: true } },
+      // A copy leaves out the leaders of a deleted poste, every shift cancelled (#1010): the count says so.
+      shifts: { select: { roleName: true, status: true }, distinct: ["roleName", "status"] },
+      sectorLeaders: { select: { roleName: true, sectorId: true } },
+      sectors: { where: { archivedAt: null }, select: { id: true } },
     },
   })
   if (!event) notFound()
+  const copied = leadersForCopy(event.sectorLeaders, deletedPosteNames(event.shifts), event.sectors.map((s) => s.id))
+  const leadersTaken = copied.taken.length
 
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Dupliquer l&apos;événement</h1>
+        <HelpLink route="/admin/events/[id]/duplicate" />
         <p className="text-sm text-gray-700 mt-1">Repartez de « {event.title} » pour une nouvelle édition : choisissez les dates et ce qui suit. Les inscriptions ne sont jamais copiées.</p>
       </div>
       <DuplicateEventForm
@@ -37,7 +46,9 @@ export default async function DuplicateEventPage({ params }: { params: Promise<{
         counts={{
           shifts: event._count.shifts,
           pages: event._count.pages,
-          leaders: event._count.sectorLeaders,
+          leaders: leadersTaken,
+          leadersLeftOut: event.sectorLeaders.length - leadersTaken,
+          leftOutSectors: copied.leftOutSectors,
           hasSettings: Boolean(event.publicInstructions || event.confirmationMessage || event.reminderMessage),
         }}
       />

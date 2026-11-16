@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:07.932Z",
+  "revalidatedAt": "2026-11-01T08:03:07.932Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-welcome",
+      "audioSha256": "1661d75b849e380573328ef9bf2267bf18cea8bf2b294c832fe78871622f62b6",
+      "recognized": "La proposition d'affectation, en bêta, prépare un planning en brouillon selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun. Rien n'est publié et aucun bénévole n'est prévenu sans votre décision.",
+      "expected": "La proposition d'affectations, en bêta, prépare un planning en brouillon selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun. Rien n'est publié, et aucun bénévole n'est prévenu, sans votre décision.",
+      "wordErrorRate": 0.02564102564102564,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

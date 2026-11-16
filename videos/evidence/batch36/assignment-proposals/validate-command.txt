@@ -1,0 +1,4 @@
+> benevoles@2.5.0 video:validate
+> node --import tsx videos/tools/validate.ts ASSIGNMENT_PROPOSALS
+
+✓ ASSIGNMENT_PROPOSALS: 11 scene durations aligned, one continuous Kore voice; narration content checked; music 12.5–19.1 LU under the voice

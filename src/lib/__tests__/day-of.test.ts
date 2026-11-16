@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   dayOfBoard,
+  dayOfBoardUrl,
   dayOfDateRange,
   filterGroups,
   groupByStart,
@@ -239,5 +240,13 @@ describe("presenceRequest", () => {
       body: { action: "check_in", registrationIds: ["r1"] },
     })
     expect(presenceRequest("evt-1", "r1", false).body).toEqual({ action: "undo_check_in", registrationIds: ["r1"] })
+  })
+})
+
+describe("dayOfBoardUrl (#1170)", () => {
+  it("reads the whole board without a sector, and keeps the page's sector otherwise", () => {
+    expect(dayOfBoardUrl("evt-1")).toBe("/api/admin/events/evt-1/day-of")
+    expect(dayOfBoardUrl("evt-1", "")).toBe("/api/admin/events/evt-1/day-of")
+    expect(dayOfBoardUrl("evt 1", "autres")).toBe("/api/admin/events/evt%201/day-of?secteur=autres")
   })
 })

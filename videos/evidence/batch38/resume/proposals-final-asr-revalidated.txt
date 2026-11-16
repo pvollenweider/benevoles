@@ -1,0 +1,11 @@
+ap-welcome: 2.6% word difference — existing independent evidence, identical audio/text
+ap-drafts: 2.4% word difference — existing independent evidence, identical audio/text
+ap-scope: 0.0% word difference — existing independent evidence, identical audio/text
+ap-targets: 0.0% word difference — existing independent evidence, identical audio/text
+ap-wishes: 3.8% word difference — existing independent evidence, identical audio/text
+ap-launch: 7.4% word difference — existing independent evidence, identical audio/text
+ap-result: 10.7% word difference — existing independent evidence, identical audio/text
+ap-load: 5.0% word difference — existing independent evidence, identical audio/text
+ap-lock: 0.0% word difference — existing independent evidence, identical audio/text
+ap-adjust: 10.5% word difference — existing independent evidence, identical audio/text
+ap-publish: 0.0% word difference — existing independent evidence, identical audio/text

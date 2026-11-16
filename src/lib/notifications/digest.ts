@@ -22,6 +22,9 @@ export async function queueDigestItem<Item>(input: {
   groupKey: string
   recipient: Recipient
   organizationId: string | null
+  /** The member the email is for (#598), when it goes to a volunteer: the address check before
+   * delivery (src/lib/outbox-recipient-check.ts) and the member cleanups read it off the payload. */
+  volunteerId?: string | null
   base: Record<string, unknown>
   item: Item
   /** Stable per item: repeated while its email is pending (retry, double click), it is added once.
@@ -40,6 +43,7 @@ export async function queueDigestItem<Item>(input: {
   const sendAt = new Date(input.now.getTime() + input.delayMs)
   const due = input.delayMs <= 0
   const prefix = `${input.groupKey}:`
+  const member = input.volunteerId ? { volunteerId: input.volunteerId } : {}
   return prisma.$transaction(async (tx) => {
     // Two items of one group at the same moment must find each other's row, not start two.
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${input.groupKey}))`
@@ -62,24 +66,29 @@ export async function queueDigestItem<Item>(input: {
       } else {
         next = [...items, { key: input.itemKey, value: input.item, ...(merge ? { mergeKey: merge.key } : {}) }]
       }
+      // Only while the row is still waiting: a delivery may claim it after the read above (the cron
+      // does not take the group's lock), and then sends what it read. Claimed meanwhile, this item
+      // starts a row of its own below rather than being written into an email already leaving.
+      const stillPending = { id: pending.id, status: "pending", attempts: 0 }
       // Nothing left to say (a change undone before the email left): the email is dropped.
       if (next.length === 0) {
-        await tx.notificationOutbox.delete({ where: { id: pending.id } })
-        return null
+        const { count } = await tx.notificationOutbox.deleteMany({ where: stillPending })
+        if (count > 0) return null
+      } else {
+        const { count } = await tx.notificationOutbox.updateMany({
+          where: stillPending,
+          data: {
+            payload: sealPayload({ kind: input.kind, recipient: input.recipient, ...member, organizationId: input.organizationId, data: { ...input.base, items: next } }),
+            nextAttemptAt: sendAt,
+          },
+        })
+        if (count > 0) return due ? pending.id : null
       }
-      await tx.notificationOutbox.update({
-        where: { id: pending.id },
-        data: {
-          payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: next } }),
-          nextAttemptAt: sendAt,
-        },
-      })
-      return due ? pending.id : null
     }
     // An item already sent in an earlier email keeps its key: queued again, it is skipped.
     await tx.notificationOutbox.createMany({
       data: [{
-        payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: [{ key: input.itemKey, value: input.item, ...(input.merge ? { mergeKey: input.merge.key } : {}) }] } }),
+        payload: sealPayload({ kind: input.kind, recipient: input.recipient, ...member, organizationId: input.organizationId, data: { ...input.base, items: [{ key: input.itemKey, value: input.item, ...(input.merge ? { mergeKey: input.merge.key } : {}) }] } }),
         dedupeKey: `${prefix}${input.itemKey}`,
         organizationId: input.organizationId,
         nextAttemptAt: sendAt,

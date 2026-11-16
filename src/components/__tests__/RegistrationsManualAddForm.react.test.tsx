@@ -6,7 +6,9 @@ import "@testing-library/jest-dom/vitest"
 import { useState } from "react"
 import { render, screen, fireEvent, cleanup, waitFor, within } from "@testing-library/react"
 import ManualAddForm from "../admin/registrations/ManualAddForm"
+import { activePolicy, buildPolicy } from "@/lib/workload-policy"
 import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "../admin/registrations/types"
+import { NETWORK_ERROR } from "@/lib/use-submit"
 
 // Manual addition of a registration by the organizer, on its own (#402, #465, #466).
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrationCount: 1 }
@@ -17,6 +19,9 @@ function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () =
 }
 
 const combo = () => screen.getByRole("combobox", { name: "Créneau" })
+
+/** The alerts that say something: the search's alert is mounted empty from the start. */
+const filledAlerts = () => screen.queryAllByRole("alert").filter((a) => a.textContent?.trim())
 
 describe("ManualAddForm", () => {
   const fetchMock = vi.fn()
@@ -84,7 +89,7 @@ describe("ManualAddForm", () => {
 
     fireEvent.submit(screen.getByRole("button", { name: "Ajouter" }).closest("form")!)
     expect(fetchMock).not.toHaveBeenCalled()
-    expect(screen.queryByRole("alert")).toBeNull()
+    expect(filledAlerts()).toEqual([])
     expect(combo()).toHaveAttribute("aria-invalid", "true")
     const error = screen.getByText("Sélectionnez un créneau.")
     expect(combo().getAttribute("aria-describedby")).toBe(error.id)
@@ -115,17 +120,34 @@ describe("ManualAddForm", () => {
     expect(combo()).not.toHaveAttribute("aria-invalid")
   })
 
+  // #1272: a failed request used to leave the button on « Ajout en cours… » with nothing said.
+  it("ends the busy state and says so when the request fails on the network", async () => {
+    fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"))
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent(NETWORK_ERROR))
+    expect(screen.getByRole("button", { name: "Ajouter" })).toBeEnabled()
+  })
+
+  it("ends the busy state when the answer is not JSON (a proxy error page during a deploy)", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 502, json: async () => { throw new SyntaxError("Unexpected token <") } })
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent("Erreur."))
+    expect(screen.getByRole("button", { name: "Ajouter" })).toBeEnabled()
+  })
+
   it("offers to go past the role limit, only for the form that was refused", async () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "role_limit", error: "Limite atteinte pour ce poste." }) })
     render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
-    const force = await screen.findByRole("button", { name: "Ajouter quand même" })
-    expect(screen.getByRole("alert")).toHaveTextContent("Limite atteinte pour ce poste.")
+    const force = await screen.findByRole("button", { name: "Ajouter malgré la limite" })
+    expect(filledAlerts()[0]).toHaveTextContent("Limite atteinte pour ce poste.")
     expect(force).toHaveAccessibleDescription("Limite atteinte pour ce poste.")
 
     fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "C" } })
-    expect(screen.queryByRole("button", { name: "Ajouter quand même" })).toBeNull()
-    expect(screen.getByRole("alert")).toHaveTextContent("Le formulaire a changé : validez à nouveau.")
+    expect(screen.queryByRole("button", { name: "Ajouter malgré la limite" })).toBeNull()
+    expect(filledAlerts()[0]).toHaveTextContent("Le formulaire a changé : validez à nouveau.")
   })
 
   // #914: a member already in the list is placed without retyping, email or not.
@@ -174,9 +196,9 @@ describe("ManualAddForm", () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ error: "Cette personne est déjà inscrite sur ce créneau." }) })
     render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
-    expect(await screen.findByRole("alert")).toHaveTextContent("Cette personne est déjà inscrite sur ce créneau.")
+    await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent("Cette personne est déjà inscrite sur ce créneau."))
     fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "C" } })
-    expect(screen.queryByRole("alert")).toBeNull()
+    expect(filledAlerts()).toEqual([])
   })
 
   // #916: what the volunteer will receive is said before submitting, and describes the button.
@@ -322,5 +344,76 @@ describe("RegistrationsManager — focus and announcement around the manual add"
     expect(region?.textContent).toBe(result)
     expect(screen.getByText("1 inscription affichée")).not.toHaveAttribute("role")
     expect(document.querySelectorAll("[role=status], [aria-live]")).toHaveLength(1)
+  })
+})
+
+// #1171: on a protected event, the addition the server will refuse is said in red, not as a warning.
+describe("ManualAddForm — workload protection", () => {
+  afterEach(cleanup)
+  it("says the addition will be refused, from the person's confirmed places and requests", () => {
+    const policy = activePolicy(buildPolicy({ serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }, "Europe/Zurich"), { startDate: "2020-01-01", endDate: "2040-12-31" })
+    const night = { ...shift, id: "n1", date: "2026-07-05", startTime: "01:00", endTime: "03:00" }
+    const held = {
+      id: "r1", status: "requested", source: "public_form", comment: null, createdAt: "2026-06-01T00:00:00.000Z",
+      volunteer: { id: "v1", firstName: "Lou", lastName: "Martin", email: "lou@example.org", phone: null },
+      shift: { ...shift, id: "d1", startTime: "14:00", endTime: "20:00" },
+    } as unknown as Registration
+    function Protected() {
+      const [form, setForm] = useState<AddFormValues>({ ...EMPTY_ADD_FORM, volunteerId: "v1", email: "lou@example.org", firstName: "Lou", lastName: "Martin", shiftId: "n1" })
+      return <ManualAddForm eventId="evt-1" shifts={[night]} registrations={[held]} timeZone="Europe/Zurich" workloadMode={{ kind: "policy", policy }} form={form} onFormChange={setForm} onAdded={() => {}} onCancel={() => {}} />
+    }
+    render(<Protected />)
+    const region = document.getElementById("add-workload")!
+    expect(region).toHaveTextContent("L'ajout sera refusé")
+    expect(region).toHaveTextContent("laissent 5 h entre elles")
+    expect(region).not.toHaveTextContent("L'ajout reste possible")
+  })
+
+  // A full or closed shift (AUTHZ-15): the server's refusal opens a confirmation dialog.
+  describe("on a full or closed shift", () => {
+    const fetchMock = vi.fn()
+    beforeEach(() => { fetchMock.mockReset(); vi.stubGlobal("fetch", fetchMock) })
+    afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+    const need = { shiftId: "s1", key: "o1|manual_add|new:chloé roy|s1|open|3|3", closed: false, full: true, markedFull: false, occupied: 3, capacity: 3, roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00" }
+    const created = { ok: true, status: 201, json: async () => ({ registrations: [{ id: "r9", status: "active", source: "admin_manual", comment: null, createdAt: "2026-06-01T00:00:00.000Z", volunteer: { id: "v9", firstName: "Chloé", lastName: "Roy", email: null, phone: null }, shift: { ...shift, date: "2026-07-04T00:00:00.000Z" } }] }) }
+    const fill = () => {
+      fireEvent.change(screen.getByRole("textbox", { name: "Prénom" }), { target: { value: "Chloé" } })
+      fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "Roy" } })
+      fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    }
+
+    it("asks in a dialog, then adds with the confirmation's key", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_override", error: "x", shifts: [need] }) }).mockResolvedValueOnce(created)
+      const onAdded = vi.fn()
+      render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} onAdded={onAdded} />)
+      fill()
+      const dialog = await screen.findByRole("dialog", { name: "Créneau complet" })
+      expect(dialog).toHaveAccessibleDescription(/^Ce créneau est complet\W+3 places sur 3 sont prises\. Ajouter Chloé quand même\W+$/)
+      expect(within(dialog).getByText("Il y aura 4 personnes pour 3 places.")).toBeInTheDocument()
+      // Nothing said as an error: the dialog asks.
+      expect(filledAlerts()).toHaveLength(0)
+      fireEvent.click(within(dialog).getByRole("button", { name: "Ajouter quand même" }))
+      await waitFor(() => expect(onAdded).toHaveBeenCalled())
+      expect(JSON.parse(fetchMock.mock.calls[1][1].body).shiftOverride).toEqual([need.key])
+    })
+
+    it("Cancel closes the dialog, adds nothing and puts focus back on « Ajouter »", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_override", error: "x", shifts: [need] }) })
+      render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
+      fill()
+      const dialog = await screen.findByRole("dialog")
+      fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
+      expect(screen.queryByRole("dialog")).toBeNull()
+      expect(screen.getByRole("button", { name: "Ajouter" })).toHaveFocus()
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+    })
+
+    it("a cancelled shift is a refusal in the form's alert", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_cancelled", error: "Le créneau « Bar » est annulé\u00a0: rien n'a été fait. Rouvrez d'abord le créneau." }) })
+      render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
+      fill()
+      await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent("Rouvrez d'abord le créneau"))
+      expect(screen.queryByRole("dialog")).toBeNull()
+    })
   })
 })

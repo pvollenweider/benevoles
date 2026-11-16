@@ -49,11 +49,11 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
 
 ## Les documents à relire
 
-1. **Accord de traitement (art. 28 RGPD / art. 9 nLPD)** : [ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md),
+1. **Accord de traitement (art. 28 RGPD / art. 9 nLPD)** : [ACCORD-SOUS-TRAITANCE.md](../../content/legal/ACCORD-SOUS-TRAITANCE.md),
    publié le 2026-10-06 sur `/legal/sous-traitance` sans relecture préalable (décision de
    l'opérateur, voir [README.md](README.md)) ; les choix faits pour le publier (délais, audits,
    responsabilité, droit applicable) sont à relire.
-2. **Liste publique des sous-traitants** : [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md),
+2. **Liste publique des sous-traitants** : [SOUS-TRAITANTS.md](../../content/legal/SOUS-TRAITANTS.md),
    publiée le 2026-10-06 sur `/legal/sous-traitants`.
 3. **Variantes de la convention de bénévolat** : [convention-benevoles-variantes-brouillon.md](convention-benevoles-variantes-brouillon.md),
    un texte neutre générique plus des notes par pays (Suisse, France, Belgique, « autre pays »),
@@ -76,7 +76,7 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
    [sous-traitants.md](sous-traitants.md) appelle-t-elle d'autres clauses de transfert (services de
    notification des navigateurs par exemple) ?
 4. **Page publique des sous-traitants** : le contenu de
-   [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md)
+   [SOUS-TRAITANTS.md](../../content/legal/SOUS-TRAITANTS.md)
    suffit-il à l'obligation de transparence, et la ligne Infomaniak peut-elle être publiée avant
    la confirmation de son accord de traitement ?
 5. **Délai de notification des violations** (article 11 de l'accord publié, sans délai

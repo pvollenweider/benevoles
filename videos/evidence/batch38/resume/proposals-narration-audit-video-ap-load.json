@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:08.592Z",
+  "revalidatedAt": "2026-11-01T08:03:08.593Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-load",
+      "audioSha256": "0c32a6deae55d0dfafe23b2ab1989e1ae33950061f9e7627c491fc3145c6ff5b",
+      "recognized": "La charge par personne compare les heures prévues à l'objectif de chacun. Noah a ses six heures. Dans affectation proposée, chaque ligne dit pourquoi. Emma est au bar vendredi, disponible sur tout le créneau, c'est son poste souhaité.",
+      "expected": "La charge par personne compare les heures prévues à l'objectif de chacun : Noah a ses six heures. Dans Affectations proposées, chaque ligne dit pourquoi. Emma est au bar vendredi : disponible sur tout le créneau, c'est son poste souhaité.",
+      "wordErrorRate": 0.05,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

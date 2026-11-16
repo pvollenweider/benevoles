@@ -42,7 +42,8 @@ describe("the frozen anchors of the old guides", () => {
       expect(unitSlugs.has(slug), target!).toBe(true)
       if (fragment) expect(docUnitHeadingIds(units.find((u) => u.slug === slug)!), target!).toContain(fragment)
     }
-  })
+    // Renders every unit of the guide: about 5 s on a loaded CI runner, as help-links.test.ts.
+  }, 20_000)
 
   it("leave no anchor of the volunteer guide on its page: it is entirely split, each anchor claimed by a unit", () => {
     const onPage = guideIds("benevole")

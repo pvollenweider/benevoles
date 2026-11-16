@@ -5,14 +5,14 @@
  * The default organization's organizer was seeded as org-admin@localhost, which the videos showed.
  * Renames that account to VIDEO_ADMIN_EMAIL in the isolated video database, once; idempotent.
  */
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { LEGACY_VIDEO_ADMIN_EMAIL, VIDEO_ADMIN_EMAIL } from "../lib/public-hosts"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.pathname !== "/benevoles_video") throw new Error("Only the isolated local video database can be changed")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   try {
     const legacy = await db.adminUser.findUnique({ where: { email: LEGACY_VIDEO_ADMIN_EMAIL }, select: { id: true, organizationId: true } })
     const current = await db.adminUser.findUnique({ where: { email: VIDEO_ADMIN_EMAIL }, select: { id: true } })

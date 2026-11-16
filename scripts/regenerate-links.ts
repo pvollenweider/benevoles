@@ -16,7 +16,7 @@
  */
 
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { countLinksInScope, regenerateLinks, type LinkScope } from "../src/lib/link-regeneration"
 import { logOrgEvent, SYSTEM_ACTOR } from "../src/lib/org-log"
 import { logEvent } from "../src/lib/event-log"
@@ -59,7 +59,7 @@ async function main() {
     process.exit(1)
   }
 
-  const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
 
   try {
     let scope: LinkScope
@@ -85,7 +85,7 @@ async function main() {
     if (!args.yes) {
       const counts = await countLinksInScope(prisma, scope)
       console.log(`Dry run for ${logLabel} — nothing was changed.`)
-      console.log(`Would regenerate: ${counts.registrations} registration link(s), ${counts.leaders} leader link(s), ${counts.invites} invite link(s).`)
+      console.log(`Would regenerate: ${counts.registrations} registration link(s), ${counts.leaders} leader link(s), ${counts.invites} invite link(s), ${counts.availabilityLinks} availability link(s).`)
       if (args.resend) console.log("--resend has no effect on a dry run.")
       console.log("Re-run with --yes to apply.")
       return
@@ -93,11 +93,12 @@ async function main() {
 
     const result = await regenerateLinks(prisma, scope, { resend: args.resend })
     console.log(`Regenerated links for ${logLabel}.`)
-    console.log(`Registrations: ${result.counts.registrations}, leaders: ${result.counts.leaders}, invites: ${result.counts.invites}.`)
+    console.log(`Registrations: ${result.counts.registrations}, leaders: ${result.counts.leaders}, invites: ${result.counts.invites}, availability links: ${result.counts.availabilityLinks}.`)
     if (result.resend) {
       console.log(`Resend — registrations: sent ${result.resend.registrations.sent}, failed ${result.resend.registrations.failed}, skipped ${result.resend.registrations.skipped}.`)
       console.log(`Resend — leaders: sent ${result.resend.leaders.sent}, failed ${result.resend.leaders.failed}, skipped ${result.resend.leaders.skipped}.`)
       console.log(`Resend — invites: sent ${result.resend.invites.sent}, failed ${result.resend.invites.failed}, skipped ${result.resend.invites.skipped}.`)
+      console.log(`Resend — availability links: sent ${result.resend.availabilityLinks.sent}, failed ${result.resend.availabilityLinks.failed}, skipped ${result.resend.availabilityLinks.skipped}.`)
     }
 
     // Traceable without revealing tokens or addresses: counts only.
@@ -105,6 +106,7 @@ async function main() {
       registrations: { from: null, to: result.counts.registrations },
       leaders: { from: null, to: result.counts.leaders },
       invites: { from: null, to: result.counts.invites },
+      availabilityLinks: { from: null, to: result.counts.availabilityLinks },
     }
     if ("organizationId" in scope) {
       await logOrgEvent({

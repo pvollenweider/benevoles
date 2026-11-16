@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-16T16:26:55.370Z",
+  "checkedAt": "2026-11-11T12:39:44.093Z",
   "firstPreview": {
     "create": 35,
     "update": 0,
@@ -37,5 +37,6 @@
     "update": 0,
     "skip": 39,
     "error": 0
-  }
+  },
+  "bulkCleanup": true
 }

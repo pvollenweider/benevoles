@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
-import { COMMITTED_STATUSES } from "@/lib/registration-capacity"
+import { NOTIFIED_COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -10,10 +10,16 @@ import { cancelShift } from "@/lib/shift-cancel"
 import { COLOR_OPTIONS } from "@/lib/roles"
 import { capacityPlan, roleMinimumPlan } from "@/lib/shift-quick-edit"
 import { parseTagList } from "@/lib/role-reservation"
+import { answerConditionSettingProblem } from "@/lib/role-answer"
 import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
 import { leaderRenamePlan } from "@/lib/sector-leader-rename"
 import { isCivilDate } from "@/lib/civil-date"
-import { labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
+import { groupShiftWrites, labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
+import { removeRoleFromScope, renameRoleInScope } from "@/lib/question-scope"
+import { removeRoleFromPage, renameRoleInPage } from "@/lib/event-page-postes"
+import { assignPosteSector } from "@/lib/sector-adoption"
+import { endSwapsAfter, endSwapsIn } from "@/lib/shift-swap-server"
+import { checkScheduleEdit, scheduleEditRefusalBody, ScheduleEditRefusalError } from "@/lib/workload-guard"
 
 /**
  * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
@@ -33,6 +39,43 @@ async function updateGroupLinks(
   for (const l of links) await db.eventGroupLink.update({ where: { id: l.id }, data: { roleNames: next(l.roleNames) } })
 }
 
+/**
+ * Information pages attached to postes (#1324) name them too: a rename follows, a deletion removes
+ * the name, exactly like a group link. The attachment is never public (src/lib/public-event.ts).
+ */
+async function updatePagePostes(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: any,
+  eventId: string,
+  role: string,
+  next: (roleNames: string[]) => string[],
+) {
+  const pages: { id: string; roleNames: string[] }[] = await db.eventPage.findMany({
+    where: { eventId, roleNames: { has: role } },
+    select: { id: true, roleNames: true },
+  })
+  for (const page of pages) await db.eventPage.update({ where: { id: page.id }, data: { roleNames: next(page.roleNames) } })
+}
+
+/**
+ * Questions asked to some postes only (#1140) name them too, archived ones included (so a question
+ * put back keeps a meaningful scope): carried the same way. Their answers are attached to the
+ * question, never to the poste, so they stay whatever happens to it.
+ */
+async function updateQuestionScopes(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: any,
+  eventId: string,
+  role: string,
+  next: (roleNames: string[]) => string[],
+) {
+  const questions: { id: string; displayRoleNames: string[] }[] = await db.eventQuestion.findMany({
+    where: { eventId, displayRoleNames: { has: role } },
+    select: { id: true, displayRoleNames: true },
+  })
+  for (const q of questions) await db.eventQuestion.update({ where: { id: q.id }, data: { displayRoleNames: next(q.displayRoleNames) } })
+}
+
 // A "role" only exists implicitly, as the roleName shared by a group of shifts on one event —
 // there's no separate Role table. Renaming, recoloring or deleting one therefore means updating
 // or cancelling every shift in this event that currently carries that roleName (#218, #219).
@@ -50,15 +93,30 @@ const updateSchema = z.object({
   maxPerVolunteer: z.number().int().min(1).max(100).nullable().optional(),
   /** Tags one of which a member needs for this role (#470); [] opens it to everyone. */
   reservedTags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
+  /** Question whose answer reserves the role (#962); null clears the condition. */
+  reservedQuestionId: z.string().trim().min(1).max(64).nullable().optional(),
+  /** Accepted answers among the question's choices (#962), values as stored. */
+  reservedAnswers: z.array(z.string().trim().min(1).max(200)).max(20).optional(),
   /** « Cumulable avec un autre créneau » (#986): the role's shifts may overlap any other shift of a volunteer. */
   overlapAllowed: z.boolean().optional(),
+  /** « Attribué par l'organisation uniquement » (#1145): never offered publicly, people added by hand. */
+  assignedOnly: z.boolean().optional(),
+  /** Sector of the poste (#1147): an active sector of the event, or null for « Autres postes ». */
+  sectorId: z.string().min(1).nullable().optional(),
+  /**
+   * « Repas sur le pouce possible » (#1171, lot 2) on every shift of the poste at once: a shortcut,
+   * each shift keeps its own value afterwards. Judged for the people holding them, like new hours.
+   */
+  mealOnTheGo: z.boolean().optional(),
   /** Label copied onto the live shifts, with the places and minimum (#1017). */
   label: z.string().trim().min(1).max(200).optional(),
   /** Day the places, minimum and label apply to (#1017, « ce jour »); absent: the whole event. */
   date: z.string().refine(isCivilDate).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined, { message: "Rien à modifier." })
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.reservedQuestionId !== undefined || d.reservedAnswers !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined || d.sectorId !== undefined || d.mealOnTheGo !== undefined, { message: "Rien à modifier." })
+  // The question and its accepted answers are one setting: send both, or neither.
+  .refine((d) => (d.reservedQuestionId === undefined) === (d.reservedAnswers === undefined), { message: "La question et ses réponses vont ensemble." })
   // A day only narrows the places, minimum and label: the poste's own settings are event-wide.
-  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
+  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.reservedQuestionId === undefined && d.reservedAnswers === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined && d.sectorId === undefined && d.mealOnTheGo === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -66,15 +124,18 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { db, organizationId } = guard
 
   const { id, roleName } = await params
-  const decodedRole = decodeURIComponent(roleName)
+  // Next already decodes the segment: decoding it again throws on a name with « % » (« Calcul 10% »).
+  const decodedRole = roleName
 
   const body = await req.json()
   const parsed = updateSchema.safeParse(body)
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, label, date } = parsed.data
+  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, assignedOnly, sectorId, mealOnTheGo, label, date } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
+  const reservedQuestionId = parsed.data.reservedQuestionId
+  const reservedAnswers = parsed.data.reservedAnswers
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -83,7 +144,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, label: true, date: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, label: true, date: true, startTime: true, endTime: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, overlapAllowed: true, assignedOnly: true, sectorId: true, mealOnTheGo: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -107,6 +168,51 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const actor = adminActor(guard.session)
 
+  if (mealOnTheGo !== undefined) {
+    // First, so that a refusal changes nothing. Every shift of the poste whose value changes, in one
+    // transaction with the workload check of everyone holding one (#1171, lot 2).
+    const changing = shifts.filter((sh) => sh.mealOnTheGo !== mealOnTheGo)
+    if (changing.length > 0) {
+      try {
+        await db.$transaction(async (tx) => {
+          const live = changing.filter((sh) => sh.status !== "cancelled")
+          const refusals = await checkScheduleEdit(tx, id, live.map((sh) => ({ id: sh.id, date: sh.date, startTime: sh.startTime, endTime: sh.endTime, mealOnTheGo })))
+          if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals, mealOnTheGo ? "avec ce changement" : "sans repas sur le pouce sur les créneaux de ce poste")
+          await tx.shift.updateMany({ where: { id: { in: changing.map((sh) => sh.id) }, eventId: id }, data: { mealOnTheGo } })
+        })
+      } catch (e) {
+        if (e instanceof ScheduleEditRefusalError) return NextResponse.json(scheduleEditRefusalBody(e.refusals, e.cause), { status: 409 })
+        throw e
+      }
+      for (const s of changing) {
+        await logEvent({
+          eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+          changes: { mealOnTheGo: { from: s.mealOnTheGo, to: mealOnTheGo } },
+        })
+      }
+    }
+  }
+
+  if (sectorId !== undefined) {
+    // Before any other write, so a refused sector changes nothing. Every shift of the poste,
+    // cancelled ones too, so it keeps one value (#1147), like the colour; a later rename moves them
+    // with it. The sector is checked under its row lock (never an archived one or another
+    // event's), only for an event that adopted sectors. Volunteers see nothing of it.
+    const assigned = await db.$transaction((tx) => assignPosteSector(tx, organizationId, id, decodedRole, sectorId, actor))
+    if (!assigned.ok) return NextResponse.json({ error: assigned.error }, { status: assigned.status })
+    const moved = shifts.filter((sh) => sh.sectorId !== sectorId)
+    if (moved.length > 0) {
+      const ids = [...new Set(moved.map((s) => s.sectorId).filter((x): x is string => !!x))]
+      const names = new Map((await db.sector.findMany({ where: { eventId: id, id: { in: ids } }, select: { id: true, name: true } })).map((x) => [x.id, x.name]))
+      for (const s of moved) {
+        await logEvent({
+          eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+          changes: { sector: { from: s.sectorId ? names.get(s.sectorId) ?? null : null, to: assigned.value.name } },
+        })
+      }
+    }
+  }
+
   if (newName !== undefined && newName !== decodedRole) {
     const clash = await db.shift.findFirst({ where: { eventId: id, roleName: newName, event: { organizationId } } })
     if (clash) {
@@ -114,7 +220,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     // Everything matched to the poste by its name moves in one transaction: its shifts, the share
-    // links that show it (#947), the questions attached to it (#984, part 3) and its sector
+    // links that show it (#947), the questions attached to it (#984, part 3) or asked to it (#1140) and its sector
     // leaders (#1001), so its leaders keep their list, its withdrawals and its answer changes.
     const droppedLeaders = await db.$transaction(async (tx) => {
       await tx.shift.updateMany({
@@ -128,8 +234,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         where: { eventId: id, roleName: newName, label: decodedRole, event: { organizationId } },
         data: { label: newName },
       })
+      // A renamed poste is a material change of its shifts (#1174 E13): their swap requests end.
+      await endSwapsIn(tx, { shiftIds: shifts.map((s) => s.id) }, "shift_changed", actor)
       await updateGroupLinks(tx, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
+      await updatePagePostes(tx, id, decodedRole, (names) => renameRoleInPage(names, decodedRole, newName))
       await tx.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
+      await updateQuestionScopes(tx, id, decodedRole, (names) => renameRoleInScope(names, decodedRole, newName))
       const [moving, atTarget] = await Promise.all([
         tx.sectorLeader.findMany({ where: { eventId: id, roleName: decodedRole }, select: { id: true, email: true } }),
         tx.sectorLeader.findMany({ where: { eventId: id, roleName: newName }, select: { id: true, email: true, roleName: true } }),
@@ -182,12 +292,45 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
   }
 
+  if (reservedQuestionId !== undefined) {
+    // A choice question asked to every volunteer (#962), with at least one of its choices accepted.
+    // Checked before any write so a refused condition changes nothing.
+    const questions = await db.eventQuestion.findMany({
+      where: { eventId: id, archivedAt: null },
+      select: { id: true, label: true, type: true, options: true, parentId: true, displayScope: true },
+    })
+    const problem = answerConditionSettingProblem({ questionId: reservedQuestionId, answers: reservedAnswers ?? [] }, questions)
+    if (problem) return NextResponse.json({ error: problem }, { status: 400 })
+    const answers = reservedQuestionId ? reservedAnswers ?? [] : []
+    const changed = shifts.filter((sh) => (sh.reservedQuestionId ?? null) !== reservedQuestionId || (sh.reservedAnswers ?? []).join("|") !== answers.join("|"))
+    // Every shift of the role, cancelled ones too, so it keeps one value (#962).
+    await db.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { reservedQuestionId, reservedAnswers: answers },
+    })
+    // A new condition ends the swap requests of the poste (#1174 E13), like the tags.
+    if (changed.length > 0) {
+      await endSwapsAfter(db, { shiftIds: shifts.map((s) => s.id) }, "shift_changed", actor)
+      const labels = new Map(questions.map((q) => [q.id, q.label]))
+      for (const s of changed) {
+        await logEvent({
+          eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+          changes: { reservedAnswer: { from: s.reservedQuestionId ? `${labels.get(s.reservedQuestionId) ?? s.reservedQuestionId} : ${(s.reservedAnswers ?? []).join(", ")}` : null, to: reservedQuestionId ? `${labels.get(reservedQuestionId) ?? reservedQuestionId} : ${answers.join(", ")}` : null } },
+        })
+      }
+    }
+  }
+
   if (reservedTags !== undefined) {
     // Every shift of the role, so it keeps one value (#470). Registrations already made stay.
     await db.shift.updateMany({
       where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
       data: { reservedTags },
     })
+    // New requirements end the swap requests of the poste (#1174 E13).
+    if (shifts.some((sh) => sh.reservedTags.join("|") !== reservedTags.join("|"))) {
+      await endSwapsAfter(db, { shiftIds: shifts.map((s) => s.id) }, "shift_changed", actor)
+    }
     for (const s of shifts.filter((sh) => sh.reservedTags.join("|") !== reservedTags.join("|"))) {
       await logEvent({
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
@@ -211,26 +354,40 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
   }
 
+  if (assignedOnly !== undefined) {
+    // Every shift of the role, cancelled ones too, so the role keeps one value (#1145). The public
+    // page and the sign-up read it from then on; registrations already made stay.
+    await db.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { assignedOnly },
+    })
+    // A poste now assigned by the organisation only no longer swaps between volunteers (#1145, #1174).
+    if (assignedOnly && shifts.some((sh) => !sh.assignedOnly)) {
+      await endSwapsAfter(db, { shiftIds: shifts.map((s) => s.id) }, "assigned_only", actor)
+    }
+    for (const s of shifts.filter((sh) => sh.assignedOnly !== assignedOnly)) {
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: { assignedOnly: { from: s.assignedOnly, to: assignedOnly } },
+      })
+    }
+  }
+
   let keptHigher = 0
   let capacityUpdated = 0
   if (capacity !== undefined || minVolunteers !== undefined || label !== undefined) {
     keptHigher = plan.keptHigher.length
     capacityUpdated = plan.updates.length
-    // Places, minimum and label of a shift in one update (the database checks minimum ≤ places per
-    // row), every shift in one transaction.
+    // Places, minimum and label of a shift in one write (the database checks minimum ≤ places per
+    // row), every shift in one transaction. Shifts receiving the same values share one updateMany:
+    // one update per shift outran the 5 s transaction on a poste with a shift every evening.
     const minAfter = new Map(minPlan.updates.map((u) => [u.id, u.minVolunteers]))
     const labelAfter = new Map(labelUpdates(live, label).map((u) => [u.id, u.label]))
     const touched = live.filter((s) => capacityAfter.has(s.id) || minAfter.has(s.id) || labelAfter.has(s.id))
+    const writes = groupShiftWrites(touched.map((s) => s.id), capacityAfter, minAfter, labelAfter)
     await db.$transaction(async (tx) => {
-      for (const s of touched) {
-        await tx.shift.update({
-          where: { id: s.id },
-          data: {
-            ...(capacityAfter.has(s.id) ? { capacity: capacityAfter.get(s.id) } : {}),
-            ...(minAfter.has(s.id) ? { minVolunteers: minAfter.get(s.id) } : {}),
-            ...(labelAfter.has(s.id) ? { label: labelAfter.get(s.id) } : {}),
-          },
-        })
+      for (const w of writes) {
+        await tx.shift.updateMany({ where: { id: { in: w.ids }, eventId: id }, data: w.data })
       }
     })
     for (const s of touched) {
@@ -256,7 +413,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const { db, organizationId } = guard
 
   const { id, roleName } = await params
-  const decodedRole = decodeURIComponent(roleName)
+  const decodedRole = roleName
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -267,7 +424,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     where: { eventId: id, roleName: decodedRole, status: { not: "cancelled" }, event: { organizationId } },
     include: {
       event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
-      registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
+      registrations: { where: { status: { in: [...NOTIFIED_COMMITTED_STATUSES] } }, include: { volunteer: true } },
     },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
@@ -283,10 +440,14 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     unpublished ||= result.unpublished
   }
   await updateGroupLinks(db, id, decodedRole, (names) => removeRoleFromLink(names, decodedRole))
+  await updatePagePostes(db, id, decodedRole, (names) => removeRoleFromPage(names, decodedRole))
   // Questions attached to the role (#984, part 3) go back to the organisers, as a deleted reference would.
   // Its sector leaders stay: deleting a poste cancels its shifts, which keep their name, and the
   // leaders stay attached to it until removed from « Responsables de secteur » (#1001).
   await db.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: null } })
+  // A question asked to that poste (#1140) is no longer asked for it; asked to that poste only, it
+  // is then asked to nobody (the editor says so) rather than to everyone. Its answers stay.
+  await updateQuestionScopes(db, id, decodedRole, (names) => removeRoleFromScope(names, decodedRole))
 
   return NextResponse.json({ success: true, cancelledShifts: shifts.length, cancelledRegistrations, notified, unpublished })
 }

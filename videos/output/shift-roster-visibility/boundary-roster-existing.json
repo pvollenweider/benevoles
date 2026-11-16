@@ -1,12 +1,12 @@
 {
   "anchor": "Bruno avait accepté l’ancien texte, limité aux bénévoles confirmés. Sur sa",
-  "windowStart": 142.20499999999998,
+  "windowStart": 155.68999999999997,
   "result": {
     "found": true,
-    "startSeconds": 18.9,
-    "wordsHeard": "Bruno avait accepté l’ancien texte, limité aux bénévoles confirmés. Sur sa"
+    "startSeconds": 16.72,
+    "wordsHeard": "Bruno avait accepté l’ancien texte"
   },
-  "onset": 161.105,
-  "proposedCut": 161.04481249999998,
+  "onset": 172.40999999999997,
+  "proposedCut": 171.883271,
   "note": "Proposal only; recut then independently audit before capture"
 }

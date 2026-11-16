@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:19:31.010Z",
+  "videoSha256": "819011bf3a95717efc2c92dc32721a4c7974fe5f11f7b8097c4f78e0e98ccf62",
+  "promptSha256": "db4e46596f754ba1f4e14e6e2e07fe228410c8da3b3020ef87aa0c529c1e7e52",
+  "clipSha256": "efe179f1804f5f06024594cd61e208eb4ad012ae922d852e5fafa895cd7638be",
+  "scene": "beta-welcome",
+  "review": {
+    "heardOpening": "Certaines fonctions avancées s'essaient d'abord",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Certaines fonctions avancées s'essaient d'abord en bêta",
+        "visibleSeconds": 0,
+        "visible": "Titre superposé 'Fonctions bêta : ouvrir et essayer une fonction avancée' sur la vue Admin Organisations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "L'opérateur de la plateforme ouvre une fonction à l'essai",
+        "visibleSeconds": 3.2,
+        "visible": "Disparition de l'encart de titre, vue d'ensemble de la page Organisations sous le rôle Super Admin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Voyons les deux premières étapes.",
+        "visibleSeconds": 18.2,
+        "visible": "Page Organisations stable, prête pour le début des manipulations",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

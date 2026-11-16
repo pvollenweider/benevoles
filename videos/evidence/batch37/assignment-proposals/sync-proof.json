@@ -1,0 +1,74 @@
+{
+  "ap-welcome": {
+    "durationMs": 12707,
+    "clicksAtSeconds": []
+  },
+  "ap-drafts": {
+    "durationMs": 18058,
+    "clicksAtSeconds": [
+      5.301,
+      15.688
+    ]
+  },
+  "ap-scope": {
+    "durationMs": 13400,
+    "clicksAtSeconds": []
+  },
+  "ap-targets": {
+    "durationMs": 13684,
+    "clicksAtSeconds": [
+      6.063,
+      12.612
+    ]
+  },
+  "ap-wishes": {
+    "durationMs": 9822,
+    "clicksAtSeconds": [
+      0.876,
+      3.794
+    ]
+  },
+  "ap-launch": {
+    "durationMs": 11785,
+    "clicksAtSeconds": [
+      4.94
+    ]
+  },
+  "ap-result": {
+    "durationMs": 17459,
+    "clicksAtSeconds": []
+  },
+  "ap-load": {
+    "durationMs": 14830,
+    "clicksAtSeconds": [
+      6.631
+    ]
+  },
+  "ap-lock": {
+    "durationMs": 12202,
+    "clicksAtSeconds": [
+      0.531,
+      5.22,
+      7.553,
+      8.954
+    ]
+  },
+  "ap-adjust": {
+    "durationMs": 16106,
+    "clicksAtSeconds": [
+      3.305,
+      5.971,
+      7.554,
+      8.371,
+      12.721,
+      14.204
+    ]
+  },
+  "ap-publish": {
+    "durationMs": 13886,
+    "clicksAtSeconds": [
+      1.086,
+      7.935
+    ]
+  }
+}

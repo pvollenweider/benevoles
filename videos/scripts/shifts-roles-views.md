@@ -31,7 +31,7 @@ choisir la vue qui aide à construire ou à contrôler le planning.
 
 ## Révision du 2026-10-15 — lot 22-3
 
-Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les réglages du poste sont hérités par les nouveaux créneaux.
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les paramètres du poste sont hérités par les nouveaux créneaux.
 
 Narration conservée : aucun libellé cité ni comportement décrit ne contredit l’écran actuel. Les WAV référencés par les anciennes métadonnées sont absents de cette copie ; ne pas prétendre avoir réutilisé un audio disponible.
 

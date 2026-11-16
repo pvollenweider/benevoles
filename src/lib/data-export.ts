@@ -6,6 +6,7 @@
  * (UTF-8 with BOM, semicolons, CRLF: opens as is in Excel), JSON for the full archive of an
  * event. Pure: the routes read through the org-scoped client and call these.
  */
+import { csvAmount, hoursValuation, type VolunteerHourRate } from "./volunteer-hour-value"
 
 /**
  * A text cell that a spreadsheet would read as a formula (#567): it starts with = + - @, possibly
@@ -32,6 +33,20 @@ export function csvDocument(header: string[], rows: unknown[][]): string {
 const when = (d: Date | string | null | undefined, timeZone: string) =>
   d ? new Date(d).toLocaleString("fr-FR", { timeZone, day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : ""
 const day = (d: Date | string | null | undefined) => (d ? new Date(d).toISOString().slice(0, 10) : "")
+/** A stored local day ("YYYY-MM-DD") as a French date, without shifting it through a time zone. */
+const localDayLabel = (value: string) => {
+  const [year, month, date] = value.split("-")
+  return year && month && date ? `${date}/${month}/${year}` : value
+}
+
+/** Plain French words for a reminder occurrence's state (#1139); the export never shows a raw value. */
+const REMINDER_OCCURRENCE_LABEL: Record<string, string> = {
+  pending: "en attente",
+  queued: "en file d'envoi",
+  sent: "envoyé",
+  cancelled: "annulé",
+  failed: "échec de l'envoi",
+}
 
 export type MemberExportRow = {
   firstName: string
@@ -58,17 +73,39 @@ export type MemberExportRow = {
    * (no volunteer consent was given there) or they have none.
    */
   charterAcceptedAt?: Date | string | null
+  /**
+   * The member's own custom reminder history (#1139): one entry per event, day and rule, with its
+   * state and timing. This export answers access requests, so the occurrence rows are included
+   * rather than left in the database: they identify the member's event and day.
+   */
+  reminderOccurrences?: {
+    eventTitle: string
+    localDay: string
+    status: string
+    dueAt: Date | string
+    sentAt: Date | string | null
+    /** The rule's delay in hours (a day is 24), or null when the stored unit is unknown. */
+    ruleHours: number | null
+  }[]
 }
 
 /** Every member of the organization, one row each; the notes are the admins' own, exported too. */
 export function membersCsv(rows: MemberExportRow[], timeZone: string): string {
   return csvDocument(
-    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis", "Derniers envois (résultat)", "Convention acceptée (dernière fois)"],
+    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis", "Derniers envois (résultat)", "Convention acceptée (dernière fois)", "Rappels automatiques (historique)"],
     rows.map((r) => [
       r.firstName, r.lastName, r.email, r.phone, r.tags.join(", "), r.active ? "oui" : "non", day(r.birthDate),
       r.availabilityPeriods.join(", "), r.availabilityNote, r.notes, r.registrationCount, when(r.createdAt, timeZone),
       (r.deliveryOutcomes ?? []).map((o) => `${when(o.date, timeZone)} ${o.kind} : ${o.outcome}${o.reason ? ` (${o.reason})` : ""}`).join(" ; "),
       when(r.charterAcceptedAt, timeZone),
+      (r.reminderOccurrences ?? []).map((o) => {
+        const status = REMINDER_OCCURRENCE_LABEL[o.status] ?? o.status
+        const timing = o.status === "sent"
+          ? o.sentAt ? ` le ${when(o.sentAt, timeZone)}` : ""
+          : o.dueAt ? ` (prévu le ${when(o.dueAt, timeZone)})` : ""
+        const delay = o.ruleHours === null ? "" : `, ${o.ruleHours} h avant`
+        return `${localDayLabel(o.localDay)} « ${o.eventTitle} » : ${status}${timing}${delay}`
+      }).join(" ; "),
     ]),
   )
 }
@@ -78,26 +115,50 @@ export type MemberHoursExportRow = {
   lastName: string
   eventsCount: number
   shiftsCount: number
-  /** Decimal hours, already split by volunteer-hours.ts's splitMinutes (planned ≠ attested, never overlapping). */
+  /** Decimal hours from volunteer-hours.ts's splitMinutes: planned = every counted hour, attested =
+   * the recorded-presence subset of it (attested ≤ planned). */
   plannedHours: number
   attestedHours: number
+  /** The same totals in minutes, for the valuation (#867): amounts come from the minutes, never from
+   * the rounded hours. Falls back to the hours when absent. */
+  plannedMinutes?: number
+  attestedMinutes?: number
 }
 
 /**
  * Hours by volunteer for a period (#557): one line per member with at least one confirmed shift in
  * the period (or every member, when the caller asked to include those without one — `rows` already
  * reflects that choice), plus a total line for the organization.
+ *
+ * With the organisation's hourly rate (#867), four more columns: the estimated value of the planned
+ * and of the attested hours (each member's amount rounded to the cent, the total is the sum of those
+ * amounts, so the file adds up), then the rate and its currency, repeated on every line so a line
+ * read alone still says how it was valued. Without a rate, the file is exactly as before.
  */
-export function memberHoursCsv(rows: MemberHoursExportRow[]): string {
+export function memberHoursCsv(rows: MemberHoursExportRow[], rate?: VolunteerHourRate | null): string {
   const total = rows.reduce(
     (acc, r) => ({ shiftsCount: acc.shiftsCount + r.shiftsCount, plannedHours: acc.plannedHours + r.plannedHours, attestedHours: acc.attestedHours + r.attestedHours }),
     { shiftsCount: 0, plannedHours: 0, attestedHours: 0 },
   )
+  const header = ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"]
+  const lines: unknown[][] = rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours])
+  const totalLine: unknown[] = ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours]
+  if (!rate) return csvDocument(header, [...lines, totalLine])
+
+  const values = rows.map((r) =>
+    hoursValuation({ plannedMinutes: r.plannedMinutes ?? Math.round(r.plannedHours * 60), attestedMinutes: r.attestedMinutes ?? Math.round(r.attestedHours * 60) }, rate),
+  )
+  const rateCells = [csvAmount(rate.cents), rate.currency]
   return csvDocument(
-    ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"],
+    [...header, "Valorisation estimée des heures prévues", "Valorisation estimée des heures attestées", "Taux horaire", "Devise"],
     [
-      ...rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours]),
-      ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours],
+      ...lines.map((line, i) => [...line, csvAmount(values[i].plannedCents), csvAmount(values[i].attestedCents), ...rateCells]),
+      [
+        ...totalLine,
+        csvAmount(values.reduce((n, v) => n + v.plannedCents, 0)),
+        csvAmount(values.reduce((n, v) => n + v.attestedCents, 0)),
+        ...rateCells,
+      ],
     ],
   )
 }
@@ -131,7 +192,8 @@ export type ArchiveInput = {
   pages: Record<string, unknown>[]
   /** Custom sign-up questions (#483) with their answers, archived ones included. */
   questions?: Record<string, unknown>[]
-  sectorLeaders: { roleName: string; name: string; email: string; createdAt: Date | string }[]
+  /** A poste (`roleName`) or, since #1169, a sector (`sector`, its name). */
+  sectorLeaders: { roleName: string | null; sector?: { name: string } | null; name: string; email: string; createdAt: Date | string }[]
   milestones: Record<string, unknown>[]
   logs: Record<string, unknown>[]
   exportedAt: Date

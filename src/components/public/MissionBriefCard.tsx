@@ -4,6 +4,8 @@
 import { fmtRange } from "@/lib/gantt-utils"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, missionBrief, orgContactHref, type BriefEvent, type BriefShift } from "@/lib/mission-brief"
 import { ORG_CONTACT_LABEL, sectorLeaderLabel } from "@/lib/shift-info"
+import ReadBeforeLinks from "@/components/ReadBeforeLinks"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import PhoneLink from "@/components/PhoneLink"
 import MapLink from "@/components/MapLink"
 import EmergencyNote from "@/components/EmergencyNote"
@@ -73,6 +75,8 @@ export default function MissionBriefCard({ shift, event, eventTitle, contactEmai
           </div>
         )}
       </dl>
+      {/* The pages attached to the next shift's poste (#1324): after the <dl>, not inside it. */}
+      <ReadBeforeLinks pages={brief.readBefore} label={READ_BEFORE_LABEL} />
       {brief.pages.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Infos de l&apos;événement</h3>

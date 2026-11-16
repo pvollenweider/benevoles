@@ -114,3 +114,35 @@ describe("parseCsv — « Étiquettes » column", () => {
     }
   })
 })
+
+describe("parseCsv — one valid address per member", () => {
+  const rowFor = (emailCell: string) => parseCsv(`prenom,nom,email\nAlice,Martin,${emailCell}`)
+
+  it.each([
+    ["a list separated by a comma", '"alice@example.com, eve@example.net"'],
+    ["a list separated by a semicolon", '"alice@example.com;eve@example.net"'],
+    ["two addresses on two lines (CRLF)", '"alice@example.com\r\neve@example.net"'],
+    ["a space inside", '"alice martin@example.com"'],
+    ["extra headers after the address", '"alice@example.com?bcc=eve@example.net"'],
+    ["a display name", '"Alice <alice@example.com>"'],
+    ["no domain", "alice@"],
+  ])("refuses %s as a line error", (_label, cell) => {
+    const result = rowFor(cell)
+    expect(result.rows).toHaveLength(0)
+    expect(result.errors).toHaveLength(1)
+    expect(result.errors[0]).toMatchObject({ line: 2 })
+    expect(result.errors[0].reason).toMatch(/Email invalide/)
+  })
+
+  it("accepts an address with spaces or a line break around it, normalized", () => {
+    const result = parseCsv('prenom,nom,email\r\nAlice,Martin,"  Alice@Example.COM \r\n"\r\nBob,Dupont, bob@example.com ')
+    expect(result.errors).toHaveLength(0)
+    expect(result.rows.map((r) => r.email)).toEqual(["alice@example.com", "bob@example.com"])
+  })
+
+  it("still accepts a member without an address", () => {
+    const result = rowFor("")
+    expect(result.errors).toHaveLength(0)
+    expect(result.rows[0].email).toBeUndefined()
+  })
+})

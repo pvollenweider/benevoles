@@ -1,0 +1,41 @@
+{
+  "videoSha256": "eaa9a44b7afc91cfbde9b6abc9ef27bb8d8fb00fac628ed746ea94225a53891f",
+  "resolved": [
+    {
+      "scene": "wl-limits",
+      "automatedFinding": "Fields absent until18s;20h/3h allegedly not typed",
+      "resolution": "Direct final MP4 frames at25% and85% show6h/30min/8h and20h/3h respectively; automated absence claims contradicted by observed pixels.",
+      "frames": [
+        "full-frames/wl-limits-25.png",
+        "full-frames/wl-limits-85.png"
+      ]
+    },
+    {
+      "scene": "wl-meal-travel",
+      "automatedFinding": "Full-chapter ASR ending mismatch",
+      "resolution": "Independent7second ending ASR of actual final MP4 with gemini-3.5-flash hears: La carte signale qu’un créneau n’a pas de lieu et que son trajet n’est pas vérifié. Le lien Choisir les lieux dans Créneau y ramène. Créneau/Créneaux are homophones. No ending omitted; source master unchanged.",
+      "report": "meal-travel-ending-final-asr.json",
+      "audioSha256": "e7cdce8108fc3efdf4a0ad6ebca1cf1c99431fb018cbc26ddc2b589861fe0069"
+    },
+    {
+      "scene": "wl-registrations",
+      "resolution": "Both complete Sarah rows in frame during actual narration; whole-row bounds asserted in recorder.",
+      "frames": [
+        "full-frames/wl-registrations-25.png",
+        "full-frames/wl-registrations-60.png",
+        "full-frames/wl-registrations-85.png"
+      ]
+    },
+    {
+      "scene": "wl-result",
+      "automatedFinding": "Conclusion allegedly requires replay of setup/actions",
+      "resolution": "The announced current result is visible: active card heading and 1 programme à revoir. Subsequent imperatives recap the earlier demonstrated workflow; the conclusion does not promise to replay each action. Stable relevant screen is allowed by the review rules.",
+      "frames": [
+        "full-frames/wl-result-25.png",
+        "full-frames/wl-result-60.png",
+        "full-frames/wl-result-85.png"
+      ]
+    }
+  ],
+  "note": "All automated findings reviewed against actual final frames and independent audio evidence; original reports retained."
+}

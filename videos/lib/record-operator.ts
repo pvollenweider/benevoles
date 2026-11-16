@@ -7,8 +7,9 @@ import path from "node:path"
 import { createHash } from "node:crypto"
 import { loadManifest } from "./manifest"
 import type { Cue } from "./sentence-timing"
+import { fullNameOf } from "./fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 const subject = "Formation — préparer votre prochain événement"
@@ -20,7 +21,7 @@ const password = "Formation-Operator-2026!"
 function database() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video_operator")
-  return new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  return new PrismaClient({ adapter: pgAdapter(url.href) })
 }
 
 export async function validateOperatorNarration(directory: string) {
@@ -114,12 +115,12 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await at(.22); await page.getByRole("row").filter({ hasText: "Formation Opérateur Réserve" }).scrollIntoViewIfNeeded()
       await at(.61); await tap(page, page.getByRole("link", { name: "Formation Opérateur Parc", exact: true }))
       await page.getByRole("heading", { name: "Formation Opérateur Parc", exact: true }).waitFor()
-      await at(.78); await page.getByRole("heading", { name: "Administrateurs", exact: true }).scrollIntoViewIfNeeded()
+      await at(.78); await page.getByRole("heading", { name: "Organisateurs", exact: true }).scrollIntoViewIfNeeded()
     })
     await scene("create", async at => {
       await at(.04); await go("/super-admin/organizations/new")
       await at("Renseignons son nom"); await write(page.getByLabel(/^Nom de l'organisation/), "Formation Opérateur Jetable")
-      await write(page.getByLabel(/^Nom complet/), "Lou Exemple")
+      await write(page.getByLabel(/^Nom complet/), fullNameOf("Lou"))
       await write(page.getByLabel(/^Adresse email/), ownerEmail)
       await at("Créons l’espace")
       const response = page.waitForResponse(res => res.url().endsWith("/api/super-admin/organizations") && res.request().method() === "POST")
@@ -155,8 +156,9 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await write(page.getByLabel("Email", { exact: true }), ownerEmail, 10)
       await write(page.getByLabel("Mot de passe", { exact: true }), password, 10)
       await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
-      await page.waitForURL(/\/admin\/events/); ownerCookies = await page.context().cookies()
-      await page.getByRole("heading", { name: "Événements", exact: true }).waitFor()
+      // Login lands on the dashboard (#1098): the new organisation's « Premiers pas » and zeros.
+      await page.waitForURL(/\/admin\/dashboard/); ownerCookies = await page.context().cookies()
+      await page.getByRole("heading", { name: "Tableau de bord", exact: true }).waitFor()
       await settle(page)
       assert.equal((await page.request.get(`${base}/api/admin/events`)).status(), 200)
       await at("Revenons au détail côté opérateur"); await session(setup.platformCookies); await go(`/super-admin/organizations/${initialSlug}`)
@@ -265,7 +267,10 @@ export async function recordOperator(options: { page: Page; base: string; direct
       const unsubscribe = await page.request.get(`${base}${lastMail.localPath}`, { maxRedirects: 0 })
       assert.equal(unsubscribe.status(), 307)
       const redirect = new URL(unsubscribe.headers().location)
+      assert.equal(redirect.pathname, "/product-updates/unsubscribe")
       await session(null); await go(`${redirect.pathname}${redirect.search}`)
+      await tap(page, page.getByRole("button", { name: "Me désabonner", exact: true }))
+      await page.waitForURL(/\/product-updates\/unsubscribed\?ok=1/)
       assert.equal((await db.adminUser.findUniqueOrThrow({ where: { email: ownerEmail } })).receiveProductUpdates, false)
       checks.actualBroadcastEmails = delivered.map(mail => mail.ID); checks.actualUnsubscribe = true
     })
@@ -290,7 +295,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await page.getByLabel("Email", { exact: true }).fill("video.operator.a.owner@example.org")
       await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
-      await page.waitForURL(/\/admin\/events/)
+      await page.waitForURL(/\/admin\/dashboard/)
       assert.equal((await page.request.get(`${base}/api/super-admin/organizations`)).status(), 403)
       await at("L’opérateur, lui"); await session(setup.platformCookies); await go("/super-admin/organizations")
       checks.ordinaryOwnerPlatformAccessRefused = true

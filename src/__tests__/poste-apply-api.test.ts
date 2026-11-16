@@ -21,7 +21,8 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName]: label and scope", () =>
   beforeEach(() => {
     vi.clearAllMocks()
     update.mockResolvedValue({})
-    transaction.mockImplementation((fn: (tx: unknown) => unknown) => fn({ shift: { update } }))
+    // Shifts receiving the same values are written by one updateMany (Sentry BENEVOLAPP-13).
+    transaction.mockImplementation((fn: (tx: unknown) => unknown) => fn({ shift: { updateMany: update } }))
     requireOrgSessionMock.mockResolvedValue({
       db: {
         event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
@@ -46,7 +47,7 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName]: label and scope", () =>
     expect(res.status).toBe(200)
     expect(await res.json()).toMatchObject({ shifts: 2, days: 1, keptHigher: 1 })
     expect(transaction).toHaveBeenCalledTimes(1)
-    expect(update.mock.calls.map((c) => c[0])).toEqual([{ where: { id: "a" }, data: { capacity: 3, label: "Bar soir" } }])
+    expect(update.mock.calls.map((c) => c[0])).toEqual([{ where: { id: { in: ["a"] }, eventId: "evt-a" }, data: { capacity: 3, label: "Bar soir" } }])
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({
       action: "shift.updated", entityId: "a",
       changes: { capacity: { from: 2, to: 3 }, label: { from: "Bar", to: "Bar soir" } },
@@ -59,9 +60,9 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName]: label and scope", () =>
     expect(res.status).toBe(200)
     expect(await res.json()).toMatchObject({ shifts: 3, days: 2, keptHigher: 1 })
     expect(update.mock.calls.map((c) => c[0])).toEqual([
-      { where: { id: "a" }, data: { capacity: 3, minVolunteers: 2, label: "Relève" } },
-      { where: { id: "b" }, data: { minVolunteers: 2, label: "Relève" } },
-      { where: { id: "c" }, data: { capacity: 3, minVolunteers: 2, label: "Relève" } },
+      // « a » and « c » receive the same values: one write; « b » keeps its places.
+      { where: { id: { in: ["a", "c"] }, eventId: "evt-a" }, data: { capacity: 3, minVolunteers: 2, label: "Relève" } },
+      { where: { id: { in: ["b"] }, eventId: "evt-a" }, data: { minVolunteers: 2, label: "Relève" } },
     ])
     expect(logEvent).toHaveBeenCalledTimes(3)
   })
@@ -82,5 +83,16 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName]: label and scope", () =>
     expect(none.status).toBe(404)
     expect((await none.json()).error).toBe("Aucun créneau du poste ce jour.")
     expect(transaction).not.toHaveBeenCalled()
+  })
+
+  it("takes the role name as Next decodes it: a « % » in the name is no error (Sentry 156069049)", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const { db } = await requireOrgSessionMock.mock.results[0]?.value ?? await requireOrgSessionMock()
+    const res = await PATCH(
+      new Request("http://localhost/api/admin/events/evt-a/roles/Calcul%2010%25", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ capacity: 3 }) }),
+      { params: Promise.resolve({ id: "evt-a", roleName: "Calcul 10%" }) },
+    )
+    expect(res.status).toBe(200)
+    expect(JSON.stringify(db.shift.findMany.mock.calls)).toContain('"roleName":"Calcul 10%"')
   })
 })

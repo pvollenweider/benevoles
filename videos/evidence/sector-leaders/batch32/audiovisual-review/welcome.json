@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:52:52.436Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "promptSha256": "a749edb625ce9738ae0a0032ecf33243a48127682ab9ff0bf085fd25e44da2e5",
+  "clipSha256": "7229985b549b7c7b32b21476814f1f5f6f928c93f1b29f369c040af281b39a6d",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour de la fête",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre « Responsables de poste et de secteur : accompagner son équipe » affiché au centre de l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Un responsable de poste peut suivre son équipe",
+        "visibleSeconds": 3.5,
+        "visible": "L'encart disparaît pour laisser place à la vue d'ensemble « Aperçu » de l'événement « Fête du village de Montvert ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel",
+        "visibleSeconds": 10,
+        "visible": "Écran d'accueil de l'événement stable présentant la synthèse et les alertes (annonce générale des étapes à venir).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine posée, fluide et claire, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

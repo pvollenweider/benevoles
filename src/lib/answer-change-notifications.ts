@@ -10,7 +10,7 @@
  * with their personal link, like a withdrawal on their poste (#559); without any leader, to the
  * organisers (`answerChangeAudience`).
  *
- * Gated by the organisation's « Prévenir les administrateurs à chaque inscription » setting
+ * Gated by the organisation's « Prévenir les organisateurs à chaque inscription » setting
  * (`signupAdminEmail`, #381): the answers belong to the sign-up, and an organisation that does not
  * want an email per sign-up does not want one per answer either. One switch for the organisers'
  * and the leaders' email, as for withdrawals (`withdrawalAdminEmail`): leaders have no setting.
@@ -48,7 +48,8 @@ export async function queueAnswerChangeNotifications(input: {
       where: { eventId: event.id, roleName: { in: roles } },
       select: { id: true, roleName: true, name: true, email: true, tokenEnc: true, tokenLegacy: true },
       orderBy: [{ roleName: "asc" }, { createdAt: "asc" }],
-    })
+    // Poste leaders only (#1169): a sector leader (roleName null) does not get answer changes in this lot.
+    }).then((rows) => rows.flatMap((l) => (l.roleName ? [{ ...l, roleName: l.roleName }] : [])))
     : []
   // Read off process.env, as the withdrawal emails do: importing this module must not force the
   // whole env schema check on a route test.

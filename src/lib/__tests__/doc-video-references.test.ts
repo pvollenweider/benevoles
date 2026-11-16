@@ -335,14 +335,14 @@ describe("video references in the public sources", () => {
         expect(component).toContain("renderFeaturesPage(env.VIDEO_MEDIA_BASE_URL, page.source")
         continue
       }
-      const laidOut = source === "FEATURES.md"
+      const laidOut = source === "content/pages/FEATURES.md"
       expect(route, page.path).toContain(laidOut ? "renderFeaturesPage(" : `renderPublicSource("${source}", `)
       expect(route, page.path).toMatch(/env\.VIDEO_MEDIA_BASE_URL[,)]/)
     }
   })
 
   it("the guides reference videos, one link per published reference once the media base is set", () => {
-    for (const source of ["GUIDE_ADMIN.md"]) {
+    for (const source of ["content/guide/GUIDE_ADMIN.md"]) {
       const refs = findVideoReferences(read(source))
       expect(refs.length, source).toBeGreaterThan(0)
       const published = refs.filter((r) => catalog.find((v) => v.id === r.id)?.published)
@@ -362,7 +362,7 @@ describe("video references in the public sources", () => {
   })
 
   it("render no video link without VIDEO_MEDIA_BASE_URL", () => {
-    expect(renderPublicSource("GUIDE_ADMIN.md", "x").html).not.toContain("data-doc-video")
-    expect(renderPublicSource("GUIDE_ADMIN.md", "x", null).html).not.toContain("/videos/")
+    expect(renderPublicSource("content/guide/GUIDE_ADMIN.md", "x").html).not.toContain("data-doc-video")
+    expect(renderPublicSource("content/guide/GUIDE_ADMIN.md", "x", null).html).not.toContain("/videos/")
   })
 })

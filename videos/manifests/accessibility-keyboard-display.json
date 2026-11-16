@@ -1,7 +1,7 @@
 {
   "id": "ACCESSIBILITY_KEYBOARD_DISPLAY",
   "slug": "accessibility-keyboard-display",
-  "title": "À ton rythme : clavier et affichage",
+  "title": "À votre rythme : clavier et affichage",
   "description": "Utiliser le clavier, comprendre le focus et adapter l'affichage, avec des limites expliquées sans promettre une validation complète.",
   "language": "fr-CH",
   "voice": "Puck",
@@ -14,7 +14,7 @@
     "deviceScaleFactor": 1
   },
   "chapterTitles": {
-    "public": "S'inscrire au clavier",
+    "public": "Frise : Tab et flèches",
     "picker": "Choisir un créneau",
     "error": "Corriger sans perdre le fil",
     "planning": "Organiser sans glisser-déposer",
@@ -32,7 +32,7 @@
     },
     {
       "id": "public",
-      "transcript": "Côté bénévole, atteignons un créneau avec le clavier, puis sélectionnons-le. Continuons jusqu'au formulaire. Le récapitulatif rappelle le poste, la date et l'horaire : il permet de vérifier son choix avant de s'engager. Un champ obligatoire manque ? Lisons le message, revenons au champ et complétons-le. La validation n'est pas seulement une couleur rouge. Les personnes et adresses utilisées ici sont fictives ; nous ne contactons aucun vrai bénévole pendant cette formation.",
+      "transcript": "Côté bénévole, Tab entre dans le planning du jour sur une seule barre. La ligne sous la Frise rappelle les touches. Gauche et droite parcourent le même poste. Haut et bas rejoignent le poste voisin. Tab quitte le planning. Les barres indisponibles restent atteignables et leur nom indique pourquoi elles ne peuvent pas être choisies. Revenons à Accueil, puis sélectionnons ce créneau. Continuons jusqu'au formulaire. Le récapitulatif rappelle le poste, la date et l'horaire : il permet de vérifier son choix avant de s'engager. Un champ obligatoire manque ? Lisons le message, revenons au champ et complétons-le. La validation n'est pas seulement une couleur rouge. Les personnes et adresses utilisées ici sont fictives ; nous ne contactons aucun vrai bénévole pendant cette formation.",
       "fallbackDurationMs": 70000
     },
     {
@@ -80,6 +80,7 @@
     "summary": "Dans cette vidéo, vous utilisez Benevol au clavier, suivez le focus (le cadre autour de l'élément actif), adaptez l'affichage et découvrez les limites connues de l'accessibilité.",
     "steps": [
       "Avancez avec Tab, revenez avec Majuscule et Tab, et utilisez le lien « Aller au contenu » pour rejoindre le contenu.",
+      "En Frise, Tab entre dans chaque jour et en sort ; ← → parcourent le même poste, ↑ ↓ le poste voisin. Début et Fin atteignent les extrémités du poste, Ctrl+Début et Ctrl+Fin celles du jour. Les barres indisponibles sont lisibles sans être sélectionnables.",
       "Dans une liste déroulante, ouvrez-la avec Flèche bas, déplacez-vous avec les flèches, validez avec Entrée ou fermez avec Échap.",
       "Si un champ manque, lisez le message : le focus revient au champ à corriger.",
       "Dans « Gérer les postes », utilisez Monter et Descendre plutôt que le glisser-déposer.",

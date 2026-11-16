@@ -1,4 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 import { hashToken } from "@/lib/token-hash"
 
 // More shifts from the personal page (#1013): POST /api/public/registrations with the session's
@@ -27,19 +33,26 @@ const questions = [
   { id: "size", label: "Taille ?", type: "single", options: ["S", "M", "L"], required: true, position: 0, archivedAt: null, roleName: null, answers: [{ values: ["M"] }] },
   { id: "note", label: "Remarque ?", type: "text", options: [], required: false, position: 1, archivedAt: null, roleName: null, answers: [{ values: ["Végétarien"] }] },
 ]
+const withoutAnswers = (question: (typeof questions)[number]) =>
+  Object.fromEntries(Object.entries(question).filter(([key]) => key !== "answers"))
 const questionRead = async (args: { select: { answers?: unknown } }) =>
-  args.select.answers ? questions : questions.map(({ answers: _a, ...q }) => q)
+  args.select.answers ? questions : questions.map(withoutAnswers)
 
-vi.mock("@/lib/prisma", () => {
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
   const tx = {
-    $queryRaw: vi.fn().mockResolvedValue([{ id: "v1", erasedAt: null }]),
-    shift: { findMany: vi.fn().mockResolvedValue([]) },
+    $queryRaw: vi.fn().mockResolvedValue([{ id: "v1", erasedAt: null, email: "julie@x.com" }]),
+    shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) },
     volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn(), update: m.txVolUpdate },
     charterVersion: { upsert: vi.fn() },
     rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
     eventQuestion: { findMany: questionRead },
     questionAnswer: { upsert: m.upsert, deleteMany: m.deleteMany, createMany: m.createMany },
+    shiftDecline: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     registration: {
+      // The link is checked again under the member lock (#1138 follow-up); the duplicate check
+      // under the lock (by shift) finds nothing.
+      findFirst: (...args: unknown[]) => ((args[0] as { where?: { shiftId?: unknown } })?.where?.shiftId ? null : m.regFindFirst(...args)),
       findMany: m.txRegFindMany,
       count: vi.fn().mockResolvedValue(0),
       aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
@@ -49,6 +62,7 @@ vi.mock("@/lib/prisma", () => {
   }
   return {
     prisma: {
+      charterVersion: { upsert: vi.fn() },
       eventQuestion: { findMany: questionRead },
       event: {
         findFirst: vi.fn().mockResolvedValue({
@@ -59,9 +73,9 @@ vi.mock("@/lib/prisma", () => {
         }),
       },
       shift: {
-        findMany: vi.fn().mockResolvedValue([
+        findMany: locked.top(vi.fn().mockResolvedValue([
           { id: "shift-2", label: "Bar", roleName: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" },
-        ]),
+        ])),
       },
       volunteer: { findFirst: m.volFindFirst, update: m.volUpdate },
       memberInvite: { findFirst: vi.fn(), updateMany: vi.fn() },
@@ -111,10 +125,10 @@ beforeEach(() => {
   m.regFindFirst.mockResolvedValue(link)
   m.enqueueNotifications.mockResolvedValue([])
   // Outside the transaction: no duplicate, no overlap; the phones of v1's live registrations.
-  m.regFindMany.mockImplementation(async (args: { select?: { phone?: boolean } }) => (args.select?.phone ? [{ phone: "079 111 11 11" }] : []))
+  m.regFindMany.mockImplementation(async (args: { select?: { phone?: boolean } }) => (args.select?.phone ? [{ phone: "079 111 11 11", shift: { roleName: "Accueil" } }] : []))
   // Inside: no overlap; v1's live registrations, the new one far ahead (answers still editable).
   m.txRegFindMany.mockImplementation(async (args: { select?: { status?: boolean } }) => (args.select?.status
-    ? [{ status: "active", shift: { date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" } }]
+    ? [{ status: "active", shift: { date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", roleName: "Accueil" } }, { status: "active", shift: { date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", roleName: "Bar" } }]
     : []))
   m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
 })
@@ -193,11 +207,36 @@ describe("POST /api/public/registrations with the personal link (#1013)", () => 
 
   it("answers locked (every registration on the event started): only missing answers are added", async () => {
     m.txRegFindMany.mockImplementation(async (args: { select?: { status?: boolean } }) => (args.select?.status
-      ? [{ status: "active", shift: { date: new Date("2020-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" } }]
+      ? [{ status: "active", shift: { date: new Date("2020-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", roleName: "Bar" } }]
       : []))
     const { body } = await signUp({ answers: { size: "L", note: "Végétarien" } })
     expect(body.updated.answers).toBe(0)
     expect(m.upsert).not.toHaveBeenCalled()
     expect(m.recordAnswerChanges).not.toHaveBeenCalled()
+  })
+
+  describe("questions asked to some postes (#1140)", () => {
+    const scoped = [
+      { id: "accueil", label: "Badge ?", type: "yesno", options: [], required: true, position: 2, archivedAt: null, roleName: null, displayScope: "roles", displayRoleNames: ["Accueil"], answers: [] as { values: string[] }[] },
+      { id: "kitchen", label: "Allergies ?", type: "text", options: [], required: true, position: 3, archivedAt: null, roleName: null, displayScope: "roles", displayRoleNames: ["Cuisine"], answers: [{ values: ["Noix"] }] },
+    ]
+    beforeEach(() => { questions.push(...(scoped as never[])) })
+    afterEach(() => { questions.splice(2) })
+
+    it("a required question of a poste already held counts from the personal link, though the new shift is elsewhere", async () => {
+      const { res, body } = await signUp({ answers: { size: "M", note: "Végétarien" } })
+      expect(res.status).toBe(400)
+      expect(body.questionErrors.map((e: { questionId: string }) => e.questionId)).toEqual(["accueil"])
+      expect(m.txCreate).not.toHaveBeenCalled()
+    })
+
+    it("a question of a poste not held: the answer sent is ignored and the stored one kept, never cleared", async () => {
+      const { res, body } = await signUp({ answers: { size: "M", note: "Végétarien", accueil: "Oui", kitchen: "" } })
+      expect(res.status).toBe(201)
+      expect(body.updated.answers).toBe(1)
+      expect(m.upsert).toHaveBeenCalledWith(expect.objectContaining({ where: { questionId_volunteerId: { questionId: "accueil", volunteerId: "v1" } } }))
+      expect(m.deleteMany).not.toHaveBeenCalled()
+      expect(m.recordAnswerChanges.mock.calls[0][0].changes.map((c: { questionId: string }) => c.questionId)).toEqual(["accueil"])
+    })
   })
 })

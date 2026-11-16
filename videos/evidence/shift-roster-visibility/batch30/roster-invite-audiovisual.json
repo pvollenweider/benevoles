@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-22T09:37:54.309Z",
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "promptSha256": "47c2f20b938f03abdc0912a243707f7c023a55cc79ddf6040221526c64dab304",
+  "clipSha256": "eac58f811c1a7cc0553f7fd9945e879a76e67eba30c890c93a44a1f50f8ac44b",
+  "scene": "roster-invite",
+  "review": {
+    "heardOpening": "Un membre qui arrive par son lien d'invitation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Activez Voir qui est inscrit.",
+        "visibleSeconds": 5.4,
+        "visible": "L'interrupteur 'Voir qui est inscrit' est activé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "En Liste",
+        "visibleSeconds": 7.3,
+        "visible": "Bascule sur l'onglet Liste de l'affichage des créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Aline apparaît avec son prénom et l’initiale de son nom, à côté du nombre des autres bénévoles.",
+        "visibleSeconds": 8.2,
+        "visible": "Sous le créneau 09h-12h Accueil, affichage de 'Sur ce créneau : Aline M. et 2 autres bénévoles.'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

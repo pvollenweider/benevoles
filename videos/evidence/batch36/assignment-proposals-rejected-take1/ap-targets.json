@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:09:51.456Z",
+  "videoSha256": "32d8145bb0ee7b43304d22d24f2b4df3fee3974cf9db3446616709397f75d039",
+  "promptSha256": "4dbd00bf0fdbed4c677acf7bde15cb024799be48bca9ac77a83c8f4d33d83de8",
+  "clipSha256": "fc576999034594a9785c50e94c2f7f242adde2ced1bc7194d7b4abf158641d24",
+  "scene": "ap-targets",
+  "review": {
+    "heardOpening": "Jules n'a pas répondu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Jules n'a pas répondu, il n'est pas inclus",
+        "visibleSeconds": 0.5,
+        "visible": "Ligne de Jules Hansen avec la mention Sans Réponse et la case Inclure décochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Appliquer la suggestion les remplit",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur le bouton Appliquer la suggestion et affichage de 12 dans la colonne Objectif d'heures de Noah",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "tapons six",
+        "visibleSeconds": 11.5,
+        "visible": "Le champ Objectif d'heures est sélectionné mais le chiffre 6 n'est pas saisi avant la fin de l'extrait",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:11, l'action « tapons six » est annoncée et le champ est cliqué, mais la saisie de la valeur 6 n'est pas effectuée avant la coupure de la vidéo."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et parfaitement audible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

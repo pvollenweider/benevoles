@@ -34,7 +34,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.delivery.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     const sent = await page.request.post(`${base}/api/admin/events/${eventId}/message`, { data: { audience: { kind: "event" }, subject: "Formation — échec partiel", message: "Bonjour {prénom}, merci pour ton aide !" } })
     assert.equal(sent.status(), 200)
     assert.equal((await sent.json()).sent, 2)

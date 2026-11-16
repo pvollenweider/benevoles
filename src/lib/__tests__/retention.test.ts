@@ -10,14 +10,14 @@ const section = (md: string) => md.slice(md.indexOf(TABLE_START) + TABLE_START.l
 
 describe("retention policy", () => {
   it("is the table of the organisers' documentation and of docs/retention.md (npm run retention:docs)", () => {
-    expect(RETENTION_GUIDE_SOURCE).toMatch(/^guide\/[a-z0-9-]+\.md$/)
+    expect(RETENTION_GUIDE_SOURCE).toMatch(/^content\/guide\/[a-z0-9-]+\.md$/)
     expect(section(read(RETENTION_GUIDE_SOURCE))).toBe(retentionGuideTable())
     expect(section(read("docs/retention.md"))).toBe(retentionMatrixTable())
   })
 
   it("drives the cleanup cron: no hard-coded duration left there", () => {
     const cron = read("src/app/api/cron/cleanup/route.ts")
-    for (const key of ["deactivatedOrganization", "deactivatedAdmin", "failedNotification", "targetedMessage", "deliveryOutcome", "mergedMemberTombstone", "videoFeedback"]) expect(cron).toContain(`RETENTION_DAYS.${key}`)
+    for (const key of ["deactivatedOrganization", "deactivatedAdmin", "failedNotification", "targetedMessage", "deliveryOutcome", "mergedMemberTombstone", "videoFeedback", "emailLimitHit", "sendBatch", "operatorAlert", "deliveryCounter"]) expect(cron).toContain(`RETENTION_DAYS.${key}`)
     expect(cron).not.toMatch(/\d+\s*\*\s*24\s*\*\s*60\s*\*\s*60\s*\*\s*1000/)
   })
 

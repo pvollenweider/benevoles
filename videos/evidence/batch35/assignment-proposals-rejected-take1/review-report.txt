@@ -1,0 +1,2 @@
+STATUS: NOT READY
+Batch35 take1 rejected:manual correction opens at+0.564s and removes at+1.348s,before opening/removal sentence starts+2.391s. Actual clicks exist;automated absence finding corrected by frames,but timing too early. No publication. Recorder sentence anchor and600ms actual-dialog hold added for final authorized take.

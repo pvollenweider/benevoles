@@ -7,15 +7,31 @@
  */
 
 import { orgBaseUrl } from "@/lib/urls"
-import { onSiteContact, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
+import { onSiteContact, readBeforePages, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
 import { siteDomain, siteName } from "@/lib/site"
+import { docHref, type AdminHelpTarget } from "@/lib/help-links"
 
 export const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
 export function myPageUrl(orgSlug: string | undefined, editToken: string): string {
   const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
   return `${base}/my/${editToken}`
+}
+
+/**
+ * A page of the documentation, absolute (#1096): /doc is served by the app's own domain, the one
+ * the emails' admin links use too.
+ */
+export function docUrl(target: AdminHelpTarget): string {
+  return `${BASE_URL}${docHref(target)}`
+}
+
+/** The page « Mes disponibilités » of a person asked (#1146): their own link, on the organisation's host. */
+export function availabilityPageUrl(orgSlug: string | undefined, token: string): string {
+  const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
+  return `${base}/disponibilites/${token}`
 }
 
 export function leaderPageUrl(orgSlug: string | undefined, token: string): string {
@@ -70,15 +86,21 @@ function lineHtml(l: ShiftInfoLine, info: ShiftInfo): string {
   return `${escapeHtml(l.text)}${l.href ? ` : <a href="${escapeHtml(l.href)}">${MAP_LINK_EMAIL_LABEL}</a>` : ""}`
 }
 
-/** Place, contact and instructions of a shift as small lines under it (#397). */
+/**
+ * Place, contact and instructions of a shift as small lines under it (#397), then the
+ * information pages attached to its poste (#1324): one link per page, the title only, never the
+ * content.
+ */
 export function shiftInfoHtml(info: ShiftInfo): string {
   const lines = shiftInfoLines(info)
-  if (lines.length === 0) return ""
-  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${lineHtml(l, info)}</div>`).join("")}</div>`
+  const pages = readBeforePages(info)
+  if (lines.length === 0 && pages.length === 0) return ""
+  const pagesHtml = pages.map((p) => `<div><a href="${escapeHtml(p.url)}" style="color:#1d4ed8;text-decoration:underline">${escapeHtml(READ_BEFORE_LABEL)} : ${escapeHtml(p.title)}</a></div>`).join("")
+  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${lineHtml(l, info)}</div>`).join("")}${pagesHtml}</div>`
 }
 
 export function btn(href: string, label: string): string {
-  return `<a href="${href}" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">${label}</a>`
+  return `<a href="${escapeHtml(href)}" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">${label}</a>`
 }
 
 /** Opening tag of the white card of every email: the organization's logo goes right after it. */

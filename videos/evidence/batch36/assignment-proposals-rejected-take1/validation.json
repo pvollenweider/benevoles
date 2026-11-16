@@ -1,0 +1,89 @@
+{
+  "id": "ASSIGNMENT_PROPOSALS",
+  "slug": "assignment-proposals",
+  "validatedAt": "2026-10-31T07:09:02.647Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 167000,
+  "scenes": [
+    {
+      "id": "ap-welcome",
+      "visualMs": 13777,
+      "audioMs": 13776,
+      "driftMs": 1
+    },
+    {
+      "id": "ap-drafts",
+      "visualMs": 16390,
+      "audioMs": 16388,
+      "driftMs": 2
+    },
+    {
+      "id": "ap-scope",
+      "visualMs": 12728,
+      "audioMs": 12728,
+      "driftMs": 0
+    },
+    {
+      "id": "ap-targets",
+      "visualMs": 11665,
+      "audioMs": 11641,
+      "driftMs": 24
+    },
+    {
+      "id": "ap-wishes",
+      "visualMs": 9553,
+      "audioMs": 9550,
+      "driftMs": 3
+    },
+    {
+      "id": "ap-launch",
+      "visualMs": 12824,
+      "audioMs": 12822,
+      "driftMs": 2
+    },
+    {
+      "id": "ap-result",
+      "visualMs": 13648,
+      "audioMs": 13646,
+      "driftMs": 2
+    },
+    {
+      "id": "ap-load",
+      "visualMs": 13588,
+      "audioMs": 13586,
+      "driftMs": 2
+    },
+    {
+      "id": "ap-lock",
+      "visualMs": 12847,
+      "audioMs": 12845,
+      "driftMs": 2
+    },
+    {
+      "id": "ap-adjust",
+      "visualMs": 17453,
+      "audioMs": 17453,
+      "driftMs": 0
+    },
+    {
+      "id": "ap-publish",
+      "visualMs": 13607,
+      "audioMs": 13604,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 28,
+  "music": {
+    "voicedWindows": 140,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": -32.9,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

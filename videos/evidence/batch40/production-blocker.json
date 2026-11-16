@@ -1,0 +1,15 @@
+{
+  "status": "NOT READY",
+  "commit": "eefc160dfd39f86413b9c2940d2da6d44adff2d0",
+  "snapshot": "/tmp/benevoles-video-production.lXLR52",
+  "node": "26.9.0",
+  "command": "node --env-file=.env.video.e2e --import tsx videos/tools/build-main-product.ts SNAPSHOT --commit eefc160dfd39f86413b9c2940d2da6d44adff2d0",
+  "stage": "Collecting page data",
+  "route": "/api/admin/events/[id]/availability/[volunteerId]",
+  "error": "ENOENT browser/default-stylesheet.css",
+  "frame": null,
+  "url": null,
+  "buildId": null,
+  "narratedTakes": 0,
+  "published": false
+}

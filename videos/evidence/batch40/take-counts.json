@@ -1,0 +1,20 @@
+[
+  {
+    "id": "LAST_MINUTE_CHANGES",
+    "narratedTakes": 2,
+    "continuousMasterSha256": "e2b683b0c85eaa949fe289d4f646e2847882f907f15cae8bfe703575a7b53e71",
+    "narrationPasses": 1
+  },
+  {
+    "id": "SHIFT_ELIGIBILITY_RULES",
+    "narratedTakes": 1,
+    "continuousMasterSha256": "97c250ecbce65c7df39db6f8f8d5b8704cf65482cf1c8d3baac880adc5e2b057",
+    "narrationPasses": 1
+  },
+  {
+    "id": "MEMBERS_IMPORT",
+    "narratedTakes": 1,
+    "continuousMasterSha256": "467d192cc9b0d119a6e5e63c40817c8d5c6a17821104718be26032645cf76949",
+    "narrationPasses": 1
+  }
+]

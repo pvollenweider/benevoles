@@ -10,6 +10,9 @@ import { validationError } from "@/lib/api-error"
 import { findTemplate, templateToEvent } from "@/lib/event-templates"
 import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
 import { orgTimeZone } from "@/lib/time-zone"
+import { newEventShiftSwapsEnabled } from "@/lib/shift-swap-data"
+import { newEventWorkload } from "@/lib/workload-policy-data"
+import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 
 const schema = z.object({
   templateId: z.string().min(1),
@@ -38,11 +41,20 @@ export async function POST(req: Request) {
   if (existing) slug = `${slug}-${Date.now()}`
 
   // « Qui est inscrit » (#1068): a new event starts with the organisation's default.
-  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true } })
+  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, timeZone: true } })
+  // Sectors (#1147): the organisation's default, only while the organisation is available.
+  const sectorsEnabled = await newEventSectorsEnabled(organizationId, org?.sectorsDefault)
+  // Shift swaps (#1174, beta): the organisation's default, only while the capability can be adopted.
+  const shiftSwapsEnabled = await newEventShiftSwapsEnabled(organizationId, org?.shiftSwapsDefault)
+  // Workload protection (#1171, beta): the organisation's values copied, only while it can be adopted.
+  const workload = await newEventWorkload(organizationId, org)
   const event = await db.event.create({
     data: {
       title: draft.title,
+      ...workload,
       shiftRosterEnabled: org?.shiftRosterDefault ?? true,
+      sectorsEnabled,
+      shiftSwapsEnabled,
       slug,
       organizationId,
       startDate: new Date(draft.startDate),

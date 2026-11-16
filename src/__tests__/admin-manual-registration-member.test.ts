@@ -1,4 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 
 // Placing a member already in the list on a shift (#914): the add form sends the member's id, the
 // server links the registration to that member, email or not, and never creates a new one. The
@@ -18,6 +24,8 @@ const m = vi.hoisted(() => ({
 
 const shift = () => ({
   id: "s1", eventId: "evt-1", roleName: "Bar", label: "Bar", capacity: 5, registrations: [],
+  // A poste reserved to an answer (#962): the organiser places people by hand anyway, like tags.
+  reservedQuestionId: "q1", reservedAnswers: ["Oui"],
   date: m.shiftDate, startTime: "10:00", endTime: "12:00",
   event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } },
 })
@@ -25,13 +33,18 @@ const shift = () => ({
 vi.mock("@/lib/auth-guard", () => ({
   requireOrgSession: vi.fn(async () => {
     const db = {
+      // An event without dated availability (#1146, lot B): nothing more is read or locked.
+      event: { findFirst: vi.fn(async () => null) },
       shift: {
         findFirst: vi.fn(async ({ where }: { where: { id: string } }) => (where.id === "gone" ? null : { ...shift(), id: where.id, roleName: where.id === "s3" ? "Loge" : "Bar" })),
         findMany: vi.fn(async () => m.limits),
         update: vi.fn(),
+        updateMany: vi.fn(),
       },
       volunteer: { findFirst: m.volunteerFindFirst, create: m.volunteerCreate },
-      registration: { findMany: vi.fn(async () => m.held), create: m.registrationCreate },
+      registration: { findMany: vi.fn(async () => m.held), create: m.registrationCreate, count: vi.fn(async () => 0) },
+      shiftDecline: { deleteMany: vi.fn(async () => ({ count: 0 })) },
+      $queryRaw: vi.fn(),
       adminUser: { findFirst: m.adminFindFirst },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
     }
@@ -75,12 +88,42 @@ describe("POST /api/admin/registrations with a chosen member (#914)", () => {
     expect(m.registrationCreate.mock.calls[0][0].data).toMatchObject({ volunteerId: "mem-1", source: "admin_manual" })
   })
 
+  it("places a member by hand even when the poste is reserved to another answer (#962)", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-1", firstName: "René", lastName: "Meyer", email: null })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(201)
+    expect(m.registrationCreate).toHaveBeenCalled()
+  })
+
   it("refuses a member it cannot find instead of creating a new person", async () => {
     m.volunteerFindFirst.mockResolvedValue(null)
     const { POST } = await import("@/app/api/admin/registrations/route")
     const res = await POST(post({ volunteerId: "mem-other-org", firstName: "Eve", lastName: "B" }))
     expect(res.status).toBe(404)
     expect(m.volunteerCreate).not.toHaveBeenCalled()
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ["an erased record", { erasedAt: new Date("2026-10-01"), mergedIntoId: null }, /effacées/],
+    ["a merge tombstone", { erasedAt: null, mergedIntoId: "mem-kept" }, /fusionnée/],
+  ])("refuses to register %s, with a clear message, and creates nothing", async (_label, state, message) => {
+    m.volunteerFindFirst.mockResolvedValueOnce({ id: "mem-1", firstName: "", lastName: "", email: null, ...state })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toMatch(message)
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
+  it("refuses when the member was merged between the first read and the lock", async () => {
+    m.volunteerFindFirst
+      .mockResolvedValueOnce({ id: "mem-1", firstName: "René", lastName: "Meyer", email: null, erasedAt: null, mergedIntoId: null })
+      .mockResolvedValueOnce({ erasedAt: null, mergedIntoId: "mem-kept" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(409)
     expect(m.registrationCreate).not.toHaveBeenCalled()
   })
 

@@ -10,6 +10,7 @@ import { defaultPeriod, volunteerHourEntries } from "@/lib/volunteer-hours"
 import { orgTimeZone } from "@/lib/time-zone"
 import CertificateView from "@/components/admin/CertificateView"
 import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -47,6 +48,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ id
         <Link href={`/admin/members/${id}`} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <span aria-hidden="true">← </span>Retour à l&apos;activité de {data.member.firstName} {data.member.lastName}
         </Link>
+        <HelpLink route="/admin/members/[id]/certificate" />
       </div>
       <CertificateView
         memberId={id}

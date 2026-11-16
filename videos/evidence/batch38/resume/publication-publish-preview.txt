@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   ASSIGNMENT_PUBLICATION
+
+> benevoles@2.5.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default ASSIGNMENT_PUBLICATION
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + assignment-publication/assignment-publication-og.jpg
+  + assignment-publication/assignment-publication.jpg
+  + assignment-publication/assignment-publication.mp4
+  + assignment-publication/assignment-publication.txt
+  + assignment-publication/assignment-publication.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 569
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

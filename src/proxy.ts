@@ -3,18 +3,22 @@
 
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
-import { NextResponse } from "next/server"
+import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server"
+import type { NextAuthRequest } from "next-auth"
 import { ORG_HEADER, withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
 import { apexBaseUrl, configuredAppUrl } from "@/lib/urls"
 import { checkAdminMutation } from "@/lib/request-origin"
-import { frameHeaders } from "@/lib/security-headers"
+import { createNonce, pageSecurityHeaders } from "@/lib/security-headers"
 import { isServerNotFound, NOT_FOUND_ROUTE } from "@/lib/server-not-found"
 import { loadDocUnits, resolveDocSlug } from "@/lib/doc-units"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { findBlogPost, loadBlogPosts } from "@/lib/blog"
+import { findRessource, loadRessources } from "@/lib/ressources"
 import { reportError } from "@/lib/report-error"
 import { REQUEST_PATH_HEADER } from "@/lib/admin-next"
+import { isAuthEndpoint } from "@/lib/auth-endpoints"
+import { SECOND_FACTOR_PATH, secondFactorUrl } from "@/lib/second-factor-session"
 
 const { auth } = NextAuth(authConfig)
 
@@ -47,9 +51,18 @@ function blogPostExists(slug: string): boolean {
   }
 }
 
+function ressourceExists(slug: string): boolean {
+  try {
+    return findRessource(slug, loadRessources()) !== null
+  } catch (error) {
+    reportError("proxy-not-found-ressource")(error)
+    return true
+  }
+}
+
 // Proxy file convention (Next.js 16, formerly `middleware`): a first filter on pages from the JWT
 // alone and the organization header; the authoritative checks stay server-side (auth-guard.ts).
-export default auth((req) => {
+function handle(req: NextAuthRequest): Response {
   const { pathname } = req.nextUrl
 
   // --- Bare domain to the www site (#759): one address per page for search engines. 308 keeps
@@ -74,6 +87,13 @@ export default auth((req) => {
   const isLoginPage = pathname === "/admin/login"
   const isPublicAdminPage = pathname === "/admin/accept-invite" || pathname === "/admin/reset-password" || pathname === "/admin/forgot-password"
     || pathname === "/admin/reactivate" || pathname === "/admin/reactivate/confirm" || pathname === "/admin/keep"
+
+  // --- Second factor (pentest F6): a super admin signed in with the password only reaches the
+  // two-factor page and nothing else of the admin, before any role check (the role is masked in
+  // such a session). The pages and API routes check it again on the server (auth-guard.ts). ---
+  if (req.auth?.secondFactor?.pending && (isSuperAdminPath || isAdminPath) && !isLoginPage && !isPublicAdminPage && pathname !== SECOND_FACTOR_PATH) {
+    return Response.redirect(new URL(secondFactorUrl(`${pathname}${req.nextUrl.search}`), req.url))
+  }
 
   if (isSuperAdminPath) {
     if (!req.auth) {
@@ -101,18 +121,43 @@ export default auth((req) => {
   requestHeaders.delete(REQUEST_PATH_HEADER)
   if (isAdminPath) requestHeaders.set(REQUEST_PATH_HEADER, `${pathname}${req.nextUrl.search}`)
 
+  // --- Script and framing policy (src/lib/security-headers.ts): a fresh nonce per request, on the
+  // forwarded request too, where Next.js reads it for its own scripts (any client value replaced). ---
+  const pageHeaders = pageSecurityHeaders(pathname, req.nextUrl.searchParams, { nonce: createNonce(), dev: process.env.NODE_ENV === "development" })
+  for (const { key, value } of pageHeaders) if (key === "Content-Security-Policy") requestHeaders.set(key, value)
+
   // --- A 404 rendered on the server (#935): what is known missing here is answered by the
   // not-found page itself, whose HTML carries the page; `notFound()` during a page's render only
   // sends an empty document that the browser fills in. See src/lib/server-not-found.ts. ---
-  const notFound = isServerNotFound(pathname, { hasOrg: requestHeaders.has(ORG_HEADER), docSlugExists, videoExists, blogPostExists })
+  const notFound = isServerNotFound(pathname, { hasOrg: requestHeaders.has(ORG_HEADER), docSlugExists, videoExists, blogPostExists, ressourceExists })
   const response = notFound
     ? NextResponse.rewrite(new URL(NOT_FOUND_ROUTE, req.url), { request: { headers: requestHeaders } })
     : NextResponse.next({ request: { headers: requestHeaders } })
-  // Framing (#948): refused everywhere but the embeddable sign-up (src/lib/security-headers.ts).
-  for (const { key, value } of frameHeaders(pathname, req.nextUrl.searchParams)) response.headers.set(key, value)
+  // Framing (#948) refused everywhere but the embeddable sign-up; scripts by nonce and hash only.
+  for (const { key, value } of pageHeaders) response.headers.set(key, value)
   return response
+}
+
+// Typed with the event so the middleware overload of auth() is the one picked.
+const withSession = auth((req: NextAuthRequest, event: NextFetchEvent) => {
+  void event
+  return handle(req)
 })
 
+/**
+ * next-auth's own endpoints (/api/auth/…) go through without the session wrapper: they read and
+ * write the session cookie themselves, and the wrapper renewed that cookie on the sign-out
+ * response too, right before next-auth's deletion (the browser kept only the last one, but the
+ * response carried a fresh session cookie). Nothing here needs the session on those paths.
+ */
+export default function proxy(req: NextRequest, event: NextFetchEvent) {
+  if (isAuthEndpoint(req.nextUrl.pathname)) return handle(Object.assign(req, { auth: null }))
+  return withSession(req, event)
+}
+
+// Every path but the Sentry tunnel, Next.js's own files and the favicon. Each exclusion is anchored
+// (whole segment or end of path): an event slug such as `monitoring-…` still goes through the proxy.
+// Kept a literal (Next.js reads it from the source); tested in src/lib/__tests__/proxy-matcher.test.ts.
 export const config = {
-  matcher: ["/((?!monitoring|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!monitoring(?:/|$)|_next/static/|_next/image$|favicon\\.ico$).*)"],
 }

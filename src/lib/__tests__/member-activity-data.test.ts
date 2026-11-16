@@ -10,6 +10,7 @@ function mockDb(overrides: Record<string, unknown> = {}) {
     volunteer: { findFirst: vi.fn(), findMany: vi.fn().mockResolvedValue([]) },
     memberInvite: { findMany: vi.fn().mockResolvedValue([]) },
     registration: { findMany: vi.fn().mockResolvedValue([]) },
+    shiftDecline: { findMany: vi.fn().mockResolvedValue([]) },
     sectorLeader: { findMany: vi.fn().mockResolvedValue([]) },
     orgLog: { findMany: vi.fn().mockResolvedValue([]) },
     ...overrides,

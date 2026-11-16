@@ -161,3 +161,80 @@ describe("QuestionsEditor: number questions (#1015)", () => {
     expect(max).toHaveFocus()
   })
 })
+
+// Who a question is asked to (#1140).
+describe("QuestionsEditor: scope of a question", () => {
+  beforeEach(() => vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => { cb(0); return 0 }))
+  afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+
+  it("everyone by default; « Certains postes seulement » reveals the postes, sent on save and shown in the list", async () => {
+    const fetchMock = reply(201, { ...size, id: "q9", label: "Caisse ?", displayScope: "roles", displayRoleNames: ["Bar"], position: 1, _count: { answers: 0 } })
+    vi.stubGlobal("fetch", fetchMock)
+    render(<QuestionsEditor eventId="evt-1" initialQuestions={[size]} roles={roles} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter une question" }))
+    expect(screen.getByRole("radio", { name: "Tous les bénévoles" })).toBeChecked()
+    expect(screen.queryByRole("group", { name: /Postes à qui la poser/ })).not.toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText(/Question posée aux bénévoles/), { target: { value: "Caisse ?" } })
+    fireEvent.click(screen.getByRole("radio", { name: "Certains postes seulement" }))
+    expect(screen.getByRole("radio", { name: "Certains postes seulement" })).toHaveAccessibleDescription(/créneau de ces postes/)
+    const group = screen.getByRole("group", { name: /Postes à qui la poser/ })
+    expect([...group.querySelectorAll("label")].map((l) => l.textContent)).toEqual(["Bar", "Cuisine"])
+    fireEvent.click(screen.getByRole("checkbox", { name: "Bar" }))
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(screen.getByText("Posée seulement pour : Bar")).toBeInTheDocument())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ displayScope: "roles", displayRoleNames: ["Bar"] })
+  })
+
+  it("no poste ticked: the first box is marked and focused, nothing sent", () => {
+    const fetchMock = vi.fn()
+    vi.stubGlobal("fetch", fetchMock)
+    render(<QuestionsEditor eventId="evt-1" initialQuestions={[size]} roles={roles} />)
+    fireEvent.click(screen.getByRole("button", { name: "Modifier la question « Taille ? »" }))
+    fireEvent.click(screen.getByRole("radio", { name: "Certains postes seulement" }))
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    const first = screen.getByRole("checkbox", { name: "Bar" })
+    expect(first).toHaveAttribute("aria-invalid", "true")
+    expect(first).toHaveFocus()
+    expect(first).toHaveAccessibleDescription(/Cochez au moins un poste/)
+    expect(fetchMock).not.toHaveBeenCalled()
+    // Back to everyone: the error goes with the boxes.
+    fireEvent.click(screen.getByRole("radio", { name: "Tous les bénévoles" }))
+    expect(screen.queryByText(/Cochez au moins un poste/)).not.toBeInTheDocument()
+  })
+
+  it("a question whose postes are all gone says it is asked to nobody, and keeps a ticked poste without shifts", () => {
+    const gone = { ...size, displayScope: "roles", displayRoleNames: [] }
+    const stale = { ...size, id: "q3", label: "Ancien ?", displayScope: "roles", displayRoleNames: ["Buvette"] }
+    render(<QuestionsEditor eventId="evt-1" initialQuestions={[gone, stale]} roles={roles} />)
+    expect(screen.getByText("Posée à personne (plus aucun de ses postes)")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Modifier la question « Taille ? »" }))
+    expect(screen.getByRole("radio", { name: "Certains postes seulement" })).toHaveAccessibleDescription(/posée à personne/)
+    fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
+    fireEvent.click(screen.getByRole("button", { name: "Modifier la question « Ancien ? »" }))
+    expect(screen.getByRole("checkbox", { name: "Buvette (plus aucun créneau)" })).toBeChecked()
+  })
+
+  it("a follow-up follows its parent's scope: no control, the select says so; back to « Toujours », it starts from the parent's", () => {
+    const parent = { ...meal, displayScope: "roles", displayRoleNames: ["Cuisine"] }
+    const child = { ...size, id: "q5", label: "Combien ?", parentId: "q1", showIfValues: ["Oui"] }
+    render(<QuestionsEditor eventId="evt-1" initialQuestions={[parent, child]} roles={roles} />)
+    fireEvent.click(screen.getByRole("button", { name: "Modifier la question « Combien ? »" }))
+    expect(screen.queryByRole("radio", { name: "Tous les bénévoles" })).not.toBeInTheDocument()
+    const select = screen.getByRole("combobox", { name: "Afficher seulement si…" })
+    expect(select).toHaveAccessibleDescription(/mêmes bénévoles que « Repas \? » : aux bénévoles des postes Cuisine/)
+    fireEvent.change(select, { target: { value: "" } })
+    expect(screen.getByRole("radio", { name: "Certains postes seulement" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Cuisine" })).toBeChecked()
+  })
+
+  it("postes all gone and no shift left: the radios stay, so the question can go back to everyone", () => {
+    const gone = { ...size, displayScope: "roles", displayRoleNames: [] }
+    render(<QuestionsEditor eventId="evt-1" initialQuestions={[gone]} roles={[]} />)
+    fireEvent.click(screen.getByRole("button", { name: "Modifier la question « Taille ? »" }))
+    expect(screen.getByRole("radio", { name: "Certains postes seulement" })).toBeChecked()
+    expect(screen.getByRole("radio", { name: "Tous les bénévoles" })).not.toHaveAccessibleDescription()
+    fireEvent.click(screen.getByRole("radio", { name: "Tous les bénévoles" }))
+    expect(screen.getByText(/Ajoutez des créneaux à l'événement pour poser cette question/)).toBeInTheDocument()
+  })
+})
+

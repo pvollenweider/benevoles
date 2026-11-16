@@ -13,7 +13,9 @@ metadata:
     # Brotli/zstd compression by Traefik, the app answering uncompressed (middleware-compress.yaml),
     # then HSTS (middleware-hsts.yaml).
     traefik.ingress.kubernetes.io/router.middlewares: benevoles-benevoles-compress@kubernetescrd,benevoles-benevoles-identity-upstream@kubernetescrd,benevoles-benevoles-hsts@kubernetescrd
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # No cert-manager annotation: the secret below is issued by the Certificate benevol-app-wildcard
+    # (certificate-wildcard.yaml). An annotation here makes cert-manager create a second Certificate
+    # for the same secret, which stays « IncorrectCertificate ».
 spec:
   ingressClassName: traefik
   tls:

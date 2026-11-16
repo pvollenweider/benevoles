@@ -21,6 +21,7 @@ vi.mock("@/lib/notifications/outbox", () => ({
   outboxHealth: vi.fn().mockResolvedValue({ healthy: true, stuck: false }),
 }))
 vi.mock("@/lib/token-vault", () => ({ registrationToken: { reveal: (r: { id: string }) => `tok-${r.id}` } }))
+vi.mock("@/lib/reminder-rules-server", () => ({ queueCustomRuleReminders: vi.fn().mockResolvedValue({ events: 0, rules: 0, eligible: 0, queued: 0, deferred: 0, cancelled: 0, handled: 0, failed: 0 }) }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications", () => ({ sendNotification: sendNotificationMock }))
@@ -87,6 +88,19 @@ describe("POST /api/cron/reminders", () => {
     )
   })
   afterEach(() => vi.useRealTimers())
+
+  it("keeps the legacy candidate query for events without any custom rule (#1139)", async () => {
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    await POST(post())
+    // An event with a rule row is left to the custom path; no row means exactly the old query.
+    expect(registrationFindMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({
+        status: "active",
+        event: { remindersEnabled: true, publicStatus: "published", reminderRules: { none: { archivedAt: null } } },
+      }),
+    }))
+  })
 
   it("counts a refused send as failed and does not mark the reminder sent", async () => {
     sendNotificationMock.mockResolvedValue({ ok: false, reason: "smtp down" })

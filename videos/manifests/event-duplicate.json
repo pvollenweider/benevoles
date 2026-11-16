@@ -2,12 +2,12 @@
   "id": "EVENT_DUPLICATE",
   "slug": "event-duplicate",
   "title": "Dupliquer l’événement de l’année précédente",
-  "description": "Décaler les dates et choisir précisément les créneaux, réglages, pages et responsables à reprendre.",
+  "description": "Décaler les dates et choisir précisément les créneaux, paramètres, pages et responsables à reprendre.",
   "viewer": {
     "summary": "Dans cette vidéo, vous dupliquez un événement précédent pour préparer sa nouvelle édition sans repartir de zéro.",
     "steps": [
       "Donnez le titre de la nouvelle édition et son premier jour : toutes les dates seront décalées automatiquement.",
-      "Choisissez ce qui doit être repris : créneaux, réglages, pages personnalisées.",
+      "Choisissez ce qui doit être repris : créneaux, paramètres, pages personnalisées.",
       "Laissez les responsables de secteur décochés, sauf si vous voulez leur envoyer un nouveau lien personnel immédiatement.",
       "Vérifiez le récapitulatif : les inscriptions et les jalons ne sont jamais copiés.",
       "Créez la copie : elle s'ouvre en brouillon, avec les créneaux vides et les inscriptions fermées.",
@@ -42,7 +42,7 @@
     },
     {
       "id": "choices",
-      "transcript": "Choisissez ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les réglages reprennent les messages, questions, téléphone et programme. Les pages personnalisées peuvent aussi être copiées.",
+      "transcript": "Choisissez ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les paramètres reprennent les messages, questions, téléphone et programme. Les pages personnalisées peuvent aussi être copiées.",
       "fallbackDurationMs": 25000
     },
     {
@@ -57,7 +57,7 @@
     },
     {
       "id": "create",
-      "transcript": "Créons la copie. Elle s’ouvre dans l’administration à l’étape Prêt à publier, mais reste un brouillon. Vérifions ses réglages : les inscriptions sont fermées. La nouvelle édition n'est donc pas encore proposée aux bénévoles. Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
+      "transcript": "Créons la copie. Elle s’ouvre dans l’administration à l’étape Prêt à publier, mais reste un brouillon. Vérifions ses paramètres : les inscriptions sont fermées. La nouvelle édition n'est donc pas encore proposée aux bénévoles. Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
       "fallbackDurationMs": 25000
     },
     {

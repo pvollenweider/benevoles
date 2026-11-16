@@ -134,6 +134,40 @@ describe("emailChannel with SMTP_HOST: records the outcome, never a raw reply or
     expect(deliveryOutcomeCreate.mock.calls[0][0].data.outcome).toBe("rejected_permanent")
   })
 
+  // Sentry 154728595: a domain that doesn't exist is flagged as the recipient's address, so the
+  // outbox fails the row without reporting it; a policy refusal is not flagged.
+  it.each([
+    ["550 5.1.2 domain_not_found", 550, "550 5.1.2 <alice@example.org>: Recipient address rejected: domain_not_found", true],
+    ["550 5.1.1 mailbox unknown", 550, RAW_REPLY, true],
+    ["550 5.7.1 policy", 550, "550 5.7.1 Message rejected as spam", false],
+    ["553 5.1.8 sender domain (reply text only)", 553, "553 5.1.8 Domain of sender address does not exist", false],
+  ])("%s: permanent, recipientRejected %s", async (_label, responseCode, response, flagged) => {
+    vi.doMock("nodemailer", () => ({
+      default: {
+        createTransport: () => ({
+          sendMail: vi.fn().mockRejectedValue(Object.assign(new Error("rejected"), { code: "EENVELOPE", command: "RCPT TO", responseCode, response, recipient: "alice@example.org" })),
+        }),
+      },
+    }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    const outcome = await freshChannel.send(payload)
+    expect(outcome.ok).toBe(false)
+    if (!outcome.ok) {
+      expect(outcome.permanent).toBe(true)
+      expect(outcome.recipientRejected === true).toBe(flagged)
+    }
+  })
+
+  it("a transport error is never flagged as the recipient's address", async () => {
+    vi.doMock("nodemailer", () => ({
+      default: { createTransport: () => ({ sendMail: vi.fn().mockRejectedValue(Object.assign(new Error("connect ECONNREFUSED"), { code: "ECONNECTION" })) }) },
+    }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    const outcome = await freshChannel.send(payload)
+    expect(outcome.ok).toBe(false)
+    if (!outcome.ok) expect(outcome.recipientRejected).toBeUndefined()
+  })
+
   it("temporary failure (ETIMEDOUT): permanent is not true, so the outbox keeps retrying", async () => {
     vi.doMock("nodemailer", () => ({
       default: {

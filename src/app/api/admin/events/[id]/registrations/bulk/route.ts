@@ -46,7 +46,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   switch (parsed.data.action) {
     case "cancel": {
-      const cancelledIds = await cancelRegistrations(db, actor, regs.filter((r) => r.status === "active"))
+      const cancelledIds = await cancelRegistrations(db, actor, regs.filter((r) => r.status === "active" || r.status === "unconfirmed"))
       return NextResponse.json({ done: cancelledIds.length, cancelledIds, skipped: ids.length - cancelledIds.length })
     }
     case "make_leader": {

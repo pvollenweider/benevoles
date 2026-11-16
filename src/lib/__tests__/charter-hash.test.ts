@@ -39,12 +39,20 @@ describe("charter-hash", () => {
 })
 
 describe("resolveCharterText", () => {
-  it("falls back to the default when the organization has no custom charter", () => {
-    expect(resolveCharterText(null)).toBe(buildVolunteerCharter())
-    expect(resolveCharterText(undefined)).toBe(buildVolunteerCharter())
+  it("falls back to the default for the organization's insurance choice when it has no custom charter", () => {
+    expect(resolveCharterText(null, true)).toBe(buildVolunteerCharter({ hasOrgInsurance: true }))
+    expect(resolveCharterText(undefined, true)).toBe(buildVolunteerCharter({ hasOrgInsurance: true }))
+    expect(resolveCharterText(null, false)).toBe(buildVolunteerCharter({ hasOrgInsurance: false }))
   })
 
-  it("uses the organization's own text otherwise", () => {
-    expect(resolveCharterText("Mon texte")).toBe("Mon texte")
+  // Regression: resolveCharterText(null) used to hash the « with insurance » default even for an
+  // organization whose switch was off, so the proof named a text the volunteer was never meant to see.
+  it("hashes differently with the switch off than on, for an organization without custom text", () => {
+    expect(hashCharterText(resolveCharterText(null, false))).not.toBe(hashCharterText(resolveCharterText(null, true)))
+  })
+
+  it("uses the organization's own text otherwise, whatever the switch", () => {
+    expect(resolveCharterText("Mon texte", true)).toBe("Mon texte")
+    expect(resolveCharterText("Mon texte", false)).toBe("Mon texte")
   })
 })

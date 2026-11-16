@@ -3,28 +3,41 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { buildDayParts, type VolData, type ShiftRow, type ShowEntry, directoryRegistrations } from "@/lib/pdf-export-gantt"
+import { buildDayParts, type PdfSectors, type VolData, type ShiftRow, type ShowEntry, directoryRegistrations } from "@/lib/pdf-export-gantt"
+import { roleSectorOf } from "@/lib/role-settings"
+import { sectorsAdopted } from "@/lib/sectors"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { sectorFilterOfRequest } from "@/lib/sector-filter-data"
+import { sectorFilterCaption } from "@/lib/sector-filter"
+import { PRINT_BUTTON_SCRIPT_TAG } from "@/lib/inline-scripts"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+/**
+ * GET /api/admin/events/[id]/export/pdf: the full export (planning, recap, volunteers).
+ * `?secteur=` (#1170) keeps the postes of one sector, read now, and says so under the title.
+ */
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { db } = guard
 
   const { id } = await params
+  const sector = await sectorFilterOfRequest(db, id, req)
+  if (!sector) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  const caption = sectorFilterCaption(sector.filter)
 
   const event = await db.event.findFirst({
     where: { id },
     include: {
       organization: { select: { timeZone: true } },
+      sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
       shifts: {
-        where: { status: { not: "cancelled" } },
+        where: { status: { not: "cancelled" }, ...sector.shiftWhere },
         include: {
           registrations: {
             where: { status: { in: [...LIVE_STATUSES] } },
@@ -63,11 +76,19 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const showSchedule = (event.showSchedule as ShowEntry[] | null) ?? []
 
+  // By sector (#1147), once the event adopted sectors: each poste's sector over the whole event.
+  let bySector: PdfSectors | undefined
+  if (sectorsAdopted(event)) {
+    const sectorOf: Record<string, string | null> = {}
+    for (const role of new Set(event.shifts.map((s) => s.roleName))) sectorOf[role] = roleSectorOf(event.shifts.filter((s) => s.roleName === role))
+    bySector = { sectors: event.sectors, sectorOf }
+  }
+
   let allGantts = ""
   let allRecaps = ""
   for (const [key, { date, shifts }] of dayMap) {
     const dayShows = showSchedule.filter((s) => s.date === key)
-    const { gantt, recap } = buildDayParts(date, shifts, dayShows, showWaitlist)
+    const { gantt, recap } = buildDayParts(date, shifts, dayShows, showWaitlist, bySector)
     allGantts += gantt
     allRecaps += recap
   }
@@ -99,7 +120,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>${esc(event.title)} – Export</title>
+  <title>${esc(event.title)} – Export${caption ? ` – ${esc(caption)}` : ""}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -194,6 +215,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .gantt-table .shift-cell, .gantt-table .show-band-cell { padding: 3px 3px; overflow-wrap: anywhere; }
     .hour-th  { border-left: 2px solid #374151 !important; font-weight: 700; color: #111827; font-size: 9px; }
     .hour-mark { border-left: 2px solid #9CA3AF !important; }
+
+    /* A sector's first row (#1147): bold, framed, readable without its background in print. */
+    .sector-row .sector-cell { text-align: left; font-weight: 700; font-size: 10px; padding: 4px 6px; background: #F3F4F6; border-top: 2px solid #374151; }
 
     .role-cell {
       text-align: left;
@@ -295,8 +319,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     <div>
       <div class="event-title">${esc(event.title)}</div>
       <div class="event-meta">Export du ${esc(ts)}</div>
+      ${caption ? `<div class="event-meta"><strong>${esc(caption)}</strong></div>` : ""}
     </div>
-    <button class="print-btn" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+    <button type="button" class="print-btn" data-print>Imprimer / Enregistrer en PDF</button>
   </div>
 
   <section class="section section-planning" aria-label="Planning">
@@ -320,6 +345,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       <tbody>${volRows}</tbody>
     </table>
   </section>
+  ${PRINT_BUTTON_SCRIPT_TAG}
 </body>
 </html>`
 

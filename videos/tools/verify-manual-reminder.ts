@@ -5,7 +5,7 @@
 import { chromium } from "playwright"
 import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { mkdir, writeFile } from "node:fs/promises"
 
 type Mail = { ID: string; To: { Address: string }[]; Subject: string }
@@ -13,7 +13,7 @@ type Mail = { ID: string; To: { Address: string }[]; Subject: string }
 async function main() {
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video environment required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const event = await db.event.findFirstOrThrow({ where: { organizationId: "default", slug: "atelier-rappels" }, include: { registrations: { include: { volunteer: true, shift: true } } } })
@@ -28,7 +28,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/events/${event.id}/edit`)
     const message = "Retrouve-nous au stand quinze minutes avant ton horaire. Prends une gourde. Merci pour ton aide !"
     const saved = page.waitForResponse(r => r.url().endsWith(`/api/admin/events/${event.id}`) && r.request().method() === "PATCH" && r.ok())
@@ -51,11 +51,13 @@ async function main() {
     await modal.getByRole("button", { name: "Envoyer", exact: true }).click()
     const response = await sent
     const result = await response.json()
-    if (!response.ok() || result.sent !== 3 || result.failed !== 0) throw new Error("Expected three actual manual reminders")
-    await modal.getByText("3 rappels envoyés", { exact: true }).waitFor()
-    const newMail = (await inbox()).filter(m => !before.has(m.ID))
+    if (!response.ok() || result.queued !== 3) throw new Error("Expected three actual manual reminders")
+    await modal.getByText("3 rappels en cours d'envoi", { exact: true }).waitFor()
     const active = event.registrations.filter(r => r.status === "active")
     const recipients = [...new Set(active.map(r => r.volunteer.email).filter(Boolean))]
+    // Queued, then delivered right after the response (#1105): wait for them to reach the mailbox.
+    let newMail = (await inbox()).filter(m => !before.has(m.ID))
+    for (let i = 0; i < 30 && newMail.length < recipients.length; i++) { await page.waitForTimeout(500); newMail = (await inbox()).filter(m => !before.has(m.ID)) }
     if (newMail.length !== recipients.length || recipients.some(email => newMail.filter(m => m.To.some(t => t.Address === email)).length !== 1)) throw new Error("Wrong recipients or duplicate reminders")
     const lea = newMail.find(m => m.To.some(t => t.Address === "video.reminder.dd@example.org"))!
     const detailResponse = await page.request.get(`http://localhost:48026/api/v1/message/${lea.ID}`)

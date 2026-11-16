@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
+import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, bulkDeactivateMembersRecap, bulkDeleteMembersRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap, unsavedRoleOrderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -26,7 +26,7 @@ describe("action recaps", () => {
       row("v2", "active", null), // no address: nothing
       row("v3", "waiting"), row("v4", "requested"), row("v5", "offered"), // not removed
     ])
-    expect(counts).toEqual({ registrations: 3, people: 2, withEmail: 1, notConfirmed: 3 })
+    expect(counts).toEqual({ registrations: 3, people: 2, withEmail: 1, notConfirmed: 3, pendingConfirmation: 0 })
     const r = bulkCancelRecap({ ...counts, waitlisted: 0 })
     expect(r.title).toBe("Retirer 2 bénévoles de leur créneau ?")
     expect(r.lines.slice(0, 4)).toEqual([
@@ -44,7 +44,11 @@ describe("action recaps", () => {
     expect(bulkLeaderRecap({ people: 2, withoutEmail: 1 }).lines).toContain("1 personne ignorée : pas d'adresse email.")
     expect(bulkLeaderRecap({ people: 1, withoutEmail: 0 }).lines).toHaveLength(3)
     expect(bulkResendRecap({ people: 4 }).title).toBe("Renvoyer leur lien personnel à 4 bénévoles ?")
-    expect(remindInvitedRecap({ people: 1 }).lines[0]).toBe("1 email de relance envoyé.")
+    expect(remindInvitedRecap({ people: 1 }).lines[0]).toBe("1 email de relance part dans les minutes qui suivent.")
+    expect(remindInvitedRecap({ people: 150 }).lines[0]).toBe("150 emails de relance partent dans les minutes qui suivent.")
+    // #1105: who was emailed less than 48 hours ago gets nothing, said before the log line.
+    expect(remindInvitedRecap({ people: 2, recent: 1 }).lines.at(-2)).toBe("1 membre invité ou relancé il y a moins de 48 heures ne reçoit rien cette fois.")
+    expect(remindInvitedRecap({ people: 2, recent: 3 }).lines).toContain("3 membres invités ou relancés il y a moins de 48 heures ne reçoivent rien cette fois.")
   })
 
   it("remind: mentions declined members left out when there are any (#558)", () => {
@@ -66,8 +70,22 @@ describe("action recaps", () => {
   it("organisation toggle, deletion and broadcast", () => {
     expect(toggleOrgRecap("Asso", true)).toMatchObject({ confirmLabel: "Désactiver", danger: true })
     expect(toggleOrgRecap("Asso", false)).toMatchObject({ confirmLabel: "Réactiver", danger: false })
-    expect(deleteOrgRecap({ name: "Asso", events: 2, volunteers: 1, admins: 3 }).lines[0]).toBe("Toutes ses données sont effacées : 2 événements, 1 membre, 3 administrateurs, inscriptions et journaux.")
-    expect(broadcastRecap(1).title).toBe("Envoyer cette communication à 1 administrateur ?")
+    expect(deleteOrgRecap({ name: "Asso", events: 2, volunteers: 1, admins: 3 }).lines[0]).toBe("Toutes ses données sont effacées : 2 événements, 1 membre, 3 organisateurs, inscriptions et journaux.")
+    expect(broadcastRecap(1).title).toBe("Envoyer cette communication à 1 organisateur ?")
+  })
+
+  // #762: prefilling a product update from a version only asks when it would overwrite something.
+  it("prefill: replaces the draft, asks only when a field has text", () => {
+    expect(prefillRecap("2.5.0")).toEqual({
+      title: "Remplacer le brouillon par les nouveautés de la version 2.5.0 ?",
+      lines: ["L'objet et le contenu actuels sont remplacés. Rien n'est envoyé."],
+      confirmLabel: "Remplacer le brouillon",
+      danger: false,
+    })
+    expect(prefillNeedsConfirmation("", "")).toBe(false)
+    expect(prefillNeedsConfirmation("  ", "\n ")).toBe(false)
+    expect(prefillNeedsConfirmation("Objet", "")).toBe(true)
+    expect(prefillNeedsConfirmation("", "Texte")).toBe(true)
   })
 
   // #587: in words, without the en dash read « tiret »; minutes and past midnight kept.
@@ -105,5 +123,47 @@ describe("action recaps", () => {
     const r = acceptRequestRecap({ name: "Chloé Roy", shift: "Bar, Soir", hasEmail: true })
     expect(r.lines[0]).toBe("La demande de Chloé Roy sur « Bar, Soir » devient une inscription confirmée.")
     expect(r.lines.join(" ")).not.toMatch(/·/)
+  })
+})
+
+describe("bulkDeactivateMembersRecap (#1307)", () => {
+  it("is a simple, reversible confirmation that says how to reactivate", () => {
+    expect(bulkDeactivateMembersRecap(12)).toMatchObject({
+      title: "Désactiver 12 membres ?",
+      confirmLabel: "Désactiver",
+      danger: false,
+    })
+    expect(bulkDeactivateMembersRecap(12).lines.join(" ")).toContain("Vous pourrez les réactiver en affichant les inactifs")
+    expect(bulkDeactivateMembersRecap(1).title).toBe("Désactiver 1 membre ?")
+    expect(bulkDeactivateMembersRecap(1).lines.join(" ")).toContain("Vous pourrez le réactiver en affichant les inactifs")
+  })
+})
+
+describe("unsavedRoleOrderRecap", () => {
+  it("asks before dropping an unsaved poste order: a safe way back, then closing without saving", () => {
+    const r = unsavedRoleOrderRecap()
+    expect(r.title).toBe("L'ordre des postes n'est pas enregistré")
+    expect(r.lead).toContain("« Enregistrer l'ordre »")
+    expect(r.cancelLabel).toBe("Revenir aux postes")
+    expect(r.confirmLabel).toBe("Fermer sans enregistrer")
+    expect(r.danger).toBe(false)
+    expect(r.lines).toEqual([])
+  })
+})
+
+describe("bulkDeleteMembersRecap lead (#1307)", () => {
+  it("announces the whole selection when nothing is known about registrations", () => {
+    expect(bulkDeleteMembersRecap(3).lead).toBe("3 fiches seront supprimées définitivement.")
+    expect(bulkDeleteMembersRecap(1, 0).lead).toBe("Cette fiche sera supprimée définitivement.")
+  })
+
+  it("says how many go and how many stay when some members have registrations", () => {
+    expect(bulkDeleteMembersRecap(2, 1).lead).toBe("1 fiche sera supprimée définitivement. 1 membre a des inscriptions et sera conservé.")
+    expect(bulkDeleteMembersRecap(10, 3).lead).toBe("7 fiches seront supprimées définitivement. 3 membres ont des inscriptions et seront conservés.")
+  })
+
+  it("never announces a deletion when every selected member will be kept", () => {
+    expect(bulkDeleteMembersRecap(2, 2).lead).toBe("Aucune fiche ne sera supprimée : les 2 membres sélectionnés ont des inscriptions.")
+    expect(bulkDeleteMembersRecap(1, 1).lead).toBe("Cette fiche ne sera pas supprimée : ce membre a des inscriptions.")
   })
 })

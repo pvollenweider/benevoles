@@ -29,6 +29,9 @@ export type MyAnswerQuestion = {
   /** Follow-up question (#1016): its parent and the parent's answers that show it. */
   parentId?: string | null
   showIfValues?: string[]
+  /** Who is asked (#1140): the API keeps only the questions asked for the postes held. */
+  displayScope?: string | null
+  displayRoleNames?: string[] | null
   /** The answers to this question, as read for one volunteer: at most one. */
   answers: { values: string[] }[]
 }
@@ -63,7 +66,7 @@ export function myAnswersQuery(eventId: string, volunteerId: string) {
     where: { eventId, archivedAt: null },
     orderBy: [{ position: "asc" as const }, { createdAt: "asc" as const }],
     select: {
-      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true,
+      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true,
       answers: { where: { volunteerId }, select: { values: true } },
     },
   }
@@ -87,6 +90,20 @@ export function myAnswerRows(questions: MyAnswerQuestion[]): MyAnswerRow[] {
       parentId: q.parentId ?? null, showIfValues: q.showIfValues ?? [], values: text ? values : [],
     }
   })
+}
+
+/**
+ * « Réponses conservées » (#1140): the answers kept for questions no longer asked to the volunteer
+ * (asked to postes they no longer hold), read-only, in form order. Only those with an answer: a
+ * question they were never asked says nothing to them.
+ */
+export const KEPT_ANSWERS_TITLE = "Réponses conservées pour tes anciens postes"
+export const KEPT_ANSWERS_NOTE = "Ces questions ne concernent plus tes créneaux actuels. L'organisation garde tes réponses ; elles redeviennent modifiables si tu reprends un créneau de ces postes."
+
+export type KeptAnswerRow = { id: string; label: string; answer: string }
+
+export function keptAnswerRows(outOfScope: MyAnswerQuestion[]): KeptAnswerRow[] {
+  return myAnswerRows(outOfScope).filter((r) => r.answer !== null).map((r) => ({ id: r.id, label: r.label, answer: r.answer! }))
 }
 
 /** The stored answers by question id, as `checkAnswers` keeps the questions not sent (#1016). */

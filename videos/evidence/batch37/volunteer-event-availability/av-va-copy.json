@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:41:02.503Z",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "promptSha256": "dce1c524b57cb30b191051692747b6c4f3e6f664a7887348502d767e3c3150f4",
+  "clipSha256": "a81f4d68a12efae4051ae5249d2dad709a6702cac975a69359aa6d02a08a4f5f",
+  "scene": "va-copy",
+  "review": {
+    "heardOpening": "Le samedi, Reprendre les horaires du vendredi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le samedi",
+        "visibleSeconds": 0.8,
+        "visible": "La section Samedi 21 novembre est affichée à l'écran sans réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "Reprendre les horaires du vendredi",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur le lien 'Reprendre les horaires du vendredi 20 novembre'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "recopie les deux horaires d'un coup",
+        "visibleSeconds": 4.5,
+        "visible": "Les deux créneaux horaires sont dupliqués automatiquement sous le samedi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -11,7 +11,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 type Vol = { id: string; firstName: string; lastName: string; birthDate: Date | null; erasedAt: Date | null; mergedIntoId: string | null; active: boolean }
 type Consent = { eventId: string; volunteerId: string; status: string; noticeVersion: string; source?: string; decidedAt?: Date }
-type Ev = { id: string; slug: string; organizationId: string; publicStatus: string; shiftRosterEnabled: boolean; personalDataAnonymizedAt: Date | null; startDate: Date; endDate: Date; organization: { timeZone: string } }
+type Ev = { id: string; slug: string; organizationId: string; publicStatus: string; shiftRosterEnabled: boolean; personalDataAnonymizedAt: Date | null; startDate: Date; endDate: Date; organization: { timeZone: string; active: boolean; suspendedAt: Date | null } }
 
 const db = vi.hoisted(() => ({
   events: new Map<string, Ev>(),
@@ -93,7 +93,7 @@ const vol = (id: string, firstName: string, lastName: string, more: Partial<Vol>
 
 function seed() {
   db.events.clear(); db.volunteers.clear(); db.shifts.length = 0; db.registrations.length = 0; db.consents.length = 0; db.invites.length = 0
-  const ev = (id: string, slug: string): Ev => ({ id, slug, organizationId: "org-a", publicStatus: "published", shiftRosterEnabled: true, personalDataAnonymizedAt: null, startDate: new Date("2099-10-01T00:00:00Z"), endDate: new Date("2099-10-02T00:00:00Z"), organization: { timeZone: "Europe/Zurich" } })
+  const ev = (id: string, slug: string): Ev => ({ id, slug, organizationId: "org-a", publicStatus: "published", shiftRosterEnabled: true, personalDataAnonymizedAt: null, startDate: new Date("2099-10-01T00:00:00Z"), endDate: new Date("2099-10-02T00:00:00Z"), organization: { timeZone: "Europe/Zurich", active: true, suspendedAt: null } })
   db.events.set("ev-a", ev("ev-a", "fete"))
   db.events.set("ev-b", ev("ev-b", "autre"))
   const d1 = new Date("2099-10-01T00:00:00Z")

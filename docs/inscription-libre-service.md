@@ -1,6 +1,6 @@
 # Inscription en libre-service
 
-Une association crée son espace elle-même depuis `/inscription` (#810). Cette page décrit le parcours, ce que l'opérateur voit et fait, et les protections contre les abus. Le parcours côté association est expliqué aux organisateurs dans [guide/creer-son-espace.md](../guide/creer-son-espace.md) (`/doc/creer-son-espace`).
+Une association crée son espace elle-même depuis `/inscription` (#810). Cette page décrit le parcours, ce que l'opérateur voit et fait, et les protections contre les abus. Le parcours côté association est expliqué aux organisateurs dans [content/guide/creer-son-espace.md](../content/guide/creer-son-espace.md) (`/doc/creer-son-espace`).
 
 ## Parcours
 
@@ -54,7 +54,7 @@ Pas de CAPTCHA (accessibilité, vie privée). À la place :
 - les plafonds d'envoi d'emails (`src/lib/notifications/send-limits.ts`) : par destinataire pour les emails déclenchés depuis une page publique, et 60 emails de confirmation par heure pour toute la plateforme (`EMAIL_LIMIT_SIGNUP_PER_HOUR`) ;
 - les noms saisis refusent liens, adresses et retours à la ligne, et l'email de confirmation ne reprend aucun texte saisi : il ne peut pas servir à faire passer un message ;
 - la **liste de blocage** (`/super-admin/blocklist`) : une adresse email, un domaine (confirmation demandée pour un fournisseur courant) ou une adresse IP (toujours pour une durée limitée, conservée sous forme d'empreinte), avec une raison. Une demande bloquée reçoit la réponse habituelle et rien n'est enregistré ; un blocage posé entre la demande et la confirmation vaut aussi ;
-- la **suspension** d'une organisation pour abus, depuis sa fiche (`src/lib/org-suspension.ts`) : ses administrateurs ne se connectent plus, ses pages publiques ne répondent plus et ses emails en attente sont annulés ; ses données sont conservées.
+- la **suspension** d'une organisation pour abus, depuis sa fiche (`src/lib/org-suspension.ts`) : ses administrateurs ne se connectent plus (même si une écriture incohérente l'avait laissée active), ses pages publiques et les liens de ses bénévoles et responsables de secteur ne répondent plus, et ses emails en attente sont annulés ; ses données sont conservées. Une réactivation, par ses administrateurs ou par l'opérateur, est décidée sous le verrou de la ligne de l'organisation : une suspension posée au même moment l'emporte toujours.
 
 ## Fermer l'inscription
 
@@ -68,7 +68,7 @@ kubectl -n benevoles set env deployment/benevoles-app SIGNUP=off
 kubectl -n benevoles set env deployment/benevoles-app SIGNUP-
 ```
 
-`set env` redémarre le pod et l'emporte sur le secret. La variable ajoutée ainsi ne figure pas dans `k8s/deployment.yaml` : un déploiement suivant (`kubectl apply`) la laisse en place, l'inscription reste fermée jusqu'à `SIGNUP-`.
+`set env` redémarre le pod et remplace, dans le Deployment, la valeur que `k8s/deployment.yaml` prend dans le secret. Tant qu'elle est en place, un déploiement s'arrête à l'étape « Deploy app » (Kubernetes refuse une variable qui a à la fois une valeur et une référence au secret) : l'ancienne version continue de servir, inscription fermée. Pour revenir à la configuration sans rouvrir, poser le secret GitHub `SIGNUP=off`, puis rendre à la variable sa référence au secret : `kubectl -n benevoles set env deployment/benevoles-app --from=secret/benevoles-secret --keys=SIGNUP` (elle prend la valeur recopiée au dernier déploiement : relancer le déploiement s'il s'est arrêté avant). Après `SIGNUP-`, le déploiement suivant remet aussi la référence. Le bouton de l'espace super admin n'a pas cette limite.
 
 ## Conservation
 

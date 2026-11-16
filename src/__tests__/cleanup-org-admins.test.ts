@@ -9,9 +9,13 @@ const m = vi.hoisted(() => ({
   orgDeleteMany: vi.fn(),
   adminFindMany: vi.fn(),
   adminDeleteMany: vi.fn(),
+  batchFindMany: vi.fn(),
+  batchDeleteMany: vi.fn(),
+  orgLogDeleteMany: vi.fn(),
 }))
 
 const videoFeedbackDeleteMany = vi.hoisted(() => vi.fn())
+const limitHitDeleteMany = vi.hoisted(() => vi.fn())
 
 vi.mock("@/lib/prisma", () => {
   const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]) }
@@ -21,18 +25,21 @@ vi.mock("@/lib/prisma", () => {
     notificationOutbox: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     targetedMessage: { update: vi.fn(), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     scheduledMessage: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+    sendBatch: { update: vi.fn(), updateMany: vi.fn(), findMany: m.batchFindMany, deleteMany: m.batchDeleteMany },
+    orgLog: { deleteMany: m.orgLogDeleteMany },
+    $executeRaw: vi.fn().mockResolvedValue(0),
   }
   return {
     prisma: {
       ...tx,
-      volunteer: zero, rateLimit: zero, deliveryOutcome: zero, videoFeedback: { deleteMany: videoFeedbackDeleteMany }, signupRequest: zero, signupBlock: zero, operatorLog: zero,
+      volunteer: zero, rateLimit: zero, revokedSession: zero, deliveryOutcome: zero, emailLimitHit: { deleteMany: limitHitDeleteMany }, videoFeedback: { deleteMany: videoFeedbackDeleteMany }, signupRequest: zero, signupBlock: zero, operatorLog: zero, notificationDeliveryCount: zero,
       $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx),
     },
   }
 })
 vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s", AUTH_SECRET: "a".repeat(32), ADMIN_NOTIFICATION_EMAIL: undefined } }))
 vi.mock("@/lib/operator-alerts", () => ({ notifyOperator: vi.fn().mockResolvedValue(undefined) }))
-vi.mock("@/lib/job-runs", () => ({ recordJobRun: (_: string, fn: () => unknown) => fn() }))
+vi.mock("@/lib/job-runs", () => ({ recordJobRun: (_: string, fn: () => unknown) => fn(), loadJobRuns: vi.fn().mockResolvedValue({}) }))
 vi.mock("@/lib/token-encryption-job", () => ({ encryptLegacyTokens: vi.fn().mockResolvedValue(null) }))
 
 const run = async () => {
@@ -45,6 +52,10 @@ beforeEach(() => {
   m.orgDeleteMany.mockResolvedValue({ count: 0 })
   m.adminDeleteMany.mockResolvedValue({ count: 0 })
   videoFeedbackDeleteMany.mockResolvedValue({ count: 0 })
+  limitHitDeleteMany.mockResolvedValue({ count: 0 })
+  m.batchFindMany.mockResolvedValue([])
+  m.batchDeleteMany.mockResolvedValue({ count: 0 })
+  m.orgLogDeleteMany.mockResolvedValue({ count: 0 })
 })
 
 describe("nightly cleanup of deactivated organizations", () => {
@@ -111,5 +122,38 @@ describe("nightly cleanup of video feedback", () => {
     expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.videoFeedback * DAY_MS - 1000)
     expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.videoFeedback * DAY_MS + 1000)
     expect(body.deleted.videoFeedback).toBe(4)
+  })
+})
+
+// #1100: sending limits reached, purged after their retention window (src/lib/retention.ts).
+describe("nightly cleanup of sending limits reached", () => {
+  it("deletes the hours last hit more than RETENTION_DAYS.emailLimitHit ago, and counts them", async () => {
+    m.orgFindMany.mockResolvedValue([])
+    limitHitDeleteMany.mockResolvedValue({ count: 3 })
+    const before = Date.now()
+    const body = await (await run()).json()
+    const cutoff: Date = limitHitDeleteMany.mock.calls[0][0].where.lastAt.lt
+    const { RETENTION_DAYS, DAY_MS } = await import("@/lib/retention")
+    expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.emailLimitHit * DAY_MS - 1000)
+    expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.emailLimitHit * DAY_MS + 1000)
+    expect(body.deleted.limitHits).toBe(3)
+  })
+})
+
+// #1101: batches of emails are kept 3 years, then deleted with their organisation log entry.
+describe("nightly cleanup of batches of emails", () => {
+  it("deletes the batches older than RETENTION_DAYS.sendBatch and their log entries, and counts them", async () => {
+    m.orgFindMany.mockResolvedValue([])
+    m.batchFindMany.mockResolvedValue([{ id: "b1" }, { id: "b2" }])
+    m.batchDeleteMany.mockResolvedValue({ count: 2 })
+    const before = Date.now()
+    const body = await (await run()).json()
+    const cutoff: Date = m.batchFindMany.mock.calls[0][0].where.createdAt.lt
+    const { RETENTION_DAYS, DAY_MS } = await import("@/lib/retention")
+    expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.sendBatch * DAY_MS - 1000)
+    expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.sendBatch * DAY_MS + 1000)
+    expect(m.orgLogDeleteMany).toHaveBeenCalledWith({ where: { entityType: "SendBatch", entityId: { in: ["b1", "b2"] } } })
+    expect(m.batchDeleteMany).toHaveBeenCalledWith({ where: { id: { in: ["b1", "b2"] } } })
+    expect(body.deleted.sendBatches).toBe(2)
   })
 })

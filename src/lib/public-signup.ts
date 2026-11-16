@@ -4,6 +4,7 @@
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
 import { tooLongSignupField } from "./signup-limits"
+import { answerConditionProblems, answerConditionRefusal, rawAnswerValues, type ReservedAnswerCondition } from "./role-answer"
 import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
 
 /**
@@ -14,6 +15,8 @@ import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
 
 export type SignupShift = {
   id: string
+  /** The poste (Shift.roleName), for the answer condition shared by its shifts (#962). */
+  roleName?: string
   label: string
   date: string
   startTime: string
@@ -21,8 +24,35 @@ export type SignupShift = {
   status: string
   waitlistEnabled: boolean
   minAge: number | null
+  /** Reserved to an answer (#962): shown on the bar, checked at validation. */
+  reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
   /** Its role may overlap another shift (#986): never a conflict. */
   overlapAllowed?: boolean
+}
+
+/** The answer conditions of the selected shifts, by role (shared by a poste's shifts, #962). */
+function conditionsOf(shifts: SignupShift[]): Map<string, ReservedAnswerCondition> {
+  const out = new Map<string, ReservedAnswerCondition>()
+  for (const s of shifts) {
+    if (s.reservedAnswer) out.set(s.roleName ?? "", { questionId: s.reservedAnswer.questionId, answers: s.reservedAnswer.answers })
+  }
+  return out
+}
+
+/**
+ * The selected shifts whose role's answer condition the form does not satisfy (#962): refused at
+ * validation, next to the question and the shift. The stored answer of a known volunteer is in
+ * `answers` too, so changing it makes the shift bookable.
+ */
+export function signupAnswerConditionProblems(shifts: SignupShift[], answers: Record<string, unknown> | undefined) {
+  const values = new Map(Object.entries(answers ?? {}).map(([id, v]) => [id, rawAnswerValues(v)]))
+  return answerConditionProblems(shifts.map((s) => ({ ...s, roleName: s.roleName ?? "" })), conditionsOf(shifts), values)
+}
+
+/** The first refusal to show for the answer conditions, or null. */
+export function signupAnswerConditionRefusal(shifts: SignupShift[], answers: Record<string, unknown> | undefined): string | null {
+  const [problem] = signupAnswerConditionProblems(shifts, answers)
+  return problem ? answerConditionRefusal(problem.questionLabel, problem.condition.answers) : null
 }
 
 export type MyRegistration = {
@@ -62,10 +92,10 @@ export const EMPTY_SIGNUP_FORM: SignupForm = {
   firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false,
 }
 
-/** Can this shift be added to the selection (not closed/cancelled, full only with a waitlist, not already mine)? */
+/** Can this shift be added to the selection (not closed/cancelled/over, full only with a waitlist, not already mine)? */
 export function isShiftSelectable(shift: SignupShift | undefined, myShiftIds: Set<string>): boolean {
   if (!shift) return false
-  if (shift.status === "closed" || shift.status === "cancelled") return false
+  if (shift.status === "closed" || shift.status === "cancelled" || shift.status === "ended") return false
   if (shift.status === "full" && !shift.waitlistEnabled) return false
   return !myShiftIds.has(shift.id)
 }
@@ -81,11 +111,18 @@ export function conflictingShiftIds<S extends SignupShift>(shifts: S[], selected
   )
 }
 
-/** Whether at least one shift can still be signed up for (open, or full with a waitlist). */
+/** Whether at least one shift can still be signed up for (open, or full with a waitlist; never one that is over). */
 export function hasAvailableShift(shifts: SignupShift[]): boolean {
   return shifts.some(
-    (s) => (s.status !== "full" && s.status !== "closed" && s.status !== "cancelled") || (s.status === "full" && s.waitlistEnabled),
+    (s) => (s.status !== "full" && s.status !== "closed" && s.status !== "cancelled" && s.status !== "ended") || (s.status === "full" && s.waitlistEnabled),
   )
+}
+
+/** What the page says when no shift can be taken: over, or full (#866: a published event that is over). */
+export function noAvailableShiftText(shifts: SignupShift[], ofTheseRoles: boolean): string {
+  const ended = shifts.length > 0 && shifts.every((s) => s.status === "ended")
+  if (ofTheseRoles) return ended ? "Tous les créneaux de ces postes sont terminés." : "Tous les créneaux de ces postes sont complets."
+  return ended ? "Tous les créneaux sont terminés." : "Tous les créneaux sont complets."
 }
 
 /** Shifts grouped by calendar day (YYYY-MM-DD), in their original order. */
@@ -103,6 +140,12 @@ export function validateSignup(input: {
   charterAccepted: boolean
   requirePhone: boolean
   ageGatedShifts: SignupShift[]
+  /** The event protects minors (#1171, lot 2): the birth date is required. */
+  minorsProtected?: boolean
+  /** The selected shifts, whose answer condition is checked here too (#962). */
+  reservedAnswerShifts?: SignupShift[]
+  /** The answers being typed, and the volunteer's stored answers (#962). */
+  answers?: Record<string, unknown>
 }): string | null {
   const { form } = input
   if (!input.charterAccepted) return "Accepte la convention des bénévoles."
@@ -113,6 +156,7 @@ export function validateSignup(input: {
   // #1047: a phone saved before the limit may come back pre-filled, longer than the field allows.
   const tooLong = tooLongSignupField(form)
   if (tooLong) return tooLong.message
+  if (input.minorsProtected && !form.birthDate) return "Date de naissance requise : cet événement protège les moins de 18 ans (pauses et charge)."
   if (input.ageGatedShifts.length > 0) {
     if (!form.birthDate) return "Date de naissance requise pour au moins un des créneaux sélectionnés."
     const tooYoungFor = shiftsTooYoungFor(form.birthDate, input.ageGatedShifts)
@@ -120,7 +164,7 @@ export function validateSignup(input: {
       return `Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`
     }
   }
-  return null
+  return signupAnswerConditionRefusal(input.reservedAnswerShifts ?? [], input.answers)
 }
 
 type ApiRegistration = {
@@ -192,4 +236,12 @@ export function proposedShiftText(state: ProposedShiftState, name: string): stri
     case "held": return `Tu es déjà inscrit·e sur ce créneau : ${name}.`
     case "unavailable": return "Le créneau proposé n'est plus disponible. D'autres créneaux sont peut-être encore ouverts ci-dessous."
   }
+}
+
+/** The hint under the birth date field: the shifts with a minimum age, and the minors' protection. */
+export function birthDateHint(ageGated: { label: string; minAge: number | null }[], minorsProtected: boolean): string {
+  const shifts = ageGated.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")
+  if (shifts && minorsProtected) return `Requise : ${shifts} ; cet événement protège aussi les moins de 18 ans (pauses et charge).`
+  if (minorsProtected) return "Requise : cet événement protège les moins de 18 ans (pauses et charge)."
+  return `Requis : ${shifts}`
 }

@@ -9,9 +9,13 @@ import { serializeAddressStatus } from "@/lib/address-status"
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { env } from "@/lib/env"
 import { countDuplicatePairs } from "@/lib/member-duplicates-data"
-import { loadMemberDeletionEligibilities } from "@/lib/member-deletion-data"
+import { loadMemberDeletionFacts } from "@/lib/member-deletion-data"
 import { MEMBER_DELETION_REASON } from "@/lib/member-deletion"
 import { memberRecordState } from "@/lib/member-record-state"
+import HelpLink from "@/components/admin/HelpLink"
+import InviteToEventMenu from "@/components/admin/InviteToEventMenu"
+import { eventDatesLabel } from "@/lib/event-nav"
+import { inviteTargetsWhere } from "@/lib/invite-targets"
 
 export const dynamic = "force-dynamic"
 
@@ -59,6 +63,13 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
   ])
   const timeZone = orgTimeZone(org)
   const today = localToday(new Date(), timeZone)
+  // « Inviter à un événement » (#1098): the published events not over yet in the organisation's
+  // zone, soonest first (db is scoped to this organisation).
+  const inviteTargets = await db.event.findMany({
+    where: inviteTargetsWhere(today),
+    select: { id: true, title: true, startDate: true, endDate: true },
+    orderBy: [{ startDate: "asc" }, { title: "asc" }],
+  })
   const addressStatuses = await loadAddressStatuses(
     ctx.organizationId,
     volunteers.map((v) => ({ id: v.id, addressHash: v.email ? addressHash(v.email, env.AUTH_SECRET) : null })),
@@ -66,8 +77,9 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
   // « Doublons possibles » (#601): count only, for the header link — the full pairs are loaded by
   // /admin/members/duplicates itself.
   const duplicatesCount = await countDuplicatePairs(db, ctx.organizationId)
-  // Whether each member can be permanently deleted (#667): one extra query for the whole list.
-  const deletionEligibilities = await loadMemberDeletionEligibilities(
+  // Whether each member can be permanently deleted (#667), and how many registrations it has
+  // (reused by the bulk deletion's deactivation checkbox, #1307): one extra query for the whole list.
+  const deletionFacts = await loadMemberDeletionFacts(
     db,
     volunteers.map((v) => ({ id: v.id, active: v.active, mergedIntoId: v.mergedIntoId })),
   )
@@ -99,7 +111,8 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
           lastShiftDate,
           lastPresenceDate,
           addressStatus: serializeAddressStatus(addressStatuses.get(v.id) ?? { kind: "ok" }),
-          deletion: deletionEligibilities.get(v.id) ?? { eligible: false, reason: MEMBER_DELETION_REASON.active },
+          deletion: deletionFacts.get(v.id)?.eligibility ?? { eligible: false, reason: MEMBER_DELETION_REASON.active },
+          registrationCount: deletionFacts.get(v.id)?.registrationCount ?? 0,
           record: memberRecordState(v, byId, timeZone),
         }
       })}
@@ -110,6 +123,10 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
       initialDeletedName={initialDeletedName}
       defaultHoursPeriod={defaultPeriod(new Date(), timeZone)}
       duplicatesCount={duplicatesCount}
+      helpLink={<HelpLink route="/admin/members" />}
+      inviteMenu={<InviteToEventMenu events={inviteTargets.map((e) => ({
+        id: e.id, title: e.title, dateLabel: eventDatesLabel(e.startDate.toISOString(), e.endDate.toISOString()),
+      }))} />}
     />
   )
 }

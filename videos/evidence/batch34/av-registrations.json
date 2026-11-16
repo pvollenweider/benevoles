@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T20:55:51.413Z",
+  "videoSha256": "6c46cb19015bd1d74ef7ffb1a00878b300299a02bf1bf181389cf014075adb02",
+  "promptSha256": "c3e7209c9c11537b57e758c203b48b754b2e492ecc5e5e75c4a52a6d5e2b0c82",
+  "clipSha256": "125468c05d07346041932b3fb8c58bdc8c9a71d4e3fc03bd8ebac8353f8935b4",
+  "scene": "wl-registrations",
+  "review": {
+    "heardOpening": "Dans Inscriptions, ses deux créneaux restants",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Inscriptions",
+        "visibleSeconds": 0,
+        "visible": "L'onglet Inscriptions est sélectionné avec la liste des inscriptions affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.6,
+        "spoken": "ses deux créneaux restants portent maintenant la mention Limite dépassée",
+        "visibleSeconds": 0,
+        "visible": "Une ligne pour Sarah Smith affiche en rouge la mention 'Limite dépassée', mais le deuxième créneau n'est pas visible car la page n'est pas défilée vers le bas",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "avec la règle, les heures et l'écart",
+        "visibleSeconds": 0,
+        "visible": "Le texte d'avertissement sous Sarah Smith détaille les 6 heure(s), la plage 11h à 21h et la limite de 3 h 30",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "L'organisation voit tout de suite quel programme revoir",
+        "visibleSeconds": 7.8,
+        "visible": "Écran fixe sur le tableau des inscriptions signalant le dépassement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Un seul créneau portant la mention d'alerte est visible à l'écran sous Sarah Smith ; le second créneau mentionné oralement est hors champ en bas de page sans défilement."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine fluide, posée et parfaitement intelligible, accompagnée d'un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

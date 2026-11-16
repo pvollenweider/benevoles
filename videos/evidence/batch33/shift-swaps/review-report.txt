@@ -1,0 +1,8 @@
+STATUS: READY
+Batch33 third and final owner-authorized take (2026-10-29), fresh seed.
+Product commit f8357a76441c78fe64cbf378fd76694a1ab0ef37; BUILD_ID hxc0T9m6qdNq_z0QuUTy4.
+Duration 208400ms. Validate and source/final chapter ASR pass; 11 AV chapters, 39 checkpoints, no flags.
+Full multilingual soundtrack ASR: no stray instructions/English; zero viewer tu; two exact screen quotations Tu cèdes/Tu reçois in ASR/VTT.
+Music gap 15–19.3LU; music-only min -33.6LUFS; no gaps. 14 real clicks, zero keys, synced soft effects.
+Frame inspection: acceptance confirmation, pending approval, actual final journal at207s. Real Mailpit body crop, no invented email.
+No product changes or further take. Real-time subjective listening unavailable; automated audio/visual review and frame inspection performed.

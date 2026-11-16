@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:19:45.859Z",
+  "videoSha256": "819011bf3a95717efc2c92dc32721a4c7974fe5f11f7b8097c4f78e0e98ccf62",
+  "promptSha256": "ec81d0ad5dac511ece4e3b4702f9c7c3c8aa3467cc45289022e99ad53fa16ad0",
+  "clipSha256": "cca35dc7051c155e8ebf5127bde8ef9ce423681d57f29b7e42c822520a3c7676",
+  "scene": "beta-operator",
+  "review": {
+    "heardOpening": "Dans l'espace super admin, ouvrons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "ouvrons Fonctions bêta depuis le menu Super Admin.",
+        "visibleSeconds": 1.8,
+        "visible": "Sélection de l'option Fonctions bêta dans le menu déroulant et ouverture de la page dédiée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Cochons Secteurs, puis Échanges de créneaux",
+        "visibleSeconds": 11.2,
+        "visible": "Cochage de la case Secteurs puis de la case Échanges de créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.7,
+        "spoken": "et enregistrons.",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur le bouton Enregistrer et message 'Fonctions ouvertes enregistrées.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Pour l'instant, aucune organisation n'y participe.",
+        "visibleSeconds": 20.8,
+        "visible": "Affichage de la section 'Organisations participantes' avec la mention 'Aucune organisation ne participe à la bêta.'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

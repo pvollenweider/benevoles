@@ -10,8 +10,9 @@ import Link from "next/link"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { useHydrated } from "@/lib/use-hydrated"
+import { loginDestination } from "@/lib/admin-next"
 
-const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const inputClass = "w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 export default function LoginPage() {
   const id = useId()
@@ -21,7 +22,7 @@ export default function LoginPage() {
   const busyRef = useRef(false)
   const [loading, setLoading] = useState(false)
   // signIn isn't a fetch: only the error handling of the shared hook is used here.
-  const { error, fail, isInvalid, reset } = useSubmit()
+  const { error, fail, isInvalid, reset, quiet, alertShown } = useSubmit()
   // Before hydration the form has no submit handler: a tap on a slow phone reloaded the empty page
   // and lost what was typed (seen in E2E as a login stuck on /admin/login, #592). The button stays
   // disabled until the handler is attached. The fields are uncontrolled (read at submit): with a
@@ -44,7 +45,9 @@ export default function LoginPage() {
         fail("Email ou mot de passe incorrect.", "password", passwordRef.current)
         return
       }
-      router.push("/admin/events")
+      // Back to the admin page that sent here (the proxy's callbackUrl), the dashboard otherwise (#1098).
+      const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl")
+      router.push(loginDestination(callbackUrl))
       router.refresh()
     } catch {
       fail("Connexion impossible. Vérifiez votre réseau et réessayez.")
@@ -59,8 +62,8 @@ export default function LoginPage() {
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Administration</h1>
-          <p className="text-gray-600 text-sm mt-1">Espace réservé aux organisateurs</p>
+          <h1 className="text-2xl font-bold text-gray-900">Espace organisateur</h1>
+          <p className="text-gray-600 text-sm mt-1">Connectez-vous pour gérer vos événements.</p>
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
@@ -89,7 +92,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <FormStatus error={error} errorId={`${id}-error`} />
+          <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
 
           <button
             type="submit"

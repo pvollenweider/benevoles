@@ -8,11 +8,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "gandi-webhook/**"
+      - "k8s/gandi-webhook/**"
   pull_request:
     branches: [main]
     paths:
-      - "gandi-webhook/**"
+      - "k8s/gandi-webhook/**"
       - ".github/workflows/gandi-webhook.yml"
 
 env:
@@ -26,20 +26,19 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v7
-
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Log in to GHCR
         if: github.event_name == 'push'
-        uses: docker/login-action@v3
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
-          context: ./gandi-webhook
+          context: ./k8s/gandi-webhook
           push: ${{ github.event_name == 'push' }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

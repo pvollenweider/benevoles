@@ -5,7 +5,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 
 async function main() {
   const base = process.env.VIDEO_BASE_URL
@@ -14,7 +14,7 @@ async function main() {
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
   const preparation = JSON.parse(await readFile("videos/output/email-delivery-failures/outbox-preparation.json", "utf8"))
   assert.equal(preparation.organizationId, "video-delivery")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const org = await db.organization.findUniqueOrThrow({ where: { id: "video-delivery" } })
@@ -30,7 +30,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.delivery.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/settings/notifications`)
     for (const label of ["En attente d'envoi", "Nouvel essai prévu", "Échec définitif", "Envoyé"]) assert(await page.getByText(label, { exact: true }).count() > 0, `Missing actual UI state: ${label}`)
     const row = page.getByRole("row").filter({ hasText: "video.delivery.recoverable@example.org" })
@@ -47,7 +47,7 @@ async function main() {
     const repeated = await page.request.post(`${base}/api/admin/settings/notifications/${before.id}/retry`)
     assert.equal(repeated.status(), 404)
     await page.goto(`${base}/admin/members`)
-    await page.getByRole("button", { name: "Modifier Léa Exemple", exact: true }).click()
+    await page.getByRole("button", { name: `Modifier ${member.firstName} ${member.lastName}`, exact: true }).click()
     const dialog = page.getByRole("dialog", { name: "Modifier le membre" })
     await dialog.getByLabel("Email", { exact: true }).fill("video.delivery.corrected@example.org")
     const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/members/${member.id}`) && response.request().method() === "PATCH")

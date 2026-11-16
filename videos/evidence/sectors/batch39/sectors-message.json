@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:06:40.040Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "8e54a9a9f4f8f8966f65ad9ad07c88419578f55041d8e8fcb9c954a55c801de6",
+  "clipSha256": "373c41804581f00b7b136c80ea891315e152e4445d0067dcb03daf5fe2fae511",
+  "scene": "sectors-message",
+  "review": {
+    "heardOpening": "Revenons aux inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Revenons aux inscriptions du secteur Parking.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page Inscriptions filtrée sur le secteur Parking",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "Le bouton Écrire au secteur Parking ouvre Écrire aux bénévoles, avec ce secteur déjà choisi.",
+        "visibleSeconds": 2.8,
+        "visible": "Ouverture du formulaire Écrire aux bénévoles avec le secteur Parking prérempli",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Le compteur indique combien de personnes recevront le message.",
+        "visibleSeconds": 8.2,
+        "visible": "Défilement montrant le compteur indiquant « 8 personnes recevront ce message »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, posée et bien synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

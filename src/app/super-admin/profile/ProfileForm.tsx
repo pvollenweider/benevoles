@@ -70,6 +70,9 @@ export default function ProfileForm({ currentEmail }: { currentEmail: string }) 
           router.push("/admin/login")
           return
         }
+        // A new sign-in asks for the second factor again (pentest F6), then comes back here.
+        router.push("/admin/two-factor?callbackUrl=%2Fsuper-admin%2Fprofile")
+        return
       }
       setSuccess(true)
       setCurrentPassword("")

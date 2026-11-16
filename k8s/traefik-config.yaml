@@ -12,13 +12,33 @@
 #
 # Access logs stay on for supervision, but never for a request carrying a personal token: those
 # are routed by k8s/ingressroute-tokens.yaml with access logs off (benevol.app only; the global
-# settings here are unchanged for the other sites). Headers are dropped by the k3s defaults.
+# settings here are unchanged for the other sites). Every request header is dropped except
+# User-Agent (owner decision 2026-10-22: tells robots from people when the log is analysed); Referer,
+# cookies and authorisation headers never reach the log.
+#
+# Access logs go to a JSON file on the node, /var/log/traefik/access.log (hostPath), not to
+# stdout: kubelet keeps only 5 x 10 MiB of container output, about 4 hours of access logs. The
+# node rotates the file daily into /var/log/traefik-archive (root only) and keeps one year
+# (k8s/node/traefik-access.logrotate); before a line is 90 days old its client address is cut to
+# its /24 (IPv4) or /48 (IPv6) network and the User-Agent dropped (k8s/node/traefik-log-anonymise).
+# The raw file is analysed on demand with standard tools (GoAccess, lnav). Procedure, analysis,
+# checks and rollback:
+# k8s/log-rotation.md.
+#
+# The directory (root:65532, 0750) and the file (65532, 0640) must exist on the node BEFORE this
+# is applied: Traefik can append to the file, never create, rename or delete anything there. type: Directory makes a missing directory fail loudly: the new pod stays in
+# ContainerCreating and the old one keeps serving (rolling update, maxUnavailable 0). A file that
+# is missing or not writable is worse: Traefik starts, logs « Unable to create access
+# logger » and writes no access log at all; check that the file grows after applying.
 #
 # This Traefik also serves other sites of the cluster (gallerypack.app, deck.altsessions.ch): they
-# get the real client address too. Applying it recreates the svclb pod, a few seconds of reconnects.
+# get the real client address too, and their requests land in the same access-log file. Applying
+# it recreates the Traefik pod (and the svclb pod when the service changes): a few seconds of
+# reconnects for every site.
 #
 #   kubectl apply -f k8s/traefik-config.yaml
 #   kubectl -n kube-system get svc traefik -o jsonpath='{.spec.externalTrafficPolicy}'   # → Local
+#   kubectl -n kube-system get deploy traefik -o jsonpath='{.spec.template.spec.containers[0].args}' | tr , '\n' | grep accesslog
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
@@ -29,6 +49,22 @@ spec:
     logs:
       access:
         enabled: true
+        format: json
+        filePath: /var/log/traefik/access.log
+        fields:
+          headers:
+            defaultmode: drop
+            names:
+              User-Agent: keep
+    deployment:
+      additionalVolumes:
+        - name: access-logs
+          hostPath:
+            path: /var/log/traefik
+            type: Directory
+    additionalVolumeMounts:
+      - name: access-logs
+        mountPath: /var/log/traefik
     additionalArguments:
       - "--entryPoints.web.transport.respondingTimeouts.readTimeout=30m"
       - "--entryPoints.web.transport.respondingTimeouts.writeTimeout=30m"

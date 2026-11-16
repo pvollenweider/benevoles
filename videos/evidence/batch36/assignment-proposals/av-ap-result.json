@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:46.178Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "6a59fbef092397fc6df918e9788a800a4922c3d0ab1bf5db266c697a9aa20cd1",
+  "clipSha256": "3ab3a42f16075059180aa9894cdfa861c4e5e6cfe4916020cc1a14efd95878d8",
+  "scene": "ap-result",
+  "review": {
+    "heardOpening": "En quelques secondes, le résultat s'affiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "le résultat s'affiche en haut de la page",
+        "visibleSeconds": 0,
+        "visible": "Section 'Résultat de la proposition' déjà affichée en haut de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "vingt-neuf places couvertes sur trente et une, écrites dans les brouillons",
+        "visibleSeconds": 0,
+        "visible": "Mentions '29 places couvertes sur 31' et '29 affectations écrites dans les brouillons' visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Couverture complète impossible : personne n'est disponible pour tout le rangement du Kiosque",
+        "visibleSeconds": 0,
+        "visible": "Mention 'Couverture complète impossible' et détails sous 'Places restées vides (1) : Rangement du Kiosque, dimanche 22 novembre' visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'écran explicatif."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

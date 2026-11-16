@@ -8,7 +8,7 @@ Décider séparément qui peut trouver la page et à quel moment les bénévoles
 
 ## Démonstration
 
-1. Dans Réglages > Informations, comparer Brouillon, Publié et Archivé.
+1. Dans Paramètres > Informations, comparer Brouillon, Publié et Archivé.
 2. Publier sans répertorier et expliquer les limites du lien direct.
 3. Programmer les dates d’ouverture et de fermeture.
 4. Montrer le message public avant l’ouverture.
@@ -27,7 +27,7 @@ Décider séparément qui peut trouver la page et à quel moment les bénévoles
 
 ## Révision du 15 octobre 2026 — lot 22-2
 
-Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et onglets ; Dupliquer, Archiver et Journal via Autres actions ; pages et QR via Partage ; questions et suppression via Réglages ; Documents à imprimer. Libellés, narration et repères de phrases revus. Toute phrase changée impose une régénération intégrale, même voix, `continuousPauseTags: false`. Le manifeste reste le transcript canonique ; les anciennes preuves ne valident pas ce nouveau texte.
+Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et onglets ; Dupliquer, Archiver et Journal via Autres actions ; pages et QR via Partage ; questions et suppression via Paramètres ; Documents à imprimer. Libellés, narration et repères de phrases revus. Toute phrase changée impose une régénération intégrale, même voix, `continuousPauseTags: false`. Le manifeste reste le transcript canonique ; les anciennes preuves ne valident pas ce nouveau texte.
 
 
 ## Révision du 16 octobre 2026 — lot 22-9

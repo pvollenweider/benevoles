@@ -26,7 +26,7 @@ export const OG_IMAGE_ALT = "benevol.app : le planning des bénévoles, inscript
  * copied into its FAQPage structured data (src/lib/public-content.ts `renderFaqSource`), so the
  * two cannot drift. Read at runtime: copied into the image by the Dockerfile.
  */
-export const LANDING_FAQ_SOURCE = "FAQ-ACCUEIL.md"
+export const LANDING_FAQ_SOURCE = "content/pages/FAQ-ACCUEIL.md"
 
 /** Metadata of the apex home: canonical, Open Graph and Twitter card, fully indexable. */
 export function landingMetadata(base: string): Metadata {

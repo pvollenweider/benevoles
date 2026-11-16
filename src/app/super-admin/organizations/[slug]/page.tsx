@@ -6,8 +6,12 @@ import { loadOrganizationCumulative } from "@/lib/usage-stats"
 import { loadOrganizationInactivity } from "@/lib/org-inactivity-data"
 import { inactivityMode, inactivityStatusText } from "@/lib/org-inactivity"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
+import { loadLimitHits } from "@/lib/limit-hits-data"
+import { LIMIT_HITS_DAYS, zoneSentence } from "@/lib/limit-hits-view"
+import { loadSendBatches } from "@/lib/send-batches-data"
+import { batchSummary } from "@/lib/send-batches"
+import { daysAgo } from "@/lib/retention"
 
-const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", year: "numeric" })
 
 export const dynamic = "force-dynamic"
 
@@ -28,6 +32,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       suspendedAt: true,
       suspensionReason: true,
       signupDescription: true,
+      signupSource: true,
+      signupSourceDetail: true,
       publicationApprovedAt: true,
       outboundEmailApprovedAt: true,
       createdAt: true,
@@ -55,7 +61,10 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
 
   if (!org) notFound()
   const now = new Date()
-  const [cumulative, inactivity] = await Promise.all([loadOrganizationCumulative(org.id), loadOrganizationInactivity(org.id, now)])
+  const [cumulative, inactivity, limitHits] = await Promise.all([loadOrganizationCumulative(org.id), loadOrganizationInactivity(org.id, now), loadLimitHits({ organizationId: org.id, now })])
+  // Its batches of emails of the same days (#1101): the same records the organisers see.
+  const batches = await loadSendBatches(org.id, { since: daysAgo(now, LIMIT_HITS_DAYS), limit: 30 })
+  const at = (d: Date) => d.toLocaleString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
 
   return (
     <OrgDetail
@@ -69,9 +78,14 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}
       cumulative={cumulative}
+      zone={zoneSentence(APP_TIME_ZONE)}
+      recentBatches={batches.map((b) => ({ id: b.id, line: `${b.kindLabel}, ${b.eventTitle}, ${at(b.createdAt)}\u00a0: ${batchSummary(b.delivery)}.`, createdAt: b.createdAt.toISOString(), heldSentence: b.heldSentence, failed: b.delivery.failed > 0 }))}
+      limitHits={limitHits.groups[0] ? { group: limitHits.groups[0], zone: zoneSentence(APP_TIME_ZONE), truncated: limitHits.truncated } : undefined}
       inactivity={inactivity ? {
         orgId: org.id,
-        status: inactivityStatusText(inactivity, inactivityMode(), now, day),
+        // The procedure's dates in the organisation's own zone (#1114), said when it is not the default.
+        status: inactivityStatusText(inactivity, inactivityMode(), now, (d) => d.toLocaleDateString("fr-FR", { timeZone: inactivity.timeZone, day: "numeric", month: "long", year: "numeric" }))
+          + (inactivity.procedure && inactivity.timeZone !== APP_TIME_ZONE ? ` Dates en heure de ${inactivity.timeZone}.` : ""),
         postponed: inactivity.postponedUntil !== null && inactivity.postponedUntil.getTime() > now.getTime(),
         exempt: inactivity.exempt,
         applies: org.active && org.suspendedAt === null,

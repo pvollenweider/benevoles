@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict"
-import { test } from "vitest"
+import { afterEach, test, vi } from "vitest"
+afterEach(() => vi.useRealTimers())
 import { correctedCsvSha, correctedXlsxSha, correctedCsvShaV2, correctedXlsxShaV2, ownsImportedNoEmailMember, validateImportBaseline, type ImportPerson, type ImportOwnership } from "../member-import-ownership"
 import { createSeedProofV2, expectedMemberV2 } from "../member-fixture-v2"
 test("no-email import ownership requires exact global ID, all source/default fields and ledger", () => {
@@ -32,11 +33,16 @@ test("no-email import ownership requires exact global ID, all source/default fie
   assert(!ownsImportedNoEmailMember(natural, { ...v2, manualContact: { ...manualContact, responseStatus: 200 } }, now))
 })
 test("baseline permits only 24 email fixtures and both exact persistent no-email seeds", () => {
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date("2026-10-06T12:00:00Z"))
   const defaults: ImportPerson = { id: "cmuww4yid000an3a5bttlnq7r", organizationId: "default", firstName: "René", lastName: "Aubert", email: null, phone: "079 000 90 02", tags: [], active: true, notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, createdAt: "2026-10-01T12:00:00Z" }
   const evidence = [{ ...defaults, organizationId: "default", createdAt: "2026-10-01T12:00:00Z", responseStatus: 201 }]
   const management = { ...defaults, id: "video-member-management-2", lastName: "Sansmail", phone: "079 000 02 00", tags: ["accueil"], notes: "Contact à joindre par téléphone pour les horaires.", availabilityPeriods: ["evening"] }
   const people = [...Array.from({ length: 24 }, (_, n) => ({ ...defaults, id: `seed-${n}`, email: `seed.${n}@example.org` })), defaults, management]
   validateImportBaseline(people, evidence)
+  const additions = [["Sofia", "Martin", "sofia.martin@example.org"], ["Sofia", "Martin", "sofia.martn@example.org"], ["Antoine", "Bovard", "antoine.bovard@example.org"]].map(([firstName, lastName, email], index) => ({ ...defaults, id: `additive-${index}`, firstName, lastName, email }))
+  validateImportBaseline([...people, ...additions], evidence)
+  assert.throws(() => validateImportBaseline([...people, ...additions.slice(0, 2), { ...additions[2], email: "unknown@example.org" }], evidence))
   validateImportBaseline([...people.slice(0, 25), { ...management, firstName: "Sébastien", lastName: "Morel 3", tags: ["logistique", "permis-b"] }], evidence)
   for (const change of [{ id: "unknown-null-seed" }, { notes: null }, { phone: "0790000200" }, { tags: [] }, { availabilityPeriods: [] }, { active: false }, { birthDate: "2000-01-01" }, { firstName: "Unknown" }]) assert.throws(() => validateImportBaseline([...people.slice(0, 25), { ...management, ...change }], evidence))
   assert.throws(() => validateImportBaseline(people, []))

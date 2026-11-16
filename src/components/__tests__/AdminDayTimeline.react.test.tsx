@@ -3,6 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
+import { visibleTextInName } from "@/__tests__/helpers/label-in-name"
 import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
@@ -43,13 +44,20 @@ describe("AdminDayTimeline", () => {
     expect(label).toHaveTextContent("de 21h à 1h, jusqu'au lendemain")
   })
 
-  it("names each bar with the role first, then the time and places in words", () => {
+  // axe-core 4.14 (label-content-name-mismatch): the name holds the bar's visible text in its
+  // order (WCAG 2.5.3); the hours and places in words (#587) are its description.
+  it("names each bar with the role, then its visible text, and describes it in words", () => {
     setup([shift(), shift({ id: "s2", label: "Bar", startTime: "14:00", endTime: "16:00", registrationCount: 2, capacity: 2 })])
     const region = screen.getByRole("region", { name: "Planning du Samedi 4 juillet" })
     expect(region).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, modifier" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Bar, de 14h à 16h, 2 inscrits sur 2, complet, modifier" })).toBeInTheDocument()
-    for (const b of screen.getAllByRole("button", { name: /^Bar/ })) expect(b.getAttribute("aria-label")).not.toMatch(/[–·]/)
+    const soir = screen.getByRole("button", { name: "Bar, 10h30–12h15, Soir, 3/5 inscrits, 2 libres, modifier" })
+    expect(soir).toHaveAccessibleDescription("de 10h30 à 12h15, 3 inscrits sur 5, 2 libres")
+    const full = screen.getByRole("button", { name: "Bar, 14h–16h, 2/2 inscrits, Complet, modifier" })
+    expect(full).toHaveAccessibleDescription("de 14h à 16h, 2 inscrits sur 2, complet")
+    for (const b of [soir, full]) {
+      // The words of the visible lines stay apart: a space between each line.
+      expect(visibleTextInName(b.querySelector("[title]")?.textContent ?? "", b.getAttribute("aria-label") ?? "")).toBe(true)
+    }
   })
 
   // #924: the role names scrolled away with the hours; the column is now sticky inside the region.
@@ -62,23 +70,91 @@ describe("AdminDayTimeline", () => {
     expect(column).toHaveTextContent("Accueil")
     // The layer holding it stacks above the rows; a focused bar above both.
     expect(column.parentElement).toHaveClass("absolute", "z-10", "pointer-events-none")
-    expect(screen.getByRole("button", { name: /^Bar, Soir/ })).toHaveClass("focus:z-20")
+    expect(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ })).toHaveClass("focus:z-20")
     expect(region.style.scrollPaddingLeft).not.toBe("")
   })
 
   // #925: the bar said « 3/5 · 2 libre » without saying what it counted.
   it("shows what the figures on a bar count, and the minimum age", () => {
     setup([shift({ minAge: 18 })])
-    const bar = screen.getByRole("button", { name: "Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, 18 ans minimum, modifier" })
+    const bar = screen.getByRole("button", { name: "Bar, 10h30–12h15, Soir, 18 ans min., 3/5 inscrits, 2 libres, modifier" })
+    expect(bar).toHaveAccessibleDescription("de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, 18 ans minimum")
     expect(bar).toHaveTextContent("18 ans min. · 3/5 inscrits · 2 libres")
   })
 
   it("the deletion recap opened from a bar says the minutes and the shift in words (regression)", () => {
     setup([shift()])
-    fireEvent.click(screen.getByRole("button", { name: /^Bar, Soir, de 10h30/ }))
+    fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
     fireEvent.click(screen.getByRole("button", { name: "Supprimer le créneau" }))
     const dialog = screen.getByRole("alertdialog", { name: "Supprimer le créneau « Bar, Soir » ?" })
     expect(dialog).toHaveTextContent("Samedi 4 juillet, de 10h30 à 12h15.")
     expect(dialog.textContent).not.toMatch(/[–·]/)
+  })
+
+  // « Créneau annulé » with people registered (AUTHZ-15): the popover closes, a confirmation says
+  // how many are affected and whether they are emailed; « Ne pas prévenir les inscrits » is off by default.
+  describe("cancelling a shift by its status", () => {
+    afterEach(() => vi.unstubAllGlobals())
+
+    it("asks first, then cancels and tells the people registered by default", async () => {
+      const fetchMock = vi.fn(async () => new Response(JSON.stringify({ status: "cancelled", notified: 3 }), { status: 200 }))
+      vi.stubGlobal("fetch", fetchMock)
+      const onUpdated = vi.fn()
+      render(<AdminDayTimeline eventId="evt-1" date="2026-07-04" shifts={[shift()]} onCreated={vi.fn()} onUpdated={onUpdated} onDeleted={vi.fn()} />)
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      const select = screen.getByLabelText("Inscriptions")
+      expect(select).toHaveAccessibleDescription(/Créneau annulé\W+une confirmation sera demandée\./)
+      fireEvent.change(select, { target: { value: "cancelled" } })
+      // Nothing saved before the confirmation.
+      expect(fetchMock).not.toHaveBeenCalled()
+      const dialog = screen.getByRole("alertdialog", { name: /^Annuler le créneau « Bar, Soir »/ })
+      expect(dialog).toHaveAccessibleDescription(/^3 personnes sont inscrites\. Elles recevront un email d'annulation\./)
+      const box = screen.getByRole("checkbox", { name: "Ne pas prévenir les inscrits" })
+      expect(box).not.toBeChecked()
+      expect(screen.getByRole("button", { name: "Garder le créneau" })).toHaveFocus()
+      fireEvent.click(screen.getByRole("button", { name: "Annuler le créneau" }))
+      await vi.waitFor(() => expect(onUpdated).toHaveBeenCalledWith(expect.objectContaining({ id: "s1", status: "cancelled", registrationCount: 0 })))
+      const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit]
+      expect(url).toBe("/api/admin/shifts/s1")
+      expect(JSON.parse(String(init.body))).toEqual({ status: "cancelled", notifyVolunteers: true })
+      await vi.waitFor(() => expect(screen.getAllByText("Créneau annulé, les inscrits sont prévenus par email.").length).toBeGreaterThan(0))
+    })
+
+    it("sends notifyVolunteers false once the box is ticked, and says so before", async () => {
+      const fetchMock = vi.fn(async () => new Response(JSON.stringify({ status: "cancelled", notified: 0 }), { status: 200 }))
+      vi.stubGlobal("fetch", fetchMock)
+      setup([shift({ registrationCount: 1 })])
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      fireEvent.change(screen.getByLabelText("Inscriptions"), { target: { value: "cancelled" } })
+      fireEvent.click(screen.getByRole("checkbox", { name: "Ne pas prévenir les inscrits" }))
+      expect(screen.getByRole("alertdialog")).toHaveAccessibleDescription(/^1 personne est inscrite\. Elle ne recevra pas d'email/)
+      fireEvent.click(screen.getByRole("button", { name: "Annuler sans prévenir" }))
+      await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled())
+      expect(JSON.parse(String((fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body))).toEqual({ status: "cancelled", notifyVolunteers: false })
+    })
+
+    it("« Garder le créneau » changes nothing and puts focus back on the bar", () => {
+      const fetchMock = vi.fn()
+      vi.stubGlobal("fetch", fetchMock)
+      setup([shift()])
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      fireEvent.change(screen.getByLabelText("Inscriptions"), { target: { value: "cancelled" } })
+      fireEvent.click(screen.getByRole("button", { name: "Garder le créneau" }))
+      expect(screen.queryByRole("alertdialog")).toBeNull()
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ })).toHaveFocus()
+    })
+
+    it("a shift nobody holds is cancelled at once, without a dialog", async () => {
+      const fetchMock = vi.fn(async () => new Response(JSON.stringify({ status: "cancelled" }), { status: 200 }))
+      vi.stubGlobal("fetch", fetchMock)
+      setup([shift({ registrationCount: 0 })])
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      fireEvent.change(screen.getByLabelText("Inscriptions"), { target: { value: "cancelled" } })
+      expect(screen.queryByRole("alertdialog")).toBeNull()
+      await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled())
+      // The status alone: the label is never rewritten by a status change.
+      expect(JSON.parse(String((fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body))).toEqual({ status: "cancelled" })
+    })
   })
 })

@@ -15,6 +15,8 @@ export type ActionRecap = {
   lines: string[]
   confirmLabel: string
   danger: boolean
+  /** The safe button's label, « Annuler » by default (e.g. « Revenir aux postes » for a discard). */
+  cancelLabel?: string
   /**
    * Optional, for a longer recap (#516): the one sentence that matters most (e.g. irreversible),
    * shown first, then a warning shown in a box with a visible « Attention : », then headed lists
@@ -38,14 +40,24 @@ const UNDO_LINE = "Vous aurez 10 secondes pour annuler : rien n'est envoyé ni e
  * one email, however many of their rows are selected. Counted from the rows on screen.
  */
 export function bulkCancelCounts(selected: { status: string; volunteer: { id: string; email: string | null } }[]) {
+  // A provisional place waiting for its email confirmation (#1253) is removed like a registration,
+  // but nobody is emailed: the person confirmed nothing yet.
+  const cancellable = selected.filter((r) => r.status === "active" || r.status === "unconfirmed")
   const active = selected.filter((r) => r.status === "active")
-  const people = new Set(active.map((r) => r.volunteer.id))
+  const pendingConfirmation = selected.filter((r) => r.status === "unconfirmed")
+  const people = new Set(cancellable.map((r) => r.volunteer.id))
   const withEmail = new Set(active.filter((r) => r.volunteer.email).map((r) => r.volunteer.id))
-  return { registrations: active.length, people: people.size, withEmail: withEmail.size, notConfirmed: selected.length - active.length }
+  return {
+    registrations: cancellable.length,
+    people: people.size,
+    withEmail: withEmail.size,
+    notConfirmed: selected.length - cancellable.length,
+    pendingConfirmation: pendingConfirmation.length,
+  }
 }
 
-export function bulkCancelRecap(i: { registrations: number; people: number; withEmail: number; notConfirmed?: number; waitlisted: number }): ActionRecap {
-  const withoutEmail = i.people - i.withEmail
+export function bulkCancelRecap(i: { registrations: number; people: number; withEmail: number; notConfirmed?: number; pendingConfirmation?: number; waitlisted: number }): ActionRecap {
+  const withoutEmail = i.people - i.withEmail - (i.pendingConfirmation ?? 0)
   return {
     title: `Retirer ${n(i.people, "bénévole", "bénévoles")} de leur créneau ?`,
     lines: [
@@ -54,6 +66,7 @@ export function bulkCancelRecap(i: { registrations: number; people: number; with
         ? `${n(i.withEmail, "email d'annulation envoyé", "emails d'annulation envoyés")}, un par personne, avec le lien vers ses autres créneaux s'il lui en reste.`
         : "Aucun email : personne n'a d'adresse.",
       ...(i.withEmail > 0 && withoutEmail > 0 ? [`${n(withoutEmail, "personne sans adresse ne reçoit", "personnes sans adresse ne reçoivent")} rien.`] : []),
+      ...((i.pendingConfirmation ?? 0) > 0 ? [`${n(i.pendingConfirmation!, "inscription en attente de confirmation par email sera retirée", "inscriptions en attente de confirmation par email seront retirées")}, sans email : la personne n'a rien confirmé.`] : []),
       ...(i.notConfirmed ? [`${n(i.notConfirmed, "inscription sélectionnée est", "inscriptions sélectionnées sont")} en liste d'attente, avec une place proposée ou en demande : ${i.notConfirmed > 1 ? "elles restent telles quelles" : "elle reste telle quelle"}, sans email.`] : []),
       i.waitlisted > 0 ? `${n(i.waitlisted, "place libérée sera proposée", "places libérées seront proposées")} à la liste d'attente.` : "Pas de liste d'attente sur ces créneaux.",
       LOGGED,
@@ -87,13 +100,15 @@ export function bulkResendRecap(i: { people: number }): ActionRecap {
   }
 }
 
-export function remindInvitedRecap(i: { people: number; declined?: number }): ActionRecap {
+export function remindInvitedRecap(i: { people: number; declined?: number; recent?: number }): ActionRecap {
   return {
     title: `Relancer ${n(i.people, "membre invité", "membres invités")} sans créneau confirmé ?`,
     lines: [
-      `${n(i.people, "email de relance envoyé", "emails de relance envoyés")}.`,
+      // Through the outbox (#1105): a long list leaves in waves, never claimed as already sent.
+      i.people > 1 ? `${i.people} emails de relance partent dans les minutes qui suivent.` : "1 email de relance part dans les minutes qui suivent.",
       "Les membres déjà inscrits ne reçoivent rien.",
       ...(i.declined ? [`${n(i.declined, "membre ayant indiqué ne pas être disponible ne reçoit", "membres ayant indiqué ne pas être disponibles ne reçoivent")} rien non plus.`] : []),
+      ...(i.recent ? [`${n(i.recent, "membre invité ou relancé il y a moins de 48 heures ne reçoit", "membres invités ou relancés il y a moins de 48 heures ne reçoivent")} rien cette fois.`] : []),
       LOGGED,
     ],
     confirmLabel: "Relancer",
@@ -128,6 +143,69 @@ export function deleteMemberRecap(name: string): ActionRecap {
 }
 
 /**
+ * Bulk deactivation of a selection (#1307): reversible, so not a danger dialog — the refund is
+ * said in words (« vous pourrez les réactiver en affichant les inactifs »).
+ */
+export function bulkDeactivateMembersRecap(count: number): ActionRecap {
+  return {
+    title: `Désactiver ${n(count, "membre", "membres")} ?`,
+    lead: count > 1 ? `${count} fiches seront désactivées.` : "Cette fiche sera désactivée.",
+    lines: [
+      count > 1
+        ? "Elles disparaissent de la liste des membres actifs et des filtres ; leurs inscriptions passées restent."
+        : "La personne disparaît de la liste des membres actifs et des filtres ; ses inscriptions passées restent.",
+      count > 1
+        ? "Aucun email n'est envoyé. Vous pourrez les réactiver en affichant les inactifs."
+        : "Aucun email n'est envoyé. Vous pourrez le réactiver en affichant les inactifs.",
+      LOGGED_ORG,
+    ],
+    confirmLabel: "Désactiver",
+    danger: false,
+  }
+}
+
+/**
+ * Permanent deletion of a selection (#1305): the count is known from the list, and the two
+ * exclusions the action applies are said before it runs — an explicit confirmation replaces the
+ * deactivation step of the single-member action.
+ */
+/**
+ * `withRegistrations`: how many selected members have registrations, when the list knows it
+ * (#1307). The lead then says how many records will really go, instead of announcing the whole
+ * selection as deleted when some (or all) of it will be kept.
+ */
+function bulkDeleteLead(count: number, withRegistrations: number | null): string {
+  const all = count > 1 ? `${count} fiches seront supprimées définitivement.` : "Cette fiche sera supprimée définitivement."
+  if (withRegistrations === null || withRegistrations <= 0) return all
+  const kept = Math.min(withRegistrations, count)
+  const deletable = count - kept
+  if (deletable === 0) {
+    return count > 1
+      ? `Aucune fiche ne sera supprimée : les ${count} membres sélectionnés ont des inscriptions.`
+      : "Cette fiche ne sera pas supprimée : ce membre a des inscriptions."
+  }
+  const goes = deletable > 1 ? `${deletable} fiches seront supprimées définitivement.` : "1 fiche sera supprimée définitivement."
+  const stays = kept > 1 ? `${kept} membres ont des inscriptions et seront conservés.` : "1 membre a des inscriptions et sera conservé."
+  return `${goes} ${stays}`
+}
+
+export function bulkDeleteMembersRecap(count: number, withRegistrations: number | null = null): ActionRecap {
+  return {
+    title: `Supprimer ${n(count, "membre", "membres")} ?`,
+    lead: bulkDeleteLead(count, withRegistrations),
+    lines: [
+      "Cette action est irréversible : les fiches ne peuvent pas être récupérées ensuite.",
+      "Les membres qui ont des inscriptions ne seront pas supprimés : leurs inscriptions doivent rester dans l'historique des événements.",
+      "Disparaissent avec chaque fiche : ses invitations, ses réponses aux questions des événements, ses abonnements aux notifications, les suivis d'envoi d'email et les doublons possibles écartés la concernant.",
+      "Aucun email n'est envoyé.",
+      LOGGED_ORG,
+    ],
+    confirmLabel: "Supprimer",
+    danger: true,
+  }
+}
+
+/**
  * "Samedi 4 juillet, de 18h à 23h": the moment of a shift, for a recap shown on screen, in words
  * (#587; an en dash between two hours is read « tiret »). Times are stored "HH:MM".
  */
@@ -152,10 +230,37 @@ export function deleteShiftRecap(i: { name: string; when: string; registered: nu
   }
 }
 
-export function removeLeaderRecap(name: string, roleName: string): ActionRecap {
+/**
+ * Cancelling a shift by its status (AUTHZ-15): how many people are registered and whether they are
+ * emailed; « Ne pas prévenir les inscrits » (a test shift, people already told by phone) changes
+ * the lead sentence. The registrations and pending requests are cancelled, as with « Supprimer ».
+ */
+export function cancelShiftRecap(i: { name: string; when: string; registered: number; notify: boolean }): ActionRecap {
+  const NBSP = "\u00a0"
+  const many = i.registered > 1
+  const who = `${n(i.registered, "personne est inscrite", "personnes sont inscrites")}.`
+  const told = i.notify
+    ? `${many ? "Elles recevront" : "Elle recevra"} un email d'annulation.`
+    : `${many ? "Elles ne recevront" : "Elle ne recevra"} pas d'email${NBSP}: pensez à ${many ? "les" : "la"} prévenir autrement.`
   return {
-    title: `Retirer ${name} des responsables de « ${roleName} » ?`,
-    lines: ["Son lien de responsable cesse de fonctionner tout de suite.", "Aucun email n'est envoyé. Si la personne n'est plus responsable d'aucun poste, son tag « responsable » lui est retiré.", LOGGED],
+    title: `Annuler le créneau « ${i.name} »${NBSP}?`,
+    lead: `${who} ${told}`,
+    lines: [
+      `${i.when}.`,
+      `${many ? "Leurs inscriptions sont annulées" : "Son inscription est annulée"}, comme les demandes en attente. Le créneau disparaît du planning.`,
+      "Si c'était le dernier créneau d'un événement publié, l'événement repasse en brouillon.",
+      LOGGED,
+    ],
+    confirmLabel: i.notify ? "Annuler le créneau" : "Annuler sans prévenir",
+    cancelLabel: "Garder le créneau",
+    danger: true,
+  }
+}
+
+export function removeLeaderRecap(name: string, roleName: string, kind?: "sector"): ActionRecap {
+  return {
+    title: `Retirer ${name} des responsables ${kind === "sector" ? "du secteur " : "de "}« ${roleName} » ?`,
+    lines: ["Son lien de responsable cesse de fonctionner tout de suite.", `Aucun email n'est envoyé. Si la personne n'est plus responsable d'aucun ${kind === "sector" ? "poste ni secteur" : "poste"}, son tag « responsable » lui est retiré.`, LOGGED],
     confirmLabel: "Retirer",
 
     danger: true,
@@ -176,6 +281,21 @@ export function deleteRoleRecap(i: { role: string; shifts: number; registered: n
   }
 }
 
+/**
+ * « Fermer » in « Gérer les postes » with a poste order not saved: closing loses it. The safe
+ * button goes back to the panel, where « Enregistrer l'ordre » is.
+ */
+export function unsavedRoleOrderRecap(): ActionRecap {
+  return {
+    title: "L'ordre des postes n'est pas enregistré",
+    lead: "Si vous fermez maintenant, le nouvel ordre est perdu. Pour le garder, revenez aux postes et choisissez « Enregistrer l'ordre ».",
+    lines: [],
+    confirmLabel: "Fermer sans enregistrer",
+    cancelLabel: "Revenir aux postes",
+    danger: false,
+  }
+}
+
 export function deleteMilestoneRecap(title: string): ActionRecap {
   return {
     title: `Supprimer le jalon « ${title} » ?`,
@@ -190,7 +310,7 @@ export function deleteGroupLinkRecap(name: string, registrations: number): Actio
   return {
     title: `Supprimer le lien « ${name} » ?`,
     lines: [
-      "Le lien et son QR code ouvriront la page de l'événement avec tous ses postes, sans filtre.",
+      "Le lien et son QR code ouvriront la page d'inscription avec tous ses postes, sans filtre.",
       registrations > 0
         ? `${registrations === 1 ? "L'inscription venue" : `Les ${registrations} inscriptions venues`} de ce lien ${registrations === 1 ? "est conservée" : "sont conservées"}, mais ne ${registrations === 1 ? "sera" : "seront"} plus comptée${registrations === 1 ? "" : "s"} pour ce groupe.`
         : "Aucune inscription n'est venue de ce lien.",
@@ -205,7 +325,7 @@ export function deleteGroupLinkRecap(name: string, registrations: number): Actio
 export function deletePageRecap(title: string): ActionRecap {
   return {
     title: `Supprimer la page « ${title} » ?`,
-    lines: ["La page n'est plus visible sur la page publique de l'événement ; les liens vers elle ne fonctionnent plus.", "Aucun email n'est envoyé.", LOGGED],
+    lines: ["La page n'est plus visible sur la page d'inscription de l'événement ; les liens vers elle ne fonctionnent plus.", "Aucun email n'est envoyé.", LOGGED],
     confirmLabel: "Supprimer",
     danger: true,
   }
@@ -215,13 +335,13 @@ export function toggleOrgRecap(name: string, active: boolean): ActionRecap {
   return active
     ? {
         title: `Désactiver l'organisation « ${name} » ?`,
-        lines: ["Ses administrateurs ne peuvent plus se connecter et ses pages publiques ne répondent plus.", "Ses emails en attente sont annulés et ne partiront jamais.", "Aucune donnée n'est supprimée : l'organisation peut être réactivée à tout moment, mais elle est effacée 30 jours après sa désactivation.", "Aucun email n'est envoyé."],
+        lines: ["Ses organisateurs ne peuvent plus se connecter et ses pages publiques ne répondent plus.", "Ses emails en attente sont annulés et ne partiront jamais.", "Aucune donnée n'est supprimée : l'organisation peut être réactivée à tout moment, mais elle est effacée 30 jours après sa désactivation.", "Aucun email n'est envoyé."],
         confirmLabel: "Désactiver",
         danger: true,
       }
     : {
         title: `Réactiver l'organisation « ${name} » ?`,
-        lines: ["Ses administrateurs peuvent de nouveau se connecter et ses pages publiques répondent.", "Aucun email n'est envoyé."],
+        lines: ["Ses organisateurs peuvent de nouveau se connecter et ses pages publiques répondent.", "Aucun email n'est envoyé."],
         confirmLabel: "Réactiver",
         danger: false,
       }
@@ -232,7 +352,7 @@ export function suspendOrgRecap(name: string): ActionRecap {
   return {
     title: `Suspendre l'organisation « ${name} » pour abus ?`,
     lines: [
-      "Ses administrateurs ne peuvent plus se connecter et ses pages publiques ne répondent plus.",
+      "Ses organisateurs ne peuvent plus se connecter et ses pages publiques ne répondent plus.",
       "Ses emails en attente sont annulés et ne partiront jamais ; aucune inscription n'est plus possible.",
       "Ses données sont conservées pour l'enquête : jamais effacées automatiquement.",
       "Seul le super admin peut lever la suspension ; « Réactiver » reste impossible tant qu'elle dure.",
@@ -263,7 +383,7 @@ export function approveOrgRecap(name: string): ActionRecap {
     lines: [
       "Il peut publier ses événements : ses pages publiques répondent.",
       "Il peut écrire à ses bénévoles et à ses membres.",
-      "Ses administrateurs reçoivent un email « Votre espace est activé ».",
+      "Ses organisateurs reçoivent un email « Votre espace est activé ».",
     ],
     confirmLabel: "Valider l'espace",
     danger: false,
@@ -275,7 +395,7 @@ export function refuseOrgRecap(name: string): ActionRecap {
   return {
     title: `Refuser et supprimer l'espace « ${name} » ?`,
     lines: [
-      "L'espace est supprimé définitivement, avec ses événements, ses membres et ses comptes administrateurs.",
+      "L'espace est supprimé définitivement, avec ses événements, ses membres et ses comptes organisateurs.",
       "Aucun email n'est envoyé.",
     ],
     confirmLabel: "Refuser et supprimer",
@@ -287,7 +407,7 @@ export function deleteOrgRecap(i: { name: string; events: number; volunteers: nu
   return {
     title: `Supprimer définitivement « ${i.name} » ?`,
     lines: [
-      `Toutes ses données sont effacées : ${n(i.events, "événement", "événements")}, ${n(i.volunteers, "membre", "membres")}, ${n(i.admins, "administrateur", "administrateurs")}, inscriptions et journaux.`,
+      `Toutes ses données sont effacées : ${n(i.events, "événement", "événements")}, ${n(i.volunteers, "membre", "membres")}, ${n(i.admins, "organisateur", "organisateurs")}, inscriptions et journaux.`,
       "Cette action est irréversible : aucune sauvegarde applicative ne permet de la défaire.",
       "Aucun email n'est envoyé.",
     ],
@@ -298,11 +418,26 @@ export function deleteOrgRecap(i: { name: string; events: number; volunteers: nu
 
 export function broadcastRecap(recipients: number): ActionRecap {
   return {
-    title: `Envoyer cette communication à ${n(recipients, "administrateur", "administrateurs")} ?`,
+    title: `Envoyer cette communication à ${n(recipients, "organisateur", "organisateurs")} ?`,
     lines: ["Chaque destinataire reçoit un email tout de suite ; l'envoi ne peut pas être annulé.", "Le message est conservé dans l'historique des communications."],
     confirmLabel: "Envoyer",
     danger: false,
   }
+}
+
+/** Replacing a product update draft by a version's changelog (#762): nothing is sent, the draft is overwritten. */
+export function prefillRecap(version: string): ActionRecap {
+  return {
+    title: `Remplacer le brouillon par les nouveautés de la version ${version} ?`,
+    lines: ["L'objet et le contenu actuels sont remplacés. Rien n'est envoyé."],
+    confirmLabel: "Remplacer le brouillon",
+    danger: false,
+  }
+}
+
+/** Whether prefilling would overwrite something typed: blank fields (spaces only) are replaced without asking. */
+export function prefillNeedsConfirmation(subject: string, content: string): boolean {
+  return subject.trim() !== "" || content.trim() !== ""
 }
 
 /** Link to the event log filtered from the day the action ran (the log's filter is a date), so its entries are on the first page. */
@@ -367,6 +502,21 @@ export function restoreRecap(i: { name: string; shift: string; hasEmail: boolean
       LOGGED,
     ],
     confirmLabel: "Rétablir",
+    danger: false,
+  }
+}
+
+/** Archiving a sector that still groups postes (#1147): they move to « Autres postes ». */
+export function archiveSectorRecap(name: string, postes: number): ActionRecap {
+  return {
+    title: `Archiver le secteur « ${name} » ?`,
+    lines: [
+      `${n(postes, "poste passe", "postes passent")} dans « Autres postes » : ${postes > 1 ? "ils gardent" : "il garde"} ${postes > 1 ? "leurs" : "ses"} créneaux et ${postes > 1 ? "leurs" : "ses"} inscriptions.`,
+      "Vous pourrez rétablir le secteur, mais ses postes n'y reviennent pas tout seuls.",
+      "Les bénévoles ne voient aucun changement.",
+      LOGGED,
+    ],
+    confirmLabel: "Archiver le secteur",
     danger: false,
   }
 }

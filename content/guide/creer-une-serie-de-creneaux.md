@@ -1,0 +1,31 @@
+---
+roles: [admin]
+group: preparer
+order: 40
+summary: Couvrir une plage horaire avec des créneaux qui se suivent, de même durée, en une seule saisie avec un aperçu.
+related: [configurer-les-creneaux, permanences-recurrentes, horaires-et-nuit]
+legacy: [admin#creer-une-serie-de-creneaux]
+aliases: []
+---
+
+# Créer une série de créneaux
+
+<!-- video: SHIFT_CREATE_SERIES -->
+
+Pour couvrir une plage horaire avec des créneaux qui se suivent (une buvette de 10 h à 22 h par créneaux de deux heures, trois personnes à chaque fois), cliquez sur **Créer une série** dans la page des créneaux au lieu de saisir chaque créneau.
+
+| Champ | Description |
+|-------|-------------|
+| Poste, libellé | Comme pour un créneau seul (voir [Configurer les créneaux](configurer-les-creneaux.md)). Si l'événement range ses postes par secteurs, un champ **Secteur** vient avant (voir [Organiser les postes par secteurs](gerer-les-postes.md#organiser-les-postes-par-secteurs)) |
+| Date, début, fin | La plage à couvrir ; une fin plus petite que le début passe minuit |
+| Durée d'un créneau | Choix courant (30 min à 4 h) ou saisie en minutes (15 au minimum) |
+| Pause entre deux créneaux | Facultative, en minutes |
+| **Places par créneau**, **Minimum par créneau** (optionnel, voir [Minimum de personnes](configurer-les-creneaux.md#minimum-de-personnes)), **Activer la liste d'attente**, **Sur validation** | Appliqués à chaque créneau |
+
+L'aperçu se met à jour au fur et à mesure : nombre de créneaux, horaires de chacun. Si la plage ne se divise pas exactement, le dernier créneau est plus court (indiqué dans l'aperçu) ; supprimez-le ensuite s'il ne sert pas. Les créneaux qui commencent après minuit sont datés du lendemain. Une série compte au plus 48 créneaux.
+
+![Formulaire « Créer une série de créneaux » rempli : poste Buvette, dimanche de 10:00 à 22:00, créneaux de 2 h sans pause, 3 personnes par créneau, liste d'attente activée ; l'aperçu annonce 6 créneaux de 2 h, de 10:00–12:00 à 20:00–22:00, au-dessus du bouton « Créer 6 créneaux »](/doc-img/admin-shift-series.png)
+
+Une fois créés, ce sont des créneaux ordinaires : chacun se modifie ou se supprime séparément.
+
+Une série couvre une seule journée. Pour une permanence qui revient chaque semaine (l'accueil du mercredi, la distribution du samedi), voir [Permanences récurrentes](permanences-recurrentes.md) : ses dates sont toutes créées d'un coup, et elle se modifie ou s'arrête ensuite d'un seul geste.

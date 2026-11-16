@@ -21,13 +21,16 @@ export async function exportIdentityVersion(directory = "videos/output/data-expo
   return ledger
 }
 
+const withoutField = (value: Record<string, unknown>, field: string) =>
+  Object.fromEntries(Object.entries(value).filter(([key]) => key !== field))
+
 /** Only identity display fields may differ. All other fixture bytes remain protected. */
 export function protectedExportIdentityDigest(snapshot: { members: Record<string, unknown>[]; admins: Record<string, unknown>[]; leaders: Record<string, unknown>[]; messages: Record<string, unknown>[]; [key: string]: unknown }) {
   const clean = { ...snapshot,
-    members: snapshot.members.map(({ lastName: _, ...rest }) => rest),
-    admins: snapshot.admins.map(({ name: _, ...rest }) => rest),
-    leaders: snapshot.leaders.map(({ name: _, ...rest }) => rest),
-    messages: snapshot.messages.map(({ authorName: _, ...rest }) => rest),
+    members: snapshot.members.map((member) => withoutField(member, "lastName")),
+    admins: snapshot.admins.map((admin) => withoutField(admin, "name")),
+    leaders: snapshot.leaders.map((leader) => withoutField(leader, "name")),
+    messages: snapshot.messages.map((message) => withoutField(message, "authorName")),
   }
   return createHash("sha256").update(JSON.stringify(clean)).digest("hex")
 }

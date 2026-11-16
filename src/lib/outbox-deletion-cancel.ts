@@ -42,7 +42,7 @@ export async function cancelOutboxForDeletedMember(db: OutboxDeletionCancelDb, o
     if (matchesAbsorbedRecipient(payload, member)) toCancel.push(row.id)
   }
   if (toCancel.length > 0) {
-    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "cancelled", lastError: MEMBER_DELETED_CANCEL_REASON } })
+    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "cancelled", lastError: MEMBER_DELETED_CANCEL_REASON, deliveryNotBefore: null } })
   }
   return toCancel
 }

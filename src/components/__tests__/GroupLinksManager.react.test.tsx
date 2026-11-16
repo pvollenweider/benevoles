@@ -65,7 +65,9 @@ describe("GroupLinksManager", () => {
     expect(screen.getByLabelText(/Nom du groupe/)).toHaveFocus()
     fireEvent.change(screen.getByLabelText(/Nom du groupe/), { target: { value: "Fanfare" } })
     fireEvent.click(screen.getByRole("button", { name: "Créer le lien" }))
-    expect(screen.getByRole("alert")).toHaveTextContent("Choisissez au moins un poste.")
+    // The checkbox takes the focus and the message as its description: no alert, so nothing repeats it.
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+    expect(screen.getByText("Choisissez au moins un poste.")).toBeVisible()
     const bar = screen.getByRole("checkbox", { name: "Bar" })
     expect(bar).toHaveFocus()
     expect(bar).toHaveAttribute("aria-invalid", "true")

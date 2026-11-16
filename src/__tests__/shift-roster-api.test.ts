@@ -12,7 +12,7 @@ type Vol = { id: string; firstName: string; lastName: string; birthDate: Date | 
 type Consent = { eventId: string; volunteerId: string; status: string; noticeVersion?: string; source?: string; decidedAt?: Date }
 
 const db = vi.hoisted(() => ({
-  events: new Map<string, { id: string; shiftRosterEnabled: boolean; personalDataAnonymizedAt: Date | null; startDate: Date; endDate: Date; organization: { timeZone: string } }>(),
+  events: new Map<string, { id: string; shiftRosterEnabled: boolean; personalDataAnonymizedAt: Date | null; startDate: Date; endDate: Date; organization: { timeZone: string; active: boolean; suspendedAt: Date | null } }>(),
   shifts: [] as { id: string; eventId: string; label: string; date: Date; startTime: string; endTime: string; status: string }[],
   volunteers: new Map<string, Vol>(),
   registrations: [] as Reg[],
@@ -80,7 +80,7 @@ const vol = (id: string, firstName: string, lastName: string, more: Partial<Vol>
 
 function seed() {
   db.events.clear(); db.volunteers.clear(); db.shifts.length = 0; db.registrations.length = 0; db.consents.length = 0
-  const event = (id: string) => ({ id, shiftRosterEnabled: true, personalDataAnonymizedAt: null, startDate: new Date("2099-10-01T00:00:00Z"), endDate: new Date("2099-10-02T00:00:00Z"), organization: { timeZone: "Europe/Zurich" } })
+  const event = (id: string) => ({ id, shiftRosterEnabled: true, personalDataAnonymizedAt: null, startDate: new Date("2099-10-01T00:00:00Z"), endDate: new Date("2099-10-02T00:00:00Z"), organization: { timeZone: "Europe/Zurich", active: true, suspendedAt: null } })
   db.events.set("ev-a", event("ev-a"))
   db.events.set("ev-b", event("ev-b"))
   const day = new Date("2099-10-01T00:00:00Z")
@@ -119,6 +119,14 @@ const patch = async (token: string, body: unknown) => {
 
 describe("GET /api/public/registrations/[token]/roster (#1068)", () => {
   beforeEach(() => { vi.clearAllMocks(); seed() })
+
+  it("no names, and no change of choice, while the organisation is suspended", async () => {
+    db.events.get("ev-a")!.organization.suspendedAt = new Date()
+    const res = await get("tok-r-me")
+    expect(res.status).toBe(403)
+    expect(await res.json()).toMatchObject({ code: "org_unavailable" })
+    expect((await patch("tok-r-me", { visible: false })).status).toBe(403)
+  })
 
   it("names the visible, confirmed volunteers of the event, shift by shift, and nothing else", async () => {
     const res = await get("tok-r-me")

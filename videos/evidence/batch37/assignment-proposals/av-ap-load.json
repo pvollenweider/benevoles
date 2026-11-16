@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:37:57.623Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "c4ce2242d9c68e42ec36250078fe5c679e80cec98849396b714e85a2454b42f4",
+  "clipSha256": "29a861fb2e08e54449d3bcbbfe6c982e011e0cbcf163b381aed9fec6f20f25cf",
+  "scene": "ap-load",
+  "review": {
+    "heardOpening": "La charge par personne compare",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La charge par personne compare les heures prévues à l'objectif de chacun",
+        "visibleSeconds": 0.5,
+        "visible": "Tableau 'Charge par personne' affichant les colonnes Nom, Charge et Activités",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Noah a ses six heures",
+        "visibleSeconds": 4,
+        "visible": "Ligne Noah de Jong avec 6 h prévues pour un objectif de 6 h : objectif atteint",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Dans Affectations proposées, chaque ligne dit pourquoi",
+        "visibleSeconds": 6.8,
+        "visible": "Déploiement de la section 'Affectations proposées' avec les détails et motifs pour chaque affectation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Emma est au bar vendredi : disponible sur tout le créneau, c'est son poste souhaité",
+        "visibleSeconds": 10,
+        "visible": "Ligne détaillée pour Emma Johansson au Bar des Tilleuls le vendredi avec mention 'Disponible sur tout le créneau' et 'Poste souhaité'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

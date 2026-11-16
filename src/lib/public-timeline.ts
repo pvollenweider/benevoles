@@ -3,6 +3,7 @@
 
 import { fmt, crossesMidnight } from "@/lib/gantt-utils"
 import { RESERVED_LABEL } from "@/lib/role-reservation"
+import { answerConditionMention } from "@/lib/role-answer"
 import { ROLE_LIMIT_REACHED_SHORT, roleLimitReachedText } from "@/lib/role-limit"
 
 /** One shift as the public timeline (DayTimeline) draws it. */
@@ -22,6 +23,8 @@ export type TimelineShift = {
   requiresApproval?: boolean
   minAge?: number | null
   colorKey?: string | null
+  /** Reserved to an answer (#962): said on the bar, never hidden nor disabled by it. */
+  reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
 }
 
 /** What the visitor already holds on a shift (#534): their registration's live status. */
@@ -43,7 +46,7 @@ const HELD_NAME: Record<HeldKind, string> = {
   active: "inscription confirmée",
   requested: "demande envoyée, en attente de validation",
   waiting: "en liste d'attente",
-  offered: "place proposée, à accepter sur ta page personnelle",
+  offered: "place proposée, à accepter sur ta page « Mes inscriptions »",
 }
 
 /** Visible tag under a held bar, first in its sub-label. */
@@ -104,14 +107,18 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
 
   const isFull = shift.status === "full"
   const isClosed = shift.status === "closed"
+  // Over (src/lib/shift-ended.ts): like a closed shift, with its own word.
+  const isEnded = shift.status === "ended"
   const isWaitlistable = isFull && (shift.waitlistEnabled ?? false)
-  const unavail = (isFull && !isWaitlistable) || isClosed
+  const unavail = (isFull && !isWaitlistable) || isClosed || isEnded
   // Informational only: we don't know a first-time visitor's age until the form, so this never
   // blocks selection here; real enforcement is server-side at submit (see #192). Said in the name
   // since the visual sub-label is aria-hidden.
   const hasMinAge = shift.minAge != null
   const needsApproval = shift.requiresApproval ?? false
-  const minAgeSuffix = (hasMinAge ? ` (${shift.minAge} ans minimum)` : "") + (needsApproval ? " (sur validation)" : "")
+  // #962: the shift stays selectable; the condition is a readable mention, checked at submit.
+  const answerMention = shift.reservedAnswer ? answerConditionMention(shift.reservedAnswer.questionLabel, shift.reservedAnswer.answers) : null
+  const minAgeSuffix = (hasMinAge ? ` (${shift.minAge} ans minimum)` : "") + (needsApproval ? " (sur validation)" : "") + (answerMention ? ` (${answerMention})` : "")
   // Skipped once full: the « Complet » / waitlist wording already says all that matters.
   const spotsSuffix = unavail ? "" : ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})`
   // Said only where the bar can otherwise be taken: a bar that can't says its own reason.
@@ -123,10 +130,12 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
 
   let ariaLabel: string
   if (reserved) ariaLabel = `Réservé, ${roleLabel} ${timeSpoken} : ${RESERVED_LABEL}`
-  else if (unavail && !selected) ariaLabel = `${isClosed ? "Fermé" : "Complet"}, ${roleLabel} ${timeSpoken}${minAgeSuffix}`
+  else if (unavail && !selected) ariaLabel = `${isEnded ? "Terminé" : isClosed ? "Fermé" : "Complet"}, ${roleLabel} ${timeSpoken}${minAgeSuffix}`
   // A disabled bar must not offer an action: it says why it can't be chosen.
   else if (conflict && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix} : chevauche un créneau déjà choisi`
-  else if (locked && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix}${spotsSuffix}`
+  // Registrations closed (#1075): the reason in the name, in the list view's words; a bar's name is
+  // what a screen reader says on focus, the schedule's description is not.
+  else if (locked && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix}${spotsSuffix} : inscriptions fermées`
   else if (isWaitlistable) {
     ariaLabel = selected
       ? `En attente ${count}, ${roleLabel} ${timeSpoken} : retirer de la file d'attente${minAgeSuffix}`
@@ -139,6 +148,7 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
     isWaitlistable && !selected ? "Complet · file d'attente" : hasLabel ? shift.label : null,
     hasMinAge ? `${shift.minAge}+` : null,
     needsApproval ? "Sur validation" : null,
+    answerMention,
   ].filter(Boolean).join(" · ")
 
   return { ariaLabel, tag: limitText, tagShort: limitText ? ROLE_LIMIT_REACHED_SHORT : null, subLabel: details || null }
@@ -153,8 +163,10 @@ export type ShiftViewState = {
   reserved: boolean
   full: boolean
   closed: boolean
+  /** Over: its end has passed (src/lib/shift-ended.ts). */
+  ended: boolean
   waitlistable: boolean
-  /** Full without a waitlist, or closed. */
+  /** Full without a waitlist, closed or over. */
   unavailable: boolean
   /** The visual state of the bar (src/lib/roles.ts). */
   look: "selected" | "unavailable" | "default"
@@ -174,13 +186,14 @@ export function shiftViewState({ shift, held, selected, conflict, reserved, lock
   const isConflict = !isHeld && conflict
   const full = shift.status === "full"
   const closed = shift.status === "closed"
+  const ended = shift.status === "ended"
   const waitlistable = full && (shift.waitlistEnabled ?? false)
-  const unavailable = !isHeld && ((full && !waitlistable) || closed)
+  const unavailable = !isHeld && ((full && !waitlistable) || closed || ended)
   const isSelected = !isHeld && selected
   const isReserved = !isSelected && !isHeld && reserved
   const look = isSelected ? "selected" : (isConflict || unavailable || isReserved) ? "unavailable" : "default"
   const clickable = !isHeld && !isConflict && !unavailable && !isReserved && (!locked || isSelected)
-  return { held, selected: isSelected, conflict: isConflict, reserved: isReserved, full, closed, waitlistable, unavailable, look, clickable }
+  return { held, selected: isSelected, conflict: isConflict, reserved: isReserved, full, closed, ended, waitlistable, unavailable, look, clickable }
 }
 
 /** The lines of one item of the list view (#808): its visible text is its accessible name. */
@@ -193,6 +206,8 @@ export function shiftListText(shift: TimelineShift, view: ShiftViewState, opts: 
     ? HELD_TAG[view.held]
     : view.selected
       ? (view.waitlistable ? "En attente, sélectionné pour la file d'attente" : "Sélectionné")
+      : view.ended
+        ? "Terminé"
       : view.conflict
         ? "Chevauche un créneau choisi"
         : view.reserved
@@ -209,6 +224,7 @@ export function shiftListText(shift: TimelineShift, view: ShiftViewState, opts: 
   const details = [
     shift.minAge != null ? `${shift.minAge} ans minimum` : null,
     shift.requiresApproval ? "Sur validation" : null,
+    shift.reservedAnswer ? answerConditionMention(shift.reservedAnswer.questionLabel, shift.reservedAnswer.answers) : null,
   ].filter(Boolean).join(" · ")
   return { title: `${time} · ${roleLabel}`, status, details: details || null }
 }

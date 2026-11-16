@@ -10,10 +10,24 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
     "org-team-permissions": /^video\.team\.[a-z-]+@example\.org$/,
     "email-delivery-failures": /^video\.delivery\.[a-z-]+@example\.org$/,
     "platform-internal-administration": /^video\.operator\.(?:platform|[abc]\.owner|disposable\.owner|lifecycle\.owner)@example\.org$/,
+    // The beta videos' organisation (scripts/seed-video-beta.ts): members, leader, owner, operator.
+    "privacy-personal-links": /^video\.privacy\.(?:[ab]\.(?:member\.[0-4]|new|owner|leader)|unknown)@example\.org$/,
+    "beta-access": /^video\.beta\.[a-z]+@example\.org$/,
+    "sectors": /^video\.beta\.[a-z]+@example\.org$/,
+    "shift-swaps": /^video\.beta\.[a-z]+@example\.org$/,
+    "sector-leaders": /^video\.beta\.[a-z]+@example\.org$/,
+    // The workload protection video's organisation (scripts/seed-video-workload.ts): members and owner.
+    "workload-protection": /^video\.workload\.[a-z]+@example\.org$/,
+    // The assignment proposals video's organisation (scripts/seed-video-proposals.ts): members and owner.
+    "assignment-proposals": /^video\.proposals\.[a-z]+@example\.org$/,
+    // The assignment publication video's organisation (scripts/seed-video-publication.ts): members and owner.
+    "assignment-publication": /^video\.publication\.[a-z]+@example\.org$/,
+    // The volunteer event availability video's organisation (scripts/seed-video-volunteer-availability.ts): Morgane and owner.
+    "volunteer-event-availability": /^video\.disponibilites\.[a-z]+@example\.org$/,
   }
   const pattern = patterns[slug]
   if (!pattern) return
-  const base = "http://localhost:48026/api/v1/messages"
+  const base = `${process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"}/api/v1/messages`
   type Mail = { ID: string; To?: { Address: string }[]; Cc?: { Address: string }[]; Bcc?: { Address: string }[] }
   const inventory = async () => {
     const messages: Mail[] = []

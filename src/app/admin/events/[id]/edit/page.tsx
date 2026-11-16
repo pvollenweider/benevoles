@@ -12,9 +12,17 @@ import DeleteEventSection from "@/components/admin/DeleteEventSection"
 import FocusTargetHeading from "@/components/admin/event-nav/FocusTargetHeading"
 import { hasLevel } from "@/lib/permissions"
 import { DELETE_SECTION_ID } from "@/lib/event-nav"
+import EventSectorsOption from "@/components/admin/EventSectorsOption"
+import EventShiftSwapsOption from "@/components/admin/EventShiftSwapsOption"
+import EventWorkloadPolicyCard from "@/components/admin/EventWorkloadPolicyCard"
+import EventAvailabilityOption from "@/components/admin/EventAvailabilityOption"
+import { loadAvailabilityOption } from "@/lib/event-availability-server"
+import { loadWorkloadPolicyState } from "@/lib/workload-policy-data"
+import { canAdoptBeta } from "@/lib/beta-access"
+import { sectorsAdopted, sectorsOptionOffered } from "@/lib/sectors"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Réglages" }
+export const metadata: Metadata = { title: "Informations de l'événement" }
 
 export default async function EditEventPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ wizard?: string }> }) {
   const ctx = await getOrgContext()
@@ -27,6 +35,16 @@ export default async function EditEventPage({ params, searchParams }: { params: 
   const event = await db.event.findFirst({ where: { id }, include: { organization: { select: { timeZone: true } } } })
   if (!event) notFound()
   const timeZone = orgTimeZone(event.organization)
+  // Sectors (#1147): offered while the organisation can adopt them, or once the event has them.
+  // The gate is read only for an event that has neither.
+  const sectorsOffered = sectorsOptionOffered(event, event.sectorsEnabled || sectorsAdopted(event) || await canAdoptBeta(event.organizationId, "sectors"))
+
+  // Shift swaps (#1174, beta): offered while the organisation can adopt them, or once the event has them.
+  const swapsOffered = event.shiftSwapsEnabled || await canAdoptBeta(event.organizationId, "shiftSwaps")
+  // Breaks and workload protection (#1171, beta): offered while it can be adopted, or once the event has it.
+  const workload = await loadWorkloadPolicyState(db, event.organizationId, event.id)
+  // Dated availability (#1146, beta): offered while it can be adopted, or once the event has it.
+  const availability = await loadAvailabilityOption(db, event.organizationId, event.id)
 
   // Everything that permanent deletion would erase (all statuses, cancelled shifts included),
   // only counted for an archived event.
@@ -50,6 +68,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     confirmationMessage: event.confirmationMessage ?? "",
     reminderMessage: event.reminderMessage ?? "",
     requirePhone: event.requirePhone,
+    requireEmailConfirmation: event.requireEmailConfirmation,
     shiftRosterEnabled: event.shiftRosterEnabled,
     remindersEnabled: event.remindersEnabled,
     publicStatus: event.publicStatus as "draft" | "published" | "archived",
@@ -71,7 +90,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
       {wizard && <WizardSteps current={1} eventId={id} />}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Modifier l&apos;événement</h1>
+          <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Informations de l&apos;événement</h1>
           <HelpLink route="/admin/events/[id]/edit" />
         </div>
         {wizard && (
@@ -84,6 +103,22 @@ export default async function EditEventPage({ params, searchParams }: { params: 
         )}
       </div>
       <EventForm initialData={initialData} timeZone={timeZone} />
+      {swapsOffered && <EventShiftSwapsOption eventId={event.id} initialEnabled={event.shiftSwapsEnabled} initialApproval={event.shiftSwapsApproval} />}
+      {workload?.adoptable && (
+        <EventWorkloadPolicyCard
+          eventId={event.id}
+          initialEnabled={workload.enabled}
+          initialValues={workload.values}
+          initialIncomplete={workload.incomplete}
+          initialFindings={workload.findings}
+          timeZone={workload.timeZone}
+          horizon={workload.horizon}
+          placesInfo={{ shiftsWithoutPlace: workload.shiftsWithoutPlace, activePlaces: workload.activePlaces }}
+          peopleWithoutBirthDate={workload.peopleWithoutBirthDate}
+        />
+      )}
+      {availability && <EventAvailabilityOption eventId={event.id} initial={availability} />}
+      {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} />}
       {!wizard && (
         <section aria-labelledby={DELETE_SECTION_ID} className="border-t border-gray-200 pt-6 space-y-3">
           <FocusTargetHeading id={DELETE_SECTION_ID} className="text-base font-semibold text-gray-900">Suppression définitive</FocusTargetHeading>

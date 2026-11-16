@@ -41,6 +41,42 @@ describe("parseFeatureBlock", () => {
   })
 })
 
+// #1323: a `<!-- citation -->` line marks the paragraph right below as a quotable text.
+describe("parseFeatureBlock, citations", () => {
+  it("reads a French citation with the heading above it, and cuts the block where it stands", () => {
+    const block = parseFeatureBlock("### En une phrase\n\n<!-- citation -->\nbenevol.app est **libre**.\n\nSuite.")
+    expect(block.citations).toEqual([{ text: "benevol.app est libre.", lang: "fr", heading: "En une phrase" }])
+    expect(block.segments).toEqual([
+      { kind: "markdown", markdown: "### En une phrase" },
+      { kind: "citation", citation: { text: "benevol.app est libre.", lang: "fr", heading: "En une phrase" } },
+      { kind: "markdown", markdown: "Suite." },
+    ])
+    expect(block.markdown).toBe("### En une phrase\n\nSuite.")
+  })
+
+  it("reads an English citation with its lang", () => {
+    const block = parseFeatureBlock("### En anglais\n\n<!-- citation: en -->\nA sentence.")
+    expect(block.citations).toEqual([{ text: "A sentence.", lang: "en", heading: "En anglais" }])
+    expect(block.segments).toEqual([
+      { kind: "markdown", markdown: "### En anglais" },
+      { kind: "citation", citation: { text: "A sentence.", lang: "en", heading: "En anglais" } },
+    ])
+  })
+
+  it("drops a directive with no paragraph below it", () => {
+    const block = parseFeatureBlock("Texte.\n\n<!-- citation -->")
+    expect(block.citations).toEqual([])
+    expect(block.segments).toEqual([{ kind: "markdown", markdown: "Texte." }])
+    expect(block.markdown).toBe("Texte.")
+  })
+
+  it("drops the first of two citations in a row: only the second one marks the paragraph", () => {
+    const block = parseFeatureBlock("<!-- citation -->\n<!-- citation: en -->\nDeux.")
+    expect(block.citations).toEqual([{ text: "Deux.", lang: "en", heading: null }])
+    expect(block.segments).toEqual([{ kind: "citation", citation: { text: "Deux.", lang: "en", heading: null } }])
+  })
+})
+
 // #872: the audience pages show real captures of public/doc-img, which need no media server.
 describe("parseFeatureBlock, documentation screenshots", () => {
   it("takes a /doc-img screenshot alone on its line out of the Markdown, with its alt text", () => {
@@ -84,9 +120,11 @@ describe("parseFaqSource and the draft marker (#951)", () => {
 
 describe("actionHref (#759)", () => {
   it("turns a link to a source file into the page that serves it", () => {
-    expect(actionHref("guide/premiers-pas.md")).toBe("/doc/premiers-pas")
-    expect(actionHref("guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
-    expect(actionHref("GUIDE_ADMIN.md")).toBe("/doc/admin")
+    expect(actionHref("content/guide/premiers-pas.md")).toBe("/doc/premiers-pas")
+    expect(actionHref("content/guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
+    expect(actionHref("../guide/GUIDE_ADMIN.md")).toBe("/doc/admin")
+    // As written in content/pages/, relative to the file (#759 kept after the move to content/).
+    expect(actionHref("../../guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
   })
 
   it("leaves every other address as it is", () => {
@@ -94,12 +132,12 @@ describe("actionHref (#759)", () => {
   })
 
   it("a source link in an actions list becomes a site link, not a file path that 404s", () => {
-    const block = parseFeatureBlock("<!-- actions -->\n- [Lire](guide/premiers-pas.md)\n")
+    const block = parseFeatureBlock("<!-- actions -->\n- [Lire](content/guide/premiers-pas.md)\n")
     expect(block.actions).toEqual([{ label: "Lire", href: "/doc/premiers-pas" }])
   })
 
   it("no action of FEATURES.md points at a Markdown file", () => {
-    const page = parseFeaturesPage(read("FEATURES.md"))
+    const page = parseFeaturesPage(read("content/pages/FEATURES.md"))
     const hrefs = [page.intro, ...page.sections].flatMap((b) => b.actions.map((a) => a.href))
     expect(hrefs.length).toBeGreaterThan(0)
     for (const href of hrefs) expect(href, href).not.toMatch(/\.md(#|$)/)
@@ -169,7 +207,7 @@ describe("parseFaq (#767)", () => {
 
 describe("plainAnswer (#767)", () => {
   it("keeps the words the page shows: link text, no emphasis or code marks, one line", () => {
-    expect(plainAnswer("Oui. La page [Créer son premier événement](guide/creer.md) vous **mène** au `lien`.\n\nEnsuite *tout* va.")).toBe(
+    expect(plainAnswer("Oui. La page [Créer son premier événement](content/guide/creer.md) vous **mène** au `lien`.\n\nEnsuite *tout* va.")).toBe(
       "Oui. La page Créer son premier événement vous mène au lien. Ensuite tout va.",
     )
   })
@@ -187,7 +225,7 @@ describe("mailtoAddress", () => {
 })
 
 describe("FEATURES.md, as /fonctionnalites lays it out", () => {
-  const page = parseFeaturesPage(read("FEATURES.md"))
+  const page = parseFeaturesPage(read("content/pages/FEATURES.md"))
   const catalog = loadVideoCatalog()
 
   it("opens with the promise, two actions (the sign-up first, #810) and the presentation video", () => {
@@ -199,7 +237,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
   })
 
   it("says what decides: free, open source, no account for the volunteers", () => {
-    const text = read("FEATURES.md")
+    const text = read("content/pages/FEATURES.md")
     for (const words of [/gratuit/i, /open source/i, /sans compte/i, /hébergé en France/i, /développé en Suisse/i]) expect(text).toMatch(words)
   })
 
@@ -211,6 +249,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
       "garder-chacun-informe",
       "voir-ou-il-manque-du-monde",
       "tenir-le-jour-j",
+      "les-grands-evenements-en-beta",
       "apres-l-evenement",
       "vos-membres-et-leurs-donnees",
       "a-l-image-de-votre-association",
@@ -242,7 +281,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
   })
 
   it("says « étiquette », never « tag », like the rest of the page", () => {
-    expect(read("FEATURES.md")).not.toMatch(/\btags?\b/i)
+    expect(read("content/pages/FEATURES.md")).not.toMatch(/\btags?\b/i)
   })
 
   // #951: a short FAQ of its own, also its FAQPage structured data (the draft marker is no question).
@@ -260,10 +299,10 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
 })
 
 describe("LOGICIEL-PLANNING-BENEVOLES.md, the editorial page on volunteer scheduling (#767)", () => {
-  const source = read("LOGICIEL-PLANNING-BENEVOLES.md")
+  const source = read("content/pages/LOGICIEL-PLANNING-BENEVOLES.md")
   const page = parseFeaturesPage(source)
   const catalog = loadVideoCatalog()
-  const features = parseFeaturesPage(read("FEATURES.md"))
+  const features = parseFeaturesPage(read("content/pages/FEATURES.md"))
 
   it("answers the search with its title, then asks for a space by email, like /fonctionnalites", () => {
     expect(page.title).toBe("Logiciel de planning pour bénévoles")

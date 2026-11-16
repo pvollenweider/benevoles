@@ -6,6 +6,7 @@
 import { useState } from "react"
 import AvailabilityFields from "./AvailabilityFields"
 import { availabilityLabel, type AvailabilityPeriod } from "@/lib/availability"
+import { requireTokenPath } from "@/lib/token-path"
 
 type Props = { token: string; initialPeriods: string[]; initialNote: string | null }
 
@@ -28,7 +29,7 @@ export default function AvailabilityForm({ token, initialPeriods, initialNote }:
     if (!dirty) { setMessage("Aucune modification à enregistrer."); return }
     setSaving(true)
     try {
-      const res = await fetch(`/api/public/registrations/${token}/availability`, {
+      const res = await fetch(requireTokenPath("/api/public/registrations", token, "/availability"), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ availabilityPeriods: periods, availabilityNote: note.trim() || null }),

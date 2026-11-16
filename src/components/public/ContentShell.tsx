@@ -5,26 +5,19 @@ import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import DocThemeToggle from "@/app/doc/DocThemeToggle"
 import ContentNav from "@/components/public/ContentNav"
+import ContentShellRoot from "@/components/public/ContentShellRoot"
 import SiteBrandLink from "@/components/public/SiteBrandLink"
 import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
-import { audienceNav } from "@/lib/doc-pages"
+import { audienceNav, availablePublicPages } from "@/lib/doc-pages"
+import { THEME_INIT_SCRIPT } from "@/lib/inline-scripts"
 
 // Sets the `dark` class on the shell's own root before first paint — from a saved choice
 // (doc-theme in localStorage) or, absent one, the OS/browser preference — so there's no flash of
 // the wrong theme. Scoped to this element, never <html>: going back to the home page must not keep
-// the dark theme (its footer would lose contrast). DocThemeToggle applies it again after a client
+// the dark theme (its footer would lose contrast); the page canvas under the frame follows it in
+// CSS (globals.css, html:has). DocThemeToggle applies it again, before paint, after a client
 // navigation, where inline scripts don't run.
-// Static string constant, never interpolated with request/user data — safe to inject verbatim.
-const THEME_INIT_SCRIPT = `
-(function () {
-  try {
-    var stored = localStorage.getItem("doc-theme");
-    var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    var el = document.currentScript && document.currentScript.parentElement;
-    if (el) el.classList.toggle("dark", dark);
-  } catch (e) {}
-})();
-`
+// THEME_INIT_SCRIPT: a constant of src/lib/inline-scripts.ts, allowed by its hash in the script policy.
 
 /**
  * The prose recipe of the content pages (changelog, accessibility), shared with
@@ -57,16 +50,26 @@ export const CONTENT_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[65
           prose-img:rounded-lg prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-700 prose-img:shadow-sm`
 
 /**
- * Frame of the public content pages rendered from Markdown sources (features, documentation):
+ * Frame of every public content page (features, documentation, blog, changelog, accessibility,
+ * video library, legal documents; one test checks their layouts, site-shell.react.test.tsx):
  * site header with the content navigation and the theme toggle, and the real PublicFooter.
  * Header, content and footer share one container (SITE_CONTAINER_CLASS), so their edges line up.
  * `layout="article"` (default) puts the page in a <main> with the shared prose recipe;
- * `layout="doc"` lets the page draw its own <main> (DocFrame, FeaturesPage), so a unit's side
- * menu can sit beside it, outside the main landmark that « Aller au contenu » jumps to.
+ * `layout="doc"` lets the page draw its own <main> (DocFrame, FeaturesPage, the video library), so
+ * a unit's side menu can sit beside it, outside the main landmark that « Aller au contenu » jumps to.
+ * Text that sets no colour of its own inherits gray-900 (gray-100 in dark), and native controls
+ * (scrollbars, select lists, the search field's clear button) follow the theme (color-scheme).
+ * Its root (ContentShellRoot) turns the page's plain links to other content pages into client
+ * navigations and places the focus after one.
  */
 export default function ContentShell({ children, layout = "article" }: { children: React.ReactNode; layout?: "article" | "doc" }) {
   return (
-    <div data-theme-scope className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+    // The colours only fade while the reader switches the theme (data-theme-switching, set by
+    // DocThemeToggle), never when the saved theme is applied to a page that is appearing.
+    <ContentShellRoot
+      pages={availablePublicPages().map((p) => p.path)}
+      className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark] motion-safe:data-[theme-switching]:transition-colors"
+    >
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       <SkipLink />
 
@@ -92,6 +95,6 @@ export default function ContentShell({ children, layout = "article" }: { childre
       <div className={SITE_CONTAINER_CLASS}>
         <PublicFooter variant="site" />
       </div>
-    </div>
+    </ContentShellRoot>
   )
 }

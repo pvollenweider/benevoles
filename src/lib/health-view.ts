@@ -56,17 +56,37 @@ export function assessRestoreTest(run: JobRunFacts | null | undefined, now: Date
   return { id, label, level: "ok", detail: `Dernier test ${ago(run.finishedAt, now)}.` }
 }
 
-export type OutboxFacts = { failedLastDay: number; oldestPendingMinutes: number | null; staleClaims: number; healthy: boolean }
+export type OutboxFacts = {
+  failedLastDay: number
+  recipientFailuresLastDay: number
+  otherFailuresLastDay: number
+  oldestPendingMinutes: number | null
+  staleClaims: number
+  healthy: boolean
+}
+
+/** « 3 adresses refusées… » : the recipient's address is wrong, not the platform. */
+function recipientFailuresDetail(n: number): string {
+  return `${n} adresse${n > 1 ? "s" : ""} refusée${n > 1 ? "s" : ""} par le destinataire en 24 h (domaine ou boîte inexistants, souvent une faute de frappe)`
+}
+
+function otherFailuresDetail(n: number): string {
+  return `${n} échec${n > 1 ? "s" : ""} définitif${n > 1 ? "s" : ""} en 24 h`
+}
 
 export function assessOutbox(o: OutboxFacts): HealthItem {
   const id = "outbox"
   const label = "File d'envoi des emails"
-  if (o.healthy) return { id, label, level: "ok", detail: o.oldestPendingMinutes === null ? "Rien en attente." : `Plus ancien en attente : ${o.oldestPendingMinutes} min.` }
+  if (o.healthy && o.recipientFailuresLastDay === 0) {
+    return { id, label, level: "ok", detail: o.oldestPendingMinutes === null ? "Rien en attente." : `Plus ancien en attente : ${o.oldestPendingMinutes} min.` }
+  }
   const parts: string[] = []
-  if (o.failedLastDay > 0) parts.push(`${o.failedLastDay} échec${o.failedLastDay > 1 ? "s" : ""} définitif${o.failedLastDay > 1 ? "s" : ""} en 24 h`)
+  if (o.otherFailuresLastDay > 0) parts.push(otherFailuresDetail(o.otherFailuresLastDay))
+  if (o.recipientFailuresLastDay > 0) parts.push(recipientFailuresDetail(o.recipientFailuresLastDay))
   if (o.staleClaims > 0) parts.push(`${o.staleClaims} envoi${o.staleClaims > 1 ? "s" : ""} bloqué${o.staleClaims > 1 ? "s" : ""}`)
   if (o.oldestPendingMinutes !== null && o.oldestPendingMinutes > 15) parts.push(`en attente depuis ${o.oldestPendingMinutes} min`)
-  return { id, label, level: o.failedLastDay > 0 || o.staleClaims > 0 ? "error" : "warn", detail: `${parts.join(", ")}.` }
+  const level: HealthLevel = o.otherFailuresLastDay > 0 || o.staleClaims > 0 ? "error" : "warn"
+  return { id, label, level, detail: `${parts.join(", ")}.` }
 }
 
 /** Spaces awaiting the operator's validation (#810): fine while young, to look at after 24 hours. */

@@ -47,8 +47,8 @@ describe("new events and the organisation's default", () => {
     const db = makeDb(true)
     guard.mockResolvedValue({ db, organizationId: "org-a", session: {} })
     await POST(post("/api/admin/events", { title: "Fête", startDate: "2031-06-06", endDate: "2031-06-06", shiftRosterEnabled: false }))
+    // The form's value wins over the default (the organisation is read anyway, for the sectors' default, #1147).
     expect(created(db).shiftRosterEnabled).toBe(false)
-    expect(db.organization.findUnique).not.toHaveBeenCalled()
   })
 
   it("POST /api/admin/events/from-template: the organisation's default", async () => {

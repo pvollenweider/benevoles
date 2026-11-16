@@ -15,7 +15,7 @@
  */
 
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { registrationToken } from "../src/lib/token-vault"
 import { findTemplate, templateToEvent } from "../src/lib/event-templates"
 import { addDays } from "../src/lib/shift-series"
@@ -24,7 +24,7 @@ export const DEMO_PERMANENCES_ORG_SLUG = "epicerie-de-la-gare"
 /** Its organizer, signed in on the screenshots of this organization (same password as ORG_ADMIN_EMAIL). */
 export const DEMO_PERMANENCES_ADMIN_EMAIL = "epicerie.admin@example.org"
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) })
+const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL!) })
 
 const today = new Date().toISOString().slice(0, 10)
 const toMonday = (8 - new Date(`${today}T00:00:00Z`).getUTCDay()) % 7 || 7

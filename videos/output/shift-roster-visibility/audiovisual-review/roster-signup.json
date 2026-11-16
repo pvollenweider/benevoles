@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T20:42:24.324Z",
-  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
-  "promptSha256": "14afd33d8c28b753e0be90d8b1cce66d7d33a7d1b23fb339d051989d75520a63",
-  "clipSha256": "d555363569a661550f410afdfec56e431a2137ac1a4f285f6d779caf47b75994",
+  "reviewedAt": "2026-10-22T09:37:58.032Z",
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "promptSha256": "7868e4779b159da72cd83f495c60e968d09e2296cf61a5c54fd444fd83c85416",
+  "clipSha256": "c75031afb7e17961334deeb56a3c651541338565041c79a426d08076717c0a30",
   "scene": "roster-signup",
   "review": {
     "heardOpening": "Voici la page vue par un visiteur anonyme",
     "checkpoints": [
       {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 5.8,
         "spoken": "Choisissez un créneau, puis continuez.",
-        "visibleSeconds": 6.7,
-        "visible": "Sélection du créneau Accueil puis clic sur le bouton bleu Continuer",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur le créneau 09h-12h et ouverture du formulaire d'inscription.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
+        "spokenSeconds": 8.7,
         "spoken": "Renseignez votre prénom, votre nom et votre adresse email.",
-        "visibleSeconds": 9.8,
-        "visible": "Saisie de Aline, Martin et de l'adresse email dans les champs correspondants",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie de Aline, Martin et de l'adresse email dans les champs correspondants.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.1,
+        "spokenSeconds": 12.8,
         "spoken": "Acceptez la convention et l’utilisation des données pour l’inscription.",
-        "visibleSeconds": 13.8,
-        "visible": "Cochage des deux premières cases obligatoires",
+        "visibleSeconds": 13.5,
+        "visible": "Cochage successif des deux premières cases obligatoires.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 33.9,
+        "spokenSeconds": 33.3,
         "spoken": "Cochez cette case si vous le souhaitez, puis confirmez l’inscription.",
-        "visibleSeconds": 34.4,
-        "visible": "Cochage de la case de visibilité puis clic sur Confirmer l'inscription",
+        "visibleSeconds": 34.5,
+        "visible": "Clic sur le bouton Confirmer mon inscription et affichage de l'écran Inscription confirmée.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix de synthèse claire, fluide et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

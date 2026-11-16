@@ -37,6 +37,9 @@ import {
 } from "./member-erasure"
 import { erasureEmailHash, registerLine } from "./member-erasure-register"
 import { ANSWER_CHANGED_ACTION, ANSWER_LOG_FIELD } from "./answer-changes"
+import { endSwapsIn } from "./shift-swap-server"
+import { scrubPeopleFromRuns } from "./proposal-runs-lifecycle"
+import type { Tx } from "./registration-capacity"
 
 export class MemberErasureConflictError extends Error {
   constructor(message: string, readonly status: 404 | 409 = 409) {
@@ -61,16 +64,18 @@ function startOfTodayUtc(now: Date): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
 }
 
-type Db = Pick<OrgScopedPrisma, "volunteer" | "registration" | "memberInvite" | "questionAnswer" | "pushSubscription" | "sectorLeader" | "duplicateDismissal">
+type Db = Pick<OrgScopedPrisma, "volunteer" | "registration" | "memberInvite" | "shiftDecline" | "questionAnswer" | "pushSubscription" | "sectorLeader" | "duplicateDismissal">
 
 /** Loads the plan's input for a member through the org-scoped client (or a transaction of it). */
 async function loadErasureInput(db: Db, id: string, now: Date): Promise<ErasureInput | null> {
   const member = await db.volunteer.findFirst({ where: { id }, select: MEMBER_SELECT })
   if (!member) return null
   const today = startOfTodayUtc(now)
-  const [registrations, invites, answers, pushSubscriptions, sectorLeaders, dismissals, merged] = await Promise.all([
+  const [registrations, invites, shiftDeclines, answers, pushSubscriptions, sectorLeaders, dismissals, merged] = await Promise.all([
     db.registration.findMany({ where: { volunteerId: id }, select: { id: true, status: true, shift: { select: { date: true } } } }),
     db.memberInvite.findMany({ where: { volunteerId: id }, select: { id: true } }),
+    // The person's own and those of the records merged into this one, all deleted below.
+    db.shiftDecline.findMany({ where: { OR: [{ volunteerId: id }, { volunteer: { mergedIntoId: id } }] }, select: { id: true } }),
     db.questionAnswer.findMany({ where: { volunteerId: id }, select: { id: true } }),
     db.pushSubscription.findMany({ where: { volunteerId: id }, select: { id: true } }),
     member.email
@@ -83,6 +88,7 @@ async function loadErasureInput(db: Db, id: string, now: Date): Promise<ErasureI
     member,
     registrations: registrations.map((r) => ({ id: r.id, status: r.status, upcoming: r.shift.date >= today })),
     inviteIds: invites.map((r) => r.id),
+    shiftDeclineIds: shiftDeclines.map((r) => r.id),
     answerIds: answers.map((r) => r.id),
     pushSubscriptionIds: pushSubscriptions.map((r) => r.id),
     sectorLeaderIds: sectorLeaders.map((r) => r.id),
@@ -176,9 +182,28 @@ export async function runMemberErasure(
     const authors = [id, ...del.tombstoneIds]
     await tx.$executeRaw`UPDATE "EventLog" SET changes = changes - ${ANSWER_LOG_FIELD}::text WHERE action = ${ANSWER_CHANGED_ACTION} AND "actorType" = 'volunteer' AND "actorId" = ANY(${authors}::text[])`
     if (del.inviteIds.length) await tx.memberInvite.deleteMany({ where: { id: { in: del.inviteIds } } })
+    // « Je ne peux pas » answers for one shift (#1303): the person's own, on this record and on the
+    // tombstones merged into it (the member row is kept, so the cascade never runs here).
+    await tx.shiftDecline.deleteMany({ where: { volunteerId: { in: authors } } })
     if (del.pushSubscriptionIds.length) await tx.pushSubscription.deleteMany({ where: { id: { in: del.pushSubscriptionIds }, volunteerId: id } })
     // Shift roster choices (#1068): the person's own, never shown again.
     await tx.rosterConsent.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Pending public sign-ups waiting for their email confirmation (#1253): the person's own, with
+    // the name, address, phone and token hash. Their provisional registrations become ordinary
+    // cancelled rows (the link is set to null), then scrubbed below like the others.
+    await tx.registration.updateMany({ where: { volunteerId: { in: authors }, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
+    await tx.signupConfirmation.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Custom reminder send state (#1139): ids and timing only, deleted with the person's data.
+    await tx.reminderOccurrence.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Personal workload limits (#1171, lot 2): the person's own settings, gone with their data.
+    await tx.eventVolunteerLimit.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Dated availability (#1146): the person's own answers, with their days and ranges (cascade).
+    await tx.availabilityRequest.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Draft assignments (#1146, lot C): the organisation's plans for the person, pending or archived.
+    await tx.draftAssignment.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Generated proposals (#1172): the person's hour targets, and their place in every run.
+    await tx.eventVolunteerTarget.deleteMany({ where: { volunteerId: { in: authors } } })
+    await scrubPeopleFromRuns(tx as unknown as Tx, organizationId, authors)
     if (del.sectorLeaderIds.length) await tx.sectorLeader.deleteMany({ where: { id: { in: del.sectorLeaderIds } } })
     if (del.duplicateDismissalIds.length) await tx.duplicateDismissal.deleteMany({ where: { id: { in: del.duplicateDismissalIds } } })
     // SMTP outcomes (#598): the member's own, and any other row of the organisation with their
@@ -203,13 +228,21 @@ export async function runMemberErasure(
     // 4. The record itself.
     await tx.volunteer.update({ where: { id }, data: erasedVolunteerData(now) })
 
+    // Swap requests of the person (#1174): ended now; the other person is told, never the erased one
+    // (the record has no address any more).
+    await endSwapsIn(tx, { volunteerIds: [id] }, "volunteer_gone", actor, now)
+
     // 5. Invariant: nothing the person owns is left.
-    const [answers, invites, push] = await Promise.all([
+    const [answers, invites, shiftDeclines, push, availability, drafts, targets] = await Promise.all([
       tx.questionAnswer.count({ where: { volunteerId: id } }),
       tx.memberInvite.count({ where: { volunteerId: id } }),
+      tx.shiftDecline.count({ where: { volunteerId: { in: authors } } }),
       tx.pushSubscription.count({ where: { volunteerId: id } }),
+      tx.availabilityRequest.count({ where: { volunteerId: id } }),
+      tx.draftAssignment.count({ where: { volunteerId: id } }),
+      tx.eventVolunteerTarget.count({ where: { volunteerId: id } }),
     ])
-    if (answers || invites || push) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} push=${push})`)
+    if (answers || invites || shiftDeclines || push || availability || drafts || targets) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} shiftDeclines=${shiftDeclines} push=${push} availability=${availability} drafts=${drafts} targets=${targets})`)
 
     // 6. Register (replay after a restore) and log: an erasure happened, never who. The admin who
     // did it is the actor, as for every other action.

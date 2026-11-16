@@ -1,0 +1,14 @@
+STATUS: READY
+ASSIGNMENT_PROPOSALS, batch36, 2026-10-31. Second and final authorized narrated take.
+167640ms; main eed7abaae331f8d15ca9adf3948b105366812fe7; BUILD_ID XkyJ_3vtHOL38BaQPtehJ.
+One new whole Kore generation, continuousPauseTags:false; all source chapters audited; whole voice consistent.
+11 final audiovisual reports unflagged; all final chapter ASRs checked (launch/result standard-model homophone/numeral flags independently resolved on identical audio; original reports retained).
+Entire final soundtrack ASR and VTT:0 register candidates; no stray instructions or English words. 34 full final frames OCR:0 forbidden labels/addresses.
+Music12.5–19.1LU below voice;0 gaps;22real clicks/7real keys with synced effects. No3-second music-only window in this render.
+Calculation4035ms; seed2026 typed; current result above form,29/31coverage,neutral status,folded optional settings,lock icon,coverage row/removal confirmation shown.
+Noah6 held650ms; Emma explanation centered. ap-lock12846ms/audio12845; ap-adjust17455ms/audio17453. Lock click7.919s after instruction; correction open3.029/remove6.427/confirm8.144/add13.760s after announcements.
+Database proof:29active drafts,Emma locked,Lou manual,LeaFridayBilletterie removed,0registrations/notifications. Publication confirmation cancelled.
+1247video tests/37files,211explicit typed sources,recorder ESLint PASS. Description130audited UTF8bytes.
+First take retained locally and evidenced as not retained; no third take. No product bug. No src/,content/guide/ or renders.json changes.
+Real-time subjective listening unavailable, as allowed by batch rules.
+Publication: preview then APPLY1 on default,5files uploaded; post-publish SHA comparison0uploads/5unchanged. Notification sent. Catalogpublished true/revision2/updatedAt2026-10-31;8meta-length tests PASS.

@@ -582,7 +582,7 @@
         "téléphone"
       ],
       "published": true,
-      "seedScenario": "demo",
+      "seedScenario": "shift-eligibility-rules",
       "themes": [
         "planning-creneaux",
         "membres-invitations"
@@ -591,9 +591,10 @@
         "organisateur"
       ],
       "feature": "Règles d'éligibilité des postes",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "avance"
+      "updatedAt": "2026-11-11",
+      "revision": 5,
+      "level": "avance",
+      "updated": "2026-11-11"
     },
     {
       "id": "VOLUNTEER_DISCOVER_EVENT",
@@ -709,7 +710,7 @@
         "validation"
       ],
       "seedScenario": "personal-withdrawals",
-      "feature": "Page personnelle du bénévole",
+      "feature": "Page « Mes inscriptions » du bénévole",
       "level": "essentiel",
       "published": true,
       "audience": [
@@ -767,6 +768,32 @@
       "themes": [
         "parcours-benevole"
       ]
+    },
+    {
+      "id": "VOLUNTEER_EVENT_AVAILABILITY",
+      "manifest": "volunteer-event-availability",
+      "category": "volunteer-experience",
+      "tags": [
+        "disponibilités",
+        "lien-personnel",
+        "horaires",
+        "nuit",
+        "date-limite",
+        "bêta"
+      ],
+      "published": true,
+      "seedScenario": "volunteer-event-availability",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Disponibilités datées pour un événement",
+      "updatedAt": "2026-10-31",
+      "revision": 1,
+      "level": "essentiel",
+      "added": "2026-10-31"
     },
     {
       "id": "VOLUNTEER_PHONE_NOTIFICATIONS",
@@ -917,10 +944,11 @@
         "équipe",
         "lien-personnel",
         "coordonnées",
-        "poste"
+        "poste",
+        "secteur"
       ],
       "published": true,
-      "seedScenario": "demo",
+      "seedScenario": "sector-leaders",
       "themes": [
         "membres-invitations",
         "jour-j"
@@ -929,9 +957,173 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-10-16",
-      "revision": 5,
-      "level": "essentiel"
+      "updatedAt": "2026-11-10",
+      "revision": 7,
+      "level": "essentiel",
+      "updated": "2026-11-10"
+    },
+    {
+      "id": "BETA_ACCESS",
+      "manifest": "beta-access",
+      "category": "organization-settings",
+      "tags": [
+        "bêta",
+        "fonctions-avancées",
+        "paramètres",
+        "opérateur"
+      ],
+      "published": true,
+      "seedScenario": "beta-access",
+      "themes": [
+        "organisation-equipe"
+      ],
+      "audience": [
+        "organisateur",
+        "super-admin"
+      ],
+      "feature": "Fonctions bêta",
+      "updatedAt": "2026-11-10",
+      "revision": 2,
+      "level": "avance",
+      "added": "2026-10-29",
+      "updated": "2026-11-10"
+    },
+    {
+      "id": "SECTORS",
+      "manifest": "sectors",
+      "category": "planning",
+      "tags": [
+        "secteurs",
+        "postes",
+        "frise",
+        "filtre",
+        "messages"
+      ],
+      "published": true,
+      "seedScenario": "sectors",
+      "themes": [
+        "planning-creneaux",
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Secteurs",
+      "updatedAt": "2026-11-10",
+      "revision": 2,
+      "level": "avance",
+      "added": "2026-10-29",
+      "updated": "2026-11-10"
+    },
+    {
+      "id": "SHIFT_SWAPS",
+      "manifest": "shift-swaps",
+      "category": "registrations-followup",
+      "tags": [
+        "échanges",
+        "créneaux",
+        "mes-inscriptions",
+        "validation",
+        "bêta"
+      ],
+      "published": true,
+      "seedScenario": "shift-swaps",
+      "themes": [
+        "inscriptions-communication",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur",
+        "benevole"
+      ],
+      "feature": "Échanges de créneaux",
+      "updatedAt": "2026-10-29",
+      "revision": 1,
+      "level": "avance",
+      "added": "2026-10-29"
+    },
+    {
+      "id": "WORKLOAD_PROTECTION",
+      "manifest": "workload-protection",
+      "category": "planning",
+      "tags": [
+        "pauses",
+        "charge",
+        "limites",
+        "lieux",
+        "repas",
+        "mes-inscriptions",
+        "bêta"
+      ],
+      "published": true,
+      "seedScenario": "workload-protection",
+      "themes": [
+        "planning-creneaux",
+        "inscriptions-communication",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur",
+        "benevole"
+      ],
+      "feature": "Protection des pauses et de la charge",
+      "updatedAt": "2026-10-30",
+      "revision": 1,
+      "level": "avance",
+      "added": "2026-10-30"
+    },
+    {
+      "id": "ASSIGNMENT_PROPOSALS",
+      "manifest": "assignment-proposals",
+      "category": "planning",
+      "tags": [
+        "proposition",
+        "affectations",
+        "brouillons",
+        "disponibilités",
+        "objectif-heures",
+        "bêta"
+      ],
+      "published": true,
+      "seedScenario": "assignment-proposals",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Proposition d'affectations",
+      "updatedAt": "2026-11-01",
+      "revision": 4,
+      "level": "avance",
+      "added": "2026-10-30",
+      "updated": "2026-11-01"
+    },
+    {
+      "id": "ASSIGNMENT_PUBLICATION",
+      "manifest": "assignment-publication",
+      "category": "planning",
+      "tags": [
+        "publication",
+        "affectations",
+        "emails",
+        "annulation",
+        "disponibilités",
+        "bêta"
+      ],
+      "published": true,
+      "seedScenario": "assignment-publication",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Publication des affectations en brouillon",
+      "updatedAt": "2026-11-01",
+      "revision": 1,
+      "level": "avance",
+      "added": "2026-11-01"
     },
     {
       "id": "MEMBERS_MANAGEMENT",
@@ -1292,7 +1484,7 @@
         "tags"
       ],
       "published": true,
-      "seedScenario": "demo",
+      "seedScenario": "members-import",
       "themes": [
         "membres-invitations"
       ],
@@ -1300,9 +1492,10 @@
         "organisateur"
       ],
       "feature": "Import des membres",
-      "updatedAt": "2026-10-16",
-      "revision": 6,
-      "level": "essentiel"
+      "updatedAt": "2026-11-11",
+      "revision": 7,
+      "level": "essentiel",
+      "updated": "2026-11-11"
     },
     {
       "id": "MEMBERS_DUPLICATES_MERGE",
@@ -1445,9 +1638,10 @@
         "organisateur"
       ],
       "feature": "Liens publics, personnels et de responsables",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-10-29",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-10-29"
     },
     {
       "id": "LAST_MINUTE_CHANGES",
@@ -1471,9 +1665,10 @@
         "organisateur"
       ],
       "feature": "Gérer un imprévu",
-      "updatedAt": "2026-10-17",
-      "revision": 5,
-      "level": "essentiel"
+      "updatedAt": "2026-11-11",
+      "revision": 6,
+      "level": "essentiel",
+      "updated": "2026-11-11"
     },
     {
       "id": "SHIFT_ROSTER_VISIBILITY",
@@ -1496,8 +1691,8 @@
         "benevole"
       ],
       "feature": "Qui est inscrit",
-      "updatedAt": "2026-10-21",
-      "revision": 1,
+      "updatedAt": "2026-10-22",
+      "revision": 2,
       "level": "essentiel",
       "added": "2026-10-21"
     }

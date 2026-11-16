@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 
 // Renaming a poste carries its sector leaders (#1001), in the same transaction as its shifts, its
 // share links and its questions. A person already leading a poste of the new name keeps one row,
@@ -20,7 +22,8 @@ function makeModels(leaders: { id: string; email: string; roleName: string }[]) 
   return {
     shift: { updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
     eventGroupLink: { findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
-    eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
+    eventPage: { findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
+    eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
     sectorLeader: {
       findMany: vi.fn(async ({ where }: { where: { roleName: string } }) => leaders.filter((l) => l.roleName === where.roleName)),
       deleteMany: vi.fn().mockResolvedValue({ count: 1 }),
@@ -90,11 +93,31 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] — sector leaders follo
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  it("renames the poste in the information pages attached to it, like a group link (#1324)", async () => {
+    setup([{ id: "l1", email: "marc@x.org", roleName: "Bar" }])
+    tx.eventPage.findMany.mockResolvedValue([{ id: "pg1", roleNames: ["Bar", "Accueil"] }])
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    expect((await PATCH(request("PATCH", { name: "Buvette" }), params)).status).toBe(200)
+    expect(tx.eventPage.findMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", roleNames: { has: "Bar" } }, select: { id: true, roleNames: true } })
+    expect(tx.eventPage.update).toHaveBeenCalledWith({ where: { id: "pg1" }, data: { roleNames: ["Buvette", "Accueil"] } })
+  })
+
   it("moves no leader on a change that is not a rename", async () => {
     setup([{ id: "l1", email: "marc@x.org", roleName: "Bar" }])
     const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     expect((await PATCH(request("PATCH", { name: "Bar", colorKey: null }), params)).status).toBe(200)
     expect($transaction).not.toHaveBeenCalled()
+  })
+
+  // #1010: they stay, shown in « Responsables de secteur » as a poste without live shift, and a
+  // duplication leaves them out; no row is deleted.
+  it("removes the poste from the information pages attached to it on deletion (#1324)", async () => {
+    setup([{ id: "l1", email: "marc@x.org", roleName: "Bar" }])
+    Object.assign(db.shift, { findMany: vi.fn().mockResolvedValue([{ id: "s1", registrations: [], event: { id: "evt-1" } }]) })
+    db.eventPage.findMany.mockResolvedValue([{ id: "pg1", roleNames: ["Bar", "Accueil"] }])
+    const { DELETE } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    expect((await DELETE(request("DELETE"), params)).status).toBe(200)
+    expect(db.eventPage.update).toHaveBeenCalledWith({ where: { id: "pg1" }, data: { roleNames: ["Accueil"] } })
   })
 
   it("leaves the leaders in place when the poste is deleted", async () => {

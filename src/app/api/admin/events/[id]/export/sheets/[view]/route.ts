@@ -6,16 +6,23 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { isSheetView, renderSheet } from "@/lib/print-sheets"
-import { answerSummary, answerSummarySelect } from "@/lib/question-answer-summary"
+import { answerSummary, answerSummarySelectFor } from "@/lib/question-answer-summary"
 import { withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
+import { sectorFilterOfRequest } from "@/lib/sector-filter-data"
+import { sectorFilterCaption } from "@/lib/sector-filter"
 
-/** GET /api/admin/events/[id]/export/sheets/[view] (#400): one printable sheet of the event. */
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string; view: string }> }) {
+/**
+ * GET /api/admin/events/[id]/export/sheets/[view] (#400): one printable sheet of the event.
+ * `?secteur=` (#1170) keeps the postes of one sector, read now, and says so under the title.
+ */
+export async function GET(req: Request, { params }: { params: Promise<{ id: string; view: string }> }) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { id, view } = await params
   if (!isSheetView(view)) return NextResponse.json({ error: "Vue inconnue" }, { status: 404 })
+  const sector = await sectorFilterOfRequest(guard.db, id, req)
+  if (!sector) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const event = await guard.db.event.findFirst({
     where: { id },
@@ -27,7 +34,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       organization: { select: { name: true, timeZone: true, logo: ORG_LOGO_SELECT } },
       sectorLeaders: { select: { roleName: true, name: true, email: true } },
       shifts: {
-        where: { status: { not: "cancelled" } },
+        where: { status: { not: "cancelled" }, ...sector.shiftWhere },
         orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
         select: {
           id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true,
@@ -43,7 +50,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   // The answers summary (#686) counts every live registration, not only the confirmed ones above.
-  const forAnswers = view === "answers" ? await guard.db.event.findFirst({ where: { id }, select: answerSummarySelect }) : null
+  const forAnswers = view === "answers" ? await guard.db.event.findFirst({ where: { id }, select: answerSummarySelectFor(sector.shiftWhere) }) : null
 
   const timeZone = orgTimeZone(event.organization)
   const html = renderSheet(view, {
@@ -53,6 +60,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     printedAt: new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short", timeZone }),
     leaders: event.sectorLeaders,
     answers: forAnswers ? answerSummary(forAnswers.questions, forAnswers.registrations) : undefined,
+    sectorCaption: sectorFilterCaption(sector.filter),
     // The role's sector leaders by name (#560) on the individual sheet, handed to the volunteers.
     shifts: event.shifts.map((s) => withSectorLeaders(withDayContact({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),

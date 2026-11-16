@@ -1,0 +1,326 @@
+{
+  "slug": "shift-swaps",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-29T06:34:53.979Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "9831e86e40ae3dd1ba60eb632b8e90951483a11c",
+    "sourceTree": "3cab4c5ef35c951b4999e429b70f1346471393aa",
+    "productSourceSha256": "3670484777e8a01d5bd1cfce0ea8d49693bf0c6d23523b1c2ddf8ae8d29d261e",
+    "buildId": "jJH5zvJlD2hQBFLXtZa0x",
+    "snapshot": "/tmp/benevoles-video-production.h6qj9dqj",
+    "builtAt": "2026-10-29T06:13:15.550Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-beta",
+    "scenario": "SHIFT_SWAPS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 29132
+    },
+    {
+      "kind": "click",
+      "atMs": 53135
+    },
+    {
+      "kind": "click",
+      "atMs": 78131
+    },
+    {
+      "kind": "click",
+      "atMs": 78929
+    },
+    {
+      "kind": "click",
+      "atMs": 88129
+    },
+    {
+      "kind": "click",
+      "atMs": 101079
+    },
+    {
+      "kind": "click",
+      "atMs": 118907
+    },
+    {
+      "kind": "click",
+      "atMs": 127664
+    },
+    {
+      "kind": "click",
+      "atMs": 144677
+    },
+    {
+      "kind": "click",
+      "atMs": 157378
+    },
+    {
+      "kind": "click",
+      "atMs": 160332
+    },
+    {
+      "kind": "click",
+      "atMs": 162193
+    },
+    {
+      "kind": "click",
+      "atMs": 179959
+    },
+    {
+      "kind": "click",
+      "atMs": 180742
+    }
+  ],
+  "cues": [
+    {
+      "id": "swaps-welcome",
+      "startMs": 1244,
+      "endMs": 18853
+    },
+    {
+      "id": "swaps-enable",
+      "startMs": 21120,
+      "endMs": 41851
+    },
+    {
+      "id": "swaps-publish",
+      "startMs": 44113,
+      "endMs": 66122
+    },
+    {
+      "id": "swaps-offer",
+      "startMs": 68381,
+      "endMs": 84502
+    },
+    {
+      "id": "swaps-accept",
+      "startMs": 86762,
+      "endMs": 103634
+    },
+    {
+      "id": "swaps-done",
+      "startMs": 104115,
+      "endMs": 120063
+    },
+    {
+      "id": "swaps-approval",
+      "startMs": 122335,
+      "endMs": 137763
+    },
+    {
+      "id": "swaps-sector",
+      "startMs": 140023,
+      "endMs": 158579
+    },
+    {
+      "id": "swaps-sector-accept",
+      "startMs": 159031,
+      "endMs": 168950
+    },
+    {
+      "id": "swaps-validate",
+      "startMs": 171208,
+      "endMs": 189204
+    },
+    {
+      "id": "swaps-result",
+      "startMs": 189656,
+      "endMs": 207848
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "swaps-enable",
+      "phrase": "la carte Échanges de créneaux propose",
+      "startMs": 291,
+      "endMs": 6930,
+      "cueMs": 21413
+    },
+    {
+      "segmentId": "swaps-enable",
+      "phrase": "Activons-la",
+      "startMs": 7524,
+      "endMs": 8079,
+      "cueMs": 28646
+    },
+    {
+      "segmentId": "swaps-enable",
+      "phrase": "Laissons pour l'instant Valider chaque échange désactivé",
+      "startMs": 16819,
+      "endMs": 20422,
+      "cueMs": 37941
+    },
+    {
+      "segmentId": "swaps-publish",
+      "phrase": "Elle ouvre sa page Mes inscriptions",
+      "startMs": 3357,
+      "endMs": 8207,
+      "cueMs": 47472
+    },
+    {
+      "segmentId": "swaps-publish",
+      "phrase": "Elle choisit Je cherche à échanger ce créneau",
+      "startMs": 8557,
+      "endMs": 10936,
+      "cueMs": 52671
+    },
+    {
+      "segmentId": "swaps-publish",
+      "phrase": "Les personnes inscrites sur un autre créneau du même poste",
+      "startMs": 13177,
+      "endMs": 18929,
+      "cueMs": 57291
+    },
+    {
+      "segmentId": "swaps-offer",
+      "phrase": "Sur sa page, Échanges proposés par d'autres bénévoles",
+      "startMs": 3375,
+      "endMs": 8968,
+      "cueMs": 71758
+    },
+    {
+      "segmentId": "swaps-offer",
+      "phrase": "Jules choisit celui qu'il cède",
+      "startMs": 9280,
+      "endMs": 14044,
+      "cueMs": 77662
+    },
+    {
+      "segmentId": "swaps-offer",
+      "phrase": "C'est maintenant à Léa de répondre",
+      "startMs": 14663,
+      "endMs": 15855,
+      "cueMs": 83046
+    },
+    {
+      "segmentId": "swaps-accept",
+      "phrase": "Léa reçoit un email",
+      "startMs": 270,
+      "endMs": 5371,
+      "cueMs": 87036
+    },
+    {
+      "segmentId": "swaps-accept",
+      "phrase": "Une confirmation récapitule les deux créneaux",
+      "startMs": 11200,
+      "endMs": 13589,
+      "cueMs": 97965
+    },
+    {
+      "segmentId": "swaps-accept",
+      "phrase": "Oui, échanger",
+      "startMs": 13821,
+      "endMs": 13978,
+      "cueMs": 100585
+    },
+    {
+      "segmentId": "swaps-done",
+      "phrase": "Léa a maintenant le créneau du dimanche",
+      "startMs": 1452,
+      "endMs": 5171,
+      "cueMs": 105569
+    },
+    {
+      "segmentId": "swaps-done",
+      "phrase": "Tous deux reçoivent un email Échange effectué",
+      "startMs": 13618,
+      "endMs": 15753,
+      "cueMs": 117735
+    },
+    {
+      "segmentId": "swaps-approval",
+      "phrase": "Dans les informations de l'événement, activons Valider chaque échange",
+      "startMs": 3425,
+      "endMs": 7152,
+      "cueMs": 125763
+    },
+    {
+      "segmentId": "swaps-sector",
+      "phrase": "Noah est à l'accueil de la Scène du Lac",
+      "startMs": 3523,
+      "endMs": 7390,
+      "cueMs": 143548
+    },
+    {
+      "segmentId": "swaps-sector",
+      "phrase": "Lou est à l'accueil de la Grande Scène",
+      "startMs": 7521,
+      "endMs": 12998,
+      "cueMs": 147547
+    },
+    {
+      "segmentId": "swaps-sector",
+      "phrase": "Lou propose son créneau",
+      "startMs": 16882,
+      "endMs": 18554,
+      "cueMs": 156907
+    },
+    {
+      "segmentId": "swaps-sector-accept",
+      "phrase": "Noah relit la proposition et l'accepte",
+      "startMs": 168,
+      "endMs": 2240,
+      "cueMs": 159201
+    },
+    {
+      "segmentId": "swaps-sector-accept",
+      "phrase": "Cette fois, la confirmation prévient",
+      "startMs": 2651,
+      "endMs": 6828,
+      "cueMs": 161684
+    },
+    {
+      "segmentId": "swaps-sector-accept",
+      "phrase": "Leur planning ne change pas avant cette validation",
+      "startMs": 7043,
+      "endMs": 9690,
+      "cueMs": 166075
+    },
+    {
+      "segmentId": "swaps-validate",
+      "phrase": "Dans Inscriptions, la section Échanges de créneaux",
+      "startMs": 242,
+      "endMs": 8002,
+      "cueMs": 171452
+    },
+    {
+      "segmentId": "swaps-validate",
+      "phrase": "Valider l'échange vérifie à nouveau toutes les règles",
+      "startMs": 8281,
+      "endMs": 12822,
+      "cueMs": 179490
+    },
+    {
+      "segmentId": "swaps-validate",
+      "phrase": "Les deux personnes sont prévenues par email",
+      "startMs": 12952,
+      "endMs": 15831,
+      "cueMs": 184161
+    },
+    {
+      "segmentId": "swaps-result",
+      "phrase": "Il se fait avant le début du premier des deux créneaux",
+      "startMs": 7432,
+      "endMs": 9898,
+      "cueMs": 197089
+    }
+  ],
+  "mailpitFocusFrames": [
+    {
+      "startMs": 117880,
+      "endMs": 125920
+    }
+  ],
+  "mailpitHolds": [],
+  "mailpitBodyOnly": true
+}

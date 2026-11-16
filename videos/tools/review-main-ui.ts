@@ -20,7 +20,7 @@ async function main() {
     await page.getByLabel("Email").fill(videoAdminEmail())
     await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.getByRole("link", { name: "Fête du village de Montvert", exact: true }).first().waitFor()
     const eventHref = await page.getByRole("link", { name: "Fête du village de Montvert", exact: true }).first().getAttribute("href")
     if (!eventHref || !/^\/admin\/events\/[a-z0-9-]+$/i.test(eventHref)) throw new Error("Known synthetic event link required")

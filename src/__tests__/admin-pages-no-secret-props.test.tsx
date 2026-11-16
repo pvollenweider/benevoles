@@ -10,6 +10,8 @@ vi.mock("@/lib/auth-guard", () => ({ getOrgContext: async () => ({ organizationI
 vi.mock("@/components/admin/SectorLeadersManager", () => ({ default: function SectorLeadersManager() { return null } }))
 vi.mock("@/components/admin/ShiftsManager", () => ({ default: function ShiftsManager() { return null } }))
 vi.mock("@/components/admin/WizardSteps", () => ({ default: () => null }))
+// Beta gates (#1171, « repas sur le pouce possible » on the shifts page): closed here.
+vi.mock("@/lib/beta-access", () => ({ canAdoptBeta: async () => false }))
 vi.mock("@/components/admin/HelpLink", () => ({ default: () => null }))
 
 function find(node: ReactNode, name: string): ReactElement | null {
@@ -35,7 +37,7 @@ describe("admin pages pass no secret field to client components (#1009)", () => 
 
   it("sector leaders page: initialLeaders carry who leads what, never the token", async () => {
     m.db = {
-      event: { findFirst: vi.fn(async () => ({ id: "evt-1", title: "Festival" })) },
+      event: { findFirst: vi.fn(async () => ({ id: "evt-1", title: "Festival", sectorsEnabled: false, sectorsAdoptedAt: null, sectors: [] })) },
       sectorLeader: { findMany: answers(() => [{ id: "l1", eventId: "evt-1", roleName: "Bar", name: "Alice", email: "a@x.com", createdAt: new Date("2026-09-01"), ...SECRETS }]) },
       shift: { findMany: vi.fn(async () => [{ roleName: "Bar" }]) },
       registration: { findMany: vi.fn(async () => []) },

@@ -1,0 +1,38 @@
+[
+  {
+    "url": "https://medias.benevol.app/shift-swaps/shift-swaps.mp4",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\ncache-control: public, max-age=86400\ncontent-type: video/mp4\ndate: Thu, 29 Oct 2026 15:33:14 GMT\netag: \"6ae3630c-a244cb\"\nlast-modified: Thu, 29 Oct 2026 15:15:24 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 10634443\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/shift-swaps/shift-swaps.vtt",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\ncache-control: public, max-age=86400\ncontent-type: text/vtt\ndate: Thu, 29 Oct 2026 15:33:15 GMT\netag: \"6ae3630d-131e\"\nlast-modified: Thu, 29 Oct 2026 15:15:25 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 4894\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/shift-swaps/shift-swaps.jpg",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\ncache-control: public, max-age=86400\ncontent-type: image/jpeg\ndate: Thu, 29 Oct 2026 15:33:15 GMT\netag: \"6ae36315-11e61\"\nlast-modified: Thu, 29 Oct 2026 15:15:33 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 73313\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/privacy-personal-links/privacy-personal-links.mp4",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\ncache-control: public, max-age=86400\ncontent-type: video/mp4\ndate: Thu, 29 Oct 2026 15:33:15 GMT\netag: \"6ae364be-101efeb\"\nlast-modified: Thu, 29 Oct 2026 15:22:38 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 16904171\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/privacy-personal-links/privacy-personal-links.vtt",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\ncache-control: public, max-age=86400\ncontent-type: text/vtt\ndate: Thu, 29 Oct 2026 15:33:15 GMT\netag: \"6ae364c0-2175\"\nlast-modified: Thu, 29 Oct 2026 15:22:40 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 8565\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/privacy-personal-links/privacy-personal-links.jpg",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\ncache-control: public, max-age=86400\ncontent-type: image/jpeg\ndate: Thu, 29 Oct 2026 15:33:15 GMT\netag: \"6ae364cd-73db\"\nlast-modified: Thu, 29 Oct 2026 15:22:53 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 29659\n\n",
+    "error": ""
+  }
+]

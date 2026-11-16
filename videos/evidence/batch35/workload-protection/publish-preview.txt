@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default"   WORKLOAD_PROTECTION
+
+> benevoles@2.5.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default WORKLOAD_PROTECTION
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + workload-protection/workload-protection-og.jpg
+  + workload-protection/workload-protection.jpg
+  + workload-protection/workload-protection.mp4
+  + workload-protection/workload-protection.txt
+  + workload-protection/workload-protection.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 554
+
+Aperçu seulement. Relancez avec --apply (make video-publish APPLY=1) pour envoyer.

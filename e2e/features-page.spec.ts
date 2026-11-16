@@ -43,7 +43,7 @@ test("« Sur cette page » leads to every section, and « Comment ça marche » 
 
 test("speaks to a volunteer who lands here: open the link received by email", async ({ page }) => {
   await page.goto("/fonctionnalites")
-  await expect(page.getByText(/Bénévole \?/)).toBeVisible()
+  await expect(page.getByText(/Bénévole\s\?/)).toBeVisible()
   await expect(page.getByRole("link", { name: "Le recevoir à nouveau" })).toHaveAttribute("href", "/doc/lien-personnel")
 })
 

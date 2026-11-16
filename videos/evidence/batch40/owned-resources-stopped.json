@@ -1,0 +1,21 @@
+{
+  "stoppedAt": "2026-11-11T13:02:24.286Z",
+  "server": {
+    "pid": 11655,
+    "port": 43102,
+    "snapshot": "/tmp/benevoles-video-production.6ff2AH"
+  },
+  "containers": [
+    {
+      "id": "6c473094f969f8da8793a447867bb1f28bce2358bef0f7008c1c91bd61f2dcd7",
+      "name": "/codex-batch40-resume-postgres",
+      "status": "exited"
+    },
+    {
+      "id": "9109924c2e1ef53ce0b5ffbea2119d45ca9c531f645149bebf388f8252c48f44",
+      "name": "/codex-batch40-resume-mailpit",
+      "status": "exited"
+    }
+  ],
+  "scope": "Only the exact capture server PID and the two container IDs started by this resumed batch were stopped"
+}

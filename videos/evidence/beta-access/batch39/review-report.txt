@@ -1,0 +1,12 @@
+STATUS: READY
+Batch 39 — 2026-11-10
+Product: 058f35c463cf3b1e6b47596201d0ab6f78ab3015
+BUILD_ID: rLDQoLz1bzvkYVRMNsVYi
+Duration: 120.600 s. Narrated takes: 1.
+One continuous Kore generation; independent source/chapter/final multilingual ASR passed; whole-master voice consistent.
+5 audiovisual chapter reviews / 15 checkpoints, no issues; representative actual final frames inspected for four beta capabilities, switches, dates and absence of graduated sectors from beta lists.
+10 sentence anchors validated. 5 real clicks with synced soft effects; no keys.
+Music gap 15.4–19.2 LU; quietest music-only window -33.7 LUFS.
+Viewer register: 0 in final ASR and VTT; no stray English or pause instructions.
+Descriptions: 122 UTF-8 bytes. Product code unchanged.
+Source changes: exact capability guards, synthetic operator second factor and proxied session; French Chromium 1254 launcher; editorial review note.

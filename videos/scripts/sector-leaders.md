@@ -1,4 +1,4 @@
-# Responsable de poste : accompagner son équipe
+# Responsables de poste et de secteur : accompagner son équipe
 
 Révision rédactionnelle du 6 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Les anciennes preuves audio ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
 
@@ -10,7 +10,7 @@ Déléguer le suivi d'une équipe sur le terrain sans donner accès à toute l'a
 
 ## Démonstration
 
-1. Depuis l'événement, ouvrir Réglages, puis Responsables de secteur ; montrer Accueil et Buvette déjà renseignés.
+1. Depuis l'événement, ouvrir Paramètres, puis Responsables de secteur ; montrer Accueil et Buvette déjà renseignés.
 2. Nommer manuellement une personne pour un autre poste. Saisir lentement nom et email fictifs, puis envoyer le lien.
 3. Reprendre les coordonnées d'une personne inscrite via la liste proposée ; vérifier le poste et confirmer.
 4. Ouvrir l'email réellement émis dans Mailpit et son lien. Ne pas simuler une boîte remplie par une capture statique.
@@ -56,3 +56,18 @@ Contrôle final 23-2 : NOT READY. Rupture de timbre dans `remove` à +11.8 s, co
 ## Contrôle du lot 23-3 — 2026-10-16
 
 READY : narration Puck complète régénérée, sans balises, tous les chapitres vérifiés en audio seul avant tournage. Première génération rejetée pour rupture de timbre, seconde retenue. Onze chapitres du MP4 relus ; souffle naturel à +11,8 s de registered contre-vérifié sans impact. BUILD_ID `gHYEjPtpdQYUNytuIhMkh`, main `89a884c8d58c22dda6800481e1238bdc4e219dff`.
+
+
+## Révision du 2026-10-28 — responsables de tout un secteur (#1169)
+
+Deux scènes ajoutées après `remove`, sur l'événement organisé par secteurs de l'organisation dédiée (`scripts/seed-video-scenario.ts sector-leaders`, après la démo) :
+
+- `leaders-sector-scope` : page « Responsables de poste et de secteur », + Ajouter un responsable, Responsable de : Tout un secteur (Un poste précis reste proposé), secteur Parking, Paul Murphy, Ajouter et envoyer le lien.
+- `leaders-sector-roster` : le vrai lien reçu par Paul, « Responsable de secteur · Parking », postes Parking Nord et Parking Mairie (pas Backline Grande Scène), filtre Jour.
+
+L'histoire du responsable de poste reste celle des événements sans secteurs. La phrase d'ouverture annonce le cas des secteurs ; titre, description et bloc `viewer` suivent. La session de la propriétaire de l'organisation dédiée est ouverte avant la capture : aucun formulaire de connexion n'est filmé. Lot 39 : narration complète régénérée, rendu READY et publié le 2026-11-10 (révision 7), 282,640 s, une prise narrée, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Preuves : `videos/evidence/sector-leaders/batch39/`.
+
+
+## Relecture du 2026-11-10 — lot 39
+
+Référence produit : main `058f35c463cf3b1e6b47596201d0ab6f78ab3015` (#1312). Les secteurs et les responsables de tout un secteur sont disponibles sans participation à la bêta pour toute organisation active. L'option Secteurs reste désactivée par défaut, événement par événement. Aucun écran ni badge bêta ne fait partie du parcours. Nouvelle narration continue complète, sans balises de pause ; les frontières de chapitres sont recoupées sur les silences du même master et vérifiées par ASR indépendante.

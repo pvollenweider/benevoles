@@ -1,0 +1,286 @@
+{
+  "slug": "volunteer-event-availability",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-31T14:39:33.818Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "3a76e5dbad281961182eba67ffaec0b6dcd67ada",
+    "sourceTree": "9c414946b7c3e062e6069773f2d0427de7fa804a",
+    "productSourceSha256": "c3d707d3256b4aa9d9e99d6a95b4e52269dcd3cdf64df88364f15309192c9844",
+    "buildId": "HMN0A-g7F4Mdz4O4q0eoc",
+    "snapshot": "/tmp/benevoles-video-production.785n8ook",
+    "builtAt": "2026-10-31T14:28:44.168Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_EVENT_AVAILABILITY",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 14374
+    },
+    {
+      "kind": "click",
+      "atMs": 37960
+    },
+    {
+      "kind": "click",
+      "atMs": 38792
+    },
+    {
+      "kind": "key",
+      "atMs": 39099
+    },
+    {
+      "kind": "key",
+      "atMs": 39197
+    },
+    {
+      "kind": "key",
+      "atMs": 39295
+    },
+    {
+      "kind": "key",
+      "atMs": 39393
+    },
+    {
+      "kind": "click",
+      "atMs": 40174
+    },
+    {
+      "kind": "key",
+      "atMs": 40481
+    },
+    {
+      "kind": "key",
+      "atMs": 40579
+    },
+    {
+      "kind": "key",
+      "atMs": 40678
+    },
+    {
+      "kind": "key",
+      "atMs": 40776
+    },
+    {
+      "kind": "click",
+      "atMs": 44642
+    },
+    {
+      "kind": "click",
+      "atMs": 45473
+    },
+    {
+      "kind": "key",
+      "atMs": 45779
+    },
+    {
+      "kind": "key",
+      "atMs": 45876
+    },
+    {
+      "kind": "key",
+      "atMs": 45974
+    },
+    {
+      "kind": "key",
+      "atMs": 46073
+    },
+    {
+      "kind": "click",
+      "atMs": 46873
+    },
+    {
+      "kind": "key",
+      "atMs": 47180
+    },
+    {
+      "kind": "key",
+      "atMs": 47278
+    },
+    {
+      "kind": "key",
+      "atMs": 47376
+    },
+    {
+      "kind": "key",
+      "atMs": 47475
+    },
+    {
+      "kind": "click",
+      "atMs": 58074
+    },
+    {
+      "kind": "click",
+      "atMs": 62873
+    },
+    {
+      "kind": "click",
+      "atMs": 73407
+    }
+  ],
+  "cues": [
+    {
+      "id": "va-welcome",
+      "startMs": 5,
+      "endMs": 7911
+    },
+    {
+      "id": "va-email",
+      "startMs": 8364,
+      "endMs": 17222
+    },
+    {
+      "id": "va-page",
+      "startMs": 17674,
+      "endMs": 32031
+    },
+    {
+      "id": "va-hours",
+      "startMs": 34289,
+      "endMs": 41521
+    },
+    {
+      "id": "va-night",
+      "startMs": 41973,
+      "endMs": 52456
+    },
+    {
+      "id": "va-copy",
+      "startMs": 52909,
+      "endMs": 58613
+    },
+    {
+      "id": "va-unavailable",
+      "startMs": 59064,
+      "endMs": 67562
+    },
+    {
+      "id": "va-save",
+      "startMs": 69824,
+      "endMs": 79174
+    },
+    {
+      "id": "va-change",
+      "startMs": 81436,
+      "endMs": 89107
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "va-email",
+      "phrase": "Il donne la date limite pour répondre",
+      "startMs": 3180,
+      "endMs": 5334,
+      "cueMs": 11545
+    },
+    {
+      "segmentId": "va-email",
+      "phrase": "Elle appuie sur Indiquer mes disponibilités",
+      "startMs": 5533,
+      "endMs": 8856,
+      "cueMs": 13899
+    },
+    {
+      "segmentId": "va-page",
+      "phrase": "Juste en dessous, la date limite",
+      "startMs": 6119,
+      "endMs": 7891,
+      "cueMs": 23796
+    },
+    {
+      "segmentId": "va-page",
+      "phrase": "Pour l'instant, Morgane n'a pas encore répondu",
+      "startMs": 11646,
+      "endMs": 14355,
+      "cueMs": 29321
+    },
+    {
+      "segmentId": "va-hours",
+      "phrase": "Le vendredi",
+      "startMs": 0,
+      "endMs": 3312,
+      "cueMs": 34366
+    },
+    {
+      "segmentId": "va-hours",
+      "phrase": "Elle indique le début, neuf heures, et la fin, midi",
+      "startMs": 3831,
+      "endMs": 6962,
+      "cueMs": 38267
+    },
+    {
+      "segmentId": "va-night",
+      "phrase": "Ajouter un autre horaire",
+      "startMs": 2179,
+      "endMs": 5208,
+      "cueMs": 44153
+    },
+    {
+      "segmentId": "va-night",
+      "phrase": "Un horaire du soir peut finir le lendemain matin",
+      "startMs": 5727,
+      "endMs": 8026,
+      "cueMs": 47762
+    },
+    {
+      "segmentId": "va-copy",
+      "phrase": "Le samedi",
+      "startMs": 340,
+      "endMs": 5321,
+      "cueMs": 53251
+    },
+    {
+      "segmentId": "va-unavailable",
+      "phrase": "Le dimanche, elle ne peut pas venir",
+      "startMs": 380,
+      "endMs": 2151,
+      "cueMs": 59447
+    },
+    {
+      "segmentId": "va-unavailable",
+      "phrase": "Si tu ne peux pas venir du tout",
+      "startMs": 3820,
+      "endMs": 8124,
+      "cueMs": 63180
+    },
+    {
+      "segmentId": "va-save",
+      "phrase": "Enfin, Enregistrer mes disponibilités",
+      "startMs": 377,
+      "endMs": 2949,
+      "cueMs": 70203
+    },
+    {
+      "segmentId": "va-save",
+      "phrase": "La page confirme que c'est enregistré",
+      "startMs": 3543,
+      "endMs": 8895,
+      "cueMs": 73713
+    },
+    {
+      "segmentId": "va-change",
+      "phrase": "Rouvrons le même lien",
+      "startMs": 2084,
+      "endMs": 2968,
+      "cueMs": 83521
+    },
+    {
+      "segmentId": "va-change",
+      "phrase": "et elle peut encore les modifier jusqu'à la date limite",
+      "startMs": 3418,
+      "endMs": 7543,
+      "cueMs": 84857
+    }
+  ]
+}

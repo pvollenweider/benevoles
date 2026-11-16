@@ -8,6 +8,9 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { loadOpenShiftsContext } from "@/lib/open-shifts-data"
 import { acceptsRegistrations } from "@/lib/registration-window"
 import OpenShiftsFinder from "@/components/admin/OpenShiftsFinder"
+import HelpLink from "@/components/admin/HelpLink"
+import { localDay } from "@/lib/day-of"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Chercher des bénévoles" }
@@ -31,24 +34,44 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
   const asked = new Set(Array.isArray(q.shift) ? q.shift : q.shift ? [q.shift] : [])
   const initialShiftIds = data.openShifts.filter((s) => asked.has(s.id)).map((s) => s.id)
   const base = `/admin/events/${event.id}`
+  const timeZone = orgTimeZone(event.organization)
+  // Shifts of roles assigned by the organisation only (#1145), left out: where they went, with a way to act.
+  const leftOut = data.assignedOnlyLeftOut
+  const assignedOnlyNote = leftOut > 0 && (
+    <p role="note" className="text-sm text-gray-700">
+      {leftOut > 1
+        ? `${leftOut} créneaux de postes attribués par l'organisation ne sont pas proposés ici : `
+        : "1 créneau d'un poste attribué par l'organisation n'est pas proposé ici : "}
+      ajoutez les personnes à la main depuis les <Link href={`${base}/registrations`} className={linkClass}>inscriptions</Link>.
+    </p>
+  )
 
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Chercher des bénévoles</h1>
+        <HelpLink route="/admin/events/[id]/staffing/search" />
         <p className="text-sm text-gray-700 mt-1">
           Choisissez les créneaux à compléter, puis cochez les membres à qui les proposer. Personne n&apos;est coché d&apos;avance et rien ne part sans votre confirmation. Chaque personne reçoit un seul email avec les créneaux qui la concernent et son lien pour s&apos;inscrire.
         </p>
       </div>
 
       {data.openShifts.length === 0 ? (
-        <p className="text-sm text-gray-700">Aucun créneau à compléter pour l&apos;instant : tous les créneaux ouverts sont complets.</p>
+        leftOut > 0 ? (
+          <>
+            <p className="text-sm text-gray-700">Aucun créneau à proposer ici.</p>
+            {assignedOnlyNote}
+          </>
+        ) : (
+          <p className="text-sm text-gray-700">Aucun créneau à compléter pour l&apos;instant : tous les créneaux ouverts sont complets.</p>
+        )
       ) : (
         <>
+          {assignedOnlyNote}
           {!acceptsRegistrations(event) && (
             <p role="note" className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 forced-colors:border-[CanvasText]">
               Les inscriptions ne sont pas ouvertes pour cet événement : vous pouvez préparer votre choix, mais l&apos;envoi sera refusé tant qu&apos;elles ne le sont pas.{" "}
-              <Link href={`${base}/edit`} className={linkClass}>Modifier l&apos;événement</Link>
+              <Link href={`${base}/edit`} className={linkClass}>Modifier les informations de l&apos;événement</Link>
             </p>
           )}
           <OpenShiftsFinder
@@ -58,8 +81,11 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
             members={data.members}
             registrations={data.registrations}
             invites={data.invites}
+            declines={data.declines}
             tags={data.tags}
             initialShiftIds={initialShiftIds}
+            today={localDay(new Date(), timeZone)}
+            timeZone={timeZone}
           />
         </>
       )}

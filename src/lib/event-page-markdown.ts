@@ -18,10 +18,11 @@
  * page, not just admins. DOMPurify strips anything outside a plain-content allowlist regardless
  * of what an admin (or a compromised admin account) wrote.
  */
-import { marked, Renderer } from "marked"
+import { marked, Renderer, type Token, type Tokens } from "marked"
 import DOMPurify from "isomorphic-dompurify"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
 import { DOC_VIDEO_ATTRIBUTE, videoReferenceId } from "@/lib/doc-video-references"
+import { frenchSpacing } from "@/lib/french-spacing"
 
 // Page title is already rendered as the page's own <h1> (see [eventSlug]/[pageSlug]/page.tsx).
 // Shift every Markdown heading down one level so admin content can't produce a second/duplicate
@@ -40,16 +41,29 @@ import { DOC_VIDEO_ATTRIBUTE, videoReferenceId } from "@/lib/doc-video-reference
 // caller returns for that id (src/lib/doc-video-references.ts), "" to render nothing. Only block
 // HTML on its own line counts; any other raw HTML is left to DOMPurify, as before.
 //
+// allowImages: only the repo's own Markdown (src/lib/public-content.ts) shows images. Admin-authored
+// event pages never get an <img>: an image loads by itself for every visitor, from whatever host its
+// address names, so each Markdown image becomes a link to it instead (its alt text, or the address),
+// and an <img> written as raw HTML is dropped by DOMPurify.
+//
 // image (#759 F2) draws each Markdown image itself, given its index in the page (0 for the first):
 // the repo's documentation gives its screenshots their size and lazy loading (src/lib/doc-images.ts).
-// Admin-authored event pages keep marked's own <img>.
+// Without it, an allowed image is marked's own <img>.
+//
+// exampleQuotes turns a blockquote of the repo's own documentation made of exactly two paragraphs, a
+// quote between « » and a short caption naming who says it (« Léa, bénévole occasionnelle »), into
+// a <figure>: the quote in its <blockquote>, the caption as its <figcaption>, which names the quote
+// for screen readers (HTML's own pattern for a quote and its attribution). Any other blockquote is
+// unchanged.
 export type MarkdownImage = { src: string; alt: string; title?: string | null }
 
 function makeRenderer(
   shiftHeadings: boolean,
   headingIds: boolean,
+  allowImages: boolean,
   videoCard?: (id: string) => string,
   image?: (img: MarkdownImage, index: number) => string,
+  exampleQuotes = false,
 ): Renderer {
   const renderer = new Renderer()
   const slug = createHeadingSlugger()
@@ -65,7 +79,12 @@ function makeRenderer(
       return id ? videoCard(id) : text
     }
   }
-  if (image) {
+  if (!allowImages) {
+    renderer.image = function ({ href, title, text, tokens }) {
+      const alt = decodeBasicEntities(tokens ? this.parser.parseInline(tokens, this.parser.textRenderer) : text).trim()
+      return `<a href="${escapeAttr(href)}"${title ? ` title="${escapeAttr(title)}"` : ""}>${escapeAttr(alt || href)}</a>`
+    }
+  } else if (image) {
     let index = 0
     renderer.image = function ({ href, title, text, tokens }) {
       // Plain text for the caller to escape once: an entity written in the source (« &amp; ») is
@@ -74,8 +93,30 @@ function makeRenderer(
       return image({ src: href, alt, title }, index++)
     }
   }
+  if (exampleQuotes) {
+    const defaultBlockquote = renderer.blockquote
+    renderer.blockquote = function (token) {
+      const blocks = token.tokens.filter((t) => t.type !== "space")
+      const [quote, caption] = blocks
+      if (blocks.length !== 2 || quote.type !== "paragraph" || caption.type !== "paragraph" || !isExampleQuote(quote.text, caption.text)) {
+        return defaultBlockquote.call(this, token)
+      }
+      const who = this.parser.parseInline((caption as Tokens.Paragraph).tokens)
+      return `<figure>\n<blockquote>\n${this.parser.parse([quote])}</blockquote>\n<figcaption>${who}</figcaption>\n</figure>\n`
+    }
+  }
   return renderer
 }
+
+/** An example quote: a paragraph between « », then a one-line caption of 80 characters at most. */
+export function isExampleQuote(quote: string, caption: string): boolean {
+  const q = quote.trim()
+  const c = caption.trim()
+  return q.startsWith("«") && q.endsWith("»") && c.length > 0 && c.length <= 80 && !c.includes("\n") && !c.startsWith("«")
+}
+
+const escapeAttr = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
 /** The few entities marked can leave in plain text, back to their characters (&amp; last). */
 function decodeBasicEntities(text: string): string {
@@ -92,31 +133,60 @@ const ALLOWED_TAGS = [
   "h1", "h2", "h3", "h4", "h5", "h6",
   "strong", "em", "del", "code", "pre",
   "ul", "ol", "li",
-  "a", "blockquote", "img",
+  "a", "blockquote",
   "table", "thead", "tbody", "tr", "th", "td",
 ]
+// Only kept when the caller allows images (`allowImages`, the repo's own Markdown).
+const IMAGE_TAGS = ["img"]
+const ALLOWED_ATTR = ["href", "title"]
 // img needs its own alt text (WCAG 1.1.1) — Markdown's ![alt](src) already forces authors to
 // supply one syntactically, but DOMPurify still needs "alt" allowlisted for it to survive.
-const ALLOWED_ATTR = ["href", "title", "src", "alt", "width", "height"]
+const IMAGE_ATTR = ["src", "alt", "width", "height"]
 // Only kept when the caller draws the images itself (`image`).
 const IMAGE_LOADING_ATTR = ["loading", "decoding"]
+// Only kept when the caller asks for example quotes (`exampleQuotes`).
+const EXAMPLE_QUOTE_TAGS = ["figure", "figcaption"]
 
 export function renderEventPageMarkdown(
   content: string,
   options: {
     shiftHeadings?: boolean
     headingIds?: boolean
+    allowImages?: boolean
     videoCard?: (id: string) => string
     image?: (img: MarkdownImage, index: number) => string
+    exampleQuotes?: boolean
+    frenchSpacing?: boolean
   } = {},
 ): string {
-  const { shiftHeadings = true, headingIds = false, videoCard, image } = options
-  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds, videoCard, image) })
+  const { shiftHeadings = true, headingIds = false, allowImages = false, videoCard, image, exampleQuotes = false } = options
+  // French spacing (#1341) on the repo's own content, the documents that allow images, unless a
+  // caller says otherwise. Only leaf text tokens: code spans, code blocks, raw HTML and link
+  // addresses are other token types or fields, left as written. An image's text is its alt
+  // attribute, read aloud and never wrapped: left as written too (marked visits a token before
+  // its children, so the image marks them first).
+  const withFrenchSpacing = options.frenchSpacing ?? allowImages
+  const altText = new WeakSet<Token>()
+  const markAltText = (tokens: Token[] | undefined) => {
+    for (const child of tokens ?? []) {
+      altText.add(child)
+      markAltText("tokens" in child ? child.tokens : undefined)
+    }
+  }
+  const walkTokens = withFrenchSpacing
+    ? (token: Token) => {
+        if (token.type === "image") markAltText(token.tokens)
+        else if (token.type === "text" && !altText.has(token) && !("tokens" in token && token.tokens?.length)) token.text = frenchSpacing(token.text)
+      }
+    : undefined
+  const html = marked.parse(content, { async: false, gfm: true, breaks: true, walkTokens, renderer: makeRenderer(shiftHeadings, headingIds, allowImages, videoCard, image, exampleQuotes) })
   const allowedAttr = [
     ...ALLOWED_ATTR,
+    ...(allowImages ? IMAGE_ATTR : []),
     ...(headingIds ? ["id"] : []),
     ...(videoCard ? [DOC_VIDEO_ATTRIBUTE] : []),
-    ...(image ? IMAGE_LOADING_ATTR : []),
+    ...(allowImages && image ? IMAGE_LOADING_ATTR : []),
   ]
-  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR: allowedAttr })
+  const allowedTags = [...ALLOWED_TAGS, ...(allowImages ? IMAGE_TAGS : []), ...(exampleQuotes ? EXAMPLE_QUOTE_TAGS : [])]
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS: allowedTags, ALLOWED_ATTR: allowedAttr })
 }

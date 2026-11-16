@@ -9,9 +9,10 @@ import path from "node:path"
 import { promisify } from "node:util"
 import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import assert from "node:assert/strict"
 import { pathToFileURL } from "node:url"
+import { ROSTER_SURNAMES, surnameOf } from "../lib/fixture-names"
 import { ownsRecordedNoEmailMember, ownsTargetedMessageNoEmailMember, recordedMembers } from "./prepare-demo"
 import { ownsImportedNoEmailMember, readImportOwnership, type ImportOwnership } from "../lib/member-import-ownership"
 import { ownsNaturalMemberSeed, readSeedProofV2, type SeedProofV2, type SeedIdentity } from "../lib/member-fixture-v2"
@@ -21,6 +22,7 @@ const reference = process.argv[2]
 const selected = process.argv.slice(3).find(arg => !arg.startsWith("--"))
 const force = process.argv.includes("--force")
 const commonDemoVideos = ["SHIFT_RECURRENCE", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "REGISTRATION_MONITOR_FOLLOWUP", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
+const betaVideos = ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS"]
 const memberDemoVideos = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
 type Member = Parameters<typeof ownsRecordedNoEmailMember>[0]
 type Ownership = Parameters<typeof ownsRecordedNoEmailMember>[1]
@@ -36,7 +38,7 @@ export function validateMemberReviewFixture(databaseUrl: string, fixture: Member
     if (member.email?.endsWith("@example.org")) return true
     if (member.email !== null) return false
     // Exact two seed identities, not every no-email contact with a familiar name.
-    if (member.id === "video-member-management-2") return ownsNaturalMemberSeed(member as Partial<SeedIdentity>, seedProof, now)
+    if (member.id === "video-member-management-2") return ownsNaturalMemberSeed(member as Partial<SeedIdentity>, seedProof, now) || member.active === false && ownsNaturalMemberSeed({ ...member, active: true } as Partial<SeedIdentity>, seedProof, now)
     return ownsTargetedMessageNoEmailMember(member) || ownsRecordedNoEmailMember(member, owned, now) || imported?.schemaVersion === 3 && ownsImportedNoEmailMember(member, imported, now)
   }
   assert(fixture.volunteers.every(synthetic), "Member review contains non-synthetic organization members")
@@ -60,20 +62,40 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
   }
   const currentMerge = manifest.id === "SHIFT_ROSTER_VISIBILITY" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : manifest.id === "DATA_EXPORTS_ARCHIVES" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : null
-  const db = currentMerge?.db ?? new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = currentMerge?.db ?? new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   try {
     if (memberDemoVideos.includes(manifest.id)) {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { volunteers: true, admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
       validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership("owned-import-members-v2.json"), await readSeedProofV2())
     }
     // Keep the existing reminder-specific nine-registration / three-event guard below as well.
-    if (manifest.id === "SHIFT_ROSTER_VISIBILITY") {
+    if (betaVideos.includes(manifest.id) || manifest.id === "SECTOR_LEADERS") {
+      const url = new URL(process.env.DATABASE_URL!)
+      assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && ["45433", "45436", "45437"].includes(url.port) && url.pathname === "/benevoles_video", "Beta review requires isolated local video database")
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-beta" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
+      assert(fixture.slug === "formation-beta" && fixture.name === "Association du Festival de Montvert")
+      assert(fixture.admins.length === 1 && fixture.admins[0].id === "video-beta-owner" && fixture.admins[0].email === "video.beta.owner@example.org")
+      assert(fixture.volunteers.every(v => /^video-beta-person-[a-z]+$/.test(v.id) && /^video\.beta\.[a-z]+@example\.org$/.test(v.email ?? "") && v.lastName === surnameOf(v.firstName) && !v.phone))
+      assert(fixture.events.length === 1 && fixture.events[0].id === "video-beta-event" && fixture.events[0].title === "Festival de Montvert")
+      assert(fixture.events[0].registrations.every(r => fixture.volunteers.some(v => v.id === r.volunteerId)))
+      assert(fixture.events[0].sectorLeaders.every(l => /^video\.beta\.[a-z]+@example\.org$/.test(l.email)))
+      if (manifest.id === "SECTOR_LEADERS") {
+        const demo = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
+        assert(demo.name === "Fêtes de Montvert" && demo.events.some(e => e.slug === "fete-du-village") && demo.admins.every(a => a.email.endsWith("@example.org")))
+        assert(demo.events.every(e => e.sectorLeaders.every(l => l.email.endsWith("@example.org")) && e.registrations.every(r => r.volunteer.email?.endsWith("@example.org"))))
+      }
+      const operator = await db.adminUser.findUniqueOrThrow({ where: { id: "video-beta-operator" } })
+      assert(operator.email === "video.beta.operator@example.org" && operator.role === "super_admin" && operator.organizationId === null)
+      const setting = await db.platformSetting.findUniqueOrThrow({ where: { key: "beta.capabilities" } })
+      const open = (setting.value as { open?: unknown }).open
+      assert(Array.isArray(open) && open.every(id => ["sectors", "sectorLeaders", "shiftSwaps"].includes(id)), "Unrelated beta capability opened")
+    } else if (manifest.id === "SHIFT_ROSTER_VISIBILITY") {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-shift-roster" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
       assert(fixture.slug === "formation-roster" && fixture.name === "Les amis de Montvert")
       assert(fixture.admins.length === 1 && fixture.admins[0].email === "video.roster.owner@example.org")
@@ -87,7 +109,7 @@ async function main() {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-org-activity" }, include: { volunteers: true, admins: true, events: { include: { registrations: true } } } })
       const emails = new Set(["video.org-activity.owner@example.org", "video.org-activity.organizer@example.org", "video.org-activity.invited@example.org"])
       assert(fixture.slug === "formation-journal" && fixture.name === "Formation — journal d'organisation" && fixture.admins.length === 3 && fixture.admins.every(admin => emails.has(admin.email)), "Journal administrators must be exclusively synthetic")
-      assert(fixture.volunteers.length === 56 && fixture.volunteers.every(member => /^video\.org-activity\.member\.\d{1,2}@example\.org$/.test(member.email ?? "") && /^Exemple \d{2}$/.test(member.lastName) && /^\+41 79 000 \d{4}$/.test(member.phone ?? "")), "Journal members must be exclusively synthetic")
+      assert(fixture.volunteers.length === 56 && fixture.volunteers.every(member => /^video\.org-activity\.member\.\d{1,2}@example\.org$/.test(member.email ?? "") && (ROSTER_SURNAMES as readonly string[]).includes(member.lastName) && /^\+41 79 000 \d{4}$/.test(member.phone ?? "")), "Journal members must be exclusively synthetic")
       assert(fixture.events.length === 1 && fixture.events[0].slug === "atelier-journal-organisation" && fixture.events[0].registrations.length === 1 && fixture.volunteers.some(member => member.id === fixture.events[0].registrations[0].volunteerId), "Only the actual journal demonstration registration may be reviewed")
       const logs = await db.orgLog.findMany({ where: { organizationId: fixture.id } })
       assert(logs.length === 61 && logs.every(log => fixture.admins.some(admin => admin.id === log.actorId)), "Journal must contain the actual synthetic actors only")
@@ -164,6 +186,18 @@ async function main() {
     } else if (manifest.id === "PLATFORM_INTERNAL_ADMINISTRATION") {
       const { verifyOperatorReviewFixture } = await import("../lib/verify-operator-review-fixture")
       await verifyOperatorReviewFixture(db, videoDir(manifest.slug))
+    } else if (manifest.id === "VOLUNTEER_EVENT_AVAILABILITY") {
+      const { verifyVolunteerAvailabilityReviewFixture } = await import("../lib/verify-volunteer-availability-review-fixture")
+      await verifyVolunteerAvailabilityReviewFixture(db)
+    } else if (manifest.id === "ASSIGNMENT_PUBLICATION") {
+      const { verifyPublicationReviewFixture } = await import("../lib/verify-publication-review-fixture")
+      await verifyPublicationReviewFixture(db)
+    } else if (manifest.id === "ASSIGNMENT_PROPOSALS") {
+      const { verifyProposalsReviewFixture } = await import("../lib/verify-proposals-review-fixture")
+      await verifyProposalsReviewFixture(db)
+    } else if (manifest.id === "WORKLOAD_PROTECTION") {
+      const { verifyWorkloadReviewFixture } = await import("../lib/verify-workload-review-fixture")
+      await verifyWorkloadReviewFixture(db)
     } else if (manifest.id === "PRIVACY_PERSONAL_LINKS") {
       const { verifyPrivacyReviewFixture } = await import("../lib/verify-privacy-review-fixture")
       await verifyPrivacyReviewFixture(db, videoDir(manifest.slug))
@@ -181,7 +215,7 @@ async function main() {
     } else if (manifest.id === "REMINDERS_CHANGES") {
       const events = await db.event.findMany({ where: { organizationId: "default", slug: { in: ["atelier-rappels", "atelier-rappels-brouillon", "atelier-rappels-coupes"] } }, include: { registrations: { include: { volunteer: true } } } })
       if (events.length !== 3 || event.registrations.length !== 9 || events.flatMap(e => e.registrations).some(r => !/^video-reminder-(j2|j1|dd|request|waiting)$/.test(r.volunteerId) || !/^video\.reminder\.(j2|j1|dd|request|waiting)@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.phone)) throw new Error("Reminder events are not exclusively synthetic fixture data")
-    } else if (event.registrations.length !== 8 || event.registrations.some(r => !/^video-attendance-person-[0-6]$/.test(r.volunteerId) || !/^video\.attendance\.[0-6]@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.lastName !== "Exemple" || r.volunteer.phone)) {
+    } else if (event.registrations.length !== 8 || event.registrations.some(r => !/^video-attendance-person-[0-6]$/.test(r.volunteerId) || !/^video\.attendance\.[0-6]@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.lastName !== surnameOf(r.volunteer.firstName) || r.volunteer.phone)) {
       throw new Error("Attendance is not exclusively synthetic fixture data")
     }
     }

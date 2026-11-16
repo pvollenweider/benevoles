@@ -111,3 +111,73 @@ describe("render — registration_confirmation message variables are literal tex
     expect(html).toMatch(/<a href="https:\/\/example\.org\/plan"[^>]*>Plan d.accès<\/a> pour Julie/)
   })
 })
+
+// #1096: the volunteer's first two emails point to the guide page that explains the next step,
+// as words on a text link (not a bare address), and as « label : address » in the text part.
+describe("render — guide link in the volunteer's emails", () => {
+  it("the confirmation links to « Mes inscriptions »", () => {
+    const { html, text } = render({
+      kind: "registration_confirmation",
+      recipient: { email: "v@example.com", name: "Julie Martin" },
+      data: { volunteerName: "Julie Martin", eventTitle: "Festival", orgSlug: "rhone", editToken: "tok-1", shifts: [{ label: "Bar", date: "10/10/2030", startTime: "10:00", endTime: "12:00" }] },
+    })
+    expect(html).toMatch(/<a href="https?:\/\/[^"]+\/doc\/ma-page-personnelle"[^>]*>Comment fonctionne ta page « Mes inscriptions »<\/a>/)
+    expect(text).toMatch(/Comment fonctionne ta page « Mes inscriptions » :\nhttps?:\/\/\S+\/doc\/ma-page-personnelle\n/)
+    // The management link stays the email's main action, before the guide.
+    expect(html.indexOf("/my/tok-1")).toBeLessThan(html.indexOf("/doc/ma-page-personnelle"))
+  })
+
+  it("the member invitation links to « S'inscrire »", () => {
+    const { html, text } = render({
+      kind: "member_invite",
+      recipient: { email: "v@example.com", name: "Julie Martin" },
+      data: { memberName: "Julie Martin", organizationName: "Asso", eventTitle: "Festival", eventDate: "10 octobre 2030", eventLocation: null, orgSlug: "rhone", eventSlug: "festival", message: null, token: "inv-1" },
+    })
+    expect(html).toMatch(/<a href="https?:\/\/[^"]+\/doc\/s-inscrire"[^>]*>Comment s'inscrire, pas à pas<\/a>/)
+    expect(text).toMatch(/Comment s'inscrire, pas à pas :\nhttps?:\/\/\S+\/doc\/s-inscrire/)
+    expect(html.search(/inv-1/)).toBeLessThan(html.indexOf("/doc/s-inscrire"))
+  })
+})
+
+// #1324: the link to a page attached to a shift's poste, resolved at send time and rendered by
+// the shared shift information helpers. One link per page, even with several shifts.
+describe("render — pages to read before the shift (#1324)", () => {
+  const page = { title: "Tenir la caisse", url: "https://asso.benevol.app/fete/caisse" }
+  const shift = (label: string) => ({ label, roleName: "Caisse", date: "10/10/2026", startTime: "08:00", endTime: "12:00", readBefore: [page] })
+
+  it("the confirmation shows the link once, with the HTML style and the plain-text sentence", () => {
+    const { html, text } = render({
+      kind: "registration_confirmation",
+      recipient: { email: "lea@example.org", name: "Léa Martin" },
+      data: { volunteerName: "Léa Martin", eventTitle: "Fête", shifts: [shift("Caisse 1"), shift("Caisse 2")], editToken: "tok" },
+    })
+    expect(html.match(/Tenir la caisse/g)).toHaveLength(1)
+    expect(html).toContain('style="color:#1d4ed8;text-decoration:underline"')
+    // The whole sentence is the link: it still says what it is in a list of links.
+    expect(html).toMatch(/<a href="https:\/\/asso\.benevol\.app\/fete\/caisse"[^>]*>À lire avant ton créneau : Tenir la caisse<\/a>/)
+    expect(text.match(/À lire avant ton créneau : Tenir la caisse : https:\/\/asso\.benevol\.app\/fete\/caisse/g)).toHaveLength(1)
+  })
+
+  it("a grouped reminder shows the link once even with several shifts of the poste", () => {
+    const { html, text } = render({
+      kind: "reminder_j2",
+      recipient: { email: "lea@example.org", name: "Léa Martin" },
+      data: {
+        volunteerName: "Léa Martin", eventTitle: "Fête", organizationName: "Association",
+        shifts: [shift("Caisse 1"), shift("Caisse 2")], editToken: "tok",
+      },
+    })
+    expect(html.match(/Tenir la caisse/g)).toHaveLength(1)
+    expect(text.match(/À lire avant ton créneau : Tenir la caisse/g)).toHaveLength(1)
+  })
+
+  it("a waiting-list confirmation carries no link", () => {
+    const { html, text } = render({
+      kind: "waitlist_confirmation",
+      recipient: { email: "lea@example.org", name: "Léa Martin" },
+      data: { volunteerName: "Léa Martin", eventTitle: "Fête", shiftLabel: "Caisse", shiftDate: "samedi 10 octobre", shiftStart: "08:00", shiftEnd: "12:00", waitingPosition: 2 },
+    })
+    expect(html).not.toContain("À lire avant ton créneau")
+    expect(text).not.toContain("À lire avant ton créneau")
+  })
+})

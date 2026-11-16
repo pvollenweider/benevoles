@@ -1,0 +1,4 @@
+Command: npx tsc --noEmit
+Directory: /tmp/benevoles-video-production.7v6ogks5
+Exit status: 0
+Captured stdout/stderr: empty

@@ -1,0 +1,18 @@
+{
+  "serverPid": 22356,
+  "pidAndCwdVerified": true,
+  "stoppedOnlyOwnedServer": true,
+  "containers": [
+    {
+      "name": "benevoles_batch34_postgres",
+      "id": "e23d460a7181c75d491893c68e95950c72da3fcc56d86b6a28f0537c4b0ec9a8",
+      "stopped": true
+    },
+    {
+      "name": "benevoles_batch34_mailpit",
+      "id": "fd9305986baaa22d0a22c07ef2a1ae5338974ce2ce2d94e9b9bba15f04fe8a64",
+      "stopped": true
+    }
+  ],
+  "unrelatedContainersUntouched": true
+}

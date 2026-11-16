@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:11.052Z",
+  "revalidatedAt": "2026-11-01T08:03:11.054Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-wishes",
+      "audioSha256": "66e93a52d4872c7be63eeb341b9b72b0340cd441de037a085b24de533b6ee4c3",
+      "recognized": "Pour Emma, barre des tilleuls comme poste souhaité. Pour Lucas, parking comme poste à éviter. Ces souhaits passent après les règles et l'équilibre des heures.",
+      "expected": "Pour Emma, Bar des Tilleuls comme poste souhaité ; pour Lucas, Parking comme poste à éviter. Ces souhaits passent après les règles et l'équilibre des heures.",
+      "wordErrorRate": 0.038461538461538464,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

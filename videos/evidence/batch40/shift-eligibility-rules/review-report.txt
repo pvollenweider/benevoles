@@ -1,0 +1,11 @@
+STATUS: READY
+
+Batch 40, 2026-11-11. One narrated take. Product d3f4c4ba81356b673b1952b19c4ffe99531652f5, BUILD_ID AOuqevq41Wdo1_vo9UIzS. Duration 153.280 s.
+
+All eight chapters independently recognized from source audio and final video; no missing boundaries after silence-based recuts. Whole master: one consistent Kore voice. Final whole-soundtrack multilingual ASR and VTT: zero viewer tu tokens; no stray instruction or English narration.
+
+Video validator passed; music 14.1–19.4 LU below voice, zero music-rule issues. Actual tracked clicks and keys have synced soft effects. Eight fresh audiovisual reviews, 32 checkpoints. Images inspected: question/accepted answer editor, visible public condition, Non refusal at submit, Oui confirmation, existing age/quota/tag chapters.
+
+One mixed-audio voice observation was resolved with retained contrary evidence: the original whole master and isolated chapter each have one female speaker; source/final voice-band waveforms correlate 0.960–0.993 with zero lag throughout, including the final sentence. Raw mixed-audio observations are retained; see review/reserved-voice-resolution.json and its waveform evidence. Real-time subjective listening unavailable; not claimed.
+
+Source changes: manifest narration/settings/answer segment/viewer, editorial script, actual UI recorder, yes/no all-volunteer question and open Navette seed. No product source or guide change. Published on 2026-11-11: default preview then APPLY=1, five files uploaded.

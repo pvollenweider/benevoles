@@ -9,6 +9,7 @@
 
 import { coordinatesOf } from "./map-link"
 import { EMAIL_SETTINGS_HREF, remindersState, type RemindersFacts } from "./automatic-reminders"
+import { eventUsesCustomReminderRules, reminderRulesDelayList } from "./reminder-rules"
 import { REMINDER_LABELS } from "./notification-settings"
 import { formatMoment, registrationState } from "./registration-window"
 import type { StaffingSummary } from "./staffing"
@@ -117,8 +118,8 @@ function practicalInfoCheck(g: PracticalInfoGaps, base: string): ReviewCheck {
   return {
     id: "practical-info", label: `${shiftsWord(g.incomplete)} ${missing}`, ok: false, required: false, warn: true, href,
     hint: g.noContact > 0
-      ? "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles. Un contact le jour J, dans les réglages de l'événement, vaut pour tous les créneaux sans contact."
-      : "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles.",
+      ? "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page « Mes inscriptions » des bénévoles. Un contact le jour J, dans les paramètres de l'événement, vaut pour tous les créneaux sans contact."
+      : "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page « Mes inscriptions » des bénévoles.",
   }
 }
 
@@ -151,7 +152,7 @@ function registrationCheck(r: NonNullable<ReviewFacts["registration"]>, publishe
 }
 
 function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>, base: string): ReviewCheck {
-  const settings = { href: EMAIL_SETTINGS_HREF, action: "Réglages des emails" }
+  const settings = { href: EMAIL_SETTINGS_HREF, action: "Paramètres des emails" }
   const state = remindersState(r)
   switch (state.kind) {
     case "no-upcoming-shift": // never reached: the item is only listed while a shift is to come
@@ -159,7 +160,9 @@ function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>, base: string):
       return {
         id: "reminders", label: "Rappels automatiques coupés pour cet événement", ok: false, required: false, warn: true,
         href: `${base}/edit#event-reminders`, action: "Modifier",
-        hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.",
+        hint: eventUsesCustomReminderRules(r.customRules ?? [])
+          ? "Aucun rappel automatique ne part pour cet événement, quels que soient les paramètres de l'organisation et les délais choisis."
+          : "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les paramètres de l'organisation.",
       }
     case "on":
       return { id: "reminders", label: "Rappels automatiques J-2, J-1 et du jour activés", ok: true, required: false, ...settings }
@@ -172,6 +175,19 @@ function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>, base: string):
       return {
         id: "reminders", label: "Rappels automatiques en partie désactivés pour l'organisation", ok: false, required: false, warn: true, ...settings,
         hint: `Seuls partent : ${state.on.map((k) => REMINDER_LABELS[k].label).join(", ")}.`,
+      }
+    case "custom": {
+      const delays = reminderRulesDelayList(r.customRules ?? [])
+      return {
+        id: "reminders", label: `Rappels automatiques : ${delays}`, ok: true, required: false,
+        href: `${base}/message#event-reminder-rules`, action: "Modifier",
+      }
+    }
+    case "custom-off":
+      return {
+        id: "reminders", label: "Rappels automatiques désactivés pour cet événement", ok: false, required: false, warn: true,
+        href: `${base}/message#event-reminder-rules`, action: "Modifier",
+        hint: "Aucun email automatique ne partira pour cet événement. Activez au moins un rappel dans l'onglet Messages, section Rappels.",
       }
   }
 }
@@ -205,7 +221,7 @@ export function reviewChecks(f: ReviewFacts): ReviewCheck[] {
     },
     {
       id: "location", label: f.location?.trim() ? `Lieu : ${f.location.trim()}` : "Pas de lieu indiqué",
-      ok: !!f.location?.trim(), required: false, href: `${base}/edit`, hint: "Affiché sur la page publique et dans les invitations.",
+      ok: !!f.location?.trim(), required: false, href: `${base}/edit`, hint: "Affiché sur la page d'inscription et dans les invitations.",
     },
     {
       id: "confirmation", label: f.confirmationMessage?.trim() ? "Message de confirmation renseigné" : "Pas de message de confirmation",

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:15:50.984Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "c4ce2242d9c68e42ec36250078fe5c679e80cec98849396b714e85a2454b42f4",
+  "clipSha256": "9a4a4fe9a82a599b8dc808837d5131d4b1445533322310a68af64a928918210c",
+  "scene": "ap-load",
+  "review": {
+    "heardOpening": "La charge par personne compare les heures prévues",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "La charge par personne compare les heures prévues à l'objectif de chacun",
+        "visibleSeconds": 0.1,
+        "visible": "Tableau 'Charge par personne' affichant les colonnes Nom, Charge et Activités",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Noah a ses six heures",
+        "visibleSeconds": 3.4,
+        "visible": "Ligne de Noah De Jong visible avec '6 h prévues pour un objectif de 6 h : objectif atteint'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Dans Affectations proposées, chaque ligne dit pourquoi",
+        "visibleSeconds": 6,
+        "visible": "Défilement vers la section 'Affectations proposées (29)' détaillant les justifications",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Emma est au bar vendredi : disponible sur tout le créneau, c'est son poste souhaité",
+        "visibleSeconds": 9,
+        "visible": "Ligne affichée pour Emma Johansson au Bar des Tilleuls le vendredi avec la mention 'Disponible sur tout le créneau' et 'Poste souhaité'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, posée, fluide et parfaitement synchronisée avec les informations affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

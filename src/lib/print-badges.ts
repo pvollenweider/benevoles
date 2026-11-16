@@ -5,6 +5,7 @@ import { esc, volunteersOf, type SheetShift } from "./print-sheets"
 import type { ColorKey } from "./roles"
 import { clockTime } from "@/lib/gantt-utils"
 import { printLogoHtml, type OrgLogo } from "./org-logo"
+import { PRINT_BUTTON_SCRIPT_TAG } from "./inline-scripts"
 
 /**
  * Printable identification badges (#190, V1): one badge per active volunteer of an event,
@@ -49,6 +50,8 @@ export type BadgeData = {
   /** Event accent colour key (#300), if any. */
   accentColorKey?: string | null
   shifts: (SheetShift & { colorKey?: string | null })[]
+  /** « Secteur : Parking » when the badges are limited to one sector (#1170). */
+  sectorCaption?: string | null
 }
 
 export type Badge = {
@@ -139,7 +142,7 @@ export function renderBadges(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIO
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>Badges – ${esc(d.eventTitle)}</title>
+  <title>Badges – ${esc(d.eventTitle)}${d.sectorCaption ? ` – ${esc(d.sectorCaption)}` : ""}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --ink: #111; --ink-2: #444; --rule: #bbb; }
@@ -182,15 +185,16 @@ export function renderBadges(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIO
   <header class="doc-head">
     <div>
       <h1>${esc(d.eventTitle)}</h1>
-      <p class="kind"><strong>Badges</strong> · ${esc(d.organizationName)} · ${badges.length} badge${badges.length > 1 ? "s" : ""}${scope ? ` · ${esc(scope)}` : ""}${badges.length ? ` · ${BADGES_PER_SHEET} par feuille A4, à découper sur les pointillés` : ""}</p>
+      <p class="kind"><strong>Badges</strong> · ${esc(d.organizationName)} · ${badges.length} badge${badges.length > 1 ? "s" : ""}${d.sectorCaption ? ` · ${esc(d.sectorCaption)}` : ""}${scope ? ` · ${esc(scope)}` : ""}${badges.length ? ` · ${BADGES_PER_SHEET} par feuille A4, à découper sur les pointillés` : ""}</p>
     </div>
-    <button type="button" class="print-btn" onclick="window.print()">Imprimer</button>
+    <button type="button" class="print-btn" data-print>Imprimer</button>
   </header>
   <main${o.color === "none" ? ` class="mono"` : ""}>
     ${badges.length === 0
       ? `<p class="empty">${emptyMessage(o, chosenName)}</p>`
       : chunk(badges, BADGES_PER_SHEET).map((group, i, all) => `<ul class="sheet" role="list" aria-label="Feuille ${i + 1} sur ${all.length}">${group.map((b) => badgeHtml(b, o, d)).join("")}</ul>`).join("")}
   </main>
+  ${PRINT_BUTTON_SCRIPT_TAG}
 </body>
 </html>`
 }

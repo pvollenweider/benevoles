@@ -12,6 +12,7 @@ import EventPageClient, { type EventData } from "./EventPageClient"
 import { consentPrivacyHref } from "@/lib/public-signup"
 import { GROUP_PARAM, parseGroupCode, resolveGroupFilter } from "@/lib/group-links"
 import { EMBED_PARAM, isEmbedMode } from "@/lib/embed"
+import { publicShifts } from "@/lib/role-assignment"
 
 // Only a published event gives its title and its link preview (#564); unlisted (#414), draft and
 // archived events are noindex. The canonical URL is the event's public one on the organization's
@@ -80,7 +81,8 @@ export default async function EventPage({ params, searchParams }: {
   const groupLink = groupCode
     ? await prisma.eventGroupLink.findFirst({ where: { eventId: event.id, code: groupCode }, select: { code: true, name: true, roleNames: true, hideFull: true } })
     : null
-  const groupFilter = resolveGroupFilter(rawGroup === undefined ? null : (groupCode ?? ""), groupLink, [...new Set(event.shifts.map((s) => s.roleName))])
+  // The roles the page shows: a role assigned by the organisation only (#1145) is not one of them.
+  const groupFilter = resolveGroupFilter(rawGroup === undefined ? null : (groupCode ?? ""), groupLink, [...new Set(publicShifts(event.shifts).map((s) => s.roleName))])
 
   const footerSite = orgPageFooterSite()
   return (

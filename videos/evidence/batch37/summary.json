@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-31",
+  "branch": "video-batch37",
+  "productCommit": "3a76e5dbad281961182eba67ffaec0b6dcd67ada",
+  "BUILD_ID": "HMN0A-g7F4Mdz4O4q0eoc",
+  "videos": {
+    "volunteer-event-availability": {
+      "status": "READY",
+      "take": 2,
+      "narratedTakes": 2,
+      "durationSeconds": 90.8,
+      "buildId": "HMN0A-g7F4Mdz4O4q0eoc",
+      "productCommit": "3a76e5dbad281961182eba67ffaec0b6dcd67ada",
+      "avScenes": 9,
+      "avCheckpoints": 28,
+      "avFlagged": 0,
+      "fullFinalAsrRegisterTokens": 7,
+      "literalTuCount": 4,
+      "vttRegisterTokens": 7,
+      "registerExpected": "Volunteer-only audience; all seven forms match the narration and VTT. No vous addressed to viewer.",
+      "musicGaps": 0,
+      "musicGapLu": [
+        14.6,
+        18.5
+      ],
+      "musicOnlyMinimumLufs": -33.3,
+      "problems": [],
+      "review": "Actual frames of every chapter inspected; real-time subjective listening unavailable. Assisted audio/video review completed."
+    },
+    "assignment-proposals": {
+      "status": "READY",
+      "take": 1,
+      "durationSeconds": 172.88,
+      "buildId": "HMN0A-g7F4Mdz4O4q0eoc",
+      "productCommit": "3a76e5dbad281961182eba67ffaec0b6dcd67ada",
+      "avScenes": 11,
+      "avFlagged": 0,
+      "fullFinalAsrRegisterTokens": 0,
+      "vttRegisterTokens": 0,
+      "musicGaps": 0,
+      "musicGapLu": [
+        15.1,
+        19.0
+      ],
+      "musicOnlyMinimumLufs": -33.7,
+      "problems": [],
+      "review": "Actual MP4 frames inspected across every chapter; audiovisual and audio observations assisted. Real-time subjective listening unavailable. No product bug observed."
+    }
+  },
+  "videoMetaTests": 1279,
+  "typedSources": 214,
+  "productFilesChanged": false,
+  "rendersJsonChanged": false,
+  "pushed": false,
+  "merged": false
+}

@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import type { z } from "zod"
 import { firstIssueMessage } from "./shift-time"
+import { TOO_LONG_MESSAGE } from "./text-limits"
 
 /**
  * One error shape for every API route (#320): `{ error: string, details?: unknown }`.
@@ -23,6 +24,8 @@ export function invalidFieldsMessage(error: z.ZodError): string {
  * define French messages (shift times).
  */
 export function validationError(error: z.ZodError, opts: { useIssueMessage?: boolean } = {}) {
-  const message = opts.useIssueMessage ? firstIssueMessage(error) : invalidFieldsMessage(error)
+  // A text over its cap (text-limits.ts) names the field and the cap, whatever the route's mode.
+  const tooLong = error.issues.find((i) => i.code === "too_big" && TOO_LONG_MESSAGE.test(i.message))
+  const message = tooLong ? tooLong.message : opts.useIssueMessage ? firstIssueMessage(error) : invalidFieldsMessage(error)
   return NextResponse.json({ error: message, details: error.flatten() }, { status: 400 })
 }

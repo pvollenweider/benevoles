@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# Installed as /etc/cron.d/traefik-log-anonymise (k8s/log-rotation.md; no dot in the installed
+# name, cron ignores those). Once a day, after the nightly logrotate run: reduces the client
+# addresses of the archived Traefik access logs whose oldest line is 89 days old, deletes those
+# past 365 days. Output and failures go to the journal: journalctl -t traefik-log-anonymise
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+15 4 * * * root out=$(traefik-log-anonymise 2>&1); rc=$?; [ -n "$out" ] && echo "$out" | logger -t traefik-log-anonymise; [ $rc -eq 0 ] || logger -p user.err -t traefik-log-anonymise "failed with exit code $rc"

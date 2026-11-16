@@ -20,7 +20,7 @@ export function generateMetadata(): Metadata {
 export default function ProcessingAgreementPage() {
   // The hosted service's own page (#760): absent on another instance, which has /legal/exploitant.
   if (!pageAvailable(publicPage("/legal/sous-traitance"))) notFound()
-  const { title, html } = renderPublicSource("ACCORD-SOUS-TRAITANCE.md", "Accord de sous-traitance")
+  const { title, html } = renderPublicSource("content/legal/ACCORD-SOUS-TRAITANCE.md", "Accord de sous-traitance")
   return (
     <>
       <JsonLd data={publicPageJsonLd("/legal/sous-traitance", apexBaseUrl())} />

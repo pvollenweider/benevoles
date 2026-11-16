@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:38:30.425Z",
+  "videoSha256": "ad7442efc7c0d84818cd9d9ee645a49d1db053d5fa3fd37cdabbe8bf1d15479f",
+  "promptSha256": "dfd58672b7c77aae333a123f412a3db6a1cdf74272314aa38e2420d11fea0a05",
+  "clipSha256": "29857b9a740dfe7706b14d5f39a0d2439ace08511894128eca0bae1ff04fbdbb",
+  "scene": "swaps-result",
+  "review": {
+    "heardOpening": "Un échange respecte les règles d'une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Un échange respecte les règles d'une inscription",
+        "visibleSeconds": 0,
+        "visible": "Section Échanges de créneaux visible dans l'interface organisateur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Il se fait avant le début du premier des deux créneaux",
+        "visibleSeconds": 7.5,
+        "visible": "Transition vers la page personnelle bénévole avec l'encadré Échanger un créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Chaque étape est inscrite au journal de l'événement",
+        "visibleSeconds": 15.5,
+        "visible": "Vue bénévole toujours affichée, le journal de l'événement n'est pas montré à l'écran",
+        "sync": "uncertain",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, fluide et bien articulée, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

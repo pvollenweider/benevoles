@@ -1,0 +1,2 @@
+Native capture unavailable: macOS Screen Recording permission is denied for this process (TCC). Window IDs alone do not authorize capture; no media recorded.
+Native capture failed (1)

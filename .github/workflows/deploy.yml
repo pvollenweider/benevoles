@@ -19,10 +19,9 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
-
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 26
           cache: npm
@@ -47,20 +46,26 @@ jobs:
       - name: Tests unitaires
         run: npm test
 
+  # In parallel with `check`: the image is built while the checks run, and `deploy` waits for
+  # both. An image whose checks fail is pushed under its sha- tag only and never deployed.
   build-push:
     name: Build & push image
     runs-on: ubuntu-latest
-    needs: check
+    # Build secrets (SENTRY_AUTH_TOKEN, NEXT_PUBLIC_SENTRY_DSN) live in this environment, limited
+    # to main by its deployment branch policy: no other branch's workflow can read them.
+    environment: production-build
     permissions:
       contents: read
       packages: write
 
     outputs:
-      image: ${{ steps.image.outputs.ref }}
+      # Tag and digest (`…:sha-<commit>@sha256:…`): the migration Job and the app run exactly the
+      # image built here, even if the tag is pushed again; the tag keeps the commit readable.
+      image: ${{ steps.image.outputs.ref }}@${{ steps.build.outputs.digest }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Full history: scripts/doc-lastmod.mjs dates each doc source by its last commit.
           fetch-depth: 0
@@ -69,10 +74,9 @@ jobs:
         run: node scripts/doc-lastmod.mjs
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
       - name: Login to GHCR
-        uses: docker/login-action@v4
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -85,17 +89,19 @@ jobs:
           echo "ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${SHA}" >> $GITHUB_OUTPUT
 
       - name: Build & push
-        uses: docker/build-push-action@v7
+        id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           push: true
-          tags: |
-            ${{ steps.image.outputs.ref }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          # :latest moves only once this image is deployed (end of the deploy job).
+          tags: ${{ steps.image.outputs.ref }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+            # The published image runs anywhere; only benevol.app reports browser errors (#1335).
+            NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS=benevol.app
             GIT_SHA=${{ github.sha }}
           secrets: |
             sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -103,85 +109,180 @@ jobs:
   deploy:
     name: Deploy to Kubernetes
     runs-on: ubuntu-latest
-    needs: build-push
+    # Checks and image both done: the checks are not skipped, they run beside the image build.
+    needs: [check, build-push]
     environment: production
+    # One deploy at a time, never cancelled once started (a migration may be running). A newer
+    # deploy waiting here replaces an older waiting one, which never started. Order is not the
+    # commit order, hence the « Refuse an older version » step below.
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
     permissions:
       contents: read
+      # Move :latest to the deployed image (last step).
+      packages: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
-
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # History, to compare this commit with the deployed one.
+          fetch-depth: 0
       - name: Set up kubectl
-        uses: azure/setup-kubectl@v5
-
+        uses: azure/setup-kubectl@bda439f5f36b99b262ebdcd3613869bddb064c8e # v5.2.0
       - name: Configure kubeconfig
+        env:
+          KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
+          echo "$KUBECONFIG_BASE64" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
-      - name: Apply namespace
-        run: kubectl apply -f k8s/namespace.yaml
+      # Before any change to the cluster. A re-run of an old run, or an old run whose image build
+      # finished after a newer one's, would otherwise put an older version back over a newer one.
+      # Re-deploying the deployed commit (re-run to copy a secret again) stays allowed; a rollback
+      # on purpose follows docs/deploiement.md.
+      - name: Refuse an older version
+        run: |
+          deployed=$(kubectl -n benevoles get deployment benevoles-app \
+            -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null || true)
+          short=$(printf '%s' "$deployed" | sed -n 's/.*:sha-\([0-9a-f]\{7,40\}\).*/\1/p')
+          deployed_sha=""
+          [ -n "$short" ] && deployed_sha=$(git rev-parse --verify --quiet "${short}^{commit}" || true)
+          if [ -z "$deployed_sha" ]; then
+            echo "Deployed image: ${deployed:-none}, no known commit to compare with."
+          elif [ "$deployed_sha" = "$GITHUB_SHA" ]; then
+            echo "Re-deploying the deployed commit $GITHUB_SHA."
+          elif git merge-base --is-ancestor "$GITHUB_SHA" "$deployed_sha"; then
+            echo "::error::Production runs $deployed_sha, which already contains $GITHUB_SHA: not deploying an older version (docs/deploiement.md, « Ordre de déploiement »)."
+            exit 1
+          else
+            echo "Deployed commit: $deployed_sha, older than or unrelated to $GITHUB_SHA."
+          fi
 
+      # k8s/namespace.yaml is cluster-scoped: applied by hand (docs/deploiement.md), the deploy
+      # ServiceAccount only has rights inside the benevoles namespace.
       - name: Sync GHCR pull secret
+        env:
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
         run: |
           kubectl create secret docker-registry ghcr-secret \
             --namespace=benevoles \
             --docker-server=ghcr.io \
             --docker-username=pvollenweider \
-            --docker-password="${{ secrets.GHCR_PULL_TOKEN }}" \
+            --docker-password="$GHCR_PULL_TOKEN" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Check required secrets
+        # Values from the step environment, never printed: only the names of the empty ones. A
+        # secret missing from the production environment would otherwise be written empty to
+        # benevoles-secret.
         env:
           TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          OFFSITE_BUCKET: ${{ secrets.OFFSITE_BUCKET }}
         run: |
-          # The app refuses to start in production without it (src/lib/production-guards.ts);
-          # fail here, before touching the cluster, rather than on a stuck rollout.
-          if [ -z "$TOKEN_ENCRYPTION_KEY" ]; then
-            echo "::error::TOKEN_ENCRYPTION_KEY secret is not set (gh secret set TOKEN_ENCRYPTION_KEY)"
+          # The app refuses to start in production without TOKEN_ENCRYPTION_KEY or AUTH_SECRET
+          # (src/lib/env.ts, src/lib/production-guards.ts); the others break mail, crons or
+          # backups without a visible error. Fail here, before touching the cluster.
+          missing=""
+          for k in TOKEN_ENCRYPTION_KEY AUTH_SECRET POSTGRES_USER POSTGRES_PASSWORD CRON_SECRET \
+            SMTP_HOST SMTP_PASSWORD EMAIL_FROM OFFSITE_BUCKET; do
+            [ -n "${!k:-}" ] || missing="$missing $k"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Secret(s) not set in the production environment:$missing (gh secret set <NAME> --env production)"
             exit 1
           fi
 
       - name: Sync k8s secret
+        # Values come from the step environment, never from the script text: each line of the
+        # key file is a bare key name, which makes kubectl read that key's value from its own
+        # environment (os.Getenv in --from-env-file). No secret goes through the shell, argv,
+        # a file on disk or the log.
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          DATABASE_URL: "postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/benevoles"
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_REPLY_TO: ${{ secrets.EMAIL_REPLY_TO }}
+          ADMIN_NOTIFICATION_EMAIL: ${{ secrets.ADMIN_NOTIFICATION_EMAIL }}
+          NTFY_URL: ${{ secrets.NTFY_URL }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          OPERATOR_ALERT_EMAIL: ${{ secrets.OPERATOR_ALERT_EMAIL }}
+          SIGNUP: ${{ secrets.SIGNUP }}
+          ORG_INACTIVITY: ${{ secrets.ORG_INACTIVITY }}
+          PAST_EVENT_RETENTION: ${{ secrets.PAST_EVENT_RETENTION }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
+          TOKEN_ENCRYPTION_KEY_ID: ${{ secrets.TOKEN_ENCRYPTION_KEY_ID }}
+          TOKEN_ENCRYPTION_PREVIOUS_KEYS: ${{ secrets.TOKEN_ENCRYPTION_PREVIOUS_KEYS }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN || secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_APP_URL: "https://www.benevol.app"
+          HOSTED_SERVICE: "true"
+          AUTH_URL: "https://www.benevol.app"
+          AUTH_TRUST_HOST: "true"
+          VIDEO_MEDIA_BASE_URL: "https://medias.benevol.app"
+          OFFSITE_BUCKET: ${{ secrets.OFFSITE_BUCKET }}
         run: |
+          keys="$RUNNER_TEMP/benevoles-secret.keys"
+          cat > "$keys" <<'KEYS'
+          POSTGRES_USER
+          POSTGRES_PASSWORD
+          DATABASE_URL
+          AUTH_SECRET
+          ADMIN_EMAIL
+          ADMIN_PASSWORD
+          SMTP_HOST
+          SMTP_PORT
+          SMTP_SECURE
+          SMTP_USER
+          SMTP_PASSWORD
+          EMAIL_FROM
+          EMAIL_REPLY_TO
+          ADMIN_NOTIFICATION_EMAIL
+          NTFY_URL
+          NTFY_TOKEN
+          OPERATOR_ALERT_EMAIL
+          SIGNUP
+          ORG_INACTIVITY
+          PAST_EVENT_RETENTION
+          CRON_SECRET
+          VAPID_PUBLIC_KEY
+          VAPID_PRIVATE_KEY
+          TOKEN_ENCRYPTION_KEY
+          TOKEN_ENCRYPTION_KEY_ID
+          TOKEN_ENCRYPTION_PREVIOUS_KEYS
+          SENTRY_DSN
+          NEXT_PUBLIC_APP_URL
+          HOSTED_SERVICE
+          AUTH_URL
+          AUTH_TRUST_HOST
+          VIDEO_MEDIA_BASE_URL
+          OFFSITE_BUCKET
+          KEYS
           kubectl create secret generic benevoles-secret \
             --namespace=benevoles \
-            --from-literal=POSTGRES_USER="${{ secrets.POSTGRES_USER }}" \
-            --from-literal=POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" \
-            --from-literal=DATABASE_URL="postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/benevoles" \
-            --from-literal=AUTH_SECRET="${{ secrets.AUTH_SECRET }}" \
-            --from-literal=ADMIN_EMAIL="${{ secrets.ADMIN_EMAIL }}" \
-            --from-literal=ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
-            --from-literal=SMTP_HOST="${{ secrets.SMTP_HOST }}" \
-            --from-literal=SMTP_PORT="${{ secrets.SMTP_PORT }}" \
-            --from-literal=SMTP_SECURE="${{ secrets.SMTP_SECURE }}" \
-            --from-literal=SMTP_USER="${{ secrets.SMTP_USER }}" \
-            --from-literal=SMTP_PASSWORD="${{ secrets.SMTP_PASSWORD }}" \
-            --from-literal=EMAIL_FROM="${{ secrets.EMAIL_FROM }}" \
-            --from-literal=EMAIL_REPLY_TO="${{ secrets.EMAIL_REPLY_TO }}" \
-            --from-literal=ADMIN_NOTIFICATION_EMAIL="${{ secrets.ADMIN_NOTIFICATION_EMAIL }}" \
-            --from-literal=NTFY_URL="${{ secrets.NTFY_URL }}" \
-            --from-literal=NTFY_TOKEN="${{ secrets.NTFY_TOKEN }}" \
-            --from-literal=OPERATOR_ALERT_EMAIL="${{ secrets.OPERATOR_ALERT_EMAIL }}" \
-            --from-literal=SIGNUP="${{ secrets.SIGNUP }}" \
-            --from-literal=ORG_INACTIVITY="${{ secrets.ORG_INACTIVITY }}" \
-            --from-literal=PAST_EVENT_RETENTION="${{ secrets.PAST_EVENT_RETENTION }}" \
-            --from-literal=CRON_SECRET="${{ secrets.CRON_SECRET }}" \
-            --from-literal=VAPID_PUBLIC_KEY="${{ secrets.VAPID_PUBLIC_KEY }}" \
-            --from-literal=VAPID_PRIVATE_KEY="${{ secrets.VAPID_PRIVATE_KEY }}" \
-            --from-literal=TOKEN_ENCRYPTION_KEY="${{ secrets.TOKEN_ENCRYPTION_KEY }}" \
-            --from-literal=TOKEN_ENCRYPTION_KEY_ID="${{ secrets.TOKEN_ENCRYPTION_KEY_ID }}" \
-            --from-literal=TOKEN_ENCRYPTION_PREVIOUS_KEYS="${{ secrets.TOKEN_ENCRYPTION_PREVIOUS_KEYS }}" \
-            --from-literal=SENTRY_DSN="${{ secrets.SENTRY_DSN || secrets.NEXT_PUBLIC_SENTRY_DSN }}" \
-            --from-literal=NEXT_PUBLIC_APP_URL="https://www.benevol.app" \
-            --from-literal=HOSTED_SERVICE="true" \
-            --from-literal=AUTH_URL="https://www.benevol.app" \
-            --from-literal=AUTH_TRUST_HOST="true" \
-            --from-literal=VIDEO_MEDIA_BASE_URL="https://medias.benevol.app" \
-            --from-literal=OFFSITE_BUCKET="${{ secrets.OFFSITE_BUCKET }}" \
+            --from-env-file="$keys" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
+          rm -f "$keys"
 
       - name: Deploy PostgreSQL
         run: kubectl apply -f k8s/postgres.yaml
@@ -190,6 +291,37 @@ jobs:
         run: |
           kubectl rollout status deployment/postgres \
             -n benevoles --timeout=120s
+
+      # Before the migration on purpose (#1050): the migration Job and the new app pod then open
+      # fresh connections through these rules within this deploy (open connections are kept by
+      # the policy controller, so a check right after applying would prove nothing).
+      # The backup CronJob first, for its app: postgres-backup label; then, since a Job keeps the
+      # pod template it was created with, wait for any running database job without an allowed
+      # label (a backup started by an older template) to finish. The policy file lists the allow
+      # rules before the default deny, so a partial apply never denies without allowing.
+      - name: Apply NetworkPolicy
+        id: netpol
+        run: |
+          kubectl apply -f k8s/cronjob-backup.yaml
+          for i in $(seq 1 90); do
+            running=$(kubectl -n benevoles get jobs -o json | python3 -c '
+          import json, sys
+          allowed = {"benevoles-migrate", "postgres-backup"}
+          for j in json.load(sys.stdin)["items"]:
+              t = j["spec"]["template"]
+              names = {e["name"] for c in t["spec"]["containers"] for e in c.get("env", [])}
+              if j["status"].get("active") and t["metadata"].get("labels", {}).get("app") not in allowed and names & {"PGHOST", "DATABASE_URL"}:
+                  print(j["metadata"]["name"])
+          ')
+            [ -z "$running" ] && break
+            echo "Waiting for running job(s) to finish: $running"
+            sleep 10
+          done
+          if [ -n "$running" ]; then
+            echo "::error::Database job(s) still running without an allowed label: $running"
+            exit 1
+          fi
+          kubectl apply -f k8s/networkpolicy.yaml
 
       - name: Run database migrations
         env:
@@ -239,3 +371,45 @@ jobs:
         run: |
           kubectl rollout status deployment/benevoles-app \
             -n benevoles --timeout=300s
+
+      # The public addresses, through Traefik, after the new pod took the traffic: they cross the
+      # NetworkPolicy like every visitor. A few retries for a slow first answer.
+      - name: Check the site through the NetworkPolicy
+        run: |
+          fail=0
+          for url in https://www.benevol.app/api/health/ready https://www.benevol.app/ \
+            https://www.benevol.app/admin/login https://medias.benevol.app/healthz; do
+            code=000
+            for i in 1 2 3 4 5 6; do
+              code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$url" || true)
+              [ "$code" = "200" ] && break
+              sleep 10
+            done
+            echo "$code $url"
+            # Stop at the first failure: the next step removes the policy straight away.
+            [ "$code" = "200" ] || { fail=1; break; }
+          done
+          [ "$fail" = "0" ] || { echo "::error::The site does not answer through the NetworkPolicy"; exit 1; }
+
+      # :latest names the image production runs: moved without a rebuild, by digest.
+      - name: Login to GHCR
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag the deployed image latest
+        env:
+          APP_IMAGE: ${{ needs.build-push.outputs.image }}
+          LATEST: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        # By digest alone (repository@sha256:…), the form every registry client accepts.
+        run: docker buildx imagetools create --tag "$LATEST" "${APP_IMAGE%%:*}@${APP_IMAGE#*@}"
+
+      # Any failure once the policy is in place (migration, rollout, the check above) removes it:
+      # the site must keep answering, isolation comes back with the next successful deploy.
+      - name: Remove NetworkPolicy after a failure
+        # Also after a partial apply (outcome failure) or a cancelled run.
+        if: (failure() || cancelled()) && steps.netpol.outcome != 'skipped'
+        run: |
+          kubectl -n benevoles delete networkpolicy -l app.kubernetes.io/part-of=benevoles-netpol --ignore-not-found
+          echo "::warning::NetworkPolicy removed after a failed deploy (k8s/networkpolicy.yaml)"

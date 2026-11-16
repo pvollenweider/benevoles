@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { hashToken } from "@/lib/token-hash"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 const findFirst = vi.hoisted(() => vi.fn())
 const upsert = vi.hoisted(() => vi.fn())
 const deleteMany = vi.hoisted(() => vi.fn())
@@ -45,7 +48,7 @@ describe("POST /api/public/push", () => {
     "https://169.254.169.254/latest/meta-data",
     "https://localhost/abc",
   ])("refuses the endpoint %s and stores nothing", async (endpoint) => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    findFirst.mockResolvedValue({ volunteerId: "vol-1", event: { organization: OPEN_ORG } })
     const { POST } = await import("@/app/api/public/push/route")
     const res = await POST(post({ editToken: "tok", ...sub, endpoint }))
     expect(res.status).toBe(400)
@@ -55,7 +58,7 @@ describe("POST /api/public/push", () => {
   })
 
   it("never attaches a device to a record erased since the link was resolved (#516)", async () => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    findFirst.mockResolvedValue({ volunteerId: "vol-1", event: { organization: OPEN_ORG } })
     lockRows.mockResolvedValue([{ erasedAt: new Date() }])
     const { POST } = await import("@/app/api/public/push/route")
     expect((await POST(post({ editToken: "tok", ...sub }))).status).toBe(404)
@@ -85,14 +88,14 @@ describe("POST /api/public/push", () => {
 
   // Any public push provider keeps working, e.g. a UnifiedPush distributor on its own domain.
   it("accepts a push provider on any public domain", async () => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    findFirst.mockResolvedValue({ volunteerId: "vol-1", event: { organization: OPEN_ORG } })
     const { POST } = await import("@/app/api/public/push/route")
     expect((await POST(post({ editToken: "tok", ...sub, endpoint: "https://ntfy.sh/upAbCd?up=1" }))).status).toBe(200)
     expect(upsert.mock.calls[0][0].create.endpoint).toBe("https://ntfy.sh/upAbCd?up=1")
   })
 
   it("binds the subscription to the token's volunteer", async () => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    findFirst.mockResolvedValue({ volunteerId: "vol-1", event: { organization: OPEN_ORG } })
     const { POST } = await import("@/app/api/public/push/route")
     const res = await POST(post({ editToken: "tok", ...sub }))
     expect(res.status).toBe(200)
@@ -104,7 +107,7 @@ describe("POST /api/public/push", () => {
   })
 
   it("ignores a client-supplied volunteerId", async () => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    findFirst.mockResolvedValue({ volunteerId: "vol-1", event: { organization: OPEN_ORG } })
     const { POST } = await import("@/app/api/public/push/route")
     await POST(post({ editToken: "tok", volunteerId: "vol-other", ...sub }))
     expect(upsert.mock.calls[0][0].create.volunteerId).toBe("vol-1")
@@ -131,7 +134,7 @@ describe("DELETE /api/public/push", () => {
   })
 
   it("removes only the link's volunteer's subscription on that endpoint, also after a cancellation", async () => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    findFirst.mockResolvedValue({ volunteerId: "vol-1", event: { organization: OPEN_ORG } })
     const { DELETE } = await import("@/app/api/public/push/route")
     expect((await DELETE(del({ editToken: "tok", endpoint: sub.endpoint }))).status).toBe(200)
     expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { editTokenHash: hashToken("tok") } }))

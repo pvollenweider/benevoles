@@ -6,7 +6,14 @@
 import { useEffect, useRef, useState } from "react"
 import { announce } from "@/lib/announce"
 import {
+  PUSH_BUTTON_LABEL,
   PUSH_FAILURE_TEXT,
+  PUSH_INSTALL_INTRO,
+  PUSH_INSTALL_STEPS,
+  PUSH_INSTALL_TITLE,
+  isAppleMobileDevice,
+  iosVersionFromUserAgent,
+  needsHomeScreenInstall,
   pushRendersNothing,
   pushStateFromEnvironment,
   pushStateFromKey,
@@ -14,9 +21,17 @@ import {
   type PushState,
 } from "@/lib/push-availability"
 
-export default function PushSubscribeButton({ editToken }: { editToken: string }) {
+/**
+ * `installHint` (#593): on an iPhone or iPad in a browser tab, where iOS offers no push, the steps
+ * to add the page to the Home Screen instead of nothing. Only on the personal page, the one page
+ * that links a web app manifest (src/lib/volunteer-manifest.ts).
+ */
+export default function PushSubscribeButton({ editToken, installHint = false }: { editToken: string; installHint?: boolean }) {
+  // Decided once, on the client: the device and how the page is open don't change while it is.
+  const [installNeeded] = useState(() => installHint && typeof window !== "undefined" && homeScreenInstallNeeded())
   const [state, setState] = useState<PushState>(() => {
     if (typeof window === "undefined") return "checking"
+    if (installNeeded) return "checking"
     return pushStateFromEnvironment({ serviceWorker: "serviceWorker" in navigator, pushManager: "PushManager" in window })
   })
   // Failure of the last attempt, said in the status region while the button stays.
@@ -26,6 +41,15 @@ export default function PushSubscribeButton({ editToken }: { editToken: string }
   const busy = useRef(false)
 
   useEffect(() => {
+    if (installNeeded) {
+      // The steps only where the site offers push (a key), like the button: steps leading to no
+      // button would be a dead end. Nothing either when the key can't be fetched.
+      let cancelled = false
+      fetchPublicKey()
+        .then((key) => { if (!cancelled) setState(pushStateFromKey(key) === "idle" ? "install-needed" : "no-vapid") })
+        .catch(() => { if (!cancelled) setState("unsupported") })
+      return () => { cancelled = true }
+    }
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) return
     let cancelled = false
     // No button until the server says it offers push: without a VAPID key there is nothing to
@@ -60,7 +84,7 @@ export default function PushSubscribeButton({ editToken }: { editToken: string }
         if (!cancelled) setState((s) => (s === "checking" ? "idle" : s))
       })
     return () => { cancelled = true }
-  }, [editToken])
+  }, [editToken, installNeeded])
 
   const statusRef = useRef<HTMLParagraphElement>(null)
   // Set on click: once the button it came from unmounts, focus moves to the outcome message
@@ -75,6 +99,19 @@ export default function PushSubscribeButton({ editToken }: { editToken: string }
   }, [state])
 
   if (pushRendersNothing(state)) return null
+
+  // Static guidance, present as soon as it is known: no live region, no focus move.
+  if (state === "install-needed") {
+    return (
+      <section aria-labelledby="push-install-title" className="bg-white rounded-xl border border-gray-200 p-4 text-sm text-gray-700">
+        <h2 id="push-install-title" className="text-sm font-semibold text-gray-900">{PUSH_INSTALL_TITLE}</h2>
+        <p className="mt-1">{PUSH_INSTALL_INTRO}</p>
+        <ol className="mt-1 list-decimal pl-5 space-y-1">
+          {PUSH_INSTALL_STEPS.map((step) => <li key={step}>{step}</li>)}
+        </ol>
+      </section>
+    )
+  }
 
   async function handleSubscribe() {
     // The button stays focusable while loading (aria-disabled): a second press does nothing.
@@ -131,7 +168,7 @@ export default function PushSubscribeButton({ editToken }: { editToken: string }
           <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
-          {loading ? "Activation…" : "Recevoir des rappels push"}
+          {loading ? "Activation…" : PUSH_BUTTON_LABEL}
         </button>
       )}
       <p
@@ -146,6 +183,18 @@ export default function PushSubscribeButton({ editToken }: { editToken: string }
       </p>
     </div>
   )
+}
+
+/** An iPhone or iPad in a browser tab, where iOS offers push only once the page is on the Home Screen. */
+function homeScreenInstallNeeded(): boolean {
+  const standalone = (navigator as Navigator & { standalone?: boolean }).standalone === true
+    || (typeof window.matchMedia === "function" && window.matchMedia("(display-mode: standalone)").matches)
+  return needsHomeScreenInstall({
+    pushManager: "PushManager" in window,
+    appleMobile: isAppleMobileDevice({ userAgent: navigator.userAgent, maxTouchPoints: navigator.maxTouchPoints ?? 0 }),
+    standalone,
+    iosVersion: iosVersionFromUserAgent(navigator.userAgent),
+  })
 }
 
 /** The server's VAPID public key, null when push isn't configured. Throws on a failed request. */

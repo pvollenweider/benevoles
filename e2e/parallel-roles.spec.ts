@@ -33,7 +33,7 @@ test("a cumulable role lets a volunteer sign up to two overlapping shifts, an or
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
   await page.goto(`/admin/events/${event.eventId}/shifts`)
   const manage = page.getByRole("button", { name: "Gérer les postes" })
   await waitForHydration(manage)

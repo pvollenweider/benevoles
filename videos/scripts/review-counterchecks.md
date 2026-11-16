@@ -2,14 +2,14 @@
 
 Ces notes confrontent les rapports conservés aux fichiers réels. Elles ne remplacent pas un visionnage humain intégral et ne modifient pas les verdicts JSON d'origine.
 
-## Réglages emails — prise du 6 octobre 2026
+## Paramètres emails — prise du 6 octobre 2026
 
 MP4 contrôlé : `f3af68cc87ceb577395281548afb6a72e4cf4c54d3483c549de340121a31317c`.
 Les images [`withdrawal-25.png`](../evidence/org-email-settings/withdrawal-25.png) et [`withdrawal-45.png`](../evidence/org-email-settings/withdrawal-45.png) montrent
 respectivement la case « Prévenir en cas de désistement » cochée puis décochée.
 Le signalement d'une absence complète de changement sur la prise antérieure
 était donc contredit par la capture. Cela ne prouve pas tous les timings.
-Dans le rendu actuel, [`save-45.png`](../evidence/org-email-settings/save-45.png) montre « Réglages enregistrés. » : le résultat
+Dans le rendu actuel, [`save-45.png`](../evidence/org-email-settings/save-45.png) montre « Paramètres enregistrés. » : le résultat
 n'est plus hors champ jusqu'à la deuxième moitié du chapitre. Le contrôle
 automatique de cette nouvelle prise reste distinct de cette inspection.
 
@@ -21,7 +21,7 @@ et barré. Le signalement automatique affirmant que le titre n'est pas barré
 est contredit par cette image. Les rapports JSON restent conservés tels quels ;
 ce constat ne certifie ni l'écoute intégrale ni la synchronisation générale.
 
-## Réglages emails — reprise de la conclusion du 6 octobre 2026
+## Paramètres emails — reprise de la conclusion du 6 octobre 2026
 
 MP4 contrôlé : `8dd5271946a812371171c9f1e7d30c5ff3f7fe17451bce1ff2388f593bbdd49a`.
 [`reminders-45.png`](../evidence/org-email-settings/reminders-45.png) montre sans ambiguïté J-2 décoché, avec J-1
@@ -41,7 +41,7 @@ Le signalement automatique disant que cette première ligne reste à quatre
 est contredit par l'image. L'aperçu bénévole est réellement ouvert dans la
 conclusion ; cette prise n'est pas déclarée validée par l'effacement du rapport.
 
-## Réglages emails — adresse saisie en entier
+## Paramètres emails — adresse saisie en entier
 
 MP4 contrôlé : `79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314`.
 [`reply-to-85.png`](../evidence/org-email-settings/reply-to-85.png) montre `benevoles@example.org` en entier.
@@ -54,7 +54,7 @@ Ces constats ne prouvent pas tous les autres critères de synchronisation.
 
 Le rapport `manual-send` dit que l'annulation promise n'est pas montrée. Les images extraites de son propre extrait montrent la confirmation à 4 secondes, puis la page sans confirmation à 6 secondes. Le contrôle de cette capture indique `cancelledWithoutEmail: true` avant le nouvel envoi, ainsi que trois emails réellement reçus. L'action n'est donc pas absente ; sa brièveté peut rendre la lecture difficile et reste à apprécier dans le film.
 
-Le rapport `organization` dit que J-1 n'a pas été décoché, enregistré et réactivé. Dans son propre extrait, l'image à 14,5 secondes montre J-1 décoché et « Réglages enregistrés » ; à 17 secondes, J-1 est coché avec la même confirmation après le second enregistrement. Le contrôle de capture vérifie `organizationSavedOffThenOn: true`. Le signalement d'absence de manipulation est contredit par ces images et le résultat réel. Cela ne prouve pas tous les autres points de synchronisation.
+Le rapport `organization` dit que J-1 n'a pas été décoché, enregistré et réactivé. Dans son propre extrait, l'image à 14,5 secondes montre J-1 décoché et « Paramètres enregistrés » ; à 17 secondes, J-1 est coché avec la même confirmation après le second enregistrement. Le contrôle de capture vérifie `organizationSavedOffThenOn: true`. Le signalement d'absence de manipulation est contredit par ces images et le résultat réel. Cela ne prouve pas tous les autres points de synchronisation.
 
 La transition vers le brouillon et le retour au planning, signalés sur une ancienne prise, ont été recapturés. La dernière revue automatisée n'a pas de signalement sur ces deux chapitres. Ne pas conserver leur ancien statut « correction écrite, capture restante » comme description du MP4 actuel.
 

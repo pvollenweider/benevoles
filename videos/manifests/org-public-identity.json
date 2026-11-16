@@ -13,10 +13,10 @@
       "Pour retirer le logo, utilisez « Retirer le logo » et confirmez."
     ],
     "remember": [
-      "Les anciens identifiants, listés sous l'adresse de la page dans les réglages de l'organisation, redirigent vers l'actuel tant que vous les gardez ; les supprimer casse les anciens liens et QR codes.",
+      "Les anciens identifiants, listés sous l'adresse de la page dans les paramètres de l'organisation, redirigent vers l'actuel tant que vous les gardez ; les supprimer casse les anciens liens et QR codes.",
       "Un événement « Publié, non répertorié » reste accessible par son lien direct, sans mot de passe.",
       "Le logo ne remplace pas le nom de l'association, qui reste affiché.",
-      "Ces réglages sont réservés au propriétaire."
+      "Ces paramètres sont réservés au propriétaire."
     ]
   },
   "language": "fr-CH",
@@ -66,7 +66,7 @@
     },
     {
       "id": "result",
-      "transcript": "Vous avez une identité cohérente : le nom de l’association, un titre public accueillant, un logo facultatif et une adresse identifiable. Ces réglages sont réservés au propriétaire. Pour corriger un texte visible, modifiez son titre plutôt que l’adresse, et conservez les anciens identifiants si vous avez déjà diffusé leurs liens.",
+      "transcript": "Vous avez une identité cohérente : le nom de l’association, un titre public accueillant, un logo facultatif et une adresse identifiable. Ces paramètres sont réservés au propriétaire. Pour corriger un texte visible, modifiez son titre plutôt que l’adresse, et conservez les anciens identifiants si vous avez déjà diffusé leurs liens.",
       "fallbackDurationMs": 24000
     }
   ]

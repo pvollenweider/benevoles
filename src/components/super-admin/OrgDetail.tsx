@@ -11,8 +11,12 @@ import { requestJson } from "@/lib/use-submit"
 import { approveOrgRecap, deleteOrgRecap, liftSuspensionRecap, refuseOrgRecap, suspendOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
 import { ORG_STATUS_LABELS, orgStatus, SUSPENSION_REASON_MAX, SUSPENSION_REASON_MIN } from "@/lib/org-suspension"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
+import { signupSourceLabel } from "@/lib/signup-source"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import InactivityPanel from "@/components/super-admin/InactivityPanel"
+import FocusTargetHeading from "@/components/admin/event-nav/FocusTargetHeading"
+import { LimitHitLines } from "@/components/super-admin/LimitHitsList"
+import { LIMIT_HITS_ANCHOR, LIMIT_HITS_DAYS, TRUNCATED_SENTENCE, type OrgLimitHits } from "@/lib/limit-hits-view"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { orgSwitchAction } from "@/lib/admin-next"
@@ -40,6 +44,8 @@ type Org = {
   suspendedAt: string | null
   suspensionReason: string | null
   signupDescription: string | null
+  signupSource: string | null
+  signupSourceDetail: string | null
   publicationApprovedAt: string | null
   outboundEmailApprovedAt: string | null
   createdAt: string
@@ -48,8 +54,9 @@ type Org = {
   admins: Admin[]
 }
 
-export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel> }) {
+export default function OrgDetail({ org, cumulative, inactivity, limitHits, recentBatches = [], zone = "" }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean }; recentBatches?: { id: string; line: string; createdAt: string; heldSentence: string | null; failed: boolean }[]; zone?: string }) {
   const router = useRouter()
+  const sourceLabel = signupSourceLabel(org.signupSource, org.signupSourceDetail)
   const [, startTransition] = useTransition()
   const [toggling, setToggling] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -177,7 +184,7 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
       router.push("/super-admin/organizations")
       return
     }
-    announce(setOutcome, "Espace validé : ses administrateurs sont prévenus par email.")
+    announce(setOutcome, "Espace validé : ses organisateurs sont prévenus par email.")
     refresh()
   }
 
@@ -364,7 +371,7 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
             rows={3}
             value={suspensionReason}
             onChange={(e) => setSuspensionReason(e.target.value)}
-            className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="mt-1 w-full rounded-xl border border-gray-500 px-3 py-2 text-sm text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           />
           <p id="suspension-reason-error" role="alert" className="text-sm text-red-800 mt-1">{reasonError}</p>
         </ConfirmActionModal>
@@ -383,19 +390,27 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
         />
       )}
 
-      {/* What the association wrote when signing up (#810): typed text, shown as plain text only. */}
-      {org.signupDescription && (
+      {/* What the association wrote when signing up (#810) and how it found the site (#1094):
+          typed text, shown as plain text only, to the operator only. */}
+      {(org.signupDescription || sourceLabel) && (
         <section aria-labelledby="org-signup-description" className="bg-white border border-gray-200 rounded-xl p-4">
           <h2 id="org-signup-description" className="text-sm font-semibold text-gray-900">Demande d&apos;inscription</h2>
-          <p className="text-xs text-gray-600 mt-0.5">Ce que l&apos;association a écrit sur elle et son besoin en créant son espace.</p>
-          <p className="text-sm text-gray-800 mt-2 whitespace-pre-line break-words">{org.signupDescription}</p>
+          {org.signupDescription && (
+            <>
+              <p className="text-xs text-gray-600 mt-0.5">Ce que l&apos;association a écrit sur elle et son besoin en créant son espace.</p>
+              <p className="text-sm text-gray-800 mt-2 whitespace-pre-line break-words">{org.signupDescription}</p>
+            </>
+          )}
+          {sourceLabel && (
+            <p className="text-sm text-gray-800 mt-2 break-words">Comment l&apos;association nous a connus : <strong className="font-medium">{sourceLabel}</strong></p>
+          )}
         </section>
       )}
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <StatCard label="Événements" value={org._count.events} />
-        <StatCard label="Administrateurs" value={org._count.admins} />
+        <StatCard label="Organisateurs" value={org._count.admins} />
         <StatCard label="Membres" value={org._count.volunteers} />
       </div>
 
@@ -413,6 +428,34 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
         </dl>
       </section>
 
+      {/* Sending limits reached in the last days (#1100), target of the list's marker. */}
+      {limitHits && (
+        <section aria-labelledby={LIMIT_HITS_ANCHOR} className="bg-white border border-gray-200 rounded-xl p-4">
+          <FocusTargetHeading id={LIMIT_HITS_ANCHOR} className="text-sm font-semibold text-gray-900">Plafonds d&apos;envoi atteints</FocusTargetHeading>
+          <p className="text-xs text-gray-600 mt-0.5">
+            Les {LIMIT_HITS_DAYS} derniers jours. Un email retenu part à la fin de la période du plafond (minute ou jour) ; un email refusé n&apos;est pas parti. {limitHits.zone}{limitHits.truncated && ` ${TRUNCATED_SENTENCE}`}
+          </p>
+          {limitHits.group.queueStatus && <p className={`text-sm mt-2 ${limitHits.group.stillHeld > 0 ? "text-amber-800" : "text-gray-700"}`}>{limitHits.group.queueStatus}</p>}
+          <LimitHitLines hits={limitHits.group.hits} />
+        </section>
+      )}
+
+      {/* Its batches of emails of the same days (#1101), as the organisers see them, without recipients. */}
+      {recentBatches.length > 0 && (
+        <section aria-labelledby="org-send-batches" className="bg-white border border-gray-200 rounded-xl p-4">
+          <h2 id="org-send-batches" className="text-sm font-semibold text-gray-900">Envois groupés</h2>
+          <p className="text-xs text-gray-600 mt-0.5">Les {LIMIT_HITS_DAYS} derniers jours, les plus récents d&apos;abord : invitations, relances, rappels et messages envoyés à plusieurs personnes. {zone}</p>
+          <ul role="list" className="mt-2 space-y-1">
+            {recentBatches.map((b) => (
+              <li key={b.id} className="text-sm text-gray-700">
+                <span className={b.failed ? "text-red-800" : undefined}>{b.line}</span>
+                {b.heldSentence && <span className="block text-gray-600">{b.heldSentence}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* Periodic check of inactive organisations (#811): postpone or exclude. */}
       {inactivity && <InactivityPanel {...inactivity} />}
 
@@ -428,7 +471,7 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
               minLength={2}
               maxLength={100}
               required
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-500 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
@@ -453,7 +496,7 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
               maxLength={40}
               pattern="^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
               required
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-500 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
@@ -470,9 +513,9 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
 
       {/* Admins */}
       <div>
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Administrateurs</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Organisateurs</h2>
         {org.admins.length === 0 ? (
-          <p className="text-sm text-gray-500">Aucun administrateur.</p>
+          <p className="text-sm text-gray-500">Aucun organisateur.</p>
         ) : (
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
@@ -521,7 +564,7 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
                   readOnly
                   aria-labelledby="resend-link-title"
                   value={resend.link}
-                  className="w-full font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
+                  className="w-full font-mono text-xs bg-white border border-gray-500 rounded-lg px-3 py-2 text-blue-900 select-all"
                   onClick={(e) => (e.target as HTMLInputElement).select()}
                 />
               </div>

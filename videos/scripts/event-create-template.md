@@ -26,6 +26,6 @@ Obtenir rapidement un brouillon réaliste lorsque l’événement correspond à 
 - Toujours vérifier horaires, effectifs et conditions avant publication.
 
 
-Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Paramètres et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
 
 Le brouillon avec dix créneaux porte le badge « Prêt à publier » ; cela ne publie pas sa page. Le changement du nombre de places reste vérifié sur la ligne Buvette (0/5).

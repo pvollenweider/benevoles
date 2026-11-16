@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:10:42.342Z",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "promptSha256": "a749edb625ce9738ae0a0032ecf33243a48127682ab9ff0bf085fd25e44da2e5",
+  "clipSha256": "ccc46d0cea0ec90a5509cc6025de240524dd199930fe5453f7b24004ee1d33a9",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour de la fête, vous n'avez pas besoin",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
+        "visibleSeconds": 0.5,
+        "visible": "Titre d'introduction affiché en superposition : « Responsables de poste et de secteur : accompagner son équipe ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter.",
+        "visibleSeconds": 10.2,
+        "visible": "Écran d'aperçu de l'événement « Fête du village de Montvert » visible de manière stable pendant l'annonce des étapes à venir.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Dans un événement organisé par secteurs, un responsable peut aussi suivre tout un secteur.",
+        "visibleSeconds": 16.5,
+        "visible": "Vue générale de l'événement maintenue à l'écran pour cette explication contextuelle.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation du sujet."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

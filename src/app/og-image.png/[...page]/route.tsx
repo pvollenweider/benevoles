@@ -12,7 +12,7 @@ import { SITE_NAME } from "@/lib/seo-metadata"
 // /og-image.png rather than a folder of its own: a path ending in .png is never an event slug, so
 // it can't shadow an organisation's event, and a route handler rather than the opengraph-image
 // convention gives each card a stable URL, the same in og:image and twitter:image. The cards only
-// show text from the sources shipped in the image (guide/, src/lib/doc-pages.ts): rendered once
+// show text from the sources shipped in the image (content/guide/, src/lib/doc-pages.ts): rendered once
 // at build, every other path is a 404.
 export const dynamic = "force-static"
 export const dynamicParams = false

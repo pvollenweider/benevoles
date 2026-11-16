@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:50:56.898Z",
-  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
+  "reviewedAt": "2026-11-11T12:36:08.762Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
   "promptSha256": "424c5939dca47ec298a17d31a10ff004a0477d92543c332d7f470c0192eaef88",
-  "clipSha256": "c66fb789056c0e790d9958b096205503174c2413d1186ea6290a9845d5bf6c23",
+  "clipSha256": "e67b8832e5e8964b6479a413e0ce53b6e4e313cdc56e48695bc03c6e09ca045d",
   "scene": "eligible",
   "review": {
     "heardOpening": "Julien possède l'étiquette sécurité",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Julien possède l’étiquette sécurité.",
-        "visibleSeconds": 0,
-        "visible": "Affichage du planning de la Fête du village de Montvert en vue frise.",
+        "spokenSeconds": 0.8,
+        "spoken": "Julien possède l'étiquette sécurité.",
+        "visibleSeconds": 1.7,
+        "visible": "Affichage de la frise des créneaux incluant la ligne de mission Sécurité",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 2.8,
         "spoken": "En ouvrant son invitation, la même mission devient sélectionnable",
-        "visibleSeconds": 6.8,
-        "visible": "Le créneau Sécurité 20h-02h devient sélectionné et apparaît dans le récapitulatif latéral.",
-        "sync": "late",
-        "severity": "minor"
+        "visibleSeconds": 7.3,
+        "visible": "Le créneau Sécurité 20h-02h est cliqué et apparaît dans les créneaux sélectionnés",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "au moment de l’inscription.",
-        "visibleSeconds": 10.5,
-        "visible": "Clic sur 'Continuer' et affichage de la page 'Tes informations' préremplie au nom de Julien Favre.",
+        "spokenSeconds": 9.2,
+        "spoken": "au moment de l'inscription",
+        "visibleSeconds": 10.6,
+        "visible": "Clic sur « Continuer » et ouverture du formulaire d'inscription prérempli avec les coordonnées de Julien Favre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Il n'y a donc ni compte à créer, ni code à recopier.",
+        "visibleSeconds": 12.5,
+        "visible": "Formulaire d'inscription directement accessible et pré-rempli sans étape de connexion ou de saisie de code",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement intelligible."
+      "observation": "Voix claire, posée, bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

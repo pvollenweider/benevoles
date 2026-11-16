@@ -29,3 +29,34 @@ export function roleMoveMessage(role: string, index: number, total: number): str
 export function roleMoveBoundaryMessage(role: string, dir: MoveDirection): string {
   return `${role} est déjà en ${dir === "up" ? "première" : "dernière"} position.`
 }
+
+/**
+ * Keyboard reorder in « Gérer les postes » grouped by sector: `role` moves one step inside its own
+ * group, never into the next sector (its sector is changed with « Secteur », not by moving). The
+ * returned `roles` is the grouped order, the one the grouped views draw and « Enregistrer l'ordre »
+ * saves; `index` and `total` are the poste's place in its group, for the announcement.
+ */
+export function moveRoleInGroup(groups: readonly { roles: readonly string[] }[], role: string, dir: MoveDirection): { roles: string[]; index: number; total: number } | null {
+  const group = groups.find((g) => g.roles.includes(role))
+  if (!group) return null
+  const moved = moveRole(group.roles, role, dir)
+  if (!moved) return null
+  return {
+    roles: groups.flatMap((g) => (g === group ? moved.roles : [...g.roles])),
+    index: moved.index,
+    total: moved.roles.length,
+  }
+}
+
+/**
+ * Whether the poste order being edited in « Gérer les postes » differs from the saved one, so that
+ * closing the panel asks first. Compared on the postes both lists hold: a poste created or deleted
+ * while the panel is open is no change of order.
+ */
+export function roleOrderUnsaved(current: readonly string[], saved: readonly string[]): boolean {
+  const inSaved = new Set(saved)
+  const inCurrent = new Set(current)
+  const a = current.filter((r) => inSaved.has(r))
+  const b = saved.filter((r) => inCurrent.has(r))
+  return a.some((r, i) => r !== b[i])
+}

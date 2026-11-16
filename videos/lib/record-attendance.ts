@@ -3,13 +3,14 @@
 
 import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { recordAttendanceActions } from "./record-attendance-actions"
 import { verifyAttendanceTransition } from "./attendance-capture-checks"
 import { showDownloadedCsv } from "./show-downloaded-csv"
 import type { Cue } from "./sentence-timing"
+import { fullNameOf } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 
@@ -17,7 +18,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
   const { page, base, eventId, directory, title, scene, tap, settle } = options
   const personPrefix = options.personPrefix ?? "video-attendance-person-"
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated video DB required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const registrationsUrl = `${base}/admin/events/${eventId}/registrations`
   const go = async (url = registrationsUrl) => { await page.goto(url); await settle(page) }
   const snapshot = () => db.registration.findMany({ where: { eventId }, select: { id: true, status: true, checkedInAt: true } })
@@ -42,7 +43,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
       await page.getByRole("columnheader", { name: /Heures prévues/ }).scrollIntoViewIfNeeded()
       if (!(await member.innerText()).includes("4h")) throw new Error("Expected four planned hours, not attested hours")
       await at(0.53) /* mid-sentence */; await tap(page, member.getByRole("link", { name: /^Activité/ }))
-      await page.getByRole("heading", { name: "Activité de Léa Exemple", exact: true }).waitFor()
+      await page.getByRole("heading", { name: `Activité de ${fullNameOf("Léa")}`, exact: true }).waitFor()
       await page.getByText(/présence|présent|point/i).last().scrollIntoViewIfNeeded()
     })
     let cancelledCheckIn = ""

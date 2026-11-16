@@ -51,6 +51,22 @@ export const MEMBER_ERASURE_REASON = {
   erased: "Les données personnelles de cette fiche ont déjà été effacées.",
 } as const
 
+/**
+ * Why an organiser can no longer register or edit this record, or null: an erased record (#516)
+ * stays empty, and a merge tombstone (#600) is only a pointer to the kept record, which is the one
+ * to register or edit. Emails of both are null, so a lookup by address never finds them.
+ */
+export const MEMBER_TOMBSTONE_WRITE = {
+  erased: "Les données personnelles de cette fiche ont été effacées : elle ne peut plus être inscrite ni modifiée.",
+  merged: "Cette fiche a été fusionnée dans une autre : inscrivez ou modifiez la fiche conservée.",
+} as const
+
+export function memberWriteRefusal(v: { erasedAt: Date | null; mergedIntoId: string | null }): string | null {
+  if (v.erasedAt) return MEMBER_TOMBSTONE_WRITE.erased
+  if (v.mergedIntoId) return MEMBER_TOMBSTONE_WRITE.merged
+  return null
+}
+
 export interface MemberErasureSubject {
   mergedIntoId: string | null
   erasedAt: Date | null
@@ -71,6 +87,8 @@ export interface ErasureInput {
   member: { id: string; firstName: string; lastName: string; email: string | null; mergedIntoId: string | null; erasedAt: Date | null }
   registrations: { id: string; status: string; upcoming: boolean }[]
   inviteIds: string[]
+  /** « Je ne peux pas » answers for one shift (#1303): the person's own. */
+  shiftDeclineIds: string[]
   answerIds: string[]
   pushSubscriptionIds: string[]
   /** Sector leader entries (#186) of the organisation whose email is the member's, case-insensitive. */
@@ -88,6 +106,7 @@ export interface ErasurePlan {
   registrationIdsToRetoken: string[]
   delete: {
     inviteIds: string[]
+    shiftDeclineIds: string[]
     answerIds: string[]
     pushSubscriptionIds: string[]
     sectorLeaderIds: string[]
@@ -98,6 +117,7 @@ export interface ErasurePlan {
     registrations: number
     upcomingLive: number
     invites: number
+    shiftDeclines: number
     answers: number
     pushSubscriptions: number
     sectorLeaders: number
@@ -123,6 +143,7 @@ export function buildErasurePlan(input: ErasureInput): ErasurePlan {
     registrationIdsToRetoken: registrationIds,
     delete: {
       inviteIds: [...input.inviteIds],
+      shiftDeclineIds: [...input.shiftDeclineIds],
       answerIds: [...input.answerIds],
       pushSubscriptionIds: [...input.pushSubscriptionIds],
       sectorLeaderIds: [...input.sectorLeaderIds],
@@ -133,6 +154,7 @@ export function buildErasurePlan(input: ErasureInput): ErasurePlan {
       registrations: registrationIds.length,
       upcomingLive: input.registrations.filter((r) => r.upcoming && LIVE.has(r.status)).length,
       invites: input.inviteIds.length,
+      shiftDeclines: input.shiftDeclineIds.length,
       answers: input.answerIds.length,
       pushSubscriptions: input.pushSubscriptionIds.length,
       sectorLeaders: input.sectorLeaderIds.length,
@@ -213,6 +235,7 @@ export function eraseMemberRecap(name: string, c: ErasureCounts): ActionRecap {
     "notes, étiquettes et disponibilités",
     ...(c.registrations > 0 ? ["commentaires et téléphones laissés à ses inscriptions ; ses liens personnels ne fonctionneront plus"] : []),
     ...(c.invites > 0 ? [n(c.invites, "invitation (et sa réponse « pas disponible » éventuelle)", "invitations (et leurs réponses « pas disponible » éventuelles)")] : []),
+    ...(c.shiftDeclines > 0 ? [n(c.shiftDeclines, "réponse « Je ne peux pas » pour un créneau", "réponses « Je ne peux pas » pour des créneaux")] : []),
     ...(c.answers > 0 ? [n(c.answers, "réponse aux questions des événements", "réponses aux questions des événements")] : []),
     ...(c.pushSubscriptions > 0 ? [n(c.pushSubscriptions, "abonnement aux notifications", "abonnements aux notifications")] : []),
     ...(c.sectorLeaders > 0 ? [n(c.sectorLeaders, "désignation comme responsable de secteur", "désignations comme responsable de secteur")] : []),

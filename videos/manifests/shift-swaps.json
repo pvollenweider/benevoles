@@ -1,0 +1,98 @@
+{
+  "id": "SHIFT_SWAPS",
+  "slug": "shift-swaps",
+  "title": "Échanges de créneaux entre bénévoles",
+  "description": "Autoriser les échanges sur un événement, puis laisser deux bénévoles échanger leurs créneaux, avec ou sans validation.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, patient pace around 130 words per minute and clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "swaps-enable": "Autoriser les échanges",
+    "swaps-publish": "Publier une demande",
+    "swaps-offer": "Proposer un de ses créneaux",
+    "swaps-accept": "Accepter l'échange",
+    "swaps-approval": "Faire valider chaque échange",
+    "swaps-sector": "Deux postes d'un même secteur",
+    "swaps-validate": "Valider dans Inscriptions"
+  },
+  "segments": [
+    {
+      "id": "swaps-welcome",
+      "transcript": "Un bénévole ne peut plus venir à son créneau ? Avec les échanges de créneaux, en bêta, il peut proposer sa place à une autre personne inscrite, sans que l'organisation ait tout à refaire. Voyons l'option de l'événement, un échange sur le même poste, puis un échange entre deux postes d'un même secteur, validé par l'organisation.",
+      "fallbackDurationMs": 28820
+    },
+    {
+      "id": "swaps-enable",
+      "transcript": "Dans les informations de l'événement, la carte Échanges de créneaux propose Autoriser les demandes d'échange de créneaux. Activons-la. Deux bénévoles confirmés sur le même poste, ou sur deux postes du même secteur, peuvent alors échanger leurs créneaux depuis leur page Mes inscriptions. Laissons pour l'instant Valider chaque échange désactivé.",
+      "fallbackDurationMs": 25530
+    },
+    {
+      "id": "swaps-publish",
+      "transcript": "Léa ne peut plus venir au bar de la Grande Scène, samedi après-midi. Elle ouvre sa page Mes inscriptions, à la partie Échanger un créneau. Elle choisit Je cherche à échanger ce créneau. Sa demande est publiée. Les personnes inscrites sur un autre créneau du même poste peuvent lui proposer le leur, jusqu'à la date limite indiquée. Son créneau ne change pas d'ici là.",
+      "fallbackDurationMs": 32580
+    },
+    {
+      "id": "swaps-offer",
+      "transcript": "Jules est inscrit à deux créneaux du même bar, le dimanche. Sur sa page, Échanges proposés par d'autres bénévoles montre le créneau que Léa cède, sans son nom. Jules choisit celui qu'il cède, dimanche après-midi, puis Proposer cet échange. C'est maintenant à Léa de répondre.",
+      "fallbackDurationMs": 23650
+    },
+    {
+      "id": "swaps-accept",
+      "transcript": "Léa reçoit un email, et sa page indique que Jules, initiale H, lui propose un échange. Elle relit Tu cèdes et Tu reçois, puis choisit Accepter l'échange. Une confirmation récapitule les deux créneaux. Oui, échanger. L'échange se fait tout de suite.",
+      "fallbackDurationMs": 21300
+    },
+    {
+      "id": "swaps-done",
+      "transcript": "Échange effectué. Léa a maintenant le créneau du dimanche, et Jules celui du samedi. Chacun garde son inscription et son lien personnel. Le nouveau créneau apparaît dans Tous mes créneaux, et les rappels repartent pour ce créneau. Tous deux reçoivent un email Échange effectué.",
+      "fallbackDurationMs": 23180
+    },
+    {
+      "id": "swaps-approval",
+      "transcript": "Côté organisation, vous pouvez faire valider chaque échange. Dans les informations de l'événement, activons Valider chaque échange. Désormais, chaque échange attend votre accord, même entre deux créneaux ordinaires. Un échange qui touche un créneau sur validation l'attend toujours.",
+      "fallbackDurationMs": 20360
+    },
+    {
+      "id": "swaps-sector",
+      "transcript": "Dans cet événement, les postes sont rangés par secteurs. Noah est à l'accueil de la Scène du Lac, samedi matin, et publie sa demande. Lou est à l'accueil de la Grande Scène, dimanche matin, un autre poste du même secteur. Sur sa page, le nom du poste est toujours indiqué, jamais le secteur. Lou propose son créneau.",
+      "fallbackDurationMs": 29290
+    },
+    {
+      "id": "swaps-sector-accept",
+      "transcript": "Noah relit la proposition et l'accepte. Cette fois, la confirmation prévient que l'organisation devra encore valider l'échange. Leur planning ne change pas avant cette validation.",
+      "fallbackDurationMs": 14250
+    },
+    {
+      "id": "swaps-validate",
+      "transcript": "Dans Inscriptions, la section Échanges de créneaux montre cet échange sous À valider, avec ce que chaque personne cède et reçoit, et la date limite. Valider l'échange vérifie à nouveau toutes les règles, puis échange les deux créneaux. Les deux personnes sont prévenues par email. Refuser leur laisse leur créneau.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "swaps-result",
+      "transcript": "Un échange respecte les règles d'une inscription : chevauchements, nombre de créneaux par personne, âge minimum et postes réservés. Il se fait avant le début du premier des deux créneaux. Si l'un des créneaux change ou est annulé entre-temps, la demande prend fin et les personnes sont prévenues. Chaque étape est inscrite au journal de l'événement.",
+      "fallbackDurationMs": 28820
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous autorisez les échanges de créneaux sur un événement, puis deux bénévoles échangent leurs créneaux depuis leur page Mes inscriptions, avec ou sans validation de l'organisation.",
+    "steps": [
+      "Dans les informations de l'événement, activez Autoriser les demandes d'échange de créneaux.",
+      "Le bénévole qui ne peut plus venir publie Je cherche à échanger ce créneau depuis sa page Mes inscriptions.",
+      "Une personne inscrite sur le même poste, ou sur un poste du même secteur, choisit le créneau qu'elle cède, puis Proposer cet échange.",
+      "Le premier bénévole relit Tu cèdes et Tu reçois, puis accepte l'échange.",
+      "Pour tout faire valider, activez Valider chaque échange, puis validez dans Inscriptions, sous À valider."
+    ],
+    "remember": [
+      "Rien ne change dans le planning tant que l'échange n'est pas effectué.",
+      "Chacun garde son inscription et son lien personnel ; les deux reçoivent un email.",
+      "Un échange respecte les règles d'une inscription et se fait avant le début du premier des deux créneaux.",
+      "C'est une fonction en bêta : votre organisation doit participer à la bêta."
+    ]
+  }
+}

@@ -17,4 +17,10 @@ describe("organizationAllowsSignIn", () => {
   it("lets the super admin in without an organization", () => {
     expect(organizationAllowsSignIn({ role: "super_admin", organization: null })).toBe(true)
   })
+  // A suspension wins over an inconsistent `active: true`: the admins stay out until it is lifted.
+  it("locks out the admins of a suspended organization, even one left active", () => {
+    expect(organizationAllowsSignIn({ role: "admin", organization: { active: true, suspendedAt: new Date() } })).toBe(false)
+    expect(organizationAllowsSignIn({ role: "organizer", organization: { active: false, suspendedAt: new Date() } })).toBe(false)
+    expect(organizationAllowsSignIn({ role: "admin", organization: { active: true, suspendedAt: null } })).toBe(true)
+  })
 })

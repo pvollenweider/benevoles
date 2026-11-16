@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 
 // « Cumulable avec un autre créneau » (#986): set on every shift of the role by the role route,
 // kept on rename, taken by a shift created in (or moved to) the role, copied by a shift duplicate.
@@ -35,7 +37,8 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] — overlapAllowed", () 
         event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-1" }) },
         shift: { findMany: vi.fn(async () => shifts), findFirst: shiftFindFirst, updateMany },
         eventGroupLink: { findMany: vi.fn().mockResolvedValue([]) },
-        eventQuestion: { updateMany: eventQuestionUpdateMany },
+        eventQuestion: { updateMany: eventQuestionUpdateMany, findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
+        eventPage: { findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
         sectorLeader: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn(), updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
         async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
       },

@@ -9,6 +9,16 @@ import { prisma } from "@/lib/prisma"
 import { isValidTimeZone } from "@/lib/time-zone"
 import { orgBaseUrl } from "@/lib/urls"
 import { isReservedOrgSlug, RESERVED_SLUG_ERROR } from "@/lib/org-subdomain"
+import { parseHourRateInput } from "@/lib/volunteer-hour-value"
+import { canAdoptBeta } from "@/lib/beta-access"
+import { SWAPS_NOT_ADOPTABLE } from "@/lib/shift-swap-data"
+import { swapsShipped } from "@/lib/shift-swap-gate"
+import { SECTORS_CLOSED_ERROR } from "@/lib/sectors"
+import { WORKLOAD_NOT_ADOPTABLE } from "@/lib/workload-policy-data"
+import { workloadProtectionShipped } from "@/lib/workload-shipped"
+import { checkPolicyValues, WRITE_SECTIONS } from "@/lib/workload-policy"
+import { Prisma } from "@/generated/prisma/client"
+import { MARKDOWN_TEXT_MAX, tooLongMessage } from "@/lib/text-limits"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
@@ -18,7 +28,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; shiftSwapsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null; workloadPolicyDefault?: Prisma.InputJsonValue | typeof Prisma.DbNull } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -61,9 +71,11 @@ export async function PATCH(req: Request) {
   }
 
   if ("volunteerCharter" in body) {
-    updates.volunteerCharter = typeof body.volunteerCharter === "string" && body.volunteerCharter.trim()
-      ? body.volunteerCharter.trim()
-      : null
+    const charter = typeof body.volunteerCharter === "string" ? body.volunteerCharter.trim() : ""
+    if (charter.length > MARKDOWN_TEXT_MAX) {
+      return NextResponse.json({ error: tooLongMessage("La charte", MARKDOWN_TEXT_MAX) }, { status: 400 })
+    }
+    updates.volunteerCharter = charter || null
   }
 
   if (typeof body.hasOrgInsurance === "boolean") {
@@ -73,6 +85,48 @@ export async function PATCH(req: Request) {
   // « Qui est inscrit » (#1068): the value of the organisation's next new events; none changes now.
   if (typeof body.shiftRosterDefault === "boolean") {
     updates.shiftRosterDefault = body.shiftRosterDefault
+  }
+
+  // Sectors for the next new events (#1147): turning it on needs the organisation available;
+  // turning it off is always possible. No existing event changes.
+  if (typeof body.sectorsDefault === "boolean") {
+    if (body.sectorsDefault && !(await canAdoptBeta(organizationId, "sectors"))) {
+      return NextResponse.json({ error: SECTORS_CLOSED_ERROR }, { status: 403 })
+    }
+    updates.sectorsDefault = body.sectorsDefault
+  }
+
+  // Shift swaps for the next new events (#1174, beta): on needs the capability open for the
+  // organisation (and shipped); off is always possible. No existing event changes.
+  if (typeof body.shiftSwapsDefault === "boolean") {
+    if (body.shiftSwapsDefault && !(swapsShipped() && (await canAdoptBeta(organizationId, "shiftSwaps")))) {
+      return NextResponse.json({ error: SWAPS_NOT_ADOPTABLE }, { status: 403 })
+    }
+    updates.shiftSwapsDefault = body.shiftSwapsDefault
+  }
+
+  // Workload protection for the next new events (#1171, beta): `{ enabled, values }` copied to each
+  // new event, every value required; null removes it. Setting one needs the capability open for the
+  // organisation (and shipped); removing it is always possible. No existing event changes.
+  if ("workloadPolicyDefault" in body) {
+    const value = body.workloadPolicyDefault
+    if (value === null) {
+      updates.workloadPolicyDefault = Prisma.DbNull
+    } else {
+      if (!(workloadProtectionShipped() && (await canAdoptBeta(organizationId, "workloadProtection")))) {
+        return NextResponse.json({ error: WORKLOAD_NOT_ADOPTABLE }, { status: 403 })
+      }
+      const checked = checkPolicyValues(value?.values, WRITE_SECTIONS)
+      if (typeof value?.enabled !== "boolean" || !checked.ok) {
+        const problems = checked.ok ? [] : checked.problems
+        return NextResponse.json({ error: problems[0]?.message ?? "Indiquez si les nouveaux événements commencent protégés.", problems }, { status: 400 })
+      }
+      // Dates mean nothing before an event exists: a default's meal rule applies every day.
+      if (checked.values.meal?.apply && checked.values.meal.days !== "all") {
+        return NextResponse.json({ error: "Pause repas : pour les nouveaux événements, la règle vaut pour tous les jours.", problems: [{ field: "mealDays", message: "Pause repas : pour les nouveaux événements, la règle vaut pour tous les jours." }] }, { status: 400 })
+      }
+      updates.workloadPolicyDefault = { enabled: value.enabled, values: checked.values }
+    }
   }
 
   // Headline of the public events page. Empty means "use the default" (Bénévoles).
@@ -99,6 +153,21 @@ export async function PATCH(req: Request) {
     }
   }
 
+  // Hourly rate for valuing volunteer work (#867): set with its currency, or cleared (empty) with it.
+  if ("volunteerHourRate" in body) {
+    const parsed = parseHourRateInput(body.volunteerHourRate, body.volunteerHourRateCurrency)
+    if (parsed.kind === "error") return NextResponse.json({ error: parsed.error, field: parsed.field }, { status: 400 })
+    if (parsed.kind === "clear") {
+      updates.volunteerHourRateCents = null
+      updates.volunteerHourRateCurrency = null
+      updates.volunteerHourRateSetAt = null
+    } else {
+      updates.volunteerHourRateCents = parsed.cents
+      updates.volunteerHourRateCurrency = parsed.currency
+      updates.volunteerHourRateSetAt = new Date()
+    }
+  }
+
   // First-run checklist hidden (true) or shown again (false) for the whole organization (#369).
   if (typeof body.onboardingDismissed === "boolean") {
     updates.onboardingDismissedAt = body.onboardingDismissed ? new Date() : null
@@ -118,10 +187,14 @@ export async function PATCH(req: Request) {
     return tx.organization.update({
       where: { id: organizationId },
       data: updates,
-      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, publicTitle: true, timeZone: true },
+      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true },
     })
   })
 
   const adminUrl = oldSlug ? `${orgBaseUrl(org.slug)}/admin/settings/admins` : null
-  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, timeZone: org.timeZone, shiftRosterDefault: org.shiftRosterDefault, adminUrl })
+  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, timeZone: org.timeZone, shiftRosterDefault: org.shiftRosterDefault, sectorsDefault: org.sectorsDefault, shiftSwapsDefault: org.shiftSwapsDefault,
+    volunteerHourRateCents: org.volunteerHourRateCents, volunteerHourRateCurrency: org.volunteerHourRateCurrency,
+    volunteerHourRateSetAt: org.volunteerHourRateSetAt?.toISOString() ?? null,
+    adminUrl,
+  })
 }

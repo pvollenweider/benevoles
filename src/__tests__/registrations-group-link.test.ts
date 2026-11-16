@@ -2,6 +2,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 
 // Share links per group (#947): a public sign-up made through `?groupe=<code>` records that link,
 // resolved by the server from the code within the event. An unknown code, another event's code or
@@ -12,25 +18,29 @@ const groupLinkFindFirst = vi.hoisted(() => vi.fn())
 const registrationCreate = vi.hoisted(() => vi.fn())
 const logEvent = vi.hoisted(() => vi.fn())
 
-vi.mock("@/lib/prisma", () => ({
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
+  return ({
   prisma: {
+      charterVersion: { upsert: vi.fn() },
     event: { findFirst: eventFindFirst },
     eventGroupLink: { findFirst: groupLinkFindFirst },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) },
     shift: {
-      findMany: vi.fn().mockResolvedValue([
+      findMany: locked.top(vi.fn().mockResolvedValue([
         { id: "shift-1", roleName: "Bar", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, requiresApproval: false, registrations: [], date: new Date("2099-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00", reservedTags: [] },
-      ]),
+      ])),
     },
     volunteer: { findFirst: vi.fn().mockResolvedValue(null), update: vi.fn() },
     registration: { findMany: vi.fn().mockResolvedValue([]) },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
       $queryRaw: vi.fn(),
-      shift: { findMany: vi.fn().mockResolvedValue([]) },
+      shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
+      shiftDecline: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
       questionAnswer: { upsert: vi.fn(), createMany: vi.fn(), deleteMany: vi.fn() },
-      registration: {
+      registration: { findFirst: vi.fn().mockResolvedValue(null),
         findMany: vi.fn().mockResolvedValue([]),
         count: vi.fn().mockResolvedValue(0),
         aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
@@ -38,7 +48,8 @@ vi.mock("@/lib/prisma", () => ({
       },
     })),
   },
-}))
+})
+})
 vi.mock("@/lib/registration-capacity", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/registration-capacity")>()),
   lockShifts: vi.fn(),

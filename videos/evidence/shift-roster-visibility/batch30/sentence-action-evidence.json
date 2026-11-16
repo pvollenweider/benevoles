@@ -1,0 +1,230 @@
+{
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "method": "Measured sentence anchor plus actual final MP4 frame 700 ms after cue; chapter audiovisual review checks visible results.",
+  "rows": [
+    {
+      "chapter": "roster-setting",
+      "phrase": "Ouvrons un nouvel événement",
+      "measuredStartMs": 15159,
+      "cueMs": 15160,
+      "frameMs": 15860,
+      "file": "videos/output/shift-roster-visibility/review/anchors/01-roster-setting.png"
+    },
+    {
+      "chapter": "roster-setting",
+      "phrase": "Vous pouvez la décocher pour cet événement",
+      "measuredStartMs": 20163,
+      "cueMs": 20164,
+      "frameMs": 20864,
+      "file": "videos/output/shift-roster-visibility/review/anchors/02-roster-setting.png"
+    },
+    {
+      "chapter": "roster-setting",
+      "phrase": "Le rappel demande d’informer les bénévoles",
+      "measuredStartMs": 22611,
+      "cueMs": 22613,
+      "frameMs": 23313,
+      "file": "videos/output/shift-roster-visibility/review/anchors/03-roster-setting.png"
+    },
+    {
+      "chapter": "roster-publication",
+      "phrase": "Vous pouvez la désactiver puis la réactiver",
+      "measuredStartMs": 43054,
+      "cueMs": 43054,
+      "frameMs": 43754,
+      "file": "videos/output/shift-roster-visibility/review/anchors/04-roster-publication.png"
+    },
+    {
+      "chapter": "roster-publication",
+      "phrase": "Sur Vérifier avant publication",
+      "measuredStartMs": 46573,
+      "cueMs": 46910,
+      "frameMs": 47610,
+      "file": "videos/output/shift-roster-visibility/review/anchors/05-roster-publication.png"
+    },
+    {
+      "chapter": "roster-publication",
+      "phrase": "Publions l’événement",
+      "measuredStartMs": 58757,
+      "cueMs": 58757,
+      "frameMs": 59457,
+      "file": "videos/output/shift-roster-visibility/review/anchors/06-roster-publication.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Choisissez un créneau",
+      "measuredStartMs": 68481,
+      "cueMs": 68482,
+      "frameMs": 69182,
+      "file": "videos/output/shift-roster-visibility/review/anchors/07-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Renseignez votre prénom",
+      "measuredStartMs": 71110,
+      "cueMs": 71112,
+      "frameMs": 71812,
+      "file": "videos/output/shift-roster-visibility/review/anchors/08-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Acceptez la convention",
+      "measuredStartMs": 74789,
+      "cueMs": 74790,
+      "frameMs": 75490,
+      "file": "videos/output/shift-roster-visibility/review/anchors/09-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "La case de visibilité est facultative",
+      "measuredStartMs": 78758,
+      "cueMs": 78761,
+      "frameMs": 79461,
+      "file": "videos/output/shift-roster-visibility/review/anchors/10-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Un lien En savoir plus ouvre le guide",
+      "measuredStartMs": 90033,
+      "cueMs": 90035,
+      "frameMs": 90735,
+      "file": "videos/output/shift-roster-visibility/review/anchors/11-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Cochez cette case",
+      "measuredStartMs": 96031,
+      "cueMs": 96033,
+      "frameMs": 96733,
+      "file": "videos/output/shift-roster-visibility/review/anchors/12-roster-signup.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Ouvrez le véritable email de confirmation",
+      "measuredStartMs": 101611,
+      "cueMs": 101613,
+      "frameMs": 102313,
+      "file": "videos/output/shift-roster-visibility/review/anchors/13-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Suivez son lien personnel",
+      "measuredStartMs": 104384,
+      "cueMs": 104386,
+      "frameMs": 105086,
+      "file": "videos/output/shift-roster-visibility/review/anchors/14-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "La carte Qui est inscrit montre uniquement",
+      "measuredStartMs": 106085,
+      "cueMs": 106433,
+      "frameMs": 107133,
+      "file": "videos/output/shift-roster-visibility/review/anchors/15-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Activez Afficher mon nom aux autres bénévoles",
+      "measuredStartMs": 121061,
+      "cueMs": 121067,
+      "frameMs": 121767,
+      "file": "videos/output/shift-roster-visibility/review/anchors/16-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Pour consulter les autres créneaux",
+      "measuredStartMs": 126456,
+      "cueMs": 126457,
+      "frameMs": 127157,
+      "file": "videos/output/shift-roster-visibility/review/anchors/17-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-event",
+      "phrase": "Passons en Liste",
+      "measuredStartMs": 140872,
+      "cueMs": 140873,
+      "frameMs": 141573,
+      "file": "videos/output/shift-roster-visibility/review/anchors/18-roster-event.png"
+    },
+    {
+      "chapter": "roster-event",
+      "phrase": "Passons en Frise",
+      "measuredStartMs": 152310,
+      "cueMs": 152322,
+      "frameMs": 153022,
+      "file": "videos/output/shift-roster-visibility/review/anchors/19-roster-event.png"
+    },
+    {
+      "chapter": "roster-event",
+      "phrase": "Survolez un créneau",
+      "measuredStartMs": 155455,
+      "cueMs": 155458,
+      "frameMs": 156158,
+      "file": "videos/output/shift-roster-visibility/review/anchors/20-roster-event.png"
+    },
+    {
+      "chapter": "roster-event",
+      "phrase": "En Frise, Tab entre dans le planning du jour",
+      "measuredStartMs": 161952,
+      "cueMs": 161954,
+      "frameMs": 162654,
+      "file": "videos/output/shift-roster-visibility/review/anchors/21-roster-event.png"
+    },
+    {
+      "chapter": "roster-invite",
+      "phrase": "Activez Voir qui est inscrit",
+      "measuredStartMs": 175359,
+      "cueMs": 175360,
+      "frameMs": 176060,
+      "file": "videos/output/shift-roster-visibility/review/anchors/22-roster-invite.png"
+    },
+    {
+      "chapter": "roster-invite",
+      "phrase": "En Liste, Aline apparaît",
+      "measuredStartMs": 177220,
+      "cueMs": 177221,
+      "frameMs": 177921,
+      "file": "videos/output/shift-roster-visibility/review/anchors/23-roster-invite.png"
+    },
+    {
+      "chapter": "roster-existing",
+      "phrase": "Cliquez sur ce bouton pour élargir cet accord",
+      "measuredStartMs": 200853,
+      "cueMs": 200854,
+      "frameMs": 201554,
+      "file": "videos/output/shift-roster-visibility/review/anchors/24-roster-existing.png"
+    },
+    {
+      "chapter": "roster-existing",
+      "phrase": "Sur le lien d’invitation, Bruno devient visible",
+      "measuredStartMs": 203429,
+      "cueMs": 203429,
+      "frameMs": 204129,
+      "file": "videos/output/shift-roster-visibility/review/anchors/25-roster-existing.png"
+    },
+    {
+      "chapter": "roster-withdraw",
+      "phrase": "Désactivez Afficher mon nom aux autres bénévoles",
+      "measuredStartMs": 213353,
+      "cueMs": 213352,
+      "frameMs": 214052,
+      "file": "videos/output/shift-roster-visibility/review/anchors/26-roster-withdraw.png"
+    },
+    {
+      "chapter": "roster-withdraw",
+      "phrase": "Sur la page ouverte par l’invitation",
+      "measuredStartMs": 217765,
+      "cueMs": 217767,
+      "frameMs": 218467,
+      "file": "videos/output/shift-roster-visibility/review/anchors/27-roster-withdraw.png"
+    },
+    {
+      "chapter": "roster-withdraw",
+      "phrase": "Pour terminer, voici la même page sans identification",
+      "measuredStartMs": 225778,
+      "cueMs": 225780,
+      "frameMs": 226480,
+      "file": "videos/output/shift-roster-visibility/review/anchors/28-roster-withdraw.png"
+    }
+  ]
+}

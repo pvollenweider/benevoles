@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { crossesMidnight, fmtRange, toMin, toMinEnd } from "./gantt-utils"
+import { answerConditionMention } from "./role-answer"
 import { shiftsClash } from "./shift-overlap"
 import { unionLength } from "./interval-union"
 
@@ -25,6 +26,8 @@ export type RecapShiftInput = {
   /** « Sur validation » (#484). Optional: older callers and previews may not send it. */
   requiresApproval?: boolean
   minAge: number | null
+  /** Reserved to an answer (#962). */
+  reservedAnswer?: { questionLabel: string; answers: string[] } | null
   /** Its role may overlap another shift (#986). */
   overlapAllowed?: boolean
 }
@@ -40,6 +43,8 @@ export type RecapShift = {
   /** A request for the organizer to accept, not a place (#484). Never true with `waitlist`. */
   request: boolean
   minAge: number | null
+  /** « Réponse requise : Permis de conduire, Oui » (#962), or null. */
+  answerMention: string | null
   /** The shift's day and hours as given, for the overlap rule (src/lib/shift-overlap.ts). */
   date: string
   startTime: string
@@ -91,6 +96,7 @@ export function recapShifts(shifts: RecapShiftInput[]): RecapShift[] {
         waitlist: isWaitlistShift(s),
         request: !isWaitlistShift(s) && (s.requiresApproval ?? false),
         minAge: s.minAge,
+        answerMention: s.reservedAnswer ? answerConditionMention(s.reservedAnswer.questionLabel, s.reservedAnswer.answers) : null,
         date: s.date,
         startTime: s.startTime,
         endTime: s.endTime,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { adminInviteCheck, isExpiredInvitation, isReleasableInvitation, withInvitedAdmin, type AdminEmailHolder } from "@/lib/admin-invitation"
+import { adminInviteCheck, isExpiredInvitation, isReleasableInvitation, type AdminEmailHolder } from "@/lib/admin-invitation"
 
 // #1053: an expired, never-activated invitation no longer holds an admin address.
 const now = new Date("2026-10-17T12:00:00Z")
@@ -76,17 +76,5 @@ describe("adminInviteCheck", () => {
     expect(adminInviteCheck(row({ organizationId: null, isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }), "org-a", now)).toBe("unavailable")
     // The expired first account of another space stays: the operator can still send it a new link.
     expect(adminInviteCheck(row({ organizationHasActiveAdmin: false }), "org-a", now)).toBe("unavailable")
-  })
-})
-
-describe("withInvitedAdmin", () => {
-  it("puts the new row in place of the pending row with the same address, whatever its case", () => {
-    const list = [{ id: "a1", email: "alice@x.ch", isActive: true }, { id: "old", email: "Camille@Example.org", isActive: false }, { id: "a2", email: "bob@x.ch", isActive: true }]
-    expect(withInvitedAdmin(list, { id: "new", email: "camille@example.org", isActive: false }).map((a) => a.id)).toEqual(["a1", "new", "a2"])
-  })
-
-  it("appends a first invitation and never drops an active member", () => {
-    expect(withInvitedAdmin([{ id: "a1", email: "alice@x.ch", isActive: true }], { id: "new", email: "n@x.ch", isActive: false }).map((a) => a.id)).toEqual(["a1", "new"])
-    expect(withInvitedAdmin([{ id: "a1", email: "alice@x.ch", isActive: true }], { id: "new", email: "alice@x.ch", isActive: false }).map((a) => a.id)).toEqual(["a1", "new"])
   })
 })

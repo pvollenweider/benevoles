@@ -19,8 +19,9 @@
  */
 
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
-import { linkToken, registrationToken } from "../src/lib/token-vault"
+import { pgAdapter } from "../src/lib/prisma-adapter"
+import { encryptValue, linkToken, registrationToken } from "../src/lib/token-vault"
+import { resolveDay, type DayAnswerInput } from "../src/lib/event-availability"
 
 export const DEMO_EVENT_SLUG = "fete-du-village"
 export const DEMO_TOKENS = {
@@ -34,7 +35,7 @@ export const DEMO_TOKENS = {
   leader: "demo-leader-buvette-0001",
 } as const
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) })
+const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL!) })
 
 const DAY = 86_400_000
 const today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()))
@@ -81,6 +82,11 @@ async function main() {
   // Retries of recorder scenarios share one local browser IP. Production rate limits are correct,
   // but stale counters must not leak from one disposable take into the next one.
   await prisma.rateLimit.deleteMany()
+  // The beta videos (scripts/seed-video-beta.ts) open capabilities for their own organisation; the
+  // open list is platform-wide, so the demo starts without any (no « Fonctions bêta » card in
+  // Paramètres, no beta option on its events), as on a fresh database. Sectors, available to every
+  // organisation since #1311, stay off on the demo event, as on a fresh one.
+  await prisma.platformSetting.deleteMany({ where: { key: "beta.capabilities" } })
 
   const org = await prisma.organization.update({
     where: { id: "default" },
@@ -89,7 +95,17 @@ async function main() {
       publicTitle: "Bénévoles des Fêtes de Montvert",
       timeZone: "Europe/Zurich",
       volunteerCharter: "Je m'engage à venir à l'heure à mes créneaux, à prévenir si j'ai un empêchement et à suivre les consignes des responsables.",
+      betaOptInAt: null,
+      betaOptInById: null,
     },
+  })
+
+  // An old address, so « Paramètres → Adresse de votre espace » shows the redirect history.
+  await prisma.orgSlugHistory.deleteMany({ where: { organizationId: org.id, slug: { not: "fetes-montvert" } } })
+  await prisma.orgSlugHistory.upsert({
+    where: { slug: "fetes-montvert" },
+    update: { organizationId: org.id, createdAt: at(-90, 10) },
+    create: { organizationId: org.id, slug: "fetes-montvert", createdAt: at(-90, 10) },
   })
 
   // The organizer signed in on the admin screenshots.
@@ -130,6 +146,11 @@ async function main() {
       publicStatus: "published",
       startDate: SAT,
       endDate: SUN,
+      // Dated availability (#1146, beta): the event asks its members date by date.
+      availabilityEnabled: true,
+      availabilityAdoptedAt: at(-15, 9),
+      availabilityTimeZone: "Europe/Zurich",
+      availabilityDeadline: at(1, 18),
       requirePhone: true,
       accentColorKey: "emerald",
       publicInstructions: "Merci de votre aide ! Présentez-vous au stand d'accueil 15 minutes avant votre créneau : on vous remettra votre t-shirt.",
@@ -142,23 +163,23 @@ async function main() {
     },
   })
 
-  type ShiftSeed = { roleName: string; date: Date; startTime: string; endTime: string; capacity: number; colorKey: string } & Partial<{
+  type ShiftSeed = { roleName: string; date: Date; startTime: string; endTime: string; capacity: number } & Partial<{
     label: string; waitlistEnabled: boolean; requiresApproval: boolean; minAge: number; reservedTags: string[]; maxPerVolunteer: number
     locationDetails: string; instructions: string; contactName: string; contactPhone: string; displayOrder: number
   }>
   const seeds: ShiftSeed[] = [
-    { roleName: "Montage", date: SAT, startTime: "07:00", endTime: "09:00", capacity: 6, colorKey: "slate", locationDetails: "Hangar communal", instructions: "Chaussures fermées" },
-    { roleName: "Accueil", date: SAT, startTime: "09:00", endTime: "12:00", capacity: 3, colorKey: "sky", locationDetails: "Stand d'accueil, entrée de la place" },
-    { roleName: "Accueil", date: SAT, startTime: "12:00", endTime: "15:00", capacity: 3, colorKey: "sky", locationDetails: "Stand d'accueil, entrée de la place" },
-    { roleName: "Accueil", date: SAT, startTime: "15:00", endTime: "18:00", capacity: 3, colorKey: "sky", locationDetails: "Stand d'accueil, entrée de la place" },
-    { roleName: "Buvette", date: SAT, startTime: "10:00", endTime: "14:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2, contactName: "Élodie", contactPhone: "079 000 00 00" },
-    { roleName: "Buvette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2 },
-    { roleName: "Buvette", date: SAT, startTime: "18:00", endTime: "22:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2, minAge: 18 },
-    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "08:00", endTime: "12:00", capacity: 2, colorKey: "violet", requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
-    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 2, colorKey: "violet", requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
-    { roleName: "Sécurité", date: SAT, startTime: "20:00", endTime: "02:00", capacity: 3, colorKey: "rose", reservedTags: ["sécurité"] },
-    { roleName: "Buvette", date: SUN, startTime: "10:00", endTime: "14:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2 },
-    { roleName: "Démontage", date: SUN, startTime: "15:00", endTime: "18:00", capacity: 6, colorKey: "slate" },
+    { roleName: "Montage", date: SAT, startTime: "07:00", endTime: "09:00", capacity: 6, locationDetails: "Hangar communal", instructions: "Chaussures fermées" },
+    { roleName: "Accueil", date: SAT, startTime: "09:00", endTime: "12:00", capacity: 3, locationDetails: "Stand d'accueil, entrée de la place" },
+    { roleName: "Accueil", date: SAT, startTime: "12:00", endTime: "15:00", capacity: 3, locationDetails: "Stand d'accueil, entrée de la place" },
+    { roleName: "Accueil", date: SAT, startTime: "15:00", endTime: "18:00", capacity: 3, locationDetails: "Stand d'accueil, entrée de la place" },
+    { roleName: "Buvette", date: SAT, startTime: "10:00", endTime: "14:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2, contactName: "Élodie", contactPhone: "079 000 00 00" },
+    { roleName: "Buvette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2 },
+    { roleName: "Buvette", date: SAT, startTime: "18:00", endTime: "22:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2, minAge: 18 },
+    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "08:00", endTime: "12:00", capacity: 2, requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
+    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 2, requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
+    { roleName: "Sécurité", date: SAT, startTime: "20:00", endTime: "02:00", capacity: 3, reservedTags: ["sécurité"] },
+    { roleName: "Buvette", date: SUN, startTime: "10:00", endTime: "14:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2 },
+    { roleName: "Démontage", date: SUN, startTime: "15:00", endTime: "18:00", capacity: 6 },
   ]
   const roleOrder = ["Montage", "Accueil", "Buvette", "Navette", "Sécurité", "Démontage"]
   const shifts = []
@@ -182,6 +203,32 @@ async function main() {
   }
   const [camille, julien, lea, noah, emma, lucas, chloe, hugo, manon, louis, sarah, nathan, ines, theo, alice, gabriel, zoe, adam, lina, raphael, anna, tom, eva, marc] = people
 
+  // Two records of the same person (#601): same name, phone and birth date, and an address typed
+  // without one letter. The « Doublons possibles » page and the merge preview show them.
+  const [sofiaKept] = await Promise.all([
+    prisma.volunteer.create({
+      data: {
+        organizationId: org.id, firstName: "Sofia", lastName: "Martin",
+        email: "sofia.martin@example.org", phone: "079 555 90 10", birthDate: new Date("1994-03-18"),
+        tags: ["habitué"], availabilityPeriods: ["après-midi"],
+      },
+    }),
+    prisma.volunteer.create({
+      data: {
+        organizationId: org.id, firstName: "Sofia", lastName: "Martin",
+        email: "sofia.martn@example.org", phone: "+41 79 555 90 10", birthDate: new Date("1994-03-18"),
+        notes: "Fiche créée à la main après une inscription téléphonique.",
+      },
+    }),
+  ])
+  // An inactive record without any registration (#667): « Supprimer » is offered on its page.
+  await prisma.volunteer.create({
+    data: {
+      organizationId: org.id, firstName: "Antoine", lastName: "Bovard",
+      email: "antoine.bovard@example.org", phone: "078 555 80 20", active: false, tags: ["ancien"],
+      notes: "N'a plus participé depuis 2023.",
+    },
+  })
   let n = 0
   const register = (shift: { id: string }, v: { id: string }, extra: Record<string, unknown> = {}) =>
     prisma.registration.create({
@@ -226,6 +273,10 @@ async function main() {
   // Manual add, with a note.
   await register(accueil1, ines, { source: "admin_manual", comment: "Inscrite par téléphone" })
 
+  // « Je ne peux pas » for one precise shift (#1303): the reason the guide's « Chercher des
+  // bénévoles » capture shows, for a person who is not registered on that shift.
+  await prisma.shiftDecline.create({ data: { shiftId: montage.id, volunteerId: lea.id, declinedAt: at(-4, 9) } })
+
   // Share links per group (#947): the village clubs each recruit for their roles, with fixed codes
   // (demo only) so the guide's captures can open them. Some sign-ups came through them.
   const pompiers = await prisma.eventGroupLink.create({
@@ -236,6 +287,76 @@ async function main() {
   })
   await prisma.registration.updateMany({ where: { shiftId: { in: [montage.id, securite.id] } }, data: { groupLinkId: pompiers.id } })
   await prisma.registration.updateMany({ where: { shiftId: buvette1.id, volunteerId: { in: [noah.id, chloe.id] } }, data: { groupLinkId: fanfare.id } })
+
+  // Dated availability (#1146, beta): answers in every state of the overview, and useful groups
+  // in « Affecter selon les disponibilités » (complete, partial, no answer, unavailable).
+  const availabilityAnswers: {
+    v: { id: string }; token: string; answeredBy: "volunteer" | "admin"; answeredAt: Date | null
+    days: DayAnswerInput[]
+  }[] = [
+    { v: camille, token: "camille", answeredBy: "volunteer", answeredAt: at(-2, 9), days: [
+      { date: iso(SAT), ranges: [{ start: "08:00", end: "18:00" }] },
+      { date: iso(SUN), ranges: [{ start: "10:00", end: "16:00" }] },
+    ] },
+    { v: lea, token: "lea", answeredBy: "volunteer", answeredAt: at(-2, 14), days: [
+      { date: iso(SAT), ranges: [{ start: "13:00", end: "18:00" }] },
+    ] },
+    { v: emma, token: "emma", answeredBy: "volunteer", answeredAt: at(-1, 19), days: [
+      { date: iso(SAT), ranges: [{ start: "08:00", end: "12:00" }] },
+      { date: iso(SUN), ranges: [{ start: "09:00", end: "13:00" }] },
+    ] },
+    { v: noah, token: "noah", answeredBy: "volunteer", answeredAt: at(-1, 20), days: [
+      { date: iso(SAT), ranges: [{ start: "10:00", end: "14:00" }, { start: "18:00", end: "22:00" }] },
+      { date: iso(SUN), ranges: [{ start: "14:00", end: "18:00" }] },
+    ] },
+    { v: julien, token: "julien", answeredBy: "volunteer", answeredAt: at(-3, 8), days: [
+      { date: iso(SAT), ranges: [] },
+      { date: iso(SUN), ranges: [] },
+    ] },
+    { v: hugo, token: "hugo", answeredBy: "volunteer", answeredAt: null, days: [] },
+    { v: manon, token: "manon", answeredBy: "volunteer", answeredAt: at(-1, 12), days: [
+      { date: iso(SAT), ranges: [{ start: "09:00", end: "18:00" }] },
+      { date: iso(SUN), ranges: [{ start: "09:00", end: "18:00" }] },
+    ] },
+    { v: ines, token: "ines", answeredBy: "volunteer", answeredAt: at(-2, 21), days: [
+      { date: iso(SUN), ranges: [{ start: "17:00", end: "22:00" }] },
+    ] },
+    { v: lucas, token: "lucas", answeredBy: "volunteer", answeredAt: at(-1, 18), days: [
+      { date: iso(SAT), ranges: [{ start: "07:00", end: "12:00" }] },
+      { date: iso(SUN), ranges: [{ start: "14:00", end: "18:00" }] },
+    ] },
+    { v: sarah, token: "sarah", answeredBy: "volunteer", answeredAt: null, days: [] },
+    { v: zoe, token: "zoe", answeredBy: "volunteer", answeredAt: at(-2, 11), days: [
+      { date: iso(SAT), ranges: [{ start: "14:00", end: "18:00" }] },
+    ] },
+  ]
+  for (const answer of availabilityAnswers) {
+    const days = answer.days.map((day) => {
+      const resolved = resolveDay(day, "Europe/Zurich")
+      if (!resolved.ok) throw new Error(resolved.error)
+      return resolved.value
+    })
+    await prisma.availabilityRequest.create({
+      data: {
+        eventId: event.id, volunteerId: answer.v.id, revision: 1,
+        answeredAt: answer.answeredAt, answeredBy: answer.answeredAt ? answer.answeredBy : null,
+        sentAt: at(-6, 9),
+        ...linkToken.data(`demo-availability-${answer.token}-0001`),
+        ...(days.length > 0 ? {
+          days: {
+            create: days.map((day) => ({
+              eventId: event.id, date: new Date(`${day.date}T00:00:00Z`),
+              ranges: {
+                create: day.ranges.map((r) => ({
+                  eventId: event.id, startTime: r.startTime, endTime: r.endTime, startsAt: r.startsAt, endsAt: r.endsAt,
+                })),
+              },
+            })),
+          },
+        } : {}),
+      },
+    })
+  }
 
   await prisma.sectorLeader.create({
     data: { eventId: event.id, roleName: "Buvette", name: "Élodie Rochat", email: "elodie.rochat@example.org", ...linkToken.data(DEMO_TOKENS.leader) },
@@ -255,7 +376,7 @@ async function main() {
 
   await prisma.eventPage.createMany({
     data: [
-      { eventId: event.id, slug: "acces", title: "Accès et parking", displayOrder: 0, content: "## En transports publics\n\nBus 12, arrêt « Montvert, Collège ».\n\n## En voiture\n\nParking du terrain de foot, à 5 minutes à pied. La navette circule le samedi matin et l'après-midi." },
+      { eventId: event.id, slug: "acces", title: "Accès et parking", displayOrder: 0, roleNames: ["Navette"], content: "## En transports publics\n\nBus 12, arrêt « Montvert, Collège ».\n\n## En voiture\n\nParking du terrain de foot, à 5 minutes à pied. La navette circule le samedi matin et l'après-midi." },
       { eventId: event.id, slug: "faq", title: "Questions fréquentes", displayOrder: 1, content: "**Suis-je assuré·e ?** Oui, par l'assurance de l'association.\n\n**Faut-il une tenue ?** Un t-shirt de la fête vous est remis à l'accueil." },
     ],
   })
@@ -269,6 +390,7 @@ async function main() {
     await prisma.questionAnswer.create({ data: { questionId: tshirt.id, eventId: event.id, volunteerId: v.id, values: [size] } })
   }
   await prisma.questionAnswer.create({ data: { questionId: drivingLicense.id, eventId: event.id, volunteerId: lucas.id, values: ["Permis B depuis 2021"] } })
+  await prisma.questionAnswer.create({ data: { questionId: tshirt.id, eventId: event.id, volunteerId: sofiaKept.id, values: ["S"] } })
 
   // Invitations: some used, some not yet answered.
   for (const [i, v] of [camille, julien, lea, emma, manon, raphael, anna, tom, eva].entries()) {
@@ -296,6 +418,42 @@ async function main() {
       subject: "Rendez-vous pour ton créneau", message: "Bonjour,\n\nRendez-vous au stand d'accueil 15 minutes avant ton créneau.",
       audienceLabel: "Tous les inscrits", recipientCount: 22, sentCount: 22, createdAt: day(-2),
     },
+  })
+
+  // Email delivery page (#382): one recent row per state, with a real recipient and kind, so the
+  // guide can show « Envoyé », « En attente d'envoi », « Nouvel essai prévu », « Échec définitif »
+  // and « Annulé » without describing an empty screen.
+  const outboxPayload = (kind: string, name: string, address: string) => {
+    const payload = { kind, recipient: { name, email: address }, data: {} }
+    const enc = encryptValue(JSON.stringify(payload))
+    return enc ? { enc } : payload
+  }
+  await prisma.notificationOutbox.deleteMany({ where: { organizationId: org.id } })
+  await prisma.notificationOutbox.createMany({
+    data: [
+      {
+        organizationId: org.id, status: "sent", createdAt: at(-1, 9), nextAttemptAt: at(-1, 9), sentAt: at(-1, 9),
+        payload: outboxPayload("registration_confirmation", "Camille Rochat", "camille.rochat@example.org"),
+      },
+      {
+        organizationId: org.id, status: "pending", createdAt: new Date(), nextAttemptAt: new Date(),
+        payload: outboxPayload("member_invite", "Léa Morand", "lea.morand@example.org"),
+      },
+      {
+        organizationId: org.id, status: "pending", attempts: 2, createdAt: at(-1, 10),
+        nextAttemptAt: new Date(Date.now() + 10 * 60_000), lastError: "smtp:failed_temporary:timeout:-:-",
+        payload: outboxPayload("reminder_j1", "Julien Favre", "julien.favre@example.org"),
+      },
+      {
+        organizationId: org.id, status: "failed", attempts: 6, createdAt: at(-2, 15), nextAttemptAt: at(-2, 15),
+        lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1",
+        payload: outboxPayload("registration_confirmation", "Marc Duc", "marc.duc@example.org"),
+      },
+      {
+        organizationId: org.id, status: "cancelled", createdAt: at(-3, 11), nextAttemptAt: at(-3, 11), lastError: "member_deleted",
+        payload: outboxPayload("targeted_message", "Anna Bühler", "anna.buhler@example.org"),
+      },
+    ],
   })
 
   // A realistic event history for the admin demo video. The application normally writes these

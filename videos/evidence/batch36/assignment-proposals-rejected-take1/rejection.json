@@ -1,0 +1,10 @@
+{
+  "status": "NOT RETAINED",
+  "reason": "Noah6 visible only at the end of ap-targets; add650ms hold. Emma explanation was visible in actual ap-load85 frame; center the line for clarity.",
+  "videoSha256": "32d8145bb0ee7b43304d22d24f2b4df3fee3974cf9db3446616709397f75d039",
+  "sourceOnlyFixes": [
+    "650ms hold after six",
+    "center Emma explanation"
+  ],
+  "narratedTake": 1
+}

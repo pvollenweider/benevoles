@@ -1,0 +1,56 @@
+[
+  {
+    "url": "https://medias.benevol.app/beta-access/beta-access.mp4",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: video/mp4\ndate: Thu, 29 Oct 2026 07:35:15 GMT\netag: \"6ae2e554-5649b1\"\nlast-modified: Thu, 29 Oct 2026 06:19:00 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 5654961\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/beta-access/beta-access.vtt",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: text/vtt\ndate: Thu, 29 Oct 2026 07:35:15 GMT\netag: \"6ae2e555-aff\"\nlast-modified: Thu, 29 Oct 2026 06:19:01 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 2815\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/beta-access/beta-access.jpg",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: image/jpeg\ndate: Thu, 29 Oct 2026 07:35:15 GMT\netag: \"6ae2e566-15585\"\nlast-modified: Thu, 29 Oct 2026 06:19:18 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 87429\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/sectors/sectors.mp4",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: video/mp4\ndate: Thu, 29 Oct 2026 07:35:15 GMT\netag: \"6ae2e805-c20cd3\"\nlast-modified: Thu, 29 Oct 2026 06:30:29 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 12717267\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/sectors/sectors.vtt",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: text/vtt\ndate: Thu, 29 Oct 2026 07:35:15 GMT\netag: \"6ae2e809-1315\"\nlast-modified: Thu, 29 Oct 2026 06:30:33 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 4885\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/sectors/sectors.jpg",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: image/jpeg\ndate: Thu, 29 Oct 2026 07:35:15 GMT\netag: \"6ae2e817-14687\"\nlast-modified: Thu, 29 Oct 2026 06:30:47 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 83591\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/sector-leaders/sector-leaders.mp4",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: video/mp4\ndate: Thu, 29 Oct 2026 07:35:15 GMT\netag: \"6ae2ed2e-b01921\"\nlast-modified: Thu, 29 Oct 2026 06:52:30 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 11540769\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/sector-leaders/sector-leaders.vtt",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: text/vtt\ndate: Thu, 29 Oct 2026 07:35:16 GMT\netag: \"6ae2ed2f-1bf9\"\nlast-modified: Thu, 29 Oct 2026 06:52:31 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 7161\n\n",
+    "error": ""
+  },
+  {
+    "url": "https://medias.benevol.app/sector-leaders/sector-leaders.jpg",
+    "exitCode": 0,
+    "headers": "HTTP/2 200 \naccept-ranges: bytes\naccess-control-allow-origin: https://www.benevol.app\ncache-control: public, max-age=86400\ncontent-type: image/jpeg\ndate: Thu, 29 Oct 2026 07:35:16 GMT\netag: \"6ae2ed3a-d5cd\"\nlast-modified: Thu, 29 Oct 2026 06:52:42 GMT\nserver: nginx/1.27.5\nvary: Origin\nx-content-type-options: nosniff\ncontent-length: 54733\n\n",
+    "error": ""
+  }
+]

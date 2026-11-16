@@ -1,0 +1,60 @@
+---
+roles: [admin]
+group: demarrer
+order: 7
+summary: Demander un espace en ligne, confirmer son adresse, puis tout préparer pendant la courte vérification.
+related: [creer-son-premier-evenement, se-connecter, premiers-pas]
+legacy: []
+aliases: []
+---
+
+# Créer l'espace de votre association
+
+L'espace de votre association se crée en ligne, depuis la page [Demander un espace](/inscription). Il est prêt dès que vous avez confirmé votre adresse : vous pouvez préparer votre événement tout de suite. La publication et les emails à vos bénévoles suivent une courte vérification.
+
+## Faire la demande
+
+Sur la page [Demander un espace](/inscription), remplissez les quatre champs obligatoires :
+
+- **Nom de l'association** : il devient le nom de votre espace et donne son adresse (par exemple `fete-du-village.benevol.app`), que vous pourrez changer dans les [paramètres de l'organisation](personnaliser-l-organisation.md). Un nom seul, sans lien ni adresse.
+- **Votre association et votre besoin** : en quelques phrases, ce que fait votre association et pour quel événement vous cherchez des bénévoles, entre 20 et 1000 caractères. Nous le lisons avant de valider votre espace. Vous pouvez y indiquer le site de l'association.
+- **Votre nom**, sans lien ni adresse.
+- **Votre adresse email** : elle reçoit le lien de confirmation et devient votre identifiant de connexion.
+
+Une dernière question est facultative : **Comment avez-vous connu benevol.app ?** Choisissez une réponse dans la liste (moteur de recherche, une autre association ou un bénévole, réseau social, article ou blog, salon ou événement, autre), ou laissez « Choisir une réponse ». Avec « Autre », un champ permet de préciser en quelques mots (100 caractères au plus). Sans réponse, rien ne change pour votre demande. La réponse n'est visible que de l'équipe de benevol.app, qui s'en sert pour savoir comment les associations découvrent le service.
+
+![Formulaire « Demander un espace » : les quatre champs obligatoires « Nom de l'association », « Votre association et votre besoin » (entre 20 et 1000 caractères), « Votre nom » et « Votre adresse email », la liste facultative « Comment avez-vous connu benevol.app ? », puis le bouton « Créer mon espace »](/doc-img/public-signup.png)
+
+Puis cliquez sur **Créer mon espace**. Le message « Vérifiez votre boîte email » s'affiche, quoi qu'il arrive : pour protéger les comptes existants, la page ne dit jamais si une adresse est déjà connue.
+
+## Confirmer votre adresse
+
+Vous recevez l'email « Confirmez votre adresse pour créer votre espace benevol.app ». Ouvrez son lien, **valable 24 heures** : il mène à une page avec le bouton **Confirmer et créer mon espace**. Ouvrir le lien ne crée rien ; seul le bouton crée l'espace.
+
+Votre adresse devient aussi l'adresse de réponse de l'espace : quand un bénévole répond à un de ses emails, sa réponse vous arrive. Vous pouvez la changer dans les [paramètres des emails](parametres-et-suivi-des-emails.md).
+
+Vous arrivez ensuite directement sur la page où choisir votre mot de passe. Le même lien vous parvient aussi par email, « Bienvenue sur benevol.app : choisissez votre mot de passe », valable 7 jours, si vous fermez la page avant. Cet email liste aussi les pages du guide pour bien démarrer. Les règles du mot de passe sont celles de [Se connecter](se-connecter.md).
+
+## Pendant la vérification
+
+Votre espace est **en attente de validation**. Un bandeau le rappelle en haut de chaque page de l'administration. En attendant, vous pouvez tout préparer : événements, postes, créneaux, membres, pages, logo et aperçu. Trois choses attendent la validation :
+
+- **la publication** de vos événements : la page publique de votre espace ne répond pas encore. Le bouton **Publier** d'un événement devient **Demander la publication** : il nous prévient que votre événement est prêt ;
+- **les emails à d'autres personnes** que vous (invitations, messages et rappels aux bénévoles, emails de test vers une autre adresse). Les emails à l'adresse confirmée lors de l'inscription partent normalement ;
+- **l'invitation d'autres organisateurs** : elle sera possible une fois l'espace validé.
+
+Dès que votre espace est validé, chacun de ses organisateurs reçoit l'email « Votre espace benevol.app est activé », et la publication devient possible. Pour la suite, voir [Créer son premier événement](creer-son-premier-evenement.md).
+
+Si la demande ne correspond pas à une association ou à un événement bénévole, l'espace peut être refusé : il est alors supprimé avec ses comptes.
+
+## En cas de souci
+
+**Je n'ai pas reçu l'email de confirmation.** Regardez dans les indésirables. Si l'adresse a déjà un compte sur benevol.app, aucun email ne part : connectez-vous avec ce compte, ou utilisez « Mot de passe oublié » sur la page de connexion. Une invitation d'organisateur reçue d'une autre organisation, dont le lien a expiré depuis plus d'une heure sans être utilisé, ne compte pas comme un compte.
+
+**Je n'ai jamais choisi de mot de passe.** L'espace est créé dès la confirmation, mais sans mot de passe choisi, il est effacé avec son compte 30 jours après : refaites alors une demande.
+
+**Le lien dit « Lien expiré ».** Il était valable 24 heures : refaites une demande depuis la page d'inscription.
+
+**J'ai fermé la page avant de choisir mon mot de passe.** Ouvrez l'email « Bienvenue sur benevol.app : choisissez votre mot de passe » : son lien est valable 7 jours. « Mot de passe oublié » ne fonctionne qu'une fois le mot de passe choisi. Lien expiré ou email introuvable : écrivez à contact@benevol.app, un nouveau lien vous sera envoyé.
+
+**Les inscriptions sont fermées.** La page le dit et donne l'adresse contact@benevol.app pour demander un espace.

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { groupDaysByMonth, isLongEvent, pastShiftLabel, usesMonthView, visibleDays } from "../long-event"
+import { groupDaysByMonth, isLongEvent, usesMonthView, visibleDays } from "../long-event"
 
 describe("long-running events (#866)", () => {
   it("tells a season from a weekend", () => {
@@ -22,12 +22,5 @@ describe("long-running events (#866)", () => {
     ])
     expect(usesMonthView(["a", "b", "c", "d", "e", "f", "g"])).toBe(false)
     expect(usesMonthView(["a", "b", "c", "d", "e", "f", "g", "h"])).toBe(true)
-  })
-
-  it("refuses a past day of a long event, never of a short one", () => {
-    const season = { startDate: "2026-09-01", endDate: "2027-06-30" }
-    expect(pastShiftLabel(season, [{ date: "2026-09-09", label: "Accueil" }], "2026-09-10")).toBe("Accueil")
-    expect(pastShiftLabel(season, [{ date: new Date("2026-09-10"), label: "Accueil" }], "2026-09-10")).toBeNull()
-    expect(pastShiftLabel({ startDate: "2026-07-04", endDate: "2026-07-05" }, [{ date: "2026-07-04", label: "Bar" }], "2026-07-06")).toBeNull()
   })
 })

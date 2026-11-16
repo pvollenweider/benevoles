@@ -5,7 +5,7 @@ import { describe, it, expect, afterEach, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/doc/admin" }))
+vi.mock("next/navigation", () => ({ usePathname: () => "/doc/admin", useRouter: () => ({ push: vi.fn() }) }))
 // The theme toggle reads matchMedia, absent from jsdom; it plays no part in the frame's width.
 vi.mock("@/app/doc/DocThemeToggle", () => ({ default: () => null }))
 
@@ -66,7 +66,7 @@ describe("site container (one width for every public page)", () => {
   })
 
   it("frames a guide without a side menu (/doc, /doc/admin) like the features page, text capped at 65ch and centred", () => {
-    render(<ContentShell layout="doc"><DocFrame><h1>Guide administrateur</h1></DocFrame></ContentShell>)
+    render(<ContentShell layout="doc"><DocFrame><h1>Guide organisateur</h1></DocFrame></ContentShell>)
     const { header, footerWrapper } = frameParts()
     expectSiteContainer(header)
     expectSiteContainer(screen.getByRole("main").parentElement)
@@ -109,7 +109,7 @@ describe("site container (one width for every public page)", () => {
     expectSiteContainer(screen.getByRole("main"))
     expectSiteContainer(footerWrapper)
     const nav = screen.getByRole("navigation", { name: "Présentation, guides et blog" })
-    for (const [name, href] of [["Fonctionnalités", "/fonctionnalites"], ["Guide administrateur", "/doc/admin"], ["Guide bénévole", "/doc/benevole"], ["Blog", "/blog"]]) {
+    for (const [name, href] of [["Fonctionnalités", "/fonctionnalites"], ["Guide organisateur", "/doc/admin"], ["Guide bénévole", "/doc/benevole"], ["Blog", "/blog"]]) {
       expect(within(nav).getByRole("link", { name })).toHaveAttribute("href", href)
     }
   })
