@@ -184,6 +184,17 @@ En local : `node scripts/check-migrations.mjs origin/main`.
 
 Toutes les routes répondent en erreur avec `{ error: string, details?: … }` : `error` est un message en français affichable tel quel, `details` porte des données structurées si utile. Pour un échec de validation zod, utiliser `validationError(parsed.error)` (`src/lib/api-error.ts`), jamais `{ error: parsed.error.flatten() }`.
 
+## Paramètres et limites par organisation
+
+Ces règles gardent possible, plus tard, un droit ou une limite propre à une organisation, sans rien construire d'avance (#653).
+
+- Un paramètre d'organisation est une colonne de `Organization` (ou l'une de ses colonnes JSON, comme `notificationSettings`). Un interrupteur de plateforme va dans `PlatformSetting`. Une variable d'environnement seule ne suffit pas pour un réglage que l'opérateur doit pouvoir changer sans redéployer.
+- Une limite propre à une organisation est une constante nommée dans un module de `src/lib`, jamais un nombre écrit dans une route ou un composant. Elle est vérifiée côté serveur ; l'interface peut la rappeler, pas la porter seule.
+- Une limite de débit par organisation utilise une clé `org:<id>:…`.
+- Une même limite n'a qu'une définition : deux routes qui l'appliquent importent la même constante.
+- Tous les emails passent par `sendNotification` (`src/lib/notifications/index.ts`), seul appelant des limites d'envoi.
+- L'ouverture d'une option à une organisation passe par `canAdoptBeta` (`src/lib/beta-access.ts`) : elle ne ferme que les nouvelles adoptions, jamais ce qu'un événement utilise déjà.
+
 ## Tests
 
 Toute correction de bug a son test Vitest de régression, toute fonctionnalité plusieurs cas. La logique testable va dans une fonction pure d'un module `src/lib/*.ts` plutôt que de rester dans une route ou un composant (voir `gantt-utils.ts`, `pdf-export-gantt.ts`, `sector-leaders.ts`). Les tests de composants sont dans `src/components/__tests__/*.react.test.tsx`, avec `@vitest-environment jsdom` en tête de fichier.
