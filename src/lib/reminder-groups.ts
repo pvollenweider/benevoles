@@ -51,6 +51,24 @@ export function shiftStartInstant(shift: GroupableShift, timeZone: string): Date
   return localDateTimeToUtc(shift.date, shift.startTime, timeZone)
 }
 
+const DAY_MS = 86_400_000
+
+/**
+ * The stored shift dates worth loading for a window whose first shift starts between `lower` and
+ * `upper`. A shift's `date` is its calendar day at midnight UTC, and its real start is that day's
+ * local time in the organisation's zone, so the start can sit up to 14 hours either side of the
+ * stored day plus its hour. Two days around the window cover every zone and every start time; the
+ * exact selection stays with `remindersDue`. A group is one calendar day, so the bound never
+ * splits one.
+ *
+ * Without it the job loaded every registration that never got this reminder, past events
+ * included: the list grew with the service until the hourly run exhausted the server's memory.
+ */
+export function reminderCandidateDates(lower: Date, upper: Date): { gte: Date; lte: Date } {
+  const dayOf = (d: Date) => Date.parse(`${d.toISOString().slice(0, 10)}T00:00:00Z`)
+  return { gte: new Date(dayOf(lower) - 2 * DAY_MS), lte: new Date(dayOf(upper) + 2 * DAY_MS) }
+}
+
 const KEY_SEP = "\u0000"
 
 /**
