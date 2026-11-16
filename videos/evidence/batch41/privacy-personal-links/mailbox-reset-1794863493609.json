@@ -1,0 +1,14 @@
+{
+  "slug": "privacy-personal-links",
+  "pattern": "^video\\.privacy\\.(?:[ab]\\.(?:member\\.[0-4]|new|owner|leader)|unknown)@example\\.org$",
+  "deletedIds": [
+    "68CY4aUw19UsM8jnCt086f",
+    "5jCbXcCFGfZ6OwSApNoQ6d",
+    "1Mr0TICBxpSPYIYspN4kt1",
+    "6cAdyLMJ2OVuJUh7QPhGQI",
+    "5nQYoI6ko2WeOdrUwd3mnV",
+    "7GBdwREfrzZutyop4Lzh7j",
+    "0wVc7TEaJM782yd6PLsA1G"
+  ],
+  "unrelatedMessagesPreserved": true
+}

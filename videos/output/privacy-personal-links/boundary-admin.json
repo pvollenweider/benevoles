@@ -1,0 +1,12 @@
+{
+  "anchor": "L'organisateur travaille dans son administration, avec sa propre connexion. Dans les",
+  "windowStart": 164.732,
+  "result": {
+    "found": true,
+    "startSeconds": 30.5,
+    "wordsHeard": "L'organisateur travaille dans son administration avec sa propre connexion. Dans les"
+  },
+  "onset": 195.232,
+  "proposedCut": 194.73175,
+  "note": "Proposal only; recut then independently audit before capture"
+}
