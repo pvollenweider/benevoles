@@ -52,6 +52,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Un email abandonné parce que le domaine du destinataire reste introuvable (450 4.1.2) n'est plus signalé comme une erreur de l'application : c'est une adresse mal saisie, déjà montrée à l'organisateur et comptée par la page Santé du service. Sentry ignore aussi l'erreur « Invalid call to runtime.sendMessage(). Tab not found. », levée par une extension de navigateur. <!-- interne -->
 - Les tests unitaires vérifient aussi les phrases annoncées par un lecteur d'écran virtuel (une approximation, ni VoiceOver ni NVDA) (#739) ; la limite de créneaux d'un ajout manuel n'a plus qu'une définition, et `CONTRIBUTING.md` décrit les paramètres et limites par organisation et les trois axes de labels des issues (#653). <!-- interne -->
 - Dépendances : le webhook Gandi de cert-manager passe à OpenTelemetry 1.47.0 (deux alertes de sécurité) et se construit avec Go 1.26, image déployée le 14 novembre 2026 ; `basic-ftp`, dépendance indirecte de Lighthouse CI, passe à la 6.2.x (une alerte de sécurité) ; le build webpack des vidéos garde `isomorphic-dompurify` hors du bundle. <!-- interne -->
+- La route de l'index de recherche de la documentation n'exporte plus que son gestionnaire : le build webpack (celui des vidéos) refusait l'export de `buildDocIndexJson`, déplacé dans `src/lib/doc-index-json.ts` ; un test vérifie les exports de chaque fichier de route. <!-- interne -->
 
 ## [2.7.0] — 2026-11-10
 

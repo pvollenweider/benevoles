@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import MiniSearch from "minisearch"
 import * as route from "@/app/api/public/doc-index/route"
+import { buildDocIndexJson } from "@/lib/doc-index-json"
 import { DOC_INDEX_OPTIONS, DOC_SEARCH_OPTIONS, docSearchDocuments, docSearchQuery, type DocSearchDocument } from "@/lib/doc-search-index"
 import { loadDocUnits } from "@/lib/doc-units"
 
@@ -17,19 +18,19 @@ describe("GET /api/public/doc-index", () => {
 
   it("returns the serialised index of every unit", async () => {
     const response = route.GET()
-    expect(await response.text()).toBe(route.buildDocIndexJson())
-    const parsed = JSON.parse(route.buildDocIndexJson()) as { documentCount: number }
+    expect(await response.text()).toBe(buildDocIndexJson())
+    const parsed = JSON.parse(buildDocIndexJson()) as { documentCount: number }
     expect(parsed.documentCount).toBe(loadDocUnits().length)
   })
 
   it("loads with the shared options and finds a unit by a word of its body", () => {
-    const index = MiniSearch.loadJSON<DocSearchDocument>(route.buildDocIndexJson(), DOC_INDEX_OPTIONS)
+    const index = MiniSearch.loadJSON<DocSearchDocument>(buildDocIndexJson(), DOC_INDEX_OPTIONS)
     const results = index.search(docSearchQuery("rappel")!, DOC_SEARCH_OPTIONS)
     expect(results[0]?.id).toBe("rappels")
   })
 
   it("indexes the same documents as the builders", () => {
-    const parsed = JSON.parse(route.buildDocIndexJson()) as { documentIds: Record<string, string> }
+    const parsed = JSON.parse(buildDocIndexJson()) as { documentIds: Record<string, string> }
     const slugs = Object.values(parsed.documentIds).sort()
     expect(slugs).toEqual(docSearchDocuments(loadDocUnits()).map((document) => document.slug).sort())
   })
