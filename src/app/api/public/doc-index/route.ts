@@ -1,9 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import MiniSearch from "minisearch"
-import { DOC_INDEX_OPTIONS, docSearchDocuments } from "@/lib/doc-search-index"
-import { loadDocUnits } from "@/lib/doc-units"
+import { buildDocIndexJson } from "@/lib/doc-index-json"
 
 /**
  * The documentation's search index (#1319): the MiniSearch instance serialised as JSON, fetched by
@@ -16,13 +14,6 @@ import { loadDocUnits } from "@/lib/doc-units"
 export const dynamic = "force-static"
 
 const CACHE_CONTROL = "public, max-age=3600, stale-while-revalidate=86400"
-
-/** Build the JSON index from the documentation units, with the options the browser loads it with. */
-export function buildDocIndexJson(): string {
-  const index = new MiniSearch(DOC_INDEX_OPTIONS)
-  index.addAll(docSearchDocuments(loadDocUnits()))
-  return JSON.stringify(index)
-}
 
 export function GET() {
   return new Response(buildDocIndexJson(), {
