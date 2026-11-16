@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest"
 
 vi.mock("../prisma", () => ({ prisma: {} }))
 
-import { FRONT_DESK_LAST_DAY_GRACE, frontDeskAccessEnd, frontDeskAccessStatus, isGrantLive, listEventFrontDeskAccesses, loadFrontDeskAccesses, loadFrontDeskGrant } from "../front-desk-access"
+import { FRONT_DESK_LAST_DAY_GRACE, formatFrontDeskDay, frontDeskAccessEnd, frontDeskAccessStatus, isGrantLive, listEventFrontDeskAccesses, loadFrontDeskAccesses, loadFrontDeskGrant } from "../front-desk-access"
 
 // Front-desk access limited to one event (#1142): when a grant counts.
 const NOW = new Date("2027-06-12T09:00:00Z")
@@ -32,6 +32,14 @@ describe("frontDeskAccessEnd", () => {
     expect(frontDeskAccessEnd({ endDate: new Date("2027-03-28T00:00:00Z"), timeZone: "Europe/Zurich" }).toISOString()).toBe("2027-03-29T04:00:00.000Z")
     // Back to winter time on 31 October 2027: 06:00 is +01:00 on 1 November.
     expect(frontDeskAccessEnd({ endDate: new Date("2027-10-31T00:00:00Z"), timeZone: "Europe/Zurich" }).toISOString()).toBe("2027-11-01T05:00:00.000Z")
+  })
+})
+
+describe("formatFrontDeskDay", () => {
+  it("words the stored UTC calendar day, never the runtime zone's day", () => {
+    // 23:00 UTC on 13 June is already 14 June in Zurich: the stored day is the 13th.
+    expect(formatFrontDeskDay(new Date("2027-06-13T23:00:00Z"))).toBe("13 juin 2027")
+    expect(formatFrontDeskDay("2027-06-14")).toBe("14 juin 2027")
   })
 })
 

@@ -50,7 +50,10 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [resending, setResending] = useState<string | null>(null)
+  // A guard per row, not one global flag: resending Léa's invitation must not silently ignore a
+  // click on Noé's row.
+  const resendingRef = useRef(new Set<string>())
+  const [resendingIds, setResendingIds] = useState<ReadonlySet<string>>(new Set())
   const [revoking, setRevoking] = useState<FrontDeskAccessView | null>(null)
   const [revokeBusy, setRevokeBusy] = useState(false)
   const [revokeError, setRevokeError] = useState<string | null>(null)
@@ -61,7 +64,7 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
   const headingRef = useRef<HTMLHeadingElement>(null)
   const rowRefs = useRef(new Map<string, HTMLElement>())
   const lastRevokedRef = useRef<string | null>(null)
-  const { submit, busy, error, status, setStatus, fail, isInvalid, quiet, alertShown } = useSubmit()
+  const { submit, busy, error, status, setStatus, reset, fail, isInvalid, quiet, alertShown } = useSubmit()
 
   // After a revocation the row stays (with « Révoqué ») but its buttons unmount: focus the row's
   // name, which took tabIndex={-1} for that purpose. A ref, not state: the effect only moves focus.
@@ -74,15 +77,26 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
 
   const liveCount = accesses.filter((a) => isLive(a.status)).length
 
-  async function reload() {
+  async function reload(): Promise<FrontDeskAccessView[] | null> {
     const outcome = await requestJson<{ accesses: FrontDeskAccessView[] }>(() => fetch(`/api/admin/events/${encodeURIComponent(eventId)}/front-desk-access`, { headers: { Accept: "application/json" } }))
-    if (outcome.ok && Array.isArray(outcome.data.accesses)) setAccesses(outcome.data.accesses)
+    if (!outcome.ok || !Array.isArray(outcome.data.accesses)) return null
+    setAccesses(outcome.data.accesses)
+    return outcome.data.accesses
   }
 
   async function handleInvite(e: React.FormEvent) {
     e.preventDefault()
-    if (name.trim().length < 2) { fail("Indiquez le nom de la personne (2 caractères au moins).", "name", nameRef.current); return }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { fail("Indiquez une adresse email complète.", "email", emailRef.current); return }
+    if (name.trim().length < 2) {
+      // A new client-side failure must not leave the previous success sentence on screen.
+      setStatus("")
+      fail("Indiquez le nom de la personne (2 caractères au moins).", "name", nameRef.current)
+      return
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setStatus("")
+      fail("Indiquez une adresse email complète.", "email", emailRef.current)
+      return
+    }
     const invited = email.trim()
     const outcome = await submit<{ accepted: true }>(() => fetch(`/api/admin/events/${encodeURIComponent(eventId)}/front-desk-access`, {
       method: "POST",
@@ -90,28 +104,39 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
       body: JSON.stringify({ name: name.trim(), email: invited }),
     }), { silent: true })
     if (!outcome.ok) {
-      // A refused address (already an owner, an organiser, another organisation) concerns the field.
+      // A refused address (an owner or an organiser of this organisation, a deactivated front-desk
+      // account) concerns the field. An address the route may not touch gets the same 202 as a
+      // sent invitation, so it is not an error here.
       const onEmail = outcome.status === 400 || outcome.status === 409
       fail(outcome.error, onEmail ? "email" : undefined, onEmail ? emailRef.current : null)
       return
     }
     setName("")
     setEmail("")
-    setStatus(`Accès accueil enregistré pour ${name.trim()}. Si la personne n'a pas encore activé son compte, elle reçoit une invitation par email, avec un lien valable 7 jours.`)
-    await reload()
+    const rows = await reload()
+    // An activated front-desk account of this organisation already has its password: the grant
+    // was added or re-opened without any email. The reloaded row says which case happened.
+    const existingAccount = rows?.find((row) => row.email.toLowerCase() === invited.toLowerCase() && row.status === "active")
+    setStatus(existingAccount
+      ? `Accès ajouté pour ${existingAccount.name}, qui a déjà un compte accueil.`
+      : "Si cette adresse peut recevoir un accès accueil, l'invitation est partie. L'accès apparaît dans la liste ci-dessous.")
     inviteRef.current?.focus()
   }
 
   async function handleResend(access: FrontDeskAccessView) {
-    if (resending) return
-    setResending(access.id)
+    if (resendingRef.current.has(access.id)) return
+    resendingRef.current.add(access.id)
+    setResendingIds(new Set(resendingRef.current))
     const outcome = await requestJson(() => fetch(`/api/admin/events/${encodeURIComponent(eventId)}/front-desk-access/${encodeURIComponent(access.id)}/resend`, { method: "POST" }))
-    setResending(null)
+    resendingRef.current.delete(access.id)
+    setResendingIds(new Set(resendingRef.current))
     if (!outcome.ok) {
       setStatus("")
       fail(outcome.error)
       return
     }
+    // A success clears an earlier error and its `aria-invalid`, not only the status line.
+    reset()
     setStatus(`Invitation renvoyée à ${access.name}. Le lien précédent ne fonctionne plus.`)
   }
 
@@ -129,6 +154,7 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
     lastRevokedRef.current = target.id
     setAccesses((rows) => rows.map((row) => (row.id === target.id ? { ...row, status: "revoked" } : row)))
     setRevoking(null)
+    reset()
     setStatus(`${target.name} : accès révoqué.`)
     focusAfterRevoke.current = target.id
   }
@@ -225,7 +251,13 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
                     </div>
                     <div className="flex flex-col items-start sm:items-end gap-1">
                       <StatusWord status={access.status} />
-                      <p className="text-xs text-gray-600">Jusqu&apos;au {access.endsOnLabel} inclus</p>
+                      <p className="text-xs text-gray-600">
+                        {access.status === "revoked"
+                          ? "Accès révoqué"
+                          : access.status === "expired"
+                            ? `Accès terminé le ${access.endsOnLabel}`
+                            : `Jusqu'au ${access.endsOnLabel} inclus`}
+                      </p>
                     </div>
                   </div>
                   {(access.status === "active" || access.status === "invitation_sent") && (
@@ -234,16 +266,16 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
                         <button
                           type="button"
                           onClick={() => handleResend(access)}
-                          aria-disabled={resending === access.id || undefined}
+                          aria-disabled={resendingIds.has(access.id) || undefined}
                           aria-label={`Renvoyer l'invitation, ${access.name}`}
-                          className={`${buttonClass} border border-blue-600 text-blue-700 bg-white hover:bg-blue-50 aria-disabled:opacity-50`}
+                          className={`${buttonClass} border border-blue-600 text-blue-700 bg-white hover:bg-blue-50 aria-disabled:opacity-50 aria-disabled:cursor-wait`}
                         >
-                          {resending === access.id ? "Envoi…" : "Renvoyer l'invitation"}
+                          Renvoyer l&apos;invitation
                         </button>
                       )}
                       <button
                         type="button"
-                        onClick={() => { setRevokeError(null); setRevoking(access) }}
+                        onClick={() => { setRevokeError(null); lastRevokedRef.current = null; setRevoking(access) }}
                         aria-label={`Révoquer, ${access.name}`}
                         className={`${buttonClass} border border-gray-300 text-gray-800 bg-white hover:bg-gray-50`}
                       >

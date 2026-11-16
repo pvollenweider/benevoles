@@ -7,11 +7,10 @@ import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { ADMIN_HOME } from "@/lib/admin-next"
 import { isFrontDeskRole } from "@/lib/permissions"
-import { loadFrontDeskGrant } from "@/lib/front-desk-access"
+import { formatFrontDeskDay, loadFrontDeskGrant } from "@/lib/front-desk-access"
 import { FRONT_DESK_HOME } from "@/lib/front-desk-pages"
 import { getOrgClient } from "@/lib/prisma-org"
 import { loadDayOf } from "@/lib/day-of-load"
-import { formatShortDate } from "@/lib/utils"
 import FrontDeskDayOfBoard from "@/components/admin/FrontDeskDayOfBoard"
 import SignOutButton from "@/components/admin/SignOutButton"
 
@@ -46,12 +45,14 @@ export default async function FrontDeskDayOfPage({ params }: { params: Promise<{
   const grant = await loadFrontDeskGrant({ adminUserId, organizationId, eventId: id, now })
   if (!grant) redirect(FRONT_DESK_HOME)
 
-  const loaded = await loadDayOf(getOrgClient(organizationId), id, now)
+  // No registration window: this role renders no « Ajouter un besoin », and the page must not
+  // serialise settings the day-of GET does not return (#1142).
+  const loaded = await loadDayOf(getOrgClient(organizationId), id, now, undefined, { registrationWindow: false })
   if (!loaded) redirect(FRONT_DESK_HOME)
   const { event, timeZone, board, today, refreshedAt } = loaded
-  const dates = formatShortDate(event.startDate) === formatShortDate(event.endDate)
-    ? `le ${formatShortDate(event.startDate)}`
-    : `du ${formatShortDate(event.startDate)} au ${formatShortDate(event.endDate)}`
+  const dates = formatFrontDeskDay(event.startDate) === formatFrontDeskDay(event.endDate)
+    ? `le ${formatFrontDeskDay(event.startDate)}`
+    : `du ${formatFrontDeskDay(event.startDate)} au ${formatFrontDeskDay(event.endDate)}`
 
   return (
     <main id="main" tabIndex={-1} className="min-h-screen bg-gray-50 px-4 py-6 focus:outline-none">
@@ -76,12 +77,6 @@ export default async function FrontDeskDayOfPage({ params }: { params: Promise<{
           today={today}
           refreshedAt={refreshedAt}
           timeZone={timeZone}
-          registrationWindow={{
-            publicStatus: event.publicStatus,
-            registrationsOpen: event.registrationsOpen,
-            registrationOpensAt: event.registrationOpensAt?.toISOString() ?? null,
-            registrationClosesAt: event.registrationClosesAt?.toISOString() ?? null,
-          }}
         />
       </div>
     </main>

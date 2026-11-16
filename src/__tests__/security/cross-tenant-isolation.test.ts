@@ -3129,14 +3129,14 @@ describe("Front-desk access, owner side — cross-tenant isolation (#1142)", () 
     expect(prismaMock.adminUser.create).not.toHaveBeenCalled()
   })
 
-  it("POST refuses an address held by another organisation with the one neutral message, and creates nothing", async () => {
+  it("POST gives an address held by another organisation the same 202 as a free one, and creates nothing", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/front-desk-access/route")
     const db = setupGuard({ organization: { findUnique: vi.fn().mockResolvedValue({ id: ORG_A, name: "Org A", outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z") }) } })
     db.event.findFirst.mockResolvedValue({ id: "evt-a", title: "Fête du village", startDate: new Date("2027-06-12T00:00:00Z"), endDate: new Date("2027-06-14T00:00:00Z"), organization: { name: "Org A", timeZone: "Europe/Zurich" } })
     prismaMock.adminUser.findFirst.mockResolvedValue({ id: "adm-b", organizationId: "org-b", name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: true, setupTokenHash: null, setupTokenExpiresAt: null })
     const res = await POST(makeRequest("/api/admin/events/evt-a/front-desk-access", "POST", { name: "Léa Favre", email: "lea.favre@example.org" }), eventParams("evt-a"))
-    expect(res.status).toBe(409)
-    expect(await res.json()).toEqual({ error: "Cette adresse ne peut pas recevoir d'accès accueil." })
+    expect(res.status).toBe(202)
+    expect(await res.json()).toEqual({ accepted: true })
     expect(db.adminEventAccess.create).not.toHaveBeenCalled()
     expect(prismaMock.adminUser.create).not.toHaveBeenCalled()
   })

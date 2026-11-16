@@ -52,10 +52,10 @@ describe("FrontDeskAccessPanel", () => {
     expect(screen.getByRole("button", { name: "Inviter" })).toBeInTheDocument()
   })
 
-  it("invites, clears the fields, keeps the focus on « Inviter » and says what happens next", async () => {
+  it("invites, clears the fields, keeps the focus on « Inviter », reloads and says what happens next", async () => {
     fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
       if (init.method === "POST") return json({ accepted: true }, 202)
-      return json({ accesses: [access(), access({ id: "grant-2", name: "Sacha Bonvin", status: "invitation_sent" })] })
+      return json({ accesses: [access(), access({ id: "grant-2", name: "Sacha Bonvin", email: "sacha.bonvin@example.org", status: "invitation_sent" })] })
     })
     renderPanel([])
     fireEvent.change(screen.getByRole("textbox", { name: /^Nom/ }), { target: { value: "Sacha Bonvin" } })
@@ -63,15 +63,28 @@ describe("FrontDeskAccessPanel", () => {
     const invite = screen.getByRole("button", { name: "Inviter" })
     invite.focus()
     fireEvent.click(invite)
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Accès accueil enregistré pour Sacha Bonvin."))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Si cette adresse peut recevoir un accès accueil, l'invitation est partie. L'accès apparaît dans la liste ci-dessous."))
+    expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-fete/front-desk-access", { headers: { Accept: "application/json" } })
     expect(screen.getByRole("textbox", { name: /^Nom/ })).toHaveValue("")
     expect(screen.getByRole("textbox", { name: /^Email/ })).toHaveValue("")
     expect(invite).toHaveFocus()
     expect(screen.getByRole("heading", { level: 2, name: "Accès accueil (2)" })).toBeInTheDocument()
   })
 
+  it("an activated front-desk account of this organisation gets the grant and a status saying it already has an account", async () => {
+    fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
+      if (init.method === "POST") return json({ accepted: true }, 202)
+      return json({ accesses: [access({ name: "Léa Favre", email: "lea.favre@example.org", status: "active" })] })
+    })
+    renderPanel([])
+    fireEvent.change(screen.getByRole("textbox", { name: /^Nom/ }), { target: { value: "Léa Favre" } })
+    fireEvent.change(screen.getByRole("textbox", { name: /^Email/ }), { target: { value: "lea.favre@example.org" } })
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Accès ajouté pour Léa Favre, qui a déjà un compte accueil."))
+  })
+
   it("a refused address moves the focus to the email field, marked invalid, with the server's sentence", async () => {
-    fetchMock.mockResolvedValue(json({ error: "Cette adresse ne peut pas recevoir d'accès accueil." }, 409))
+    fetchMock.mockResolvedValue(json({ error: "Cette personne fait déjà partie de l'équipe d'administration de votre organisation : elle n'a pas besoin d'un accès accueil." }, 409))
     renderPanel([])
     fireEvent.change(screen.getByRole("textbox", { name: /^Nom/ }), { target: { value: "Sacha Bonvin" } })
     const email = screen.getByRole("textbox", { name: /^Email/ })
@@ -79,7 +92,7 @@ describe("FrontDeskAccessPanel", () => {
     fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
     await waitFor(() => expect(email).toHaveFocus())
     expect(email).toHaveAttribute("aria-invalid", "true")
-    expect(email).toHaveAccessibleDescription("Cette adresse ne peut pas recevoir d'accès accueil.")
+    expect(email).toHaveAccessibleDescription("Cette personne fait déjà partie de l'équipe d'administration de votre organisation : elle n'a pas besoin d'un accès accueil.")
     // A field error is announced by the focus move, not twice through the alert.
     expect(screen.getByRole("status")).toHaveTextContent("")
   })
@@ -104,7 +117,10 @@ describe("FrontDeskAccessPanel", () => {
     expect(screen.getByText("Invitation envoyée")).toHaveClass("bg-amber-100", "text-amber-900")
     expect(screen.getByText("Révoqué")).toHaveClass("bg-gray-100", "text-gray-700")
     expect(screen.getByText("Expiré")).toHaveClass("bg-gray-100", "text-gray-600")
-    expect(screen.getAllByText("Jusqu'au 14 juin 2027 inclus")).toHaveLength(4)
+    // A live row says until when; a revoked or expired one never says « Jusqu'au … inclus ».
+    expect(screen.getAllByText("Jusqu'au 14 juin 2027 inclus")).toHaveLength(2)
+    expect(screen.getByText("Accès révoqué")).toBeInTheDocument()
+    expect(screen.getByText("Accès terminé le 14 juin 2027")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Révoquer, Léa Favre" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Renvoyer l'invitation, Sacha Bonvin" })).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /Révoquer, Inès Morel/ })).toBeNull()
@@ -148,5 +164,103 @@ describe("FrontDeskAccessPanel", () => {
     fireEvent.click(button)
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Invitation renvoyée à Léa Favre. Le lien précédent ne fonctionne plus."))
     expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-fete/front-desk-access/grant-1/resend", { method: "POST" })
+  })
+
+  it("keeps the visible label « Renvoyer l'invitation » while a resend is in flight", async () => {
+    let resolve!: (value: unknown) => void
+    fetchMock.mockReturnValue(new Promise((r) => { resolve = r }))
+    renderPanel([access({ status: "invitation_sent" })])
+    const button = screen.getByRole("button", { name: "Renvoyer l'invitation, Léa Favre" })
+    fireEvent.click(button)
+    await waitFor(() => expect(button).toHaveAttribute("aria-disabled", "true"))
+    expect(button).toHaveTextContent("Renvoyer l'invitation")
+    expect(button).not.toHaveTextContent("Envoi…")
+    expect(button).toHaveAccessibleName(/^Renvoyer l'invitation/)
+    resolve(json({ sent: true }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Invitation renvoyée à Léa Favre."))
+  })
+
+  it("guards each row's resend separately: a pending row does not silently ignore another row", async () => {
+    let resolveFirst!: (value: unknown) => void
+    fetchMock
+      .mockReturnValueOnce(new Promise((r) => { resolveFirst = r }))
+      .mockResolvedValueOnce(json({ sent: true }))
+    renderPanel([
+      access({ id: "grant-1", name: "Léa Favre", status: "invitation_sent" }),
+      access({ id: "grant-2", name: "Noé Rochat", status: "invitation_sent" }),
+    ])
+    fireEvent.click(screen.getByRole("button", { name: "Renvoyer l'invitation, Léa Favre" }))
+    fireEvent.click(screen.getByRole("button", { name: "Renvoyer l'invitation, Noé Rochat" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+    expect(fetchMock).toHaveBeenNthCalledWith(1, "/api/admin/events/evt-fete/front-desk-access/grant-1/resend", { method: "POST" })
+    expect(fetchMock).toHaveBeenNthCalledWith(2, "/api/admin/events/evt-fete/front-desk-access/grant-2/resend", { method: "POST" })
+    resolveFirst(json({ sent: true }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Invitation renvoyée à"))
+  })
+
+  it("a client validation failure clears the previous success sentence", async () => {
+    fetchMock.mockResolvedValue(json({ accesses: [] }))
+    renderPanel([])
+    fireEvent.change(screen.getByRole("textbox", { name: /^Nom/ }), { target: { value: "Sacha Bonvin" } })
+    fireEvent.change(screen.getByRole("textbox", { name: /^Email/ }), { target: { value: "sacha.bonvin@example.org" } })
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Si cette adresse peut recevoir un accès accueil"))
+    // Both fields are empty again: submitting now fails locally.
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    await waitFor(() => expect(screen.getByRole("textbox", { name: /^Nom/ })).toHaveFocus())
+    expect(screen.getByRole("status")).toHaveTextContent("")
+  })
+
+  it("a successful resend clears an earlier error and its aria-invalid", async () => {
+    fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
+      if (init.method === "POST" && url.endsWith("/resend")) return json({ sent: true })
+      if (init.method === "POST") return json({ error: "Cette personne fait déjà partie de l'équipe d'administration de votre organisation : elle n'a pas besoin d'un accès accueil." }, 409)
+      return json({ accesses: [] })
+    })
+    renderPanel([access({ status: "invitation_sent" })])
+    const email = screen.getByRole("textbox", { name: /^Email/ })
+    fireEvent.change(screen.getByRole("textbox", { name: /^Nom/ }), { target: { value: "Sacha Bonvin" } })
+    fireEvent.change(email, { target: { value: "sacha.bonvin@example.org" } })
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    await waitFor(() => expect(email).toHaveAttribute("aria-invalid", "true"))
+    fireEvent.click(screen.getByRole("button", { name: "Renvoyer l'invitation, Léa Favre" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Invitation renvoyée à Léa Favre."))
+    expect(email).not.toHaveAttribute("aria-invalid")
+  })
+
+  it("a successful revocation clears an earlier error and its aria-invalid", async () => {
+    fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
+      if (init.method === "DELETE") return json({ revoked: true })
+      if (init.method === "POST") return json({ error: "Ce compte accueil a été désactivé." }, 409)
+      return json({ accesses: [] })
+    })
+    renderPanel([access()])
+    const email = screen.getByRole("textbox", { name: /^Email/ })
+    fireEvent.change(screen.getByRole("textbox", { name: /^Nom/ }), { target: { value: "Sacha Bonvin" } })
+    fireEvent.change(email, { target: { value: "sacha.bonvin@example.org" } })
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    await waitFor(() => expect(email).toHaveAttribute("aria-invalid", "true"))
+    fireEvent.click(screen.getByRole("button", { name: "Révoquer, Léa Favre" }))
+    await screen.findByRole("alertdialog")
+    fireEvent.click(screen.getByRole("button", { name: "Révoquer" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Léa Favre : accès révoqué."))
+    expect(email).not.toHaveAttribute("aria-invalid")
+  })
+
+  it("opening a new confirmation dialog forgets the previously revoked row, so a cancel focuses the heading", async () => {
+    fetchMock.mockResolvedValue(json({ revoked: true }))
+    renderPanel([
+      access({ id: "grant-1", name: "Léa Favre" }),
+      access({ id: "grant-2", name: "Noé Rochat" }),
+    ])
+    fireEvent.click(screen.getByRole("button", { name: "Révoquer, Léa Favre" }))
+    await screen.findByRole("alertdialog")
+    fireEvent.click(screen.getByRole("button", { name: "Révoquer" }))
+    await waitFor(() => expect(screen.getByText("Léa Favre")).toHaveFocus())
+
+    fireEvent.click(screen.getByRole("button", { name: "Révoquer, Noé Rochat" }))
+    await screen.findByRole("alertdialog")
+    fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
+    await waitFor(() => expect(screen.getByRole("heading", { level: 2, name: /Accès accueil/ })).toHaveFocus())
   })
 })

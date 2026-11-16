@@ -93,6 +93,9 @@ describe("/admin/front-desk", () => {
     expect(screen.queryByRole("navigation")).toBeNull()
     const link = screen.getByRole("link", { name: "Ouvrir le pointage : Fête du village, du 12 juin 2027 au 14 juin 2027" })
     expect(link).toHaveAttribute("href", "/admin/front-desk/events/evt-fete")
+    // A long title that wraps keeps a comfortable target.
+    expect(link.className).toContain("py-2")
+    expect(link.className).toContain("break-words")
     expect(container.querySelector("ul")).toBeNull()
   })
 

@@ -233,15 +233,32 @@ describe("accept-invite: the link is consumed once, atomically", () => {
     queryRaw.mockResolvedValue([])
   })
 
-  it("consumes only while the account still carries this token, unexpired", async () => {
+  it("consumes only while the account is still inactive and carries this token, unexpired", async () => {
     findUnique.mockResolvedValue(admin)
     const { POST } = await import("@/app/api/admin/accept-invite/route")
     await POST(post({ token: "atomic-token", password }))
     expect(update.mock.calls[0][0].where).toEqual({
       id: admin.id,
+      isActive: false,
       setupTokenHash: hashToken("atomic-token"),
       OR: [{ setupTokenExpiresAt: null }, { setupTokenExpiresAt: { gt: expect.any(Date) } }],
     })
+  })
+
+  it("refuses a setup token on an account that is already active: no password change, nothing consumed", async () => {
+    // The state a resend racing activation used to create: a valid setup token left on an active
+    // account. The conditional update matches no row.
+    findUnique.mockResolvedValue({ ...admin, isActive: true })
+    update.mockResolvedValue({ count: 0 })
+    const { POST } = await import("@/app/api/admin/accept-invite/route")
+    const res = await POST(post({ token: "active-account-token", password }))
+    expect(res.status).toBe(404)
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ id: admin.id, isActive: false }) }))
+    expect(update.mock.calls[0][0].data).toMatchObject({ passwordHash: "hashed" })
+    // The route only writes through that conditional update: no welcome email and no reply-to fill.
+    expect(queryRaw).not.toHaveBeenCalled()
+    expect(orgUpdateMany).not.toHaveBeenCalled()
+    expect(enqueued).toHaveLength(0)
   })
 
   it("a request that lost the race changes nothing and queues no welcome email", async () => {

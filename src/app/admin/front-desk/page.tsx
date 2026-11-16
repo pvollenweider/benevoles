@@ -7,21 +7,20 @@ import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { ADMIN_HOME } from "@/lib/admin-next"
 import { isFrontDeskRole } from "@/lib/permissions"
-import { loadFrontDeskAccesses, type FrontDeskEventLink } from "@/lib/front-desk-access"
-import { formatShortDate } from "@/lib/utils"
+import { formatFrontDeskDay, loadFrontDeskAccesses, type FrontDeskEventLink } from "@/lib/front-desk-access"
 import SignOutButton from "@/components/admin/SignOutButton"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Accès accueil", robots: { index: false, follow: false } }
 
 const linkClass =
-  "inline-flex items-center min-h-11 px-4 rounded-xl border border-blue-600 bg-white text-sm font-medium text-blue-700 underline underline-offset-2 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+  "inline-flex items-center min-h-11 px-4 py-2 rounded-xl border border-blue-600 bg-white text-sm font-medium text-blue-700 underline underline-offset-2 break-words hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
-/** « le 14 juin 2026 » or « du 12 au 14 juin 2026 ». */
+/** « le 14 juin 2026 » or « du 12 au 14 juin 2026 », in the stored calendar days (UTC). */
 function datesOf(access: FrontDeskEventLink): string {
-  return formatShortDate(access.startDate) === formatShortDate(access.endDate)
-    ? `le ${formatShortDate(access.startDate)}`
-    : `du ${formatShortDate(access.startDate)} au ${formatShortDate(access.endDate)}`
+  return formatFrontDeskDay(access.startDate) === formatFrontDeskDay(access.endDate)
+    ? `le ${formatFrontDeskDay(access.startDate)}`
+    : `du ${formatFrontDeskDay(access.startDate)} au ${formatFrontDeskDay(access.endDate)}`
 }
 
 /**

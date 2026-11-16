@@ -96,8 +96,11 @@ type Props = {
   /** The event's existing postes, for the « Ajouter un besoin » field (#1304). */
   roles?: string[]
   timeZone: string
-  /** The registration window (#1304): says why a send is blocked instead of showing the list. */
-  registrationWindow: RegistrationWindow
+  /**
+   * The registration window (#1304): says why a send is blocked instead of showing the list.
+   * Absent for a front-desk account, which never renders « Ajouter un besoin » (#1142).
+   */
+  registrationWindow?: RegistrationWindow
   /** The event's active sector ids, to tell whether the page's filter hides the new shift. */
   activeSectorIds?: string[]
   /**
@@ -716,7 +719,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       <p role="status" aria-live="polite" aria-label="Mise à jour du tableau" className="sr-only">{status}</p>
       {nothingFound && <p className="text-sm text-gray-700">Aucun bénévole ni poste ne correspond à « {query.trim()} ».</p>}
 
-      {!frontDesk && (
+      {!frontDesk && registrationWindow && (
         <AddNeedPanel
           eventId={eventId}
           today={today}

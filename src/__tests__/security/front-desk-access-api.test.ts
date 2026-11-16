@@ -17,6 +17,10 @@ const fake = vi.hoisted(() => {
     organizations: [] as R[], events: [] as R[], admins: [] as R[], grants: [] as R[],
     calls: [] as [string, string, unknown][],
     nextId: 1,
+    // Simulates an activation that lands between the read and the conditional token write.
+    forcePendingUpdateZero: false,
+    // Simulates a failed session invalidation after the revocation write.
+    failAdminUpdateMany: false,
   }
 
   function matches(row: R | null | undefined, where: unknown): boolean {
@@ -89,6 +93,11 @@ const fake = vi.hoisted(() => {
         return admin
       },
       updateMany: async ({ where, data }) => {
+        if (state.forcePendingUpdateZero) return { count: 0 }
+        if (state.failAdminUpdateMany) {
+          state.failAdminUpdateMany = false
+          throw new Error("session invalidation failed")
+        }
         const hits = state.admins.filter((a) => matches(adminView(a), where))
         for (const admin of hits) {
           for (const [key, value] of Object.entries(data ?? {})) {
@@ -121,6 +130,11 @@ const fake = vi.hoisted(() => {
         Object.assign(grant, data)
         return grant
       },
+      updateMany: async ({ where, data }) => {
+        const hits = state.grants.filter((g) => matches(grantView(g), where))
+        for (const grant of hits) Object.assign(grant, data)
+        return { count: hits.length }
+      },
     },
   }
 
@@ -146,9 +160,27 @@ const fake = vi.hoisted(() => {
           }),
         })
       }
+      if (name === "$queryRaw") return async () => {
+        state.calls.push(["$queryRaw", "$queryRaw", undefined])
+        return [{ id: "locked" }]
+      }
       if (name === "$transaction") return async (arg: unknown) => {
         state.calls.push(["$transaction", "$transaction", undefined])
-        return typeof arg === "function" ? (arg as (tx: unknown) => unknown)(client) : Promise.all(arg as unknown[])
+        if (typeof arg !== "function") return Promise.all(arg as unknown[])
+        // A real transaction rolls back on a throw: the atomicity tests rely on it.
+        const snapshot = {
+          admins: state.admins.map((a) => ({ ...a })),
+          grants: state.grants.map((g) => ({ ...g })),
+          nextId: state.nextId,
+        }
+        try {
+          return await (arg as (tx: unknown) => unknown)(client)
+        } catch (e) {
+          state.admins = snapshot.admins
+          state.grants = snapshot.grants
+          state.nextId = snapshot.nextId
+          throw e
+        }
       }
       if (name === "then") return undefined
       return new Proxy({}, { get: (_m, op) => (args: unknown) => rawOp(String(name), String(op), args) })
@@ -184,6 +216,8 @@ function seed() {
   const s = fake.state
   s.calls.length = 0
   s.nextId = 1
+  s.forcePendingUpdateZero = false
+  s.failAdminUpdateMany = false
   s.organizations = [
     { id: ORG, name: "Fête du village", active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), slug: "fete", timeZone: "Europe/Zurich" },
     { id: OTHER_ORG, name: "Tournoi", active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), slug: "tournoi", timeZone: "Europe/Zurich" },
@@ -221,7 +255,7 @@ async function call(method: "GET" | "POST" | "DELETE", path: string, body?: unkn
   return mod[method](req, params)
 }
 
-const writes = () => fake.state.calls.filter(([model, op]) => op === "create" || op === "update" || op === "$transaction" || model === "adminUser")
+const writes = () => fake.state.calls.filter(([, op]) => op === "create" || op === "update" || op === "updateMany" || op === "delete" || op === "deleteMany" || op === "$transaction")
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -300,8 +334,11 @@ describe("POST front-desk-access", () => {
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ eventId: EVENT, action: "frontdesk.access_granted", entityId: grant.id, actor: { type: "admin", id: "adm-owner" } }))
   })
 
-  it("an existing inactive front-desk account of this organisation is reused: no second account, grant created, invitation resent", async () => {
-    fake.state.admins.push({ id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: false, sessionVersion: 0 })
+  it("an existing never-activated front-desk account of this organisation is reused: no second account, grant created, invitation resent", async () => {
+    fake.state.admins.push({
+      id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk",
+      isActive: false, sessionVersion: 0, setupTokenHash: "old-hash", setupTokenExpiresAt: new Date("2027-01-01T00:00:00Z"),
+    })
     const res = await call("POST", "events/[id]/front-desk-access", body)
     expect(res.status).toBe(202)
     expect(fake.state.admins.filter((a) => a.email === "lea.favre@example.org")).toHaveLength(1)
@@ -309,12 +346,48 @@ describe("POST front-desk-access", () => {
     expect(enqueue).toHaveBeenCalledTimes(1)
   })
 
-  it("an existing actives front-desk account gets the grant but no second invitation", async () => {
-    fake.state.admins.push({ id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: true, sessionVersion: 0 })
+  it("an existing active front-desk account gets the grant but no second invitation: it already has its password", async () => {
+    fake.state.admins.push({ id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: true, sessionVersion: 0, setupTokenHash: null, setupTokenExpiresAt: null })
     const res = await call("POST", "events/[id]/front-desk-access", body)
     expect(res.status).toBe(202)
     expect(fake.state.grants).toHaveLength(1)
     expect(enqueue).not.toHaveBeenCalled()
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_granted" }))
+  })
+
+  it("an activation that wins the race installs no setup token and queues no email, but keeps the grant", async () => {
+    fake.state.admins.push({
+      id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk",
+      isActive: false, sessionVersion: 0, setupTokenHash: "old-hash", setupTokenExpiresAt: new Date("2027-01-01T00:00:00Z"),
+    })
+    fake.state.forcePendingUpdateZero = true
+    const res = await call("POST", "events/[id]/front-desk-access", body)
+    expect(res.status).toBe(202)
+    expect(fake.state.grants).toHaveLength(1)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.setupTokenHash).toBe("old-hash")
+    expect(enqueue).not.toHaveBeenCalled()
+  })
+
+  it("the existing-account grant, token replacement and email commit together: an enqueue failure rolls all of it back", async () => {
+    fake.state.admins.push({
+      id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk",
+      isActive: false, sessionVersion: 0, setupTokenHash: "old-hash", setupTokenExpiresAt: new Date("2027-01-01T00:00:00Z"),
+    })
+    enqueue.mockRejectedValueOnce(new Error("outbox indisponible"))
+    await expect(call("POST", "events/[id]/front-desk-access", body)).rejects.toThrow("outbox indisponible")
+    expect(fake.state.grants).toEqual([])
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.setupTokenHash).toBe("old-hash")
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("an activated then deactivated front-desk account is refused openly, and nothing is written", async () => {
+    fake.state.admins.push({ id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: false, sessionVersion: 1, setupTokenHash: null, setupTokenExpiresAt: null })
+    const res = await call("POST", "events/[id]/front-desk-access", body)
+    expect(res.status).toBe(409)
+    expect(await res.json()).toEqual({ error: "Ce compte accueil a été désactivé." })
+    expect(fake.state.grants).toEqual([])
+    expect(enqueue).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
   })
 
   it("re-opens a revoked grant of this event, and logs it as reopened", async () => {
@@ -327,19 +400,45 @@ describe("POST front-desk-access", () => {
   })
 
   it.each([
+    ["a super admin", { organizationId: null, role: "super_admin", isActive: true }],
+    ["a super admin attached to this organisation", { organizationId: ORG, role: "super_admin", isActive: true }],
+    ["an owner of another organisation", { organizationId: OTHER_ORG, role: "admin", isActive: true }],
+    ["an organiser of another organisation", { organizationId: OTHER_ORG, role: "organizer", isActive: true }],
+    ["a front-desk account of another organisation", { organizationId: OTHER_ORG, role: "front_desk", isActive: true }],
+  ])("gives %s exactly the same 202 as a free address, and writes, sends or logs nothing", async (_label, holder) => {
+    fake.state.admins.push({ id: "adm-taken", name: "Personne Concernée", email: "lea.favre@example.org", sessionVersion: 0, ...holder })
+    const res = await call("POST", "events/[id]/front-desk-access", body)
+    expect(res.status).toBe(202)
+    expect(await res.json()).toEqual({ accepted: true })
+    expect(fake.state.admins.filter((a) => a.email === "lea.favre@example.org")).toHaveLength(1)
+    expect(fake.state.grants).toEqual([])
+    expect(writes()).toEqual([])
+    expect(enqueue).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it.each([
     ["an owner of this organisation", { organizationId: ORG, role: "admin", isActive: true }],
     ["an organiser of this organisation", { organizationId: ORG, role: "organizer", isActive: true }],
-    ["a super admin", { organizationId: null, role: "super_admin", isActive: true }],
-    ["a front-desk account of another organisation", { organizationId: OTHER_ORG, role: "front_desk", isActive: true }],
-  ])("refuses %s with the same neutral message: no account, no grant, no email", async (_label, holder) => {
+  ])("refuses %s openly: this person already administers the organisation", async (_label, holder) => {
     fake.state.admins.push({ id: "adm-taken", name: "Personne Concernée", email: "lea.favre@example.org", sessionVersion: 0, ...holder })
     const res = await call("POST", "events/[id]/front-desk-access", body)
     expect(res.status).toBe(409)
-    expect(await res.json()).toEqual({ error: "Cette adresse ne peut pas recevoir d'accès accueil." })
+    expect(await res.json()).toEqual({ error: "Cette personne fait déjà partie de l'équipe d'administration de votre organisation : elle n'a pas besoin d'un accès accueil." })
     expect(fake.state.admins.filter((a) => a.email === "lea.favre@example.org")).toHaveLength(1)
     expect(fake.state.grants).toEqual([])
     expect(enqueue).not.toHaveBeenCalled()
     expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("a free address and another organisation's account get the same status and body", async () => {
+    const free = await call("POST", "events/[id]/front-desk-access", body)
+    const freeBody = await free.json()
+    seed()
+    fake.state.admins.push({ id: "adm-other", organizationId: OTHER_ORG, name: "Personne Concernée", email: "lea.favre@example.org", role: "front_desk", isActive: true, sessionVersion: 0 })
+    const hidden = await call("POST", "events/[id]/front-desk-access", body)
+    expect(hidden.status).toBe(free.status)
+    expect(await hidden.json()).toEqual(freeBody)
   })
 
   it("404 for an event of another organisation, creating nothing", async () => {
@@ -353,7 +452,10 @@ describe("POST front-desk-access", () => {
 
 describe("POST front-desk-access/[accessId]/resend", () => {
   beforeEach(() => {
-    fake.state.admins.push({ id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: false, sessionVersion: 0 })
+    fake.state.admins.push({
+      id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk",
+      isActive: false, sessionVersion: 0, setupTokenHash: "old-hash", setupTokenExpiresAt: new Date("2027-01-01T00:00:00Z"),
+    })
     fake.state.grants.push(grantRow({ adminUserId: "adm-lea" }))
   })
 
@@ -362,6 +464,27 @@ describe("POST front-desk-access/[accessId]/resend", () => {
     expect(res.status).toBe(200)
     expect(enqueue).toHaveBeenCalledTimes(1)
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.invitation_resent", entityId: "grant-1" }))
+  })
+
+  it("counts every resend against the same daily budget as an invitation", async () => {
+    rateLimit.mockResolvedValue({ ok: false, remaining: 0, retryAfter: 42 })
+    const res = await call("POST", "events/[id]/front-desk-access/[accessId]/resend")
+    expect(res.status).toBe(429)
+    expect(rateLimit).toHaveBeenCalledWith(`org:${ORG}`, "front-desk-invite", 20, 24 * 60 * 60 * 1000)
+    expect(fake.state.calls.filter(([m]) => m === "adminEventAccess")).toEqual([])
+    expect(enqueue).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("an activation that wins the race makes the token write match no row: none installed, no email, no log", async () => {
+    // The account was read as pending, then activated before the conditional updateMany.
+    fake.state.forcePendingUpdateZero = true
+    const before = fake.state.admins.find((a) => a.id === "adm-lea")!
+    const res = await call("POST", "events/[id]/front-desk-access/[accessId]/resend")
+    expect(res.status).toBe(404)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")).toMatchObject({ setupTokenHash: before.setupTokenHash })
+    expect(enqueue).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
   })
 
   it("refuses an activated account, an ended access, and another event's access", async () => {
@@ -388,16 +511,57 @@ describe("DELETE front-desk-access/[accessId]", () => {
     expect(fake.state.grants[0].revokedAt).toBeInstanceOf(Date)
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!).toMatchObject({ id: "adm-lea", isActive: true, sessionVersion: 4 })
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_revoked", entityId: "grant-1" }))
+    // One transaction, and the account row is locked before the grant is touched.
+    const ops = fake.state.calls.map(([model, op]) => `${model}.${op}`)
+    expect(ops.indexOf("$transaction.$transaction")).toBeGreaterThanOrEqual(0)
+    expect(ops.indexOf("$queryRaw.$queryRaw")).toBeGreaterThan(ops.indexOf("$transaction.$transaction"))
+    expect(ops.indexOf("$queryRaw.$queryRaw")).toBeLessThan(ops.indexOf("adminEventAccess.updateMany"))
   })
 
-  it("is idempotent: a second revocation changes nothing, logs nothing and does not bump the version again", async () => {
-    await call("DELETE", "events/[id]/front-desk-access/[accessId]")
-    logEvent.mockClear()
+  it("a failed session invalidation rolls the revocation back, so a retry completes both", async () => {
+    fake.state.failAdminUpdateMany = true
+    await expect(call("DELETE", "events/[id]/front-desk-access/[accessId]")).rejects.toThrow("session invalidation failed")
+    expect(fake.state.grants[0].revokedAt).toBeNull()
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(3)
+    // The retry is a normal revocation, not the « already revoked » path.
+    const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
+    expect(res.status).toBe(200)
+    expect(fake.state.grants[0].revokedAt).toBeInstanceOf(Date)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_revoked" }))
+  })
+
+  it("a retry repairs a revocation that committed without invalidating the sessions", async () => {
+    // The old, non-transactional path could leave the grant revoked and the version unbumped.
+    fake.state.grants[0].revokedAt = new Date("2026-11-02T00:00:00Z")
     const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ revoked: true, alreadyRevoked: true })
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
     expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("is idempotent for the resource: a second call changes no row and logs nothing", async () => {
+    await call("DELETE", "events/[id]/front-desk-access/[accessId]")
+    const revokedAt = fake.state.grants[0].revokedAt
+    logEvent.mockClear()
+    const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ revoked: true, alreadyRevoked: true })
+    expect(fake.state.grants[0].revokedAt).toBe(revokedAt)
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("a grant re-opened after a revocation never revives the old session", async () => {
+    await call("DELETE", "events/[id]/front-desk-access/[accessId]")
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
+    fake.state.admins.find((a) => a.id === "adm-lea")!.isActive = true
+    const res = await call("POST", "events/[id]/front-desk-access", { name: "Léa Favre", email: "lea.favre@example.org" })
+    expect(res.status).toBe(202)
+    expect(fake.state.grants[0].revokedAt).toBeNull()
+    // Re-opening a grant does not lower or reset the version: the session issued before the
+    // revocation (version 3) stays refused.
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
   })
 
   it("keeps the session when the account still has another live grant", async () => {

@@ -20,26 +20,48 @@ export type DayOfSnapshot = {
   refreshedAt: string
 }
 
+/** The event's own dates, always read: the page's header needs them. */
+export type DayOfEventBase = { id: string; startDate: Date; endDate: Date }
+
+/** The registration window (#463), so « Ajouter un besoin » can say why the send is blocked (#1304). */
+export type DayOfRegistrationWindow = { publicStatus: string; registrationsOpen: boolean; registrationOpensAt: Date | null; registrationClosesAt: Date | null }
+
 export type DayOfLoaded = DayOfSnapshot & {
-  event: {
-    id: string; startDate: Date; endDate: Date
-    /** The registration window (#463), so « Ajouter un besoin » can say why the send is blocked (#1304). */
-    publicStatus: string; registrationsOpen: boolean; registrationOpensAt: Date | null; registrationClosesAt: Date | null
-  }
+  event: DayOfEventBase & DayOfRegistrationWindow
+  timeZone: string
+}
+
+/** The same snapshot for a page that never renders « Ajouter un besoin »: no registration window read. */
+export type DayOfLoadedBase = DayOfSnapshot & {
+  event: DayOfEventBase
   timeZone: string
 }
 
 /**
  * Null when the event is not one of this organization's. `shiftWhere` narrows the shifts to some
  * postes (the « Secteur » filter, #1170, src/lib/sector-filter-data.ts); `{}` reads them all.
+ * `options.registrationWindow: false` leaves the registration window columns out of the query: a
+ * front-desk page renders no « Ajouter un besoin » and must not serialise what the day-of GET does
+ * not return (#1142).
  */
-export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date, shiftWhere: { roleName?: { in: string[] } } = {}): Promise<DayOfLoaded | null> {
+export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date, shiftWhere?: { roleName?: { in: string[] } }, options?: { registrationWindow?: true }): Promise<DayOfLoaded | null>
+export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date, shiftWhere: { roleName?: { in: string[] } } | undefined, options: { registrationWindow: false }): Promise<DayOfLoadedBase | null>
+export async function loadDayOf(
+  db: OrgScopedPrisma,
+  eventId: string,
+  now: Date,
+  shiftWhere: { roleName?: { in: string[] } } = {},
+  options: { registrationWindow?: boolean } = {},
+): Promise<DayOfLoaded | DayOfLoadedBase | null> {
+  const withRegistrationWindow = options.registrationWindow !== false
   const range = dayOfDateRange(now)
   const event = await db.event.findFirst({
     where: { id: eventId },
     select: {
       id: true, startDate: true, endDate: true,
-      publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
+      ...(withRegistrationWindow
+        ? { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true }
+        : {}),
       organization: { select: { timeZone: true } },
       shifts: {
         where: { status: { not: "cancelled" }, date: { gte: range.from, lte: range.to }, ...shiftWhere },
@@ -74,12 +96,20 @@ export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date,
       .sort((a, b) => a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr")),
   }))
   const clock = now.toLocaleTimeString("fr-CH", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+  const baseEvent: DayOfEventBase = { id: event.id, startDate: event.startDate, endDate: event.endDate }
+  // Present only when selected above: the role's page leaves these columns unread.
+  const registration = event as Partial<DayOfRegistrationWindow>
+  const loadedEvent: DayOfEventBase & Partial<DayOfRegistrationWindow> = withRegistrationWindow
+    ? {
+        ...baseEvent,
+        publicStatus: registration.publicStatus!,
+        registrationsOpen: registration.registrationsOpen!,
+        registrationOpensAt: registration.registrationOpensAt ?? null,
+        registrationClosesAt: registration.registrationClosesAt ?? null,
+      }
+    : baseEvent
   return {
-    event: {
-      id: event.id, startDate: event.startDate, endDate: event.endDate,
-      publicStatus: event.publicStatus, registrationsOpen: event.registrationsOpen,
-      registrationOpensAt: event.registrationOpensAt, registrationClosesAt: event.registrationClosesAt,
-    },
+    event: loadedEvent as DayOfLoaded["event"],
     timeZone,
     board: dayOfBoard(shifts, now, timeZone),
     today: localDay(now, timeZone),

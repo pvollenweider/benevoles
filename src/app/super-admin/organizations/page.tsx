@@ -5,7 +5,7 @@ import OrgsManager from "@/components/super-admin/OrgsManager"
 import { orgTimeZone } from "@/lib/time-zone"
 import { ORG_SORT_COLS } from "@/lib/super-admin-tables"
 import { parseSortParam } from "@/lib/table-sort"
-import { OWNER_ROLE } from "@/lib/permissions"
+import { ORG_ACCOUNT_ROLE_WHERE, OWNER_ROLE } from "@/lib/permissions"
 import { localToday } from "@/lib/volunteer-hours"
 import { loadLimitHits } from "@/lib/limit-hits-data"
 import { zoneSentence } from "@/lib/limit-hits-view"
@@ -39,7 +39,8 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
       _count: {
         select: {
           events: true,
-          admins: true,
+          // The administrators as before (#1142): a front-desk account is not one of them.
+          admins: { where: ORG_ACCOUNT_ROLE_WHERE },
           volunteers: true,
         },
       },

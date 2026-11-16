@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import DayOfBoard from "./DayOfBoard"
 import { ACCESS_ENDED_TEXT } from "@/lib/day-of-sync"
 
-type Props = Omit<React.ComponentProps<typeof DayOfBoard>, "frontDesk" | "onAccessEnded">
+type Props = Omit<React.ComponentProps<typeof DayOfBoard>, "frontDesk" | "onAccessEnded" | "registrationWindow">
 
 /**
  * The « Jour J » board of a front-desk account (#1142). When its access to the event ends while

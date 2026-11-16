@@ -88,12 +88,14 @@ export async function POST(req: Request) {
   // Activation and welcome email commit together (#352).
   const organization = admin.organization
   const outboxIds = await prisma.$transaction(async (tx) => {
-    // Consumes the link atomically: the update only matches while the account still carries this
-    // token, unexpired. A concurrent request that consumed it first, a link replaced by a new
-    // invitation or one expired during bcrypt match no row, and nothing else happens.
+    // Consumes the link atomically: the update only matches while the account is still inactive
+    // and carries this token, unexpired. A concurrent request that activated it first, a link
+    // replaced by a new invitation or one expired during bcrypt match no row, and nothing else
+    // happens: a setup token can never replace the password of an already active account (#1142).
     const { count } = await tx.adminUser.updateMany({
       where: {
         id: admin.id,
+        isActive: false,
         setupTokenHash: hashToken(token),
         OR: [{ setupTokenExpiresAt: null }, { setupTokenExpiresAt: { gt: new Date() } }],
       },

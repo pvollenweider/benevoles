@@ -39,11 +39,17 @@ export const FRONT_DESK_LAST_DAY_GRACE = "06:00"
 export const FRONT_DESK_INVITES_PER_DAY = 20
 
 /**
- * The one answer to an address that cannot receive a front-desk access: an owner, an organiser, a
- * super admin or an account of another organisation. The same sentence in every case, so the
- * answer never says whether the address has an account.
+ * The open refusal for an address the owner already knows as an administrator of their own team
+ * (#1142): a person who can already administer the organisation needs no front-desk access.
+ * Unlike another organisation's account, this one is not hidden.
  */
-export const FRONT_DESK_ADDRESS_UNAVAILABLE = "Cette adresse ne peut pas recevoir d'accès accueil."
+export const FRONT_DESK_ALREADY_ADMIN = "Cette personne fait déjà partie de l'équipe d'administration de votre organisation : elle n'a pas besoin d'un accès accueil."
+
+/**
+ * The open refusal for a front-desk account of this organisation that was activated and later
+ * deactivated (#1142): it is not a pending invitation, so it may not be silently re-invited.
+ */
+export const FRONT_DESK_ACCOUNT_DEACTIVATED = "Ce compte accueil a été désactivé."
 
 /** The instant a grant on this event ends, in the organisation's time zone. */
 export function frontDeskAccessEnd(event: Pick<GrantEventFacts, "endDate" | "timeZone">): Date {
@@ -190,8 +196,17 @@ export type FrontDeskAccessView = {
   endsOnLabel: string
 }
 
-const endsOnLabel = (endsOn: string): string =>
-  new Date(`${endsOn}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
+/**
+ * A stored event day (a Date at UTC midnight, or "YYYY-MM-DD") worded in French, read in UTC: the
+ * same day on the server and in any browser, never shifted by the runtime's zone. Front-desk pages
+ * use it for the dates of an event, as they do for its last day.
+ */
+export function formatFrontDeskDay(day: Date | string): string {
+  const iso = typeof day === "string" ? day.slice(0, 10) : day.toISOString().slice(0, 10)
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
+}
+
+const endsOnLabel = (endsOn: string): string => formatFrontDeskDay(endsOn)
 
 type AccessListReader = {
   adminEventAccess: {

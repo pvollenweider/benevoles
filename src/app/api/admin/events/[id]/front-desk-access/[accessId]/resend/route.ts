@@ -12,13 +12,15 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { enqueueNotifications, deliverAfterResponse } from "@/lib/notifications/outbox"
 import { hashToken } from "@/lib/token-hash"
 import { apexBaseUrl } from "@/lib/urls"
-import { formatShortDate } from "@/lib/utils"
+import { NEVER_ACTIVATED_WHERE } from "@/lib/admin-invitation"
+import { FRONT_DESK_INVITES_PER_DAY, formatFrontDeskDay, isGrantLive } from "@/lib/front-desk-access"
+import { rateLimit } from "@/lib/rate-limit"
 import { orgTimeZone } from "@/lib/time-zone"
-import { isGrantLive } from "@/lib/front-desk-access"
 
 export const dynamic = "force-dynamic"
 
 const SETUP_TOKEN_MS = 7 * 24 * 60 * 60 * 1000
+const INVITE_WINDOW_MS = 24 * 60 * 60 * 1000
 
 type ResendDb = {
   adminEventAccess: {
@@ -47,6 +49,11 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const { db } = guard
   const { id: eventId, accessId } = await params
 
+  // The same daily budget as an invitation (#1142): every request counts, so repeatedly rotating
+  // a pending account's link cannot bypass the advertised 20 per day.
+  const rl = await rateLimit(`org:${guard.organizationId}`, "front-desk-invite", FRONT_DESK_INVITES_PER_DAY, INVITE_WINDOW_MS)
+  if (!rl.ok) return NextResponse.json({ error: "Trop d'invitations aujourd'hui. Réessayez demain." }, { status: 429, headers: { "Retry-After": String(rl.retryAfter) } })
+
   const access = await (db as unknown as ResendDb).adminEventAccess.findFirst({
     where: { id: accessId, eventId },
     select: {
@@ -73,13 +80,16 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const setupTokenExpiresAt = new Date(now.getTime() + SETUP_TOKEN_MS)
   const inviteUrl = `${apexBaseUrl()}/admin/accept-invite?token=${setupToken}`
   const organizationName = access.event.organization?.name ?? ""
-  const eventDates = formatShortDate(access.event.startDate) === formatShortDate(access.event.endDate)
-    ? `le ${formatShortDate(access.event.startDate)}`
-    : `du ${formatShortDate(access.event.startDate)} au ${formatShortDate(access.event.endDate)}`
+  const eventDates = formatFrontDeskDay(access.event.startDate) === formatFrontDeskDay(access.event.endDate)
+    ? `le ${formatFrontDeskDay(access.event.startDate)}`
+    : `du ${formatFrontDeskDay(access.event.startDate)} au ${formatFrontDeskDay(access.event.endDate)}`
 
   const outboxIds = await prisma.$transaction(async (tx) => {
+    // Conditional on the never-activated state in the write itself (#1142): if the person
+    // activated the account since the read, no row matches, no link is installed on the active
+    // account, and nothing is queued or logged.
     const { count } = await tx.adminUser.updateMany({
-      where: { id: access.adminUser!.id, organizationId: guard.organizationId },
+      where: { id: access.adminUser!.id, organizationId: guard.organizationId, ...NEVER_ACTIVATED_WHERE },
       data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt, receiveProductUpdates: false },
     })
     if (count === 0) return null
@@ -92,7 +102,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
         organizationName,
         eventTitle: access.event!.title,
         eventDates,
-        untilLabel: formatShortDate(access.event!.endDate),
+        untilLabel: formatFrontDeskDay(access.event!.endDate),
         inviterName: guard.session.user?.name?.trim() || "Un propriétaire de l'organisation",
         inviteUrl,
       },

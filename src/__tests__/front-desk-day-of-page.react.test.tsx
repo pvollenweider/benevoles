@@ -16,10 +16,16 @@ vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => undefined })
 
 type Row = Record<string, unknown>
 const fake = vi.hoisted(() => {
-  const state = { grant: null as Row | null, event: null as Row | null, calls: [] as string[] }
+  const state = { grant: null as Row | null, event: null as Row | null, calls: [] as string[], eventArgs: null as { select?: Record<string, unknown> } | null }
   const client = {
     adminEventAccess: { findFirst: async () => { state.calls.push("adminEventAccess.findFirst"); return state.grant } },
-    event: { findFirst: async () => { state.calls.push("event.findFirst"); return state.event } },
+    event: {
+      findFirst: async (args?: { select?: Record<string, unknown> }) => {
+        state.calls.push("event.findFirst")
+        state.eventArgs = args ?? null
+        return state.event
+      },
+    },
     $extends: () => client,
     then: undefined,
   }
@@ -76,9 +82,15 @@ describe("the front-desk day-of page", () => {
     expect(screen.queryByRole("heading", { name: "Ajouter un besoin" })).toBeNull()
     expect(screen.queryByText("Autres pages de l'événement")).toBeNull()
     expect(screen.queryByText(/Secteur/)).toBeNull()
-    // Not one link into the admin's event pages.
-    expect(container.querySelectorAll('a[href^="/admin/events"]')).toHaveLength(0)
+    // Every link is either the front-desk area or a phone number: no other admin page.
+    const links = [...container.querySelectorAll("a[href]")].map((a) => a.getAttribute("href")!)
+    expect(links.length).toBeGreaterThan(0)
+    for (const href of links) expect(href.startsWith("/admin/front-desk") || href.startsWith("tel:")).toBe(true)
     expect(fake.state.calls).toEqual(["adminEventAccess.findFirst", "event.findFirst"])
+    // The role's page does not read the registration window: it renders no « Ajouter un besoin ».
+    expect(fake.state.eventArgs?.select).not.toHaveProperty("registrationsOpen")
+    expect(fake.state.eventArgs?.select).not.toHaveProperty("registrationOpensAt")
+    expect(fake.state.eventArgs?.select).not.toHaveProperty("registrationClosesAt")
   })
 
   it("its title names the event and it is not indexed", async () => {

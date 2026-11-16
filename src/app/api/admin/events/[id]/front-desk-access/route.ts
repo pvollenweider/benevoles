@@ -19,13 +19,15 @@ import { isUniqueViolation } from "@/lib/registration-capacity"
 import { rateLimit } from "@/lib/rate-limit"
 import { apexBaseUrl } from "@/lib/urls"
 import { orgTimeZone } from "@/lib/time-zone"
-import { formatShortDate } from "@/lib/utils"
 import { ADMIN_INVITE_PENDING_ERROR, canInviteAdmins } from "@/lib/org-approval"
 import { findAdminEmailHolder } from "@/lib/admin-invitation-server"
-import { FRONT_DESK_ROLE } from "@/lib/permissions"
+import { isNeverActivated, NEVER_ACTIVATED_WHERE } from "@/lib/admin-invitation"
+import { FRONT_DESK_ROLE, ORGANIZER_ROLE, OWNER_ROLE } from "@/lib/permissions"
 import {
-  FRONT_DESK_ADDRESS_UNAVAILABLE,
+  FRONT_DESK_ACCOUNT_DEACTIVATED,
+  FRONT_DESK_ALREADY_ADMIN,
   FRONT_DESK_INVITES_PER_DAY,
+  formatFrontDeskDay,
   frontDeskAccessEnd,
   listEventFrontDeskAccesses,
 } from "@/lib/front-desk-access"
@@ -47,9 +49,9 @@ const generateToken = () => randomBytes(32).toString("hex")
 
 /** « le 14 juin 2026 » or « du 12 au 14 juin 2026 », in the event's stored calendar days. */
 function eventDatesLabel(startDate: Date, endDate: Date): string {
-  return formatShortDate(startDate) === formatShortDate(endDate)
-    ? `le ${formatShortDate(startDate)}`
-    : `du ${formatShortDate(startDate)} au ${formatShortDate(endDate)}`
+  return formatFrontDeskDay(startDate) === formatFrontDeskDay(endDate)
+    ? `le ${formatFrontDeskDay(startDate)}`
+    : `du ${formatFrontDeskDay(startDate)} au ${formatFrontDeskDay(endDate)}`
 }
 
 type InviteDb = {
@@ -81,10 +83,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
  * A new address creates an inactive account with the role `front_desk` (like an invited admin:
  * password chosen from the emailed link, seven days), the grant, and the invitation email, in
  * one transaction. An address already held by a front-desk account of this organisation reuses
- * that account: the grant is created or re-opened, and the invitation is sent again only while
- * the account is not activated. Every other holder (an owner, an organiser, a super admin, an
- * account of another organisation) gets the same neutral answer, which never says whether the
- * address has an account.
+ * that account: the grant is created or re-opened, and a new invitation link is installed and
+ * sent only while the account is still a never-activated invitation. An activated account of this
+ * organisation gets the grant without any email (it already has its password). A deactivated one
+ * is refused openly, like an owner or an organiser of this organisation. Every account the route
+ * may not touch (another organisation's account of any role, a super admin) gets exactly the same
+ * 202 answer as a sent invitation, and nothing is written, sent or logged for that address: the
+ * answer never says whether the address has an account.
  */
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession("owner")
@@ -115,12 +120,26 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const now = new Date()
   const expiresAt = frontDeskAccessEnd({ endDate: event.endDate, timeZone: orgTimeZone(event.organization) })
   const holder = await findAdminEmailHolder(prisma, email, now)
-  // Only a front-desk account of this very organisation may receive (or extend) an access.
-  if (holder && !(holder.organizationId === organizationId && holder.role === FRONT_DESK_ROLE)) {
-    return NextResponse.json({ error: FRONT_DESK_ADDRESS_UNAVAILABLE }, { status: 409 })
+  if (holder) {
+    const sameOrganization = holder.organizationId === organizationId
+    // An owner or an organiser of the caller's own team is already an administrator, and the owner
+    // knows them: the refusal can be open, unlike the same holder in another organisation.
+    if (sameOrganization && (holder.role === OWNER_ROLE || holder.role === ORGANIZER_ROLE)) {
+      return NextResponse.json({ error: FRONT_DESK_ALREADY_ADMIN }, { status: 409 })
+    }
+    // Any other account (another organisation's, a super admin's) is not the caller's business:
+    // the same answer as a sent invitation, and no write, email or log for that address.
+    if (!(sameOrganization && holder.role === FRONT_DESK_ROLE)) return ACCEPTED()
+    // A front-desk account activated and later deactivated has no setup link left: it is not a
+    // pending invitation, and re-inviting it silently would reset its password. The owner may know.
+    if (!holder.isActive && !isNeverActivated(holder)) {
+      return NextResponse.json({ error: FRONT_DESK_ACCOUNT_DEACTIVATED }, { status: 409 })
+    }
   }
 
-  const setupToken = holder && holder.isActive ? null : generateToken()
+  // A new account always gets a link; so does a never-activated front-desk account when it is
+  // invited again. An activated account already has its password and gets none.
+  const setupToken = !holder || isNeverActivated(holder) ? generateToken() : null
   const setupTokenExpiresAt = setupToken ? new Date(now.getTime() + SETUP_TOKEN_MS) : null
   const organizationName = event.organization?.name ?? org.name
   const inviteUrl = setupToken ? `${apexBaseUrl()}/admin/accept-invite?token=${setupToken}` : null
@@ -135,13 +154,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       organizationName,
       eventTitle: event.title,
       eventDates: eventDatesLabel(event.startDate, event.endDate),
-      untilLabel: formatShortDate(event.endDate),
+      untilLabel: formatFrontDeskDay(event.endDate),
       inviterName,
       inviteUrl,
     },
   })
 
-  let outcome: { adminId: string; grantId: string; reopened: boolean; invitationSent: boolean }
+  let outcome: { adminId: string; grantId: string; reopened: boolean; invitationSent: boolean; outboxIds: string[] }
   try {
     if (!holder) {
       const dummyHash = await bcrypt.hash(randomBytes(16).toString("hex"), 10)
@@ -167,30 +186,47 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         const outboxIds = inviteUrl ? await enqueueNotifications([payload(name)], tx) : []
         return { adminId: admin.id, grantId: grant.id, invitationSent: !!inviteUrl, outboxIds }
       })
-      deliverAfterResponse(created.outboxIds)
-      outcome = { adminId: created.adminId, grantId: created.grantId, reopened: false, invitationSent: created.invitationSent }
+      outcome = { ...created, reopened: false }
     } else {
-      const existing = await db.adminEventAccess.findFirst({ where: { adminUserId: holder.id, eventId }, select: { id: true, revokedAt: true, expiresAt: true } })
-      const reopened = !!existing && (existing.revokedAt !== null || (existing.expiresAt !== null && existing.expiresAt.getTime() <= now.getTime()))
-      const grant = existing
-        ? await prisma.adminEventAccess.update({ where: { id: existing.id }, data: { revokedAt: null, expiresAt }, select: { id: true } })
-        : await prisma.adminEventAccess.create({ data: { adminUserId: holder.id, eventId, organizationId, createdById: guard.session.user?.id ?? null, expiresAt }, select: { id: true } })
-      let outboxIds: string[] = []
-      if (setupToken) {
-        await prisma.adminUser.update({
-          where: { id: holder.id },
-          data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt, receiveProductUpdates: false },
+      // The grant, the link replacement and the email commit together, on the account's row lock:
+      // a concurrent revocation (which takes the same lock) and this write cannot interleave.
+      const existingOutcome = await prisma.$transaction(async (tx) => {
+        const locked = await tx.$queryRaw<{ id: string }[]>`SELECT id FROM "AdminUser" WHERE id = ${holder.id} AND "organizationId" = ${organizationId} FOR UPDATE`
+        if (locked.length === 0) return null
+        const existing = await tx.adminEventAccess.findFirst({
+          where: { adminUserId: holder.id, eventId },
+          select: { id: true, revokedAt: true, expiresAt: true },
         })
-        outboxIds = await enqueueNotifications([payload(name)], prisma)
-      }
-      deliverAfterResponse(outboxIds)
-      outcome = { adminId: holder.id, grantId: grant.id, reopened, invitationSent: !!setupToken }
+        const reopened = !!existing && (existing.revokedAt !== null || (existing.expiresAt !== null && existing.expiresAt.getTime() <= now.getTime()))
+        const grant = existing
+          ? await tx.adminEventAccess.update({ where: { id: existing.id }, data: { revokedAt: null, expiresAt }, select: { id: true } })
+          : await tx.adminEventAccess.create({ data: { adminUserId: holder.id, eventId, organizationId, createdById: guard.session.user?.id ?? null, expiresAt }, select: { id: true } })
+        let outboxIds: string[] = []
+        let invitationSent = false
+        if (setupToken) {
+          // Conditional on the never-activated state in the write itself: an activation that
+          // happened since the read matches no row, so no setup link lands on an active account.
+          const { count } = await tx.adminUser.updateMany({
+            where: { id: holder.id, organizationId, ...NEVER_ACTIVATED_WHERE },
+            data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt, receiveProductUpdates: false },
+          })
+          if (count === 1) {
+            invitationSent = true
+            outboxIds = await enqueueNotifications([payload(name)], tx)
+          }
+        }
+        return { adminId: holder.id, grantId: grant.id, reopened, invitationSent, outboxIds }
+      })
+      if (!existingOutcome) return ACCEPTED()
+      outcome = existingOutcome
     }
   } catch (e) {
-    // The address was taken between the lookup and the write: the same neutral answer.
-    if (isUniqueViolation(e)) return NextResponse.json({ error: FRONT_DESK_ADDRESS_UNAVAILABLE }, { status: 409 })
+    // The address was taken between the lookup and the write: the same neutral answer as a sent
+    // invitation, never a hint that the address now has an account.
+    if (isUniqueViolation(e)) return ACCEPTED()
     throw e
   }
+  deliverAfterResponse(outcome.outboxIds)
 
   await logEvent({
     eventId,

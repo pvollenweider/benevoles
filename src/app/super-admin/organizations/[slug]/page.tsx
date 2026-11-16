@@ -11,6 +11,7 @@ import { LIMIT_HITS_DAYS, zoneSentence } from "@/lib/limit-hits-view"
 import { loadSendBatches } from "@/lib/send-batches-data"
 import { batchSummary } from "@/lib/send-batches"
 import { daysAgo } from "@/lib/retention"
+import { FRONT_DESK_ROLE, ORG_ACCOUNT_ROLE_WHERE } from "@/lib/permissions"
 
 
 export const dynamic = "force-dynamic"
@@ -41,11 +42,13 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       _count: {
         select: {
           events: true,
-          admins: true,
+          // The administrators as before (#1142): a front-desk account is not one of them.
+          admins: { where: ORG_ACCOUNT_ROLE_WHERE },
           volunteers: true,
         },
       },
       admins: {
+        where: ORG_ACCOUNT_ROLE_WHERE,
         select: {
           id: true,
           name: true,
@@ -61,7 +64,13 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
 
   if (!org) notFound()
   const now = new Date()
-  const [cumulative, inactivity, limitHits] = await Promise.all([loadOrganizationCumulative(org.id), loadOrganizationInactivity(org.id, now), loadLimitHits({ organizationId: org.id, now })])
+  const [cumulative, inactivity, limitHits, frontDeskCount] = await Promise.all([
+    loadOrganizationCumulative(org.id),
+    loadOrganizationInactivity(org.id, now),
+    loadLimitHits({ organizationId: org.id, now }),
+    // Apart from the administrators (#1142): one count, never the list.
+    prisma.adminUser.count({ where: { organizationId: org.id, role: FRONT_DESK_ROLE } }),
+  ])
   // Its batches of emails of the same days (#1101): the same records the organisers see.
   const batches = await loadSendBatches(org.id, { since: daysAgo(now, LIMIT_HITS_DAYS), limit: 30 })
   const at = (d: Date) => d.toLocaleString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
@@ -78,6 +87,7 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}
       cumulative={cumulative}
+      frontDeskCount={frontDeskCount}
       zone={zoneSentence(APP_TIME_ZONE)}
       recentBatches={batches.map((b) => ({ id: b.id, line: `${b.kindLabel}, ${b.eventTitle}, ${at(b.createdAt)}\u00a0: ${batchSummary(b.delivery)}.`, createdAt: b.createdAt.toISOString(), heldSentence: b.heldSentence, failed: b.delivery.failed > 0 }))}
       limitHits={limitHits.groups[0] ? { group: limitHits.groups[0], zone: zoneSentence(APP_TIME_ZONE), truncated: limitHits.truncated } : undefined}
