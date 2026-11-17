@@ -44,7 +44,7 @@ Les PRs doivent passer la CI avant d'être fusionnées. Contrôles de `ci.yml` e
 | Type-check, lint & tests | `tsc --noEmit` | `make typecheck` |
 | | ESLint | `make lint` |
 | | Vitest et seuils de couverture | `npm run test:coverage` |
-| | Dépendances de production sans avis `high` ou `critical` | `npm audit --omit=dev --audit-level=high` |
+| | Dépendances de production sans avis `high` ou `critical`, hors exceptions datées de `src/lib/audit-exceptions.ts` | `node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-prod-audit.mjs` |
 | | `SECURITY.md` suit la version de `package.json` | `node scripts/check-security-md.mjs` |
 | | Migrations compatibles avec la version précédente | `node scripts/check-migrations.mjs origin/main` |
 | | Captures de la documentation à jour des écrans qu'elles montrent | `node scripts/check-doc-screenshots.mjs origin/main` |

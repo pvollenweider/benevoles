@@ -74,7 +74,13 @@ describe("repository configuration guard", () => {
     const checkJob = ci.match(/^  check:\n([\s\S]*?)(?=^  [a-z][a-z0-9-]*:\s*$)/m)?.[1] ?? ""
     expect(checkJob, "the check job is missing from ci.yml").not.toBe("")
     expect(checkJob).toContain("- name: Production dependencies have no high or critical advisory")
-    expect(checkJob).toContain("run: npm audit --omit=dev --audit-level=high")
+    // The script runs `npm audit --omit=dev` and fails on any high or critical advisory but the
+    // dated exceptions of src/lib/audit-exceptions.ts; a bare npm audit would have no such list.
+    expect(checkJob).toContain("run: node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-prod-audit.mjs")
+    expect(checkJob).not.toMatch(/run:\s*npm audit/)
+    const script = read("scripts/check-prod-audit.mjs")
+    expect(script).toContain('spawnSync("npm", ["audit", "--omit=dev", "--json"]')
+    expect(script).toContain("auditVerdict(report, AUDIT_EXCEPTIONS, today)")
     const install = checkJob.indexOf("- name: Install dependencies")
     const audit = checkJob.indexOf("- name: Production dependencies have no high or critical advisory")
     expect(install, "Install dependencies is missing from the check job").toBeGreaterThanOrEqual(0)

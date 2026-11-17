@@ -42,6 +42,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Tests des routes** : les tests de droits voient un gestionnaire quelle que soit sa forme d'export, refusent les ré-exports dans les fichiers de route, et vérifient que chaque route de l'administration de la plateforme refuse un administrateur d'organisation. <!-- interne -->
 - **Administration de la plateforme** : en production, le cookie qui retient l'organisation choisie porte le préfixe `__Host-` ; il faut choisir l'organisation à nouveau une fois. <!-- interne -->
 - **Accès accueil** : la liste des accès d'un événement ne retient que les comptes accueil de l'organisation, dans la requête et sur chaque ligne. <!-- interne -->
+- **Contrôle des dépendances en intégration continue** : un avis de sécurité sans version corrigée, dont l'application n'est pas exposée, peut être accepté pour un mois au plus, avec sa raison et sa date de fin dans `src/lib/audit-exceptions.ts` ; passé cette date, le contrôle échoue de nouveau. Première exception : `picomatch` (GHSA-fc5q-39xc-vjpf), outil de build seulement, jusqu'au 17 décembre 2026. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
 
