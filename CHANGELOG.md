@@ -13,7 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
-- **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse. Rien ne change à l'écran ni dans les e-mails.
+- **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse : la page affichée après l'envoi est la même pour toutes, et l'e-mail reçu dit la suite. Les e-mails ne changent pas.
 
 ## [2.8.0] — 2026-11-17
 
