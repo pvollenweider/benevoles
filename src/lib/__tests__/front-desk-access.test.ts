@@ -266,7 +266,7 @@ describe("loadFrontDeskGrant", () => {
 
 const accessRow = (over: Record<string, unknown> = {}) => ({
   id: "grant-1", revokedAt: null, expiresAt: null, eventId: "evt-fete",
-  adminUser: { name: "Léa Favre", email: "lea.favre@example.org", isActive: true, role: "front_desk" },
+  adminUser: { name: "Léa Favre", email: "lea.favre@example.org", isActive: true, role: "front_desk", organizationId: "org-fete" },
   event: {
     id: "evt-fete", organizationId: "org-fete", title: "Fête du village", publicStatus: "published",
     startDate: new Date("2027-06-12T00:00:00Z"), endDate: new Date("2027-06-20T00:00:00Z"),
@@ -279,7 +279,7 @@ const listReader = (rows: unknown[]) => ({ adminEventAccess: { findMany: vi.fn()
 describe("listEventFrontDeskAccesses", () => {
   it("returns name, email, status and end date, never a token or a hash", async () => {
     const db = listReader([accessRow()]) as never
-    const rows = await listEventFrontDeskAccesses(db, "evt-fete", NOW)
+    const rows = await listEventFrontDeskAccesses(db, "org-fete", "evt-fete", NOW)
     expect(rows).toEqual([{ id: "grant-1", name: "Léa Favre", email: "lea.favre@example.org", status: "active", endsOn: "2027-06-20", endsOnLabel: "20 juin 2027" }])
     expect(JSON.stringify(rows)).not.toMatch(/token|hash|setup/i)
   })
@@ -287,20 +287,31 @@ describe("listEventFrontDeskAccesses", () => {
   it("words each state and leaves another event's row out", async () => {
     const db = listReader([
       accessRow({ id: "g-active" }),
-      accessRow({ id: "g-invited", adminUser: { name: "Sacha Bonvin", email: "sacha.bonvin@example.org", isActive: false, role: "front_desk" } }),
+      accessRow({ id: "g-invited", adminUser: { name: "Sacha Bonvin", email: "sacha.bonvin@example.org", isActive: false, role: "front_desk", organizationId: "org-fete" } }),
       accessRow({ id: "g-revoked", revokedAt: new Date("2027-06-01T00:00:00Z") }),
       accessRow({ id: "g-expired", expiresAt: new Date("2027-06-01T00:00:00Z") }),
       accessRow({ id: "g-other", event: { ...(accessRow().event as object), id: "evt-marche" } }),
     ]) as never
-    const rows = await listEventFrontDeskAccesses(db, "evt-fete", NOW)
+    const rows = await listEventFrontDeskAccesses(db, "org-fete", "evt-fete", NOW)
     expect(rows.map((r) => [r.id, r.status])).toEqual([
       ["g-active", "active"], ["g-invited", "invitation_sent"], ["g-revoked", "revoked"], ["g-expired", "expired"],
     ])
   })
 
+  it("asks only for accounts of the organisation, and leaves out a row whose account belongs to another one", async () => {
+    const db = listReader([
+      accessRow({ id: "g-own" }),
+      accessRow({ id: "g-foreign", adminUser: { name: "Noé Perrin", email: "noe.perrin@example.org", isActive: true, role: "front_desk", organizationId: "org-autre" } }),
+      accessRow({ id: "g-not-front-desk", adminUser: { name: "Inès Morel", email: "ines.morel@example.org", isActive: true, role: "organizer", organizationId: "org-fete" } }),
+    ])
+    const rows = await listEventFrontDeskAccesses(db as never, "org-fete", "evt-fete", NOW)
+    expect(rows.map((r) => r.id)).toEqual(["g-own"])
+    expect(db.adminEventAccess.findMany.mock.calls[0][0].where).toEqual({ eventId: "evt-fete", adminUser: { role: "front_desk", organizationId: "org-fete" } })
+  })
+
   it("lists nothing once a purged account's grant has cascaded away, so the panel's count is zero", async () => {
     const db = listReader([]) as never
-    await expect(listEventFrontDeskAccesses(db, "evt-fete", NOW)).resolves.toEqual([])
+    await expect(listEventFrontDeskAccesses(db, "org-fete", "evt-fete", NOW)).resolves.toEqual([])
   })
 })
 

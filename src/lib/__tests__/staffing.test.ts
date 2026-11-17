@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { fillPercent, staffingHeadline, staffingSummary, type StaffingShift } from "../staffing"
+import { fillPercent, SHIFT_PLACES_MAX, shiftCapacityProblem, staffingHeadline, staffingSummary, type StaffingShift } from "../staffing"
 
 const shift = (over: Partial<StaffingShift> & { id: string }): StaffingShift => ({
   roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00",
@@ -78,5 +78,20 @@ describe("staffing with pending requests", () => {
   })
   it("partly: the requests reduce what's missing", () => {
     expect(staffingSummary([{ ...shift, active: 1, requested: 2 }], []).underfilled[0].missing).toBe(2)
+  })
+})
+
+describe("shiftCapacityProblem", () => {
+  it("accepts a whole number from 1 to SHIFT_PLACES_MAX", () => {
+    expect(shiftCapacityProblem(1)).toBeNull()
+    expect(shiftCapacityProblem(SHIFT_PLACES_MAX)).toBeNull()
+  })
+
+  it("refuses more places than SHIFT_PLACES_MAX, none, or a fraction", () => {
+    expect(shiftCapacityProblem(SHIFT_PLACES_MAX + 1)).toBe(`Un créneau ne peut pas dépasser ${SHIFT_PLACES_MAX} places.`)
+    expect(shiftCapacityProblem(2 ** 31)).not.toBeNull()
+    expect(shiftCapacityProblem(0)).toBe("Indiquez au moins une personne par créneau.")
+    expect(shiftCapacityProblem(-1)).not.toBeNull()
+    expect(shiftCapacityProblem(2.5)).toBe("Les places sont un nombre entier de personnes.")
   })
 })

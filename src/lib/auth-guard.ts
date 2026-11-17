@@ -14,6 +14,7 @@ import { secondFactorRequired } from "./second-factor-guard"
 import { secondFactorUrl } from "./second-factor-session"
 import { loadFrontDeskGrant, type FrontDeskGrant } from "./front-desk-access"
 import { FRONT_DESK_HOME } from "./front-desk-pages"
+import { superAdminOrgCookie } from "./super-admin-org-cookie"
 
 type GuardError = NextResponse
 
@@ -26,13 +27,13 @@ function forbidden(): GuardError {
 }
 
 /**
- * The organization a super admin explicitly picked (sa-org-id cookie, set from the org list).
+ * The organization a super admin explicitly picked (superAdminOrgCookie, set from the org list).
  * No implicit fallback: without a valid pick there is no tenant context, rather than silently
  * working on some other organization than the one the super admin believes they're in.
  */
 export async function resolveSuperAdminOrg(): Promise<string | null> {
   const cookieStore = await cookies()
-  const fromCookie = cookieStore.get("sa-org-id")?.value
+  const fromCookie = cookieStore.get(superAdminOrgCookie().name)?.value
   if (!fromCookie) return null
   const org = await prisma.organization.findUnique({ where: { id: fromCookie }, select: { id: true } })
   return org?.id ?? null

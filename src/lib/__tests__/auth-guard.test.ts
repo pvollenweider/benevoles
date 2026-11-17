@@ -98,6 +98,24 @@ describe("requireOrgSession", () => {
     expect(result.organizationId).toBe("org-picked")
   })
 
+  it("over https, reads the organisation from the __Host- cookie only", async () => {
+    vi.stubEnv("AUTH_URL", "https://www.benevol.app")
+    try {
+      authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
+      findUniqueOrgMock.mockResolvedValue({ id: "org-picked" })
+      cookiesMock.mockResolvedValue({ get: (name: string) => (name === "__Host-sa-org-id" ? { value: "org-picked" } : undefined) })
+      const result = await requireOrgSession()
+      expect(result).not.toBeInstanceOf(NextResponse)
+      if (result instanceof NextResponse) return
+      expect(result.organizationId).toBe("org-picked")
+      // The plain name is not read there.
+      withSaCookie("org-picked")
+      expect((await requireOrgSession()) as NextResponse).toBeInstanceOf(NextResponse)
+    } finally {
+      vi.unstubAllEnvs()
+    }
+  })
+
   it("returns scoped client when admin has an organizationId", async () => {
     authMock.mockResolvedValue({ user: { role: "admin", organizationId: "org-A" } })
     const result = await requireOrgSession()

@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
-import { readdirSync, readFileSync, statSync } from "node:fs"
+import { readFileSync } from "node:fs"
 import { join, relative, resolve } from "node:path"
+import { handlerBodies, reExports, routeFilesUnder as routeFiles, ROUTE_METHODS as METHODS } from "../helpers/route-handlers"
 
 /**
  * Every admin route and method has a cross-tenant test (rule in CLAUDE.md): this guard lists each
@@ -12,15 +13,6 @@ import { join, relative, resolve } from "node:path"
 const root = resolve(import.meta.dirname, "../../..")
 const adminDir = join(root, "src/app/api/admin")
 const guardFile = join(root, "src/__tests__/security/cross-tenant-isolation.test.ts")
-const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const
-
-function routeFiles(dir: string): string[] {
-  return readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name)
-    if (statSync(path).isDirectory()) return routeFiles(path)
-    return name === "route.ts" ? [path] : []
-  })
-}
 
 /** The test blocks of the guard file: the text of each `it(...)`. */
 function testBlocks(source: string): string[] {
@@ -32,8 +24,9 @@ function uncoveredRoutes(files: { path: string; source: string }[], guardSource:
   const missing: string[] = []
   for (const { path, source } of files) {
     const specifier = `"@/${path.replace(/^src\//, "").replace(/\.ts$/, "")}"`
+    const handlers = handlerBodies(source)
     for (const method of METHODS) {
-      if (!new RegExp(`export (async )?function ${method}\\b`).test(source)) continue
+      if (!(method in handlers)) continue
       const call = new RegExp(`[\\s.(]${method}\\(`)
       if (!blocks.some((b) => b.includes(specifier) && call.test(b))) missing.push(`${method} /${path.replace(/^src\/app\//, "").replace(/\/route\.ts$/, "")}`)
     }
@@ -55,5 +48,23 @@ describe("admin routes: cross-tenant test coverage", () => {
     const files = [{ path: "src/app/api/admin/things/route.ts", source: "export async function GET() {}\nexport async function DELETE() {}" }]
     const guard = `describe("x", () => {\n  it("GET things", async () => {\n    const { GET } = await import("@/app/api/admin/things/route")\n    await GET()\n  })\n})`
     expect(uncoveredRoutes(files, guard)).toEqual(["DELETE /api/admin/things"])
+  })
+
+  it("sees a handler whatever the form that exports it by name", () => {
+    const files = [{ path: "src/app/api/admin/things/route.ts", source: "export function GET() {}\nexport const POST = async () => {}\nexport async function PATCH() {}" }]
+    expect(uncoveredRoutes(files, "")).toEqual(["GET /api/admin/things", "POST /api/admin/things", "PATCH /api/admin/things"])
+  })
+})
+
+describe("API route files export their handlers by name", () => {
+  const apiDir = join(root, "src/app/api")
+
+  it("no route file re-exports (`export {` or `export *`): such a handler would escape the guard tests", () => {
+    const offenders = routeFiles(apiDir).flatMap((p) => reExports(readFileSync(p, "utf8")).map((line) => `${relative(root, p)}: ${line}`))
+    expect(offenders).toEqual([])
+  })
+
+  it("reads the re-export forms", () => {
+    expect(reExports("export { POST } from \"./x\"\nexport * from \"./y\"\n  export {GET as PUT}\nexport const GET = 1")).toEqual(["export { POST } from \"./x\"", "export * from \"./y\"", "export {GET as PUT}"])
   })
 })

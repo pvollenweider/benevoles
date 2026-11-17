@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { shiftCapacitySchema } from "@/lib/shift-capacity-schema"
 import { civilDateSchema } from "@/lib/civil-date"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
@@ -27,7 +28,7 @@ const schema = z.object({
   endTime: clockSchema,
   slotMinutes: z.number().int(),
   breakMinutes: z.number().int().optional(),
-  capacity: z.number().int().min(1),
+  capacity: shiftCapacitySchema,
   holidays: z.enum(["none", "FR", "CH"]),
   closures: z.array(civilDateSchema).max(366).default([]),
   locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),

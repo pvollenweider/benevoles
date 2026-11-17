@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
+import { handlerBodies } from "@/__tests__/helpers/route-handlers"
 import { ADMIN_ROLES } from "../statuses"
 import { PRODUCT_UPDATE_RECIPIENT_WHERE } from "../product-update-recipients"
 import { FRONT_DESK_BULK_ACTIONS, FRONT_DESK_ROLE, FRONT_DESK_ROUTES, hasLevel, isFrontDeskBulkAction, isFrontDeskRole, isOrgAccountRole, isOwnerRole, lastOwnerProblem, ORG_ACCOUNT_ROLE_WHERE, ORG_ROLES, PERMISSIONS, PUBLIC_ADMIN_ROUTES, ROLE_LABEL } from "../permissions"
@@ -117,11 +118,7 @@ describe("permission matrix", () => {
   }
   walk(root)
   const handlers = (route: string) => {
-    const src = fs.readFileSync(path.join(root, route, "route.ts"), "utf-8")
-    const parts = src.split(/export async function (GET|POST|PATCH|PUT|DELETE)\(/)
-    const out: Record<string, string> = {}
-    for (let i = 1; i < parts.length; i += 2) out[parts[i]] = parts[i + 1]
-    return out
+    return handlerBodies(fs.readFileSync(path.join(root, route, "route.ts"), "utf-8"))
   }
 
   it("classifies every admin route and method, and nothing that doesn't exist", () => {
