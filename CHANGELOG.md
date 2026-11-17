@@ -30,6 +30,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Requêtes mal formées** : un corps de requête qui n'est pas du JSON valide reçoit une erreur 400 claire, au lieu d'une erreur serveur, sur les routes d'écriture de l'administration, de l'inscription publique et de l'activation d'invitation. <!-- interne -->
 - **Longueurs et nombres maximums** : le prénom et le nom d'un membre (100 caractères), son téléphone (50), ses étiquettes (50 au plus, 100 caractères chacune), le commentaire d'une inscription ajoutée à la main (2 000 caractères), le programme des spectacles d'un événement (500 spectacles au plus) et le minimum de personnes d'un créneau (nombre entier de 1 à 10 000) ont désormais un maximum, aussi pour une inscription ajoutée à la main et pour l'import d'un fichier. Dans l'import, une cellule trop longue est signalée sur sa ligne au lieu d'être coupée.
 - **Places d'un créneau** : le nombre de places est désormais limité à 10 000, comme le minimum de personnes, à la création d'un créneau, d'une série ou d'une permanence, à leur modification et dans les réglages d'un poste. Un nombre plus grand reçoit un message clair au lieu d'une erreur serveur.
+- **Inscription avec confirmation par e-mail** : deux demandes envoyées au même moment pour une même nouvelle adresse reçoivent toutes deux la réponse habituelle ; la seconde est reprise avec la fiche créée par la première. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
 

@@ -11,12 +11,19 @@ import { describe, it, expect, vi, beforeAll, afterAll } from "vitest"
 const send = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications", () => ({ sendNotification: send }))
 vi.mock("next/server", async (original) => ({ ...(await original<typeof import("next/server")>()), after: () => {} }))
+// Wrapped so one test can stand in for a concurrent sign-up that creates the member between this
+// request's read and its write; every other call runs the real helper.
+vi.mock("@/lib/signup-volunteer", async (original) => {
+  const actual = await original<typeof import("@/lib/signup-volunteer")>()
+  return { ...actual, lockSignupVolunteer: vi.fn(actual.lockSignupVolunteer) }
+})
 
 import { prisma } from "@/lib/prisma"
 import { POST as publicSignup } from "@/app/api/public/registrations/route"
 import { openPayload } from "@/lib/notifications/outbox"
 import { localDateTimeToUtc } from "@/lib/time-zone"
 import { registrationToken } from "@/lib/token-vault"
+import { lockSignupVolunteer } from "@/lib/signup-volunteer"
 
 const url = process.env.DATABASE_URL
 const tag = `int-signup-hard-${Date.now()}`
@@ -205,6 +212,69 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     const next = await prisma.signupConfirmation.findFirstOrThrow({ where: { eventId: confirming.id, email: owner, cancelledAt: null }, include: { registrations: true } })
     expect(next.id).not.toBe(pending.id)
     expect(next.registrations.map((r) => [r.shiftId, r.status])).toEqual([[pendingShift, "unconfirmed"]])
+  })
+
+  describe("on an event that confirms by email, the same new address twice at once", () => {
+    let confirmingId = ""
+    let shiftA = ""
+    let shiftB = ""
+    beforeAll(async () => {
+      const confirming = await prisma.event.create({
+        data: { organizationId: orgId, slug: "course", title: "Course", startDate: new Date("2031-06-01"), endDate: new Date("2031-06-02"), publicStatus: "published", requireEmailConfirmation: true },
+      })
+      confirmingId = confirming.id
+      const mk = async (roleName: string, startTime: string) => (await prisma.shift.create({ data: { eventId: confirmingId, roleName, label: roleName, capacity: 5, date: new Date("2031-06-02T00:00:00Z"), startTime, endTime: `${Number(startTime.slice(0, 2)) + 1}:00` } })).id
+      shiftA = await mk("Vestiaire", "10:00")
+      shiftB = await mk("Parking", "12:00")
+    })
+
+    // Every unproven request on this event answers the confirmation shape; the deadline is checked
+    // within a tolerance (24 h after each request), the rest must match exactly.
+    const confirmationShape = async (res: Response) => {
+      const { status, body } = await answer(res)
+      const { confirmationExpiresAt, ...rest } = body
+      expect(Math.abs(Date.parse(confirmationExpiresAt) - (Date.now() + 24 * 3_600_000))).toBeLessThan(10_000)
+      return { status, keys: Object.keys(body).sort(), rest }
+    }
+    const expected = { status: 201, rest: { success: true, editToken: null, linkSentByEmail: true, received: true, emailConfirmation: true, confirmationHeld: 1, confirmationWaiting: 0, confirmationTimeZone: "Europe/Zurich" } }
+
+    it("two requests at once both answer the confirmation shape", async () => {
+      const email = `${tag}-twice@example.org`
+      const [a, b] = await Promise.all([signup([shiftA], email, confirmingId), signup([shiftB], email, confirmingId)])
+      const [ra, rb] = [await confirmationShape(a), await confirmationShape(b)]
+      expect(ra).toMatchObject(expected)
+      expect(rb.keys).toEqual(ra.keys)
+      expect(rb).toMatchObject(expected)
+      expect(await prisma.volunteer.count({ where: { organizationId: orgId, email } })).toBe(1)
+    })
+
+    // A concurrent request creating the member between this one's read and its write, made
+    // deterministic: the first attempt meets the member created meanwhile and a duplicate key.
+    const memberCreatedMeanwhile = (email: string) => async () => {
+      await prisma.volunteer.createMany({ data: [{ organizationId: orgId, firstName: "Chloé", lastName: "Roy", email }], skipDuplicates: true })
+      throw Object.assign(new Error("duplicate key"), { code: "P2002" })
+    }
+
+    it("a member created meanwhile: tried again, recorded, and the same confirmation shape", async () => {
+      const email = `${tag}-meanwhile@example.org`
+      vi.mocked(lockSignupVolunteer).mockImplementationOnce(memberCreatedMeanwhile(email))
+      const res = await confirmationShape(await signup([shiftA], email, confirmingId))
+      expect(res).toMatchObject(expected)
+      expect(await prisma.signupConfirmation.count({ where: { eventId: confirmingId, email, cancelledAt: null, confirmedAt: null } })).toBe(1)
+    })
+
+    it("still a duplicate key after every attempt: the owner is told, the answer keeps the confirmation shape", async () => {
+      const email = `${tag}-stuck@example.org`
+      vi.mocked(lockSignupVolunteer).mockImplementation(memberCreatedMeanwhile(email))
+      try {
+        const res = await confirmationShape(await signup([shiftA], email, confirmingId))
+        expect(res).toMatchObject(expected)
+      } finally {
+        vi.mocked(lockSignupVolunteer).mockReset()
+        vi.mocked(lockSignupVolunteer).mockImplementation((await vi.importActual<typeof import("@/lib/signup-volunteer")>("@/lib/signup-volunteer")).lockSignupVolunteer)
+      }
+      expect(await prisma.signupConfirmation.count({ where: { eventId: confirmingId, email } })).toBe(0)
+    })
   })
 
   // The organisation the proxy resolved (subdomain, or `?org=` where honoured) scopes the event.

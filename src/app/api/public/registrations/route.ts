@@ -69,7 +69,8 @@ import { shiftStartsAt } from "@/lib/cancel-deadline"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { orgBaseUrl } from "@/lib/urls"
 import { hashToken } from "@/lib/token-hash"
-import { confirmationDeadlineLabel, emailConfirmationAnswer, pendingConfirmationSummary } from "@/lib/signup-confirmation"
+import { confirmationDeadlineLabel, emailConfirmationAnswer, noticeConfirmationSummary, pendingConfirmationSummary } from "@/lib/signup-confirmation"
+import { SIGNUP_ATTEMPTS, uniqueViolationStep } from "@/lib/signup-retry"
 import { findPendingSignupConfirmation, newSignupConfirmationToken, pendingSignupConfirmationShiftIds, replacePendingSignupConfirmation } from "@/lib/signup-confirmation-server"
 import { recordTokenMiss, tokenLookupsBlocked } from "@/lib/token-rate-limit"
 import { contactPhone } from "@/lib/contact-phone"
@@ -162,7 +163,7 @@ export async function POST(req: Request) {
   // Confirmation by email (#1253): off by default, including for existing events. Only then can a
   // previous pending request of this address hold places to free before this sign-up.
   const confirmsByEmail = event.requireEmailConfirmation === true
-  const previousConfirmationShiftIds = confirmsByEmail ? await pendingSignupConfirmationShiftIds(eventId, email) : []
+  let previousConfirmationShiftIds = confirmsByEmail ? await pendingSignupConfirmationShiftIds(eventId, email) : []
 
   const windowRefusal = registrationWindowRefusal(event)
   if (windowRefusal) return refuse(windowRefusal)
@@ -429,6 +430,8 @@ export async function POST(req: Request) {
     releasedShiftIds?: string[]
   }
   let matchId = existing?.id ?? null
+  // Where the last attempt placed each selected shift, for an answer given outside the transaction.
+  let lastPlacements: { status: string; startsAt: Date }[] | null = null
   for (let attempt = 1; ; attempt++) {
     try {
       outcome = await prisma.$transaction(async (tx) => {
@@ -560,8 +563,9 @@ export async function POST(req: Request) {
           if (placement.status === "full") throw new ShiftFullError(shift.id, shift.label)
           placements.push({ shift, placement })
         }
-        const confirmationSummary = (now: Date) =>
-          pendingConfirmationSummary(placements.map((p) => ({ status: p.placement.status, startsAt: shiftStartsAt(p.shift, timeZone) })), now)
+        const placed = placements.map((p) => ({ status: p.placement.status, startsAt: shiftStartsAt(p.shift, timeZone) }))
+        lastPlacements = placed
+        const confirmationSummary = (now: Date) => pendingConfirmationSummary(placed, now)
         // Workload protection (#1171): without proof of the address, the selection alone is judged
         // first, with only the birth date typed now, as for a new address; a refusal it gives is
         // the public, detailed one. What the address's own schedule or limits add is a conflict.
@@ -816,7 +820,7 @@ export async function POST(req: Request) {
       // without that match, as a sign-up arriving now would (twice at most, then the usual error).
       if (e instanceof SignupMatchMovedError) {
         if (ownsEmail) return refuse(staleLinkRefusal())
-        if (attempt < 3) { matchId = null; continue }
+        if (attempt < SIGNUP_ATTEMPTS) { matchId = null; continue }
       }
       // Without proof of the address (AUTHZ-01): answered like any sign-up without proof, the owner
       // is told by email what was not recorded and why.
@@ -835,12 +839,20 @@ export async function POST(req: Request) {
         // Our transaction rolled back; the duplicate belongs to a volunteer that exists
         // independently of it (created before, or by a concurrent sign-up).
         const owner = await prisma.volunteer.findFirst({ where: { email: { equals: email, mode: "insensitive" }, organizationId }, select: { id: true } })
-        if (owner && ownsEmail) return alreadyRegistered(owner.id, eventId)
-        if (owner) {
-          await sendSignupNotice({ volunteerId: owner.id, eventId, conflict: { kind: "duplicate", shift: null } })
-          return unprovenAnswer()
+        const step = uniqueViolationStep({ ownerFound: owner != null, ownsEmail, attempt })
+        if (!owner || step === "refuse") return refuse(duplicateSignupRefusal())
+        if (step === "already_registered") return alreadyRegistered(owner.id, eventId)
+        // Without proof of the address, a member created meanwhile by a concurrent request: run
+        // again with it, so the usual path decides and answers like every other unproven request.
+        if (step === "retry") {
+          matchId = owner.id
+          if (confirmsByEmail) previousConfirmationShiftIds = await pendingSignupConfirmationShiftIds(eventId, email)
+          continue
         }
-        return refuse(duplicateSignupRefusal())
+        await sendSignupNotice({ volunteerId: owner.id, eventId, conflict: { kind: "duplicate", shift: null } })
+        if (!confirmsByEmail) return unprovenAnswer()
+        const summary = noticeConfirmationSummary(lastPlacements, shifts.map((s) => shiftStartsAt(s, timeZone)), new Date())
+        return NextResponse.json(emailConfirmationAnswer(summary, timeZone), { status: 201 })
       }
       throw e
     }
