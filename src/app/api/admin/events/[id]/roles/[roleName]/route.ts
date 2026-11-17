@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { NOTIFIED_COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
+import { shiftCapacitySchema } from "@/lib/shift-capacity-schema"
 import { minVolunteersSchema } from "@/lib/min-volunteers-schema"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
@@ -87,7 +88,7 @@ const updateSchema = z.object({
   name: z.string().trim().min(1).max(100).optional(),
   colorKey: z.enum(COLOR_KEYS).nullable().optional(),
   /** Applied to every live shift of the role (#398), never below the people confirmed on a shift. */
-  capacity: z.number().int().min(1).optional(),
+  capacity: shiftCapacitySchema.optional(),
   /** Minimum of people on every live shift of the role (#949), with or without `capacity`; null removes it. */
   minVolunteers: minVolunteersSchema,
   /** Shifts per volunteer on this role (#466); null removes the limit. */

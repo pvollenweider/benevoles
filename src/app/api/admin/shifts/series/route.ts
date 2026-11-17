@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { z } from "zod"
+import { shiftCapacitySchema } from "@/lib/shift-capacity-schema"
 import { minVolunteersSchema } from "@/lib/min-volunteers-schema"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
@@ -31,7 +32,7 @@ const schema = z.object({
   endTime: clockSchema,
   slotMinutes: z.number().int(),
   breakMinutes: z.number().int().optional(),
-  capacity: z.number().int().min(1),
+  capacity: shiftCapacitySchema,
   // Minimum per shift (#949), the same on every shift of the series.
   minVolunteers: minVolunteersSchema,
   locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),
