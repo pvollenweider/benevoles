@@ -26,7 +26,7 @@ import {
   planPlacement,
 } from "@/lib/registration-capacity"
 import { z } from "zod"
-import { SIGNUP_ADDRESS_LIMIT, SIGNUP_ADDRESS_WINDOW_MS, SIGNUP_COMMENT_MAX, SIGNUP_ID_MAX, SIGNUP_PHONE_MAX, SIGNUP_SHIFTS_MAX, tooLongSignupField } from "@/lib/signup-limits"
+import { SIGNUP_COMMENT_MAX, SIGNUP_ID_MAX, SIGNUP_PHONE_MAX, SIGNUP_SHIFTS_MAX, tooLongSignupField } from "@/lib/signup-limits"
 import { linkTargetInclude } from "@/lib/personal-link-send"
 import { sendNotification } from "@/lib/notifications"
 import { linkToken, registrationToken } from "@/lib/token-vault"
@@ -320,13 +320,12 @@ export async function POST(req: Request) {
     }
   }
 
-  // A sign-up without proof of the address must not be a way to flood one address: this caps, per
-  // address and event, the requests and so the emails they send (the confirmation link when the
-  // event confirms by email, #1253; otherwise the confirmation or the notice to the owner). A proven
-  // sign-up is not counted. Hashed: the address never lands in RateLimit.
-  if (!ownsEmail) {
+  // A public sign-up waiting for its email confirmation must not be a way to flood one address
+  // (#1253): one pending request per address already replaces the previous, and this caps the
+  // confirmations sent per address and event. Hashed: the address never lands in RateLimit.
+  if (confirmsByEmail && !ownsEmail) {
     const address = hashToken(`${eventId}:${email}`).slice(0, 32)
-    const addressLimit = await rateLimit(address, "signup-email-confirm-address", SIGNUP_ADDRESS_LIMIT, SIGNUP_ADDRESS_WINDOW_MS)
+    const addressLimit = await rateLimit(address, "signup-email-confirm-address", 5, 60 * 60 * 1000)
     if (!addressLimit.ok) {
       return NextResponse.json(
         { error: "Trop de demandes pour cette adresse. Réessaie dans une heure." },

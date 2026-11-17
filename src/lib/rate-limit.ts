@@ -128,11 +128,9 @@ export const FAIL_CLOSED_ROUTES: ReadonlySet<string> = new Set([
   // Account recovery and reactivation
   "forgot-password", "reset-password", "org-reactivation", "org-reactivation-confirm",
   // Anonymous sign-ups
-  // "signup-email-confirm-address": every public sign-up without proof, per event and address
-  // (SIGNUP_ADDRESS_LIMIT), named after the confirmation by email where it started (#1253).
-  "signup", "signup-confirm", "registrations", "signup-email-confirm-address",
+  "signup", "signup-confirm", "registrations",
   // Confirmation by email of a public sign-up (#1253): the link token is a secret.
-  "signup-email-confirm",
+  "signup-email-confirm", "signup-email-confirm-address",
   // Link tokens: failed lookups, and the pages that look a token up
   "reg-token-miss", "reg-feed-miss", "avail-token-miss", "member-invite-roster-miss",
   "leader-token-read", "member-invite-read", "member-invite-decline", "waitlist-confirm", "org-keep",

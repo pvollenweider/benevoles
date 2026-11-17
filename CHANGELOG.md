@@ -22,7 +22,6 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Rétablir une inscription** : impossible pour une personne dont la fiche a été effacée ou fusionnée dans une autre ; le message dit quelle fiche utiliser.
 - **Accès accueil** : l'accès accueil enregistre les présences du jour affiché sur sa page Jour J, et seulement pour les personnes que cette page montre. Les organisateurs et propriétaires marquent toujours les présences de tous les jours de l'événement.
 - **Inscription avec confirmation par e-mail** : une nouvelle demande pour la même adresse qui ne peut pas être enregistrée (déjà inscrite sur ce créneau, horaire qui chevauche une de ses inscriptions, limite atteinte) ne remplace plus la demande en attente : ses places restent réservées et le lien de son e-mail reste valable. Une nouvelle demande enregistrée la remplace toujours.
-- **Inscription publique** : une même adresse peut envoyer au plus 5 demandes par heure et par événement sans lien personnel ni invitation, comme c'était déjà le cas pour les événements qui confirment par e-mail. Au-delà, le formulaire demande de réessayer dans une heure. Les inscriptions faites depuis le lien personnel ou une invitation ne sont pas comptées.
 - **Nettoyage de nuit** : une organisation réactivée entre le moment où le nettoyage la sélectionne et celui où il la supprime est conservée avec ses administrateurs, et les comptes rendus ne comptent que ce qui a été supprimé. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17

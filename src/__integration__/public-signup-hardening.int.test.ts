@@ -57,10 +57,10 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     await prisma.$disconnect()
   })
 
-  const signup = (shiftIds: string[], email: string, ev = eventId, orgSlug?: string, extra: Record<string, unknown> = {}) => publicSignup(new Request("http://localhost/api/public/registrations", {
+  const signup = (shiftIds: string[], email: string, ev = eventId, orgSlug?: string) => publicSignup(new Request("http://localhost/api/public/registrations", {
     method: "POST",
     headers: { "content-type": "application/json", "x-forwarded-for": `${tag}-ip-${ipSeq++}`, ...(orgSlug ? { "x-org-slug": orgSlug } : {}) },
-    body: JSON.stringify({ eventId: ev, shiftIds, firstName: "Chloé", lastName: "Roy", email, consent: true, charterAccepted: true, ...extra }),
+    body: JSON.stringify({ eventId: ev, shiftIds, firstName: "Chloé", lastName: "Roy", email, consent: true, charterAccepted: true }),
   }))
   const answer = async (res: Response) => ({ status: res.status, body: await res.json() })
 
@@ -205,39 +205,6 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     const next = await prisma.signupConfirmation.findFirstOrThrow({ where: { eventId: confirming.id, email: owner, cancelledAt: null }, include: { registrations: true } })
     expect(next.id).not.toBe(pending.id)
     expect(next.registrations.map((r) => [r.shiftId, r.status])).toEqual([[pendingShift, "unconfirmed"]])
-  })
-
-  it("without proof of the address, five sign-ups per address and event in an hour, whatever the event's mode; a proven one is not counted", async () => {
-    const standard = await prisma.event.create({
-      data: { organizationId: orgId, slug: "limite", title: "Limite", startDate: new Date("2031-06-01"), endDate: new Date("2031-06-02"), publicStatus: "published" },
-    })
-    const mk = async (roleName: string, startTime: string, endTime: string) => (await prisma.shift.create({ data: { eventId: standard.id, roleName, label: roleName, capacity: 10, date: new Date("2031-06-01T00:00:00Z"), startTime, endTime } })).id
-    const [held, asked, added] = [await mk("Accueil", "08:00", "09:00"), await mk("Bar", "10:00", "11:00"), await mk("Montage", "12:00", "13:00")]
-    const owner = `${tag}-limit-owner@example.org`
-    const person = await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Chloé", lastName: "Roy", email: owner } })
-    const personalToken = `${tag}-limit-token`
-    await prisma.registration.create({ data: { eventId: standard.id, shiftId: held, volunteerId: person.id, status: "active", ...registrationToken.data(personalToken) } })
-
-    // Five requests from five client addresses: answered as usual (the first recorded, the others
-    // not, which the answer does not tell).
-    const answers = []
-    for (let i = 0; i < 5; i++) answers.push(await answer(await signup([asked], owner, standard.id)))
-    expect(answers.map((a) => a.status)).toEqual([201, 201, 201, 201, 201])
-    for (const a of answers) expect(a).toEqual(answers[0])
-
-    const sixth = await signup([asked], owner, standard.id)
-    expect(sixth.status).toBe(429)
-    expect(Number(sixth.headers.get("Retry-After"))).toBeGreaterThan(0)
-    expect(await sixth.json()).toEqual({ error: "Trop de demandes pour cette adresse. Réessaie dans une heure." })
-
-    // Another address on the same event, and the same address on another event, are not affected.
-    expect((await signup([asked], `${tag}-limit-other@example.org`, standard.id)).status).toBe(201)
-    expect((await signup([ids.montage], owner)).status).toBe(201)
-
-    // With the personal link, the address is proven: not counted, recorded.
-    const proven = await signup([added], owner, standard.id, undefined, { personalToken })
-    expect(proven.status).toBe(201)
-    expect(await prisma.registration.count({ where: { volunteerId: person.id, shiftId: added, status: "active" } })).toBe(1)
   })
 
   // The organisation the proxy resolved (subdomain, or `?org=` where honoured) scopes the event.
