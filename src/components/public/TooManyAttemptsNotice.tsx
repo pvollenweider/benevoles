@@ -11,9 +11,9 @@ import { TOO_MANY_ATTEMPTS_PARAGRAPHS, TOO_MANY_ATTEMPTS_TITLE } from "@/lib/too
 export default function TooManyAttemptsNotice() {
   return (
     <>
-      <h1 className="text-xl font-bold text-gray-900 mb-2">{TOO_MANY_ATTEMPTS_TITLE}</h1>
+      <h1 className="text-xl font-bold text-gray-900 mb-2 break-words">{TOO_MANY_ATTEMPTS_TITLE}</h1>
       {TOO_MANY_ATTEMPTS_PARAGRAPHS.map((text, i) => (
-        <p key={i} className={`text-sm text-gray-700${i > 0 ? " mt-3" : ""}`}>{text}</p>
+        <p key={i} className={`text-sm text-gray-700 break-words${i > 0 ? " mt-3" : ""}`}>{text}</p>
       ))}
     </>
   )

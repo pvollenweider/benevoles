@@ -37,6 +37,9 @@ describe("TooManyAttemptsNotice", () => {
     const classes = [...container.querySelectorAll("*")].map((el) => el.getAttribute("class") ?? "").join(" ")
     expect(screen.getByRole("heading")).toHaveClass("text-xl", "font-bold", "text-gray-900")
     for (const p of container.querySelectorAll("p")) expect(p).toHaveClass("text-sm", "text-gray-700")
-    expect(classes).not.toMatch(/red-|amber-|whitespace-nowrap|\bw-\[|min-w-/)
+    // Left-aligned, unlike the centred neighbours of the waitlist page, and long words may break.
+    expect(classes).not.toMatch(/red-|amber-|whitespace-nowrap|\bw-\[|min-w-|text-center/)
+    expect(screen.getByRole("heading")).toHaveClass("break-words")
+    for (const p of container.querySelectorAll("p")) expect(p).toHaveClass("break-words")
   })
 })
