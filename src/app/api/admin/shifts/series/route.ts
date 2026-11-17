@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { z } from "zod"
+import { minVolunteersSchema } from "@/lib/min-volunteers-schema"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -32,7 +33,7 @@ const schema = z.object({
   breakMinutes: z.number().int().optional(),
   capacity: z.number().int().min(1),
   // Minimum per shift (#949), the same on every shift of the series.
-  minVolunteers: z.number().nullable().optional(),
+  minVolunteers: minVolunteersSchema,
   locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
   if (guard instanceof NextResponse) return guard
   const { db } = guard
 
-  const parsed = schema.safeParse(await req.json())
+  const parsed = schema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
   const { eventId, slotMinutes, breakMinutes, date, startTime, endTime, label, sectorId, ...rest } = parsed.data
 

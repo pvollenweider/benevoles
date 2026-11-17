@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { parseCsv } from "../csv-import"
+import { MEMBER_NAME_MAX, MEMBER_PHONE_MAX, MEMBER_TAG_MAX, MEMBER_TAGS_MAX } from "../text-limits"
 
 describe("parseCsv — header detection", () => {
   it("detects standard French headers", () => {
@@ -144,5 +145,42 @@ describe("parseCsv — one valid address per member", () => {
     const result = rowFor("")
     expect(result.errors).toHaveLength(0)
     expect(result.rows[0].email).toBeUndefined()
+  })
+})
+
+describe("parseCsv — per-cell limits", () => {
+  const head = "prenom,nom,email,telephone,tags\n"
+  const long = (n: number) => "a".repeat(n)
+
+  it("reports an over-long first name, last name or phone as a row error, never truncated", () => {
+    const result = parseCsv(`${head}${long(MEMBER_NAME_MAX + 1)},Martin,a@x.com,,\nAlice,${long(MEMBER_NAME_MAX + 1)},b@x.com,,\nBob,Dupont,c@x.com,${long(MEMBER_PHONE_MAX + 1)},`)
+    expect(result.rows).toEqual([])
+    expect(result.errors.map((e) => e.line)).toEqual([2, 3, 4])
+    expect(result.errors[0].reason).toContain("prénom")
+    expect(result.errors[1].reason).toContain("nom")
+    expect(result.errors[2].reason).toContain("téléphone")
+    expect(result.errors.every((e) => e.reason.includes("caractères au maximum"))).toBe(true)
+  })
+
+  it("accepts cells exactly at the limits", () => {
+    const result = parseCsv(`${head}${long(MEMBER_NAME_MAX)},${long(MEMBER_NAME_MAX)},a@x.com,${long(MEMBER_PHONE_MAX)},${long(MEMBER_TAG_MAX)}`)
+    expect(result.errors).toEqual([])
+    expect(result.rows[0].firstName).toHaveLength(MEMBER_NAME_MAX)
+    expect(result.rows[0].tags).toEqual([long(MEMBER_TAG_MAX)])
+  })
+
+  it("reports a tag that is too long and a cell with too many tags", () => {
+    const tooMany = Array.from({ length: MEMBER_TAGS_MAX + 1 }, (_, i) => `t${i}`).join(";")
+    const result = parseCsv(`${head}Alice,Martin,a@x.com,,${long(MEMBER_TAG_MAX + 1)}\nBob,Dupont,b@x.com,,${tooMany}`)
+    expect(result.rows).toEqual([])
+    expect(result.errors.map((e) => e.line)).toEqual([2, 3])
+    expect(result.errors[0].reason).toContain("étiquette")
+    expect(result.errors[1].reason).toContain("étiquette")
+  })
+
+  it("keeps the valid rows of a file that also has an over-long one", () => {
+    const result = parseCsv(`${head}Alice,Martin,a@x.com,,\n${long(MEMBER_NAME_MAX + 1)},Dupont,b@x.com,,`)
+    expect(result.rows.map((r) => r.firstName)).toEqual(["Alice"])
+    expect(result.errors).toHaveLength(1)
   })
 })

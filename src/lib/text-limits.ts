@@ -19,6 +19,14 @@ export const SHIFT_DESCRIPTION_MAX = 5000
 export const SHIFT_LOCATION_DETAILS_MAX = 1000
 export const SHIFT_INTERNAL_NOTES_MAX = 5000
 export const MEMBER_NOTES_MAX = 5000
+/** A member's name, phone and tags, however the member is added (form, manual registration, import). */
+export const MEMBER_NAME_MAX = 100
+export const MEMBER_PHONE_MAX = 50
+export const MEMBER_TAGS_MAX = 50
+export const MEMBER_TAG_MAX = 100
+/** The shows of an event's schedule: how many, and the length of a time (« HH:MM »). */
+export const SHOW_SCHEDULE_MAX = 500
+export const SHOW_TIME_MAX = 5
 
 /** 20000 → « 20 000 » (the same on the server and in every browser, unlike Intl). */
 function groupThousands(n: number): string {
