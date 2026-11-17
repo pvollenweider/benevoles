@@ -24,6 +24,7 @@ import { openPayload } from "@/lib/notifications/outbox"
 import { localDateTimeToUtc } from "@/lib/time-zone"
 import { registrationToken } from "@/lib/token-vault"
 import { lockSignupVolunteer } from "@/lib/signup-volunteer"
+import { SIGNUP_ADDRESS_LIMIT } from "@/lib/signup-limits"
 
 const url = process.env.DATABASE_URL
 const tag = `int-signup-hard-${Date.now()}`
@@ -64,9 +65,9 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     await prisma.$disconnect()
   })
 
-  const signup = (shiftIds: string[], email: string, ev = eventId, orgSlug?: string) => publicSignup(new Request("http://localhost/api/public/registrations", {
+  const signup = (shiftIds: string[], email: string, ev = eventId, orgSlug?: string, ip?: string) => publicSignup(new Request("http://localhost/api/public/registrations", {
     method: "POST",
-    headers: { "content-type": "application/json", "x-forwarded-for": `${tag}-ip-${ipSeq++}`, ...(orgSlug ? { "x-org-slug": orgSlug } : {}) },
+    headers: { "content-type": "application/json", "x-forwarded-for": ip ?? `${tag}-ip-${ipSeq++}`, ...(orgSlug ? { "x-org-slug": orgSlug } : {}) },
     body: JSON.stringify({ eventId: ev, shiftIds, firstName: "Chloé", lastName: "Roy", email, consent: true, charterAccepted: true }),
   }))
   const answer = async (res: Response) => ({ status: res.status, body: await res.json() })
@@ -306,5 +307,28 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     expect(refused).toEqual({ status: 409, body: { error: 'Le créneau "Rangement" est terminé. Recharge la page.' } })
     expect(await prisma.registration.count({ where: { shiftId: over.id } })).toBe(0)
     expect((await signup([running.id], `${tag}-night@example.org`, past.id)).status).toBe(201)
+  })
+
+  it("on an event that confirms by email, the hourly limit of an address counts per connection", async () => {
+    const confirming = await prisma.event.create({
+      data: { organizationId: orgId, slug: "adresse-ip", title: "Adresse IP", startDate: new Date("2031-06-01"), endDate: new Date("2031-06-02"), publicStatus: "published", requireEmailConfirmation: true },
+    })
+    const shift = (await prisma.shift.create({ data: { eventId: confirming.id, roleName: "Accueil", label: "Accueil", capacity: 5, date: new Date("2031-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" } })).id
+    const address = `${tag}-per-ip-a@example.org`
+    const ip1 = `${tag}-ip-fixed-1`
+    const ip2 = `${tag}-ip-fixed-2`
+    const from = (email: string, ip: string) => signup([shift], email, confirming.id, undefined, ip)
+
+    for (let i = 0; i < SIGNUP_ADDRESS_LIMIT.max; i++) expect((await from(address, ip1)).status).toBe(201)
+    const sixth = await from(address, ip1)
+    expect(sixth.status).toBe(429)
+    expect((await sixth.json()).error).toBe("Trop de demandes pour cette adresse. Réessaie dans une heure.")
+    expect(Number(sixth.headers.get("Retry-After"))).toBeGreaterThan(0)
+    // The address's owner, from another connection, is not refused by what the first one sent.
+    expect((await from(address, ip2)).status).toBe(201)
+    // Another address from the first connection has its own count.
+    expect((await from(`${tag}-per-ip-b@example.org`, ip1)).status).toBe(201)
+    // Still one pending request for the address: each new one replaced the previous.
+    expect(await prisma.signupConfirmation.count({ where: { eventId: confirming.id, email: address, cancelledAt: null, confirmedAt: null } })).toBe(1)
   })
 })
