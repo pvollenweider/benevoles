@@ -85,7 +85,7 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
     "app/api/super-admin/organizations/[id]/route.ts": { count: 3, reason: "The operator's view of one organisation (every account, with its role, and their number) and its deletion, which removes every account." },
     "app/api/super-admin/organizations/route.ts": { count: 1, reason: "The operator's list of organisations: the number of accounts of each, whatever their role." },
     "lib/prisma-org.ts": { count: 1, reason: "Checks that the account a front-desk grant is created for belongs to the organisation: an account of any role, the front-desk one first." },
-    "app/api/cron/cleanup/route.ts": { count: 1, reason: "Deletes the accounts of an organisation being erased: every account." },
+    "lib/org-cleanup.ts": { count: 1, reason: "Deletes the accounts of an organisation being erased: every account." },
     "lib/org-log-read.ts": { count: 1, reason: "Names of the authors of log entries, by id: a front-desk account's check-ins must be attributed." },
     "lib/event-log-read.ts": { count: 2, reason: "Names of the authors of log entries and of milestone owners, by id." },
     "lib/send-batches-data.ts": { count: 1, reason: "Names of the authors of sends, by id." },

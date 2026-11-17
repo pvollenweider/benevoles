@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { PENDING_ORG_WHERE, abandonedSignupSpaceWhere, expiredDeactivatedOrgWhere, pendingSummary } from "@/lib/org-review"
+import { PENDING_ORG_WHERE, pendingSummary } from "@/lib/org-review"
+import { deleteAbandonedSignupSpaces, deleteExpiredDeactivatedOrgs } from "@/lib/org-cleanup"
 import { notifyOperator } from "@/lib/operator-alerts"
 import { backupAlerts } from "@/lib/backup-alerts"
 import { countsToFreeze } from "@/lib/message-history"
@@ -77,29 +78,11 @@ async function run(req: Request) {
   // AdminUser.organizationId is only SET NULL: the organization's admins are deleted with it here,
   // as the super admin's deletion does. Otherwise an active admin outlived the organization (step 3
   // only removes inactive ones), with its email and password hash kept indefinitely.
-  const { deletedOrgs, deletedOrgAdmins } = await prisma.$transaction(async (tx) => {
-    const orgs = await tx.organization.findMany({
-      // Never a suspended one, nor one deactivated for inactivity (src/lib/org-review.ts).
-      where: expiredDeactivatedOrgWhere(orgCutoff),
-      select: { id: true },
-    })
-    const orgIds = orgs.map((o) => o.id)
-    if (orgIds.length === 0) return { deletedOrgs: { count: 0 }, deletedOrgAdmins: { count: 0 } }
-    const admins = await tx.adminUser.findMany({ where: { organizationId: { in: orgIds } }, select: { id: true } })
-    const deletedOrgs = await tx.organization.deleteMany({ where: { id: { in: orgIds } } })
-    const deletedOrgAdmins = await tx.adminUser.deleteMany({ where: { id: { in: admins.map((a) => a.id) } } })
-    return { deletedOrgs, deletedOrgAdmins }
-  })
+  const { deletedOrgs, deletedOrgAdmins } = await prisma.$transaction((tx) => deleteExpiredDeactivatedOrgs(tx, orgCutoff))
 
   // --- 1b. Sign-up spaces never activated (#810): the owner never chose a password. Deleted with
   // their inactive account (step 3 would remove the account alone and leave the space pending).
-  const deletedAbandonedSpaces = await prisma.$transaction(async (tx) => {
-    const orgs = await tx.organization.findMany({ where: abandonedSignupSpaceWhere(adminCutoff), select: { id: true } })
-    const orgIds = orgs.map((o) => o.id)
-    if (orgIds.length === 0) return { count: 0 }
-    await tx.adminUser.deleteMany({ where: { organizationId: { in: orgIds }, isActive: false } })
-    return tx.organization.deleteMany({ where: { id: { in: orgIds } } })
-  })
+  const { deletedOrgs: deletedAbandonedSpaces } = await prisma.$transaction((tx) => deleteAbandonedSignupSpaces(tx, adminCutoff))
 
   // --- 2. Orphan volunteers ---
   // Registrations were cascade-deleted with their organization's events above.

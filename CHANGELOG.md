@@ -19,6 +19,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste n'y figure plus. La personne placée sur ce poste la reçoit toujours sur sa page.
 - **Rétablir une inscription** : impossible pour une personne dont la fiche a été effacée ou fusionnée dans une autre ; le message dit quelle fiche utiliser.
+- **Nettoyage de nuit** : une organisation réactivée entre le moment où le nettoyage la sélectionne et celui où il la supprime est conservée avec ses administrateurs, et les comptes rendus ne comptent que ce qui a été supprimé. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
 
