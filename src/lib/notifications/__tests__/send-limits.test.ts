@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest"
 import { memoryStore } from "@/lib/rate-limit"
 import { alertRefusedAtRequest, DEFAULT_SEND_LIMITS, recipientWindowKey, sendCategory, sendLimits, sendWindows, takeSendAllowance, type SendLimits } from "../send-limits"
 
-const tight: SendLimits = { orgPerMinute: 3, orgPerDay: 5, orgBulkPerDay: 2, orgAccountPerDay: 1, globalPerMinute: 10, recipientPerHour: 2, signupConfirmationsPerHour: 3 }
+const tight: SendLimits = { orgPerMinute: 3, orgPerDay: 5, orgBulkPerDay: 2, orgBulkPerDayUnreviewed: 1, orgAccountPerDay: 1, globalPerMinute: 10, recipientPerHour: 2, signupConfirmationsPerHour: 3 }
 
 describe("email sending limits (#810)", () => {
   it("sorts kinds into bulk, account and automatic", () => {
@@ -152,5 +152,59 @@ describe("operator alert gate (#810)", () => {
     expect(a.map((r) => r.ok)).toEqual(b.map((r) => r.ok))
     expect(peekMany).toHaveBeenCalledTimes(5)
     expect(peek).not.toHaveBeenCalled()
+  })
+})
+
+describe("bulk cap of an automatically validated space not yet reviewed", () => {
+  const bulk = (w: { name: string }[]) => w.filter((x) => x.name.startsWith("org_bulk_per_day"))
+
+  it("defaults to 100 a day, read from its own variable", () => {
+    expect(DEFAULT_SEND_LIMITS.orgBulkPerDayUnreviewed).toBe(100)
+    expect(DEFAULT_SEND_LIMITS.orgBulkPerDay).toBe(2000)
+    expect(sendLimits({ EMAIL_LIMIT_ORG_BULK_PER_DAY_UNREVIEWED: "40" }).orgBulkPerDayUnreviewed).toBe(40)
+    expect(sendLimits({ EMAIL_LIMIT_ORG_BULK_PER_DAY_UNREVIEWED: "-3" }).orgBulkPerDayUnreviewed).toBe(100)
+  })
+
+  it("lowers only the bulk window, in the same window as the normal cap", () => {
+    const limits = sendLimits({})
+    const normal = sendWindows("org-1", "targeted_message", limits)
+    const reduced = sendWindows("org-1", "targeted_message", limits, null, { unreviewedAutoApproval: true })
+    expect(bulk(normal)).toEqual([{ key: "email:org:org-1:bulk:day", windowMs: 86_400_000, limit: 2000, name: "org_bulk_per_day" }])
+    expect(bulk(reduced)).toEqual([{ key: "email:org:org-1:bulk:day", windowMs: 86_400_000, limit: 100, name: "org_bulk_per_day_unreviewed" }])
+    // Every other window is unchanged.
+    expect(reduced.filter((w) => !w.name.startsWith("org_bulk"))).toEqual(normal.filter((w) => !w.name.startsWith("org_bulk")))
+  })
+
+  it("leaves automatic, account and public emails alone", () => {
+    const limits = sendLimits({})
+    for (const kind of ["registration_confirmation", "reminder_j1", "admin_invite", "registration_link_resend"] as const) {
+      expect(sendWindows("org-1", kind, limits, "a@b.ch", { unreviewedAutoApproval: true })).toEqual(sendWindows("org-1", kind, limits, "a@b.ch"))
+    }
+  })
+
+  it("follows the variable, and never raises a normal cap set lower", () => {
+    expect(bulk(sendWindows("org-1", "open_shifts", sendLimits({ EMAIL_LIMIT_ORG_BULK_PER_DAY_UNREVIEWED: "250" }), null, { unreviewedAutoApproval: true }))[0]).toMatchObject({ limit: 250, name: "org_bulk_per_day_unreviewed" })
+    expect(bulk(sendWindows("org-1", "open_shifts", sendLimits({ EMAIL_LIMIT_ORG_BULK_PER_DAY: "50" }), null, { unreviewedAutoApproval: true }))[0]).toMatchObject({ limit: 50, name: "org_bulk_per_day" })
+  })
+
+  it("holds the bulk email over the reduced cap, names that limit, and the count carries over after the review", async () => {
+    const store = memoryStore()
+    const limits = { ...tight, orgPerMinute: 100, orgPerDay: 100, orgBulkPerDay: 4, orgBulkPerDayUnreviewed: 2 }
+    const alert = vi.fn()
+    const send = (unreviewedAutoApproval: boolean, kind: "targeted_message" | "registration_confirmation" = "targeted_message") =>
+      takeSendAllowance("org-1", kind, { store, limits, alert, unreviewedAutoApproval })
+    expect((await send(true)).ok).toBe(true)
+    expect((await send(true)).ok).toBe(true)
+    expect(await send(true)).toMatchObject({ ok: false, limit: "org_bulk_per_day_unreviewed" })
+    expect(alert).toHaveBeenCalledWith("org_bulk_per_day_unreviewed", "org-1")
+    // An automatic email still goes.
+    expect((await send(true, "registration_confirmation")).ok).toBe(true)
+    // Reviewed: the normal cap, on the same count (2 already sent, 2 more allowed, not 4).
+    expect((await send(false)).ok).toBe(true)
+    expect((await send(false)).ok).toBe(true)
+    expect(await send(false)).toMatchObject({ ok: false, limit: "org_bulk_per_day" })
+    // The normal cap reached later in the same window still alerts, once.
+    expect(alert.mock.calls).toEqual([["org_bulk_per_day_unreviewed", "org-1"], ["org_bulk_per_day", "org-1"]])
+    expect((await store.peek("email:org:org-1:bulk:day"))?.count).toBe(4)
   })
 })

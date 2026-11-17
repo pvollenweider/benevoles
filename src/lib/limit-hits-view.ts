@@ -20,6 +20,7 @@ const LIMIT_LABELS: Record<string, string> = {
   org_per_minute: "Plafond par minute de l'organisation",
   org_per_day: "Plafond par jour de l'organisation",
   org_bulk_per_day: "Plafond par jour des envois en masse (messages, invitations, rappels, créneaux à compléter)",
+  org_bulk_per_day_unreviewed: "Plafond réduit par jour des envois en masse, espace validé automatiquement pas encore relu",
   org_account_per_day: "Plafond par jour des emails de compte organisateur",
   global_per_minute: "Plafond par minute de toute la plateforme",
   recipient_per_hour: "Trop de demandes publiques pour une même adresse en une heure",

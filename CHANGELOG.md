@@ -16,6 +16,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Partager ce créneau** : depuis « Où manque-t-il du monde ? », un lien public vers un seul créneau qui manque de monde, à coller dans le groupe de discussion ou sur la page de l'association, avec copie, partage, QR code et le nombre d'inscriptions qu'il a apportées. Une option peut accepter une inscription après la fermeture des inscriptions de l'événement, tant que ce créneau n'a pas commencé et qu'il reste une place ; la page publique et l'inscription suivent la même règle (#1386).
 - **État du service** : la page [statut.benevol.app](https://statut.benevol.app), hébergée hors du serveur, vérifie toutes les 5 minutes que le site, l'application et les vidéos répondent, et garde l'historique des incidents ; liée depuis le pied de page du site et la page Continuité du service (#1387).
 
+### Modifié
+
+- **Validation automatique des nouveaux espaces** : un espace validé automatiquement envoie au plus 100 emails groupés par jour (messages, invitations, rappels, créneaux à compléter) tant que l'opérateur ne l'a pas marqué comme relu ; ensuite, le plafond habituel s'applique. Les autres emails ne changent pas.
+
 ### Sécurité
 
 - **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse : la page affichée après l'envoi est la même pour toutes, et l'e-mail reçu dit la suite. Les e-mails ne changent pas.

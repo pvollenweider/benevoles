@@ -38,7 +38,7 @@ describe("one path to SMTP (#810)", () => {
 
 const m = vi.hoisted(() => ({ send: vi.fn(), verdict: vi.fn(), allowance: vi.fn() }))
 vi.mock("@/lib/notifications/channels/email", () => ({ emailChannel: { send: m.send } }))
-vi.mock("@/lib/notifications/org-send-guard", () => ({ organizationSendingVerdict: m.verdict }))
+vi.mock("@/lib/notifications/org-send-guard", () => ({ organizationSendingState: async (...a: unknown[]) => ({ refused: await m.verdict(...a), unreviewedAutoApproval: false }) }))
 vi.mock("@/lib/notifications/send-limits", () => ({ takeSendAllowance: m.allowance }))
 
 const payload = { kind: "targeted_message", organizationId: "org-a", recipient: { email: "a@example.org" }, data: {} } as never

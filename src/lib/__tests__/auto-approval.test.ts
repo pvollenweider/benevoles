@@ -18,6 +18,7 @@ import {
   autoApprovalRemainingBudget,
   autoApprovalState,
   autoApprovalStateSentence,
+  awaitsAutoApprovalReview,
   autoApprovalStoredBudgetUsed,
   autoApprovalUntilError,
   autoApprovalView,
@@ -407,5 +408,17 @@ describe("corrupted stored settings fail closed", () => {
     expect(autoApprovalStoredBudgetUsed({ budgetDate: "2026-11-16", budgetUsed: "x" }, now)).toBeNull()
     expect(autoApprovalStoredBudgetUsed({ budgetDate: "2026-11-17", budgetUsed: 1 }, now)).toBeNull()
     expect(autoApprovalStoredBudgetUsed({}, now)).toBeNull()
+  })
+})
+
+describe("awaitsAutoApprovalReview", () => {
+  const at = new Date("2026-11-17T08:00:00Z")
+  it("is true only for a space validated automatically and not yet reviewed", () => {
+    expect(awaitsAutoApprovalReview({ autoApprovedAt: at, autoApprovalReviewedAt: null })).toBe(true)
+    expect(awaitsAutoApprovalReview({ autoApprovedAt: at.toISOString(), autoApprovalReviewedAt: null })).toBe(true)
+    expect(awaitsAutoApprovalReview({ autoApprovedAt: at, autoApprovalReviewedAt: at })).toBe(false)
+    // Validated by hand (or still pending): never marked.
+    expect(awaitsAutoApprovalReview({ autoApprovedAt: null, autoApprovalReviewedAt: null })).toBe(false)
+    expect(awaitsAutoApprovalReview({})).toBe(false)
   })
 })
