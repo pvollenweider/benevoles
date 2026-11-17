@@ -6,7 +6,7 @@ vi.mock("../channels/email", () => ({ emailChannel: { send: channelSend } }))
 vi.mock("@/lib/prisma", () => ({ prisma: { organization: { findUnique } } }))
 
 import { sendNotification } from "../index"
-import { cancelPendingOutboxForOrganization, organizationBlocksSending, ORG_INACTIVE_REASON, sendingBlocked } from "../org-send-guard"
+import { cancelPendingOutboxForOrganization, organizationBlocksSending, organizationSendingState, ORG_INACTIVE_REASON, sendingBlocked } from "../org-send-guard"
 
 const payload = (organizationId?: string | null) => ({ kind: "registration_confirmation" as const, recipient: { email: "a@b.ch" }, organizationId, data: {} })
 
@@ -27,7 +27,7 @@ describe("sending for a deactivated organisation (#814)", () => {
   it("reads the organisation at send time, and not at all for a platform message", async () => {
     findUnique.mockResolvedValueOnce({ active: false })
     expect(await organizationBlocksSending("org-1")).toBe(true)
-    expect(findUnique).toHaveBeenCalledWith({ where: { id: "org-1" }, select: { active: true, outboundEmailApprovedAt: true, createdAt: true, admins: { where: { isActive: true, role: { in: ["admin", "organizer", "super_admin"] } }, select: { email: true, createdAt: true } } } })
+    expect(findUnique).toHaveBeenCalledWith({ where: { id: "org-1" }, select: { active: true, outboundEmailApprovedAt: true, autoApprovedAt: true, autoApprovalReviewedAt: true, createdAt: true, admins: { where: { isActive: true, role: { in: ["admin", "organizer", "super_admin"] } }, select: { email: true, createdAt: true } } } })
     findUnique.mockClear()
     expect(await organizationBlocksSending(null)).toBe(false)
     expect(findUnique).not.toHaveBeenCalled()
@@ -54,4 +54,32 @@ describe("sending for a deactivated organisation (#814)", () => {
       data: { status: "cancelled", lastError: ORG_INACTIVE_REASON, claimedAt: null, deliveryNotBefore: null },
     })
   })
+})
+
+describe("the review state of an automatically validated space, read with the send-time check", () => {
+  const approved = new Date("2026-11-10T08:00:00Z")
+  const row = (over: Record<string, unknown>) => ({ active: true, outboundEmailApprovedAt: approved, createdAt: approved, admins: [], ...over })
+  beforeEach(() => { findUnique.mockReset() })
+
+  it("is unreviewed while validated automatically and not yet reviewed, in the same single read", async () => {
+    findUnique.mockResolvedValueOnce(row({ autoApprovedAt: approved, autoApprovalReviewedAt: null }))
+    expect(await organizationSendingState("org-1", "a@b.ch")).toEqual({ refused: null, unreviewedAutoApproval: true })
+    expect(findUnique).toHaveBeenCalledTimes(1)
+  })
+
+  it("is back to normal once reviewed, and never concerns a space validated by hand", async () => {
+    findUnique.mockResolvedValueOnce(row({ autoApprovedAt: approved, autoApprovalReviewedAt: new Date("2026-11-12T08:00:00Z") }))
+    expect(await organizationSendingState("org-1", "a@b.ch")).toEqual({ refused: null, unreviewedAutoApproval: false })
+    findUnique.mockResolvedValueOnce(row({ autoApprovedAt: null, autoApprovalReviewedAt: null }))
+    expect(await organizationSendingState("org-1", "a@b.ch")).toEqual({ refused: null, unreviewedAutoApproval: false })
+  })
+
+  it("still refuses a deactivated space, and reads nothing for a platform email", async () => {
+    findUnique.mockResolvedValueOnce(row({ active: false, autoApprovedAt: approved, autoApprovalReviewedAt: null }))
+    expect(await organizationSendingState("org-1", "a@b.ch")).toMatchObject({ refused: ORG_INACTIVE_REASON })
+    findUnique.mockClear()
+    expect(await organizationSendingState(null, "a@b.ch")).toEqual({ refused: null, unreviewedAutoApproval: false })
+    expect(findUnique).not.toHaveBeenCalled()
+  })
+
 })

@@ -10,7 +10,7 @@
  */
 
 import { emailChannel } from "./channels/email"
-import { organizationSendingVerdict } from "./org-send-guard"
+import { organizationSendingState } from "./org-send-guard"
 import { takeSendAllowance } from "./send-limits"
 import { recordLimitHit } from "./limit-hits"
 import { bumpPlatformCounter } from "@/lib/usage-stats"
@@ -25,15 +25,17 @@ import type { NotificationKind, NotificationPayload } from "./types"
  * again; the outbox keeps the row pending, a direct send reports it to its caller. `limit` names
  * the limit reached. A refused email (dropped, or a direct send over a limit) is recorded here for
  * the operator (#1100); a held outbox email is recorded by the outbox, once per email and hour.
+ * The same organisation read says whether the space awaits the operator's review after an
+ * automatic validation (#1371): its bulk emails then get the reduced daily cap.
  */
 export async function sendNotification(
   payload: NotificationPayload,
 ): Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; recipientRejected?: true; blocked?: true; held?: true; retryAfterMs?: number; limit?: string }> {
   // Deactivated or missing organisation (#814), or one awaiting validation writing to someone other
   // than its administrators (#810): refused, and the outbox cancels the row.
-  const refused = await organizationSendingVerdict(payload.organizationId, payload.recipient?.email)
+  const { refused, unreviewedAutoApproval } = await organizationSendingState(payload.organizationId, payload.recipient?.email)
   if (refused) return { ok: false, reason: refused, permanent: true, blocked: true }
-  const allowance = await takeSendAllowance(payload.organizationId, payload.kind, { recipientEmail: payload.recipient?.email })
+  const allowance = await takeSendAllowance(payload.organizationId, payload.kind, { recipientEmail: payload.recipient?.email, unreviewedAutoApproval })
   // Over the per-recipient cap: abandoned, like a cancellation (the outbox marks it « cancelled »,
   // never retried). Over any other limit: held until the window ends.
   if (!allowance.ok && allowance.drop) {

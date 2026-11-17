@@ -70,6 +70,13 @@ export const DEFAULT_SEND_LIMITS = {
   orgPerDay: 5000,
   /** Bulk emails (targeted messages, invitations, open shifts, manual reminders) of one organisation, per day. */
   orgBulkPerDay: 2000,
+  /**
+   * The same bulk cap while a space was validated automatically (#1371) and the operator has not
+   * reviewed it yet (`awaitsAutoApprovalReview`, src/lib/auto-approval.ts). Counted in the same
+   * daily window as `orgBulkPerDay`: once the space is reviewed, the normal cap applies to the next
+   * email, on the same count. A space validated by hand never gets it.
+   */
+  orgBulkPerDayUnreviewed: 100,
   /** Account emails (admin invitations, password resets) of one organisation, per day. */
   orgAccountPerDay: 50,
   /** Every email of the platform, per minute: a safety net for the sending domain's reputation. */
@@ -90,6 +97,7 @@ const ENV: Record<keyof SendLimits, string> = {
   orgPerMinute: "EMAIL_LIMIT_ORG_PER_MINUTE",
   orgPerDay: "EMAIL_LIMIT_ORG_PER_DAY",
   orgBulkPerDay: "EMAIL_LIMIT_ORG_BULK_PER_DAY",
+  orgBulkPerDayUnreviewed: "EMAIL_LIMIT_ORG_BULK_PER_DAY_UNREVIEWED",
   orgAccountPerDay: "EMAIL_LIMIT_ORG_ACCOUNT_PER_DAY",
   globalPerMinute: "EMAIL_LIMIT_GLOBAL_PER_MINUTE",
   recipientPerHour: "EMAIL_LIMIT_RECIPIENT_PER_HOUR",
@@ -117,11 +125,29 @@ export function recipientKey(email: string): string {
 
 type Window = { key: string; windowMs: number; limit: number; name: string }
 
+/** What the send-time check read about the organisation, for the windows that depend on it. */
+export type OrgSendContext = {
+  /** Validated automatically and not yet reviewed by the operator: the reduced bulk cap. */
+  unreviewedAutoApproval?: boolean
+}
+
+/**
+ * The daily bulk window's limit and name: the reduced cap while the space awaits the operator's
+ * review, unless the normal cap is already lower (a variable set lower is never raised). The key
+ * is the same either way, so a review neither resets nor doubles the day's count.
+ */
+export function bulkDayLimit(limits: SendLimits, context: OrgSendContext = {}): { limit: number; name: string } {
+  if (context.unreviewedAutoApproval && limits.orgBulkPerDayUnreviewed < limits.orgBulkPerDay) {
+    return { limit: limits.orgBulkPerDayUnreviewed, name: "org_bulk_per_day_unreviewed" }
+  }
+  return { limit: limits.orgBulkPerDay, name: "org_bulk_per_day" }
+}
+
 /**
  * The windows one email counts against: the per-recipient one first (public-triggered kinds), so a
  * flood for one address is stopped before it reaches the organisation's or the platform's.
  */
-export function sendWindows(organizationId: string | null | undefined, kind: NotificationKind, limits: SendLimits = sendLimits(), recipientEmail?: string | null): Window[] {
+export function sendWindows(organizationId: string | null | undefined, kind: NotificationKind, limits: SendLimits = sendLimits(), recipientEmail?: string | null, context: OrgSendContext = {}): Window[] {
   const windows: Window[] = []
   if (recipientEmail && PUBLIC_TRIGGERED.includes(kind) && !RECIPIENT_CAP_AT_REQUEST.includes(kind)) {
     windows.push({ key: recipientWindowKey(recipientEmail, kind), windowMs: HOUR, limit: limits.recipientPerHour, name: "recipient_per_hour" })
@@ -136,7 +162,7 @@ export function sendWindows(organizationId: string | null | undefined, kind: Not
     { key: `email:org:${organizationId}:day`, windowMs: DAY, limit: limits.orgPerDay, name: "org_per_day" },
   )
   const category = sendCategory(kind)
-  if (category === "bulk") windows.push({ key: `email:org:${organizationId}:bulk:day`, windowMs: DAY, limit: limits.orgBulkPerDay, name: "org_bulk_per_day" })
+  if (category === "bulk") windows.push({ key: `email:org:${organizationId}:bulk:day`, windowMs: DAY, ...bulkDayLimit(limits, context) })
   if (category === "account") windows.push({ key: `email:org:${organizationId}:account:day`, windowMs: DAY, limit: limits.orgAccountPerDay, name: "org_account_per_day" })
   return windows
 }
@@ -155,6 +181,7 @@ const LIMIT_SENTENCES: Record<string, string> = {
   org_per_minute: "plafond d'une organisation par minute",
   org_per_day: "plafond d'une organisation par jour",
   org_bulk_per_day: "plafond d'envois en masse d'une organisation par jour",
+  org_bulk_per_day_unreviewed: "plafond réduit d'envois en masse par jour d'un espace validé automatiquement, pas encore relu",
   org_account_per_day: "plafond d'emails de compte d'une organisation par jour",
 }
 
@@ -238,11 +265,11 @@ export async function alertRefusedAtRequest(organizationId: string | null, kind:
 export async function takeSendAllowance(
   organizationId: string | null | undefined,
   kind: NotificationKind,
-  opts: { store?: RateLimitStore; limits?: SendLimits; recipientEmail?: string | null; alert?: (limit: string, organizationId: string | null) => void } = {},
+  opts: { store?: RateLimitStore; limits?: SendLimits; recipientEmail?: string | null; alert?: (limit: string, organizationId: string | null) => void } & OrgSendContext = {},
 ): Promise<SendAllowance> {
   const store = opts.store ?? defaultStore
   const alert = opts.alert ?? ((limit: string, org: string | null) => void alertOperator(limit, org, store))
-  const windows = sendWindows(organizationId, kind, opts.limits, opts.recipientEmail)
+  const windows = sendWindows(organizationId, kind, opts.limits, opts.recipientEmail, { unreviewedAutoApproval: opts.unreviewedAutoApproval })
 
   // 1. Decide, from the windows as they are.
   let full: { window: Window; msLeft: number } | null = null
@@ -263,7 +290,10 @@ export async function takeSendAllowance(
   if (full) {
     const retryAfterMs = Math.max(1000, Math.ceil(full.msLeft))
     try {
-      const marker = await store.hit(`${full.window.key}:held`, retryAfterMs)
+      // The reduced bulk cap shares its window with the normal one but has its own marker: once
+      // the space is reviewed, reaching the normal cap in the same window alerts again.
+      const markerKey = full.window.name === "org_bulk_per_day_unreviewed" ? `${full.window.key}:held:unreviewed` : `${full.window.key}:held`
+      const marker = await store.hit(markerKey, retryAfterMs)
       if (marker.count === 1) alert(full.window.name, organizationId ?? null)
     } catch (e) {
       reportError("email.limit.alert_marker")(e)

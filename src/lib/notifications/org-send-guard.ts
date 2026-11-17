@@ -3,6 +3,7 @@
 
 import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
 import { ORG_PENDING_REASON } from "@/lib/outbox-org-pending-reason"
+import { awaitsAutoApprovalReview } from "@/lib/auto-approval"
 import { canEmailThirdParties, pendingRecipientAllowed, signupOwnerEmails } from "@/lib/org-approval"
 import { prisma } from "@/lib/prisma"
 import { ORG_ACCOUNT_ROLE_WHERE } from "../permissions"
@@ -31,6 +32,8 @@ export { ORG_INACTIVE_REASON, ORG_PENDING_REASON }
 type OrgSendState = {
   active: boolean
   outboundEmailApprovedAt: Date | string | null
+  autoApprovedAt?: Date | string | null
+  autoApprovalReviewedAt?: Date | string | null
   createdAt?: Date | string
   admins?: { email: string; createdAt: Date | string }[]
 }
@@ -55,18 +58,31 @@ export function sendingVerdict(organizationId: string | null | undefined, org: O
 
 type OrgReader = {
   organization: {
-    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; createdAt: true; admins: { where: { isActive: true; role: { in: string[] } }; select: { email: true; createdAt: true } } } }): Promise<OrgSendState | null>
+    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; autoApprovedAt: true; autoApprovalReviewedAt: true; createdAt: true; admins: { where: { isActive: true; role: { in: string[] } }; select: { email: true; createdAt: true } } } }): Promise<OrgSendState | null>
   }
+}
+
+/**
+ * What sendNotification needs to know about the organisation, from the one read it makes per
+ * email: why the email may not go (`sendingVerdict`), and whether the space was validated
+ * automatically and is not yet reviewed (`awaitsAutoApprovalReview`), which lowers its daily bulk
+ * cap (src/lib/notifications/send-limits.ts). Read at every send, never cached: the operator's
+ * review applies to the next email on every replica.
+ */
+export type OrgSendingState = { refused: string | null; unreviewedAutoApproval: boolean }
+
+export async function organizationSendingState(organizationId: string | null | undefined, recipientEmail?: string | null, db: OrgReader = prisma): Promise<OrgSendingState> {
+  if (!organizationId) return { refused: null, unreviewedAutoApproval: false }
+  const org = await db.organization.findUnique({
+    where: { id: organizationId },
+    select: { active: true, outboundEmailApprovedAt: true, autoApprovedAt: true, autoApprovalReviewedAt: true, createdAt: true, admins: { where: { isActive: true, ...ORG_ACCOUNT_ROLE_WHERE }, select: { email: true, createdAt: true } } },
+  })
+  return { refused: sendingVerdict(organizationId, org, recipientEmail), unreviewedAutoApproval: !!org && awaitsAutoApprovalReview(org) }
 }
 
 /** Reads the organisation now and applies `sendingVerdict`. */
 export async function organizationSendingVerdict(organizationId: string | null | undefined, recipientEmail?: string | null, db: OrgReader = prisma): Promise<string | null> {
-  if (!organizationId) return null
-  const org = await db.organization.findUnique({
-    where: { id: organizationId },
-    select: { active: true, outboundEmailApprovedAt: true, createdAt: true, admins: { where: { isActive: true, ...ORG_ACCOUNT_ROLE_WHERE }, select: { email: true, createdAt: true } } },
-  })
-  return sendingVerdict(organizationId, org, recipientEmail)
+  return (await organizationSendingState(organizationId, recipientEmail, db)).refused
 }
 
 /** For a push (no address): deactivated, missing or pending organisation all block. */
