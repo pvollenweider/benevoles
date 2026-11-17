@@ -127,8 +127,9 @@ export async function POST(req: Request) {
     )
   }
 
-  const body = await req.json()
-  if (body?.charterAccepted !== true) {
+  const body = await req.json().catch(() => null)
+  if (!body || typeof body !== "object") return NextResponse.json({ error: "Données invalides." }, { status: 400 })
+  if (body.charterAccepted !== true) {
     // A page opened before the checkbox was sent with the form doesn't send it at all: reloading
     // the page brings the current form.
     return NextResponse.json(

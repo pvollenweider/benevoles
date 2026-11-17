@@ -38,7 +38,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { db, organizationId } = guard
 
   const { id: eventId } = await params
-  const body = await req.json()
+  const body = await req.json().catch(() => null)
   const parsed = postSchema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 

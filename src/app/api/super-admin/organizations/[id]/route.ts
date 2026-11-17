@@ -107,7 +107,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (guard instanceof NextResponse) return guard
 
   const { id } = await params
-  const body = await req.json()
+  const body = await req.json().catch(() => null)
   const parsed = patchSchema.safeParse(body)
   if (!parsed.success) {
     return validationError(parsed.error)

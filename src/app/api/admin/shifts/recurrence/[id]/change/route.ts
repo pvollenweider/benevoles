@@ -37,7 +37,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { db } = guard
   const { id } = await params
 
-  const parsed = schema.safeParse(await req.json())
+  const parsed = schema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
   const { from, notifyVolunteers, ...change } = parsed.data
 

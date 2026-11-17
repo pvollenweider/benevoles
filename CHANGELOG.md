@@ -21,6 +21,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste n'y figure plus. La personne placée sur ce poste la reçoit toujours sur sa page.
 - **Rétablir une inscription** : impossible pour une personne dont la fiche a été effacée ou fusionnée dans une autre ; le message dit quelle fiche utiliser.
 - **Nettoyage de nuit** : une organisation réactivée entre le moment où le nettoyage la sélectionne et celui où il la supprime est conservée avec ses administrateurs, et les comptes rendus ne comptent que ce qui a été supprimé. <!-- interne -->
+- **Requêtes mal formées** : un corps de requête qui n'est pas du JSON valide reçoit une erreur 400 claire, au lieu d'une erreur serveur, sur les routes d'écriture de l'administration, de l'inscription publique et de l'activation d'invitation. <!-- interne -->
+- **Longueurs et nombres maximums** : le prénom et le nom d'un membre (100 caractères), son téléphone (50), ses étiquettes (50 au plus, 100 caractères chacune), le commentaire d'une inscription ajoutée à la main (2 000 caractères), le programme des spectacles d'un événement (500 spectacles au plus) et le minimum de personnes d'un créneau (nombre entier de 1 à 10 000) ont désormais un maximum, aussi pour une inscription ajoutée à la main et pour l'import d'un fichier. Dans l'import, une cellule trop longue est signalée sur sa ligne au lieu d'être coupée.
 
 ## [2.8.0] — 2026-11-17
 
