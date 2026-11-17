@@ -16,6 +16,7 @@ const linkClass =
 
 const NEW_TAB = "(ouvre dans un nouvel onglet)"
 const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
+const STATUS_URL = "https://statut.benevol.app"
 
 type FooterLink = { href: string; label: string; external?: boolean; github?: boolean; newTab?: boolean }
 type FooterColumn = { id: string; title: string; links: readonly FooterLink[] }
@@ -76,6 +77,8 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
         { href: "/videos", label: "Tutoriels vidéo" },
         { href: "/nouveautes", label: "Nouveautés" },
         { href: "/blog", label: "Blog" },
+        // The hosted service's status page (#1387), served off its server so it answers in an outage.
+        ...(hosted ? [{ href: STATUS_URL, label: "État du service", external: true }] : []),
       ],
     },
     {

@@ -50,7 +50,8 @@ describe("PublicFooter", () => {
         // #872, #950: what the service is, for whom and at what price, from every page.
         "Découvrir": [["Pour qui ?", "/pour-qui"], ["Tarifs", "/tarifs"], ["Logiciel libre", "/logiciel-libre-benevoles"], ["Manifeste", "/manifeste"], ["Guides pratiques", "/ressources"]],
         // #757 (changelog) and the public video library stay one click away from every page.
-        "Aide": [["Documentation", "/doc"], ["Tutoriels vidéo", "/videos"], ["Nouveautés", "/nouveautes"], ["Blog", "/blog"]],
+        // #1387: the status page, off the server, from every page of the hosted service.
+        "Aide": [["Documentation", "/doc"], ["Tutoriels vidéo", "/videos"], ["Nouveautés", "/nouveautes"], ["Blog", "/blog"], ["État du service (ouvre dans un nouvel onglet)", "https://statut.benevol.app"]],
         "benevol.app": [
           ["Espace organisateur", "/admin/login"],
           [`Code source v${pkg.version} sur GitHub (ouvre dans un nouvel onglet)`, GITHUB],
@@ -69,6 +70,9 @@ describe("PublicFooter", () => {
       // Its name and press contact are its own: no link to the hosted service's press page.
       const project = footerSiteColumns("asso.example.org", null, false).find((c) => c.id === "project")!
       expect(project.links.map((l) => l.href)).not.toContain("/citer")
+      // Nor the hosted service's status page (#1387).
+      const help = footerSiteColumns("asso.example.org", null, false).find((c) => c.id === "help")!
+      expect(help.links.map((l) => l.href)).not.toContain("https://statut.benevol.app")
       expect(footerSiteColumns("benevol.app", null, true).map((c) => c.id)).toEqual(["discover", "help", "project", "legal"])
     })
 

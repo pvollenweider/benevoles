@@ -21,6 +21,10 @@ Avant l'événement, deux gestes suffisent :
 
 Avec ces documents, l'accueil des bénévoles se fait sur papier le jour même.
 
+## Savoir si le service fonctionne
+
+La page [État du service](https://statut.benevol.app) vérifie toutes les 5 minutes, depuis l'extérieur du serveur, que le site, l'application et les vidéos répondent. Elle reste accessible pendant une panne, la signale avec sa durée et garde l'historique des incidents.
+
 ## Le logiciel ne vous enferme pas
 
 - Le code est libre, publié sous licence AGPL : chacun peut le lire, le reprendre et le faire évoluer. La page [Logiciel libre](LOGICIEL-LIBRE-BENEVOLES.md) dit ce que cette licence permet.
@@ -42,7 +46,7 @@ Les [conditions d'utilisation](/legal/terms) font foi.
 
 ### Que faire si le service ne répond pas le jour de mon événement ?
 
-Utilisez le planning et les feuilles de présence imprimés avant l'événement.
+Utilisez le planning et les feuilles de présence imprimés avant l'événement. La page [État du service](https://statut.benevol.app) dit si une panne est en cours.
 
 ### Puis-je récupérer mes données si je change d'outil ?
 
