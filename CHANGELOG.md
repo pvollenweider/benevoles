@@ -34,6 +34,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Équipe** : le changement de rôle et le retrait d'un membre de l'équipe ne concernent que les propriétaires et les organisateurs ; un compte d'administration de la plateforme rattaché à l'organisation n'est plus modifiable depuis cette page. <!-- interne -->
 - **Tests des routes** : les tests de droits voient un gestionnaire quelle que soit sa forme d'export, refusent les ré-exports dans les fichiers de route, et vérifient que chaque route de l'administration de la plateforme refuse un administrateur d'organisation. <!-- interne -->
 - **Administration de la plateforme** : en production, le cookie qui retient l'organisation choisie porte le préfixe `__Host-` ; il faut choisir l'organisation à nouveau une fois. <!-- interne -->
+- **Accès accueil** : la liste des accès d'un événement ne retient que les comptes accueil de l'organisation, dans la requête et sur chaque ligne. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
 

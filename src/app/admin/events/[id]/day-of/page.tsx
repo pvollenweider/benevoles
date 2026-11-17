@@ -53,7 +53,7 @@ export default async function DayOfPage({ params, searchParams }: { params: Prom
   const eventDay = isEventDay({ startDate: event.startDate.toISOString(), endDate: event.endDate.toISOString() }, now, timeZone)
   // « Accès accueil » (#1142): owners only, at the bottom of the page. Organisers see the page as before.
   const owner = hasLevel(ctx.session.user?.role, "owner")
-  const frontDeskAccesses = owner ? await listEventFrontDeskAccesses(ctx.db, id, now) : []
+  const frontDeskAccesses = owner ? await listEventFrontDeskAccesses(ctx.db, ctx.organizationId, id, now) : []
 
   return (
     <div className="space-y-6 max-w-2xl">

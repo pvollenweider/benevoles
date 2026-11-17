@@ -84,7 +84,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const { id } = await params
   const event = await guard.db.event.findFirst({ where: { id }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
-  const accesses = await listEventFrontDeskAccesses(guard.db, id, new Date())
+  const accesses = await listEventFrontDeskAccesses(guard.db, guard.organizationId, id, new Date())
   return NextResponse.json({ accesses }, { headers: { "Cache-Control": "no-store" } })
 }
 

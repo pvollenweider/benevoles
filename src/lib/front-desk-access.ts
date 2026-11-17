@@ -293,7 +293,7 @@ type AccessListRow = {
   revokedAt: Date | null
   expiresAt: Date | null
   eventId: string
-  adminUser: { name: string; email: string; isActive: boolean } | null
+  adminUser: { name: string; email: string; isActive: boolean; role: string; organizationId: string | null } | null
   event: {
     id: string
     title: string
@@ -307,18 +307,20 @@ type AccessListRow = {
 /**
  * The grants of one event, for its owner panel: the person's name, email, status and the event's
  * last day, never a token nor a hash. Read through the organisation's scoped client, which limits
- * the rows to its own events; the event relation is checked again here.
+ * the rows to its own events; the event and the account's organisation are checked again here,
+ * in the query and on each row, as `loadFrontDeskGrant` does.
  */
 export async function listEventFrontDeskAccesses(
   db: OrgScopedPrisma,
+  organizationId: string,
   eventId: string,
   now: Date,
 ): Promise<FrontDeskAccessView[]> {
   const rows = (await (db as unknown as AccessListReader).adminEventAccess.findMany({
-    where: { eventId, adminUser: { role: FRONT_DESK_ROLE } },
+    where: { eventId, adminUser: { role: FRONT_DESK_ROLE, organizationId } },
     select: {
       id: true, revokedAt: true, expiresAt: true, eventId: true,
-      adminUser: { select: { name: true, email: true, isActive: true } },
+      adminUser: { select: { name: true, email: true, isActive: true, role: true, organizationId: true } },
       event: {
         select: {
           id: true, title: true, startDate: true, endDate: true, publicStatus: true,
@@ -329,7 +331,7 @@ export async function listEventFrontDeskAccesses(
     orderBy: { createdAt: "asc" },
   })) as AccessListRow[]
   return (rows ?? [])
-    .filter((row) => row.event?.id === eventId && row.adminUser)
+    .filter((row) => row.event?.id === eventId && row.adminUser?.role === FRONT_DESK_ROLE && row.adminUser.organizationId === organizationId)
     .map((row) => {
       const event = row.event!
       const timeZone = orgTimeZone(event.organization)
