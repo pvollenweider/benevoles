@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { getClientIp, isRateLimited, rateLimit, type RateLimitStore } from "./rate-limit"
+import { getClientIp, isRateLimited, rateLimit, type ClientHeaders, type RateLimitStore } from "./rate-limit"
 import { hashToken } from "./token-hash"
 
 /**
@@ -39,12 +39,12 @@ const MISS_ROUTES: Record<TokenFamily, string> = { personal: "reg-token-miss", c
 export const TOKEN_MISS_RETRY_AFTER = HOUR / 1000
 
 /** Whether this client has used up its failed lookups; does not count. */
-export async function tokenLookupsBlocked(req: Request, using?: RateLimitStore, family: TokenFamily = "personal"): Promise<boolean> {
+export async function tokenLookupsBlocked(req: ClientHeaders, using?: RateLimitStore, family: TokenFamily = "personal"): Promise<boolean> {
   return isRateLimited(getClientIp(req), MISS_ROUTES[family], TOKEN_MISS_LIMIT, using)
 }
 
 /** Counts one failed lookup for this client. */
-export async function recordTokenMiss(req: Request, using?: RateLimitStore, family: TokenFamily = "personal"): Promise<void> {
+export async function recordTokenMiss(req: ClientHeaders, using?: RateLimitStore, family: TokenFamily = "personal"): Promise<void> {
   await rateLimit(getClientIp(req), MISS_ROUTES[family], TOKEN_MISS_LIMIT, HOUR, using)
 }
 

@@ -207,6 +207,11 @@ export async function isRateLimited(ip: string, route: string, limit: number, us
 }
 
 /**
+ * What getClientIp reads: a Request, or `{ headers: await headers() }` in a server component.
+ */
+export type ClientHeaders = { headers: Pick<Headers, "get"> }
+
+/**
  * Client IP as seen by our own reverse proxy (#289).
  *
  * `X-Forwarded-For` is a list each proxy appends to: `client-supplied…, what proxy 1 saw, …`.
@@ -215,7 +220,7 @@ export async function isRateLimited(ip: string, route: string, limit: number, us
  * proxy closest to us: counted from the right, TRUSTED_PROXY_HOPS entries in (1 = the rightmost,
  * Traefik in front of the pod; raise it only if another proxy/LB appends in front of Traefik).
  */
-export function getClientIp(req: Request): string {
+export function getClientIp(req: ClientHeaders): string {
   const hops = Math.max(1, Number.parseInt(process.env.TRUSTED_PROXY_HOPS ?? "1", 10) || 1)
   const chain = (req.headers.get("x-forwarded-for") ?? "")
     .split(",")

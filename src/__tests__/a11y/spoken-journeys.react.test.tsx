@@ -18,6 +18,8 @@ import SignupForm from "@/components/public/signup/SignupForm"
 import BlocklistManager from "@/components/super-admin/BlocklistManager"
 import AdminsManager from "@/components/admin/AdminsManager"
 import ImportModal from "@/components/admin/members/ImportModal"
+import TooManyAttemptsNotice from "@/components/public/TooManyAttemptsNotice"
+import { TOO_MANY_ATTEMPTS_PARAGRAPHS } from "@/lib/too-many-attempts"
 import { useSubmit } from "@/lib/use-submit"
 import { startVirtualScreenReader, stopVirtualScreenReader, type VirtualScreenReader } from "./virtual-screen-reader"
 
@@ -318,5 +320,28 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     expect(heard[0]).toContain("textbox, Délai")
     expect(log.filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(message))).toEqual([])
     expect(screen.getByRole("textbox", { name: "Délai" })).toHaveFocus()
+  })
+
+  // « Réessaie dans une heure » on a page a personal link opens: present in the server HTML, read in
+  // order like any page, a level-1 heading then its paragraphs; no live region speaks it again.
+  it("reads « Réessaie dans une heure » as a level-1 heading, then its three paragraphs, with nothing live", async () => {
+    const view = render(<main><TooManyAttemptsNotice /></main>)
+    const reader = await startVirtualScreenReader(view.container)
+
+    const heard: string[] = []
+    while (heard.at(-1) !== "end of main" && heard.length < 20) {
+      await reader.next()
+      heard.push(await reader.lastSpokenPhrase())
+    }
+    // Container boundaries (« paragraph », « end of paragraph ») aside, the content in order.
+    const content = heard.filter((phrase) => !/^(end of )?(main|paragraph)$/.test(phrase))
+    expect(content).toEqual([
+      "heading, Réessaie dans une heure, level 1",
+      ...TOO_MANY_ATTEMPTS_PARAGRAPHS,
+    ])
+    await settle()
+    const log = await reader.spokenPhraseLog()
+    expect(log.filter((phrase) => /^(polite|assertive):/.test(phrase))).toEqual([])
+    expect(log.filter((phrase) => phrase.includes("Réessaie dans une heure"))).toHaveLength(1)
   })
 })

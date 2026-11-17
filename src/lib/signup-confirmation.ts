@@ -7,6 +7,8 @@
  * (`src/lib/signup-confirmation-server.ts`) does the database work.
  */
 
+import { TOO_MANY_ATTEMPTS, TOO_MANY_ATTEMPTS_TITLE, type TooManyAttemptsState } from "./too-many-attempts"
+
 /** How long a provisional reservation stays, like a waitlist offer (#946). */
 export const SIGNUP_CONFIRMATION_HOURS = 24
 
@@ -155,7 +157,7 @@ export function confirmationIdentityLines(input: { firstName: string; lastName: 
 }
 
 /** The browser tab title per state (WCAG 2.4.2): set by generateMetadata, then by the page. */
-export const SIGNUP_CONFIRMATION_PAGE_TITLES: Record<SignupConfirmationPageState, string> = {
+export const SIGNUP_CONFIRMATION_PAGE_TITLES: Record<SignupConfirmationPageState | TooManyAttemptsState, string> = {
   pending: "Confirme ton inscription",
   confirmed: "Inscription confirmée",
   expired: "Lien expiré",
@@ -163,6 +165,7 @@ export const SIGNUP_CONFIRMATION_PAGE_TITLES: Record<SignupConfirmationPageState
   cancelled: "Demande annulée",
   invalid: "Lien expiré ou invalide",
   unavailable: "Espace indisponible",
+  [TOO_MANY_ATTEMPTS]: TOO_MANY_ATTEMPTS_TITLE,
 }
 
 /** What the result page says after a sign-up waiting for its email confirmation (#1253). */
