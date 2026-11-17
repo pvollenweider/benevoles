@@ -127,7 +127,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // Next already decodes the segment: decoding it again throws on a name with « % » (« Calcul 10% »).
   const decodedRole = roleName
 
-  const body = await req.json()
+  const body = await req.json().catch(() => null)
   const parsed = updateSchema.safeParse(body)
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })

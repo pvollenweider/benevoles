@@ -61,7 +61,7 @@ export async function POST(req: Request) {
   if (guard instanceof NextResponse) return guard
   const { db } = guard
 
-  const parsed = schema.safeParse(await req.json())
+  const parsed = schema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
   const { eventId, slotMinutes, breakMinutes, date, startTime, endTime, label, sectorId, ...rest } = parsed.data
 

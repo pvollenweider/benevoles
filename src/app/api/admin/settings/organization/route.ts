@@ -27,7 +27,11 @@ export async function PATCH(req: Request) {
   if (guard instanceof NextResponse) return guard
   const { organizationId } = guard
 
-  const body = await req.json().catch(() => ({}))
+  const body = await req.json().catch(() => null)
+  // Anything but a JSON object (`null`, a number, a list, a body that does not parse) holds no change.
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "Aucune modification." }, { status: 400 })
+  }
   const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; shiftSwapsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null; workloadPolicyDefault?: Prisma.InputJsonValue | typeof Prisma.DbNull } = {}
   let oldSlug: string | null = null
 
