@@ -3,6 +3,7 @@ import {
   dayOfBoard,
   dayOfBoardUrl,
   dayOfDateRange,
+  isListedOnDayOfBoard,
   filterGroups,
   groupByStart,
   groupHeading,
@@ -124,6 +125,46 @@ describe("isEventDay and the dates to load", () => {
     const r = dayOfDateRange(new Date("2026-07-04T23:30:00Z"))
     expect(r.from.toISOString()).toBe("2026-07-02T00:00:00.000Z")
     expect(r.to.toISOString()).toBe("2026-07-06T00:00:00.000Z")
+  })
+})
+
+describe("isListedOnDayOfBoard", () => {
+  // 2026-07-05 13:30 in Zurich (summer, UTC+2).
+  const now = new Date("2026-07-05T11:30:00Z")
+  const at = (date: string, startTime: string, endTime: string, status = "published") => ({ date: new Date(`${date}T00:00:00Z`), startTime, endTime, status })
+
+  it("lists today's shifts running, starting within the window, or over earlier today", () => {
+    expect(isListedOnDayOfBoard(at("2026-07-05", "13:00", "16:00"), now, TZ)).toBe(true)
+    expect(isListedOnDayOfBoard(at("2026-07-05", "16:00", "18:00"), now, TZ)).toBe(true)
+    expect(isListedOnDayOfBoard(at("2026-07-05", "08:00", "12:00"), now, TZ)).toBe(true)
+  })
+
+  it("leaves out tomorrow's and yesterday's shifts", () => {
+    expect(isListedOnDayOfBoard(at("2026-07-06", "13:00", "16:00"), now, TZ)).toBe(false)
+    expect(isListedOnDayOfBoard(at("2026-07-04", "13:00", "16:00"), now, TZ)).toBe(false)
+  })
+
+  it("a shift later today, beyond the window, is only counted by the board: not listed", () => {
+    expect(isListedOnDayOfBoard(at("2026-07-05", "16:31", "18:00"), now, TZ)).toBe(false)
+    expect(isListedOnDayOfBoard(at("2026-07-05", "16:30", "18:00"), now, TZ)).toBe(true)
+  })
+
+  it("last night's shift that ended this morning is listed; one that ended at midnight sharp is not", () => {
+    const morning = new Date("2026-07-05T05:00:00Z")
+    expect(isListedOnDayOfBoard(at("2026-07-04", "22:00", "02:00"), morning, TZ)).toBe(true)
+    expect(isListedOnDayOfBoard(at("2026-07-04", "20:00", "00:00"), morning, TZ)).toBe(false)
+  })
+
+  it("a cancelled shift is never listed", () => {
+    expect(isListedOnDayOfBoard(at("2026-07-05", "13:00", "16:00", "cancelled"), now, TZ)).toBe(false)
+  })
+
+  it("stays inside the dates dayOfDateRange loads, bounds included, whatever the window", () => {
+    const r = dayOfDateRange(now)
+    const wide = 24 * 5
+    const iso = (d: Date) => d.toISOString().slice(0, 10)
+    expect(isListedOnDayOfBoard(at(iso(r.to), "10:00", "12:00"), now, TZ, wide)).toBe(true)
+    expect(isListedOnDayOfBoard(at(iso(new Date(r.to.getTime() + 86_400_000)), "10:00", "12:00"), now, TZ, wide)).toBe(false)
   })
 })
 

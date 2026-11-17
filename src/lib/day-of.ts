@@ -95,6 +95,28 @@ export function dayOfDateRange(now: Date): { from: Date; to: Date } {
   return { from: new Date(day - 2 * 86_400_000), to: new Date(day + 2 * 86_400_000) }
 }
 
+/** Phases whose people the board lists; shifts later today are only counted (`laterCount`). */
+const LISTED_PHASES: ReadonlySet<DayOfPhase> = new Set(["in_progress", "upcoming", "earlier"])
+
+/**
+ * Whether the board read at `now` lists this shift's people: not cancelled, stored on a date
+ * dayOfDateRange loads, and running, starting within the window or over earlier today. The
+ * front-desk account records attendance only on these shifts (#1142), the ones its board shows.
+ */
+export function isListedOnDayOfBoard(
+  shift: { date: Date; startTime: string; endTime: string; status?: string | null },
+  now: Date,
+  timeZone: string,
+  windowHours: number = DAY_OF_WINDOW_HOURS,
+): boolean {
+  if (shift.status === "cancelled") return false
+  const range = dayOfDateRange(now)
+  const t = shift.date.getTime()
+  if (!(t >= range.from.getTime() && t <= range.to.getTime())) return false
+  const phase = shiftPhase({ date: shift.date.toISOString().slice(0, 10), startTime: shift.startTime, endTime: shift.endTime }, now, timeZone, windowHours)
+  return phase !== null && LISTED_PHASES.has(phase)
+}
+
 /** Shifts starting at the same instant, in role order. */
 export type DayOfGroup = { key: string; date: string; startTime: string; shifts: DayOfShift[] }
 
@@ -130,6 +152,7 @@ export function dayOfBoard(shifts: DayOfShift[], now: Date, timeZone: string, wi
     const phase = shiftPhase(s, now, timeZone, windowHours)
     if (phase) by[phase].push(s)
   }
+  // The listed groups are LISTED_PHASES (isListedOnDayOfBoard); `later` is only counted.
   return {
     inProgress: groupByStart(by.in_progress),
     upcoming: groupByStart(by.upcoming),
