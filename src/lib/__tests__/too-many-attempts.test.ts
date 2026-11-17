@@ -3,16 +3,16 @@ import { TOO_MANY_ATTEMPTS, TOO_MANY_ATTEMPTS_PARAGRAPHS, TOO_MANY_ATTEMPTS_TITL
 import { WAITLIST_OFFER_PAGE_TITLES } from "@/lib/waitlist-offer"
 import { SIGNUP_CONFIRMATION_PAGE_TITLES } from "@/lib/signup-confirmation"
 
-describe("« Trop de tentatives » copy", () => {
-  it("titles the state « Trop de tentatives »", () => {
-    expect(TOO_MANY_ATTEMPTS_TITLE).toBe("Trop de tentatives")
+describe("« Réessaie dans une heure » copy", () => {
+  it("titles the state « Réessaie dans une heure »", () => {
+    expect(TOO_MANY_ATTEMPTS_TITLE).toBe("Réessaie dans une heure")
   })
 
   it("says what happened, what was not done, and what to do, in three paragraphs", () => {
     expect(TOO_MANY_ATTEMPTS_PARAGRAPHS).toEqual([
-      "Trop de liens non reconnus ont été ouverts depuis ta connexion internet en peu de temps. Par sécurité, les liens personnels sont en pause pour cette connexion, pendant une heure au plus.",
-      "Ton lien n'a pas été vérifié et rien n'a été modifié. Attends une heure, puis ouvre à nouveau le lien reçu par email.",
-      "Si tu dois répondre avant, essaie depuis une autre connexion, par exemple les données mobiles de ton téléphone, ou écris à l'organisation de ton événement.",
+      "Cette page est bloquée pendant une heure. Cela arrive quand trop de liens sont ouverts depuis le même réseau. Ta réponse n'a pas été enregistrée.",
+      "Dans une heure, clique à nouveau sur le lien reçu par email.",
+      "C'est urgent ? Ouvre le lien sur ton téléphone, wifi coupé. Sinon, contacte l'organisation de l'événement.",
     ])
   })
 
@@ -22,7 +22,7 @@ describe("« Trop de tentatives » copy", () => {
   })
 
   it("is a state of the waitlist offer and sign-up confirmation title maps", () => {
-    expect(WAITLIST_OFFER_PAGE_TITLES[TOO_MANY_ATTEMPTS]).toBe("Trop de tentatives")
-    expect(SIGNUP_CONFIRMATION_PAGE_TITLES[TOO_MANY_ATTEMPTS]).toBe("Trop de tentatives")
+    expect(WAITLIST_OFFER_PAGE_TITLES[TOO_MANY_ATTEMPTS]).toBe("Réessaie dans une heure")
+    expect(SIGNUP_CONFIRMATION_PAGE_TITLES[TOO_MANY_ATTEMPTS]).toBe("Réessaie dans une heure")
   })
 })

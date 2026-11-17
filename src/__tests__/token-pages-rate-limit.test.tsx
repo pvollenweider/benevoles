@@ -8,7 +8,7 @@ import { TOKEN_MISS_LIMIT } from "@/lib/token-rate-limit"
 
 // The pages a personal link opens (sign-up confirmation, waitlist offer, « Je ne peux pas ») count
 // unknown links like their JSON APIs (src/lib/token-page-guard.ts): after 20 unknown links from one
-// connection, they answer « Trop de tentatives » without looking anything up, valid link or not.
+// connection, they answer « Réessaie dans une heure » without looking anything up, valid link or not.
 
 // Next memoizes `cache()` per request; React's client build does not. One « view » here is one
 // scope: generateMetadata and the page of the same view share it, the next view starts afresh.
@@ -124,7 +124,7 @@ describe("personal-link pages: failed-lookup limit", () => {
     db.declineFindUnique.mockResolvedValue(null)
   })
 
-  it("after 20 unknown links, a valid link on each page shows « Trop de tentatives » and looks nothing up", async () => {
+  it("after 20 unknown links, a valid link on each page shows « Réessaie dans une heure » and looks nothing up", async () => {
     const ip = freshIp()
     await spendMisses(ip)
     vi.clearAllMocks()
@@ -133,18 +133,18 @@ describe("personal-link pages: failed-lookup limit", () => {
     db.inviteFindUnique.mockResolvedValue(declineLink)
 
     const waitlist = await open(await pages.waitlist(), { token: "realoffer" }, ip)
-    expect(waitlist.title).toBe("Trop de tentatives")
+    expect(waitlist.title).toBe("Réessaie dans une heure")
     expect(waitlist.html).toContain("<h1")
-    expect(waitlist.html).toContain(">Trop de tentatives</h1>")
+    expect(waitlist.html).toContain(">Réessaie dans une heure</h1>")
     expect(waitlist.html).not.toContain("Fête du village")
 
     const conf = await open(await pages.confirmation(), { token: "realconfirmation" }, ip)
-    expect(conf.title).toBe("Trop de tentatives")
-    expect(conf.html).toContain(">Trop de tentatives</h1>")
+    expect(conf.title).toBe("Réessaie dans une heure")
+    expect(conf.html).toContain(">Réessaie dans une heure</h1>")
 
     const decline = await open(await pages.decline(), { kind: "invitation", token: "realinvite", shiftId: "shift1" }, ip)
-    expect(decline.title).toMatch(/^Trop de tentatives — /)
-    expect(decline.html).toContain(">Trop de tentatives</h1>")
+    expect(decline.title).toMatch(/^Réessaie dans une heure — /)
+    expect(decline.html).toContain(">Réessaie dans une heure</h1>")
     expect(decline.html).not.toContain("Bar")
 
     expect(lookups()).toBe(0)
@@ -177,7 +177,7 @@ describe("personal-link pages: failed-lookup limit", () => {
       expect(view.title).toBe("Lien expiré ou invalide")
     }
     expect(db.registrationFindFirst).toHaveBeenCalledTimes(TOKEN_MISS_LIMIT)
-    expect((await open(waitlist, { token: "unknown-next" }, ip)).title).toBe("Trop de tentatives")
+    expect((await open(waitlist, { token: "unknown-next" }, ip)).title).toBe("Réessaie dans une heure")
   })
 
   it("each page counts its unknown links: confirmation and « Je ne peux pas » too", async () => {
@@ -188,7 +188,7 @@ describe("personal-link pages: failed-lookup limit", () => {
     for (let i = 0; i < 9; i++) await open(await pages.decline(), { kind: "invitation", token: `nope${i}`, shiftId: "shift1" }, ip)
     // A malformed link counts like an unknown one.
     await open(await pages.decline(), { kind: "invitation", token: "not a token", shiftId: "shift1" }, ip)
-    expect(await titleOf(await pages.waitlist(), { token: "realoffer" }, ip)).toBe("Trop de tentatives")
+    expect(await titleOf(await pages.waitlist(), { token: "realoffer" }, ip)).toBe("Réessaie dans une heure")
   })
 
   it("while blocked, a valid, an unknown and a malformed link give the same page", async () => {

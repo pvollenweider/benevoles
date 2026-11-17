@@ -322,9 +322,9 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     expect(screen.getByRole("textbox", { name: "Délai" })).toHaveFocus()
   })
 
-  // « Trop de tentatives » on a page a personal link opens: present in the server HTML, read in
+  // « Réessaie dans une heure » on a page a personal link opens: present in the server HTML, read in
   // order like any page, a level-1 heading then its paragraphs; no live region speaks it again.
-  it("reads « Trop de tentatives » as a level-1 heading, then its three paragraphs, with nothing live", async () => {
+  it("reads « Réessaie dans une heure » as a level-1 heading, then its three paragraphs, with nothing live", async () => {
     const view = render(<main><TooManyAttemptsNotice /></main>)
     const reader = await startVirtualScreenReader(view.container)
 
@@ -336,12 +336,12 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     // Container boundaries (« paragraph », « end of paragraph ») aside, the content in order.
     const content = heard.filter((phrase) => !/^(end of )?(main|paragraph)$/.test(phrase))
     expect(content).toEqual([
-      "heading, Trop de tentatives, level 1",
+      "heading, Réessaie dans une heure, level 1",
       ...TOO_MANY_ATTEMPTS_PARAGRAPHS,
     ])
     await settle()
     const log = await reader.spokenPhraseLog()
     expect(log.filter((phrase) => /^(polite|assertive):/.test(phrase))).toEqual([])
-    expect(log.filter((phrase) => phrase.includes("Trop de tentatives"))).toHaveLength(1)
+    expect(log.filter((phrase) => phrase.includes("Réessaie dans une heure"))).toHaveLength(1)
   })
 })

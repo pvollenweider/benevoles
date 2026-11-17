@@ -3,7 +3,7 @@ import { seriousViolations } from "./helpers/axe"
 
 /**
  * The pages a personal link opens (sign-up confirmation, waitlist offer, « Je ne peux pas ») count
- * unknown links per connection like their APIs: after 20, they say « Trop de tentatives » for up
+ * unknown links per connection like their APIs: after 20, they say « Réessaie dans une heure » for up
  * to an hour, whatever the link. A dedicated address keeps the other specs unblocked.
  */
 
@@ -14,13 +14,13 @@ async function expectNotice(page: Page, path: string, title: RegExp, label: stri
   const response = await page.goto(path)
   expect(response?.status(), label).toBe(200)
   await expect(page).toHaveTitle(title)
-  await expect(page.getByRole("heading", { level: 1, name: "Trop de tentatives" })).toBeVisible()
+  await expect(page.getByRole("heading", { level: 1, name: "Réessaie dans une heure" })).toBeVisible()
   await expect(page.getByRole("heading")).toHaveCount(1)
-  await expect(page.getByText("Ton lien n'a pas été vérifié et rien n'a été modifié.", { exact: false })).toBeVisible()
+  await expect(page.getByText("Ta réponse n'a pas été enregistrée.", { exact: false })).toBeVisible()
   expect(await seriousViolations(page), `${label}, 1280 px`).toEqual([])
 
   await page.setViewportSize({ width: 320, height: 640 })
-  await expect(page.getByRole("heading", { level: 1, name: "Trop de tentatives" })).toBeVisible()
+  await expect(page.getByRole("heading", { level: 1, name: "Réessaie dans une heure" })).toBeVisible()
   expect(await seriousViolations(page), `${label}, 320 px`).toEqual([])
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   expect(overflow, `${label}: no horizontal scroll at 320 px`).toBeLessThanOrEqual(0)
@@ -38,9 +38,9 @@ test("after 20 unknown links, the three personal-link pages pause for that conne
     expect(await res.text()).toContain("Lien expiré ou invalide")
   }
 
-  await expectNotice(page, `/waitlist/e2eoffer${stamp}/confirm`, /^Trop de tentatives$/, "waitlist offer")
-  await expectNotice(page, `/confirmation/e2econfirm${stamp}`, /^Trop de tentatives$/, "sign-up confirmation")
-  await expectNotice(page, `/ne-peux-pas/invitation/e2einvite${stamp}/e2eshift${stamp}`, /^Trop de tentatives — /, "« Je ne peux pas »")
+  await expectNotice(page, `/waitlist/e2eoffer${stamp}/confirm`, /^Réessaie dans une heure$/, "waitlist offer")
+  await expectNotice(page, `/confirmation/e2econfirm${stamp}`, /^Réessaie dans une heure$/, "sign-up confirmation")
+  await expectNotice(page, `/ne-peux-pas/invitation/e2einvite${stamp}/e2eshift${stamp}`, /^Réessaie dans une heure — /, "« Je ne peux pas »")
 
   // Another connection still opens its links normally.
   await context.setExtraHTTPHeaders({ "x-forwarded-for": `10.84.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}` })

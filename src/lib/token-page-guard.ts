@@ -8,7 +8,7 @@ import { recordTokenMiss, tokenLookupsBlocked, type TokenFamily } from "./token-
 /**
  * Failed-lookup accounting for the pages a personal link opens (the sign-up confirmation, the
  * waitlist offer, « Je ne peux pas »), the same as their JSON APIs (src/lib/token-rate-limit.ts):
- * a connection that used up its unknown links is answered « Trop de tentatives » before anything
+ * a connection that used up its unknown links is answered « Réessaie dans une heure » before anything
  * is looked up, valid link or not, so the block tells nothing about the link; an unknown link
  * counts one miss. A valid link never counts.
  *

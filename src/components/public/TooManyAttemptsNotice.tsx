@@ -4,7 +4,7 @@
 import { TOO_MANY_ATTEMPTS_PARAGRAPHS, TOO_MANY_ATTEMPTS_TITLE } from "@/lib/too-many-attempts"
 
 /**
- * « Trop de tentatives » on a page a personal link opens (src/lib/token-page-guard.ts): a server
+ * « Réessaie dans une heure » on a page a personal link opens (src/lib/token-page-guard.ts): a server
  * component, in the page's HTML from the start. The tab title and the heading carry the message:
  * no live region, no focus move, no timer, nothing to click. Rendered inside the page's own card.
  */
