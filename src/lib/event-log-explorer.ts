@@ -32,6 +32,7 @@ export const ENTITY_LABELS: Record<string, string> = {
   EventMilestone: "Jalon",
   EventQuestion: "Question",
   GroupLink: "Lien de groupe",
+  ShiftShareLink: "Lien de créneau",
   ShiftSwap: "Échange de créneaux",
   Availability: "Disponibilités",
 }
@@ -58,6 +59,7 @@ export const ACTION_PREFIXES = [
   { value: "sectorleader", label: "Responsables de secteur" },
   { value: "eventmilestone", label: "Jalons" },
   { value: "grouplink", label: "Liens de groupe" },
+  { value: "shiftshare", label: "Liens de créneau" },
   { value: "message", label: "Messages" },
   { value: "question", label: "Questions" },
 ]

@@ -69,6 +69,8 @@ const FIELD_LABELS: Record<string, string> = {
   overlapAllowed: "cumulable avec un autre créneau",
   // « Attribué par l'organisation uniquement » (#1145).
   assignedOnly: "attribué par l'organisation uniquement",
+  // Shift share link (#1386): accepts a sign-up after the event's registrations closed.
+  acceptsAfterClose: "accepte après la fermeture des inscriptions",
   // « Accès par une réponse » (#962).
   reservedAnswer: "accès par une réponse",
   // « Repas sur le pouce possible » (#1171, lot 2).
@@ -256,6 +258,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "grouplink.created": (a) => `${a} a créé un lien de groupe`,
   "grouplink.updated": (a) => `${a} a modifié un lien de groupe`,
   "grouplink.deleted": (a) => `${a} a supprimé un lien de groupe`,
+  "shiftshare.created": (a) => `${a} a créé un lien pour un créneau`,
+  "shiftshare.updated": (a) => `${a} a modifié un lien de créneau`,
   "sector.created": (a) => `${a} a créé un secteur`,
   "sector.updated": (a) => `${a} a renommé un secteur`,
   "sector.archived": (a) => `${a} a archivé un secteur`,

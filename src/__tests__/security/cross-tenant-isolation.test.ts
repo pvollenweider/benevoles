@@ -205,6 +205,14 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       delete: vi.fn(),
       ...((overrides.eventGroupLink as object) ?? {}),
     },
+    shiftShareLink: {
+      findMany: vi.fn().mockResolvedValue([]),
+      findFirst: vi.fn().mockResolvedValue(null),
+      create: vi.fn().mockResolvedValue({ id: "slink-a", shiftId: "shift-a", code: "abcd2345", acceptsAfterClose: false }),
+      update: vi.fn(),
+      delete: vi.fn(),
+      ...((overrides.shiftShareLink as object) ?? {}),
+    },
     eventPage: {
       findMany: vi.fn().mockResolvedValue([]),
       findFirst: vi.fn().mockResolvedValue(null),
@@ -1917,6 +1925,55 @@ describe("Group links — cross-tenant isolation (#947)", () => {
     const { GET } = await import("@/app/api/admin/events/[id]/qr/route")
     setupGuard({ event: { findFirst: vi.fn().mockResolvedValue({ slug: "fete", title: "Fête", organization: { slug: "org-a" } }) } })
     const res = await GET(makeRequest("/api/admin/events/evt-a/qr?link=link-b"), params("evt-a"))
+    expect(res.status).toBe(404)
+  })
+})
+
+// ── Share link for one shift (#1386) ─────────────────────────────────────────
+
+describe("Shift share links — cross-tenant isolation (#1386)", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const linkParams = (id: string, linkId: string) => ({ params: Promise.resolve({ id, linkId }) })
+  const ORG_A_EVENT = { id: "evt-a", slug: "fete", organization: { slug: "org-a" } }
+
+  it("POST /api/admin/events/[id]/shift-links returns 404 for an org-B event and creates nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/shift-links/route")
+    const db = setupGuard()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/shift-links", "POST", { shiftId: "shift-b" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.shift.findFirst).not.toHaveBeenCalled()
+    expect(db.shiftShareLink.create).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/shift-links returns 404 for an org-B shift of an org-A event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/shift-links/route")
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue(ORG_A_EVENT) } }) // shift.findFirst → null
+    const res = await POST(makeRequest("/api/admin/events/evt-a/shift-links", "POST", { shiftId: "shift-b" }), params("evt-a"))
+    expect(res.status).toBe(404)
+    expect(db.shiftShareLink.create).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/shift-links/[linkId] returns 404 for an org-B event", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/shift-links/[linkId]/route")
+    const db = setupGuard()
+    const res = await PATCH(makeRequest("/api/admin/events/evt-b/shift-links/link-b", "PATCH", { acceptsAfterClose: true }), linkParams("evt-b", "link-b"))
+    expect(res.status).toBe(404)
+    expect(db.shiftShareLink.update).not.toHaveBeenCalled()
+  })
+
+  it("PATCH of an org-B link through an org-A event returns 404, read only through the scoped client", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/shift-links/[linkId]/route")
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue(ORG_A_EVENT) } }) // link lookup → null
+    const res = await PATCH(makeRequest("/api/admin/events/evt-a/shift-links/link-b", "PATCH", { acceptsAfterClose: true }), linkParams("evt-a", "link-b"))
+    expect(res.status).toBe(404)
+    expect(db.shiftShareLink.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "link-b", eventId: "evt-a" } }))
+    expect(db.shiftShareLink.update).not.toHaveBeenCalled()
+  })
+
+  it("GET /api/admin/events/[id]/shift-links/[linkId]/qr returns 404 for an org-B link", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/shift-links/[linkId]/qr/route")
+    setupGuard({ event: { findFirst: vi.fn().mockResolvedValue({ slug: "fete", organization: { slug: "org-a" } }) } })
+    const res = await GET(makeRequest("/api/admin/events/evt-a/shift-links/link-b/qr"), linkParams("evt-a", "link-b"))
     expect(res.status).toBe(404)
   })
 })

@@ -11,6 +11,8 @@ import { apexHref } from "@/lib/apex-links"
 import EventPageClient, { type EventData } from "./EventPageClient"
 import { consentPrivacyHref } from "@/lib/public-signup"
 import { GROUP_PARAM, parseGroupCode, resolveGroupFilter } from "@/lib/group-links"
+import { SHIFT_SHARE_PARAM, parseShiftShareCode, shiftShareBooking, shiftShareView, type ShiftShareView } from "@/lib/shift-share-links"
+import { orgTimeZone } from "@/lib/time-zone"
 import { EMBED_PARAM, isEmbedMode } from "@/lib/embed"
 import { publicShifts } from "@/lib/role-assignment"
 
@@ -84,6 +86,35 @@ export default async function EventPage({ params, searchParams }: {
   // The roles the page shows: a role assigned by the organisation only (#1145) is not one of them.
   const groupFilter = resolveGroupFilter(rawGroup === undefined ? null : (groupCode ?? ""), groupLink, [...new Set(publicShifts(event.shifts).map((s) => s.roleName))])
 
+  // Share link for one shift (#1386): `?partage=<code>`. A code that doesn't parse, a link of
+  // another event or an unknown one changes nothing (the page shows the whole event, no notice).
+  // The same value keeps its other meaning, a shift proposed by an email (#869): a shift id is not
+  // shaped like a share code, so `parseShiftShareCode` leaves it alone.
+  const rawShiftShare = query[SHIFT_SHARE_PARAM]
+  const shiftShareCode = parseShiftShareCode(rawShiftShare)
+  const shiftShareLink = shiftShareCode
+    ? await prisma.shiftShareLink.findFirst({
+        where: { eventId: event.id, code: shiftShareCode },
+        select: { code: true, shiftId: true, acceptsAfterClose: true },
+      })
+    : null
+  const shareableIds = new Set(publicShifts(event.shifts).map((s) => s.id))
+  const linkShift = shiftShareLink ? event.shifts.find((s) => s.id === shiftShareLink.shiftId && shareableIds.has(s.id)) : null
+  const shiftShare: ShiftShareView = shiftShareLink && linkShift
+    ? shiftShareView(
+        shiftShareBooking({
+          event,
+          shift: linkShift,
+          occupied: linkShift.registrations.length,
+          acceptsAfterClose: shiftShareLink.acceptsAfterClose,
+          now: new Date(),
+          timeZone: orgTimeZone(event.organization),
+        }),
+        shiftShareLink.code,
+        shiftShareLink.shiftId,
+      )
+    : { kind: "none" }
+
   const footerSite = orgPageFooterSite()
   return (
     <EventPageClient
@@ -94,6 +125,7 @@ export default async function EventPage({ params, searchParams }: {
       eventSlug={eventSlug}
       initialEvent={publicEventPayload(event) as EventData}
       groupFilter={groupFilter}
+      shiftShare={shiftShare}
       embed={embed}
     />
   )

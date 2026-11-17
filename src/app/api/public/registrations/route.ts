@@ -63,6 +63,7 @@ import { touchOrgActivity } from "@/lib/org-activity"
 import { isKnownMinor, signupNoticeVersion } from "@/lib/shift-roster"
 import { applySignupRosterChoice, logRosterChange, type RosterChange } from "@/lib/roster-consent-write"
 import { parseGroupCode } from "@/lib/group-links"
+import { parseShiftShareCode, shiftShareBooking, shiftShareStartedRefusal } from "@/lib/shift-share-links"
 import { sendSignupNotice, signupNotice } from "@/lib/signup-notice"
 import { overlapConflict, type SignupConflict } from "@/lib/signup-conflict"
 import { orgTimeZone } from "@/lib/time-zone"
@@ -105,6 +106,8 @@ const schema = z.object({
   answers: z.record(z.string(), z.unknown()).optional(),
   /** Code of the share link per group (#947) the page was opened with; resolved below, never an id. */
   groupCode: z.string().max(64).optional(),
+  /** Code of the share link for one shift (#1386) the page was opened with; resolved below. */
+  shiftLinkCode: z.string().max(64).optional(),
   /**
    * The personal link of the volunteer's session on this event (#1013), when they come from their
    * personal page for more shifts: proof they own their address, so what they change in the form
@@ -160,14 +163,31 @@ export async function POST(req: Request) {
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
   const refuse = (r: SignupRefusal) => NextResponse.json(r.body, { status: r.status })
+  const invalidShifts = () => NextResponse.json({ error: INVALID_SHIFTS }, { status: 409 })
+
+  // Share link for one shift (#1386): the sign-up is for exactly that shift and counts for the
+  // link. An unknown, malformed or other event's code is ignored, like a group link's: the sign-up
+  // follows the usual rules. A link that resolves is authoritative on the shift ids.
+  const shareCode = parseShiftShareCode(parsed.data.shiftLinkCode)
+  const shiftShareLink = shareCode
+    ? await prisma.shiftShareLink.findFirst({
+        where: { eventId, code: shareCode },
+        select: { id: true, shiftId: true, acceptsAfterClose: true },
+      })
+    : null
+  if (shiftShareLink && (shiftIds.length !== 1 || shiftIds[0] !== shiftShareLink.shiftId)) return invalidShifts()
 
   // Confirmation by email (#1253): off by default, including for existing events. Only then can a
   // previous pending request of this address hold places to free before this sign-up.
   const confirmsByEmail = event.requireEmailConfirmation === true
   let previousConfirmationShiftIds = confirmsByEmail ? await pendingSignupConfirmationShiftIds(eventId, email) : []
 
+  // Registration window (#463). A shift share link created with « Accepter une inscription même si
+  // les inscriptions de l'événement sont fermées » (option b) may go on after the close; its own
+  // rule (shift open, not started, free place, event published and opened) is checked below, on
+  // the shift read with its places, and again under the lock for the start.
   const windowRefusal = registrationWindowRefusal(event)
-  if (windowRefusal) return refuse(windowRefusal)
+  if (windowRefusal && !(shiftShareLink?.acceptsAfterClose)) return refuse(windowRefusal)
 
   const phoneRefusal = requiredPhoneRefusal(event.requirePhone, phone)
   if (phoneRefusal) return refuse(phoneRefusal)
@@ -177,7 +197,6 @@ export async function POST(req: Request) {
     include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } } },
   })
 
-  const invalidShifts = () => NextResponse.json({ error: INVALID_SHIFTS }, { status: 409 })
   if (shifts.length !== shiftIds.length) return invalidShifts()
 
   // The settings of the roles asked for, from all their live shifts: a role is assigned by the
@@ -194,6 +213,25 @@ export async function POST(req: Request) {
   // Early, unlocked check for a friendly error — the authoritative one runs under lock below.
   // A full shift with a waitlist goes on: its registration is created with status "waiting".
   const timeZone = orgTimeZone(event.organization)
+  // A shift share link (#1386) has its own rule, the same as the public page's: the shift is open,
+  // has a free place (never a waitlist entry through the link) and has not started; the window
+  // follows `acceptsAfterClose`. The start is checked again under the lock below.
+  if (shiftShareLink) {
+    const booking = shiftShareBooking({
+      event,
+      shift: shifts[0],
+      occupied: shifts[0].registrations.length,
+      acceptsAfterClose: shiftShareLink.acceptsAfterClose,
+      now: new Date(),
+      timeZone,
+    })
+    if (!booking.bookable) {
+      if (booking.reason === "started") return refuse(shiftShareStartedRefusal(shifts[0].label))
+      if (booking.reason === "full") return refuse(fullShift(shifts[0].id, shifts[0].label))
+      if (booking.reason === "not_yet" || booking.reason === "window_closed") return windowRefusal ? refuse(windowRefusal) : invalidShifts()
+      return invalidShifts()
+    }
+  }
   const pastRefusal = pastShiftRefusal(shifts, new Date(), timeZone)
   if (pastRefusal) return refuse(pastRefusal)
 
@@ -449,6 +487,14 @@ export async function POST(req: Request) {
         // options read before it may have changed meanwhile (a shift closed, cancelled, shortened).
         const current = await currentShifts(tx, eventId, shifts)
         if (!current) throw new AssignedOnlyError()
+        // A shift share link (#1386) stops at the shift's start, not only at its end: checked again
+        // under the lock, on the shift as it is now.
+        if (shiftShareLink) {
+          const linkShift = current.find((s) => s.id === shiftShareLink.shiftId)
+          if (linkShift && shiftStartsAt(linkShift, timeZone).getTime() <= Date.now()) {
+            throw new SignupRefusalError(shiftShareStartedRefusal(linkShift.label))
+          }
+        }
         const pastNow = pastShiftRefusal(current, new Date(), timeZone)
         if (pastNow) throw new SignupRefusalError(pastNow)
 
@@ -559,7 +605,9 @@ export async function POST(req: Request) {
           const placement = planPlacement({
             capacity: shift.capacity,
             occupied,
-            waitlistEnabled: shift.waitlistEnabled,
+            // Through a shift share link (#1386), no waitlist entry: a full shift is refused, the
+            // same « complet » answer as a full shift without a waitlist.
+            waitlistEnabled: shiftShareLink ? false : shift.waitlistEnabled,
             maxWaitingPosition: maxPos._max.waitingPosition,
             requiresApproval: shift.requiresApproval,
           })
@@ -666,6 +714,7 @@ export async function POST(req: Request) {
                   charterAcceptedHash: charterHash,
                   charterAcceptedAt,
                   groupLinkId: groupLink?.id ?? null,
+                  shiftShareLinkId: shiftShareLink?.id ?? null,
                   signupConfirmationId: confirmation.id,
                 },
               })
@@ -728,6 +777,7 @@ export async function POST(req: Request) {
                 charterAcceptedHash: charterHash,
                 charterAcceptedAt,
                 groupLinkId: groupLink?.id ?? null,
+                shiftShareLinkId: shiftShareLink?.id ?? null,
               },
             })
           )

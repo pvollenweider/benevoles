@@ -26,6 +26,8 @@ export type StaffingShift = {
   closed: boolean
   /** Minimum of people the shift can run with (#949); null or absent = the same as capacity. */
   minVolunteers?: number | null
+  /** Role assigned by the organisation only (#1145): no public link, no « Partager ce créneau ». */
+  assignedOnly?: boolean | null
 }
 
 export type StaffingShiftLine = StaffingShift & {
