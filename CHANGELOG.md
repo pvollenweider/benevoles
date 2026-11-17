@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **État du service** : la page [statut.benevol.app](https://statut.benevol.app), hébergée hors du serveur, vérifie toutes les 5 minutes que le site, l'application et les vidéos répondent, et garde l'historique des incidents ; liée depuis le pied de page du site et la page Continuité du service (#1387).
+
 ### Sécurité
 
 - **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse : la page affichée après l'envoi est la même pour toutes, et l'e-mail reçu dit la suite. Les e-mails ne changent pas.

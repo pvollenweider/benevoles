@@ -38,10 +38,12 @@ describe("/continuite-du-service, the service continuity page (#1357)", () => {
     expect(page.metaDescription.length).toBeLessThanOrEqual(160)
   })
 
-  it("has the five settled sections, in order, and a FAQ the renderer can parse", () => {
+  it("has the six settled sections, in order, and a FAQ the renderer can parse", () => {
     expect(parsed.sections.map((candidate) => candidate.heading)).toEqual([
       "Vos données sont sauvegardées et restent récupérables",
       "Votre planning reste utilisable même si le service ne répond pas",
+      // #1387: the status page, served off the server.
+      "Savoir si le service fonctionne",
       "Le logiciel ne vous enferme pas",
       "Les limites actuelles du service hébergé",
       "Questions fréquentes",
