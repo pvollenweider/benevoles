@@ -16,6 +16,7 @@ import { prisma } from "@/lib/prisma"
 import { POST as publicSignup } from "@/app/api/public/registrations/route"
 import { openPayload } from "@/lib/notifications/outbox"
 import { localDateTimeToUtc } from "@/lib/time-zone"
+import { registrationToken } from "@/lib/token-vault"
 
 const url = process.env.DATABASE_URL
 const tag = `int-signup-hard-${Date.now()}`
@@ -118,6 +119,39 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     expect(notices[0].data.notRecorded.reason).toContain("« Accueil »")
     expect(notices[1].data.notRecorded.reason).toBe("le créneau « Bar » chevauche ton créneau « Accueil »")
     expect(typeof notices[0].data.editToken).toBe("string")
+  })
+
+  it("on an event that confirms by email, a request that is not recorded answers like one that is", async () => {
+    const confirming = await prisma.event.create({
+      data: { organizationId: orgId, slug: "confirme", title: "Confirme", startDate: new Date("2031-06-01"), endDate: new Date("2031-06-02"), publicStatus: "published", requireEmailConfirmation: true },
+    })
+    const mk = async (roleName: string, startTime: string, endTime: string) => (await prisma.shift.create({ data: { eventId: confirming.id, roleName, label: roleName, capacity: 5, date: new Date("2031-06-01T00:00:00Z"), startTime, endTime } })).id
+    const [held, clashing, free] = [await mk("Accueil", "14:00", "16:00"), await mk("Bar", "15:00", "17:00"), await mk("Montage", "09:00", "11:00")]
+    const owner = `${tag}-confirm-owner@example.org`
+    const person = await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Chloé", lastName: "Roy", email: owner } })
+    await prisma.registration.create({ data: { eventId: confirming.id, shiftId: held, volunteerId: person.id, status: "active", ...registrationToken.data(`${tag}-confirm-token`) } })
+
+    // The deadline is 24 h after each request: close to now + 24 h every time, never a sign of the outcome.
+    const shape = async (res: Response) => {
+      const { status, body } = await answer(res)
+      const { confirmationExpiresAt, ...rest } = body
+      expect(Math.abs(Date.parse(confirmationExpiresAt) - (Date.now() + 24 * 3_600_000))).toBeLessThan(10_000)
+      return { status, rest }
+    }
+    const before = await prisma.registration.count({ where: { eventId: confirming.id } })
+    const recordedForOwner = await shape(await signup([free], owner, confirming.id))
+    expect(await prisma.registration.count({ where: { eventId: confirming.id } })).toBe(before + 1)
+    const duplicate = await shape(await signup([held], owner, confirming.id))
+    const overlap = await shape(await signup([clashing], owner, confirming.id))
+    const stranger = await shape(await signup([held], `${tag}-confirm-new@example.org`, confirming.id))
+
+    expect(recordedForOwner).toEqual({ status: 201, rest: { success: true, editToken: null, linkSentByEmail: true, received: true, emailConfirmation: true, confirmationHeld: 1, confirmationWaiting: 0, confirmationTimeZone: "Europe/Zurich" } })
+    expect(duplicate).toEqual(recordedForOwner)
+    expect(overlap).toEqual(recordedForOwner)
+    expect(stranger).toEqual(recordedForOwner)
+    // The duplicate and the overlap wrote nothing for the owner's address.
+    expect(await prisma.registration.count({ where: { eventId: confirming.id, volunteerId: person.id, shiftId: clashing } })).toBe(0)
+    expect(await prisma.signupConfirmation.count({ where: { eventId: confirming.id, email: owner, cancelledAt: null, confirmedAt: null } })).toBe(0)
   })
 
   // The organisation the proxy resolved (subdomain, or `?org=` where honoured) scopes the event.

@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Sécurité
+
+- **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse. Rien ne change à l'écran ni dans les e-mails.
+
 ## [2.8.0] — 2026-11-17
 
 ### En bref
