@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Suivi des erreurs du navigateur** : une évaluation de texte comme code refusée par la politique de scripts, dont aucune ligne de la trace n'est dans l'application (script injecté par une extension ou un outil du visiteur), n'est plus envoyée à Sentry. Si une ligne vient de l'application, l'erreur reste signalée. <!-- interne -->
 - **Délais propres à un événement** : un rappel ajouté, réactivé ou modifié après l'heure où il aurait dû partir ne part plus pour les personnes déjà inscrites, comme pour une inscription arrivée après cette heure. Un rappel mis en place avant son heure part toujours, une seule fois.
 - **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste n'y figure plus. La personne placée sur ce poste la reçoit toujours sur sa page.
 - **Rétablir une inscription** : impossible pour une personne dont la fiche a été effacée ou fusionnée dans une autre ; le message dit quelle fiche utiliser.

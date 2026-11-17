@@ -4,7 +4,7 @@ import path from "node:path"
 import type { ErrorEvent } from "@sentry/nextjs"
 import { isStaffPath, pathnameOf, replayAllowedFor, tracesSampleRateFor, urlCarriesSecret, STAFF_TRACES_SAMPLE_RATE } from "../sentry-client-policy"
 import { browserSentryAllowedOn, createSentryLoader, type SentryClientModule } from "../sentry-client-loader"
-import { beforeSendClient, isStacklessDomEventRejection, isStacklessNetworkRejection } from "../sentry-scrub"
+import { beforeSendClient, isInjectedEvalRefusal, isStacklessDomEventRejection, isStacklessNetworkRejection } from "../sentry-scrub"
 
 // Deferred browser Sentry (#773).
 
@@ -273,6 +273,60 @@ describe("stackless network failures (Safari « Load failed » after a deploy)",
 })
 
 // Regression guards: what every public page downloads (#773).
+describe("string evaluation refused by the script policy, from an injected script", () => {
+  const CHROME =
+    "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'nonce-abc' 'strict-dynamic' 'sha256-xyz'"
+  const WEBKIT = "Refused to evaluate a string as JavaScript because 'unsafe-eval' or 'trusted-types-eval' is not an allowed source of script in the following Content Security Policy directive: \"script-src 'self'\".\n"
+  const anonymous = [{ filename: "<anonymous>", function: "eval" }, { filename: "<anonymous>", function: "injFunc", lineno: 1, colno: 156 }, { filename: "<anonymous>", lineno: 1, colno: 172 }]
+  const value = (overrides: Record<string, unknown> = {}) => ({
+    type: "EvalError",
+    value: CHROME,
+    mechanism: { type: "auto.browser.global_handlers.onerror", handled: false },
+    stacktrace: { frames: anonymous },
+    ...overrides,
+  })
+  const event = (...values: Record<string, unknown>[]): ErrorEvent => ({ type: undefined, exception: { values } }) as ErrorEvent
+
+  it("drops the event seen in production (three anonymous frames)", () => {
+    expect(isInjectedEvalRefusal(event(value()))).toBe(true)
+    expect(beforeSendClient(event(value()))).toBeNull()
+  })
+
+  it("drops the WebKit wording, and an event without any stack", () => {
+    expect(isInjectedEvalRefusal(event(value({ value: WEBKIT })))).toBe(true)
+    expect(isInjectedEvalRefusal(event(value({ stacktrace: undefined })))).toBe(true)
+    expect(isInjectedEvalRefusal(event(value({ stacktrace: { frames: [] } })))).toBe(true)
+    expect(isInjectedEvalRefusal(event(value({ stacktrace: { frames: [{ filename: "chrome-extension://abc/content.js" }] } })))).toBe(true)
+  })
+
+  it("keeps it when a frame is in the app (Sentry app:/// path or a full URL)", () => {
+    for (const filename of ["app:///_next/static/chunks/x.js", "https://benevol.app/_next/static/chunks/x.js"]) {
+      const e = event(value({ stacktrace: { frames: [...anonymous, { filename }] } }))
+      expect(isInjectedEvalRefusal(e)).toBe(false)
+      expect(beforeSendClient(e)).toBe(e)
+    }
+  })
+
+  it("keeps an EvalError that is not about the script policy", () => {
+    const e = event(value({ value: "Code generation from strings disallowed for this context" }))
+    expect(isInjectedEvalRefusal(e)).toBe(false)
+    expect(beforeSendClient(e)).toBe(e)
+  })
+
+  it("keeps another error with anonymous frames only", () => {
+    const e = event(value({ type: "TypeError", value: "x is not a function" }))
+    expect(isInjectedEvalRefusal(e)).toBe(false)
+    expect(beforeSendClient(e)).toBe(e)
+  })
+
+  it("keeps an event with two exception values when only one matches", () => {
+    const e = event(value(), value({ type: "Error", value: "boom" }))
+    expect(isInjectedEvalRefusal(e)).toBe(false)
+    expect(beforeSendClient(e)).toBe(e)
+    expect(isInjectedEvalRefusal({ type: undefined } as ErrorEvent)).toBe(false)
+  })
+})
+
 describe("browser Sentry only on the allowed domains (#1335)", () => {
   it("runs on benevol.app and its organisations' subdomains", () => {
     for (const host of ["benevol.app", "www.benevol.app", "ape-chateauneuf.benevol.app", "WWW.Benevol.App", "benevol.app."]) {
