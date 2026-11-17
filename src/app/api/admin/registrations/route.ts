@@ -24,6 +24,8 @@ import { checkShiftOverrides, ShiftCancelledError, ShiftOverrideError } from "@/
 import { cancelledShiftMessage, overrideLogValue, type ShiftOverrideNeed } from "@/lib/shift-override"
 import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { memberWriteRefusal } from "@/lib/member-erasure"
+import { MEMBER_NAME_MAX, MEMBER_PHONE_MAX } from "@/lib/text-limits"
+import { SIGNUP_COMMENT_MAX, SIGNUP_ID_MAX } from "@/lib/signup-limits"
 
 /** The organiser's refusal (#1171): who, and the first limit the addition would break. */
 function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount: number) {
@@ -36,18 +38,19 @@ function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount
 class TombstoneRefusal extends Error {}
 
 const schema = z.object({
-  eventId: z.string(),
+  eventId: z.string().max(SIGNUP_ID_MAX),
   /** One shift: the original API, still answered with the registration itself. */
-  shiftId: z.string().optional(),
+  shiftId: z.string().max(SIGNUP_ID_MAX).optional(),
   /** Several shifts for the same person in one submit (#918), all or nothing. */
-  shiftIds: z.array(z.string()).max(MANUAL_ADD_MAX_SHIFTS).optional(),
+  shiftIds: z.array(z.string().max(SIGNUP_ID_MAX)).max(MANUAL_ADD_MAX_SHIFTS).optional(),
   /** A member already in the organization's list (#914): placed without retyping, email or not. */
-  volunteerId: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
+  volunteerId: z.string().max(SIGNUP_ID_MAX).optional(),
+  /** Same limits as a member added by hand: the registration creates one. */
+  firstName: z.string().max(MEMBER_NAME_MAX).optional(),
+  lastName: z.string().max(MEMBER_NAME_MAX).optional(),
   email: z.string().trim().toLowerCase().email().optional().or(z.literal("")),
-  phone: z.string().optional(),
-  comment: z.string().optional(),
+  phone: z.string().max(MEMBER_PHONE_MAX).optional(),
+  comment: z.string().max(SIGNUP_COMMENT_MAX).optional(),
   /** The admin saw the role-limit warning and adds anyway (#466). */
   allowOverLimit: z.boolean().optional(),
   /**

@@ -8,6 +8,7 @@ import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
+import { minVolunteersSchema } from "@/lib/min-volunteers-schema"
 import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
@@ -32,7 +33,7 @@ const schema = z.object({
   endTime: clockSchema.optional(),
   capacity: z.number().int().min(1).optional(),
   // Minimum per shift (#949): null removes it; checked below against the places it will have.
-  minVolunteers: z.number().nullable().optional(),
+  minVolunteers: minVolunteersSchema,
   status: z.enum(["open", "full", "closed", "cancelled"]).optional(),
   locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),

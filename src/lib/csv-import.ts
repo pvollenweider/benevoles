@@ -4,6 +4,7 @@
 import { parse } from "csv-parse/sync"
 import ExcelJS from "exceljs"
 import { isValidEmailAddress, normalizeEmail } from "./email-address"
+import { MEMBER_NAME_MAX, MEMBER_PHONE_MAX, MEMBER_TAG_MAX, MEMBER_TAGS_MAX, tooLongMessage } from "./text-limits"
 
 export type ParsedMemberRow = {
   /** Line in the file (the header is line 1), for the preview and error messages. */
@@ -94,6 +95,17 @@ function rowToMember(
   const email = get("email") ? normalizeEmail(get("email")!) : undefined
   const phone = get("phone") || undefined
   const tags = parseTagsValue(get("tags"))
+
+  // The same limits as the other ways of adding a member (text-limits.ts). A cell over its limit is
+  // reported, never cut: the organiser fixes the file and sees what was typed.
+  const tooLong =
+    firstName.length > MEMBER_NAME_MAX ? tooLongMessage("Le prénom", MEMBER_NAME_MAX)
+    : lastName.length > MEMBER_NAME_MAX ? tooLongMessage("Le nom", MEMBER_NAME_MAX)
+    : phone && phone.length > MEMBER_PHONE_MAX ? tooLongMessage("Le téléphone", MEMBER_PHONE_MAX)
+    : tags.length > MEMBER_TAGS_MAX ? `Trop d'étiquettes : ${MEMBER_TAGS_MAX} au maximum.`
+    : tags.some((t) => t.length > MEMBER_TAG_MAX) ? tooLongMessage("Une étiquette", MEMBER_TAG_MAX)
+    : null
+  if (tooLong) return { ok: false, error: { line: lineNumber, reason: tooLong } }
 
   // The same rule as the other ways of adding a member: one address, nothing else in the cell.
   if (email && !isValidEmailAddress(email)) {

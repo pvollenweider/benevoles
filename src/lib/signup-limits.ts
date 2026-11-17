@@ -7,8 +7,10 @@
  * organisers then see in their lists and CSV exports.
  */
 
+import { MEMBER_PHONE_MAX } from "./text-limits"
+
 /** Same limit as a member's phone in the admin (api/admin/members). */
-export const SIGNUP_PHONE_MAX = 50
+export const SIGNUP_PHONE_MAX = MEMBER_PHONE_MAX
 export const SIGNUP_COMMENT_MAX = 2000
 /** Database ids (cuid) are 25 characters; tokens and codes have their own limits in the schema. */
 export const SIGNUP_ID_MAX = 100

@@ -16,7 +16,8 @@ import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { cappedText } from "@/lib/text-limits-schema"
-import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX, SHOW_NAME_MAX } from "@/lib/text-limits"
+import { showScheduleSchema } from "@/lib/show-schedule-schema"
+import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX } from "@/lib/text-limits"
 import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
 import { isPublishing, publishBlocker } from "@/lib/event-publish"
 import { dayContactSchema } from "@/lib/day-contact"
@@ -27,13 +28,6 @@ import { eventDatesRefusalBody, eventDatesWorkloadCheck, type PersonFindings } f
 class EventDatesRefusal extends Error {
   constructor(readonly people: PersonFindings[]) { super("Workload protection refuses the new dates") }
 }
-
-const showSchema = z.object({
-  name: cappedText(SHOW_NAME_MAX, "Le nom du spectacle"),
-  date: civilDateSchema,
-  startTime: z.string(),
-  endTime: z.string(),
-})
 
 const schema = z.object({
   title: cappedText(EVENT_TITLE_MAX, "Le titre").min(1).optional(),
@@ -50,7 +44,7 @@ const schema = z.object({
   registrationsOpen: z.boolean().optional(),
   registrationOpensAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/).nullable().optional().or(z.literal("")),
   registrationClosesAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/).nullable().optional().or(z.literal("")),
-  showSchedule: z.array(showSchema).optional(),
+  showSchedule: showScheduleSchema.optional(),
   reminderMessage: z.string().max(2000).optional().nullable(),
   remindersEnabled: z.boolean().optional(),
   requirePhone: z.boolean().optional(),
