@@ -195,8 +195,42 @@ export function isStacklessNetworkRejection(event: Event): boolean {
   )
 }
 
+// What a browser says when the script policy (CSP without 'unsafe-eval') refuses to evaluate a
+// string. Chromium (V8 throws an EvalError): « Evaluating a string as JavaScript violates the
+// following Content Security Policy directive because 'unsafe-eval' is not an allowed source of
+// script: … » (seen in production). WebKit (Safari): « Refused to evaluate a string as JavaScript
+// because 'unsafe-eval' or 'trusted-types-eval' is not an allowed source of script … » (message
+// built in WebKit's ContentSecurityPolicyDirectiveList.cpp). Chromium's console line starts with the
+// same « Refused to evaluate a string as JavaScript because ». Firefox's wording is not covered:
+// it could not be sourced, so its events stay visible.
+const EVAL_REFUSED_BY_POLICY =
+  /^(?:Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval'|Refused to evaluate a string as JavaScript because 'unsafe-eval')/
+
+// A frame that cannot be a script of the app: no file, « <anonymous> » (code built by eval or
+// new Function in a script injected into the page) or a browser extension. Anything else, in
+// particular /_next/static/… (« app:///_next/… » once Sentry rewrote it), counts as the app's.
+const FOREIGN_FRAME = /^(?:<anonymous>|(?:chrome|moz|safari|safari-web)-extension:)/
+
+/**
+ * A string evaluation refused by the script policy, with no frame in the app (client only): a
+ * script injected by the visitor's software (extension, in-app browser, translation or security
+ * tool) that the policy rightly refused (« injFunc » on a public event page). The app has no
+ * eval() or new Function(), so there is nothing to fix. A single frame in the app keeps the event:
+ * the app or a dependency would have evaluated a string, which must stay visible. With no stack at
+ * all the event cannot be located, so it is dropped, as the stackless predicates above do.
+ */
+export function isInjectedEvalRefusal(event: Event): boolean {
+  const exceptions = event.exception?.values ?? []
+  if (exceptions.length === 0) return false
+  return exceptions.every(
+    (ex) =>
+      EVAL_REFUSED_BY_POLICY.test(ex.value ?? "") &&
+      (ex.stacktrace?.frames ?? []).every((frame) => !frame.filename || FOREIGN_FRAME.test(frame.filename)),
+  )
+}
+
 /** Client `beforeSend`: drops browser noise that `ignoreErrors` cannot express, then scrubs. */
 export function beforeSendClient<T extends Event>(event: T): T | null {
-  if (isStacklessDomEventRejection(event) || isStacklessNetworkRejection(event)) return null
+  if (isStacklessDomEventRejection(event) || isStacklessNetworkRejection(event) || isInjectedEvalRefusal(event)) return null
   return scrubEvent(event)
 }
