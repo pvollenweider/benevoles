@@ -7,9 +7,10 @@ import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 import { canonicalRedirect, orgSwitchUrl, safeAdminNext } from "@/lib/admin-next"
 import { configuredAppUrl } from "@/lib/urls"
+import { superAdminOrgCookie } from "@/lib/super-admin-org-cookie"
 
 /**
- * Picks the organization a super admin works in (sa-org-id cookie), then opens `next` when it is a
+ * Picks the organization a super admin works in (superAdminOrgCookie), then opens `next` when it is a
  * same-origin admin page (an email link to an event, see auth-guard.ts), the events list otherwise.
  *
  * A POST only (#1048), sent by the « Gérer » button of an organization or by the confirmation page
@@ -26,13 +27,15 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!org) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
 
   const cookieStore = await cookies()
-  cookieStore.set("sa-org-id", id, {
+  const cookie = superAdminOrgCookie()
+  // No domain: a __Host- cookie (https) must have none, and the plain one stays on this host.
+  cookieStore.set(cookie.name, id, {
     path: "/",
     httpOnly: true,
     // Lax, like the session cookie: an admin link opened from a webmail (a top-level cross-site
     // GET) must carry it.
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: cookie.secure,
   })
 
   const next = safeAdminNext(await readNext(req))

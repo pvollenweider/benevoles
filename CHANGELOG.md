@@ -15,6 +15,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **État du service** : la page [statut.benevol.app](https://statut.benevol.app), hébergée hors du serveur, vérifie toutes les 5 minutes que le site, l'application et les vidéos répondent, et garde l'historique des incidents ; liée depuis le pied de page du site et la page Continuité du service (#1387).
 
+### Modifié
+
+- **Validation automatique des nouveaux espaces** : un espace validé automatiquement envoie au plus 100 emails groupés par jour (messages, invitations, rappels, créneaux à compléter) tant que l'opérateur ne l'a pas marqué comme relu ; ensuite, le plafond habituel s'applique. Les autres emails ne changent pas.
+
 ### Sécurité
 
 - **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse : la page affichée après l'envoi est la même pour toutes, et l'e-mail reçu dit la suite. Les e-mails ne changent pas.
@@ -30,6 +34,12 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Nettoyage de nuit** : une organisation réactivée entre le moment où le nettoyage la sélectionne et celui où il la supprime est conservée avec ses administrateurs, et les comptes rendus ne comptent que ce qui a été supprimé. <!-- interne -->
 - **Requêtes mal formées** : un corps de requête qui n'est pas du JSON valide reçoit une erreur 400 claire, au lieu d'une erreur serveur, sur les routes d'écriture de l'administration, de l'inscription publique et de l'activation d'invitation. <!-- interne -->
 - **Longueurs et nombres maximums** : le prénom et le nom d'un membre (100 caractères), son téléphone (50), ses étiquettes (50 au plus, 100 caractères chacune), le commentaire d'une inscription ajoutée à la main (2 000 caractères), le programme des spectacles d'un événement (500 spectacles au plus) et le minimum de personnes d'un créneau (nombre entier de 1 à 10 000) ont désormais un maximum, aussi pour une inscription ajoutée à la main et pour l'import d'un fichier. Dans l'import, une cellule trop longue est signalée sur sa ligne au lieu d'être coupée.
+- **Places d'un créneau** : le nombre de places est désormais limité à 10 000, comme le minimum de personnes, à la création d'un créneau, d'une série ou d'une permanence, à leur modification et dans les réglages d'un poste. Un nombre plus grand reçoit un message clair au lieu d'une erreur serveur.
+- **Inscription avec confirmation par e-mail** : deux demandes envoyées au même moment pour une même nouvelle adresse reçoivent toutes deux la réponse habituelle ; la seconde est reprise avec la fiche créée par la première. <!-- interne -->
+- **Équipe** : le changement de rôle et le retrait d'un membre de l'équipe ne concernent que les propriétaires et les organisateurs ; un compte d'administration de la plateforme rattaché à l'organisation n'est plus modifiable depuis cette page. <!-- interne -->
+- **Tests des routes** : les tests de droits voient un gestionnaire quelle que soit sa forme d'export, refusent les ré-exports dans les fichiers de route, et vérifient que chaque route de l'administration de la plateforme refuse un administrateur d'organisation. <!-- interne -->
+- **Administration de la plateforme** : en production, le cookie qui retient l'organisation choisie porte le préfixe `__Host-` ; il faut choisir l'organisation à nouveau une fois. <!-- interne -->
+- **Accès accueil** : la liste des accès d'un événement ne retient que les comptes accueil de l'organisation, dans la requête et sur chaque ligne. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
 

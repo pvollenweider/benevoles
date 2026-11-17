@@ -43,6 +43,13 @@ describe("POST /api/super-admin/use-org/[id]", () => {
     }))
   })
 
+  it("over https, names it __Host-sa-org-id: Secure, the whole site, no domain", async () => {
+    vi.stubEnv("AUTH_URL", "https://www.benevol.app")
+    await post()
+    expect(setCookie).toHaveBeenCalledWith("__Host-sa-org-id", "org-1", expect.objectContaining({ path: "/", httpOnly: true, sameSite: "lax", secure: true }))
+    expect(setCookie.mock.calls[0][2]).not.toHaveProperty("domain")
+  })
+
   it("stays on the organization's subdomain the switch was posted from", async () => {
     const res = await POST(new Request("http://localhost/api/super-admin/use-org/org-1", {
       method: "POST", headers: { host: "lausanne.benevol.app", "x-forwarded-host": "evil.example" },

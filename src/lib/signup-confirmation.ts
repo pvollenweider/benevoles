@@ -50,6 +50,16 @@ export function pendingConfirmationSummary(placements: readonly { status: string
 }
 
 /**
+ * The summary answered for a request that ends as a notice to the owner outside the transaction
+ * (a duplicate key, attempts spent): computed like the others, from where the last attempt placed
+ * each selected shift; if it stopped before placing them, from the selection with every shift
+ * counted as held. The deadline depends only on `now` and the first start either way.
+ */
+export function noticeConfirmationSummary(placed: readonly { status: string; startsAt: Date }[] | null, selectionStarts: readonly Date[], now: Date): PendingConfirmationSummary {
+  return pendingConfirmationSummary(placed ?? selectionStarts.map((startsAt) => ({ status: "active", startsAt })), now)
+}
+
+/**
  * The body answered to a sign-up without proof of the address on an event that confirms by email:
  * one shape, built here only, for a recorded request and for one that is not (the owner of the
  * address is then told by email).

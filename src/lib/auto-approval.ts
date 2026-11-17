@@ -529,3 +529,13 @@ export function autoApprovalSignupOwner(
     (cutoff === null || a.activatedAt.getTime() <= cutoff),
   ) ?? null
 }
+
+/**
+ * Validated automatically (#1371) and not yet reviewed by the operator: the « à relire » mark of
+ * the super admin list, and the reduced daily bulk cap of src/lib/notifications/send-limits.ts.
+ * Only the automatic path sets `autoApprovedAt`, with the grants and in the same transaction
+ * (src/lib/org-approval-server.ts); a manual approval never does, and a refusal deletes the space.
+ */
+export function awaitsAutoApprovalReview(org: { autoApprovedAt?: Date | string | null; autoApprovalReviewedAt?: Date | string | null }): boolean {
+  return !!org.autoApprovedAt && !org.autoApprovalReviewedAt
+}
