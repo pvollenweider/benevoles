@@ -59,6 +59,10 @@ Puis **Créer le lien**. Recommencez pour la fanfare, avec le poste Buvette.
 
 **Supprimer** demande une confirmation. Les inscriptions venues de ce lien sont conservées, mais ne sont plus comptées pour ce groupe. L'adresse et le QR code du lien supprimé ouvrent ensuite tout l'événement, avec la phrase « Ce lien de groupe n'existe plus ». La création, la modification et la suppression d'un lien sont inscrites au [journal de l'événement](journal-de-l-evenement.md).
 
+## Un lien pour un seul créneau
+
+Quand une place se libère à la dernière minute, partagez directement le créneau plutôt que tout l'événement : dans [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md#partager-un-creneau-dans-un-groupe-de-discussion), **Partager ce créneau** donne un lien public qui n'affiche que ce créneau, avec ses places libres, à coller dans le groupe de discussion ou sur la page de l'association. Le panneau propose aussi **Copier le lien**, **Partager**, **QR code PNG** et l'option **Accepter une inscription même si les inscriptions de l'événement sont fermées**.
+
 ## Intégrer l'inscription à votre site
 
 Votre association a son propre site ? Affichez-y l'inscription : les bénévoles choisissent leurs créneaux et s'inscrivent sans quitter votre site. La page garde le nom, le logo et la couleur de votre organisation ; seuls le lien « Retour » et les colonnes du pied de page de benevol.app disparaissent. En bas de la page restent les mentions légales, le lien « Propulsé par benevol.app » vers la page d'accueil de benevol.app et le lien vers le code source.

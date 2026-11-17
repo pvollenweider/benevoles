@@ -4,6 +4,7 @@
 import Link from "next/link"
 import { fmtRange } from "@/lib/gantt-utils"
 import { fillPercent, shiftStaffingState, spokenStaffingState, staffingStateText, type StaffingShiftLine as Line, type StaffingState } from "@/lib/staffing"
+import ShiftShareButton from "@/components/admin/ShiftShareButton"
 
 /**
  * The state of a shift against its minimum (#949), in words: « sous le minimum (2) » in a red badge
@@ -61,6 +62,11 @@ export function Meter({ active, capacity, className = "" }: { active: number; ca
 export function ShiftLine({ eventId, group, s, detail, action }: { eventId: string; group: string; s: Line; detail: React.ReactNode; action?: React.ReactNode }) {
   const name = s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName
   const detailId = `${group}-${s.id}-detail`
+  // « Partager ce créneau » (#1386): on a shift that still needs people, next to « Chercher des
+  // bénévoles ». A role assigned by the organisation only is never offered publicly, so no link.
+  const share = s.missing > 0 && !s.assignedOnly
+    ? <ShiftShareButton eventId={eventId} shiftId={s.id} shiftName={`${name}, ${day(s.date)}, ${fmtRange(s.startTime, s.endTime)}`} />
+    : null
   return (
     <li className="px-4 py-3 text-sm grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-2 items-center">
       <div className="min-w-0">
@@ -70,7 +76,7 @@ export function ShiftLine({ eventId, group, s, detail, action }: { eventId: stri
           {name}{" "}
           <span className="block sm:inline font-normal text-gray-600 sm:ml-1">{day(s.date)} · {fmtRange(s.startTime, s.endTime)}</span>
         </Link>
-        {action && <div className="sm:mt-1">{action}</div>}
+        {(action || share) && <div className="sm:mt-1 flex flex-wrap gap-x-4">{action}{share}</div>}
       </div>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
         <Meter active={s.active} capacity={s.capacity} className="w-full sm:w-24 shrink-0" />

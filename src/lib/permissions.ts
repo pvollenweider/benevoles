@@ -97,6 +97,10 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   // Share links per group (#947), like the event's pages: organiser level.
   "events/[id]/group-links": { GET: "organizer", POST: "organizer" },
   "events/[id]/group-links/[linkId]": { PATCH: "organizer", DELETE: "organizer" },
+  // Share link for one shift (#1386), like the other share links: organiser level.
+  "events/[id]/shift-links": { POST: "organizer" },
+  "events/[id]/shift-links/[linkId]": { PATCH: "organizer" },
+  "events/[id]/shift-links/[linkId]/qr": { GET: "organizer" },
   "events/[id]/invitations": { GET: "organizer", POST: "organizer" },
   "events/[id]/invitations/remind": { POST: "organizer" },
   "events/[id]/invitations/test-email": { POST: "organizer" },

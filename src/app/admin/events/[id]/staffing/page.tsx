@@ -76,6 +76,7 @@ export default async function StaffingPage({ params, searchParams }: { params: P
     event.shifts.map((s) => ({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, minVolunteers: s.minVolunteers, closed: s.status === "closed",
+      assignedOnly: s.assignedOnly,
       active: s.registrations.filter((r) => r.status === "active").length,
       waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
       requested: s.registrations.filter((r) => r.status === "requested").length,

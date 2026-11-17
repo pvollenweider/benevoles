@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Partager ce créneau** : depuis « Où manque-t-il du monde ? », un lien public vers un seul créneau qui manque de monde, à coller dans le groupe de discussion ou sur la page de l'association, avec copie, partage, QR code et le nombre d'inscriptions qu'il a apportées. Une option peut accepter une inscription après la fermeture des inscriptions de l'événement, tant que ce créneau n'a pas commencé et qu'il reste une place ; la page publique et l'inscription suivent la même règle (#1386).
 - **État du service** : la page [statut.benevol.app](https://statut.benevol.app), hébergée hors du serveur, vérifie toutes les 5 minutes que le site, l'application et les vidéos répondent, et garde l'historique des incidents ; liée depuis le pied de page du site et la page Continuité du service (#1387).
 
 ### Modifié
@@ -26,6 +27,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Inscription avec confirmation par e-mail** : une personne n'est plus refusée parce qu'une autre a envoyé des demandes avec son adresse. La limite de 5 demandes par heure pour une même adresse et un même événement compte désormais par connexion : depuis une autre connexion, la personne peut s'inscrire normalement. Une adresse reçoit toujours au plus 5 emails de confirmation par heure.
 - **Suivi des erreurs du navigateur** : une évaluation de texte comme code refusée par la politique de scripts, dont aucune ligne de la trace n'est dans l'application (script injecté par une extension ou un outil du visiteur), n'est plus envoyée à Sentry. Si une ligne vient de l'application, l'erreur reste signalée. <!-- interne -->
 - **Délais propres à un événement** : un rappel ajouté, réactivé ou modifié après l'heure où il aurait dû partir ne part plus pour les personnes déjà inscrites, comme pour une inscription arrivée après cette heure. Un rappel mis en place avant son heure part toujours, une seule fois.
 - **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste n'y figure plus. La personne placée sur ce poste la reçoit toujours sur sa page.
@@ -41,6 +43,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Tests des routes** : les tests de droits voient un gestionnaire quelle que soit sa forme d'export, refusent les ré-exports dans les fichiers de route, et vérifient que chaque route de l'administration de la plateforme refuse un administrateur d'organisation. <!-- interne -->
 - **Administration de la plateforme** : en production, le cookie qui retient l'organisation choisie porte le préfixe `__Host-` ; il faut choisir l'organisation à nouveau une fois. <!-- interne -->
 - **Accès accueil** : la liste des accès d'un événement ne retient que les comptes accueil de l'organisation, dans la requête et sur chaque ligne. <!-- interne -->
+- **Contrôle des dépendances en intégration continue** : un avis de sécurité sans version corrigée, dont l'application n'est pas exposée, peut être accepté pour un mois au plus, avec sa raison et sa date de fin dans `src/lib/audit-exceptions.ts` ; passé cette date, le contrôle échoue de nouveau. Première exception : `picomatch` (GHSA-fc5q-39xc-vjpf), outil de build seulement, jusqu'au 17 décembre 2026. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
 
