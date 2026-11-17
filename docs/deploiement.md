@@ -314,6 +314,14 @@ Quand le script se termine, échoue ou atteint sa limite, l'entrée écrit le fi
 Avec Docker Compose, le préchauffage tourne de la même façon (sur l'hôte de `NEXT_PUBLIC_APP_URL`, `localhost` par défaut) ; rien n'attend `/api/health/ready`, le serveur répond dès son démarrage. Le préchauffage ne se lance que pour la commande `node server.js` : le Job de migration, qui utilise la même image, n'est pas concerné.
 - Les cron jobs de rappels, d'envoi des emails et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
 
+## Mise à jour depuis 2.7.x
+
+Les migrations de la 2.8 ajoutent des tables et des colonnes sans rien retirer ; elles passent par le Job habituel sur Kubernetes et au démarrage de l'application avec Docker Compose. Aucune nouvelle variable obligatoire sur Kubernetes.
+
+- **Docker Compose : action requise avant la mise à jour.** `docker-compose.yml` lance lui-même les tâches planifiées (service `cron`) et exige `CRON_SECRET` dans `.env` : sans lui, Compose refuse de démarrer. Y écrire la valeur que votre cron de l'hôte utilise déjà, ou une nouvelle (`openssl rand -base64 32`), et retirer d'abord du cron de l'hôte les appels à `/api/cron/*` : chaque tâche serait sinon appelée deux fois, et des rappels pourraient partir en double. Voir [Mettre à jour une installation Compose existante](#mettre-à-jour-une-installation-compose-existante).
+- **Premier super admin** (facultatif) : une instance neuve peut le créer au démarrage à partir de `ADMIN_EMAIL`, `ADMIN_PASSWORD` et `ADMIN_NAME`, sans lancer le seed (voir [configuration.md](configuration.md)).
+- **Kubernetes** : `k8s/deployment.yaml` donne à l'application 1 Gi de mémoire au plus (demande : 384 Mi) ; l'appliquer avec la nouvelle image.
+
 ## Mise à jour depuis 2.5.x
 
 Les migrations de la 2.6 ajoutent des tables et des colonnes sans rien retirer ; elles passent par le Job habituel sur Kubernetes et au démarrage de l'application avec Docker Compose. Aucune nouvelle variable.
