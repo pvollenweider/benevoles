@@ -26,7 +26,8 @@ import {
   planPlacement,
 } from "@/lib/registration-capacity"
 import { z } from "zod"
-import { SIGNUP_ADDRESS_LIMIT, SIGNUP_COMMENT_MAX, SIGNUP_ID_MAX, SIGNUP_PHONE_MAX, SIGNUP_SHIFTS_MAX, signupAddressLimitKey, tooLongSignupField } from "@/lib/signup-limits"
+import { SIGNUP_ADDRESS_LIMIT, SIGNUP_COMMENT_MAX, SIGNUP_ID_MAX, SIGNUP_PHONE_MAX, SIGNUP_SHIFTS_MAX, tooLongSignupField } from "@/lib/signup-limits"
+import { signupAddressLimitKey } from "@/lib/signup-address-limit"
 import { linkTargetInclude } from "@/lib/personal-link-send"
 import { sendNotification } from "@/lib/notifications"
 import { linkToken, registrationToken } from "@/lib/token-vault"

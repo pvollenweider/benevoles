@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, expect, it } from "vitest"
-import { SIGNUP_ADDRESS_LIMIT, SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX, signupAddressLimitKey, tooLongSignupField } from "../signup-limits"
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { SIGNUP_ADDRESS_LIMIT, SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX, tooLongSignupField } from "../signup-limits"
+import { signupAddressLimitKey } from "../signup-address-limit"
 
 // Bounded free text of the public sign-up (#1047).
 describe("tooLongSignupField", () => {
@@ -45,5 +48,16 @@ describe("signupAddressLimitKey", () => {
 
   it("allows five requests an hour", () => {
     expect(SIGNUP_ADDRESS_LIMIT).toEqual({ max: 5, windowMs: 3_600_000 })
+  })
+})
+
+// The public page loads signup-limits.ts in the browser: an import of Node's crypto there (directly
+// or through token-hash) puts a substitute in the browser bundle that evaluates strings, which the
+// script policy refuses. The key, which hashes, lives in the server-only signup-address-limit.ts.
+describe("signup-limits stays loadable in the browser", () => {
+  it("imports neither Node's crypto nor a module that does", () => {
+    const source = readFileSync(path.join(__dirname, "..", "signup-limits.ts"), "utf8")
+    const imports = [...source.matchAll(/^import .* from "([^"]+)"/gm)].map((m) => m[1])
+    expect(imports.filter((i) => /crypto|token-hash|signup-address-limit|^node:/.test(i))).toEqual([])
   })
 })
