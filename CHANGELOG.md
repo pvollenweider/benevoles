@@ -22,6 +22,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Sécurité
 
 - **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse : la page affichée après l'envoi est la même pour toutes, et l'e-mail reçu dit la suite. Les e-mails ne changent pas.
+- **Liens reçus par email** : après de nombreux liens non reconnus ouverts depuis une même connexion, les pages de confirmation d'une inscription, de place de liste d'attente et « Je ne peux pas » se mettent en pause pour cette connexion, pendant une heure au plus, et le disent : « Trop de tentatives », avec ce qu'il faut faire en attendant.
 
 ### Corrigé
 

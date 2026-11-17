@@ -2,20 +2,50 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata } from "next"
-import { headers } from "next/headers"
+import { cache } from "react"
 import { contactEmail, siteName } from "@/lib/site"
 import { isTokenShaped } from "@/lib/token-path"
-import { loadShiftDeclineTarget } from "@/lib/shift-decline-read"
+import { loadShiftDeclineTarget, type ShiftDeclineLookup } from "@/lib/shift-decline-read"
 import {
   shiftDeclineDay, shiftDeclineHours, shiftDeclineSecretFromSegment, shiftDeclineShiftName,
 } from "@/lib/shift-declines"
+import { guardTokenLookup, pageClient } from "@/lib/token-page-guard"
+import { TOO_MANY_ATTEMPTS_TITLE } from "@/lib/too-many-attempts"
 import ShiftDeclineConfirm from "@/components/public/ShiftDeclineConfirm"
 import OrgUnavailableNotice from "@/components/public/OrgUnavailableNotice"
+import TooManyAttemptsNotice from "@/components/public/TooManyAttemptsNotice"
 
 export const dynamic = "force-dynamic"
 
-export function generateMetadata(): Metadata {
-  return { title: `Je ne peux pas — ${siteName()}`, robots: { index: false, follow: false } }
+type ParamsPromise = Promise<{ kind: string; token: string; shiftId: string }>
+
+/**
+ * One decision per request, shared by generateMetadata and the page. A connection that opened too
+ * many unknown links is answered before the link's shape, its organisation or anything else is
+ * checked; a malformed or unknown link counts one miss, once per view (src/lib/token-page-guard.ts).
+ * Its POST routes have no failed-lookup counter of their own: the page counts in the "personal"
+ * family, the closest one (both secrets are links sent by email to one person).
+ */
+const loadDecline = cache(async (segment: string, token: string, shiftId: string) => {
+  const client = await pageClient()
+  const secret = shiftDeclineSecretFromSegment(segment)
+  const malformed = !secret || !isTokenShaped(token) || !isTokenShaped(shiftId)
+  const guarded = await guardTokenLookup(
+    client,
+    async (): Promise<ShiftDeclineLookup> => malformed
+      ? { kind: "invalid" }
+      : loadShiftDeclineTarget({ secret, token, shiftId, orgSlug: client.headers.get("x-org-slug") }),
+    (lookup) => lookup.kind === "invalid",
+  )
+  if (guarded.blocked) return { blocked: true as const }
+  return { blocked: false as const, secret: malformed ? null : secret, lookup: guarded.value }
+})
+
+export async function generateMetadata({ params }: { params: ParamsPromise }): Promise<Metadata> {
+  const { kind, token, shiftId } = await params
+  const view = await loadDecline(kind, token, shiftId)
+  const state = view.blocked ? TOO_MANY_ATTEMPTS_TITLE : "Je ne peux pas"
+  return { title: `${state} — ${siteName()}`, robots: { index: false, follow: false } }
 }
 
 /**
@@ -26,10 +56,18 @@ export function generateMetadata(): Metadata {
  * message: unknown link, closed organisation, deleted, cancelled, full, past shift, or a shift
  * the member already holds.
  */
-export default async function ShiftDeclinePage({ params }: { params: Promise<{ kind: string; token: string; shiftId: string }> }) {
+export default async function ShiftDeclinePage({ params }: { params: ParamsPromise }) {
   const { kind: segment, token, shiftId } = await params
-  const secret = shiftDeclineSecretFromSegment(segment)
-  if (!secret || !isTokenShaped(token) || !isTokenShaped(shiftId)) {
+  const view = await loadDecline(segment, token, shiftId)
+  if (view.blocked) {
+    return (
+      <Card>
+        <TooManyAttemptsNotice />
+      </Card>
+    )
+  }
+  const { secret, lookup } = view
+  if (!secret) {
     return (
       <Card>
         <ShiftDeclineConfirm secret="invitation" token={token} shiftId={shiftId} state="invalid" />
@@ -37,8 +75,6 @@ export default async function ShiftDeclinePage({ params }: { params: Promise<{ k
     )
   }
 
-  const orgSlug = (await headers()).get("x-org-slug")
-  const lookup = await loadShiftDeclineTarget({ secret, token, shiftId, orgSlug })
   if (lookup.kind === "org_unavailable") return <OrgUnavailableNotice audience="volunteer" contact={contactEmail()} />
   if (lookup.kind === "invalid") {
     return (

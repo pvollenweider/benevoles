@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { WAITLIST_OFFER_HOURS } from "./waitlist-copy"
+import { TOO_MANY_ATTEMPTS, TOO_MANY_ATTEMPTS_TITLE, type TooManyAttemptsState } from "./too-many-attempts"
 
 /**
  * How long a spot offered from the waitlist stays reserved (#946). Pure: read by
@@ -53,7 +54,7 @@ export function waitlistOfferPageState(
 export type WaitlistOfferView = WaitlistOfferPageState | "confirmed" | "requestSent" | "gone"
 
 /** The browser tab title per view (WCAG 2.4.2): set by generateMetadata, then by the page itself. */
-export const WAITLIST_OFFER_PAGE_TITLES: Record<WaitlistOfferView, string> = {
+export const WAITLIST_OFFER_PAGE_TITLES: Record<WaitlistOfferView | TooManyAttemptsState, string> = {
   offered: "Place proposée",
   expired: "Lien expiré",
   active: "Place déjà confirmée",
@@ -63,4 +64,5 @@ export const WAITLIST_OFFER_PAGE_TITLES: Record<WaitlistOfferView, string> = {
   confirmed: "Place confirmée",
   requestSent: "Demande envoyée",
   gone: "Place plus disponible",
+  [TOO_MANY_ATTEMPTS]: TOO_MANY_ATTEMPTS_TITLE,
 }

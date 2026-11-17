@@ -101,6 +101,8 @@ export async function signupConfirmationShifts(row: { waitlistShiftIds: string[]
 
 export type SignupConfirmationView = {
   state: SignupConfirmationPageState
+  /** Whether the token names a request at all: an unknown one counts as a failed lookup. */
+  linkFound: boolean
   details: {
     eventTitle: string
     eventSlug: string
@@ -126,11 +128,12 @@ export async function signupConfirmationView(token: string, now: Date = new Date
     row?.registrations.map((r) => r.status) ?? [],
     row?.waitlistShiftIds ?? [],
   )
-  if (!row || !state) return { state: "invalid", details: null }
+  if (!row || !state) return { state: "invalid", details: null, linkFound: !!row }
   const shifts = await signupConfirmationShifts(row)
   const byId = new Map(shifts.map((s) => [s.id, s]))
   return {
     state,
+    linkFound: true,
     details: {
       eventTitle: row.event.title,
       eventSlug: row.event.slug,

@@ -12,22 +12,35 @@ import { offerDeadline } from "@/lib/waitlist-copy"
 import { dayLabel, spokenTimeRange } from "@/lib/spoken-time"
 import { WAITLIST_OFFER_PAGE_TITLES, waitlistOfferPageState } from "@/lib/waitlist-offer"
 import WaitlistOfferConfirm, { type WaitlistOfferDetails } from "@/components/public/WaitlistOfferConfirm"
+import TooManyAttemptsNotice from "@/components/public/TooManyAttemptsNotice"
+import { guardTokenLookup, pageClient } from "@/lib/token-page-guard"
+import { TOO_MANY_ATTEMPTS } from "@/lib/too-many-attempts"
 
 export const dynamic = "force-dynamic"
 
-/** One read per request, shared by generateMetadata and the page. Read-only (#1044). */
+/** The offer's registration, or null when no registration has this token. */
+function readOffer(token: string) {
+  if (!token) return Promise.resolve(null)
+  return prisma.registration.findFirst({
+    where: registrationToken.where(token),
+    select: {
+      status: true,
+      waitingExpiresAt: true,
+      shift: { select: { label: true, date: true, startTime: true, endTime: true, requiresApproval: true } },
+      event: { select: { title: true, organization: { select: { timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
+    },
+  })
+}
+
+/**
+ * One read per request, shared by generateMetadata and the page. Read-only (#1044). A connection
+ * that opened too many unknown links reads nothing; an unknown link counts one miss, once per view
+ * (src/lib/token-page-guard.ts, "personal" family: the offer's token is the personal link).
+ */
 const loadOffer = cache(async (token: string) => {
-  const reg = token
-    ? await prisma.registration.findFirst({
-        where: registrationToken.where(token),
-        select: {
-          status: true,
-          waitingExpiresAt: true,
-          shift: { select: { label: true, date: true, startTime: true, endTime: true, requiresApproval: true } },
-          event: { select: { title: true, organization: { select: { timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
-        },
-      })
-    : null
+  const guarded = await guardTokenLookup(await pageClient(), () => readOffer(token), (reg) => reg === null)
+  if (guarded.blocked) return { state: TOO_MANY_ATTEMPTS, details: null }
+  const reg = guarded.value
   const state = waitlistOfferPageState(reg, new Date(), orgLinksOpen(reg?.event.organization))
   const details: WaitlistOfferDetails | null = reg && state === "offered"
     ? {
@@ -60,7 +73,9 @@ export default async function WaitlistConfirmPage({ params }: { params: Promise<
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-        <WaitlistOfferConfirm token={token} state={state} details={details} contact={contactEmail()} />
+        {state === TOO_MANY_ATTEMPTS
+          ? <TooManyAttemptsNotice />
+          : <WaitlistOfferConfirm token={token} state={state} details={details} contact={contactEmail()} />}
       </div>
     </main>
   )
