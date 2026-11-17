@@ -61,6 +61,9 @@ export type ValidReminderRule = {
   value: number
   enabled: boolean
   displayOrder: number
+  /** Carried through from the input when present, for the due-instant check. */
+  activeSince?: Date | null
+  createdAt?: Date
 }
 
 export function isReminderRuleUnit(unit: string): unit is ReminderRuleUnit {
@@ -134,6 +137,8 @@ export function validateReminderRules(rules: readonly ReminderRuleInput[]): Remi
       value: rule.value,
       enabled: rule.enabled,
       displayOrder: rule.displayOrder ?? index,
+      ...(rule.activeSince !== undefined ? { activeSince: rule.activeSince } : {}),
+      ...(rule.createdAt !== undefined ? { createdAt: rule.createdAt } : {}),
     })
   }
   return { ok: true, rules: normalized }
@@ -268,6 +273,24 @@ export function reminderPlaceActiveAt(registration: ReminderRuleRegistration): D
   return registration.signupConfirmation?.confirmedAt ?? registration.createdAt
 }
 
+/**
+ * When a rule started to apply: `activeSince` (creation, or the save that enabled or revived it),
+ * else the row's `createdAt` for a row written before that column; null when neither is known.
+ */
+export function reminderRuleActiveSince(rule: { activeSince?: Date | null; createdAt?: Date | null }): Date | null {
+  return rule.activeSince ?? rule.createdAt ?? null
+}
+
+/**
+ * Whether a rule already applied at a reminder's due instant. A rule created, enabled again or
+ * revived after that instant does not send that reminder: the same idea as a place taken after it.
+ * Changing a delay creates a rule, so a new delay whose instant has passed sends nothing.
+ */
+export function reminderRuleAppliedAt(rule: { activeSince?: Date | null; createdAt?: Date | null }, dueAt: Date): boolean {
+  const since = reminderRuleActiveSince(rule)
+  return !since || since.getTime() <= dueAt.getTime()
+}
+
 export type ReminderRuleStatus = "due" | "not-yet" | "late" | "started" | "disabled"
 
 export type ReminderRuleEvaluation = {
@@ -299,11 +322,12 @@ export function nextReminderAttemptAt(dueAt: Date, deliveryNotBefore: Date | nul
  * - earliest shift already started: too late (the cron was down past the shift);
  * - every place of the group confirmed after the due instant: late sign-up, that rule is skipped
  *   (a later rule with a later due instant still applies);
+ * - rule created, enabled again or revived after the due instant: late as well, skipped;
  * - otherwise: due.
  */
 export function reminderRuleStatus<T extends ReminderRuleRegistration>(
   group: ReminderGroup<T>,
-  rule: Pick<ReminderRuleInput, "enabled" | "unit" | "value"> & { archivedAt?: Date | null },
+  rule: Pick<ReminderRuleInput, "enabled" | "unit" | "value" | "archivedAt" | "activeSince" | "createdAt">,
   now: Date,
 ): ReminderRuleEvaluation {
   if (rule.archivedAt || !rule.enabled) return { status: "disabled", dueAt: null, hours: null }
@@ -312,6 +336,7 @@ export function reminderRuleStatus<T extends ReminderRuleRegistration>(
   const dueAt = reminderRuleDueAt(group.earliestStart, hours)
   if (now.getTime() < dueAt.getTime()) return { status: "not-yet", dueAt, hours }
   if (group.earliestStart.getTime() <= now.getTime()) return { status: "started", dueAt, hours }
+  if (!reminderRuleAppliedAt(rule, dueAt)) return { status: "late", dueAt, hours }
   const confirmedBefore = group.registrations.some((r) => reminderPlaceActiveAt(r).getTime() <= dueAt.getTime())
   if (!confirmedBefore) return { status: "late", dueAt, hours }
   return { status: "due", dueAt, hours }

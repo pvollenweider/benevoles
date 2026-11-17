@@ -15,6 +15,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Inscription avec confirmation par e-mail** : la réponse du formulaire a désormais la même forme pour toutes les demandes faites sans preuve de l'adresse : la page affichée après l'envoi est la même pour toutes, et l'e-mail reçu dit la suite. Les e-mails ne changent pas.
 
+### Corrigé
+
+- **Délais propres à un événement** : un rappel ajouté, réactivé ou modifié après l'heure où il aurait dû partir ne part plus pour les personnes déjà inscrites, comme pour une inscription arrivée après cette heure. Un rappel mis en place avant son heure part toujours, une seule fois.
+
 ## [2.8.0] — 2026-11-17
 
 ### En bref

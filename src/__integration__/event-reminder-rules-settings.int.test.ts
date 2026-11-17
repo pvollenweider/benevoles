@@ -667,9 +667,10 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     const scenario = await createLocalDayScenario("dst-automne", "2026-10-25", [{ startTime: "02:15", endTime: "04:15" }])
     try {
       const now = new Date("2026-10-25T00:30:00Z")
+      // Set up two days before, so the rule already applied at its due instant.
       const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
         mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
-      }, now)
+      }, new Date("2026-10-23T00:00:00Z"))
       expect(saved).toMatchObject({ ok: true })
       expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
         state: "queued",
@@ -689,9 +690,10 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     const scenario = await createLocalDayScenario("dst-printemps", "2026-03-29", [{ startTime: "02:30", endTime: "04:30" }])
     try {
       const now = new Date("2026-03-29T01:00:00Z")
+      // Set up two days before, so the rule already applied at its due instant.
       const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
         mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
-      }, now)
+      }, new Date("2026-03-27T00:00:00Z"))
       expect(saved).toMatchObject({ ok: true })
       expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
         state: "queued",
