@@ -1,5 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 // Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+// These tests post the same address on one event many times, from fresh client addresses: the
+// per-address limit of unproven sign-ups is left out here (public-signup-hardening.int.test.ts
+// covers it), every other limit is the real one.
+vi.mock("@/lib/rate-limit", async (importOriginal) => {
+  const real = await importOriginal<typeof import("@/lib/rate-limit")>()
+  return {
+    ...real,
+    rateLimit: (key: string, route: string, limit: number, windowMs: number) =>
+      route === "signup-email-confirm-address" ? Promise.resolve({ ok: true, remaining: limit, retryAfter: 0 }) : real.rateLimit(key, route, limit, windowMs),
+  }
+})
 vi.mock("@/lib/workload-guard", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
   lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
