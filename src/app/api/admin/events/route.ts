@@ -10,19 +10,13 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { cappedText } from "@/lib/text-limits-schema"
-import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX, SHOW_NAME_MAX } from "@/lib/text-limits"
+import { showScheduleSchema } from "@/lib/show-schedule-schema"
+import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX } from "@/lib/text-limits"
 import { dayContactSchema } from "@/lib/day-contact"
 import { cancelDeadlineSchema } from "@/lib/cancel-deadline-schema"
 import { newEventShiftSwapsEnabled } from "@/lib/shift-swap-data"
 import { newEventWorkload } from "@/lib/workload-policy-data"
 import { newEventSectorsEnabled } from "@/lib/sector-adoption"
-
-const showSchema = z.object({
-  name: cappedText(SHOW_NAME_MAX, "Le nom du spectacle"),
-  date: civilDateSchema,
-  startTime: z.string(),
-  endTime: z.string(),
-})
 
 const schema = z.object({
   title: cappedText(EVENT_TITLE_MAX, "Le titre").min(1),
@@ -32,7 +26,7 @@ const schema = z.object({
   endDate: civilDateSchema,
   publicInstructions: cappedText(MARKDOWN_TEXT_MAX, "Les informations pratiques").optional(),
   confirmationMessage: cappedText(MARKDOWN_TEXT_MAX, "Le message de confirmation").optional(),
-  showSchedule: z.array(showSchema).optional(),
+  showSchedule: showScheduleSchema.optional(),
   requirePhone: z.boolean().optional(),
   requireEmailConfirmation: z.boolean().optional(),
   shiftRosterEnabled: z.boolean().optional(),
@@ -86,7 +80,7 @@ export async function POST(req: Request) {
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
-  const body = await req.json()
+  const body = await req.json().catch(() => null)
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 

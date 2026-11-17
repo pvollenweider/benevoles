@@ -136,6 +136,8 @@ const sami = { user: { id: "adm-sami", name: "Sami Haddad", email: "sami.haddad@
 // The day-of board reads the organisation's calendar day (Europe/Zurich), not the UTC one:
 // between midnight and 1 am (2 am in summer) in Zurich the two differ.
 const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Zurich" }).format(new Date())
+/** The stored date (UTC midnight) `days` after the calendar day `day`. */
+const dayFrom = (day: string, days: number) => new Date(Date.parse(`${day}T00:00:00.000Z`) + days * 86_400_000)
 
 function seed() {
   const s = fake.store
@@ -160,15 +162,22 @@ function seed() {
     { ...baseEvent, id: OTHER_EVENT, title: "Marché de Noël", organizationId: ORG, shifts: [shift("shift-marche", [person("reg-ines", "Inès", "Morel")])] },
     { ...baseEvent, id: FOREIGN_EVENT, title: "Tournoi", organizationId: OTHER_ORG, shifts: [shift("shift-tournoi", [person("reg-paulo", "Paulo", "Ferreira")])] },
   ]
-  const registration = (id: string, eventId: string, shiftId: string) => ({
-    id, eventId, shiftId, status: "active", checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null,
-    volunteer: { id: `vol-${id}`, firstName: "Nadia", lastName: "Rochat", email: "nadia.rochat@example.org" }, shift: { roleName: "Accueil" },
+  // The shift as the bulk route reads it with the registration: today's all-day shift by default.
+  const todayShift = { roleName: "Accueil", date: new Date(`${today}T00:00:00.000Z`), startTime: "00:00", endTime: "23:59", status: "published" }
+  const registration = (id: string, eventId: string, shiftId: string, shift: Row = todayShift, status = "active") => ({
+    id, eventId, shiftId, status, checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null,
+    volunteer: { id: `vol-${id}`, firstName: "Nadia", lastName: "Rochat", email: "nadia.rochat@example.org" }, shift,
   })
   s.registrations = [
     registration("reg-nadia", EVENT, "shift-accueil"),
     registration("reg-luc", EVENT, "shift-accueil"),
     registration("reg-ines", OTHER_EVENT, "shift-marche"),
     registration("reg-paulo", FOREIGN_EVENT, "shift-tournoi"),
+    // Same event, outside what the front-desk board lists today.
+    registration("reg-demain", EVENT, "shift-demain", { ...todayShift, date: dayFrom(today, 1), startTime: "10:00", endTime: "12:00" }),
+    registration("reg-hier", EVENT, "shift-hier", { ...todayShift, date: dayFrom(today, -1), startTime: "10:00", endTime: "12:00" }),
+    registration("reg-annule", EVENT, "shift-annule", { ...todayShift, status: "cancelled" }),
+    registration("reg-attente", EVENT, "shift-accueil", todayShift, "waitlisted"),
   ]
   s.admins = [
     { id: "adm-colette", organizationId: ORG, isActive: true, role: "front_desk" },
@@ -316,6 +325,33 @@ describe("POST registrations/bulk as a front-desk account (#1142)", () => {
     const res = await bulk(EVENT, { action: "mark_absent", registrationIds: ["reg-luc", "reg-ines"] })
     expect(res.status).toBe(404)
     for (const r of fake.store.registrations) expect(r.attendanceStatus).toBeNull()
+  })
+
+  it.each([
+    ["a shift of tomorrow", "reg-demain"],
+    ["a shift of yesterday", "reg-hier"],
+    ["a cancelled shift", "reg-annule"],
+    ["a registration that is not confirmed", "reg-attente"],
+  ])("an id the board does not list (%s) answers like an unknown one, and the whole request writes nothing", async (_label, outside) => {
+    for (const action of FRONT_DESK_BULK_ACTIONS) {
+      fake.store.calls.length = 0
+      const res = await bulk(EVENT, { action, registrationIds: ["reg-nadia", outside] })
+      expect(res.status).toBe(404)
+      expect(res.json).toEqual({ error: "Inscription introuvable" })
+      expect(calls()).not.toContain("registration.updateManyAndReturn")
+      expect(calls()).not.toContain("registration.updateMany")
+    }
+    for (const r of fake.store.registrations) expect(r).toMatchObject({ checkedInAt: null, attendanceStatus: null })
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("an organiser still records attendance on any day of the event", async () => {
+    auth.mockResolvedValue(sami)
+    const res = await bulk(EVENT, { action: "mark_absent", registrationIds: ["reg-demain", "reg-hier"] })
+    expect(res.status).toBe(200)
+    expect(res.json).toMatchObject({ done: 2 })
+    expect(registrationRow("reg-demain").attendanceStatus).toBe("absent")
+    expect(registrationRow("reg-hier").attendanceStatus).toBe("absent")
   })
 
   it("the event of the path decides: the granted event's ids sent to another event's address are refused", async () => {

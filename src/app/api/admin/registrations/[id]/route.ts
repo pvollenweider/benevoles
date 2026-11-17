@@ -24,7 +24,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { db } = guard
 
   const { id } = await params
-  const body = await req.json()
+  const body = await req.json().catch(() => null)
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 

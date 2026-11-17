@@ -31,6 +31,43 @@ export function confirmationDeadlineLabel(expiresAt: Date | string | null | unde
   return `${day} à ${time}`
 }
 
+/** What the sign-up answer says of a request waiting for its address to be proven. */
+export type PendingConfirmationSummary = { expiresAt: Date; held: number; waiting: number }
+
+/**
+ * The summary of a request from where each selected shift would be placed and when it starts:
+ * the deadline, the places held (a place or a request to approve) and the waitlist entries. It
+ * depends only on the selection and on the shifts' own state, never on the registrations of the
+ * address: the sign-up route computes it the same way whether the request is recorded or not.
+ */
+export function pendingConfirmationSummary(placements: readonly { status: string; startsAt: Date }[], now: Date): PendingConfirmationSummary {
+  const firstStart = new Date(Math.min(...placements.map((p) => p.startsAt.getTime())))
+  return {
+    expiresAt: signupConfirmationExpiry(now, firstStart),
+    held: placements.filter((p) => p.status === "active" || p.status === "requested").length,
+    waiting: placements.filter((p) => p.status === "waiting").length,
+  }
+}
+
+/**
+ * The body answered to a sign-up without proof of the address on an event that confirms by email:
+ * one shape, built here only, for a recorded request and for one that is not (the owner of the
+ * address is then told by email).
+ */
+export function emailConfirmationAnswer(summary: PendingConfirmationSummary, timeZone: string) {
+  return {
+    success: true,
+    editToken: null,
+    linkSentByEmail: true,
+    received: true,
+    emailConfirmation: true,
+    confirmationExpiresAt: summary.expiresAt.toISOString(),
+    confirmationHeld: summary.held,
+    confirmationWaiting: summary.waiting,
+    confirmationTimeZone: timeZone,
+  }
+}
+
 /**
  * What the email's link shows before its button (#1253). Reading it changes nothing: mail
  * scanners follow links and sometimes run scripts.

@@ -119,3 +119,45 @@ describe("publicEventPayload", () => {
     expect(text).not.toContain("079 111 11 11")
   })
 })
+
+// A poste assigned by the organisation only is never named on the anonymous page, questions included.
+describe("toPublicEvent questions of a hidden poste", () => {
+  const shift = (id: string, roleName: string, assignedOnly: boolean) => ({
+    id, roleName, label: roleName, description: null, date: new Date(), startTime: "10:00", endTime: "12:00", capacity: 2, status: "open",
+    locationDetails: null, instructions: null, displayOrder: 0, waitlistEnabled: false, minAge: null, colorKey: null, assignedOnly, registrations: [],
+  })
+  const q = (id: string, over: Record<string, unknown> = {}) => ({
+    id, label: `Question ${id}`, type: "text", options: [], required: false, minValue: null, maxValue: null, parentId: null, showIfValues: [],
+    displayScope: "event", displayRoleNames: [], ...over,
+  })
+  const row = (questions: unknown[]) => ({
+    id: "e", slug: "fete", title: "Fête", description: null, location: null, startDate: new Date(), endDate: new Date(),
+    publicInstructions: null, confirmationMessage: null, requirePhone: false, showSchedule: [],
+    organization: { name: "Org", slug: "org", volunteerCharter: null },
+    pages: [], shifts: [shift("s1", "Bar", false), shift("s2", "Régie", true)], questions,
+  }) as unknown as PublicEventRow
+
+  it("drops a question scoped only to the hidden poste, and its follow-ups", () => {
+    const out = toPublicEvent(row([
+      q("a", { displayScope: "roles", displayRoleNames: ["Régie"] }),
+      q("b", { parentId: "a", showIfValues: ["oui"] }),
+      q("c", { parentId: "b" }),
+    ]))
+    expect(out.questions).toEqual([])
+    expect(JSON.stringify(out)).not.toContain("Régie")
+  })
+
+  it("keeps only the visible poste names of a question scoped to both", () => {
+    const out = toPublicEvent(row([q("a", { displayScope: "roles", displayRoleNames: ["Régie", "Bar"] })]))
+    expect(out.questions).toHaveLength(1)
+    expect(out.questions[0].displayRoleNames).toEqual(["Bar"])
+    expect(JSON.stringify(out)).not.toContain("Régie")
+  })
+
+  it("leaves a question asked to the whole event, and one scoped to a visible poste, unchanged", () => {
+    const all = q("a")
+    const bar = q("b", { displayScope: "roles", displayRoleNames: ["Bar"] })
+    const child = q("c", { parentId: "b" })
+    expect(toPublicEvent(row([all, bar, child])).questions).toEqual([all, bar, child])
+  })
+})

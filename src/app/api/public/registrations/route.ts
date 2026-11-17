@@ -69,8 +69,8 @@ import { shiftStartsAt } from "@/lib/cancel-deadline"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { orgBaseUrl } from "@/lib/urls"
 import { hashToken } from "@/lib/token-hash"
-import { confirmationDeadlineLabel, signupConfirmationExpiry } from "@/lib/signup-confirmation"
-import { newSignupConfirmationToken, pendingSignupConfirmationShiftIds, replacePendingSignupConfirmation } from "@/lib/signup-confirmation-server"
+import { confirmationDeadlineLabel, emailConfirmationAnswer, pendingConfirmationSummary } from "@/lib/signup-confirmation"
+import { findPendingSignupConfirmation, newSignupConfirmationToken, pendingSignupConfirmationShiftIds, replacePendingSignupConfirmation } from "@/lib/signup-confirmation-server"
 import { recordTokenMiss, tokenLookupsBlocked } from "@/lib/token-rate-limit"
 import { contactPhone } from "@/lib/contact-phone"
 import { myAnswersQuery, storedAnswers } from "@/lib/my-answers"
@@ -127,8 +127,9 @@ export async function POST(req: Request) {
     )
   }
 
-  const body = await req.json()
-  if (body?.charterAccepted !== true) {
+  const body = await req.json().catch(() => null)
+  if (!body || typeof body !== "object") return NextResponse.json({ error: "Données invalides." }, { status: 400 })
+  if (body.charterAccepted !== true) {
     // A page opened before the checkbox was sent with the form doesn't send it at all: reloading
     // the page brings the current form.
     return NextResponse.json(
@@ -481,13 +482,16 @@ export async function POST(req: Request) {
         const proven = ownsEmail && !matchErased
         // One pending request per address and event (#1253): a new sign-up replaces it and frees
         // its held places in this same transaction. A proven sign-up replaces it too, then follows
-        // the usual path directly (no confirmation email).
-        const replacedPending = confirmsByEmail
-          ? await replacePendingSignupConfirmation(tx, { eventId, email, now: new Date(), reason: proven ? "proven" : "replaced" })
-          : { shiftIds: [] as string[], confirmationId: null }
+        // the usual path directly (no confirmation email). Read now, replaced only once this sign-up
+        // is known to be recorded: one that is not (a conflict below) leaves it as it was. Until
+        // then its own places are left out of the checks and counts below, as the replacement will
+        // free them before anything of this sign-up is written.
+        const pending = confirmsByEmail ? await findPendingSignupConfirmation(tx, { eventId, email }) : null
+        const pendingIds = pending?.registrations.map((r) => r.id) ?? []
+        const notPending = pendingIds.length > 0 ? { id: { notIn: pendingIds } } : {}
         let conflict: SignupConflict | null = null
         const held = await tx.registration.findFirst({
-          where: { volunteerId, shiftId: { in: shiftIds }, status: { in: [...BOOKED_STATUSES] } },
+          where: { volunteerId, shiftId: { in: shiftIds }, status: { in: [...BOOKED_STATUSES] }, ...notPending },
           select: { shift: { select: { label: true } } },
         })
         if (held) {
@@ -495,7 +499,7 @@ export async function POST(req: Request) {
           conflict = { kind: "duplicate", shift: held.shift.label }
         }
         const liveNow = await tx.registration.findMany({
-          where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
+          where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] }, ...notPending },
           include: { shift: true },
         })
         // The event's roles assigned by the organisation only (#1145), read again under the shift
@@ -526,7 +530,7 @@ export async function POST(req: Request) {
           const [own] = roleLimitBreaches(current, [], limits)
           if (own) throw new RoleLimitError(own)
           const heldOfRoles = await tx.registration.findMany({
-            where: { volunteerId, eventId, status: { in: [...BOOKED_STATUSES] }, shift: { roleName: { in: [...limits.keys()] } } },
+            where: { volunteerId, eventId, status: { in: [...BOOKED_STATUSES] }, shift: { roleName: { in: [...limits.keys()] } }, ...notPending },
             select: { shift: { select: { roleName: true } } },
           })
           const [breach] = roleLimitBreaches(current, heldOfRoles.map((h) => h.shift), limits)
@@ -540,7 +544,7 @@ export async function POST(req: Request) {
         const placements: { shift: (typeof current)[number]; placement: Exclude<ReturnType<typeof planPlacement>, { status: "full" }> }[] = []
         for (const shift of current) {
           const occupied = await tx.registration.count({
-            where: { shiftId: shift.id, status: { in: [...OCCUPYING_STATUSES] } },
+            where: { shiftId: shift.id, status: { in: [...OCCUPYING_STATUSES] }, ...notPending },
           })
           const maxPos = await tx.registration.aggregate({
             where: { shiftId: shift.id, status: { in: ["waiting", "offered"] } },
@@ -556,6 +560,8 @@ export async function POST(req: Request) {
           if (placement.status === "full") throw new ShiftFullError(shift.id, shift.label)
           placements.push({ shift, placement })
         }
+        const confirmationSummary = (now: Date) =>
+          pendingConfirmationSummary(placements.map((p) => ({ status: p.placement.status, startsAt: shiftStartsAt(p.shift, timeZone) })), now)
         // Workload protection (#1171): without proof of the address, the selection alone is judged
         // first, with only the birth date typed now, as for a new address; a refusal it gives is
         // the public, detailed one. What the address's own schedule or limits add is a conflict.
@@ -588,8 +594,18 @@ export async function POST(req: Request) {
         if (conflict) {
           const notice = await signupNotice(tx, { volunteerId, eventId, conflict })
           const outboxIds = notice ? await enqueueNotifications([notice], tx, { organizationId: event.organizationId }) : []
-          return { registrations: [], volunteerId, createdNow, matchErased, outboxIds, updates: null, rosterChange: null, notRecorded: true, releasedShiftIds: replacedPending.shiftIds }
+          return {
+            registrations: [], volunteerId, createdNow, matchErased, outboxIds, updates: null, rosterChange: null, notRecorded: true,
+            // On an event that confirms by email, the answer carries the same facts as a recorded
+            // request, computed the same way from the selection alone.
+            ...(confirmsByEmail ? { emailConfirmation: confirmationSummary(new Date()) } : {}),
+            // The pending request stays as it was: nothing freed.
+            releasedShiftIds: [],
+          }
         }
+        const replacedPending = confirmsByEmail
+          ? await replacePendingSignupConfirmation(tx, { eventId, email, now: new Date(), reason: proven ? "proven" : "replaced", previous: pending })
+          : { shiftIds: [] as string[], confirmationId: null }
         // Waiting for the address to be proven (#1253): hold the places provisionally, never send the
         // usual confirmation, and queue the one email with the link and the deadline. A shift that
         // was full with a waitlist enters nothing now: its rank is taken at the confirmation.
@@ -597,8 +613,8 @@ export async function POST(req: Request) {
           const now = new Date()
           const waitlistShiftIds = placements.filter((p) => p.placement.status === "waiting").map((p) => p.shift.id)
           const heldPlacements = placements.filter((p): p is typeof p & { placement: { status: "active" | "requested" } } => p.placement.status === "active" || p.placement.status === "requested")
-          const firstStart = new Date(Math.min(...placements.map((p) => shiftStartsAt(p.shift, timeZone).getTime())))
-          const expiresAt = signupConfirmationExpiry(now, firstStart)
+          const summary = confirmationSummary(now)
+          const expiresAt = summary.expiresAt
           const token = newSignupConfirmationToken()
           const answerValues = Object.fromEntries([...answerCheck.values].filter(([id]) => questions.some((q) => q.id === id)))
           const confirmation = await tx.signupConfirmation.create({
@@ -681,7 +697,7 @@ export async function POST(req: Request) {
             outboxIds,
             updates: null,
             rosterChange: null,
-            emailConfirmation: { expiresAt, held: heldPlacements.length, waiting: waitlistShiftIds.length },
+            emailConfirmation: summary,
             releasedShiftIds: replacedPending.shiftIds,
           }
         }
@@ -839,7 +855,9 @@ export async function POST(req: Request) {
   }
   if (outcome.notRecorded) {
     deliverAfterResponse(outboxIds)
-    return unprovenAnswer()
+    return outcome.emailConfirmation
+      ? NextResponse.json(emailConfirmationAnswer(outcome.emailConfirmation, timeZone), { status: 201 })
+      : unprovenAnswer()
   }
   if (outcome.emailConfirmation) {
     for (const reg of registrations) {
@@ -858,17 +876,7 @@ export async function POST(req: Request) {
       })
     }
     deliverAfterResponse(outboxIds)
-    return NextResponse.json({
-      success: true,
-      editToken: null,
-      linkSentByEmail: true,
-      received: true,
-      emailConfirmation: true,
-      confirmationExpiresAt: outcome.emailConfirmation.expiresAt.toISOString(),
-      confirmationHeld: outcome.emailConfirmation.held,
-      confirmationWaiting: outcome.emailConfirmation.waiting,
-      confirmationTimeZone: timeZone,
-    }, { status: 201 })
+    return NextResponse.json(emailConfirmationAnswer(outcome.emailConfirmation, timeZone), { status: 201 })
   }
   if (matchErased) ownsEmail = false
 

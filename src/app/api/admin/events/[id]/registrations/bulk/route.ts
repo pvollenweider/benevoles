@@ -10,6 +10,8 @@ import { z } from "zod"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import type { AttendanceTransition } from "@/lib/attendance-state"
+import { isListedOnDayOfBoard } from "@/lib/day-of"
+import { orgTimeZone } from "@/lib/time-zone"
 
 // Bulk actions on the registrations list (#292): one request for the whole selection instead
 // of one per row. All-or-nothing on ownership: every id must be a registration of this event,
@@ -19,7 +21,9 @@ import type { AttendanceTransition } from "@/lib/attendance-state"
 // A front-desk account holding a live grant on this event (#1142) may use the attendance actions
 // only: any other action is refused with a 403 before the event or a registration is read. The
 // guard reads the grant for the event of the path, and the ownership check below is on that same
-// event, for every id, before any write.
+// event, for every id, before any write. It also records attendance only for the people its board
+// lists at this moment (isListedOnDayOfBoard: active registration, shift of the day shown): an id
+// outside the board gets the same 404 as an id of another event, before any write.
 const schema = z.object({
   action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in", "mark_absent", "undo_absent", "mark_left_early", "undo_left_early"]),
   registrationIds: z.array(z.string().min(1)).min(1).max(500),
@@ -44,7 +48,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const event = await db.event.findFirst({
     where: { id: eventId },
-    select: { id: true, title: true, organization: { select: { slug: true } } },
+    select: { id: true, title: true, organization: { select: { slug: true, timeZone: true } } },
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
@@ -53,10 +57,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     where: { id: { in: ids }, eventId },
     include: {
       volunteer: { select: { id: true, firstName: true, lastName: true, email: true } },
-      shift: { select: { roleName: true } },
+      shift: { select: { roleName: true, date: true, startTime: true, endTime: true, status: true } },
     },
   })
   if (regs.length !== ids.length) return NextResponse.json({ error: "Inscription introuvable" }, { status: 404 })
+  if (guard.access === "front_desk") {
+    const now = new Date()
+    const timeZone = orgTimeZone(event.organization)
+    if (!regs.every((r) => r.status === "active" && isListedOnDayOfBoard(r.shift, now, timeZone))) {
+      return NextResponse.json({ error: "Inscription introuvable" }, { status: 404 })
+    }
+  }
 
   const actor = adminActor(guard.session)
 

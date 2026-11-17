@@ -22,6 +22,7 @@ import {
   isReminderRuleUnit,
   nextReminderAttemptAt,
   reminderPlaceActiveAt,
+  reminderRuleAppliedAt,
   reminderRuleDueAt,
   reminderRuleHours,
   reminderShiftStart,
@@ -80,6 +81,8 @@ export const customReminderRuleSelect = {
   enabled: true,
   displayOrder: true,
   archivedAt: true,
+  activeSince: true,
+  createdAt: true,
 } as const
 
 /**
@@ -484,6 +487,7 @@ export async function queueCustomRuleReminders(now: Date): Promise<CustomReminde
               })
               return "deferred" as const
             }
+            if (!reminderRuleAppliedAt(freshRule, dueAt)) return cancel("Rappel mis en place après son heure.")
             if (!group.registrations.some((r) => reminderPlaceActiveAt(r).getTime() <= dueAt.getTime())) {
               return cancel("Inscription confirmée après l'heure du rappel.")
             }
