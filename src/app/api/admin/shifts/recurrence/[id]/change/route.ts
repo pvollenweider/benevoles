@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { shiftCapacitySchema } from "@/lib/shift-capacity-schema"
 import { civilDateSchema } from "@/lib/civil-date"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
@@ -20,7 +21,7 @@ const schema = z.object({
   from: civilDateSchema,
   startTime: clockSchema.optional(),
   endTime: clockSchema.optional(),
-  capacity: z.number().int().optional(),
+  capacity: shiftCapacitySchema.optional(),
   notifyVolunteers: z.boolean().optional(),
 })
 

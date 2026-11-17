@@ -88,8 +88,16 @@ export function spokenStaffingState(s: { capacity: number; minVolunteers?: numbe
   return staffingStateText(s, state)
 }
 
-/** The most people a shift's minimum can ask for: far above any real shift, far below what a database integer holds. */
+/** The most places a shift can have, and so the most its minimum can ask for: far above any real shift, far below what a database integer holds. */
 export const SHIFT_PLACES_MAX = 10000
+
+/** Why a shift's places can't be saved, or null: a whole number from 1 to SHIFT_PLACES_MAX. */
+export function shiftCapacityProblem(capacity: number): string | null {
+  if (!Number.isInteger(capacity)) return "Les places sont un nombre entier de personnes."
+  if (capacity < 1) return "Indiquez au moins une personne par créneau."
+  if (capacity > SHIFT_PLACES_MAX) return `Un créneau ne peut pas dépasser ${SHIFT_PLACES_MAX} places.`
+  return null
+}
 
 /** Why a minimum can't be saved with these places, or null. Empty (null) is always fine: no minimum. */
 export function minVolunteersProblem(min: number | null | undefined, capacity: number): string | null {

@@ -63,6 +63,13 @@ export const isOrgAccountRole = (role: string | null | undefined): boolean => ty
  */
 export const ORG_ACCOUNT_ROLE_WHERE = { role: { in: [...ORG_ACCOUNT_ROLES] } }
 
+/**
+ * The accounts the team's own changes (level change, removal) can target: the owner and the
+ * organiser. A super admin account attached to an organisation is listed and counted with it
+ * (ORG_ACCOUNT_ROLE_WHERE), but is never changed or removed from the organisation's team.
+ */
+export const ORG_TEAM_ROLE_WHERE = { role: { in: [...ORG_ROLES] } }
+
 type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
 
 /**

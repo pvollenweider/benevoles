@@ -3,6 +3,7 @@ import Link from "next/link"
 import { PENDING_ORG_WHERE } from "@/lib/org-review"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { superAdminOrgCookie } from "@/lib/super-admin-org-cookie"
 import AdminNav from "@/components/admin/AdminNav"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import ReleaseBanner from "@/components/super-admin/ReleaseBanner"
@@ -18,7 +19,7 @@ export default async function SuperAdminLayout({ children }: { children: React.R
   }
 
   const cookieStore = await cookies()
-  const saOrgId = cookieStore.get("sa-org-id")?.value
+  const saOrgId = cookieStore.get(superAdminOrgCookie().name)?.value
   let orgName: string | undefined
   if (saOrgId) {
     const org = await prisma.organization.findUnique({ where: { id: saOrgId }, select: { name: true } })
