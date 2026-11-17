@@ -6,7 +6,8 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { coordinatesOf } from "@/lib/map-link"
 import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
-import { publicShifts } from "@/lib/role-assignment"
+import { assignedOnlyRoles, publicShifts } from "@/lib/role-assignment"
+import { SCOPE_ROLES } from "@/lib/question-scope"
 import { workloadModeOf } from "@/lib/workload-view"
 import { shiftHasEnded } from "@/lib/shift-ended"
 import { reservedAnswerConditions } from "@/lib/role-answer"
@@ -42,6 +43,43 @@ export const publicEventInclude = {
 } satisfies Prisma.EventInclude
 
 export type PublicEventRow = Prisma.EventGetPayload<{ include: typeof publicEventInclude }>
+
+/**
+ * The questions the anonymous page receives: those scoped to postes drop the names of postes
+ * assigned by the organisation only, and a question left with no poste is not published, nor are
+ * its follow-ups (#1016). A person on such a poste still gets the question from their own page,
+ * which reads the questions itself. Questions asked to the whole event are unchanged.
+ */
+export function publicQuestions<Q extends { id: string; parentId?: string | null; displayScope?: string | null; displayRoleNames?: string[] | null }>(
+  questions: Q[],
+  hidden: Set<string>,
+): Q[] {
+  if (hidden.size === 0) return questions
+  const dropped = new Set<string>()
+  const kept = new Map<string, Q>()
+  for (const q of questions) {
+    const names = q.displayRoleNames ?? []
+    if (q.displayScope !== SCOPE_ROLES || !names.some((n) => hidden.has(n))) {
+      kept.set(q.id, q)
+      continue
+    }
+    const visible = names.filter((n) => !hidden.has(n))
+    if (visible.length === 0) dropped.add(q.id)
+    else kept.set(q.id, { ...q, displayRoleNames: visible })
+  }
+  // A follow-up is asked to the people its parent is asked to: it goes with a dropped parent.
+  let changed = true
+  while (changed) {
+    changed = false
+    for (const q of questions) {
+      if (q.parentId && dropped.has(q.parentId) && !dropped.has(q.id)) {
+        dropped.add(q.id)
+        changed = true
+      }
+    }
+  }
+  return questions.filter((q) => !dropped.has(q.id)).map((q) => kept.get(q.id) ?? q)
+}
 
 export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
   const timeZone = orgTimeZone(event.organization)
@@ -100,7 +138,7 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
   })
 
   return {
-    questions: event.questions ?? [],
+    questions: publicQuestions(event.questions ?? [], assignedOnlyRoles(event.shifts)),
     id: event.id,
     slug: event.slug,
     title: event.title,

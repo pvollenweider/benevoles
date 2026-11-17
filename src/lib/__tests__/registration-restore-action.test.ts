@@ -21,17 +21,18 @@ vi.mock("../notifications/outbox", () => ({
 vi.mock("../token-vault", () => ({ registrationToken: { reveal: () => "tok-1", data: (t: string) => ({ editTokenHash: `h:${t}` }) } }))
 vi.mock("../utils", () => { let n = 0; return { generateToken: () => `new-${++n}` } })
 
+import { MEMBER_TOMBSTONE_WRITE } from "../member-erasure"
 import { ALREADY_LIVE, restoreRegistration } from "../registration-restore-action"
 import { answerRow, availabilityShift, availabilityTx } from "./fixtures/availability-tx"
 
 const reg = {
   id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", status: "cancelled",
-  volunteer: { firstName: "Chloé", lastName: "Roy", email: "chloe@example.com" },
+  volunteer: { firstName: "Chloé", lastName: "Roy", email: "chloe@example.com", erasedAt: null, mergedIntoId: null },
   shift: { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04T00:00:00Z"), startTime: "10:00", endTime: "12:00", capacity: 2, status: "open" },
   event: { id: "e1", title: "Fête", organizationId: "org-1", organization: { slug: "org", timeZone: "Europe/Zurich" } },
 }
 
-function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?: number; shiftStatus?: string; updateError?: unknown; availability?: ReturnType<typeof availabilityTx> } = {}) {
+function makeDb(over: { lockedVolunteer?: { erasedAt: Date | null; mergedIntoId: string | null }; reg?: unknown; from?: string; status?: string; occupied?: number; shiftStatus?: string; updateError?: unknown; availability?: ReturnType<typeof availabilityTx> } = {}) {
   const availability = over.availability ?? availabilityTx({ inUse: false })
   const tx = {
     event: availability.event,
@@ -54,6 +55,7 @@ function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?
       updateMany: vi.fn().mockResolvedValue({ count: 1 }),
     },
     shiftDecline: availability.shiftDecline,
+    volunteer: { findFirst: vi.fn().mockResolvedValue(over.lockedVolunteer ?? { erasedAt: null, mergedIntoId: null }) },
   }
   const db = {
     registration: { findFirst: vi.fn().mockResolvedValue(over.reg === undefined ? reg : over.reg) },
@@ -92,6 +94,32 @@ describe("restoreRegistration (#809)", () => {
       changes: { status: { from: "cancelled", to: "active" }, shiftId: { from: "s1", to: "s1" } },
     }))
     expect(deliverAfterResponse).toHaveBeenCalledWith(["n1"])
+  })
+
+  it("refuses to restore for a member whose data was erased: 409, nothing written", async () => {
+    const { db, tx } = makeDb({ reg: { ...reg, volunteer: { ...reg.volunteer, erasedAt: new Date() } } })
+    const out = await restoreRegistration(db, actor, "r1", before)
+    expect(out).toEqual({ ok: false, httpStatus: 409, error: MEMBER_TOMBSTONE_WRITE.erased })
+    expect(tx.registration.updateMany).not.toHaveBeenCalled()
+    expect(enqueueNotifications).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("refuses to restore for a member merged into another: 409, nothing written", async () => {
+    const { db, tx } = makeDb({ reg: { ...reg, volunteer: { ...reg.volunteer, mergedIntoId: "v2" } } })
+    const out = await restoreRegistration(db, actor, "r1", before)
+    expect(out).toEqual({ ok: false, httpStatus: 409, error: MEMBER_TOMBSTONE_WRITE.merged })
+    expect(tx.registration.updateMany).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("re-reads the member under the lock: an erasure committed meanwhile refuses the restore", async () => {
+    const { db, tx } = makeDb({ lockedVolunteer: { erasedAt: new Date(), mergedIntoId: null } })
+    const out = await restoreRegistration(db, actor, "r1", before)
+    expect(out).toEqual({ ok: false, httpStatus: 409, error: MEMBER_TOMBSTONE_WRITE.erased })
+    expect(tx.registration.updateMany).not.toHaveBeenCalled()
+    expect(enqueueNotifications).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
   })
 
   it("restores a request as a request, without filling the shift", async () => {

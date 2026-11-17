@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { memberWriteRefusal } from "./member-erasure"
 import { clearShiftDeclines } from "./shift-decline-clear"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { logEvent, type LogActor } from "./event-log"
@@ -52,12 +53,15 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
   const reg = await db.registration.findFirst({
     where: { id },
     include: {
-      volunteer: { select: { firstName: true, lastName: true, email: true } },
+      volunteer: { select: { firstName: true, lastName: true, email: true, erasedAt: true, mergedIntoId: true } },
       shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, capacity: true, status: true } },
       event: { select: { id: true, title: true, organizationId: true, organization: { select: { slug: true, timeZone: true } } } },
     },
   })
   if (!reg) return { ok: false, httpStatus: 404, error: "Non trouvé" }
+  // An erased record or a merge tombstone is never put back on a shift (checked again under the lock below).
+  const tombstone = memberWriteRefusal(reg.volunteer)
+  if (tombstone) return { ok: false, httpStatus: 409, error: tombstone }
 
   // What it was before: the latest cancellation recorded for this registration.
   const cancellation = await db.eventLog.findFirst({
@@ -75,6 +79,11 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
       await lockWorkloadShared(tx, reg.eventId)
       const workloadGate = await readWorkloadGate(tx, reg.eventId)
       await lockShifts(tx, [reg.shiftId])
+      // The person's row is locked: an erasure or a merge committed meanwhile is seen here.
+      await lockVolunteerRows(tx, [reg.volunteerId])
+      const member = await tx.volunteer.findFirst({ where: { id: reg.volunteerId }, select: { erasedAt: true, mergedIntoId: true } })
+      const refusal = member ? memberWriteRefusal(member) : null
+      if (refusal) return { ok: false as const, error: refusal }
       const [current, shift, occupied] = await Promise.all([
         tx.registration.findFirst({ where: { id }, select: { status: true } }),
         tx.shift.findFirst({ where: { id: reg.shiftId }, select: { status: true, capacity: true } }),

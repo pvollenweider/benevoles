@@ -62,14 +62,15 @@ describe("nightly cleanup of deactivated organizations", () => {
   it("deletes the organization's admins, active ones included, with it", async () => {
     // The deactivated organisations to delete; the pending-spaces summary (#810) finds none.
     m.orgFindMany.mockImplementation(async ({ where }: { where: { OR?: unknown; admins?: unknown } }) => (where.OR || where.admins ? [] : [{ id: "org-old" }]))
-    m.adminFindMany.mockResolvedValue([{ id: "owner-1" }, { id: "organizer-1" }])
+    m.adminFindMany.mockResolvedValue([{ id: "owner-1", organizationId: "org-old" }, { id: "organizer-1", organizationId: "org-old" }])
     m.orgDeleteMany.mockResolvedValue({ count: 1 })
     m.adminDeleteMany.mockResolvedValueOnce({ count: 2 }).mockResolvedValueOnce({ count: 0 })
 
     const res = await run()
     expect(res.status).toBe(200)
-    expect(m.adminFindMany).toHaveBeenCalledWith({ where: { organizationId: { in: ["org-old"] } }, select: { id: true } })
-    expect(m.orgDeleteMany).toHaveBeenCalledWith({ where: { id: { in: ["org-old"] } } })
+    expect(m.adminFindMany).toHaveBeenCalledWith({ where: { organizationId: { in: ["org-old"] } }, select: { id: true, organizationId: true } })
+    // The delete applies the retention condition again.
+    expect(m.orgDeleteMany).toHaveBeenCalledWith({ where: { AND: [{ id: { in: ["org-old"] } }, expect.objectContaining({ active: false, suspendedAt: null })] } })
     // No isActive filter: the active owner goes too.
     expect(m.adminDeleteMany.mock.calls[0][0]).toEqual({ where: { id: { in: ["owner-1", "organizer-1"] } } })
     const body = await res.json()
@@ -83,7 +84,17 @@ describe("nightly cleanup of deactivated organizations", () => {
     expect(m.orgDeleteMany).not.toHaveBeenCalled()
     // The front-desk purge reads AdminUser too; step 1's own read of its organisations' admins is
     // the one that must not happen.
-    expect(m.adminFindMany).not.toHaveBeenCalledWith({ where: { organizationId: { in: ["org-old"] } }, select: { id: true } })
+    expect(m.adminFindMany).not.toHaveBeenCalledWith({ where: { organizationId: { in: ["org-old"] } }, select: { id: true, organizationId: true } })
+  })
+
+  // An organisation reactivated between the cleanup's read and its delete is not deleted, nor its admins, nor counted.
+  it("spares an organization reactivated between the read and the delete", async () => {
+    m.orgFindMany.mockImplementation(async ({ where }: { where: { OR?: unknown; admins?: unknown; id?: unknown } }) => (where.OR || where.admins ? [] : where.id ? [{ id: "org-old" }] : [{ id: "org-old" }]))
+    m.adminFindMany.mockResolvedValue([{ id: "owner-1", organizationId: "org-old" }])
+    m.orgDeleteMany.mockResolvedValue({ count: 0 })
+    const body = await (await run()).json()
+    expect(m.adminDeleteMany.mock.calls.every(([a]) => !JSON.stringify(a).includes("owner-1"))).toBe(true)
+    expect(body.deleted.organizations).toBe(0)
   })
 
   it("also sweeps org accounts orphaned by earlier cleanups, never the super admin", async () => {
@@ -106,8 +117,8 @@ describe("nightly cleanup of sign-up spaces never activated", () => {
     expect(where).toMatchObject({ active: true, suspendedAt: null, publicationApprovedAt: null, outboundEmailApprovedAt: null, admins: { none: { isActive: true } } })
     const { RETENTION_DAYS, DAY_MS } = await import("@/lib/retention")
     expect(before - where.createdAt.lt.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.deactivatedAdmin * DAY_MS - 1000)
-    expect(m.adminDeleteMany).toHaveBeenCalledWith({ where: { organizationId: { in: ["org-abandoned"] }, isActive: false } })
-    expect(m.orgDeleteMany).toHaveBeenCalledWith({ where: { id: { in: ["org-abandoned"] } } })
+    expect(m.adminFindMany).toHaveBeenCalledWith({ where: { isActive: false, organizationId: { in: ["org-abandoned"] } }, select: { id: true, organizationId: true } })
+    expect(m.orgDeleteMany).toHaveBeenCalledWith({ where: { AND: [{ id: { in: ["org-abandoned"] } }, expect.objectContaining({ admins: { none: expect.anything() } })] } })
     expect(body.deleted.abandonedSignupSpaces).toBe(1)
   })
 })
