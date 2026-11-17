@@ -19,7 +19,7 @@ import {
   type ReminderGroup,
 } from "./reminder-groups"
 import { orgTimeZone } from "./time-zone"
-import { reminderPlaceActiveAt, reminderRuleDueAt, reminderRuleHours, type ReminderRuleInput } from "./reminder-rules"
+import { reminderPlaceActiveAt, reminderRuleAppliedAt, reminderRuleDueAt, reminderRuleHours, type ReminderRuleInput } from "./reminder-rules"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "./shift-info"
 import { registrationToken } from "./token-vault"
 import { hasEarlierDeadline, reminderCancelNotice, selfCancelDeadline } from "./cancel-deadline"
@@ -194,6 +194,7 @@ export async function resolveCustomRuleReminder(payload: NotificationPayload, no
   if (hours === null) return { kind: "cancel", reason: "Délai de rappel invalide." }
   const dueAt = reminderRuleDueAt(group.earliestStart, hours)
   if (dueAt.getTime() > now.getTime()) return { kind: "defer", until: dueAt }
+  if (!reminderRuleAppliedAt(rule, dueAt)) return { kind: "cancel", reason: "Rappel mis en place après son heure." }
   if (!group.registrations.some((r) => reminderPlaceActiveAt(r).getTime() <= dueAt.getTime())) {
     return { kind: "cancel", reason: "Inscription confirmée après l'heure du rappel." }
   }

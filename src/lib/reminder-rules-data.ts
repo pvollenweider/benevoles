@@ -10,7 +10,9 @@
  * sent. Saving takes the event's advisory lock (`lockReminderRules`) before reading or writing:
  * two saves, or a save and the hourly run, cannot interleave. A rule's identity is its delay in
  * hours: a submitted delay resolves to the event's row of that delay (active or archived, revived)
- * or creates one, so changing a delay removes the old row and adds the new one. Unsent occurrences
+ * or creates one, so changing a delay removes the old row and adds the new one. A created, revived
+ * or re-enabled row records `activeSince`: a reminder whose due instant came before it is not sent,
+ * so a new delay never reaches back to an instant already passed. Unsent occurrences
  * and pending outbox rows of a removed or disabled delay are cancelled in the same transaction;
  * an occurrence already `sending` is left to record its own outcome and keeps its rule archived.
  */
@@ -67,6 +69,8 @@ function toRules(event: CustomReminderEventWithRules): ReminderRuleInput[] {
     value: rule.value,
     enabled: rule.enabled,
     displayOrder: rule.displayOrder,
+    activeSince: rule.activeSince,
+    createdAt: rule.createdAt,
   }))
 }
 
@@ -211,6 +215,7 @@ export async function saveEventReminderRules(
     const resolvedIds = new Set(after.filter((rule) => rule.id).map((rule) => rule.id))
     // Changing a delay is therefore « remove the old delay, add the new one »: the old row is gone
     // from this list even when the client sent its id, and its unsent occurrences are cancelled.
+    // The new row starts to apply now: a due instant already passed sends nothing.
     const removed = before.filter((rule) => !resolvedIds.has(rule.id))
     const removedIds = new Set(removed.map((rule) => rule.id))
     const resolved = after.filter((rule) => rule.id)
@@ -258,19 +263,28 @@ export async function saveEventReminderRules(
     )
 
     // Resolve, revive and create rows. `displayOrder` follows the screen order; `archivedAt` is
-    // cleared on a revived row so its sent occurrences protect the same delay again.
+    // cleared on a revived row so its sent occurrences protect the same delay again. `activeSince`
+    // moves only when the rule starts to apply again (enabled from disabled, or revived enabled):
+    // re-saving an unchanged rule keeps the reminders it already owes.
+    const rowsById = new Map(event.reminderRules.map((row) => [row.id, row]))
     for (const rule of resolved) {
+      const row = rowsById.get(rule.id)
+      const startsAgain = rule.enabled && (!row || !row.enabled || !!row.archivedAt)
       await tx.eventReminderRule.update({
         where: { id: rule.id },
         data: {
           unit: rule.unit, value: rule.value, enabled: rule.enabled, displayOrder: rule.displayOrder,
           archivedAt: null,
+          ...(startsAgain ? { activeSince: now } : {}),
         },
       })
     }
     for (const rule of created) {
       await tx.eventReminderRule.create({
-        data: { eventId, unit: rule.unit, value: rule.value, enabled: rule.enabled, displayOrder: rule.displayOrder },
+        data: {
+          eventId, unit: rule.unit, value: rule.value, enabled: rule.enabled, displayOrder: rule.displayOrder,
+          activeSince: now,
+        },
       })
     }
     if (removed.length > 0) {

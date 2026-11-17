@@ -193,6 +193,57 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     expect(await customOutbox()).toHaveLength(2)
   })
 
+  it("new delays whose time already passed send nothing, however often they change", async () => {
+    // The shift is on 10 June 08:00Z and the places date from January. The evening before, three
+    // rounds of three new delays (336 down to 328 hours) all have due instants in late May.
+    const now = new Date("2030-06-09T18:00:00Z")
+    for (const base of [336, 333, 330]) {
+      const saved = await saveEventReminderRules(prisma, orgId, eventId, {
+        mode: "custom",
+        rules: [0, 1, 2].map((offset) => rule({ unit: "hours", value: base - offset })),
+      }, now)
+      expect(saved).toMatchObject({ ok: true, state: { preview: { state: "blocked", reason: "no-upcoming-reminder" } } })
+      const run = await queueCustomRuleReminders(now)
+      expect(run.queued).toBe(0)
+    }
+    expect(await customOccurrences()).toHaveLength(0)
+    expect(await customOutbox()).toHaveLength(0)
+  })
+
+  it("a delay set up before its time sends once to each volunteer", async () => {
+    const setUp = new Date("2030-05-20T08:00:00Z")
+    const saved = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule({ unit: "hours", value: 336 })] }, setUp)
+    expect(saved).toMatchObject({ ok: true, state: { preview: { state: "scheduled", dueAt: "2030-05-27T08:00:00.000Z", recipientCount: 2 } } })
+    const due = new Date("2030-05-27T08:30:00Z")
+    expect((await queueCustomRuleReminders(due)).queued).toBe(2)
+    expect((await queueCustomRuleReminders(new Date("2030-05-27T09:30:00Z"))).queued).toBe(0)
+    expect(await customOutbox()).toHaveLength(2)
+  })
+
+  it("a rule re-enabled after its time sends nothing", async () => {
+    const first = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule({ unit: "hours", value: 336 })] }, new Date("2030-05-20T08:00:00Z"))
+    if (!first.ok) throw new Error("save failed")
+    const id = first.state.rules[0].id
+    await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [{ id, unit: "hours", value: 336, enabled: false }] }, new Date("2030-05-21T08:00:00Z"))
+    const now = new Date("2030-06-09T18:00:00Z")
+    const reEnabled = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [{ id, unit: "hours", value: 336, enabled: true }] }, now)
+    expect(reEnabled).toMatchObject({ ok: true, state: { rules: [{ id, enabled: true }], preview: { state: "blocked", reason: "no-upcoming-reminder" } } })
+    expect((await queueCustomRuleReminders(now)).queued).toBe(0)
+    expect(await customOutbox()).toHaveLength(0)
+  })
+
+  it("saving an unchanged rule after its time keeps its reminder", async () => {
+    // A rule set up in time, then saved again (reordering, no change) after its due instant but
+    // before the hourly run: the reminder is still owed.
+    const first = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule({ unit: "hours", value: 336 })] }, new Date("2030-05-20T08:00:00Z"))
+    if (!first.ok) throw new Error("save failed")
+    const id = first.state.rules[0].id
+    const now = new Date("2030-05-27T08:30:00Z")
+    expect(await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [{ id, unit: "days", value: 14, enabled: true }] }, now))
+      .toMatchObject({ ok: true })
+    expect((await queueCustomRuleReminders(now)).queued).toBe(2)
+  })
+
   it("editing a kept rule to the delay of an archived one does not re-send that delay", async () => {
     // Rule A (7 days) already reminded both volunteers, then rule B (2 hours) is the only one kept
     // and is edited to 7 days. B's id must not stop the resolution: the archived 7-day row is
@@ -616,9 +667,10 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     const scenario = await createLocalDayScenario("dst-automne", "2026-10-25", [{ startTime: "02:15", endTime: "04:15" }])
     try {
       const now = new Date("2026-10-25T00:30:00Z")
+      // Set up two days before, so the rule already applied at its due instant.
       const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
         mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
-      }, now)
+      }, new Date("2026-10-23T00:00:00Z"))
       expect(saved).toMatchObject({ ok: true })
       expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
         state: "queued",
@@ -638,9 +690,10 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     const scenario = await createLocalDayScenario("dst-printemps", "2026-03-29", [{ startTime: "02:30", endTime: "04:30" }])
     try {
       const now = new Date("2026-03-29T01:00:00Z")
+      // Set up two days before, so the rule already applied at its due instant.
       const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
         mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
-      }, now)
+      }, new Date("2026-03-27T00:00:00Z"))
       expect(saved).toMatchObject({ ok: true })
       expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
         state: "queued",

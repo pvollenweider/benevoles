@@ -305,6 +305,11 @@ model EventReminderRule {
   // volunteers if the same delay is recreated. Null means active; an archived rule is hidden, never
   // counted, sent or rescheduled.
   archivedAt   DateTime?
+  // When the rule last started to apply: set on creation and when a save enables a disabled rule
+  // or revives an archived one. A reminder whose due instant came before it is not sent (as for a
+  // place taken after that instant). Null on rows written before the column: `createdAt` applies.
+  // `updatedAt` cannot serve: every save rewrites each kept row, an unchanged one included.
+  activeSince  DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

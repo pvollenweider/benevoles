@@ -463,3 +463,89 @@ describe("settings payload and copy (#1139, PR 2)", () => {
       .toBe("Rien à envoyer pour l'instant : aucun créneau à venir ne peut encore recevoir ces rappels.")
   })
 })
+
+describe("rules set up after their due instant", () => {
+  // 10:00 Zurich on 2030-06-01 is 08:00Z; the place was taken on 1 May, long before any due instant.
+  const placeGroups = () => groupsOf([registration({ startTime: "10:00", createdAt: "2030-05-01T00:00:00Z" })])
+
+  it("a rule created after its due instant sends nothing", () => {
+    const now = new Date("2030-06-01T07:30:00Z")
+    // 2 h rule due 06:00Z, created at 07:00Z.
+    const late = rule({ value: 2, activeSince: new Date("2030-06-01T07:00:00Z") })
+    expect(reminderRuleStatus(placeGroups()[0], late, now).status).toBe("late")
+    expect(triggeredCustomReminders(placeGroups(), [late], now)).toEqual([])
+  })
+
+  it("falls back to createdAt when the rule has no activation instant", () => {
+    const now = new Date("2030-06-01T07:30:00Z")
+    const late = rule({ value: 2, activeSince: null, createdAt: new Date("2030-06-01T07:00:00Z") })
+    expect(reminderRuleStatus(placeGroups()[0], late, now).status).toBe("late")
+    const onTime = rule({ value: 2, activeSince: null, createdAt: new Date("2030-05-20T00:00:00Z") })
+    expect(reminderRuleStatus(placeGroups()[0], onTime, now).status).toBe("due")
+  })
+
+  it("a rule created before its due instant sends once", () => {
+    const now = new Date("2030-06-01T06:30:00Z")
+    const onTime = rule({ value: 2, activeSince: new Date("2030-05-20T00:00:00Z") })
+    const triggers = triggeredCustomReminders(placeGroups(), [onTime], now)
+    expect(triggers).toHaveLength(1)
+    const sent: ReminderOccurrenceKey[] = [{ eventId: "evt-1", volunteerId: "vol-1", localDay: "2030-06-01", ruleId: "rule-1", status: "sent" }]
+    expect(triggeredCustomReminders(placeGroups(), [onTime], new Date("2030-06-01T07:30:00Z"), sent)).toEqual([])
+  })
+
+  it("a rule set up exactly at its due instant still sends", () => {
+    const now = new Date("2030-06-01T06:00:00Z")
+    const atDue = rule({ value: 2, activeSince: new Date("2030-06-01T06:00:00Z") })
+    expect(reminderRuleStatus(placeGroups()[0], atDue, now).status).toBe("due")
+  })
+
+  it("a rule re-enabled after its due instant sends nothing", () => {
+    const now = new Date("2030-06-01T07:30:00Z")
+    // Created long ago, disabled, then enabled again at 07:00Z: its activation instant moved.
+    const reEnabled = rule({
+      value: 2,
+      createdAt: new Date("2030-05-01T00:00:00Z"),
+      activeSince: new Date("2030-06-01T07:00:00Z"),
+    })
+    expect(reminderRuleStatus(placeGroups()[0], reEnabled, now).status).toBe("late")
+    expect(triggeredCustomReminders(placeGroups(), [reEnabled], now)).toEqual([])
+  })
+
+  it("is not announced by the preview", () => {
+    const now = new Date("2030-06-01T07:30:00Z")
+    const preview = nextEventReminderPreview({
+      rules: [rule({ value: 2, activeSince: new Date("2030-06-01T07:00:00Z") })],
+      groups: placeGroups(),
+      now,
+      eventRemindersEnabled: true,
+    })
+    expect(preview).toMatchObject({ state: "blocked", reason: "no-upcoming-reminder" })
+  })
+
+  it("changing the delays three times never sends more than the reminders set up in time", () => {
+    // Place taken 14 days before, shift at 08:00Z on 1 June. One 1-day rule exists from the start.
+    const groups = placeGroups()
+    const original = rule({ id: "day", unit: "days", value: 1, activeSince: new Date("2030-05-01T00:00:00Z") })
+    const sent: ReminderOccurrenceKey[] = []
+    let total = 0
+    const run = (rules: ReminderRuleInput[], now: Date) => {
+      const triggers = triggeredCustomReminders(groups, rules, now, sent)
+      for (const t of triggers) {
+        sent.push({ eventId: t.group.eventId, volunteerId: t.group.volunteerId, localDay: t.group.localDay, ruleId: t.rule.id, status: "sent" })
+      }
+      total += triggers.length
+    }
+    // The 1-day rule is due on 31 May 08:00Z and goes out once.
+    run([original], new Date("2030-05-31T08:00:00Z"))
+    expect(total).toBe(1)
+    // Then, the evening before, three rounds of three new delays whose instants have all passed.
+    for (const [round, base] of [336, 333, 330].entries()) {
+      const at = new Date(Date.UTC(2030, 4, 31, 18, round * 5))
+      const rules = [0, 1, 2].map((offset) => rule({
+        id: `r${base - offset}`, unit: "hours", value: base - offset, activeSince: at,
+      }))
+      run(rules, new Date(at.getTime() + 60_000))
+    }
+    expect(total).toBe(1)
+  })
+})
