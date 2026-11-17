@@ -69,7 +69,7 @@ import { shiftStartsAt } from "@/lib/cancel-deadline"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { orgBaseUrl } from "@/lib/urls"
 import { hashToken } from "@/lib/token-hash"
-import { confirmationDeadlineLabel, signupConfirmationExpiry } from "@/lib/signup-confirmation"
+import { confirmationDeadlineLabel, emailConfirmationAnswer, pendingConfirmationSummary } from "@/lib/signup-confirmation"
 import { newSignupConfirmationToken, pendingSignupConfirmationShiftIds, replacePendingSignupConfirmation } from "@/lib/signup-confirmation-server"
 import { recordTokenMiss, tokenLookupsBlocked } from "@/lib/token-rate-limit"
 import { contactPhone } from "@/lib/contact-phone"
@@ -556,6 +556,8 @@ export async function POST(req: Request) {
           if (placement.status === "full") throw new ShiftFullError(shift.id, shift.label)
           placements.push({ shift, placement })
         }
+        const confirmationSummary = (now: Date) =>
+          pendingConfirmationSummary(placements.map((p) => ({ status: p.placement.status, startsAt: shiftStartsAt(p.shift, timeZone) })), now)
         // Workload protection (#1171): without proof of the address, the selection alone is judged
         // first, with only the birth date typed now, as for a new address; a refusal it gives is
         // the public, detailed one. What the address's own schedule or limits add is a conflict.
@@ -588,7 +590,13 @@ export async function POST(req: Request) {
         if (conflict) {
           const notice = await signupNotice(tx, { volunteerId, eventId, conflict })
           const outboxIds = notice ? await enqueueNotifications([notice], tx, { organizationId: event.organizationId }) : []
-          return { registrations: [], volunteerId, createdNow, matchErased, outboxIds, updates: null, rosterChange: null, notRecorded: true, releasedShiftIds: replacedPending.shiftIds }
+          return {
+            registrations: [], volunteerId, createdNow, matchErased, outboxIds, updates: null, rosterChange: null, notRecorded: true,
+            // On an event that confirms by email, the answer carries the same facts as a recorded
+            // request, computed the same way from the selection alone.
+            ...(confirmsByEmail ? { emailConfirmation: confirmationSummary(new Date()) } : {}),
+            releasedShiftIds: replacedPending.shiftIds,
+          }
         }
         // Waiting for the address to be proven (#1253): hold the places provisionally, never send the
         // usual confirmation, and queue the one email with the link and the deadline. A shift that
@@ -597,8 +605,8 @@ export async function POST(req: Request) {
           const now = new Date()
           const waitlistShiftIds = placements.filter((p) => p.placement.status === "waiting").map((p) => p.shift.id)
           const heldPlacements = placements.filter((p): p is typeof p & { placement: { status: "active" | "requested" } } => p.placement.status === "active" || p.placement.status === "requested")
-          const firstStart = new Date(Math.min(...placements.map((p) => shiftStartsAt(p.shift, timeZone).getTime())))
-          const expiresAt = signupConfirmationExpiry(now, firstStart)
+          const summary = confirmationSummary(now)
+          const expiresAt = summary.expiresAt
           const token = newSignupConfirmationToken()
           const answerValues = Object.fromEntries([...answerCheck.values].filter(([id]) => questions.some((q) => q.id === id)))
           const confirmation = await tx.signupConfirmation.create({
@@ -681,7 +689,7 @@ export async function POST(req: Request) {
             outboxIds,
             updates: null,
             rosterChange: null,
-            emailConfirmation: { expiresAt, held: heldPlacements.length, waiting: waitlistShiftIds.length },
+            emailConfirmation: summary,
             releasedShiftIds: replacedPending.shiftIds,
           }
         }
@@ -839,7 +847,9 @@ export async function POST(req: Request) {
   }
   if (outcome.notRecorded) {
     deliverAfterResponse(outboxIds)
-    return unprovenAnswer()
+    return outcome.emailConfirmation
+      ? NextResponse.json(emailConfirmationAnswer(outcome.emailConfirmation, timeZone), { status: 201 })
+      : unprovenAnswer()
   }
   if (outcome.emailConfirmation) {
     for (const reg of registrations) {
@@ -858,17 +868,7 @@ export async function POST(req: Request) {
       })
     }
     deliverAfterResponse(outboxIds)
-    return NextResponse.json({
-      success: true,
-      editToken: null,
-      linkSentByEmail: true,
-      received: true,
-      emailConfirmation: true,
-      confirmationExpiresAt: outcome.emailConfirmation.expiresAt.toISOString(),
-      confirmationHeld: outcome.emailConfirmation.held,
-      confirmationWaiting: outcome.emailConfirmation.waiting,
-      confirmationTimeZone: timeZone,
-    }, { status: 201 })
+    return NextResponse.json(emailConfirmationAnswer(outcome.emailConfirmation, timeZone), { status: 201 })
   }
   if (matchErased) ownsEmail = false
 

@@ -8,6 +8,8 @@ import {
   confirmationIdentityLines,
   confirmationDeadlineLabel,
   confirmationRequestNotice,
+  emailConfirmationAnswer,
+  pendingConfirmationSummary,
   signupConfirmationDecision,
   signupConfirmationExpiry,
   signupConfirmationPageState,
@@ -168,5 +170,36 @@ describe("who the request was made for (#1253)", () => {
   it("leaves out an empty phone", () => {
     expect(confirmationIdentityLines({ firstName: "Nadia", lastName: "Berisha", phone: null })).toEqual(["Nom : Nadia Berisha"])
     expect(confirmationIdentityLines({ firstName: "Nadia", lastName: "Berisha", phone: "  " })).toEqual(["Nom : Nadia Berisha"])
+  })
+})
+
+describe("the answer to a sign-up waiting for its address (#1253)", () => {
+  const now = new Date("2031-07-01T08:00:00Z")
+  const at = (iso: string) => new Date(iso)
+
+  it("counts held places and waitlist entries, and stops at the first shift's start", () => {
+    expect(pendingConfirmationSummary([
+      { status: "active", startsAt: at("2031-07-04T08:00:00Z") },
+      { status: "requested", startsAt: at("2031-07-05T08:00:00Z") },
+      { status: "waiting", startsAt: at("2031-07-06T08:00:00Z") },
+    ], now)).toEqual({ expiresAt: new Date(now.getTime() + SIGNUP_CONFIRMATION_HOURS * 3_600_000), held: 2, waiting: 1 })
+    expect(pendingConfirmationSummary([
+      { status: "waiting", startsAt: at("2031-07-06T08:00:00Z") },
+      { status: "active", startsAt: at("2031-07-01T10:00:00Z") },
+    ], now).expiresAt).toEqual(at("2031-07-01T10:00:00Z"))
+  })
+
+  it("has one shape, whatever the summary", () => {
+    expect(emailConfirmationAnswer({ expiresAt: at("2031-07-02T08:00:00Z"), held: 1, waiting: 0 }, "Europe/Zurich")).toEqual({
+      success: true,
+      editToken: null,
+      linkSentByEmail: true,
+      received: true,
+      emailConfirmation: true,
+      confirmationExpiresAt: "2031-07-02T08:00:00.000Z",
+      confirmationHeld: 1,
+      confirmationWaiting: 0,
+      confirmationTimeZone: "Europe/Zurich",
+    })
   })
 })
