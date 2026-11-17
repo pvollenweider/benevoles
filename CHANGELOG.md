@@ -32,6 +32,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Places d'un créneau** : le nombre de places est désormais limité à 10 000, comme le minimum de personnes, à la création d'un créneau, d'une série ou d'une permanence, à leur modification et dans les réglages d'un poste. Un nombre plus grand reçoit un message clair au lieu d'une erreur serveur.
 - **Inscription avec confirmation par e-mail** : deux demandes envoyées au même moment pour une même nouvelle adresse reçoivent toutes deux la réponse habituelle ; la seconde est reprise avec la fiche créée par la première. <!-- interne -->
 - **Équipe** : le changement de rôle et le retrait d'un membre de l'équipe ne concernent que les propriétaires et les organisateurs ; un compte d'administration de la plateforme rattaché à l'organisation n'est plus modifiable depuis cette page. <!-- interne -->
+- **Tests des routes** : les tests de droits voient un gestionnaire quelle que soit sa forme d'export, refusent les ré-exports dans les fichiers de route, et vérifient que chaque route de l'administration de la plateforme refuse un administrateur d'organisation. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
 
