@@ -33,7 +33,7 @@ export const AUDIT_EXCEPTIONS: readonly AuditException[] = [
     id: "GHSA-fc5q-39xc-vjpf",
     package: "picomatch",
     reason:
-      "No fixed version exists (every release up to 4.0.7 is affected). picomatch comes only from the build tooling of @sentry/nextjs (@rollup/plugin-commonjs, vite), where it matches file names against patterns written in configuration; the slow matching needs a pattern chosen by an attacker, and no visitor supplies one.",
+      "No fixed version exists (every release up to 4.0.7 is affected). picomatch comes only from the build tooling of @sentry/nextjs (@rollup/plugin-commonjs, vite), where it matches file names against patterns written in configuration; the slow matching needs a pattern chosen by an attacker, and no visitor supplies one. The maintainer disputes the advisory (CVE-2026-112366) and Snyk revoked its own entry as not a vulnerability (SNYK-JS-PICOMATCH-21248802, read on 2026-11-17), so no fixed version is expected: at the end date, check whether GitHub withdrew the advisory before renewing.",
     added: "2026-11-17",
     until: "2026-12-17",
   },
