@@ -47,6 +47,12 @@ export type ReminderRuleInput = {
   displayOrder?: number
   /** Set on a removed rule that already sent an occurrence: hidden, never counted nor sent. */
   archivedAt?: Date | null
+  /**
+   * When the rule last started to apply: its creation, or the save that enabled or revived it.
+   * Null on a row written before the column existed, which falls back to `createdAt`.
+   */
+  activeSince?: Date | null
+  createdAt?: Date
 }
 
 export type ValidReminderRule = {
