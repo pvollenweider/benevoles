@@ -8,6 +8,7 @@
  */
 
 import { MEMBER_PHONE_MAX } from "./text-limits"
+import { hashToken } from "./token-hash"
 
 /** Same limit as a member's phone in the admin (api/admin/members). */
 export const SIGNUP_PHONE_MAX = MEMBER_PHONE_MAX
@@ -16,6 +17,21 @@ export const SIGNUP_COMMENT_MAX = 2000
 export const SIGNUP_ID_MAX = 100
 /** Shifts picked in one submission. */
 export const SIGNUP_SHIFTS_MAX = 1000
+
+/**
+ * Requests without proof of the address, on an event that confirms sign-ups by email (#1253), per
+ * event, address and connection: one address's mailbox must not be flooded with confirmation
+ * emails. Counted per connection so that a stranger who knows an address only uses up their own
+ * budget and never keeps the address's owner from signing up from another connection. What caps
+ * the mailbox from many connections is the per-recipient cap at delivery (`PUBLIC_TRIGGERED` in
+ * src/lib/notifications/send-limits.ts), and each request replaces the address's pending one.
+ */
+export const SIGNUP_ADDRESS_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 } as const
+
+/** The rate-limit key of that limit: a hash, never the address or the connection in the RateLimit table. */
+export function signupAddressLimitKey(eventId: string, email: string, clientIp: string): string {
+  return hashToken(JSON.stringify([eventId, email, clientIp])).slice(0, 32)
+}
 
 /**
  * A phone or comment over its limit, in words the volunteer can act on. A phone saved before the

@@ -97,6 +97,17 @@ describe("email sending limits (#810)", () => {
     expect((await takeSendAllowance("org-1", "admin_invite", { store, limits, alert: vi.fn() })).ok).toBe(true)
   })
 
+  // #1253: the confirmation of a sign-up by email is what keeps one mailbox from being flooded
+  // when the address limit counts per connection (src/lib/signup-limits.ts).
+  it("caps the sign-up confirmation email per recipient: dropped, never held for a later hour", async () => {
+    const store = memoryStore()
+    const limits = { ...tight, orgPerMinute: 100, orgPerDay: 100 }
+    const confirm = (email: string) => takeSendAllowance("org-1", "signup_email_confirmation", { store, limits, recipientEmail: email, alert: vi.fn() })
+    for (let i = 0; i < limits.recipientPerHour; i++) expect((await confirm("victim@example.org")).ok).toBe(true)
+    expect(await confirm("Victim@Example.org")).toMatchObject({ ok: false, limit: "recipient_per_hour", drop: true })
+    expect((await confirm("other@example.org")).ok).toBe(true)
+  })
+
   // Security review of #817: a failing alert marker must not turn a held email into a sent one.
   it("keeps a held email held when recording the alert fails, and lets it go only if the windows cannot be read", async () => {
     const full = { peek: vi.fn().mockResolvedValue({ count: 99, msLeft: 30_000 }), hit: vi.fn().mockRejectedValue(new Error("db down")) }

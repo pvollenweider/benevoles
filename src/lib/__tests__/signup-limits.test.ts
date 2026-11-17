@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, expect, it } from "vitest"
-import { SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX, tooLongSignupField } from "../signup-limits"
+import { SIGNUP_ADDRESS_LIMIT, SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX, signupAddressLimitKey, tooLongSignupField } from "../signup-limits"
 
 // Bounded free text of the public sign-up (#1047).
 describe("tooLongSignupField", () => {
@@ -16,5 +16,34 @@ describe("tooLongSignupField", () => {
     expect(tooLongSignupField({ phone: "1".repeat(SIGNUP_PHONE_MAX + 1) })).toMatchObject({ field: "phone" })
     expect(tooLongSignupField({ comment: "x".repeat(SIGNUP_COMMENT_MAX + 1) })?.message).toContain("commentaire")
     expect(tooLongSignupField({ phone: "1".repeat(99), comment: "x".repeat(9999) })?.field).toBe("phone")
+  })
+})
+
+// The hourly limit of an address on an event that confirms by email (#1253) counts per connection.
+describe("signupAddressLimitKey", () => {
+  it("is the same for the same event, address and connection", () => {
+    expect(signupAddressLimitKey("evt1", "a@example.org", "203.0.113.7")).toBe(signupAddressLimitKey("evt1", "a@example.org", "203.0.113.7"))
+  })
+
+  it("differs by connection, address and event", () => {
+    const base = signupAddressLimitKey("evt1", "a@example.org", "203.0.113.7")
+    expect(signupAddressLimitKey("evt1", "a@example.org", "203.0.113.8")).not.toBe(base)
+    expect(signupAddressLimitKey("evt1", "b@example.org", "203.0.113.7")).not.toBe(base)
+    expect(signupAddressLimitKey("evt2", "a@example.org", "203.0.113.7")).not.toBe(base)
+  })
+
+  it("cannot be confused by moving a character between the parts", () => {
+    expect(signupAddressLimitKey("evt1", "a@example.org:1", "2")).not.toBe(signupAddressLimitKey("evt1", "a@example.org", "1:2"))
+  })
+
+  it("holds neither the address nor the connection in clear", () => {
+    const key = signupAddressLimitKey("evt1", "a@example.org", "203.0.113.7")
+    expect(key).toMatch(/^[0-9a-f]{32}$/)
+    expect(key).not.toContain("example")
+    expect(key).not.toContain("203")
+  })
+
+  it("allows five requests an hour", () => {
+    expect(SIGNUP_ADDRESS_LIMIT).toEqual({ max: 5, windowMs: 3_600_000 })
   })
 })
