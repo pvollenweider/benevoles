@@ -43,7 +43,7 @@ describe("self-service sign-up rules (#810, part 4b)", () => {
 })
 
 describe("sign-up confirmation emails and the sending limits (#810)", () => {
-  const limits: SendLimits = { orgPerMinute: 100, orgPerDay: 100, orgBulkPerDay: 100, orgAccountPerDay: 100, globalPerMinute: 100, recipientPerHour: 2, signupConfirmationsPerHour: 3 }
+  const limits: SendLimits = { orgPerMinute: 100, orgPerDay: 100, orgBulkPerDay: 100, orgBulkPerDayUnreviewed: 100, orgAccountPerDay: 100, globalPerMinute: 100, recipientPerHour: 2, signupConfirmationsPerHour: 3 }
 
   it("counts against the per-recipient and the platform's hourly sign-up caps, and drops over them", async () => {
     expect(sendWindows(null, "signup_confirmation", limits, "a@b.ch").map((w) => w.name)).toEqual(["recipient_per_hour", "signup_per_hour", "global_per_minute"])

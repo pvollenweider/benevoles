@@ -140,4 +140,55 @@ describe.skipIf(!url)("outbox and sending limits on Postgres (#810)", () => {
       await prisma.organization.deleteMany({ where: { id: raceOrgId } })
     }
   })
+
+  // A space validated automatically and not yet reviewed by the operator: its bulk emails are
+  // capped at 100 a day (the normal cap is 2000). The review lifts it at the next email, on the
+  // same daily count.
+  it("caps the bulk emails of an automatically validated space at 100 a day until it is reviewed", async () => {
+    smtp.mockReset().mockResolvedValue({ ok: true })
+    const approvedAt = new Date()
+    const org = await prisma.organization.create({
+      data: { name: `${tag}-auto`, slug: `${tag}-auto`, publicationApprovedAt: approvedAt, outboundEmailApprovedAt: approvedAt, autoApprovedAt: approvedAt },
+    })
+    try {
+      const ids = await enqueueNotifications(Array.from({ length: 101 }, (_, i) => ({
+        kind: "targeted_message" as const, recipient: { email: `${tag}-auto-${i}@example.org` }, organizationId: org.id, data: { i },
+      })))
+      const now = new Date()
+      await prisma.notificationOutbox.updateMany({ where: { id: { in: ids } }, data: { nextAttemptAt: now } })
+      expect(await deliverOutbox({ ids, now, limit: 200 })).toMatchObject({ sent: 100, held: 1, failed: 0, cancelled: 0 })
+      expect(smtp).toHaveBeenCalledTimes(100)
+      expect(await prisma.emailLimitHit.findMany({ where: { organizationId: org.id } }))
+        .toMatchObject([{ limit: "org_bulk_per_day_unreviewed", kind: "targeted_message", heldCount: 1 }])
+
+      // Reviewed: the normal cap applies to the next email, nothing restarted.
+      await prisma.organization.update({ where: { id: org.id }, data: { autoApprovalReviewedAt: new Date() } })
+      const later = new Date(Date.now() + 25 * 60 * 60_000)
+      expect(await deliverOutbox({ ids, now: later, limit: 200 })).toMatchObject({ sent: 1, held: 0 })
+      expect(smtp).toHaveBeenCalledTimes(101)
+    } finally {
+      await prisma.emailLimitHit.deleteMany({ where: { organizationId: org.id } })
+      await prisma.notificationOutbox.deleteMany({ where: { organizationId: org.id } })
+      await prisma.organization.deleteMany({ where: { id: org.id } })
+    }
+  })
+
+  it("never applies the reduced cap to a space validated by hand", async () => {
+    smtp.mockReset().mockResolvedValue({ ok: true })
+    const approvedAt = new Date()
+    const org = await prisma.organization.create({
+      data: { name: `${tag}-manual`, slug: `${tag}-manual`, publicationApprovedAt: approvedAt, outboundEmailApprovedAt: approvedAt },
+    })
+    try {
+      const ids = await enqueueNotifications(Array.from({ length: 101 }, (_, i) => ({
+        kind: "targeted_message" as const, recipient: { email: `${tag}-manual-${i}@example.org` }, organizationId: org.id, data: { i },
+      })))
+      const now = new Date()
+      await prisma.notificationOutbox.updateMany({ where: { id: { in: ids } }, data: { nextAttemptAt: now } })
+      expect(await deliverOutbox({ ids, now, limit: 200 })).toMatchObject({ sent: 101, held: 0 })
+    } finally {
+      await prisma.notificationOutbox.deleteMany({ where: { organizationId: org.id } })
+      await prisma.organization.deleteMany({ where: { id: org.id } })
+    }
+  })
 })
