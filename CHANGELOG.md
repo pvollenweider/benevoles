@@ -20,6 +20,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Délais propres à un événement** : un rappel ajouté, réactivé ou modifié après l'heure où il aurait dû partir ne part plus pour les personnes déjà inscrites, comme pour une inscription arrivée après cette heure. Un rappel mis en place avant son heure part toujours, une seule fois.
 - **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste n'y figure plus. La personne placée sur ce poste la reçoit toujours sur sa page.
 - **Rétablir une inscription** : impossible pour une personne dont la fiche a été effacée ou fusionnée dans une autre ; le message dit quelle fiche utiliser.
+- **Accès accueil** : l'accès accueil enregistre les présences du jour affiché sur sa page Jour J, et seulement pour les personnes que cette page montre. Les organisateurs et propriétaires marquent toujours les présences de tous les jours de l'événement.
 - **Nettoyage de nuit** : une organisation réactivée entre le moment où le nettoyage la sélectionne et celui où il la supprime est conservée avec ses administrateurs, et les comptes rendus ne comptent que ce qui a été supprimé. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17
