@@ -495,15 +495,30 @@ export async function expireSignupConfirmations(now: Date = new Date(), limit = 
   return { expired, shifts: [...shifts] }
 }
 
-/** Marks a pending request replaced and frees its held places, in the caller's transaction. */
-export async function replacePendingSignupConfirmation(
+/** A pending request of an address on an event, with the places it holds. */
+export type PendingSignupConfirmation = { id: string; registrations: { id: string; shiftId: string }[] }
+
+/** The address's pending request on the event, read in the caller's transaction; null if none. */
+export async function findPendingSignupConfirmation(
   tx: ConfirmationTx,
-  input: { eventId: string; email: string; now: Date; reason: "replaced" | "proven" },
-): Promise<{ shiftIds: string[]; confirmationId: string | null }> {
-  const previous = await tx.signupConfirmation.findFirst({
+  input: { eventId: string; email: string },
+): Promise<PendingSignupConfirmation | null> {
+  return tx.signupConfirmation.findFirst({
     where: { eventId: input.eventId, email: input.email, confirmedAt: null, cancelledAt: null },
     select: { id: true, registrations: { where: { status: "unconfirmed" }, select: { id: true, shiftId: true } } },
   })
+}
+
+/**
+ * Marks a pending request replaced and frees its held places, in the caller's transaction.
+ * `previous`, when given, is the request findPendingSignupConfirmation read earlier in the same
+ * transaction (under the same locks); otherwise it is read here.
+ */
+export async function replacePendingSignupConfirmation(
+  tx: ConfirmationTx,
+  input: { eventId: string; email: string; now: Date; reason: "replaced" | "proven"; previous?: PendingSignupConfirmation | null },
+): Promise<{ shiftIds: string[]; confirmationId: string | null }> {
+  const previous = input.previous !== undefined ? input.previous : await findPendingSignupConfirmation(tx, input)
   if (!previous) return { shiftIds: [], confirmationId: null }
   const updated = await tx.signupConfirmation.updateMany({
     where: { id: previous.id, confirmedAt: null, cancelledAt: null },

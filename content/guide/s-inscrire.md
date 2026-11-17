@@ -64,7 +64,7 @@ Tant que tu n'as pas confirmé :
 - un créneau complet avec liste d'attente ne te réserve rien : tu entres dans la liste d'attente **au moment de ta confirmation**, avec ton rang à ce moment-là ;
 - sur un créneau **sur validation**, ta demande n'arrive à l'organisation qu'après ta confirmation ; elle devient alors une demande normale, avec l'email « Demande reçue » et le bouton d'acceptation ou de refus pour l'organisation.
 
-Une nouvelle demande pour la même adresse et le même événement remplace la demande précédente encore en attente : ses places sont libérées et tu reçois un nouvel email. À l'échéance, tes places sont remises à disposition et la liste d'attente est prévenue ; si tu ouvres un lien expiré, la page te l'explique et te propose de refaire une demande. Confirmer après l'échéance ne reprend jamais une place déjà donnée à quelqu'un d'autre.
+Une nouvelle demande pour la même adresse et le même événement remplace la demande précédente encore en attente : ses places sont libérées et tu reçois un nouvel email. Une demande qui ne peut pas être enregistrée, par exemple pour un créneau où tu es déjà inscrit, laisse la précédente en place. À l'échéance, tes places sont remises à disposition et la liste d'attente est prévenue ; si tu ouvres un lien expiré, la page te l'explique et te propose de refaire une demande. Confirmer après l'échéance ne reprend jamais une place déjà donnée à quelqu'un d'autre.
 
 Si tu t'inscris depuis ton **lien personnel** ou depuis le lien de ton **invitation**, ton adresse est déjà prouvée : tu suis directement le parcours habituel, sans email de confirmation.
 

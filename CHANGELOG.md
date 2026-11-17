@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste n'y figure plus. La personne placée sur ce poste la reçoit toujours sur sa page.
 - **Rétablir une inscription** : impossible pour une personne dont la fiche a été effacée ou fusionnée dans une autre ; le message dit quelle fiche utiliser.
 - **Accès accueil** : l'accès accueil enregistre les présences du jour affiché sur sa page Jour J, et seulement pour les personnes que cette page montre. Les organisateurs et propriétaires marquent toujours les présences de tous les jours de l'événement.
+- **Inscription avec confirmation par e-mail** : une nouvelle demande pour la même adresse qui ne peut pas être enregistrée (déjà inscrite sur ce créneau, horaire qui chevauche une de ses inscriptions, limite atteinte) ne remplace plus la demande en attente : ses places restent réservées et le lien de son e-mail reste valable. Une nouvelle demande enregistrée la remplace toujours.
 - **Nettoyage de nuit** : une organisation réactivée entre le moment où le nettoyage la sélectionne et celui où il la supprime est conservée avec ses administrateurs, et les comptes rendus ne comptent que ce qui a été supprimé. <!-- interne -->
 
 ## [2.8.0] — 2026-11-17

@@ -149,9 +149,62 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     expect(duplicate).toEqual(recordedForOwner)
     expect(overlap).toEqual(recordedForOwner)
     expect(stranger).toEqual(recordedForOwner)
-    // The duplicate and the overlap wrote nothing for the owner's address.
+    // The duplicate and the overlap wrote nothing for the owner's address, and left the owner's
+    // pending request (the first sign-up, on « Montage ») as it was.
     expect(await prisma.registration.count({ where: { eventId: confirming.id, volunteerId: person.id, shiftId: clashing } })).toBe(0)
-    expect(await prisma.signupConfirmation.count({ where: { eventId: confirming.id, email: owner, cancelledAt: null, confirmedAt: null } })).toBe(0)
+    expect(await prisma.signupConfirmation.count({ where: { eventId: confirming.id, email: owner, cancelledAt: null, confirmedAt: null } })).toBe(1)
+  })
+
+  it("on an event that confirms by email, a request that is not recorded leaves the pending one untouched; a recorded one replaces it", async () => {
+    const confirming = await prisma.event.create({
+      data: { organizationId: orgId, slug: "attente", title: "Attente", startDate: new Date("2031-06-01"), endDate: new Date("2031-06-02"), publicStatus: "published", requireEmailConfirmation: true },
+    })
+    const mk = async (roleName: string, startTime: string, endTime: string, capacity = 5) => (await prisma.shift.create({ data: { eventId: confirming.id, roleName, label: roleName, capacity, date: new Date("2031-06-01T00:00:00Z"), startTime, endTime } })).id
+    // « Montage » has one place: the pending request holds it.
+    const [held, clashing, pendingShift] = [await mk("Accueil", "14:00", "16:00"), await mk("Bar", "15:00", "17:00"), await mk("Montage", "09:00", "11:00", 1)]
+    const owner = `${tag}-pending-owner@example.org`
+    const person = await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Chloé", lastName: "Roy", email: owner } })
+    await prisma.registration.create({ data: { eventId: confirming.id, shiftId: held, volunteerId: person.id, status: "active", ...registrationToken.data(`${tag}-pending-token`) } })
+
+    // The deadline is 24 h after each request: left out, the rest must match exactly.
+    const keys = async (res: Response) => {
+      const { status, body } = await answer(res)
+      const rest = { ...body }
+      expect(typeof rest.confirmationExpiresAt).toBe("string")
+      delete rest.confirmationExpiresAt
+      return { status, rest }
+    }
+    const first = await keys(await signup([pendingShift], owner, confirming.id))
+    expect(first.status).toBe(201)
+    const pending = await prisma.signupConfirmation.findFirstOrThrow({ where: { eventId: confirming.id, email: owner }, include: { registrations: true } })
+    expect(pending.registrations.map((r) => [r.shiftId, r.status])).toEqual([[pendingShift, "unconfirmed"]])
+    const untouched = async () => {
+      const row = await prisma.signupConfirmation.findUniqueOrThrow({ where: { id: pending.id }, include: { registrations: true } })
+      expect(row).toMatchObject({ cancelledAt: null, cancelReason: null, confirmedAt: null })
+      expect(row.registrations.map((r) => [r.shiftId, r.status])).toEqual([[pendingShift, "unconfirmed"]])
+      expect(await prisma.signupConfirmation.count({ where: { eventId: confirming.id, email: owner } })).toBe(1)
+    }
+
+    // Not recorded: the same answer as a recorded request, and nothing changes, the pending one's
+    // place included when the selection asks for it again next to a clash.
+    expect(await keys(await signup([clashing], owner, confirming.id))).toEqual(first)
+    await untouched()
+    expect(await keys(await signup([held], owner, confirming.id))).toEqual(first)
+    await untouched()
+    const both = await keys(await signup([pendingShift, clashing], owner, confirming.id))
+    expect(both).toEqual({ ...first, rest: { ...first.rest, confirmationHeld: 2 } })
+    await untouched()
+
+    // Recorded: the same shift again is not a duplicate of the pending request's own place, nor
+    // full because of it. It replaces the pending request and takes the place again.
+    expect(await keys(await signup([pendingShift], owner, confirming.id))).toEqual(first)
+    const replaced = await prisma.signupConfirmation.findUniqueOrThrow({ where: { id: pending.id }, include: { registrations: true } })
+    expect(replaced).toMatchObject({ cancelReason: "replaced", confirmedAt: null })
+    expect(replaced.cancelledAt).toBeInstanceOf(Date)
+    expect(replaced.registrations.map((r) => r.status)).toEqual(["cancelled"])
+    const next = await prisma.signupConfirmation.findFirstOrThrow({ where: { eventId: confirming.id, email: owner, cancelledAt: null }, include: { registrations: true } })
+    expect(next.id).not.toBe(pending.id)
+    expect(next.registrations.map((r) => [r.shiftId, r.status])).toEqual([[pendingShift, "unconfirmed"]])
   })
 
   // The organisation the proxy resolved (subdomain, or `?org=` where honoured) scopes the event.
