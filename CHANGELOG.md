@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Partager ce créneau** : depuis « Où manque-t-il du monde ? », un lien public vers un seul créneau qui manque de monde, à coller dans le groupe de discussion ou sur la page de l'association, avec copie, partage, QR code et le nombre d'inscriptions qu'il a apportées. Une option peut accepter une inscription après la fermeture des inscriptions de l'événement, tant que ce créneau n'a pas commencé et qu'il reste une place ; la page publique et l'inscription suivent la même règle (#1386).
 - **État du service** : la page [statut.benevol.app](https://statut.benevol.app), hébergée hors du serveur, vérifie toutes les 5 minutes que le site, l'application et les vidéos répondent, et garde l'historique des incidents ; liée depuis le pied de page du site et la page Continuité du service (#1387).
 
 ### Modifié

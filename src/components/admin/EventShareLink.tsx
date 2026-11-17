@@ -9,6 +9,11 @@ import { announce } from "@/lib/announce"
 const noSubscription = () => () => {}
 const hasNativeShare = () => typeof navigator !== "undefined" && typeof navigator.share === "function"
 
+/** Whether this browser has a native share sheet, decided on the client only (see below). */
+export function useNativeShare(): boolean {
+  return useSyncExternalStore(noSubscription, hasNativeShare, () => false)
+}
+
 const buttonClass =
   "text-sm font-medium border border-blue-600 text-blue-700 px-3 py-1.5 rounded-xl hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
@@ -27,7 +32,7 @@ export const SHARE_FAILED = "Partage impossible : utilisez « Copier le lien ».
  * selected so that it can be copied by hand, whatever the device.
  */
 export default function EventShareLink({ url }: { url: string }) {
-  const canShare = useSyncExternalStore(noSubscription, hasNativeShare, () => false)
+  const canShare = useNativeShare()
   const [message, setMessage] = useState("")
   const [failed, setFailed] = useState(false)
   const urlRef = useRef<HTMLSpanElement>(null)

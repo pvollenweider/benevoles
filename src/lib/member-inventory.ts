@@ -196,6 +196,8 @@ export const REGISTRATION_FIELDS_ON_ERASURE: Record<string, "clear" | "keep" | "
   charterAcceptedAt: "keep",
   // The share link per group it came through (#947): the club's link, not the person.
   groupLinkId: "keep",
+  // The shift share link it came through (#1386): the shift's link, not the person.
+  shiftShareLinkId: "keep",
   // The pending confirmation (#1253) is deleted on erasure; its provisional rows stay, scrubbed,
   // and the foreign key is set to null.
   signupConfirmationId: "keep",
