@@ -56,7 +56,9 @@ const refused = (cases: Case[]) => cases
 const registration = { eventId: "evt-1", shiftId: "shf-1", firstName: "Ana", lastName: "Roth", email: "ana.roth@example.org" }
 const member = { firstName: "Ana", lastName: "Roth" }
 const event = { title: "Fête du village", startDate: "2027-06-12", endDate: "2027-06-14" }
-const shift = { eventId: "evt-1", roleName: "Bar", label: "Matin", date: "2027-06-12", startTime: "09:00", endTime: "12:00", capacity: SHIFT_PLACES_MAX * 2 }
+const shift = { eventId: "evt-1", roleName: "Bar", label: "Matin", date: "2027-06-12", startTime: "09:00", endTime: "12:00", capacity: SHIFT_PLACES_MAX }
+const series = { eventId: "evt-1", roleName: "Bar", date: "2027-06-12", startTime: "09:00", endTime: "12:00", slotMinutes: 60, capacity: 2 }
+const recurrence = { eventId: "evt-1", roleName: "Accueil", from: "2027-06-01", until: "2027-06-30", weekdays: [1, 3], everyWeeks: 1, startTime: "09:00", endTime: "12:00", slotMinutes: 180, capacity: 2, holidays: "none" }
 const show = { name: "Concert", date: "2027-06-12", startTime: "20:00", endTime: "22:00" }
 
 const REFUSED = refused([
@@ -91,7 +93,18 @@ const REFUSED = refused([
   ["new shift: minimum of 0", "admin/shifts", "POST", { ...shift, minVolunteers: 0 }],
   ["new shift: minimum over the bound", "admin/shifts", "POST", { ...shift, minVolunteers: SHIFT_PLACES_MAX + 1 }],
   ["shift: minimum with a fraction", "admin/shifts/[id]", "PATCH", { minVolunteers: 2.5 }],
-  ["shift: minimum over the bound", "admin/shifts/[id]", "PATCH", { minVolunteers: SHIFT_PLACES_MAX + 1, capacity: SHIFT_PLACES_MAX * 2 }],
+  ["shift: minimum over the bound", "admin/shifts/[id]", "PATCH", { minVolunteers: SHIFT_PLACES_MAX + 1, capacity: SHIFT_PLACES_MAX }],
+
+  // Places of a shift: a whole number from 1 to SHIFT_PLACES_MAX, wherever they enter.
+  ["new shift: places over the bound", "admin/shifts", "POST", { ...shift, capacity: SHIFT_PLACES_MAX + 1 }],
+  ["new shift: places with a fraction", "admin/shifts", "POST", { ...shift, capacity: 2.5 }],
+  ["new shift: no place", "admin/shifts", "POST", { ...shift, capacity: 0 }],
+  ["shift: places over the bound", "admin/shifts/[id]", "PATCH", { capacity: SHIFT_PLACES_MAX + 1 }],
+  ["series: places over the bound", "admin/shifts/series", "POST", { ...series, capacity: SHIFT_PLACES_MAX + 1 }],
+  ["recurrence: places over the bound", "admin/shifts/recurrence", "POST", { ...recurrence, capacity: SHIFT_PLACES_MAX + 1 }],
+  ["recurrence change: places over the bound", "admin/shifts/recurrence/[id]/change", "POST", { from: "2027-06-10", capacity: SHIFT_PLACES_MAX + 1 }],
+  ["recurrence change: no place", "admin/shifts/recurrence/[id]/change", "POST", { from: "2027-06-10", capacity: 0 }],
+  ["role: places over the bound", "admin/events/[id]/roles/[roleName]", "PATCH", { capacity: SHIFT_PLACES_MAX + 1 }],
 ])
 
 describe("fields with a length, count or range limit", () => {
@@ -108,6 +121,12 @@ describe("fields with a length, count or range limit", () => {
     ["event with the most shows", "admin/events", "POST", { ...event, showSchedule: Array.from({ length: SHOW_SCHEDULE_MAX }, () => show) }],
     ["role minimum at the bound", "admin/events/[id]/roles/[roleName]", "PATCH", { minVolunteers: SHIFT_PLACES_MAX }],
     ["shift minimum of 1", "admin/shifts", "POST", { ...shift, minVolunteers: 1 }],
+    ["new shift with the most places", "admin/shifts", "POST", { ...shift, capacity: SHIFT_PLACES_MAX }],
+    ["shift with the most places", "admin/shifts/[id]", "PATCH", { capacity: SHIFT_PLACES_MAX }],
+    ["series with the most places", "admin/shifts/series", "POST", { ...series, capacity: SHIFT_PLACES_MAX }],
+    ["recurrence with the most places", "admin/shifts/recurrence", "POST", { ...recurrence, capacity: SHIFT_PLACES_MAX }],
+    ["recurrence change to the most places", "admin/shifts/recurrence/[id]/change", "POST", { from: "2027-06-10", capacity: SHIFT_PLACES_MAX }],
+    ["role with the most places", "admin/events/[id]/roles/[roleName]", "PATCH", { capacity: SHIFT_PLACES_MAX }],
   ] as Case[])("%s is not refused for its size", async (_label, route, method, body) => {
     expect(await send(route, method, body)).not.toBe(400)
   })

@@ -1625,7 +1625,7 @@ describe("Admin settings — cross-tenant isolation", () => {
 
     const res = await DELETE(makeRequest("/api/admin/settings/admins/adm-b", "DELETE"), params("adm-b"))
     expect(res.status).toBe(404)
-    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer", "super_admin"] } })
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer"] } })
     expect(prismaMock.adminUser.delete).not.toHaveBeenCalled()
   })
 
@@ -3078,7 +3078,7 @@ describe("Members, templates, team, password, invitation — cross-tenant isolat
     Object.assign(prismaMock.adminUser, { update })
     const res = await PATCH(makeRequest("/api/admin/settings/admins/adm-b", "PATCH", { role: "organizer" }), params("adm-b"))
     expect(res.status).toBe(404)
-    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer", "super_admin"] } })
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer"] } })
     expect(update).not.toHaveBeenCalled()
   })
 

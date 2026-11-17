@@ -201,8 +201,19 @@ describe("recipients and team lists leave the front-desk account out (#1142)", (
     expect(emails).toEqual([ELODIE.email, SAMI.email, attached.email])
     const { eligibleOwnerWhere } = await import("@/lib/milestones")
     expect(adminsMatching(eligibleOwnerWhere(ORG), accounts).map((a) => a.email)).toEqual([ELODIE.email, SAMI.email, attached.email])
-    const { changeAdminRole } = await import("@/lib/admin-team-changes")
-    expect(await changeAdminRole(ORG, attached.id, "organizer")).toMatchObject({ ok: true, changed: true })
+  })
+
+  it("the team's role change and removal do not reach a super admin account attached to the organisation", async () => {
+    const attached = { ...ELODIE, id: "adm-morgane", name: "Morgane Blanc", email: "morgane.blanc@example.org", role: "super_admin", organizationId: ORG }
+    accounts = [...accounts, attached]
+    const { changeAdminRole, removeOrgAdmin, ADMIN_NOT_FOUND } = await import("@/lib/admin-team-changes")
+    expect(await changeAdminRole(ORG, attached.id, "organizer")).toEqual({ ok: false, status: 404, error: ADMIN_NOT_FOUND })
+    expect(await changeAdminRole(ORG, attached.id, "admin")).toEqual({ ok: false, status: 404, error: ADMIN_NOT_FOUND })
+    expect(db.adminUpdate).not.toHaveBeenCalled()
+    expect(await removeOrgAdmin(ORG, attached.id, ELODIE.email)).toEqual({ ok: false, status: 404, error: ADMIN_NOT_FOUND })
+    expect(db.adminDelete).not.toHaveBeenCalled()
+    // The owner and the organiser are still found.
+    expect(await changeAdminRole(ORG, SAMI.id, "admin")).toMatchObject({ ok: true, changed: true })
   })
 
   it("the team's role change does not reach a front-desk account: unknown account, nothing written", async () => {
