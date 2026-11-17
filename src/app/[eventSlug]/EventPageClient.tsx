@@ -78,6 +78,7 @@ import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
 import EmbedFrame from "@/components/public/EmbedFrame"
 import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnouncement, shiftsForGroup, type GroupFilter } from "@/lib/group-links"
+import { SHIFT_SHARE_AFTER_CLOSE_HINT, SHIFT_SHARE_HEADING, SHIFT_SHARE_UNAVAILABLE_NOTICE, parseShiftShareCode, type ShiftShareView } from "@/lib/shift-share-links"
 import RequiredMark from "@/components/RequiredMark"
 import { startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
 import { SESSION_EMAIL_HINT, sessionFormNote, type SignupUpdates } from "@/lib/signup-updates"
@@ -169,13 +170,18 @@ type PreviewResult = { subject: string; html: string; confirmationMessage: strin
  * the server. A filtered page shows only the link's roles, says so, and lets the visitor see every
  * role; the sign-up is counted for the link either way.
  *
+ * `shiftShare` (#1386): the share link for one shift the page was opened with (`?partage=<code>`),
+ * resolved by the server with the same rule as the sign-up route. A bookable link shows only that
+ * shift, with a short line; a shift that is full, started or closed falls back to the whole event
+ * with a notice; a closed window keeps the event's usual message.
+ *
  * `embed` (#948): the sign-up in the association's own website, inside an iframe (`?embed=1`). The
  * organisation's branding and the whole flow stay; the « Retour » link and the site footer go,
  * what leaves the flow (event pages, personal page, legal pages) opens in a new tab, the
  * « Continuer » bar is not fixed (a resized frame is as tall as its content) and the page's height
  * is posted to the site around it (EmbedFrame).
  */
-export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF, groupFilter = { kind: "none" }, embed = false, footerSite }: {
+export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF, groupFilter = { kind: "none" }, shiftShare = { kind: "none" }, embed = false, footerSite }: {
   /** The consent's privacy link, from the server (#760: the operator page on another instance). */
   privacyHref?: string
   orgSlug: string
@@ -184,6 +190,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   preview?: { eventId: string; adminEventUrl: string; helpLink?: React.ReactNode }
   initialEvent?: EventData
   groupFilter?: GroupFilter
+  shiftShare?: ShiftShareView
   embed?: boolean
   /** The footer's links to the site's pages and its name, from the server (src/lib/urls.ts, `orgPageFooterSite`). */
   footerSite?: FooterSite
@@ -442,7 +449,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     enabled: !!event?.shiftRosterEnabled,
     embed,
     preview: !!previewEventId,
-    groupLink: groupFilter.kind !== "none",
+    groupLink: groupFilter.kind !== "none" || shiftShare.kind !== "none",
     inviteToken,
     sessionToken: hasConfirmedSession ? sessionToken : null,
   })
@@ -492,16 +499,21 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
 
   // Registration window (#463). This page only shows published events, or a preview of what
-  // volunteers will see once published: either way, the window decides.
+  // volunteers will see once published: either way, the window decides. A shift share link (#1386)
+  // may accept after the close (its own rule, decided by the server): the shift is then bookable
+  // even though the event's window is closed.
+  const shiftShareBookable = shiftShare.kind === "bookable"
   const windowState = registrationState({ ...event, publicStatus: "published" })
-  const accepting = windowState.open
-  const windowClosedText = closedMessage(windowState, event.timeZone)
-  const windowUntilText = openUntilMessage(windowState, event.timeZone)
+  const accepting = windowState.open || shiftShareBookable
+  const windowClosedText = shiftShareBookable ? null : closedMessage(windowState, event.timeZone)
+  const windowUntilText = shiftShareBookable ? null : openUntilMessage(windowState, event.timeZone)
   // A group link (#947) shows its roles only; the visitor's held and selected shifts always stay.
-  const groupFiltered = groupFilter.kind === "filtered"
+  // A shift share link takes precedence and is not a group filter.
+  const groupFiltered = groupFilter.kind === "filtered" && !shiftShareBookable
   const keptShiftIds = new Set([...myShiftIds, ...selectedShifts])
-  const shownShifts = groupFiltered && !showAllRoles ? shiftsForGroup(event.shifts, groupFilter, keptShiftIds) : event.shifts
-  const groupNotice = groupFilterNotice(groupFilter)
+  const sharedShifts = shiftShareBookable ? event.shifts.filter((s) => s.id === shiftShare.shiftId) : null
+  const shownShifts = sharedShifts ?? (groupFiltered && !showAllRoles ? shiftsForGroup(event.shifts, groupFilter, keptShiftIds) : event.shifts)
+  const groupNotice = shiftShareBookable ? null : groupFilterNotice(groupFilter)
   const shiftsByDay = groupShiftsByDay(shownShifts)
   // A season of permanences (#866): past days left out, one month at a time from 8 dates on.
   // « Today » in the organisation's zone; the server answers the same for the days it renders.
@@ -648,6 +660,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           inviteToken: inviteToken ?? undefined,
           // The sign-up counts for the group link the page was opened with (#947).
           groupCode: attributionCode(groupFilter) ?? undefined,
+          // The sign-up is for this shift only, through the shift share link (#1386).
+          shiftLinkCode: shiftShareBookable ? shiftShare.code : undefined,
           // From the personal page (#1013): the changes made here are saved.
           personalToken: inSession ? sessionToken! : undefined,
         }),
@@ -997,6 +1011,18 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               </div>
             )}
 
+            {/* Share link for one shift (#1386): the shift the organisation needs people for, or
+                the notice that it is no longer bookable and the whole event is shown instead. */}
+            {shiftShareBookable && (
+              <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-950">
+                <p>{SHIFT_SHARE_HEADING}</p>
+                {!windowState.open && <p className="mt-1">{SHIFT_SHARE_AFTER_CLOSE_HINT}</p>}
+              </div>
+            )}
+            {shiftShare.kind === "unavailable" && (
+              <p className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">{SHIFT_SHARE_UNAVAILABLE_NOTICE}</p>
+            )}
+
             {proposedShiftId && (() => {
               const proposed = event.shifts.find((s) => s.id === proposedShiftId)
               const state = proposedShiftState(proposed, { myShiftIds, selected: selectedShifts, reservedIds: reservedShiftIds, accepting })
@@ -1022,7 +1048,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
             {/* Share link per group (#947): which group the page is for, and the way out of the filter.
                 One button whose label flips, so the focus stays on it; the result is announced. */}
-            {groupFilter.kind === "filtered" && (
+            {groupFiltered && (
               <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-950 flex flex-wrap items-center justify-between gap-3">
                 <p className="min-w-0 break-words">
                   {showAllRoles ? "Tous les postes de l'événement sont affichés." : groupFilterLine(groupFilter.name, groupFilter.roleNames.length)}
@@ -1036,7 +1062,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 </button>
               </div>
             )}
-            {groupFilter.kind === "filtered" && <p role="status" className="sr-only">{groupNote}</p>}
+            {groupFiltered && <p role="status" className="sr-only">{groupNote}</p>}
             {groupNotice && (
               <p className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">{groupNotice}</p>
             )}

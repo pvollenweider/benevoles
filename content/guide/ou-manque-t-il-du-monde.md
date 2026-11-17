@@ -62,6 +62,22 @@ L'envoi passe par la file d'envoi, compte dans la même limite horaire que [Écr
 
 Depuis la page [Jour J](presences-le-jour-j.md#ajouter-un-besoin), **Ajouter un besoin** ouvre cette même liste pour le créneau qui vient d'être créé, avec **Inscrits aujourd'hui** coché d'avance et la notification cochée d'avance : c'est le chemin le plus court quand un besoin apparaît pendant l'événement.
 
+## Partager un créneau dans un groupe de discussion
+
+Quand une place se libère la veille ou le jour même, le plus court chemin est souvent le groupe de discussion de l'association ou sa page. Sur chaque créneau à compléter, **Partager ce créneau**, à côté de **Chercher des bénévoles**, ouvre un panneau avec un lien public vers ce seul créneau. Un poste attribué par l'organisation uniquement n'a pas ce bouton : il garde **Ajouter à la main depuis les inscriptions**.
+
+Le lien est créé au premier clic, puis reste le même : on peut le recopier ou réimprimer son QR code sans qu'il change. Le panneau affiche le lien et :
+
+- **Copier le lien** le copie, par exemple pour le coller dans le groupe de discussion ou sur la page de l'association. « Lien copié. » s'affiche sous les boutons ; si le navigateur refuse la copie, le lien est sélectionné.
+- **Partager** ouvre le partage de votre téléphone ou de votre navigateur, quand celui-ci sait le faire.
+- **QR code PNG** télécharge le QR code de ce lien, à imprimer ou à montrer sur place.
+- **Accepter une inscription même si les inscriptions de l'événement sont fermées**, avec la phrase « Valable pour ce créneau seulement, tant qu'il reste une place et qu'il n'a pas commencé. » : l'option est enregistrée dès que vous la cochez ou la décochez. Sans elle, les dates d'inscription de l'événement s'appliquent comme d'habitude. Avec elle, une personne peut encore s'inscrire sur ce créneau après la fermeture des inscriptions, mais jamais avant leur ouverture ni sur un événement non publié.
+- **N inscriptions par ce lien** compte les inscriptions arrivées par ce lien, pour voir s'il a servi.
+
+La personne qui ouvre le lien voit l'événement réduit à ce créneau, avec une phrase qui dit que l'organisation a besoin de monde, puis les places restantes et le formulaire habituel. Les autres règles ne changent pas : postes réservés, âge minimum, réponses demandées et validation éventuelle s'appliquent comme sur la page de l'événement. Dès que le créneau est complet ou qu'il a commencé, la page affiche de nouveau tout l'événement avec la phrase « Ce créneau est complet ou déjà commencé. Voici les autres créneaux de l'événement. » : le lien ne mène jamais à une liste d'attente. Un lien supprimé, un code erroné ou le lien d'un autre événement ouvrent la page normale de l'événement, sans message.
+
+La création du lien et chaque changement de l'option figurent dans le [journal de l'événement](journal-de-l-evenement.md).
+
 ## Questions fréquentes
 
 ### Un poste critique risque d'être en sous-effectif (sécurité, premiers secours…) : comment je le surveille ?

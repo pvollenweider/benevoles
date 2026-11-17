@@ -265,6 +265,7 @@ model Event {
   questions        EventQuestion[]
   questionAnswers  QuestionAnswer[]
   groupLinks       EventGroupLink[]
+  shiftShareLinks  ShiftShareLink[]
   rosterConsents   RosterConsent[]
   signupConfirmations SignupConfirmation[]
   sectors          Sector[]
@@ -753,6 +754,31 @@ model EventGroupLink {
   @@index([eventId])
 }
 
+// Share link for one shift (#1386): « Partager ce créneau », `/<event>?partage=<code>`, for a
+// last-minute gap. One link per shift (shiftId unique); the code is random, same alphabet and
+// length as the group links (src/lib/group-links.ts), never derived from the shift. The public page
+// shows only that shift while it is open, has a free place and has not started; `acceptsAfterClose`
+// lets a sign-up through after the event's registration window closed (published event, opening
+// date passed), never before it opens. Registrations made through it point to it
+// (Registration.shiftShareLinkId); deleting the link keeps them and only clears that reference.
+// `createdById` is the AdminUser id, without a foreign key: the account may be deleted later.
+model ShiftShareLink {
+  id                String   @id @default(cuid())
+  eventId           String
+  shiftId           String   @unique
+  code              String   @unique
+  acceptsAfterClose Boolean  @default(false)
+  createdById       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  event         Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shift         Shift          @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+
+  @@index([eventId])
+}
+
 // Organizer milestone/deadline — see issue #189. Purely informational (name, due date,
 // done/not-done): no automation, nothing it triggers on the rest of the event. Admin-only for
 // now, not surfaced to sector leaders (#186) — most milestones cut across the whole event, not
@@ -1033,6 +1059,7 @@ model Shift {
   sector        Sector?          @relation(fields: [sectorId], references: [id], onDelete: SetNull)
   place         EventPlace?      @relation(fields: [placeId], references: [id], onDelete: SetNull)
   registrations Registration[]
+  shareLink     ShiftShareLink?
   draftAssignments DraftAssignment[]
   declines      ShiftDecline[]
 
@@ -1187,6 +1214,9 @@ model Registration {
   // The group link (#947) the public sign-up came through, set by the server from the link's code;
   // null for the main link, an admin addition, or once that group link is deleted.
   groupLinkId      String?
+  // The shift share link (#1386) the public sign-up came through, set by the server from the
+  // link's code; null otherwise, or once that shift link is deleted.
+  shiftShareLinkId String?
   // Provisional reservation awaiting confirmation by email (#1253). Null for any other
   // registration; set on the places held while the volunteer proves the address.
   signupConfirmationId String?
@@ -1197,6 +1227,7 @@ model Registration {
   shift     Shift           @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   volunteer Volunteer       @relation(fields: [volunteerId], references: [id])
   groupLink EventGroupLink? @relation(fields: [groupLinkId], references: [id], onDelete: SetNull)
+  shiftShareLink ShiftShareLink? @relation(fields: [shiftShareLinkId], references: [id], onDelete: SetNull)
   signupConfirmation SignupConfirmation? @relation(fields: [signupConfirmationId], references: [id], onDelete: SetNull)
   swapRequests      ShiftSwapRequest[] @relation("SwapRequester")
   swapCounterOffers ShiftSwapRequest[] @relation("SwapCounterpart")
@@ -1211,6 +1242,7 @@ model Registration {
   @@index([status, shiftId])
   @@index([waitingPosition, shiftId])
   @@index([groupLinkId])
+  @@index([shiftShareLinkId])
   @@index([signupConfirmationId])
 }
 

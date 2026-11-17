@@ -44,4 +44,19 @@ describe("ShiftLine (coverage report)", () => {
     setup()
     expect(screen.getAllByRole("link")).toHaveLength(1)
   })
+
+  it("offers « Partager ce créneau » on a shift that still needs people (#1386)", () => {
+    setup()
+    expect(screen.getByRole("button", { name: /^Partager ce créneau/ })).toBeInTheDocument()
+  })
+
+  it("hides it for a role assigned by the organisation only", () => {
+    setup(undefined, { assignedOnly: true })
+    expect(screen.queryByRole("button", { name: /Partager ce créneau/ })).toBeNull()
+  })
+
+  it("hides it once the shift is full", () => {
+    setup(undefined, { missing: 0, active: 6 })
+    expect(screen.queryByRole("button", { name: /Partager ce créneau/ })).toBeNull()
+  })
 })
