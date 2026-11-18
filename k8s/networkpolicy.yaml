@@ -20,7 +20,7 @@
 #   CronJobs calling the app         -> cluster DNS, Traefik :8443 (they call the public address,
 #                                       which the node hands to the Traefik pod)
 # Not restricted yet: the app (SMTP, Sentry, ntfy, web push services, GitHub) and the two backup
-# jobs (Alpine mirrors, Swiss Backup). A pod without one of the labels below keeps free egress, so
+# jobs (heartbeat to the public address, Swiss Backup). A pod without one of the labels below keeps free egress, so
 # a Job started from an older template is never cut off.
 #
 # Applied by the deploy workflow before the migration, so the migration Job and the new app pod
