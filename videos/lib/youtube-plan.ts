@@ -29,6 +29,8 @@ export const CATEGORY_EDUCATION = "27"
 export type Privacy = "private" | "unlisted" | "public"
 export const PRIVACIES: readonly Privacy[] = ["private", "unlisted", "public"]
 
+export type VideoFormat = "native" | "framed"
+
 export type YoutubeState = Record<
   string,
   {
@@ -41,6 +43,8 @@ export type YoutubeState = Record<
     synthetic?: boolean
     /** What the thumbnail sent shows (videos/lib/youtube-thumbnail.ts thumbnailKey). */
     thumbnailKey?: string
+    /** « framed »: a phone recording sent inside a 16:9 frame; « native » (or absent): the MP4 as published. */
+    format?: VideoFormat
     uploadedAt: string
     /** Earlier uploads of the same video, set to unlisted when a new revision replaced them. */
     replaced?: string[]
@@ -116,24 +120,29 @@ export function youtubeMetadata(manifest: VideoManifest, entry: VideoCatalogEntr
 
 export type PlanItem =
   | { slug: string; action: "upload"; revision: number }
-  | { slug: string; action: "replace"; revision: number; previousVideoId: string }
+  | { slug: string; action: "replace"; revision: number; previousVideoId: string; previousPrivacy: Privacy }
   | { slug: string; action: "finish"; revision: number; videoId: string; captions: boolean; thumbnail: boolean }
   | { slug: string; action: "status"; revision: number; videoId: string; from: Privacy; to: Privacy }
   | { slug: string; action: "unchanged"; revision: number; videoId: string }
 
 /**
  * What to do for each video. YouTube cannot swap the file of an existing video, so a new revision
- * is a new upload; the earlier one is then set to unlisted (never deleted: links keep working).
+ * or a new format is a new upload; the earlier one is then set to unlisted, or left private if it
+ * never was public (never deleted: links keep working).
  * An upload whose captions or thumbnail failed is finished on the next run, without a new upload;
  * so is a thumbnail whose content or design changed.
  * A video whose privacy differs from the one asked, or not yet declared as synthetic, only gets
  * its status updated. Without an explicit privacy, a video already on YouTube keeps its own.
  */
-export function planYoutube(videos: { slug: string; revision: number; thumbnailKey?: string }[], state: YoutubeState, privacy?: Privacy): PlanItem[] {
-  return videos.map(({ slug, revision, thumbnailKey }) => {
+export function planYoutube(
+  videos: { slug: string; revision: number; thumbnailKey?: string; format?: VideoFormat }[],
+  state: YoutubeState,
+  privacy?: Privacy,
+): PlanItem[] {
+  return videos.map(({ slug, revision, thumbnailKey, format = "native" }) => {
     const known = state[slug]
     if (!known) return { slug, action: "upload", revision }
-    if (known.revision !== revision) return { slug, action: "replace", revision, previousVideoId: known.videoId }
+    if (known.revision !== revision || (known.format ?? "native") !== format) return { slug, action: "replace", revision, previousVideoId: known.videoId, previousPrivacy: known.privacy }
     const thumbnail = !known.thumbnail || (thumbnailKey !== undefined && known.thumbnailKey !== thumbnailKey)
     if (!known.captions || thumbnail) return { slug, action: "finish", revision, videoId: known.videoId, captions: !known.captions, thumbnail }
     const to = privacy ?? known.privacy

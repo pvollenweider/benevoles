@@ -3,10 +3,10 @@
 
 import { describe, expect, it } from "vitest"
 import type { VideoCatalogEntry, VideoManifest } from "../manifest"
-import { escapeHtml, thumbnailContent, thumbnailHtml, thumbnailKey } from "../youtube-thumbnail"
+import { FRAME_HEIGHT, FRAME_WIDTH, escapeHtml, frameHtml, framePlacement, isPhoneRecording, thumbnailContent, thumbnailHtml, thumbnailKey } from "../youtube-thumbnail"
 
 const manifest = (width: number, title = "S’inscrire comme bénévole depuis son téléphone") =>
-  ({ id: "X", slug: "x", title, description: "", language: "fr-CH", voice: "", voiceStyle: "", segments: [], viewport: { width, height: 800, deviceScaleFactor: 1 } }) as VideoManifest
+  ({ id: "X", slug: "x", title, description: "", language: "fr-CH", voice: "", voiceStyle: "", segments: [], viewport: { width, height: width < 600 ? 844 : 800, deviceScaleFactor: 1 } }) as VideoManifest
 const entry = (over: Partial<VideoCatalogEntry> = {}): VideoCatalogEntry => ({ id: "X", manifest: "x", category: "c", tags: [], published: true, audience: ["benevole"], ...over })
 
 describe("thumbnailContent", () => {
@@ -50,5 +50,32 @@ describe("thumbnailHtml", () => {
 
   it("escapes every special character", () => {
     expect(escapeHtml(`<>&"'`)).toBe("&lt;&gt;&amp;&quot;&#39;")
+  })
+})
+
+describe("isPhoneRecording", () => {
+  it("is true for a portrait recording only", () => {
+    expect(isPhoneRecording(manifest(390))).toBe(true)
+    expect(isPhoneRecording(manifest(1280))).toBe(false)
+  })
+})
+
+describe("framePlacement", () => {
+  it("fits a 390 x 844 recording in the 1080p frame, right side, even sizes, inside the frame", () => {
+    const r = framePlacement(390, 844)
+    expect(r).toEqual({ x: 1198, y: 46, w: 456, h: 988 })
+    for (const n of [r.x, r.y, r.w, r.h]) expect(n % 2).toBe(0)
+    expect(r.x + r.w).toBeLessThanOrEqual(FRAME_WIDTH)
+    expect(r.y + r.h).toBeLessThanOrEqual(FRAME_HEIGHT)
+    expect(r.x).toBeGreaterThan(642 * 1.5)
+  })
+})
+
+describe("frameHtml", () => {
+  it("draws the phone bezel and the empty slot at the video's place, in page pixels", () => {
+    const html = frameHtml({ title: "T", kicker: "Bénévoles", layout: "mobile" }, { x: 1198, y: 46, w: 456, h: 988 })
+    expect(html).toContain('class="slot" style="left:798.6666666666666px;top:30.666666666666668px')
+    expect(html).toContain('class="bezel"')
+    expect(html).toContain("Bénévoles")
   })
 })

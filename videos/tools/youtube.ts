@@ -21,6 +21,7 @@
  */
 import { createHash, randomBytes } from "node:crypto"
 import { execFile } from "node:child_process"
+import { promisify } from "node:util"
 import { existsSync, readdirSync } from "node:fs"
 import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import { createServer } from "node:http"
@@ -28,7 +29,7 @@ import { homedir, tmpdir } from "node:os"
 import path from "node:path"
 import { chromium } from "playwright"
 import { catalogEntry, loadManifest, videosRoot } from "../lib/manifest"
-import { thumbnailContent, thumbnailHtml, thumbnailKey, type ThumbnailContent } from "../lib/youtube-thumbnail"
+import { framePlacement, frameHtml, FRAME_SCALE, isPhoneRecording, thumbnailContent, thumbnailHtml, thumbnailKey, type ThumbnailContent } from "../lib/youtube-thumbnail"
 import {
   CATEGORY_EDUCATION,
   PRIVACIES,
@@ -41,9 +42,11 @@ import {
   youtubeMetadata,
   type PlanItem,
   type Privacy,
+  type VideoFormat,
   type YoutubeState,
 } from "../lib/youtube-plan"
 
+const run = promisify(execFile)
 const SCOPE = "https://www.googleapis.com/auth/youtube.force-ssl"
 const AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 const TOKEN_URL = "https://oauth2.googleapis.com/token"
@@ -221,6 +224,40 @@ async function renderThumbnail(content: ThumbnailContent, poster: string): Promi
   }
 }
 
+/**
+ * A phone recording (portrait) would become a YouTube Short: 9:16 display, thumbnail cropped,
+ * links in the description not clickable. It is sent inside a 1920 x 1080 frame instead: the
+ * thumbnail's design (logo, audience, title) with the recording in a phone on the right. Same
+ * frame rate and timing, audio copied, so the captions still match.
+ */
+async function frameVideo(content: ThumbnailContent, input: string, dir: string): Promise<string> {
+  const probe = await run("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height,r_frame_rate", "-of", "json", input])
+  const stream = (JSON.parse(probe.stdout) as { streams: { width: number; height: number; r_frame_rate: string }[] }).streams[0]
+  const rect = framePlacement(stream.width, stream.height)
+  const background = path.join(dir, "frame.png")
+  const browser = await chromium.launch()
+  try {
+    const page = await browser.newPage({ viewport: { width: THUMBNAIL_WIDTH, height: THUMBNAIL_HEIGHT }, deviceScaleFactor: FRAME_SCALE })
+    await page.setContent(frameHtml(content, rect), { waitUntil: "load" })
+    await page.waitForSelector("body[data-ready]", { state: "attached" })
+    await page.screenshot({ path: background, type: "png" })
+  } finally {
+    await browser.close()
+  }
+  const out = path.join(dir, "framed.mp4")
+  await run("ffmpeg", [
+    "-v", "error", "-y",
+    "-loop", "1", "-framerate", stream.r_frame_rate, "-i", background,
+    "-i", input,
+    "-filter_complex", `[1:v]scale=${rect.w}:${rect.h}:flags=lanczos,setsar=1[v];[0:v][v]overlay=${rect.x}:${rect.y}:shortest=1,format=yuv420p[out]`,
+    "-map", "[out]", "-map", "1:a?",
+    "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+    "-c:a", "copy", "-movflags", "+faststart",
+    out,
+  ])
+  return out
+}
+
 async function uploadThumbnail(token: string, videoId: string, image: Buffer) {
   if (image.length > THUMBNAIL_MAX_BYTES) throw new Error("Vignette de plus de 2 Mo")
   const res = await fetch(`${UPLOAD_API}/thumbnails/set?videoId=${encodeURIComponent(videoId)}&uploadType=media`, {
@@ -246,7 +283,7 @@ function describe(item: PlanItem): string {
     case "upload":
       return "nouvel envoi"
     case "replace":
-      return `nouvelle révision ${item.revision}, l'ancienne (${item.previousVideoId}) passera en non répertoriée`
+      return `nouvel envoi (révision ${item.revision} ou nouveau format), l'ancienne version (${item.previousVideoId}) ${item.previousPrivacy === "private" ? "reste privée" : "passera en non répertoriée"}`
     case "finish":
       return `à terminer (${[item.captions && "sous-titres", item.thumbnail && "vignette"].filter(Boolean).join(", ")}) sur ${item.videoId}`
     case "status":
@@ -272,7 +309,8 @@ async function main() {
       const manifest = await loadManifest(entry.manifest)
       const revision = entry.revision ?? 1
       const thumb = thumbnailContent(manifest, entry)
-      return { entry, manifest, slug: manifest.slug, revision, thumb, thumbnailKey: thumbnailKey(thumb) }
+      const format: VideoFormat = isPhoneRecording(manifest) ? "framed" : "native"
+      return { entry, manifest, slug: manifest.slug, revision, thumb, thumbnailKey: thumbnailKey(thumb), format }
     }),
   )
   const plan = planYoutube(videos, state, requestedPrivacy)
@@ -288,6 +326,7 @@ async function main() {
       console.log(`  ${head.ok ? "ok" : `MANQUANT (${head.status})`} ${url}`)
     }
     if (item.action === "upload" || item.action === "replace") {
+      if (videos[i].format === "framed") console.log("  Format : enregistrement téléphone, envoyé dans un cadre 16:9 (1920 x 1080)")
       console.log(`  Vignette : « ${thumb.title} », ${thumb.kicker}, ${thumb.layout === "mobile" ? "téléphone" : "navigateur"}`)
       console.log(`  Titre : ${meta.title}\n  Étiquettes : ${meta.tags.join(", ")}\n  Visibilité : ${privacy}\n  Description :\n${meta.description.replace(/^/gm, "    ")}`)
     }
@@ -306,7 +345,7 @@ async function main() {
   const failures: string[] = []
   for (const [i, item] of plan.entries()) {
     if (item.action === "unchanged") continue
-    const { manifest, entry, thumb, thumbnailKey: key } = videos[i]
+    const { manifest, entry, thumb, thumbnailKey: key, format } = videos[i]
     const dir = await mkdtemp(path.join(tmpdir(), "benevol-youtube-"))
     try {
       const urls = mediaUrls(item.slug)
@@ -322,12 +361,13 @@ async function main() {
         videoId = item.videoId
       } else {
         console.log(`\n${entry.id} : envoi de la vidéo…`)
-        videoId = await uploadVideo(token, await download(urls.mp4, dir), youtubeMetadata(manifest, entry))
+        const mp4 = await download(urls.mp4, dir)
+        videoId = await uploadVideo(token, format === "framed" ? await frameVideo(thumb, mp4, dir) : mp4, youtubeMetadata(manifest, entry))
         const replaced = item.action === "replace" ? [...(state[item.slug]?.replaced ?? []), item.previousVideoId] : state[item.slug]?.replaced
-        state[item.slug] = { videoId, revision: item.revision, privacy, captions: false, thumbnail: false, synthetic: true, uploadedAt: new Date().toISOString(), ...(replaced ? { replaced } : {}) }
+        state[item.slug] = { videoId, revision: item.revision, privacy, captions: false, thumbnail: false, synthetic: true, format, uploadedAt: new Date().toISOString(), ...(replaced ? { replaced } : {}) }
         await saveState(state)
         console.log(`  envoyée : https://youtu.be/${videoId}`)
-        if (item.action === "replace") {
+        if (item.action === "replace" && item.previousPrivacy !== "private") {
           await setStatus(token, item.previousVideoId, "unlisted").then(
             () => console.log(`  ancienne version ${item.previousVideoId} passée en non répertoriée`),
             (error) => failures.push(`${entry.id} : ${error.message}`),

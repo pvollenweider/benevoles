@@ -118,7 +118,13 @@ describe("planYoutube", () => {
   })
 
   it("replaces a video whose revision changed", () => {
-    expect(planYoutube([{ slug: "a", revision: 4 }], { a: ok }, "private")[0]).toEqual({ slug: "a", action: "replace", revision: 4, previousVideoId: "abc" })
+    expect(planYoutube([{ slug: "a", revision: 4 }], { a: ok }, "private")[0]).toEqual({ slug: "a", action: "replace", revision: 4, previousVideoId: "abc", previousPrivacy: "private" })
+  })
+
+  it("replaces a video sent in another format (a phone recording now framed in 16:9)", () => {
+    expect(planYoutube([{ slug: "a", revision: 3, format: "framed" }], { a: ok })[0]).toMatchObject({ action: "replace", previousVideoId: "abc" })
+    expect(planYoutube([{ slug: "a", revision: 3, format: "framed" }], { a: { ...ok, format: "framed" } })[0]).toMatchObject({ action: "unchanged" })
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: ok })[0]).toMatchObject({ action: "unchanged" })
   })
 
   it("only updates the status when the privacy changes or the synthetic voice is not declared yet", () => {

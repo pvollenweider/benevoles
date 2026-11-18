@@ -535,6 +535,10 @@ medias.benevol.app :
 - le MP4, avec un titre (titre du manifeste + « · benevol.app »), une description (description,
   étapes et « À retenir » du bloc `viewer`, lien vers `/videos/<ID>`, définition de `/citer`) et des
   étiquettes tirées du catalogue (`videos/lib/youtube-plan.ts`) ;
+- un enregistrement téléphone (portrait) part dans un cadre 1920 x 1080, sinon YouTube en ferait
+  un Short (affichage 9:16, vignette recadrée, liens de la description non cliquables) : fond de
+  la vignette (logo, public, titre) et l'enregistrement dans un téléphone à droite, même cadence et
+  même durée, son copié, donc les sous-titres restent calés (`frameVideo`, Playwright + ffmpeg) ;
 - les sous-titres : la VTT publiée, donc le texte exact de la narration ;
 - une vignette 1280 x 720 (`videos/lib/youtube-thumbnail.ts`, rendue par Playwright avec la police
   système) : fond bleu de la marque, logo, public (« Organisateurs » ou « Bénévoles », d'après
@@ -556,8 +560,9 @@ narration est une voix de synthèse (Gemini) : chaque vidéo est déclarée comm
 (`containsSyntheticMedia`).
 `videos/youtube.json` garde, par slug, l'identifiant YouTube, la révision envoyée et ce qui est
 fait (sous-titres, vignette) ; il se commite. Une révision plus récente dans `catalog.json` donne
-un nouvel envoi (YouTube ne remplace pas le fichier d'une vidéo) et l'ancienne version passe en
-« non répertoriée », sans suppression. Si les sous-titres ou la vignette échouent, relancer la
+un nouvel envoi (YouTube ne remplace pas le fichier d'une vidéo), de même qu'un changement de
+format ; l'ancienne version passe en « non répertoriée », ou reste privée si elle n'a jamais été
+publique, sans suppression. Si les sous-titres ou la vignette échouent, relancer la
 même commande termine ce qui manque sans renvoyer la vidéo. Quota par défaut : 100 envois de
 vidéo par jour, et 10 000 unités pour le reste (400 par piste de sous-titres).
 

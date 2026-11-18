@@ -13,8 +13,11 @@ import { THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH } from "./youtube-plan"
 
 /** Bumped when the design changes, so every thumbnail already sent is made again. */
 export const THUMBNAIL_STYLE = 2
-/** A recording narrower than this is a phone screen. */
-const MOBILE_MAX_WIDTH = 600
+
+/** A portrait recording is a phone screen: framed into 16:9 for YouTube, phone frame on the thumbnail. */
+export function isPhoneRecording(manifest: VideoManifest): boolean {
+  return manifest.viewport.height > manifest.viewport.width
+}
 
 export type ThumbnailContent = { title: string; kicker: string; layout: "mobile" | "desktop" }
 
@@ -24,7 +27,7 @@ export function thumbnailContent(manifest: VideoManifest, entry: VideoCatalogEnt
   return {
     title: (entry.thumbnailTitle ?? manifest.title).trim(),
     kicker,
-    layout: manifest.viewport.width < MOBILE_MAX_WIDTH ? "mobile" : "desktop",
+    layout: isPhoneRecording(manifest) ? "mobile" : "desktop",
   }
 }
 
@@ -37,12 +40,10 @@ export function escapeHtml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")
 }
 
-/** Full page; `posterSrc` is a data: URL of the poster. The title shrinks until it fits its box. */
-export function thumbnailHtml(content: ThumbnailContent, posterSrc: string): string {
-  const shot =
-    content.layout === "mobile"
-      ? `<div class="shot phone"><img src="${posterSrc}" alt=""></div>`
-      : `<div class="shot browser"><div class="chrome"><b></b><b></b><b></b></div><img src="${posterSrc}" alt=""></div>`
+/** Rectangle in CSS pixels of the 1280 x 720 page. */
+export type Rect = { x: number; y: number; w: number; h: number }
+
+function page(content: ThumbnailContent, shot: string): string {
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>
 *{box-sizing:border-box;margin:0}
 html,body{width:${THUMBNAIL_WIDTH}px;height:${THUMBNAIL_HEIGHT}px;overflow:hidden;background:#1e3a8a}
@@ -63,6 +64,8 @@ h1{font-size:88px;line-height:1.02;font-weight:800;letter-spacing:-.03em;max-hei
 .chrome{height:34px;display:flex;align-items:center;gap:8px;padding:0 14px}
 .chrome b{width:12px;height:12px;border-radius:50%;background:#9ca3af}
 .browser img{display:block;width:100%}
+.bezel{position:absolute;z-index:1;background:#0f172a;border-radius:28px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.slot{position:absolute;z-index:1;background:#000}
 </style></head><body><div class="t">
 <div class="text"><div class="brand"><div class="logo"><i></i><i></i><i></i></div>benevol.app</div>
 <div class="main"><span class="kicker">${escapeHtml(content.kicker)}</span><h1 id="title">${escapeHtml(content.title)}</h1></div></div>
@@ -72,4 +75,42 @@ ${shot}</div>
 while(size>48&&(h.scrollHeight>400||h.scrollWidth>570)){size-=4;h.style.fontSize=size+"px"}
 document.body.dataset.ready="1"}
 </script></body></html>`
+}
+
+/** Thumbnail page; `posterSrc` is a data: URL of the poster. The title shrinks until it fits its box. */
+export function thumbnailHtml(content: ThumbnailContent, posterSrc: string): string {
+  const shot =
+    content.layout === "mobile"
+      ? `<div class="shot phone"><img src="${posterSrc}" alt=""></div>`
+      : `<div class="shot browser"><div class="chrome"><b></b><b></b><b></b></div><img src="${posterSrc}" alt=""></div>`
+  return page(content, shot)
+}
+
+/** Output of a framed phone recording: 1080p, so YouTube serves it in HD. */
+export const FRAME_WIDTH = 1920
+export const FRAME_HEIGHT = 1080
+/** The page is drawn at 1280 x 720 and rendered at this scale. */
+export const FRAME_SCALE = FRAME_WIDTH / THUMBNAIL_WIDTH
+const FRAME_MARGIN = 46
+const FRAME_PHONE_CENTER_X = 1425
+const BEZEL = 18
+
+/**
+ * Where the phone recording goes in the 1920 x 1080 frame (output pixels, even numbers for
+ * yuv420p): as tall as the frame allows, centred on the right, beside the title.
+ */
+export function framePlacement(srcWidth: number, srcHeight: number): Rect {
+  const h = FRAME_HEIGHT - 2 * FRAME_MARGIN
+  const w = Math.round((h * srcWidth) / srcHeight / 2) * 2
+  const x = Math.round((FRAME_PHONE_CENTER_X - w / 2) / 2) * 2
+  return { x, y: FRAME_MARGIN, w, h }
+}
+
+/** Background of a framed phone recording: same design as the thumbnail, an empty phone where the video goes. */
+export function frameHtml(content: ThumbnailContent, video: Rect): string {
+  const css = (n: number) => n / FRAME_SCALE
+  const b = BEZEL
+  const bezel = `<div class="bezel" style="left:${css(video.x - b)}px;top:${css(video.y - b)}px;width:${css(video.w + 2 * b)}px;height:${css(video.h + 2 * b)}px"></div>`
+  const slot = `<div class="slot" style="left:${css(video.x)}px;top:${css(video.y)}px;width:${css(video.w)}px;height:${css(video.h)}px"></div>`
+  return page(content, bezel + slot)
 }
