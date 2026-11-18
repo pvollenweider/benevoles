@@ -302,9 +302,61 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     return doc!
   }
 
-  it("denies ingress by default and never restricts egress", () => {
+  it("denies ingress by default", () => {
     expect(byName("default-deny-ingress")).toMatch(/podSelector: \{\}\n\s+policyTypes: \[Ingress\]\n/)
-    for (const d of docs) expect(d).not.toMatch(/policyTypes:.*Egress|^\s+egress:/m)
+  })
+
+  describe("egress", () => {
+    const egress = docs.filter((d) => /policyTypes: \[Egress\]/.test(d))
+    const selectorOf = (d: string) => d.match(/podSelector:\n\s+matchLabels:\n\s+app: ([\w-]+)\n\s+policyTypes/)![1]
+    const dns = /namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+k8s-app: kube-dns\n\s+ports:\n\s+- protocol: UDP\n\s+port: 53\n\s+- protocol: TCP\n\s+port: 53\n/
+
+    it("restricts exactly the pods whose needs are closed: postgres, media, migration, CronJobs", () => {
+      expect(egress.map(selectorOf).sort()).toEqual(["benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres"])
+      // One pod label per policy, never the whole namespace: an unlabelled pod (a Job started from
+      // an older template) keeps free egress instead of being cut off.
+      for (const d of egress) expect(d).not.toMatch(/podSelector: \{\}/)
+      // No policy mixes directions: an egress rule never changes what may come in.
+      for (const d of egress) expect(d).not.toMatch(/Ingress|^\s+ingress:/m)
+    })
+
+    it("leaves the app and the backup jobs alone until their destinations are closed lists", () => {
+      const selected = egress.map(selectorOf)
+      for (const label of ["benevoles-app", "postgres-backup"]) expect(selected).not.toContain(label)
+    })
+
+    it("gives postgres and the media server no outgoing connection at all", () => {
+      for (const name of ["postgres-no-egress", "media-no-egress"]) expect(byName(name), name).not.toMatch(/^\s+egress:/m)
+      expect(read("k8s/postgres.yaml")).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: postgres\n/)
+      expect(read("k8s/media.yaml")).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: benevoles-media\n/)
+    })
+
+    it("lets the migration Job reach the cluster DNS and postgres only", () => {
+      const d = byName("migrate-egress")
+      expect(d).toMatch(dns)
+      expect(d).toMatch(/- to:\n\s+- podSelector:\n\s+matchLabels:\n\s+app: postgres\n\s+ports:\n\s+- protocol: TCP\n\s+port: 5432\n/)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(2)
+      expect(d).not.toContain("ipBlock")
+      // Prisma would otherwise try an update check the policy refuses.
+      expect(read("k8s/job-migrate.yaml")).toMatch(/- name: CHECKPOINT_DISABLE\n\s+value: "1"\n/)
+    })
+
+    it("lets the CronJobs that call the app reach the cluster DNS and Traefik only", () => {
+      const d = byName("cron-egress")
+      expect(d).toMatch(dns)
+      // The public address resolves to the node, which hands the connection to the Traefik pod on
+      // its websecure port: measured on the cluster, an ipBlock for the internet does not cover it.
+      expect(d).toMatch(/app\.kubernetes\.io\/name: traefik\n\s+ports:\n\s+- protocol: TCP\n\s+port: 8443\n/)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(2)
+      expect(d).not.toContain("ipBlock")
+      for (const job of ["reminders", "outbox", "cleanup", "release-check"]) {
+        const manifest = read(`k8s/cronjob-${job}.yaml`)
+        expect(manifest, job).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: benevoles-cron\n/)
+        // The label is only right for a job that calls the public address and nothing else.
+        expect(manifest, job).toContain("${APP_URL}/api/cron/")
+        expect(manifest, job).not.toMatch(/PGHOST|DATABASE_URL/)
+      }
+    })
   })
 
   it("lets Traefik reach the app, the media server and the ACME solver on their container ports", () => {
