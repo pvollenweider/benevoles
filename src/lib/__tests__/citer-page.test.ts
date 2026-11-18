@@ -77,3 +77,14 @@ describe("/citer, the citation page (#1323)", () => {
     expect(CONTENT_NAV.map((candidate) => candidate.path)).not.toContain("/citer")
   })
 })
+
+// The GEO audit of 2026-11-18: the home opened on a slogan alone. Its hero lead now starts with the
+// same definition as /citer, the one the page asks others to use.
+describe("the home's definition", () => {
+  it("opens the hero lead with /citer's definition of the software", () => {
+    const definition = "est un logiciel libre de planning pour bénévoles"
+    expect(source).toContain(`benevol.app ${definition}`)
+    const home = read("src/app/page.tsx").replace(/\s+/g, " ")
+    expect(home).toContain(`{SITE_NAME} ${definition}&nbsp;: vos bénévoles choisissent leurs créneaux`)
+  })
+})
