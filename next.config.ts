@@ -3,6 +3,7 @@ import { withSentryConfig } from "@sentry/nextjs/config"
 import { CALENDAR_FEED_HEADER_RULES, SECURITY_HEADERS } from "./src/lib/security-headers"
 import { STATIC_CACHE_HEADERS } from "./src/lib/static-cache-headers"
 import { IMAGE_LOCAL_PATTERNS } from "./src/lib/image-local-patterns"
+import { IMAGE_DISK_CACHE_MAX_BYTES } from "./src/lib/image-disk-cache"
 import { PERSONAL_API_HEADER_RULES } from "./src/lib/personal-api-headers"
 import pkg from "./package.json"
 
@@ -33,6 +34,8 @@ const nextConfig: NextConfig = {
     imageSizes: [32, 48, 64, 96, 128, 256, 384, 512],
     // Only the doc screenshots: the optimiser never fetches another local path (API routes included).
     localPatterns: IMAGE_LOCAL_PATTERNS.map((p) => ({ ...p })),
+    // A fixed ceiling for .next/cache/images instead of half the free disk (src/lib/image-disk-cache.ts).
+    maximumDiskCacheSize: IMAGE_DISK_CACHE_MAX_BYTES,
   },
 }
 

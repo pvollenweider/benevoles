@@ -85,7 +85,7 @@ describe("docker-entrypoint.sh", () => {
   })
 
   it("the image ships the script", () => {
-    expect(dockerfile).toContain("COPY --from=builder --chown=nextjs:nodejs /app/scripts/database-url.mjs ./scripts/database-url.mjs")
+    expect(dockerfile).toContain("COPY --from=builder /app/scripts/database-url.mjs ./scripts/database-url.mjs")
   })
 })
 

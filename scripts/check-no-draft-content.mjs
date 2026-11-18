@@ -21,7 +21,7 @@ export const DRAFT_MARKER = "<!-- BROUILLON"
 /** The public Markdown sources, from the Dockerfile's COPY lines: files, then the .md files of copied folders. */
 export function publicContentSources(root) {
   const dockerfile = readFileSync(path.join(root, "Dockerfile"), "utf-8")
-  const copied = [...dockerfile.matchAll(/^COPY --from=builder \S+ \/app\/(\S+) \.\/\S+$/gm)].map((m) => m[1])
+  const copied = [...dockerfile.matchAll(/^COPY --from=builder (?:--\S+ )*\/app\/(\S+) \.\/\S+$/gm)].map((m) => m[1])
   const files = []
   for (const entry of copied) {
     const full = path.join(root, entry)
