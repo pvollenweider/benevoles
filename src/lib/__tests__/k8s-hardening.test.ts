@@ -366,8 +366,8 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     const selectorOf = (d: string) => d.match(/podSelector:\n\s+matchLabels:\n\s+app: ([\w-]+)\n\s+policyTypes/)![1]
     const dns = /namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+k8s-app: kube-dns\n\s+ports:\n\s+- protocol: UDP\n\s+port: 53\n\s+- protocol: TCP\n\s+port: 53\n/
 
-    it("restricts exactly the pods whose needs are closed: postgres, media, migration, CronJobs, backups", () => {
-      expect(egress.map(selectorOf).sort()).toEqual(["backup-offsite", "benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres", "postgres-backup"])
+    it("restricts every pod of the namespace, each by its own label", () => {
+      expect(egress.map(selectorOf).sort()).toEqual(["backup-offsite", "benevoles-app", "benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres", "postgres-backup"])
       // One pod label per policy, never the whole namespace: an unlabelled pod (a Job started from
       // an older template) keeps free egress instead of being cut off.
       for (const d of egress) expect(d).not.toMatch(/podSelector: \{\}/)
@@ -375,8 +375,28 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
       for (const d of egress) expect(d).not.toMatch(/Ingress|^\s+ingress:/m)
     })
 
-    it("leaves the app alone until its destinations are a closed list", () => {
-      expect(egress.map(selectorOf)).not.toContain("benevoles-app")
+    const INTERNAL = ["10.42.0.0/16", "10.43.0.0/16", "169.254.0.0/16", "188.165.255.107/32", "188.165.255.51/32"]
+    const exceptOf = (d: string) =>
+      d.match(/ipBlock:\n\s+cidr: 0\.0\.0\.0\/0\n\s+except:\n((?:\s+- \S+\n)+)/)![1].trim().split("\n").map((l) => l.trim().replace(/^- /, "")).sort()
+
+    it("lets the app reach the cluster DNS, postgres and the internet, never the cluster", () => {
+      const d = byName("app-egress")
+      expect(d).toMatch(dns)
+      expect(d).toMatch(/- to:\n\s+- podSelector:\n\s+matchLabels:\n\s+app: postgres\n\s+ports:\n\s+- protocol: TCP\n\s+port: 5432\n/)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(3)
+      // Web push services choose their own host and port, and the SMTP port is a setting: the
+      // internet rule carries no port. What it must never include is the inside of the cluster.
+      expect(exceptOf(d)).toEqual(INTERNAL)
+      expect(d).not.toMatch(/ipBlock:[\s\S]*ports:/)
+      // The app does not call its own public address, so it gets no way to Traefik, through
+      // which it would reach the other sites of the cluster.
+      expect(d).not.toContain("traefik")
+    })
+
+    it("every rule to the internet leaves out the same internal ranges", () => {
+      const withBlock = egress.filter((d) => d.includes("ipBlock"))
+      expect(withBlock.map(selectorOf).sort()).toEqual(["backup-offsite", "benevoles-app"])
+      for (const d of withBlock) expect(exceptOf(d), selectorOf(d)).toEqual(INTERNAL)
     })
 
     const traefikOut = /app\.kubernetes\.io\/name: traefik\n\s+ports:\n\s+- protocol: TCP\n\s+port: 8443\n/
