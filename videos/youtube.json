@@ -31,6 +31,10 @@
     "planning-creneaux": {
       "playlistId": "PLCdnbN_LgI8w",
       "title": "Construire un planning précis"
+    },
+    "tracabilite-donnees": {
+      "playlistId": "PLJUd4RKfmUvI",
+      "title": "Traçabilité, données et administration avancée"
     }
   },
   "videos": {
@@ -52,12 +56,15 @@
       "videoId": "eF5q9EzPmPA",
       "revision": 4,
       "privacy": "public",
-      "captions": false,
-      "thumbnail": false,
+      "captions": true,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
-      "playlists": [],
-      "uploadedAt": "2026-11-18T09:32:17.061Z"
+      "playlists": [
+        "planning-creneaux"
+      ],
+      "uploadedAt": "2026-11-18T09:32:17.061Z",
+      "thumbnailKey": "8a7e6c7c4ccfc94a"
     },
     "attendance-check-in": {
       "videoId": "1AN3vR8Z6bw",
@@ -68,7 +75,10 @@
       "synthetic": true,
       "format": "native",
       "uploadedAt": "2026-11-18T08:56:13.894Z",
-      "thumbnailKey": "88e982b49a9b4b37"
+      "thumbnailKey": "88e982b49a9b4b37",
+      "playlists": [
+        "jour-j"
+      ]
     },
     "beta-access": {
       "videoId": "5o9MWK7BoaU",
@@ -108,7 +118,8 @@
       "synthetic": true,
       "format": "native",
       "playlists": [
-        "organisation-equipe"
+        "organisation-equipe",
+        "inscriptions-communication"
       ],
       "uploadedAt": "2026-11-18T09:30:01.779Z",
       "thumbnailKey": "0d635bba9b92dc35"
@@ -122,7 +133,11 @@
       "synthetic": true,
       "format": "native",
       "uploadedAt": "2026-11-18T08:56:26.648Z",
-      "thumbnailKey": "356206c3094a0689"
+      "thumbnailKey": "356206c3094a0689",
+      "playlists": [
+        "parcours-benevole",
+        "tracabilite-donnees"
+      ]
     },
     "reminders-changes": {
       "videoId": "q3uUWtgAo3A",
@@ -133,7 +148,11 @@
       "synthetic": true,
       "format": "native",
       "uploadedAt": "2026-11-18T08:55:59.393Z",
-      "thumbnailKey": "3dc75884c32b6530"
+      "thumbnailKey": "3dc75884c32b6530",
+      "playlists": [
+        "inscriptions-communication",
+        "jour-j"
+      ]
     },
     "sector-leaders": {
       "videoId": "odq70meXiVg",
