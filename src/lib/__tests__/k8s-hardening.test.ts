@@ -366,8 +366,8 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     const selectorOf = (d: string) => d.match(/podSelector:\n\s+matchLabels:\n\s+app: ([\w-]+)\n\s+policyTypes/)![1]
     const dns = /namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+k8s-app: kube-dns\n\s+ports:\n\s+- protocol: UDP\n\s+port: 53\n\s+- protocol: TCP\n\s+port: 53\n/
 
-    it("restricts exactly the pods whose needs are closed: postgres, media, migration, CronJobs", () => {
-      expect(egress.map(selectorOf).sort()).toEqual(["benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres"])
+    it("restricts exactly the pods whose needs are closed: postgres, media, migration, CronJobs, backups", () => {
+      expect(egress.map(selectorOf).sort()).toEqual(["backup-offsite", "benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres", "postgres-backup"])
       // One pod label per policy, never the whole namespace: an unlabelled pod (a Job started from
       // an older template) keeps free egress instead of being cut off.
       for (const d of egress) expect(d).not.toMatch(/podSelector: \{\}/)
@@ -375,9 +375,38 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
       for (const d of egress) expect(d).not.toMatch(/Ingress|^\s+ingress:/m)
     })
 
-    it("leaves the app and the backup jobs alone until their destinations are closed lists", () => {
-      const selected = egress.map(selectorOf)
-      for (const label of ["benevoles-app", "postgres-backup"]) expect(selected).not.toContain(label)
+    it("leaves the app alone until its destinations are a closed list", () => {
+      expect(egress.map(selectorOf)).not.toContain("benevoles-app")
+    })
+
+    const traefikOut = /app\.kubernetes\.io\/name: traefik\n\s+ports:\n\s+- protocol: TCP\n\s+port: 8443\n/
+
+    it("lets the database backup reach the cluster DNS, postgres and Traefik only", () => {
+      const d = byName("backup-egress")
+      expect(d).toMatch(dns)
+      expect(d).toMatch(/- to:\n\s+- podSelector:\n\s+matchLabels:\n\s+app: postgres\n\s+ports:\n\s+- protocol: TCP\n\s+port: 5432\n/)
+      // The heartbeat container calls the public address, which lands on the Traefik pod.
+      expect(d).toMatch(traefikOut)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(3)
+      expect(d).not.toContain("ipBlock")
+    })
+
+    it("lets the off-site copy reach the cluster DNS, Traefik and the internet on 443, never the cluster", () => {
+      const d = byName("backup-offsite-egress")
+      expect(d).toMatch(dns)
+      expect(d).toMatch(traefikOut)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(3)
+      // Pod and service ranges, link-local, and both addresses of the node: the cluster API is
+      // published on the node, so a rule that left the node in would leave the API reachable
+      // (measured on the cluster with the service address 10.43.0.1).
+      const block = d.match(/ipBlock:\n\s+cidr: 0\.0\.0\.0\/0\n\s+except:\n((?:\s+- \S+\n)+)\s+ports:\n\s+- protocol: TCP\n\s+port: 443\n/)
+      expect(block).not.toBeNull()
+      const except = block![1].trim().split("\n").map((l) => l.trim().replace(/^- /, ""))
+      expect(except.sort()).toEqual(["10.42.0.0/16", "10.43.0.0/16", "169.254.0.0/16", "188.165.255.107/32", "188.165.255.51/32"])
+      expect(read("k8s/cronjob-backup-offsite.yaml")).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: backup-offsite\n/)
+      // The job needs nothing from postgres, and postgres lets no such pod in.
+      expect(d).not.toContain("5432")
+      expect(byName("postgres-from-clients")).not.toContain("backup-offsite")
     })
 
     it("gives postgres and the media server no outgoing connection at all", () => {

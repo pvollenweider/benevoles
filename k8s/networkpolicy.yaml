@@ -19,9 +19,15 @@
 #   migration Job                    -> cluster DNS, postgres :5432
 #   CronJobs calling the app         -> cluster DNS, Traefik :8443 (they call the public address,
 #                                       which the node hands to the Traefik pod)
-# Not restricted yet: the app (SMTP, Sentry, ntfy, web push services, GitHub) and the two backup
-# jobs (heartbeat to the public address, Swiss Backup). A pod without one of the labels below keeps free egress, so
-# a Job started from an older template is never cut off.
+#   database backup                  -> cluster DNS, postgres :5432, Traefik :8443 (its heartbeat)
+#   off-site copy                    -> cluster DNS, Traefik :8443, the internet on :443 only
+#                                       (Swiss Backup), never an address inside the cluster
+# Not restricted yet: the app (SMTP, Sentry, ntfy, web push services, GitHub). A pod without one of
+# the labels below keeps free egress, so a Job started from an older template is never cut off.
+#
+# "The internet" below is every address except the pod and service ranges of k3s, the link-local
+# range and the node's own addresses: the cluster API answers on the node, so leaving the node in
+# would leave the API reachable. On another cluster, put its own ranges and node addresses there.
 #
 # Applied by the deploy workflow before the migration, so the migration Job and the new app pod
 # open fresh connections through these rules in the same deploy; deploy.yml removes them again if
@@ -221,6 +227,99 @@ spec:
       ports:
         - protocol: TCP
           port: 8443
+---
+# The dump container talks to postgres, the heartbeat container to the public address.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backup-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres-backup
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8443
+---
+# rclone to Swiss Backup (identity and storage, both HTTPS), then the heartbeat.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backup-offsite-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: backup-offsite
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8443
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.42.0.0/16
+              - 10.43.0.0/16
+              - 169.254.0.0/16
+              - 188.165.255.51/32
+              - 188.165.255.107/32
+      ports:
+        - protocol: TCP
+          port: 443
 ---
 # Last: kubectl applies in file order, so the allow rules are in place before anything is denied.
 apiVersion: networking.k8s.io/v1
