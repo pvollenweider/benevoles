@@ -525,6 +525,60 @@ make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1           # aperçu
 make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1 APPLY=1   # envoi
 ```
 
+## Chaîne YouTube (@benevolapp)
+
+La chaîne sert à être trouvé (YouTube, Google, assistants d'IA) ; le site garde son propre
+lecteur, sans intégration YouTube. Elle porte une sélection de vidéos, jamais toute la
+bibliothèque. `make video-youtube` envoie une vidéo telle qu'elle est publiée sur
+medias.benevol.app :
+
+- le MP4, avec un titre (titre du manifeste + « · benevol.app »), une description (description,
+  étapes et « À retenir » du bloc `viewer`, lien vers `/videos/<ID>`, définition de `/citer`) et des
+  étiquettes tirées du catalogue (`videos/lib/youtube-plan.ts`) ;
+- un enregistrement téléphone (portrait) part dans un cadre 1920 x 1080, sinon YouTube en ferait
+  un Short (affichage 9:16, vignette recadrée, liens de la description non cliquables) : fond de
+  la vignette (logo, public, titre) et l'enregistrement dans un téléphone à droite, même cadence et
+  même durée, son copié, donc les sous-titres restent calés (`frameVideo`, Playwright + ffmpeg) ;
+- les sous-titres : la VTT publiée, donc le texte exact de la narration ;
+- une vignette 1280 x 720 (`videos/lib/youtube-thumbnail.ts`, rendue par Playwright avec la police
+  système) : fond bleu de la marque, logo, public (« Organisateurs » ou « Bénévoles », d'après
+  `audience`), titre court en gros (`thumbnailTitle` du catalogue, 40 caractères au plus, sinon le
+  titre du manifeste, réduit s'il déborde), et l'affiche de la vidéo dans un cadre de téléphone
+  (enregistrement de moins de 600 px de large) ou une fenêtre de navigateur. Une vignette déjà
+  envoyée est refaite quand son contenu ou `THUMBNAIL_STYLE` change. Vignettes personnalisées :
+  chaîne vérifiée par téléphone.
+
+```bash
+make video-youtube ID=VOLUNTEER_REGISTER                           # aperçu
+make video-youtube ID=VOLUNTEER_REGISTER APPLY=1                   # envoi, en privé
+make video-youtube IDS="A B" PRIVACY=public APPLY=1                # envoi public
+make video-youtube ALL=1 EXCEPT="A B" PRIVACY=public APPLY=1        # toutes les vidéos publiées, sauf A et B
+```
+
+Chaque thème du catalogue (`themes`, libellés de `src/lib/video-catalog.ts`) a sa playlist publique,
+créée au premier besoin ; une vidéo entre dans la playlist de chacun de ses thèmes. Quota : chaque
+nouvelle vidéo coûte environ 500 unités (400 pour les sous-titres, 50 pour la vignette, 50 par
+playlist) sur les 10 000 du jour. Quand le quota est épuisé, l'outil s'arrête proprement et la
+même commande, relancée le lendemain (après 9 h en Suisse), reprend où il s'était arrêté.
+
+Un nouvel envoi est privé sauf `PRIVACY=…` (l'API publie en public quand rien n'est dit) ; une
+vidéo déjà envoyée garde sa visibilité, sauf si `PRIVACY=…` la change (sans nouvel envoi). La
+narration est une voix de synthèse (Gemini) : chaque vidéo est déclarée comme contenu synthétique
+(`containsSyntheticMedia`).
+`videos/youtube.json` garde les playlists par thème et, par slug, l'identifiant YouTube, la révision envoyée et ce qui est
+fait (sous-titres, vignette) ; il se commite. Une révision plus récente dans `catalog.json` donne
+un nouvel envoi (YouTube ne remplace pas le fichier d'une vidéo), de même qu'un changement de
+format ; l'ancienne version passe en « non répertoriée », ou reste privée si elle n'a jamais été
+publique, sans suppression. Si les sous-titres ou la vignette échouent, relancer la
+même commande termine ce qui manque sans renvoyer la vidéo. Quota par défaut : 100 envois de
+vidéo par jour, et 10 000 unités pour le reste (400 par piste de sous-titres).
+
+Identifiants, hors du dépôt, dans `~/.config/benevol-youtube/` (ou `BENEVOL_YOUTUBE_DIR`) : le
+client OAuth « Application de bureau » du projet Google Cloud `benevol-app-youtube`
+(`client_secret_*.json`), et `token.json`, écrit en mode 600 après la première autorisation
+dans le navigateur. Tant que l'application OAuth reste en mode « Test », Google retire
+l'autorisation au bout de 7 jours ; le script la redemande alors.
+
 ## Bibliothèque vidéo publique (`/videos`, #644)
 
 `src/lib/video-catalog.ts` lit `catalog.json`, `renders.json`, les manifestes et les scripts
