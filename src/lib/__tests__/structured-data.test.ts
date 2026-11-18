@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { breadcrumbNode, docUnitJsonLd, jsonLdScript, organizationNode, publicPageJsonLd, softwareApplicationNode, websiteNode } from "../structured-data"
+import { breadcrumbNode, CONTACT_EMAIL, docUnitJsonLd, jsonLdScript, ORGANIZATION_DESCRIPTION, organizationNode, publicPageJsonLd, softwareApplicationNode, websiteNode } from "../structured-data"
 import { docGroup, loadDocUnits, type DocUnit } from "../doc-units"
 import { featuresPageFaq, renderFeaturesPage } from "../public-content"
 import fs from "fs"
@@ -31,8 +31,24 @@ const unit: DocUnit = {
 
 describe("shared nodes", () => {
   it("tie every page to one publisher and one site, by stable ids on the home", () => {
-    expect(organizationNode(BASE)).toMatchObject({ "@type": "Organization", "@id": `${BASE}/#organization`, url: `${BASE}/`, logo: `${BASE}/apple-icon.png` })
+    expect(organizationNode(BASE)).toMatchObject({
+      "@type": "Organization",
+      "@id": `${BASE}/#organization`,
+      url: `${BASE}/`,
+      description: ORGANIZATION_DESCRIPTION,
+      logo: { "@type": "ImageObject", url: `${BASE}/apple-icon.png`, width: 180, height: 180 },
+    })
+    // The code everywhere; the YouTube channel is the hosted service's own.
+    expect(organizationNode(BASE, true).sameAs).toEqual(["https://github.com/pvollenweider/benevoles", "https://www.youtube.com/@benevolapp"])
+    expect(organizationNode(BASE, false).sameAs).toEqual(["https://github.com/pvollenweider/benevoles"])
+    expect(ORGANIZATION_DESCRIPTION).toMatch(/logiciel libre de planning pour bénévoles\.$/)
     expect(websiteNode(`${BASE}/`)).toMatchObject({ "@type": "WebSite", "@id": `${BASE}/#website`, inLanguage: "fr", publisher: { "@id": `${BASE}/#organization` } })
+  })
+
+  it("give the publisher's contact point, in French, only when the instance has a contact address", () => {
+    const org = organizationNode(BASE)
+    if (CONTACT_EMAIL) expect(org.contactPoint).toEqual({ "@type": "ContactPoint", contactType: "customer support", email: CONTACT_EMAIL, availableLanguage: "fr" })
+    else expect(org).not.toHaveProperty("contactPoint")
   })
 
   it("describe the application as a free, open source web application", () => {
@@ -65,6 +81,13 @@ describe("publicPageJsonLd", () => {
     const [page, crumbs] = graphOf(doc)
     expect(page).toMatchObject({ "@id": `${BASE}/doc/admin#webpage`, url: `${BASE}/doc/admin`, inLanguage: "fr", breadcrumb: { "@id": `${BASE}/doc/admin#breadcrumb` } })
     expect((crumbs.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Documentation", "Guide organisateur"])
+  })
+
+  it("dates a page by its source file's last commit, and leaves the date out when unknown", () => {
+    const d = new Date("2026-11-10T09:00:00Z")
+    const dated = graphOf(publicPageJsonLd("/tarifs", BASE, [], (src) => (src === "content/pages/TARIFS.md" ? d : null)))[0]
+    expect(dated.dateModified).toBe("2026-11-10T09:00:00.000Z")
+    expect(graphOf(publicPageJsonLd("/tarifs", BASE))[0]).not.toHaveProperty("dateModified")
   })
 
   it("makes /doc a collection, and the features page describe the application", () => {

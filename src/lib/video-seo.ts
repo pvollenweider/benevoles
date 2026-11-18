@@ -145,10 +145,13 @@ export function serializeJsonLd(data: unknown): string {
     .replace(/\u2029/g, "\\u2029")
 }
 
+// The site's publisher, by the @id every other public page gives it (src/lib/structured-data.ts),
+// so the video pages join the same entity; its name and logo stay inline for a reader of this page only.
 function publisher(siteBase: string) {
   const base = trimBase(siteBase)
   return {
     "@type": "Organization",
+    "@id": `${base}/#organization`,
     name: VIDEO_SITE_NAME,
     url: `${base}/`,
     logo: { "@type": "ImageObject", url: `${base}/apple-icon.png` },
@@ -179,9 +182,11 @@ export function videoJsonLd(video: Video, ctx: VideoSeoContext): Record<string, 
         transcript: videoTranscript(video),
         keywords: video.tags.join(", "),
         publisher: publisher(base),
+        isPartOf: { "@id": `${base}/#website` },
       },
       {
         "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
         itemListElement: [
           { "@type": "ListItem", position: 1, name: VIDEO_SITE_NAME, item: `${base}/` },
           { "@type": "ListItem", position: 2, name: VIDEO_LIBRARY_NAME, item: videoLibraryUrl(base) },
@@ -210,6 +215,7 @@ export function videoLibraryJsonLd(videos: Video[], ctx: VideoSeoContext): Recor
     description: videoLibraryDescription(listed.length),
     inLanguage: "fr",
     publisher: publisher(base),
+    isPartOf: { "@id": `${base}/#website` },
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: listed.length,

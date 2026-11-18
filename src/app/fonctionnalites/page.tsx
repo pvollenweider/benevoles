@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { publicPageMetadata } from "@/lib/doc-pages"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import FeaturesPage from "@/components/public/FeaturesPage"
 import { featuresPageFaq, renderFeaturesPage } from "@/lib/public-content"
@@ -23,7 +24,7 @@ export default function Page() {
     <>
       {/* The page, its breadcrumb, the application it presents and its FAQ (#951), the questions
           the page renders (src/lib/structured-data.ts). */}
-      <JsonLd data={publicPageJsonLd("/fonctionnalites", apexBaseUrl(), featuresPageFaq(page))} />
+      <JsonLd data={publicPageJsonLd("/fonctionnalites", apexBaseUrl(), featuresPageFaq(page), loadDocLastmod())} />
       <FeaturesPage page={page} />
     </>
   )

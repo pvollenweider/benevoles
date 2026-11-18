@@ -4,6 +4,7 @@ import { loadDocUnits } from "@/lib/doc-units"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import { env } from "@/lib/env"
 import RoleGuide from "../RoleGuide"
@@ -23,7 +24,7 @@ export default function DocAdminPage() {
   const { title, html } = renderPublicSource("content/guide/GUIDE_ADMIN.md", "Guide organisateur", env.VIDEO_MEDIA_BASE_URL)
   return (
     <>
-      <JsonLd data={publicPageJsonLd("/doc/admin", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/doc/admin", apexBaseUrl(), [], loadDocLastmod())} />
       <RoleGuide role="admin" units={loadDocUnits()} title={title} html={html} />
     </>
   )
