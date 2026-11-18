@@ -18,7 +18,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
-- **Vidéos sur YouTube** : `make video-youtube ID=…` envoie une vidéo publiée sur la chaîne @benevolapp, avec ses sous-titres (la narration), une vignette tirée de son affiche et une description reliée à sa page sur le site ; privée par défaut, voix de synthèse déclarée, `PRIVACY=public` pour publier, état dans `videos/youtube.json`. <!-- interne -->
+- **Vidéos sur YouTube** : `make video-youtube ID=…` envoie une vidéo publiée sur la chaîne @benevolapp, avec ses sous-titres (la narration), une vignette (titre court en gros, public, écran de la vidéo) et une description reliée à sa page sur le site ; privée par défaut, voix de synthèse déclarée, `PRIVACY=public` pour publier, état dans `videos/youtube.json`. <!-- interne -->
 - **Référencement** : une adresse tapée sans « www » ni « https » (http://benevol.app/…) arrive sur la bonne page en une seule redirection au lieu de deux ; le plan du site donne aussi la date de dernière modification de la page d'accueil ; après chaque mise en ligne, les pages modifiées sont signalées à Bing et aux autres moteurs IndexNow pour qu'ils les relisent plus vite. <!-- interne -->
 - **Validation automatique des nouveaux espaces** : un espace validé automatiquement envoie au plus 100 emails groupés par jour (messages, invitations, rappels, créneaux à compléter) tant que l'opérateur ne l'a pas marqué comme relu ; ensuite, le plafond habituel s'applique. Les autres emails ne changent pas.
 

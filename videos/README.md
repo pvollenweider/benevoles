@@ -536,8 +536,13 @@ medias.benevol.app :
   étapes et « À retenir » du bloc `viewer`, lien vers `/videos/<ID>`, définition de `/citer`) et des
   étiquettes tirées du catalogue (`videos/lib/youtube-plan.ts`) ;
 - les sous-titres : la VTT publiée, donc le texte exact de la narration ;
-- une vignette 1280 x 720 : l'affiche posée sur le bleu des aperçus de lien, sans recadrage
-  (vignettes personnalisées : chaîne vérifiée par téléphone).
+- une vignette 1280 x 720 (`videos/lib/youtube-thumbnail.ts`, rendue par Playwright avec la police
+  système) : fond bleu de la marque, logo, public (« Organisateurs » ou « Bénévoles », d'après
+  `audience`), titre court en gros (`thumbnailTitle` du catalogue, 40 caractères au plus, sinon le
+  titre du manifeste, réduit s'il déborde), et l'affiche de la vidéo dans un cadre de téléphone
+  (enregistrement de moins de 600 px de large) ou une fenêtre de navigateur. Une vignette déjà
+  envoyée est refaite quand son contenu ou `THUMBNAIL_STYLE` change. Vignettes personnalisées :
+  chaîne vérifiée par téléphone.
 
 ```bash
 make video-youtube ID=VOLUNTEER_REGISTER                           # aperçu

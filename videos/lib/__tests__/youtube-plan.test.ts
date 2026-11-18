@@ -9,7 +9,6 @@ import {
   TAGS_MAX_CHARS,
   TITLE_MAX,
   mediaUrls,
-  thumbnailFilter,
   videoStatus,
   planYoutube,
   tagsLength,
@@ -133,6 +132,12 @@ describe("planYoutube", () => {
     expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...pub, synthetic: undefined } })[0]).toMatchObject({ action: "status", from: "public", to: "public" })
   })
 
+  it("makes the thumbnail again when what it shows changed", () => {
+    const sent = { ...ok, thumbnailKey: "k1" }
+    expect(planYoutube([{ slug: "a", revision: 3, thumbnailKey: "k1" }], { a: sent })[0]).toMatchObject({ action: "unchanged" })
+    expect(planYoutube([{ slug: "a", revision: 3, thumbnailKey: "k2" }], { a: sent })[0]).toMatchObject({ action: "finish", captions: false, thumbnail: true })
+  })
+
   it("finishes only what failed: captions, thumbnail, or both", () => {
     expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, captions: false } }, "private")[0]).toEqual({ slug: "a", action: "finish", revision: 3, videoId: "abc", captions: true, thumbnail: false })
     expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, thumbnail: false } }, "private")[0]).toMatchObject({ action: "finish", captions: false, thumbnail: true })
@@ -149,11 +154,6 @@ describe("mediaUrls", () => {
   })
 })
 
-describe("thumbnailFilter", () => {
-  it("fits the poster into 1280 x 720 on the brand blue without cropping", () => {
-    expect(thumbnailFilter()).toBe("scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=0x1e3a8a")
-  })
-})
 
 describe("videoStatus", () => {
   it("is complete, because part=status resets what it omits, and declares the generated voice", () => {

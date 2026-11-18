@@ -22,19 +22,21 @@
 import { createHash, randomBytes } from "node:crypto"
 import { execFile } from "node:child_process"
 import { existsSync, readdirSync } from "node:fs"
-import { chmod, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises"
+import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import { createServer } from "node:http"
 import { homedir, tmpdir } from "node:os"
 import path from "node:path"
-import { promisify } from "node:util"
+import { chromium } from "playwright"
 import { catalogEntry, loadManifest, videosRoot } from "../lib/manifest"
+import { thumbnailContent, thumbnailHtml, thumbnailKey, type ThumbnailContent } from "../lib/youtube-thumbnail"
 import {
   CATEGORY_EDUCATION,
   PRIVACIES,
+  THUMBNAIL_HEIGHT,
   THUMBNAIL_MAX_BYTES,
+  THUMBNAIL_WIDTH,
   mediaUrls,
   planYoutube,
-  thumbnailFilter,
   videoStatus,
   youtubeMetadata,
   type PlanItem,
@@ -42,7 +44,6 @@ import {
   type YoutubeState,
 } from "../lib/youtube-plan"
 
-const run = promisify(execFile)
 const SCOPE = "https://www.googleapis.com/auth/youtube.force-ssl"
 const AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 const TOKEN_URL = "https://oauth2.googleapis.com/token"
@@ -207,14 +208,25 @@ async function uploadCaptions(token: string, videoId: string, file: string) {
   if (!res.ok) throw await apiError(res, "Sous-titres refusés")
 }
 
-async function uploadThumbnail(token: string, videoId: string, poster: string, dir: string) {
-  const out = path.join(dir, "thumbnail.jpg")
-  await run("ffmpeg", ["-v", "error", "-y", "-i", poster, "-vf", thumbnailFilter(), "-q:v", "3", out])
-  if ((await stat(out)).size > THUMBNAIL_MAX_BYTES) throw new Error("Vignette de plus de 2 Mo")
+async function renderThumbnail(content: ThumbnailContent, poster: string): Promise<Buffer> {
+  const browser = await chromium.launch()
+  try {
+    const page = await browser.newPage({ viewport: { width: THUMBNAIL_WIDTH, height: THUMBNAIL_HEIGHT } })
+    const src = `data:image/jpeg;base64,${(await readFile(poster)).toString("base64")}`
+    await page.setContent(thumbnailHtml(content, src), { waitUntil: "load" })
+    await page.waitForSelector("body[data-ready]")
+    return await page.screenshot({ type: "jpeg", quality: 90 })
+  } finally {
+    await browser.close()
+  }
+}
+
+async function uploadThumbnail(token: string, videoId: string, image: Buffer) {
+  if (image.length > THUMBNAIL_MAX_BYTES) throw new Error("Vignette de plus de 2 Mo")
   const res = await fetch(`${UPLOAD_API}/thumbnails/set?videoId=${encodeURIComponent(videoId)}&uploadType=media`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "image/jpeg" },
-    body: await readFile(out),
+    body: new Uint8Array(image),
   })
   if (!res.ok) throw await apiError(res, "Vignette refusée")
 }
@@ -258,14 +270,15 @@ async function main() {
     ids.map(async (id) => {
       const entry = await catalogEntry(id)
       const manifest = await loadManifest(entry.manifest)
-      const revision = (entry as { revision?: number }).revision ?? 1
-      return { entry, manifest, slug: manifest.slug, revision }
+      const revision = entry.revision ?? 1
+      const thumb = thumbnailContent(manifest, entry)
+      return { entry, manifest, slug: manifest.slug, revision, thumb, thumbnailKey: thumbnailKey(thumb) }
     }),
   )
   const plan = planYoutube(videos, state, requestedPrivacy)
 
   for (const [i, item] of plan.entries()) {
-    const { manifest, entry } = videos[i]
+    const { manifest, entry, thumb } = videos[i]
     const meta = youtubeMetadata(manifest, entry)
     console.log(`\n${entry.id} (${item.slug}, révision ${item.revision}) : ${describe(item)}`)
     if (item.action === "unchanged") continue
@@ -275,6 +288,7 @@ async function main() {
       console.log(`  ${head.ok ? "ok" : `MANQUANT (${head.status})`} ${url}`)
     }
     if (item.action === "upload" || item.action === "replace") {
+      console.log(`  Vignette : « ${thumb.title} », ${thumb.kicker}, ${thumb.layout === "mobile" ? "téléphone" : "navigateur"}`)
       console.log(`  Titre : ${meta.title}\n  Étiquettes : ${meta.tags.join(", ")}\n  Visibilité : ${privacy}\n  Description :\n${meta.description.replace(/^/gm, "    ")}`)
     }
   }
@@ -292,7 +306,7 @@ async function main() {
   const failures: string[] = []
   for (const [i, item] of plan.entries()) {
     if (item.action === "unchanged") continue
-    const { manifest, entry } = videos[i]
+    const { manifest, entry, thumb, thumbnailKey: key } = videos[i]
     const dir = await mkdtemp(path.join(tmpdir(), "benevol-youtube-"))
     try {
       const urls = mediaUrls(item.slug)
@@ -331,10 +345,10 @@ async function main() {
           failures.push(`${entry.id} : ${(error as Error).message}`)
         }
       }
-      if (!current.thumbnail) {
+      if (!current.thumbnail || current.thumbnailKey !== key) {
         try {
-          await uploadThumbnail(token, videoId, await download(urls.poster, dir), dir)
-          current.thumbnail = true
+          await uploadThumbnail(token, videoId, await renderThumbnail(thumb, await download(urls.poster, dir)))
+          Object.assign(current, { thumbnail: true, thumbnailKey: key })
           await saveState(state)
           console.log("  vignette ajoutée")
         } catch (error) {

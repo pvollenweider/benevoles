@@ -11,7 +11,6 @@
  * description ≤ 5000 bytes, tags ≤ 500 characters in total, no « < » or « > » anywhere.
  */
 import type { VideoCatalogEntry, VideoManifest } from "./manifest"
-import { OG_POSTER_BACKGROUND } from "./posters"
 
 export const SITE_URL = "https://www.benevol.app"
 export const MEDIA_BASE_URL = "https://medias.benevol.app"
@@ -40,6 +39,8 @@ export type YoutubeState = Record<
     thumbnail: boolean
     /** The narration voice is generated (Gemini): declared as synthetic content to YouTube. */
     synthetic?: boolean
+    /** What the thumbnail sent shows (videos/lib/youtube-thumbnail.ts thumbnailKey). */
+    thumbnailKey?: string
     uploadedAt: string
     /** Earlier uploads of the same video, set to unlisted when a new revision replaced them. */
     replaced?: string[]
@@ -123,16 +124,18 @@ export type PlanItem =
 /**
  * What to do for each video. YouTube cannot swap the file of an existing video, so a new revision
  * is a new upload; the earlier one is then set to unlisted (never deleted: links keep working).
- * An upload whose captions or thumbnail failed is finished on the next run, without a new upload.
+ * An upload whose captions or thumbnail failed is finished on the next run, without a new upload;
+ * so is a thumbnail whose content or design changed.
  * A video whose privacy differs from the one asked, or not yet declared as synthetic, only gets
  * its status updated. Without an explicit privacy, a video already on YouTube keeps its own.
  */
-export function planYoutube(videos: { slug: string; revision: number }[], state: YoutubeState, privacy?: Privacy): PlanItem[] {
-  return videos.map(({ slug, revision }) => {
+export function planYoutube(videos: { slug: string; revision: number; thumbnailKey?: string }[], state: YoutubeState, privacy?: Privacy): PlanItem[] {
+  return videos.map(({ slug, revision, thumbnailKey }) => {
     const known = state[slug]
     if (!known) return { slug, action: "upload", revision }
     if (known.revision !== revision) return { slug, action: "replace", revision, previousVideoId: known.videoId }
-    if (!known.captions || !known.thumbnail) return { slug, action: "finish", revision, videoId: known.videoId, captions: !known.captions, thumbnail: !known.thumbnail }
+    const thumbnail = !known.thumbnail || (thumbnailKey !== undefined && known.thumbnailKey !== thumbnailKey)
+    if (!known.captions || thumbnail) return { slug, action: "finish", revision, videoId: known.videoId, captions: !known.captions, thumbnail }
     const to = privacy ?? known.privacy
     if (to !== known.privacy || !known.synthetic) return { slug, action: "status", revision, videoId: known.videoId, from: known.privacy, to }
     return { slug, action: "unchanged", revision, videoId: known.videoId }
@@ -158,10 +161,3 @@ export function mediaUrls(slug: string): { mp4: string; vtt: string; poster: str
 export const THUMBNAIL_WIDTH = 1280
 export const THUMBNAIL_HEIGHT = 720
 export const THUMBNAIL_MAX_BYTES = 2 * 1024 * 1024
-/** Same blue as the link previews. */
-export const THUMBNAIL_BACKGROUND = OG_POSTER_BACKGROUND
-
-/** ffmpeg filter fitting the poster (16:10) into 1280 x 720 without cropping, on the brand blue. */
-export function thumbnailFilter(): string {
-  return `scale=${THUMBNAIL_WIDTH}:${THUMBNAIL_HEIGHT}:force_original_aspect_ratio=decrease,pad=${THUMBNAIL_WIDTH}:${THUMBNAIL_HEIGHT}:(ow-iw)/2:(oh-ih)/2:color=${THUMBNAIL_BACKGROUND}`
-}
