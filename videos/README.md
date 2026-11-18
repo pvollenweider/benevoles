@@ -525,6 +525,40 @@ make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1           # aperçu
 make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1 APPLY=1   # envoi
 ```
 
+## Chaîne YouTube (@benevolapp)
+
+La chaîne sert à être trouvé (YouTube, Google, assistants d'IA) ; le site garde son propre
+lecteur, sans intégration YouTube. Elle porte une sélection de vidéos, jamais toute la
+bibliothèque. `make video-youtube` envoie une vidéo telle qu'elle est publiée sur
+medias.benevol.app :
+
+- le MP4, avec un titre (titre du manifeste + « · benevol.app »), une description (description,
+  étapes et « À retenir » du bloc `viewer`, lien vers `/videos/<ID>`, définition de `/citer`) et des
+  étiquettes tirées du catalogue (`videos/lib/youtube-plan.ts`) ;
+- les sous-titres : la VTT publiée, donc le texte exact de la narration ;
+- une vignette 1280 x 720 : l'affiche posée sur le bleu des aperçus de lien, sans recadrage
+  (vignettes personnalisées : chaîne vérifiée par téléphone).
+
+```bash
+make video-youtube ID=VOLUNTEER_REGISTER                           # aperçu
+make video-youtube ID=VOLUNTEER_REGISTER APPLY=1                   # envoi, en privé
+make video-youtube IDS="A B" PRIVACY=public APPLY=1                # envoi public
+```
+
+La visibilité vaut `private` par défaut (l'API publie en public quand rien n'est dit).
+`videos/youtube.json` garde, par slug, l'identifiant YouTube, la révision envoyée et ce qui est
+fait (sous-titres, vignette) ; il se commite. Une révision plus récente dans `catalog.json` donne
+un nouvel envoi (YouTube ne remplace pas le fichier d'une vidéo) et l'ancienne version passe en
+« non répertoriée », sans suppression. Si les sous-titres ou la vignette échouent, relancer la
+même commande termine ce qui manque sans renvoyer la vidéo. Quota par défaut : 100 envois de
+vidéo par jour, et 10 000 unités pour le reste (400 par piste de sous-titres).
+
+Identifiants, hors du dépôt, dans `~/.config/benevol-youtube/` (ou `BENEVOL_YOUTUBE_DIR`) : le
+client OAuth « Application de bureau » du projet Google Cloud `benevol-app-youtube`
+(`client_secret_*.json`), et `token.json`, écrit en mode 600 après la première autorisation
+dans le navigateur. Tant que l'application OAuth reste en mode « Test », Google retire
+l'autorisation au bout de 7 jours ; le script la redemande alors.
+
 ## Bibliothèque vidéo publique (`/videos`, #644)
 
 `src/lib/video-catalog.ts` lit `catalog.json`, `renders.json`, les manifestes et les scripts

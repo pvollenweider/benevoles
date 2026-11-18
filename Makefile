@@ -200,6 +200,9 @@ video-publish: ## Publie les vidéos nouvelles ou modifiées (KUBE_CONTEXT=… [
 	@test -n "$(KUBE_CONTEXT)" || (echo "KUBE_CONTEXT=<contexte kubectl de production> est obligatoire (kubectl config get-contexts)"; exit 1)
 	npm run video:publish -- --context "$(KUBE_CONTEXT)" $(if $(APPLY),--apply) $(if $(POSTERS_ONLY),--posters-only) $(ID) $(IDS)
 
+video-youtube: ## Envoie des vidéos choisies sur la chaîne YouTube, avec sous-titres et vignette (ID=… | IDS="…") [PRIVACY=private|unlisted|public] [APPLY=1]
+	npm run video:youtube -- $(if $(APPLY),--apply) $(if $(PRIVACY),--privacy $(PRIVACY)) $(ID) $(IDS)
+
 video-media-serve: ## Sert videos/output en local pour VIDEO_MEDIA_BASE_URL (PORT=4870 par défaut, mêmes en-têtes CORS/Content-Type que k8s/media.yaml)
 	node scripts/serve-video-media.mjs
 
