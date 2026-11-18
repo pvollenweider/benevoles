@@ -45,6 +45,10 @@ spec:
     spec:
       backoffLimit: 2
       template:
+        metadata:
+          # Selects the egress rule of k8s/networkpolicy.yaml: DNS, Traefik and the internet on 443.
+          labels:
+            app: backup-offsite
         spec:
           restartPolicy: OnFailure
           # Hardened but still root (#1050), like the dump job: it reads the root-owned files of
