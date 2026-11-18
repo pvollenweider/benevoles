@@ -79,7 +79,7 @@ describe("GitHub workflow hardening", () => {
       for (const k of keys) expect(k).toMatch(/^[A-Z0-9_]+$/)
       expect([...keys].sort()).toEqual([...env].sort())
       expect(keys).toEqual(
-        expect.arrayContaining(["DATABASE_URL", "POSTGRES_PASSWORD", "AUTH_SECRET", "TOKEN_ENCRYPTION_KEY"]),
+        expect.arrayContaining(["DATABASE_URL", "MIGRATE_DATABASE_URL", "POSTGRES_PASSWORD", "AUTH_SECRET", "TOKEN_ENCRYPTION_KEY"]),
       )
     })
   })
@@ -135,7 +135,11 @@ describe("deploy environments and namespaced credential", () => {
       const checked = loop![1].replace(/\\\n/g, " ").split(/\s+/).filter(Boolean)
       expect([...checked].sort()).toEqual([...env].sort())
       expect(checked).toEqual(
-        expect.arrayContaining(["TOKEN_ENCRYPTION_KEY", "AUTH_SECRET", "POSTGRES_PASSWORD", "CRON_SECRET", "OFFSITE_BUCKET"]),
+        expect.arrayContaining([
+          "TOKEN_ENCRYPTION_KEY", "AUTH_SECRET", "POSTGRES_PASSWORD", "CRON_SECRET", "OFFSITE_BUCKET",
+          // The database role passwords: an empty one would be written into a URL without error.
+          "APP_DB_PASSWORD", "MIGRATE_DB_PASSWORD",
+        ]),
       )
     })
 

@@ -188,13 +188,17 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           OFFSITE_BUCKET: ${{ secrets.OFFSITE_BUCKET }}
+          APP_DB_PASSWORD: ${{ secrets.APP_DB_PASSWORD }}
+          MIGRATE_DB_PASSWORD: ${{ secrets.MIGRATE_DB_PASSWORD }}
         run: |
           # The app refuses to start in production without TOKEN_ENCRYPTION_KEY or AUTH_SECRET
           # (src/lib/env.ts, src/lib/production-guards.ts); the others break mail, crons or
-          # backups without a visible error. Fail here, before touching the cluster.
+          # backups without a visible error, and an empty database role password would be written
+          # into DATABASE_URL or MIGRATE_DATABASE_URL without any error. Fail here, before
+          # benevoles-secret is written.
           missing=""
           for k in TOKEN_ENCRYPTION_KEY AUTH_SECRET POSTGRES_USER POSTGRES_PASSWORD CRON_SECRET \
-            SMTP_HOST SMTP_PASSWORD EMAIL_FROM OFFSITE_BUCKET; do
+            SMTP_HOST SMTP_PASSWORD EMAIL_FROM OFFSITE_BUCKET APP_DB_PASSWORD MIGRATE_DB_PASSWORD; do
             [ -n "${!k:-}" ] || missing="$missing $k"
           done
           if [ -n "$missing" ]; then
@@ -210,7 +214,12 @@ jobs:
         env:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          DATABASE_URL: "postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/benevoles"
+          # Three database roles (docs/deploiement.md, « Rôles PostgreSQL »): the app connects as
+          # benevoles_app (reads and writes rows only), the migration Job as benevoles_owner (owns
+          # the schema objects, not a superuser); POSTGRES_USER stays for the postgres pod and the
+          # backup. The URLs are not encoded: both passwords are hex strings (openssl rand -hex 32).
+          DATABASE_URL: "postgresql://benevoles_app:${{ secrets.APP_DB_PASSWORD }}@postgres:5432/benevoles"
+          MIGRATE_DATABASE_URL: "postgresql://benevoles_owner:${{ secrets.MIGRATE_DB_PASSWORD }}@postgres:5432/benevoles"
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
@@ -247,6 +256,7 @@ jobs:
           POSTGRES_USER
           POSTGRES_PASSWORD
           DATABASE_URL
+          MIGRATE_DATABASE_URL
           AUTH_SECRET
           ADMIN_EMAIL
           ADMIN_PASSWORD
