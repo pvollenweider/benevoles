@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { readFileSync } from "fs"
-import { join } from "path"
+import { readFileSync, readdirSync } from "fs"
+import { join, relative } from "path"
 import { IMAGE_DISK_CACHE_MAX_BYTES } from "../image-disk-cache"
 
 // Pod hardening of the Kubernetes manifests (#1050): restricted securityContext, no service
@@ -242,6 +242,111 @@ describe("explicit secret keys for the app (#1050)", () => {
   })
 })
 
+// The nightly dump: nothing installed at run time, authenticated encryption, the passphrase never
+// an argument of a process. scripts/test-offsite-backup.sh runs the script itself.
+describe("nightly backup: image, encryption and passphrase handling", () => {
+  const manifest = read("k8s/cronjob-backup.yaml")
+  const cut = manifest.indexOf("\n          containers:\n")
+  const dump = manifest.slice(manifest.indexOf("\n          initContainers:\n"), cut)
+  const heartbeat = manifest.slice(cut)
+  const script = manifest.slice(manifest.indexOf("# >>> BACKUP_SCRIPT_START"), manifest.indexOf("# <<< BACKUP_SCRIPT_END"))
+  // The same without its comment lines, for what the commands must not contain.
+  const code = script.split("\n").filter((l) => !l.trim().startsWith("#")).join("\n")
+
+  /** Every file under a directory of the repository, as repo-relative paths. */
+  const filesUnder = (dir: string) =>
+    readdirSync(join(process.cwd(), dir), { recursive: true, withFileTypes: true })
+      .filter((e) => e.isFile())
+      .map((e) => relative(process.cwd(), join(e.parentPath, e.name)))
+
+  it("splits the job in a dump init container and a heartbeat container", () => {
+    expect(cut).toBeGreaterThan(-1)
+    expect(dump).toMatch(/- name: backup\n\s+image: postgres:16\n/)
+    expect(heartbeat).toMatch(/- name: heartbeat\n\s+image: curlimages\/curl:[\d.]+\n/)
+    expect(script.length).toBeGreaterThan(500)
+    expect(script).toMatch(/^# >>> BACKUP_SCRIPT_START.*\n\s+set -e\n/)
+  })
+
+  it("installs no package at run time, in either backup job", () => {
+    for (const file of ["k8s/cronjob-backup.yaml", "k8s/cronjob-backup-offsite.yaml"]) {
+      expect(read(file), file).not.toMatch(/\b(apk\s+add|apt-get|apt\s+install|dnf\s+install|yum\s+install|pip3?\s+install|npm\s+i(nstall)?\b)/)
+    }
+    // The Alpine image ships neither gpg nor openssl: the tools come with the Debian one.
+    expect(dump).not.toMatch(/image: postgres:[\w.-]*alpine/)
+  })
+
+  it("encrypts new backups with gpg, AES256, in the format every gpg 2.2+ reads", () => {
+    expect(script).toContain('FILENAME="benevoles_$(date -u +%Y-%m-%d_%H-%M).sql.gz.gpg"')
+    expect(script).toMatch(/gpg_backup --symmetric --cipher-algo AES256 /)
+    expect(script).toMatch(/--output "\/backups\/\$\{FILENAME\}" \/tmp\/dump\.sql\.gz/)
+    expect(code).not.toMatch(/openssl/)
+    expect(code).not.toMatch(/--force-(ocb|aead)|--aead-algo|--disable-mdc|--ignore-mdc-error/)
+  })
+
+  it("gives gpg the passphrase on standard input, never as an argument", () => {
+    expect(script).toMatch(/printf '%s\\n' "\$\{BACKUP_PASSPHRASE\}" \| gpg --batch --yes --no-tty \\\n\s+--pinentry-mode loopback --passphrase-fd 0 /)
+    // BACKUP_PASSPHRASE appears only in the empty check and in that printf.
+    expect(count(code, /BACKUP_PASSPHRASE/g)).toBe(count(code, /-z "\$\{BACKUP_PASSPHRASE\}"|printf '%s\\n' "\$\{BACKUP_PASSPHRASE\}" \||BACKUP_PASSPHRASE est vide/g))
+    // Every gpg call goes through gpg_backup.
+    expect(count(code, /(^|[\s|;(])gpg /g)).toBe(1)
+  })
+
+  it("no file of k8s/ or scripts/ passes a passphrase on a command line", () => {
+    const files = [...filesUnder("k8s"), ...filesUnder("scripts")]
+    expect(files.length).toBeGreaterThan(50)
+    for (const file of files) {
+      const text = read(file)
+      expect(text, `${file}: openssl pass: argument`).not.toMatch(/-pass(in|out)?\s+["']?pass:/)
+      expect(text, `${file}: gpg --passphrase argument`).not.toMatch(/--passphrase[\s=]/)
+    }
+  })
+
+  it("keeps the dump in a file, the size check and the verification after writing", () => {
+    expect(script).toContain("pg_dump --no-password > /tmp/dump.sql\n")
+    expect(script).toMatch(/if \[ "\$DUMP_SIZE" -lt 1024 \]; then\n(.*\n){1,2}\s+exit 1\n/)
+    expect(script).toMatch(/if ! gpg_backup --decrypt --output \/tmp\/verify\.sql\.gz "\/backups\/\$\{FILENAME\}" \\\n\s+\|\| ! gunzip -c \/tmp\/verify\.sql\.gz > \/tmp\/verify\.sql; then\n(.*\n)?\s+rm -f "\/backups\/\$\{FILENAME\}"\n\s+exit 1\n/)
+    expect(script).toMatch(/if \[ "\$VERIFY_SIZE" != "\$DUMP_SIZE" \]; then\n(.*\n)?\s+rm -f "\/backups\/\$\{FILENAME\}"\n\s+exit 1\n/)
+    // No pipeline hides pg_dump's exit code.
+    expect(code).not.toMatch(/pg_dump[^\n]*\|/)
+  })
+
+  it("rotates both formats after 30 days", () => {
+    expect(script).toMatch(/find \/backups \\\( -name "benevoles_\*\.sql\.gz\.gpg" -o -name "benevoles_\*\.sql\.gz\.enc" \\\) \\\n\s+-mtime \+30 -print -delete/)
+  })
+
+  it("sends the heartbeat from the second container, which gets no database or backup secret", () => {
+    expect(secretEnv(dump).map((e) => e.name).sort()).toEqual(["BACKUP_PASSPHRASE", "PGPASSWORD", "PGUSER"])
+    expect(secretEnv(heartbeat).map((e) => `${e.name}=${e.key}`).sort()).toEqual(["APP_URL=NEXT_PUBLIC_APP_URL", "CRON_SECRET=CRON_SECRET"])
+    expect(dump).not.toMatch(/heartbeat|CRON_SECRET/)
+    expect(heartbeat).toContain('-d \'{"job":"backup","ok":true}\'')
+    expect(heartbeat).toContain('"${APP_URL}/api/cron/heartbeat"')
+    expect(heartbeat).toMatch(/runAsNonRoot: true\n\s+runAsUser: 100\n\s+runAsGroup: 101\n/)
+    expect(heartbeat).toContain("readOnlyRootFilesystem: true")
+    // A heartbeat that cannot be sent must not fail a backup that succeeded.
+    expect(heartbeat).not.toMatch(/set -e|exit 1/)
+  })
+
+  it("the off-site job copies the whole volume, whatever the format", () => {
+    expect(read("k8s/cronjob-backup-offsite.yaml")).toMatch(/rclone copy \/backups "\$REMOTE" /)
+  })
+
+  it("the restore script reads both formats, without the passphrase on a command line", () => {
+    const restore = read("scripts/restore-test-offsite.sh")
+    expect(restore).toContain('"$DUMP_DIR"/benevoles_*.sql.gz.gpg "$DUMP_DIR"/benevoles_*.sql.gz.enc')
+    expect(restore).toContain("grep -E '^benevoles_.*\\.sql\\.gz\\.(gpg|enc)$'")
+    expect(restore).toMatch(/printf '%s\\n' "\$BACKUP_PASSPHRASE" \| gpg [^\n]*\\\n\s+--pinentry-mode loopback --passphrase-fd 0 [^\n]*\\\n\s+--decrypt /)
+    expect(restore).toMatch(/openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \\\n\s+-pass env:BACKUP_PASSPHRASE /)
+  })
+
+  it("the restore documentation gives the command for both formats, without the passphrase in it", () => {
+    for (const text of [read("docs/deploiement.md"), manifest.slice(0, manifest.indexOf("\n---\n"))]) {
+      expect(text).toMatch(/gpg --pinentry-mode loopback --output dump\.sql\.gz --decrypt benevoles_<date>\.sql\.gz\.gpg/)
+      expect(text).toMatch(/openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \\\n[# ]+-in benevoles_<date>\.sql\.gz\.enc -out dump\.sql\.gz/)
+      expect(text).not.toMatch(/-pass\s+["']?pass:|--passphrase[\s=]/)
+    }
+  })
+})
+
 describe("NetworkPolicy of the namespace (#1050)", () => {
   const policy = read("k8s/networkpolicy.yaml")
   const workflow = read(".github/workflows/deploy.yml")
@@ -252,9 +357,61 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     return doc!
   }
 
-  it("denies ingress by default and never restricts egress", () => {
+  it("denies ingress by default", () => {
     expect(byName("default-deny-ingress")).toMatch(/podSelector: \{\}\n\s+policyTypes: \[Ingress\]\n/)
-    for (const d of docs) expect(d).not.toMatch(/policyTypes:.*Egress|^\s+egress:/m)
+  })
+
+  describe("egress", () => {
+    const egress = docs.filter((d) => /policyTypes: \[Egress\]/.test(d))
+    const selectorOf = (d: string) => d.match(/podSelector:\n\s+matchLabels:\n\s+app: ([\w-]+)\n\s+policyTypes/)![1]
+    const dns = /namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+k8s-app: kube-dns\n\s+ports:\n\s+- protocol: UDP\n\s+port: 53\n\s+- protocol: TCP\n\s+port: 53\n/
+
+    it("restricts exactly the pods whose needs are closed: postgres, media, migration, CronJobs", () => {
+      expect(egress.map(selectorOf).sort()).toEqual(["benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres"])
+      // One pod label per policy, never the whole namespace: an unlabelled pod (a Job started from
+      // an older template) keeps free egress instead of being cut off.
+      for (const d of egress) expect(d).not.toMatch(/podSelector: \{\}/)
+      // No policy mixes directions: an egress rule never changes what may come in.
+      for (const d of egress) expect(d).not.toMatch(/Ingress|^\s+ingress:/m)
+    })
+
+    it("leaves the app and the backup jobs alone until their destinations are closed lists", () => {
+      const selected = egress.map(selectorOf)
+      for (const label of ["benevoles-app", "postgres-backup"]) expect(selected).not.toContain(label)
+    })
+
+    it("gives postgres and the media server no outgoing connection at all", () => {
+      for (const name of ["postgres-no-egress", "media-no-egress"]) expect(byName(name), name).not.toMatch(/^\s+egress:/m)
+      expect(read("k8s/postgres.yaml")).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: postgres\n/)
+      expect(read("k8s/media.yaml")).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: benevoles-media\n/)
+    })
+
+    it("lets the migration Job reach the cluster DNS and postgres only", () => {
+      const d = byName("migrate-egress")
+      expect(d).toMatch(dns)
+      expect(d).toMatch(/- to:\n\s+- podSelector:\n\s+matchLabels:\n\s+app: postgres\n\s+ports:\n\s+- protocol: TCP\n\s+port: 5432\n/)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(2)
+      expect(d).not.toContain("ipBlock")
+      // Prisma would otherwise try an update check the policy refuses.
+      expect(read("k8s/job-migrate.yaml")).toMatch(/- name: CHECKPOINT_DISABLE\n\s+value: "1"\n/)
+    })
+
+    it("lets the CronJobs that call the app reach the cluster DNS and Traefik only", () => {
+      const d = byName("cron-egress")
+      expect(d).toMatch(dns)
+      // The public address resolves to the node, which hands the connection to the Traefik pod on
+      // its websecure port: measured on the cluster, an ipBlock for the internet does not cover it.
+      expect(d).toMatch(/app\.kubernetes\.io\/name: traefik\n\s+ports:\n\s+- protocol: TCP\n\s+port: 8443\n/)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(2)
+      expect(d).not.toContain("ipBlock")
+      for (const job of ["reminders", "outbox", "cleanup", "release-check"]) {
+        const manifest = read(`k8s/cronjob-${job}.yaml`)
+        expect(manifest, job).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: benevoles-cron\n/)
+        // The label is only right for a job that calls the public address and nothing else.
+        expect(manifest, job).toContain("${APP_URL}/api/cron/")
+        expect(manifest, job).not.toMatch(/PGHOST|DATABASE_URL/)
+      }
+    })
   })
 
   it("lets Traefik reach the app, the media server and the ACME solver on their container ports", () => {
