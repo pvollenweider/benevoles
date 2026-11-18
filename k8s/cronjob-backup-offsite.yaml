@@ -4,7 +4,8 @@
 # Copie chaque nuit à 01h30 UTC (30 min après le dump, cronjob-backup.yaml) les fichiers
 # chiffrés du volume backup-pvc hors site, via rclone. Les fichiers sont déjà chiffrés
 # AES-256 avant d'arriver ici : rclone ne voit et n'envoie que du contenu déjà illisible sans
-# BACKUP_PASSPHRASE.
+# BACKUP_PASSPHRASE. Tout le volume est copié, quel que soit le format : benevoles_*.sql.gz.gpg
+# (GnuPG) et l'ancien benevoles_*.sql.gz.enc (openssl), tant qu'il en reste.
 #
 # Fournisseur : Infomaniak Swiss Backup (OpenStack Swift), stockage en Suisse, remote rclone
 # "swissbackup" ; voir docs/deploiement.md « Copie hors site ». Jusqu'au 2026-10-05 la copie

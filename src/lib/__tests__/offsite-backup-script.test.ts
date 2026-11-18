@@ -8,14 +8,19 @@ import path from "node:path"
 
 const root = process.cwd()
 
-// The off-site copy (#524) is shell inside a CronJob, so its logic is tested by an offline shell
-// script with a fake rclone. Running it here puts it in CI with the rest of the suite.
+// The nightly dump and its off-site copy (#524) are shell inside CronJobs, so their logic is tested
+// by an offline shell script with a fake rclone and a fake pg_dump, and the real gpg and openssl.
+// Running it here puts it in CI with the rest of the suite.
 describe("off-site backup CronJob (#524)", () => {
-  it("passes the offline provider, dry-run and restore tests", () => {
+  // Some twenty real key derivations (gpg, openssl): a few seconds, more on a loaded machine.
+  it("passes the offline backup, rotation, provider, dry-run and restore tests", { timeout: 120_000 }, () => {
     const out = execFileSync("sh", [path.join(root, "scripts/test-offsite-backup.sh")], {
       cwd: root,
       encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
     })
+    expect(out).toContain("ok - backup script: GnuPG file written and verified, 30-day rotation of both formats")
+    expect(out).toContain("ok - restore-test-offsite.sh refuses a GnuPG file modified after encryption")
     expect(out).toContain("All offsite backup tests passed.")
   })
 
@@ -45,9 +50,12 @@ describe("off-site backup CronJob (#524)", () => {
       path.join(root, "scripts/restore-test-offsite.sh"),
       "utf8",
     )
+    // The former openssl format reads it from the environment, gpg from its standard input.
     expect(restoreScript).toContain("-pass env:BACKUP_PASSPHRASE")
+    expect(restoreScript).toContain("--passphrase-fd 0")
     expect(restoreScript).not.toContain('-pass "pass:')
     expect(restoreScript).not.toContain("pass:${BACKUP_PASSPHRASE}")
+    expect(restoreScript).not.toMatch(/--passphrase[\s=]/)
 
     const makefile = readFileSync(path.join(root, "Makefile"), "utf8")
     expect(makefile).not.toMatch(/BACKUP_PASSPHRASE="\$\(BACKUP_PASSPHRASE\)"/)

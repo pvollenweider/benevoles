@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { readFileSync } from "fs"
-import { join } from "path"
+import { readFileSync, readdirSync } from "fs"
+import { join, relative } from "path"
 
 // Pod hardening of the Kubernetes manifests (#1050): restricted securityContext, no service
 // account token, and the app given only the secret keys it reads instead of the whole secret.
@@ -184,6 +184,111 @@ describe("explicit secret keys for the app (#1050)", () => {
 
   it("the hand-managed backup passphrase still reaches the backup job", () => {
     expect(read("k8s/cronjob-backup.yaml")).toMatch(/- name: BACKUP_PASSPHRASE\n\s+valueFrom:\n\s+secretKeyRef:\n\s+name: benevoles-secret\n\s+key: BACKUP_PASSPHRASE\n/)
+  })
+})
+
+// The nightly dump: nothing installed at run time, authenticated encryption, the passphrase never
+// an argument of a process. scripts/test-offsite-backup.sh runs the script itself.
+describe("nightly backup: image, encryption and passphrase handling", () => {
+  const manifest = read("k8s/cronjob-backup.yaml")
+  const cut = manifest.indexOf("\n          containers:\n")
+  const dump = manifest.slice(manifest.indexOf("\n          initContainers:\n"), cut)
+  const heartbeat = manifest.slice(cut)
+  const script = manifest.slice(manifest.indexOf("# >>> BACKUP_SCRIPT_START"), manifest.indexOf("# <<< BACKUP_SCRIPT_END"))
+  // The same without its comment lines, for what the commands must not contain.
+  const code = script.split("\n").filter((l) => !l.trim().startsWith("#")).join("\n")
+
+  /** Every file under a directory of the repository, as repo-relative paths. */
+  const filesUnder = (dir: string) =>
+    readdirSync(join(process.cwd(), dir), { recursive: true, withFileTypes: true })
+      .filter((e) => e.isFile())
+      .map((e) => relative(process.cwd(), join(e.parentPath, e.name)))
+
+  it("splits the job in a dump init container and a heartbeat container", () => {
+    expect(cut).toBeGreaterThan(-1)
+    expect(dump).toMatch(/- name: backup\n\s+image: postgres:16\n/)
+    expect(heartbeat).toMatch(/- name: heartbeat\n\s+image: curlimages\/curl:[\d.]+\n/)
+    expect(script.length).toBeGreaterThan(500)
+    expect(script).toMatch(/^# >>> BACKUP_SCRIPT_START.*\n\s+set -e\n/)
+  })
+
+  it("installs no package at run time, in either backup job", () => {
+    for (const file of ["k8s/cronjob-backup.yaml", "k8s/cronjob-backup-offsite.yaml"]) {
+      expect(read(file), file).not.toMatch(/\b(apk\s+add|apt-get|apt\s+install|dnf\s+install|yum\s+install|pip3?\s+install|npm\s+i(nstall)?\b)/)
+    }
+    // The Alpine image ships neither gpg nor openssl: the tools come with the Debian one.
+    expect(dump).not.toMatch(/image: postgres:[\w.-]*alpine/)
+  })
+
+  it("encrypts new backups with gpg, AES256, in the format every gpg 2.2+ reads", () => {
+    expect(script).toContain('FILENAME="benevoles_$(date -u +%Y-%m-%d_%H-%M).sql.gz.gpg"')
+    expect(script).toMatch(/gpg_backup --symmetric --cipher-algo AES256 /)
+    expect(script).toMatch(/--output "\/backups\/\$\{FILENAME\}" \/tmp\/dump\.sql\.gz/)
+    expect(code).not.toMatch(/openssl/)
+    expect(code).not.toMatch(/--force-(ocb|aead)|--aead-algo|--disable-mdc|--ignore-mdc-error/)
+  })
+
+  it("gives gpg the passphrase on standard input, never as an argument", () => {
+    expect(script).toMatch(/printf '%s\\n' "\$\{BACKUP_PASSPHRASE\}" \| gpg --batch --yes --no-tty \\\n\s+--pinentry-mode loopback --passphrase-fd 0 /)
+    // BACKUP_PASSPHRASE appears only in the empty check and in that printf.
+    expect(count(code, /BACKUP_PASSPHRASE/g)).toBe(count(code, /-z "\$\{BACKUP_PASSPHRASE\}"|printf '%s\\n' "\$\{BACKUP_PASSPHRASE\}" \||BACKUP_PASSPHRASE est vide/g))
+    // Every gpg call goes through gpg_backup.
+    expect(count(code, /(^|[\s|;(])gpg /g)).toBe(1)
+  })
+
+  it("no file of k8s/ or scripts/ passes a passphrase on a command line", () => {
+    const files = [...filesUnder("k8s"), ...filesUnder("scripts")]
+    expect(files.length).toBeGreaterThan(50)
+    for (const file of files) {
+      const text = read(file)
+      expect(text, `${file}: openssl pass: argument`).not.toMatch(/-pass(in|out)?\s+["']?pass:/)
+      expect(text, `${file}: gpg --passphrase argument`).not.toMatch(/--passphrase[\s=]/)
+    }
+  })
+
+  it("keeps the dump in a file, the size check and the verification after writing", () => {
+    expect(script).toContain("pg_dump --no-password > /tmp/dump.sql\n")
+    expect(script).toMatch(/if \[ "\$DUMP_SIZE" -lt 1024 \]; then\n(.*\n){1,2}\s+exit 1\n/)
+    expect(script).toMatch(/if ! gpg_backup --decrypt --output \/tmp\/verify\.sql\.gz "\/backups\/\$\{FILENAME\}" \\\n\s+\|\| ! gunzip -c \/tmp\/verify\.sql\.gz > \/tmp\/verify\.sql; then\n(.*\n)?\s+rm -f "\/backups\/\$\{FILENAME\}"\n\s+exit 1\n/)
+    expect(script).toMatch(/if \[ "\$VERIFY_SIZE" != "\$DUMP_SIZE" \]; then\n(.*\n)?\s+rm -f "\/backups\/\$\{FILENAME\}"\n\s+exit 1\n/)
+    // No pipeline hides pg_dump's exit code.
+    expect(code).not.toMatch(/pg_dump[^\n]*\|/)
+  })
+
+  it("rotates both formats after 30 days", () => {
+    expect(script).toMatch(/find \/backups \\\( -name "benevoles_\*\.sql\.gz\.gpg" -o -name "benevoles_\*\.sql\.gz\.enc" \\\) \\\n\s+-mtime \+30 -print -delete/)
+  })
+
+  it("sends the heartbeat from the second container, which gets no database or backup secret", () => {
+    expect(secretEnv(dump).map((e) => e.name).sort()).toEqual(["BACKUP_PASSPHRASE", "PGPASSWORD", "PGUSER"])
+    expect(secretEnv(heartbeat).map((e) => `${e.name}=${e.key}`).sort()).toEqual(["APP_URL=NEXT_PUBLIC_APP_URL", "CRON_SECRET=CRON_SECRET"])
+    expect(dump).not.toMatch(/heartbeat|CRON_SECRET/)
+    expect(heartbeat).toContain('-d \'{"job":"backup","ok":true}\'')
+    expect(heartbeat).toContain('"${APP_URL}/api/cron/heartbeat"')
+    expect(heartbeat).toMatch(/runAsNonRoot: true\n\s+runAsUser: 100\n\s+runAsGroup: 101\n/)
+    expect(heartbeat).toContain("readOnlyRootFilesystem: true")
+    // A heartbeat that cannot be sent must not fail a backup that succeeded.
+    expect(heartbeat).not.toMatch(/set -e|exit 1/)
+  })
+
+  it("the off-site job copies the whole volume, whatever the format", () => {
+    expect(read("k8s/cronjob-backup-offsite.yaml")).toMatch(/rclone copy \/backups "\$REMOTE" /)
+  })
+
+  it("the restore script reads both formats, without the passphrase on a command line", () => {
+    const restore = read("scripts/restore-test-offsite.sh")
+    expect(restore).toContain('"$DUMP_DIR"/benevoles_*.sql.gz.gpg "$DUMP_DIR"/benevoles_*.sql.gz.enc')
+    expect(restore).toContain("grep -E '^benevoles_.*\\.sql\\.gz\\.(gpg|enc)$'")
+    expect(restore).toMatch(/printf '%s\\n' "\$BACKUP_PASSPHRASE" \| gpg [^\n]*\\\n\s+--pinentry-mode loopback --passphrase-fd 0 [^\n]*\\\n\s+--decrypt /)
+    expect(restore).toMatch(/openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \\\n\s+-pass env:BACKUP_PASSPHRASE /)
+  })
+
+  it("the restore documentation gives the command for both formats, without the passphrase in it", () => {
+    for (const text of [read("docs/deploiement.md"), manifest.slice(0, manifest.indexOf("\n---\n"))]) {
+      expect(text).toMatch(/gpg --pinentry-mode loopback --output dump\.sql\.gz --decrypt benevoles_<date>\.sql\.gz\.gpg/)
+      expect(text).toMatch(/openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \\\n[# ]+-in benevoles_<date>\.sql\.gz\.enc -out dump\.sql\.gz/)
+      expect(text).not.toMatch(/-pass\s+["']?pass:|--passphrase[\s=]/)
+    }
   })
 })
 
