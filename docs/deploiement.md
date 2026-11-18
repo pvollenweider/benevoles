@@ -132,7 +132,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-outbox.yaml` | CronJob `app-outbox` | oui | Envoi des emails arrivés à échéance (`POST /api/cron/outbox`), toutes les 5 minutes : emails groupés « inscrit par un organisateur » et désistements d'un même événement |
 | `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
-| `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
+| `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (GnuPG, AES-256 avec contrôle d'intégrité), 01:00 UTC, rétention 30 jours |
 | `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; demande le secret `rclone-config` et la clé `OFFSITE_BUCKET` de `benevoles-secret` |
 | `log-rotation.md`, `node/` | | | Journaux du nœud, procédure manuelle : journaux d'accès de Traefik gardés 1 an, adresses réduites après 90 jours (`node/` : logrotate, script et tâche cron à installer sur le nœud), analyse à la demande avec GoAccess ; journaux des conteneurs, 90 jours pas encore garantis |
 
@@ -142,7 +142,7 @@ Les pods de l'application, du Job de migration et des CronJobs ne reçoivent pas
 
 - L'application et la migration tournent sous l'utilisateur `nextjs` de l'image (uid 1001, groupe 1001), donné en chiffres : `runAsNonRoot` ne peut pas vérifier un utilisateur désigné par son nom. Leur système de fichiers reste en écriture : Next.js écrit son cache à l'exécution (`.next/cache`, et les pages qu'il régénère dans `.next/server/app`).
 - Les quatre CronJobs `curl` tournent sous `curl_user` (uid 100, groupe 101), système de fichiers en lecture seule, avec un `emptyDir` pour `/tmp`.
-- La sauvegarde et la copie hors site restent root sans capacité : la sauvegarde installe `openssl` avec `apk add`, et les fichiers de `backup-pvc` appartiennent à root.
+- La sauvegarde et la copie hors site restent root sans capacité : les fichiers de `backup-pvc` appartiennent à root. La sauvegarde n'installe rien à l'exécution ; son signal de vie part d'un second conteneur `curl`, sous `curl_user` et en lecture seule comme les quatre CronJobs ci-dessus.
 - PostgreSQL (`postgres.yaml`) et le serveur de médias (`media.yaml`) gardent leur démarrage root, sans jeton de compte de service, avec `RuntimeDefault`, sans élévation de privilèges, et avec les seules capacités qu'il utilise : le point d'entrée de PostgreSQL vérifie le propriétaire du répertoire de données puis passe sous l'utilisateur `postgres` (uid 70) avec `su-exec` (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETGID`, `SETUID`) ; le serveur de médias fait tourner ses processus sous `nginx` et reçoit les fichiers de `make video-publish` par `tar` en root (les mêmes, plus `FSETID`). Leurs volumes gardent leurs propriétaires : ni `runAsUser` ni `fsGroup`. PostgreSQL est remplacé (`strategy: Recreate`) et non mis à jour progressivement : deux serveurs ne tournent jamais sur le même répertoire de données, au prix de quelques secondes sans base à chaque changement de son modèle de pod.
 
 ### Isolation réseau
@@ -677,16 +677,29 @@ Ne la lancer qu'après avoir listé les lignes concernées avec le `SELECT` fina
 
 ## Sauvegarde et restauration
 
-`cronjob-backup.yaml` produit chaque nuit, à 01:00 UTC, un `pg_dump` chiffré avec `BACKUP_PASSPHRASE`, sur le volume `backup-pvc`, conservé 30 jours. Les fichiers s'appellent `/backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc`.
+`cronjob-backup.yaml` produit chaque nuit, à 01:00 UTC, un `pg_dump` chiffré avec `BACKUP_PASSPHRASE`, sur le volume `backup-pvc`, conservé 30 jours. Les fichiers s'appellent `/backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.gpg`.
 
-> **Les fichiers antérieurs au 22/09/2026 sont vides (0 octet) et ne sont pas restaurables : les ignorer.** Le script installe `openssl` au démarrage, écrit chaque étape dans un fichier, vérifie que le dump dépasse 1 Ko et re-déchiffre le fichier produit avant de le garder ; toute anomalie fait échouer le job.
+Le chiffrement est fait par GnuPG (`gpg --symmetric`, AES-256, avec son contrôle d'intégrité) : un fichier modifié après coup ne se déchiffre plus, `gpg` s'arrête sur une erreur. La phrase secrète est lue sur l'entrée standard de `gpg` ; elle n'est jamais un argument de commande et n'apparaît pas dans la liste des processus. Le format est celui que lit tout GnuPG 2.2 ou plus récent (macOS avec Homebrew, Debian, Ubuntu).
 
-Déchiffrement (commande donnée en en-tête du manifeste) :
+Le job a deux conteneurs. Le premier (`backup`, image `postgres:16`, qui fournit `pg_dump` et `gpg` : rien n'est installé à l'exécution) écrit chaque étape dans un fichier, vérifie que le dump dépasse 1 Ko, re-déchiffre le fichier produit avant de le garder et supprime les fichiers de plus de 30 jours ; toute anomalie fait échouer le job, et un fichier qui ne passe pas la vérification est supprimé. Le second (`heartbeat`, image `curl`) n'est lancé que si le premier a réussi et envoie le signal de vie. Journaux d'un job : `kubectl -n benevoles logs job/<nom> -c backup` pour la sauvegarde, `kubectl -n benevoles logs job/<nom>` pour le signal de vie.
+
+Déchiffrement (commandes données en en-tête du manifeste) ; `gpg` demande la phrase secrète :
 
 ```bash
-openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
+gpg --pinentry-mode loopback --output dump.sql.gz --decrypt benevoles_<date>.sql.gz.gpg \
+  && gunzip dump.sql.gz
+```
+
+Si `gpg` signale une erreur (mauvaise phrase secrète, ou « encrypted message has been manipulated »), le fichier `dump.sql.gz` éventuellement écrit n'est pas fiable : le supprimer et prendre une autre sauvegarde.
+
+**Ancien format.** Les fichiers `benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc` ont été chiffrés avec `openssl` (AES-256-CBC, sans contrôle d'intégrité), avec la même phrase secrète. Il en reste sur le volume jusqu'à leur rotation à 30 jours, et hors site jusqu'à 90 jours. Ceux antérieurs au 22/09/2026 sont vides (0 octet) et ne sont pas restaurables : les ignorer. `openssl` demande la phrase secrète :
+
+```bash
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \
   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ```
+
+Dans un script, ne pas écrire la phrase secrète sur la ligne de commande : `gpg --batch --pinentry-mode loopback --passphrase-fd 0` la lit sur l'entrée standard, et `openssl … -pass env:BACKUP_PASSPHRASE` dans une variable d'environnement (c'est ce que fait `scripts/restore-test-offsite.sh`).
 
 **Créer les rôles avant de restaurer.** Le dump nomme les rôles `benevoles_owner` et `benevoles_app` (propriétaires des objets, droits, droits par défaut), mais ne les contient pas : un rôle appartient au serveur PostgreSQL, pas à la base. Dans le même serveur, ils existent déjà. Sur un serveur neuf (volume perdu, autre cluster) :
 
@@ -711,7 +724,7 @@ kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASS
 
 ### Copie hors site
 
-`cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume `backup-pvc` hors site avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, le fournisseur ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`.
+`cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume `backup-pvc` hors site avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, le fournisseur ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`. Tout le volume est copié : les fichiers `.sql.gz.gpg` comme les anciens `.sql.gz.enc`.
 
 - Envoi avec `rclone copy` (upload seulement, ne touche jamais aux fichiers déjà présents chez le fournisseur) puis purge des fichiers de plus de **90 jours** avec `rclone delete --min-age`. Volontairement plus long que la rétention locale de 30 jours du PVC : le but est de pouvoir revenir à un état antérieur à une erreur découverte tard, indépendamment de ce que la rotation locale a déjà supprimé.
 - Ce n'est pas un `rclone sync` : un `sync` effacerait chez le fournisseur tout fichier que le PVC a déjà purgé, ce qui viderait la copie hors site en même temps que le volume local en cas de perte du cluster — exactement le scénario que la copie hors site est censée couvrir.
@@ -735,11 +748,11 @@ kubectl create secret generic rclone-config -n benevoles \
 
 **`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
 
-**Restauration / test.** `scripts/restore-test-offsite.sh` prend le dump chiffré le plus récent, le déchiffre avec `BACKUP_PASSPHRASE`, vérifie le gzip et l'en-tête `pg_dump`, puis, par défaut, le recharge dans un conteneur PostgreSQL 16 jetable (sans port publié, supprimé à la fin) et compare les comptages : organisations, événements, bénévoles, inscriptions et migrations terminées. La sauvegarde est donc réellement restaurable, pas seulement bien formée. Le script ne modifie jamais la copie hors site : montage local en lecture seule, ou `rclone lsl`/`lsf`/`copy` depuis le remote uniquement.
+**Restauration / test.** `scripts/restore-test-offsite.sh` prend le dump chiffré le plus récent, dans l'un ou l'autre format (`.sql.gz.gpg`, lu avec `gpg`, à installer sur le poste : GnuPG 2.2 ou plus récent ; ou l'ancien `.sql.gz.enc`, lu avec `openssl`), le déchiffre avec `BACKUP_PASSPHRASE`, vérifie le gzip et l'en-tête `pg_dump`, puis, par défaut, le recharge dans un conteneur PostgreSQL 16 jetable (sans port publié, supprimé à la fin) et compare les comptages : organisations, événements, bénévoles, inscriptions et migrations terminées. La sauvegarde est donc réellement restaurable, pas seulement bien formée. Le script ne modifie jamais la copie hors site : montage local en lecture seule, ou `rclone lsl`/`lsf`/`copy` depuis le remote uniquement.
 
 Source du dump, au choix :
 
-- **Montage local Swiss Backup** (application de bureau) : si `SWISSBACKUP_DIR` est défini, ou si `$HOME/SwissBackup/benevol-backups/benevol-backups` existe, le script y prend le plus récent `benevoles_*.sql.gz.enc`, en lecture seule.
+- **Montage local Swiss Backup** (application de bureau) : si `SWISSBACKUP_DIR` est défini, ou si `$HOME/SwissBackup/benevol-backups/benevol-backups` existe, le script y prend le plus récent `benevoles_*.sql.gz.gpg` ou `benevoles_*.sql.gz.enc`, en lecture seule.
 - **Remote rclone** : sinon, avec `OFFSITE_BUCKET` (container Swiss Backup) et éventuellement `RCLONE_CONFIG` :
 
   ```bash
@@ -752,11 +765,11 @@ Source du dump, au choix :
   ./scripts/restore-test-offsite.sh
   ```
 
-La phrase secrète est lue dans `BACKUP_PASSPHRASE` si elle est définie, sinon demandée en saisie masquée sur le terminal ; elle n'apparaît jamais dans la liste des processus. `make restore-test-offsite` lance la même chose sans afficher de secret. Sans Docker, `RESTORE_MODE=header` se limite à l'ancienne vérification d'en-tête ; le script indique toujours le mode utilisé. L'image PostgreSQL se change avec `RESTORE_PG_IMAGE` (défaut `postgres:16`, la version de production).
+La phrase secrète est lue dans `BACKUP_PASSPHRASE` si elle est définie, sinon demandée en saisie masquée sur le terminal ; elle n'apparaît jamais dans la liste des processus, et un fichier `.sql.gz.gpg` modifié après son chiffrement est refusé. `make restore-test-offsite` lance la même chose sans afficher de secret. Sans Docker, `RESTORE_MODE=header` se limite à l'ancienne vérification d'en-tête ; le script indique toujours le mode utilisé. L'image PostgreSQL se change avec `RESTORE_PG_IMAGE` (défaut `postgres:16`, la version de production).
 
 Le script affiche à la fin la commande `kubectl exec` à lancer pour enregistrer le test sur la page de santé (voir « Checklist opérationnelle » ci-dessous) ; il ne l'envoie pas lui-même et ne lit pas `CRON_SECRET` sur le poste, pour qu'un essai local ne signale jamais un faux succès en production. La phrase secrète doit rester dans un gestionnaire de mots de passe hors du serveur : sans elle, les copies hors site restent indéchiffrables si le cluster est perdu (voir « `BACKUP_PASSPHRASE` est un point unique de défaillance » ci-dessus).
 
-`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`docker`/`wget`) du script du CronJob et du script de restauration ; voir son en-tête. `make test-offsite-backup` le lance.
+`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`docker`/`wget`/`pg_dump`, vrais `gpg` et `openssl`) des scripts des deux CronJobs de sauvegarde et du script de restauration : fichier écrit et vérifié, rotation des deux formats, refus d'un fichier modifié ; voir son en-tête. `make test-offsite-backup` le lance.
 
 **Retrait de Dropbox (#697), côté opérateur**, une fois ce changement déployé :
 
@@ -799,7 +812,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
   fetch("http://localhost:3000/api/cron/heartbeat", {
     method: "POST",
     headers: { authorization: `Bearer ${process.env.CRON_SECRET}`, "content-type": "application/json" },
-    body: JSON.stringify({ job: "restore-test", ok: true, summary: { dump: "benevoles_2026-09-30_01-00.sql.gz.enc", mode: "full" } }),
+    body: JSON.stringify({ job: "restore-test", ok: true, summary: { dump: "benevoles_2026-11-30_01-00.sql.gz.gpg", mode: "full" } }),
   }).then(async r => console.log(r.status, await r.text()))'
   ```
 
