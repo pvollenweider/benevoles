@@ -4,9 +4,9 @@ import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import { docLastmodLookup } from "../doc-lastmod"
-import { apexSitemap, PUBLIC_PAGES } from "../doc-pages"
+import { apexSitemap, HOME_PAGE_SOURCES, PUBLIC_PAGES } from "../doc-pages"
 import { readDocUnits } from "../doc-units"
-import { docLastmod, docLastmodSources, LASTMOD_SKIP_TRAILER, VIDEO_PAGE_SOURCES } from "../../../scripts/doc-lastmod.mjs"
+import { docLastmod, docLastmodSources, HOME_PAGE_SOURCES as SCRIPT_HOME_PAGE_SOURCES, LASTMOD_SKIP_TRAILER, VIDEO_PAGE_SOURCES } from "../../../scripts/doc-lastmod.mjs"
 
 // The apex sitemap's lastmod comes from doc-lastmod.json (each source's last commit, written at
 // deploy), not from the files' mtime in the image, which is the build time for every page.
@@ -50,8 +50,13 @@ describe("scripts/doc-lastmod.mjs", () => {
     const units = readDocUnits().map((u) => u.source)
     const videoPages = [...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video]
     expect(units.length).toBeGreaterThan(1)
-    expect([...sources].sort()).toEqual([...new Set([...pages, ...units, ...videoPages])].sort())
+    expect([...sources].sort()).toEqual([...new Set([...pages, ...units, ...HOME_PAGE_SOURCES, ...videoPages])].sort())
     expect(sources).not.toContain("content/guide/README.md")
+  })
+
+  it("dates the home from the same files in the script and in the sitemap, all present", () => {
+    expect(SCRIPT_HOME_PAGE_SOURCES).toEqual([...HOME_PAGE_SOURCES])
+    for (const file of HOME_PAGE_SOURCES) expect(fs.existsSync(path.join(process.cwd(), file)), file).toBe(true)
   })
 
   it("dates a file by its last commit and skips a file without history", () => {

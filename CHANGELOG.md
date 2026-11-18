@@ -19,6 +19,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Modifié
 
 - **Données structurées** : la description de l'éditeur, son point de contact, la date de dernière modification des pages publiques, des guides et des billets de blog, et le rattachement des pages vidéo au même site et au même éditeur que les autres pages, pour que les moteurs de recherche et les assistants IA relient tout à benevol.app. <!-- interne -->
+- **Référencement** : une adresse tapée sans « www » ni « https » (http://benevol.app/…) arrive sur la bonne page en une seule redirection au lieu de deux ; le plan du site donne aussi la date de dernière modification de la page d'accueil ; après chaque mise en ligne, les pages modifiées sont signalées à Bing et aux autres moteurs IndexNow pour qu'ils les relisent plus vite. <!-- interne -->
 - **Validation automatique des nouveaux espaces** : un espace validé automatiquement envoie au plus 100 emails groupés par jour (messages, invitations, rappels, créneaux à compléter) tant que l'opérateur ne l'a pas marqué comme relu ; ensuite, le plafond habituel s'applique. Les autres emails ne changent pas.
 
 ### Sécurité
