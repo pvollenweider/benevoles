@@ -847,7 +847,8 @@
       "updatedAt": "2026-11-16",
       "revision": 4,
       "level": "decouverte",
-      "updated": "2026-11-16"
+      "updated": "2026-11-16",
+      "thumbnailTitle": "S’inscrire depuis son téléphone"
     },
     {
       "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
@@ -894,7 +895,8 @@
       "updatedAt": "2026-11-16",
       "revision": 6,
       "level": "decouverte",
-      "updated": "2026-11-16"
+      "updated": "2026-11-16",
+      "thumbnailTitle": "Organiser ses bénévoles"
     },
     {
       "id": "REGISTRATION_MONITOR_FOLLOWUP",
@@ -1256,7 +1258,8 @@
       "updatedAt": "2026-11-16",
       "revision": 5,
       "level": "essentiel",
-      "updated": "2026-11-16"
+      "updated": "2026-11-16",
+      "thumbnailTitle": "Accueillir les bénévoles le jour J"
     },
     {
       "id": "FRONT_DESK_ACCESS",
@@ -1354,7 +1357,8 @@
       "updatedAt": "2026-11-16",
       "revision": 5,
       "level": "essentiel",
-      "updated": "2026-11-16"
+      "updated": "2026-11-16",
+      "thumbnailTitle": "Rappels et changements de planning"
     },
     {
       "id": "TARGETED_MESSAGES",
@@ -1677,7 +1681,8 @@
       "updatedAt": "2026-11-16",
       "revision": 6,
       "level": "essentiel",
-      "updated": "2026-11-16"
+      "updated": "2026-11-16",
+      "thumbnailTitle": "Les bons liens aux bonnes personnes"
     },
     {
       "id": "LAST_MINUTE_CHANGES",

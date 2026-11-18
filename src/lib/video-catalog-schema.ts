@@ -37,6 +37,9 @@ export const catalogEntrySchema = z.object({
   added: z.string().refine((v) => parseCalendarDate(v) !== null, "added : date réelle attendue (AAAA-MM-JJ)").optional(),
   updated: z.string().refine((v) => parseCalendarDate(v) !== null, "updated : date réelle attendue (AAAA-MM-JJ)").optional(),
   new: z.literal(false).optional(),
+  // Short title of the YouTube thumbnail (videos/lib/youtube-thumbnail.ts); the manifest title
+  // otherwise, often too long to read at thumbnail size.
+  thumbnailTitle: z.string().min(1).max(40).optional(),
 })
 export type VideoCatalogEntry = z.infer<typeof catalogEntrySchema>
 
