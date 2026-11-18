@@ -5,7 +5,7 @@ import { DOC_ROLE_INFO, docGroup, docGroupHref, type DocUnit } from "@/lib/doc-u
 import { AUDIENCE_INDEX_PATH, publicPage } from "@/lib/doc-pages"
 import type { BlogPost } from "@/lib/blog"
 import { SITE_NAME, absoluteUrl, socialImagePath } from "@/lib/seo-metadata"
-import { contactEmail } from "@/lib/site"
+import { contactEmail, isHostedService } from "@/lib/site"
 
 /**
  * The structured data (schema.org JSON-LD) of the public pages of the apex site. Every node is a
@@ -17,6 +17,8 @@ import { contactEmail } from "@/lib/site"
  */
 
 export const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
+/** The hosted service's YouTube channel (its tutorials): the publisher's sameAs on that service only. */
+export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@benevolapp"
 /** The public contact address (#760): null when the instance has none (src/lib/site.ts). */
 export const CONTACT_EMAIL = contactEmail()
 export const LICENSE_URL = "https://www.gnu.org/licenses/agpl-3.0.html"
@@ -30,7 +32,7 @@ const idOf = (base: string, name: string) => ({ "@id": `${homeUrl(base)}#${name}
 export const ORGANIZATION_DESCRIPTION = `Éditeur de ${SITE_NAME}, logiciel libre de planning pour bénévoles.`
 
 /** The publisher: the instance, what it is, its logo, its contact (in French) and its code. */
-export function organizationNode(base: string): JsonLdNode {
+export function organizationNode(base: string, hosted: boolean = isHostedService()): JsonLdNode {
   return {
     "@type": "Organization",
     ...idOf(base, "organization"),
@@ -41,7 +43,7 @@ export function organizationNode(base: string): JsonLdNode {
     ...(CONTACT_EMAIL
       ? { email: CONTACT_EMAIL, contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: CONTACT_EMAIL, availableLanguage: "fr" } }
       : {}),
-    sameAs: [REPOSITORY_URL],
+    sameAs: hosted ? [REPOSITORY_URL, YOUTUBE_CHANNEL_URL] : [REPOSITORY_URL],
   }
 }
 

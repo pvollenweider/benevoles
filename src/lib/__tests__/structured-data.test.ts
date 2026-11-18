@@ -37,8 +37,10 @@ describe("shared nodes", () => {
       url: `${BASE}/`,
       description: ORGANIZATION_DESCRIPTION,
       logo: { "@type": "ImageObject", url: `${BASE}/apple-icon.png`, width: 180, height: 180 },
-      sameAs: ["https://github.com/pvollenweider/benevoles"],
     })
+    // The code everywhere; the YouTube channel is the hosted service's own.
+    expect(organizationNode(BASE, true).sameAs).toEqual(["https://github.com/pvollenweider/benevoles", "https://www.youtube.com/@benevolapp"])
+    expect(organizationNode(BASE, false).sameAs).toEqual(["https://github.com/pvollenweider/benevoles"])
     expect(ORGANIZATION_DESCRIPTION).toMatch(/logiciel libre de planning pour bénévoles\.$/)
     expect(websiteNode(`${BASE}/`)).toMatchObject({ "@type": "WebSite", "@id": `${BASE}/#website`, inLanguage: "fr", publisher: { "@id": `${BASE}/#organization` } })
   })
