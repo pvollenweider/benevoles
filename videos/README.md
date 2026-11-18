@@ -545,7 +545,10 @@ make video-youtube ID=VOLUNTEER_REGISTER APPLY=1                   # envoi, en p
 make video-youtube IDS="A B" PRIVACY=public APPLY=1                # envoi public
 ```
 
-La visibilité vaut `private` par défaut (l'API publie en public quand rien n'est dit).
+Un nouvel envoi est privé sauf `PRIVACY=…` (l'API publie en public quand rien n'est dit) ; une
+vidéo déjà envoyée garde sa visibilité, sauf si `PRIVACY=…` la change (sans nouvel envoi). La
+narration est une voix de synthèse (Gemini) : chaque vidéo est déclarée comme contenu synthétique
+(`containsSyntheticMedia`).
 `videos/youtube.json` garde, par slug, l'identifiant YouTube, la révision envoyée et ce qui est
 fait (sous-titres, vignette) ; il se commite. Une révision plus récente dans `catalog.json` donne
 un nouvel envoi (YouTube ne remplace pas le fichier d'une vidéo) et l'ancienne version passe en

@@ -38,6 +38,8 @@ export type YoutubeState = Record<
     privacy: Privacy
     captions: boolean
     thumbnail: boolean
+    /** The narration voice is generated (Gemini): declared as synthetic content to YouTube. */
+    synthetic?: boolean
     uploadedAt: string
     /** Earlier uploads of the same video, set to unlisted when a new revision replaced them. */
     replaced?: string[]
@@ -115,24 +117,38 @@ export type PlanItem =
   | { slug: string; action: "upload"; revision: number }
   | { slug: string; action: "replace"; revision: number; previousVideoId: string }
   | { slug: string; action: "finish"; revision: number; videoId: string; captions: boolean; thumbnail: boolean }
+  | { slug: string; action: "status"; revision: number; videoId: string; from: Privacy; to: Privacy }
   | { slug: string; action: "unchanged"; revision: number; videoId: string }
 
 /**
  * What to do for each video. YouTube cannot swap the file of an existing video, so a new revision
  * is a new upload; the earlier one is then set to unlisted (never deleted: links keep working).
  * An upload whose captions or thumbnail failed is finished on the next run, without a new upload.
+ * A video whose privacy differs from the one asked, or not yet declared as synthetic, only gets
+ * its status updated. Without an explicit privacy, a video already on YouTube keeps its own.
  */
-export function planYoutube(videos: { slug: string; revision: number }[], state: YoutubeState): PlanItem[] {
+export function planYoutube(videos: { slug: string; revision: number }[], state: YoutubeState, privacy?: Privacy): PlanItem[] {
   return videos.map(({ slug, revision }) => {
     const known = state[slug]
     if (!known) return { slug, action: "upload", revision }
     if (known.revision !== revision) return { slug, action: "replace", revision, previousVideoId: known.videoId }
     if (!known.captions || !known.thumbnail) return { slug, action: "finish", revision, videoId: known.videoId, captions: !known.captions, thumbnail: !known.thumbnail }
+    const to = privacy ?? known.privacy
+    if (to !== known.privacy || !known.synthetic) return { slug, action: "status", revision, videoId: known.videoId, from: known.privacy, to }
     return { slug, action: "unchanged", revision, videoId: known.videoId }
   })
 }
 
 /** Published files the upload starts from: the video, its captions (the narration text, timed) and its poster. */
+/**
+ * Full `status` of an upload. An update with part=status resets every writable field it omits,
+ * so the same complete object is sent on insert and on every status change. The narration is a
+ * generated voice (Gemini), hence containsSyntheticMedia.
+ */
+export function videoStatus(privacy: Privacy) {
+  return { privacyStatus: privacy, selfDeclaredMadeForKids: false, containsSyntheticMedia: true, embeddable: true, license: "youtube", publicStatsViewable: true }
+}
+
 export function mediaUrls(slug: string): { mp4: string; vtt: string; poster: string } {
   const base = `${MEDIA_BASE_URL}/${slug}/${slug}`
   return { mp4: `${base}.mp4`, vtt: `${base}.vtt`, poster: `${base}.jpg` }

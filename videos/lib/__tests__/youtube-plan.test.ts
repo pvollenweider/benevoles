@@ -10,6 +10,7 @@ import {
   TITLE_MAX,
   mediaUrls,
   thumbnailFilter,
+  videoStatus,
   planYoutube,
   tagsLength,
   youtubeDescription,
@@ -107,23 +108,34 @@ describe("youtubeMetadata", () => {
 })
 
 describe("planYoutube", () => {
-  const ok = { videoId: "abc", revision: 3, privacy: "private" as const, captions: true, thumbnail: true, uploadedAt: "2026-11-18T00:00:00Z" }
+  const ok = { videoId: "abc", revision: 3, privacy: "private" as const, captions: true, thumbnail: true, synthetic: true, uploadedAt: "2026-11-18T00:00:00Z" }
 
   it("uploads a video never sent", () => {
-    expect(planYoutube([{ slug: "a", revision: 1 }], {})).toEqual([{ slug: "a", action: "upload", revision: 1 }])
+    expect(planYoutube([{ slug: "a", revision: 1 }], {}, "private")).toEqual([{ slug: "a", action: "upload", revision: 1 }])
   })
 
   it("leaves a video alone when the revision is the one on YouTube", () => {
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: ok })[0]).toMatchObject({ action: "unchanged", videoId: "abc" })
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: ok }, "private")[0]).toMatchObject({ action: "unchanged", videoId: "abc" })
   })
 
   it("replaces a video whose revision changed", () => {
-    expect(planYoutube([{ slug: "a", revision: 4 }], { a: ok })[0]).toEqual({ slug: "a", action: "replace", revision: 4, previousVideoId: "abc" })
+    expect(planYoutube([{ slug: "a", revision: 4 }], { a: ok }, "private")[0]).toEqual({ slug: "a", action: "replace", revision: 4, previousVideoId: "abc" })
+  })
+
+  it("only updates the status when the privacy changes or the synthetic voice is not declared yet", () => {
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: ok }, "public")[0]).toEqual({ slug: "a", action: "status", revision: 3, videoId: "abc", from: "private", to: "public" })
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, synthetic: undefined } }, "private")[0]).toMatchObject({ action: "status", to: "private" })
+  })
+
+  it("keeps the current privacy of a video already sent when none is asked", () => {
+    const pub = { ...ok, privacy: "public" as const }
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: pub })[0]).toMatchObject({ action: "unchanged" })
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...pub, synthetic: undefined } })[0]).toMatchObject({ action: "status", from: "public", to: "public" })
   })
 
   it("finishes only what failed: captions, thumbnail, or both", () => {
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, captions: false } })[0]).toEqual({ slug: "a", action: "finish", revision: 3, videoId: "abc", captions: true, thumbnail: false })
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, thumbnail: false } })[0]).toMatchObject({ action: "finish", captions: false, thumbnail: true })
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, captions: false } }, "private")[0]).toEqual({ slug: "a", action: "finish", revision: 3, videoId: "abc", captions: true, thumbnail: false })
+    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, thumbnail: false } }, "private")[0]).toMatchObject({ action: "finish", captions: false, thumbnail: true })
   })
 })
 
@@ -140,5 +152,11 @@ describe("mediaUrls", () => {
 describe("thumbnailFilter", () => {
   it("fits the poster into 1280 x 720 on the brand blue without cropping", () => {
     expect(thumbnailFilter()).toBe("scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=0x1e3a8a")
+  })
+})
+
+describe("videoStatus", () => {
+  it("is complete, because part=status resets what it omits, and declares the generated voice", () => {
+    expect(videoStatus("public")).toEqual({ privacyStatus: "public", selfDeclaredMadeForKids: false, containsSyntheticMedia: true, embeddable: true, license: "youtube", publicStatsViewable: true })
   })
 })

@@ -10,8 +10,9 @@
  *   make video-youtube ID=… [PRIVACY=…] [APPLY=1]
  *
  * Without --apply it only prints the plan and the metadata. IDs are required: the channel carries a
- * selection, not the whole library. The privacy defaults to private, because the API publishes
- * as public when nothing is said. A new revision of a video is a new upload (YouTube cannot swap
+ * selection, not the whole library. A new upload is private unless --privacy says otherwise (the
+ * API publishes as public when nothing is said); a video already sent keeps its privacy unless
+ * --privacy changes it. The narration voice is generated (Gemini) and declared as synthetic. A new revision of a video is a new upload (YouTube cannot swap
  * a file); the earlier one is set to unlisted, never deleted.
  *
  * Credentials stay outside the repository, in ~/.config/benevol-youtube/ (BENEVOL_YOUTUBE_DIR):
@@ -34,6 +35,7 @@ import {
   mediaUrls,
   planYoutube,
   thumbnailFilter,
+  videoStatus,
   youtubeMetadata,
   type PlanItem,
   type Privacy,
@@ -53,7 +55,9 @@ const TOKEN_FILE = path.join(CONFIG_DIR, "token.json")
 const args = process.argv.slice(2)
 const apply = args.includes("--apply")
 const privacyIndex = args.indexOf("--privacy")
-const privacy = (privacyIndex >= 0 ? args[privacyIndex + 1] : "private") as Privacy
+/** Asked privacy; without it a new upload is private and a video already sent keeps its own. */
+const requestedPrivacy = privacyIndex >= 0 ? (args[privacyIndex + 1] as Privacy) : undefined
+const privacy: Privacy = requestedPrivacy ?? "private"
 const ids = args.filter((a, i) => !a.startsWith("--") && !(privacyIndex >= 0 && i === privacyIndex + 1))
 
 type Client = { client_id: string; client_secret?: string }
@@ -175,7 +179,7 @@ async function uploadVideo(token: string, file: string, metadata: ReturnType<typ
     },
     body: JSON.stringify({
       snippet: { ...metadata, categoryId: CATEGORY_EDUCATION, defaultLanguage: "fr" },
-      status: { privacyStatus: privacy, selfDeclaredMadeForKids: false, embeddable: true, license: "youtube" },
+      status: videoStatus(privacy),
     }),
   })
   const location = init.headers.get("location")
@@ -215,14 +219,14 @@ async function uploadThumbnail(token: string, videoId: string, poster: string, d
   if (!res.ok) throw await apiError(res, "Vignette refusée")
 }
 
-/** Sets an earlier upload to unlisted. part=status replaces every status field, so all are sent. */
-async function unlist(token: string, videoId: string) {
+/** Sets a video's privacy (and the synthetic-voice declaration) without touching anything else. */
+async function setStatus(token: string, videoId: string, to: Privacy) {
   const res = await fetch(`${API}/videos?part=status`, {
     method: "PUT",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json; charset=UTF-8" },
-    body: JSON.stringify({ id: videoId, status: { privacyStatus: "unlisted", selfDeclaredMadeForKids: false, embeddable: true, license: "youtube", publicStatsViewable: true } }),
+    body: JSON.stringify({ id: videoId, status: videoStatus(to) }),
   })
-  if (!res.ok) throw await apiError(res, `Passage en non répertoriée de ${videoId} refusé`)
+  if (!res.ok) throw await apiError(res, `Changement de visibilité de ${videoId} refusé`)
 }
 
 function describe(item: PlanItem): string {
@@ -233,6 +237,8 @@ function describe(item: PlanItem): string {
       return `nouvelle révision ${item.revision}, l'ancienne (${item.previousVideoId}) passera en non répertoriée`
     case "finish":
       return `à terminer (${[item.captions && "sous-titres", item.thumbnail && "vignette"].filter(Boolean).join(", ")}) sur ${item.videoId}`
+    case "status":
+      return `visibilité ${item.from} → ${item.to}, voix de synthèse déclarée, sur ${item.videoId}`
     case "unchanged":
       return `déjà en ligne : https://youtu.be/${item.videoId}`
   }
@@ -243,7 +249,7 @@ async function main() {
     console.error("Indiquez les vidéos à envoyer : make video-youtube ID=ADMIN_NAVIGATION (ou IDS=\"A B\").")
     process.exit(2)
   }
-  if (!PRIVACIES.includes(privacy)) {
+  if (requestedPrivacy && !PRIVACIES.includes(requestedPrivacy)) {
     console.error(`--privacy doit valoir ${PRIVACIES.join(", ")}.`)
     process.exit(2)
   }
@@ -256,7 +262,7 @@ async function main() {
       return { entry, manifest, slug: manifest.slug, revision }
     }),
   )
-  const plan = planYoutube(videos, state)
+  const plan = planYoutube(videos, state, requestedPrivacy)
 
   for (const [i, item] of plan.entries()) {
     const { manifest, entry } = videos[i]
@@ -268,7 +274,7 @@ async function main() {
       const head = await fetch(url, { method: "HEAD" })
       console.log(`  ${head.ok ? "ok" : `MANQUANT (${head.status})`} ${url}`)
     }
-    if (item.action !== "finish") {
+    if (item.action === "upload" || item.action === "replace") {
       console.log(`  Titre : ${meta.title}\n  Étiquettes : ${meta.tags.join(", ")}\n  Visibilité : ${privacy}\n  Description :\n${meta.description.replace(/^/gm, "    ")}`)
     }
   }
@@ -291,17 +297,24 @@ async function main() {
     try {
       const urls = mediaUrls(item.slug)
       let videoId: string
+      if (item.action === "status") {
+        await setStatus(token, item.videoId, item.to)
+        Object.assign(state[item.slug], { privacy: item.to, synthetic: true })
+        await saveState(state)
+        console.log(`\n${entry.id} : visibilité ${item.to} : https://youtu.be/${item.videoId}`)
+        continue
+      }
       if (item.action === "finish") {
         videoId = item.videoId
       } else {
         console.log(`\n${entry.id} : envoi de la vidéo…`)
         videoId = await uploadVideo(token, await download(urls.mp4, dir), youtubeMetadata(manifest, entry))
         const replaced = item.action === "replace" ? [...(state[item.slug]?.replaced ?? []), item.previousVideoId] : state[item.slug]?.replaced
-        state[item.slug] = { videoId, revision: item.revision, privacy, captions: false, thumbnail: false, uploadedAt: new Date().toISOString(), ...(replaced ? { replaced } : {}) }
+        state[item.slug] = { videoId, revision: item.revision, privacy, captions: false, thumbnail: false, synthetic: true, uploadedAt: new Date().toISOString(), ...(replaced ? { replaced } : {}) }
         await saveState(state)
         console.log(`  envoyée : https://youtu.be/${videoId}`)
         if (item.action === "replace") {
-          await unlist(token, item.previousVideoId).then(
+          await setStatus(token, item.previousVideoId, "unlisted").then(
             () => console.log(`  ancienne version ${item.previousVideoId} passée en non répertoriée`),
             (error) => failures.push(`${entry.id} : ${error.message}`),
           )
