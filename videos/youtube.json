@@ -1,8 +1,63 @@
 {
+  "admin-features-tour": {
+    "videoId": "o6nQTrWD__M",
+    "revision": 6,
+    "privacy": "public",
+    "captions": true,
+    "thumbnail": true,
+    "synthetic": true,
+    "format": "native",
+    "uploadedAt": "2026-11-18T08:55:38.940Z",
+    "thumbnailKey": "de719f0c3d639f01"
+  },
+  "attendance-check-in": {
+    "videoId": "1AN3vR8Z6bw",
+    "revision": 5,
+    "privacy": "public",
+    "captions": true,
+    "thumbnail": true,
+    "synthetic": true,
+    "format": "native",
+    "uploadedAt": "2026-11-18T08:56:13.894Z",
+    "thumbnailKey": "88e982b49a9b4b37"
+  },
+  "privacy-personal-links": {
+    "videoId": "9dELAhOnzr4",
+    "revision": 6,
+    "privacy": "public",
+    "captions": true,
+    "thumbnail": true,
+    "synthetic": true,
+    "format": "native",
+    "uploadedAt": "2026-11-18T08:56:26.648Z",
+    "thumbnailKey": "356206c3094a0689"
+  },
+  "reminders-changes": {
+    "videoId": "q3uUWtgAo3A",
+    "revision": 5,
+    "privacy": "public",
+    "captions": true,
+    "thumbnail": true,
+    "synthetic": true,
+    "format": "native",
+    "uploadedAt": "2026-11-18T08:55:59.393Z",
+    "thumbnailKey": "3dc75884c32b6530"
+  },
+  "shift-create-series": {
+    "videoId": "JvI7pRDmkZ0",
+    "revision": 7,
+    "privacy": "public",
+    "captions": true,
+    "thumbnail": true,
+    "synthetic": true,
+    "format": "native",
+    "uploadedAt": "2026-11-18T08:55:47.471Z",
+    "thumbnailKey": "4de8183d88193e65"
+  },
   "volunteer-register-mobile": {
     "videoId": "eG3tCM7nH9M",
     "revision": 4,
-    "privacy": "private",
+    "privacy": "public",
     "captions": true,
     "thumbnail": true,
     "synthetic": true,
