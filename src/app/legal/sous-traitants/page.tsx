@@ -6,6 +6,7 @@ import { pageAvailable, publicPage, publicPageMetadata } from "@/lib/doc-pages"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import { notFound } from "next/navigation"
 
@@ -23,7 +24,7 @@ export default function SubProcessorsPage() {
   const { title, html } = renderPublicSource("content/legal/SOUS-TRAITANTS.md", "Liste des sous-traitants")
   return (
     <>
-      <JsonLd data={publicPageJsonLd("/legal/sous-traitants", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/legal/sous-traitants", apexBaseUrl(), [], loadDocLastmod())} />
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>

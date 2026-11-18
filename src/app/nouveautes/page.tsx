@@ -6,6 +6,7 @@ import { publicPageMetadata } from "@/lib/doc-pages"
 import { renderChangelog } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd, REPOSITORY_URL } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import ReleaseNotes from "@/components/public/ReleaseNotes"
 
@@ -18,7 +19,7 @@ export function generateMetadata(): Metadata {
 export default function ReleaseNotesPage() {
   return (
     <>
-      <JsonLd data={publicPageJsonLd("/nouveautes", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/nouveautes", apexBaseUrl(), [], loadDocLastmod())} />
       <ReleaseNotes releases={renderChangelog()} fullChangelogUrl={`${REPOSITORY_URL}/blob/main/CHANGELOG.md`} />
     </>
   )

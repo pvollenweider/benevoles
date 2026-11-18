@@ -128,10 +128,11 @@ describe("videoJsonLd", () => {
       contentUrl: "https://medias.benevol.app/event-create-blank/event-create-blank.mp4",
       inLanguage: "fr",
       transcript: "Premier passage.\n\nSecond passage.",
-      publisher: { "@type": "Organization", name: "benevol.app", url: "https://www.benevol.app/" },
+      publisher: { "@type": "Organization", "@id": "https://www.benevol.app/#organization", name: "benevol.app", url: "https://www.benevol.app/" },
+      isPartOf: { "@id": "https://www.benevol.app/#website" },
     })
     expect(video).not.toHaveProperty("embedUrl")
-    expect(breadcrumb["@type"]).toBe("BreadcrumbList")
+    expect(breadcrumb).toMatchObject({ "@type": "BreadcrumbList", "@id": "https://www.benevol.app/videos/EVENT_CREATE_BLANK#breadcrumb" })
     expect((breadcrumb.itemListElement as { item: string }[]).map((i) => i.item)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/videos",
@@ -189,6 +190,8 @@ describe("the gallery", () => {
   it("lists only the indexed videos in its ItemList", () => {
     const data = videoLibraryJsonLd(videos, ctx)
     expect(data["@type"]).toBe("CollectionPage")
+    // Tied to the site and its publisher by the @ids of the other public pages.
+    expect(data).toMatchObject({ isPartOf: { "@id": "https://www.benevol.app/#website" }, publisher: { "@id": "https://www.benevol.app/#organization" } })
     expect(data.mainEntity).toMatchObject({
       "@type": "ItemList",
       numberOfItems: 1,

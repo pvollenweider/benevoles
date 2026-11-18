@@ -8,6 +8,7 @@ import { RESSOURCES_PATH, loadRessources } from "@/lib/ressources"
 import { renderRessourcesIndex } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import { RessourcesIndex } from "@/components/public/Ressources"
 
@@ -23,7 +24,7 @@ export default function RessourcesPage() {
   const { title, introHtml, charterHtml } = renderRessourcesIndex(page.source)
   return (
     <>
-      <JsonLd data={publicPageJsonLd(RESSOURCES_PATH, apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd(RESSOURCES_PATH, apexBaseUrl(), [], loadDocLastmod())} />
       <RessourcesIndex title={title} introHtml={introHtml} charterHtml={charterHtml} guides={loadRessources()} />
     </>
   )

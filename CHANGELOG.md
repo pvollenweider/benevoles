@@ -18,6 +18,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Données structurées** : la description de l'éditeur, son point de contact, la date de dernière modification des pages publiques, des guides et des billets de blog, et le rattachement des pages vidéo au même site et au même éditeur que les autres pages, pour que les moteurs de recherche et les assistants IA relient tout à benevol.app. <!-- interne -->
 - **Validation automatique des nouveaux espaces** : un espace validé automatiquement envoie au plus 100 emails groupés par jour (messages, invitations, rappels, créneaux à compléter) tant que l'opérateur ne l'a pas marqué comme relu ; ensuite, le plafond habituel s'applique. Les autres emails ne changent pas.
 
 ### Sécurité
