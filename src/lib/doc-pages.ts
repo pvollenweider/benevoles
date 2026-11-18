@@ -521,6 +521,13 @@ const LEADING_COMMENTS_RE = /^(?:\s*<!--[\s\S]*?-->)*\s*/
  * change from its source file (null when unknown), injected, like the units, so the list stays
  * pure and testable.
  */
+/**
+ * The files the apex home is rendered from (src/app/page.tsx and its FAQ): its sitemap lastmod is
+ * the later of their last commits. Same list as HOME_PAGE_SOURCES in scripts/doc-lastmod.mjs; a
+ * test checks the two match.
+ */
+export const HOME_PAGE_SOURCES = ["src/app/page.tsx", "content/pages/FAQ-ACCUEIL.md"] as const
+
 export function apexSitemap(
   base: string,
   modifiedAt: (source: string) => Date | null,
@@ -536,8 +543,11 @@ export function apexSitemap(
     const lastModified = source ? modifiedAt(source) : pagePath === "/blog" && posts.length > 0 ? day([...posts].sort((a, b) => b.date.localeCompare(a.date))[0].date) : null
     return { url: `${root}${pagePath}`, changeFrequency: "monthly" as const, priority, ...(lastModified ? { lastModified } : {}) }
   }
+  // The home's last change is the later of its own files' (HOME_PAGE_SOURCES), unknown without dates.
+  const homeDates = HOME_PAGE_SOURCES.map(modifiedAt).filter((d): d is Date => d !== null)
+  const homeModified = homeDates.length > 0 ? new Date(Math.max(...homeDates.map((d) => d.getTime()))) : null
   return [
-    { url: `${root}/`, changeFrequency: "weekly", priority: 1 },
+    { url: `${root}/`, changeFrequency: "weekly", priority: 1, ...(homeModified ? { lastModified: homeModified } : {}) },
     ...availablePublicPages(hosted).map((p) => entry(p.path, p.source, p.priority)),
     ...units.map((u) => entry(`/doc/${u.slug}`, u.source, DOC_UNIT_PRIORITY)),
     // The blog's posts (#944): a post doesn't change once sent, its date is its last change.

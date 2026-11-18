@@ -9,7 +9,22 @@
 # benevoles-https-redirect middleware defined in ingressroute-tokens.yaml (apply that file first).
 # Its priority stays under the token route (200), which keeps its own HTTP route without access logs.
 #
+# The bare domain over plain HTTP goes straight to https://www.benevol.app with the same path and
+# query, in one hop: through the catch-all it took two (http -> https://benevol.app -> www, the
+# proxy's #759 redirect), and search engines prefer a single permanent redirect.
+#
 #   kubectl apply -f k8s/ingressroute-http.yaml      (also applied by the deploy workflow)
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: benevoles-apex-www-redirect
+  namespace: benevoles
+spec:
+  redirectRegex:
+    regex: '^https?://benevol\.app(?::\d+)?/(.*)'
+    replacement: 'https://www.benevol.app/${1}'
+    permanent: true
+---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -24,6 +39,14 @@ spec:
       match: Host(`benevol.app`) || HostRegexp(`^[a-z0-9-]+\.benevol\.app$`)
       middlewares:
         - name: benevoles-https-redirect
+      services:
+        - name: benevoles-app
+          port: 80
+    - kind: Rule
+      priority: 2
+      match: Host(`benevol.app`)
+      middlewares:
+        - name: benevoles-apex-www-redirect
       services:
         - name: benevoles-app
           port: 80
