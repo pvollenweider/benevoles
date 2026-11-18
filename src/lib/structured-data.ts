@@ -5,7 +5,7 @@ import { DOC_ROLE_INFO, docGroup, docGroupHref, type DocUnit } from "@/lib/doc-u
 import { AUDIENCE_INDEX_PATH, publicPage } from "@/lib/doc-pages"
 import type { BlogPost } from "@/lib/blog"
 import { SITE_NAME, absoluteUrl, socialImagePath } from "@/lib/seo-metadata"
-import { contactEmail } from "@/lib/site"
+import { contactEmail, isHostedService } from "@/lib/site"
 
 /**
  * The structured data (schema.org JSON-LD) of the public pages of the apex site. Every node is a
@@ -17,6 +17,8 @@ import { contactEmail } from "@/lib/site"
  */
 
 export const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
+/** The hosted service's YouTube channel (its tutorials): the publisher's sameAs on that service only. */
+export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@benevolapp"
 /** The public contact address (#760): null when the instance has none (src/lib/site.ts). */
 export const CONTACT_EMAIL = contactEmail()
 export const LICENSE_URL = "https://www.gnu.org/licenses/agpl-3.0.html"
@@ -26,16 +28,22 @@ export type JsonLdNode = Record<string, unknown>
 const homeUrl = (base: string) => absoluteUrl(base, "/")
 const idOf = (base: string, name: string) => ({ "@id": `${homeUrl(base)}#${name}` })
 
-/** The publisher: the instance, its logo, its contact and its code. */
-export function organizationNode(base: string): JsonLdNode {
+/** What the publisher is, true of every instance: it publishes the software, under its name. */
+export const ORGANIZATION_DESCRIPTION = `Éditeur de ${SITE_NAME}, logiciel libre de planning pour bénévoles.`
+
+/** The publisher: the instance, what it is, its logo, its contact (in French) and its code. */
+export function organizationNode(base: string, hosted: boolean = isHostedService()): JsonLdNode {
   return {
     "@type": "Organization",
     ...idOf(base, "organization"),
     name: SITE_NAME,
     url: homeUrl(base),
-    logo: absoluteUrl(base, "/apple-icon.png"),
-    ...(CONTACT_EMAIL ? { email: CONTACT_EMAIL } : {}),
-    sameAs: [REPOSITORY_URL],
+    description: ORGANIZATION_DESCRIPTION,
+    logo: { "@type": "ImageObject", url: absoluteUrl(base, "/apple-icon.png"), width: 180, height: 180 },
+    ...(CONTACT_EMAIL
+      ? { email: CONTACT_EMAIL, contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: CONTACT_EMAIL, availableLanguage: "fr" } }
+      : {}),
+    sameAs: hosted ? [REPOSITORY_URL, YOUTUBE_CHANNEL_URL] : [REPOSITORY_URL],
   }
 }
 
@@ -102,10 +110,10 @@ export function breadcrumbNode(base: string, pagePath: string, crumbs: readonly 
   }
 }
 
-/** A page of the site: its address, name, description, language and social card. */
+/** A page of the site: its address, name, description, language, social card and last change when known. */
 export function webPageNode(
   base: string,
-  page: { path: string; name: string; description: string; type?: "WebPage" | "CollectionPage" },
+  page: { path: string; name: string; description: string; type?: "WebPage" | "CollectionPage"; dateModified?: Date | null },
 ): JsonLdNode {
   const url = absoluteUrl(base, page.path)
   return {
@@ -119,6 +127,7 @@ export function webPageNode(
     publisher: idOf(base, "organization"),
     primaryImageOfPage: { "@type": "ImageObject", url: absoluteUrl(base, socialImagePath(page.path)), width: 1200, height: 630 },
     breadcrumb: { "@id": `${url}#breadcrumb` },
+    ...(page.dateModified ? { dateModified: page.dateModified.toISOString() } : {}),
   }
 }
 
@@ -161,11 +170,23 @@ const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-pla
 /**
  * The structured data of a public content page (src/lib/doc-pages.ts): the page, its breadcrumb,
  * the site and its publisher; the pages that present the application also describe it, and a page
- * with a visible FAQ passes its questions for a FAQPage.
+ * with a visible FAQ passes its questions for a FAQPage. `modifiedAt` dates the page by its source
+ * file's last commit (src/lib/doc-lastmod-load.ts, the sitemap's lastmod); unknown, no date.
  */
-export function publicPageJsonLd(path: string, base: string, faq: readonly FaqItem[] = []): JsonLdNode {
+export function publicPageJsonLd(
+  path: string,
+  base: string,
+  faq: readonly FaqItem[] = [],
+  modifiedAt: (source: string) => Date | null = () => null,
+): JsonLdNode {
   const page = publicPage(path)
-  const pageNode = webPageNode(base, { path: page.path, name: page.metaTitle, description: page.metaDescription, type: page.path === "/doc" || page.path === "/blog" ? "CollectionPage" : "WebPage" })
+  const pageNode = webPageNode(base, {
+    path: page.path,
+    name: page.metaTitle,
+    description: page.metaDescription,
+    type: page.path === "/doc" || page.path === "/blog" ? "CollectionPage" : "WebPage",
+    dateModified: page.source ? modifiedAt(page.source) : null,
+  })
   // The citation page (#1323) describes the application and its publisher, by the same @ids: it
   // says what to cite, not another software.
   if (page.path === "/citer") pageNode.about = [idOf(base, "application"), idOf(base, "organization")]
@@ -215,8 +236,9 @@ export function docUnitJsonLd(unit: DocUnit, base: string, dateModified?: Date |
 
 /**
  * The structured data of a blog post (#944): a BlogPosting in French by the site, published the
- * day the newsletter was sent, with the title and summary the page shows, its image (its own or the
- * site's card), and its breadcrumb (Accueil, Blog, the post).
+ * day the newsletter was sent and not changed since (its date is its last change, as in the
+ * sitemap), with the title and summary the page shows, its image (its own or the site's card), and
+ * its breadcrumb (Accueil, Blog, the post).
  */
 export function blogPostJsonLd(post: Pick<BlogPost, "slug" | "title" | "summary" | "date" | "image">, base: string): JsonLdNode {
   const path = `/blog/${post.slug}`
@@ -229,6 +251,7 @@ export function blogPostJsonLd(post: Pick<BlogPost, "slug" | "title" | "summary"
     headline: post.title,
     description: post.summary,
     datePublished: post.date,
+    dateModified: post.date,
     inLanguage: "fr",
     image: absoluteUrl(base, post.image ?? "/og-image.png"),
     author: idOf(base, "organization"),

@@ -10,6 +10,7 @@ import { pageAvailable, publicPage, publicPageMetadata } from "@/lib/doc-pages"
 import { env } from "@/lib/env"
 import { featuresPageFaq, renderFeaturesPage } from "@/lib/public-content"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import { CONTENT_VIEWPORT } from "@/lib/seo-metadata"
 import { apexBaseUrl } from "@/lib/urls"
 
@@ -30,7 +31,7 @@ export default function EditorialPage({ path, eyebrow, variant }: { path: string
   const rendered = renderFeaturesPage(env.VIDEO_MEDIA_BASE_URL, page.source, page.title)
   return (
     <>
-      <JsonLd data={publicPageJsonLd(path, apexBaseUrl(), featuresPageFaq(rendered))} />
+      <JsonLd data={publicPageJsonLd(path, apexBaseUrl(), featuresPageFaq(rendered), loadDocLastmod())} />
       <FeaturesPage page={rendered} eyebrow={eyebrow} variant={variant} />
     </>
   )
