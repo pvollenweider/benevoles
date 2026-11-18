@@ -19,7 +19,7 @@ describe("the draft content check", () => {
 
   it("names the files that still carry the marker", () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), "draft-check-"))
-    fs.writeFileSync(path.join(root, "Dockerfile"), "COPY --from=builder --chown=a:b /app/A.md ./A.md\nCOPY --from=builder --chown=a:b /app/B.md ./B.md\n")
+    fs.writeFileSync(path.join(root, "Dockerfile"), "COPY --from=builder /app/A.md ./A.md\nCOPY --from=builder --chown=a:b /app/B.md ./B.md\n")
     fs.writeFileSync(path.join(root, "A.md"), `${DRAFT_MARKER} : texte à relire -->\n# A\n`)
     fs.writeFileSync(path.join(root, "B.md"), "# B\n")
     expect(draftSources(root)).toEqual(["A.md"])

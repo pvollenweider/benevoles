@@ -4,6 +4,7 @@
 import { describe, it, expect } from "vitest"
 import { readFileSync } from "fs"
 import { join } from "path"
+import { IMAGE_DISK_CACHE_MAX_BYTES } from "../image-disk-cache"
 
 // Pod hardening of the Kubernetes manifests (#1050): restricted securityContext, no service
 // account token, and the app given only the secret keys it reads instead of the whole secret.
@@ -101,6 +102,60 @@ describe("k8s pod hardening (#1050)", () => {
     for (const file of ["k8s/deployment.yaml", "k8s/job-migrate.yaml"]) {
       expect(read(file), file).toMatch(/runAsNonRoot: true\n\s+runAsUser: 1001\n/)
     }
+  })
+
+  // The app container (pentest INF-06): the image's application files belong to root
+  // (docker-app-ownership.test.ts) and the root filesystem is read-only. The volumes are the paths
+  // the server writes, measured with `docker diff`: the readiness file in /tmp, the optimised
+  // images in .next/cache and Next.js's copies of the built static routes in .next/server/route-cache.
+  describe("read-only root filesystem of the app container", () => {
+    const app = read("k8s/deployment.yaml")
+    const APP_VOLUMES: Record<string, string> = {
+      tmp: "/tmp",
+      "next-cache": "/app/.next/cache",
+      "next-route-cache": "/app/.next/server/route-cache",
+    }
+    const MIB = 1024 * 1024
+    const mounts = Object.fromEntries([...app.matchAll(/- name: ([\w-]+)\n\s+mountPath: (\S+)\n/g)].map((m) => [m[1], m[2]]))
+    const volumes = Object.fromEntries(
+      [...app.matchAll(/- name: ([\w-]+)\n\s+emptyDir:\n\s+sizeLimit: (\d+)Mi\n/g)].map((m) => [m[1], Number(m[2]) * MIB]),
+    )
+
+    it("is read-only, with the other restrictions kept", () => {
+      expect(app).toMatch(/securityContext:\n\s+allowPrivilegeEscalation: false\n\s+readOnlyRootFilesystem: true\n\s+capabilities:\n\s+drop: \[ALL\]\n/)
+      expect(app).not.toMatch(/readOnlyRootFilesystem: false/)
+    })
+
+    it("mounts exactly the paths the server writes", () => {
+      expect(mounts).toEqual(APP_VOLUMES)
+    })
+
+    it("each mount is an emptyDir on disk with a size limit, nothing from the node or a claim", () => {
+      expect(Object.keys(volumes).sort()).toEqual(Object.keys(APP_VOLUMES).sort())
+      expect(count(app, /^\s+emptyDir:/gm)).toBe(Object.keys(APP_VOLUMES).length)
+      expect(app).not.toMatch(/hostPath:|persistentVolumeClaim:|medium: Memory/)
+    })
+
+    it("never mounts over a folder the image fills: the Dockerfile creates the two cache folders empty", () => {
+      const created = read("Dockerfile").match(/RUN mkdir -p ([^\\\n]+) \\\n && chown nextjs:nodejs ([^\\\n]+)\n/)
+      expect(created, "RUN mkdir -p … && chown nextjs:nodejs … of the Dockerfile").not.toBeNull()
+      const underApp = Object.values(APP_VOLUMES).filter((p) => p.startsWith("/app/")).map((p) => p.slice("/app/".length))
+      expect(created![1].split(" ").sort()).toEqual(underApp.sort())
+      expect(created![2]).toBe(created![1])
+      // The pages and routes built into the image stay where Next.js reads them.
+      for (const p of Object.values(APP_VOLUMES)) expect(["/app", "/app/.next", "/app/.next/server", "/app/.next/server/app"]).not.toContain(p)
+    })
+
+    it("the image cache volume holds at least twice what Next.js may keep there", () => {
+      expect(read("next.config.ts")).toMatch(/maximumDiskCacheSize: IMAGE_DISK_CACHE_MAX_BYTES,\n/)
+      expect(IMAGE_DISK_CACHE_MAX_BYTES).toBeGreaterThanOrEqual(50 * MIB)
+      expect(volumes["next-cache"]).toBeGreaterThanOrEqual(2 * IMAGE_DISK_CACHE_MAX_BYTES)
+    })
+
+    it("the readiness file of the warm-up goes to the /tmp volume", () => {
+      expect(read("docker-entrypoint.sh")).toContain('READY_FILE="${WARMUP_READY_FILE:-/tmp/benevoles-ready}"')
+      expect(app).not.toMatch(/WARMUP_READY_FILE/)
+    })
   })
 
   it.each(POD_MANIFESTS)("%s: a read-only root filesystem always has a writable /tmp", (file) => {
