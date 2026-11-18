@@ -21,6 +21,10 @@ spec:
     spec:
       backoffLimit: 2
       template:
+        metadata:
+          # Selects the egress rule of k8s/networkpolicy.yaml: DNS and Traefik, nothing else.
+          labels:
+            app: benevoles-cron
         spec:
           restartPolicy: OnFailure
           # Restricted pod (#1050): curl_user (uid 100, gid 101) of the image, given as numbers for

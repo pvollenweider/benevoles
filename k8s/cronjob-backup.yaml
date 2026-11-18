@@ -1,12 +1,21 @@
 # SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 # SPDX-License-Identifier: AGPL-3.0-only
 
-# pg_dump chiffré (AES-256) vers un PVC, rétention 30 jours.
+# pg_dump chiffré (GnuPG, AES-256 avec contrôle d'intégrité) vers un PVC, rétention 30 jours.
 # Exécuté chaque nuit à 01h00 UTC (avant le cleanup à 02h00).
 #
-# Format du fichier : /backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc
-# Déchiffrement : openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
-#                   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
+# Format du fichier : /backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.gpg
+# Déchiffrement (gpg demande la phrase secrète, elle n'est jamais sur la ligne de commande) :
+#   gpg --pinentry-mode loopback --output dump.sql.gz --decrypt benevoles_<date>.sql.gz.gpg \
+#     && gunzip dump.sql.gz
+# Un fichier modifié ou une mauvaise phrase secrète font échouer gpg (code de sortie non nul) :
+# ne pas utiliser le fichier produit dans ce cas.
+#
+# Ancien format, encore présent sur le volume et hors site jusqu'à sa rotation :
+# benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc (openssl, AES-256-CBC, sans contrôle d'intégrité).
+#   openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \
+#     -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
+# (openssl demande la phrase secrète ; c'est la même pour les deux formats.)
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -39,8 +48,16 @@ spec:
             app: postgres-backup
         spec:
           restartPolicy: OnFailure
-          # Hardened but still root (#1050): `apk add` below installs into the image, and the files
-          # already on backup-pvc belong to root. No capability is needed for that as root.
+          # The dump runs as an init container and the heartbeat as the main container: the
+          # heartbeat is only sent once the dump, its encryption and its verification have
+          # succeeded, and each container gets only the secrets it uses. `kubectl logs job/<name>`
+          # shows the heartbeat; the dump is in `kubectl logs job/<name> -c backup`.
+          #
+          # The dump container is hardened but still root (#1050): the files already on
+          # backup-pvc belong to root and it must keep rotating them. As root it needs no
+          # capability for that. Nothing is installed at run time: postgres:16 (Debian) ships
+          # pg_dump and gpg. It has no HTTP client and no CA certificates, hence the separate
+          # curl container for the heartbeat.
           automountServiceAccountToken: false
           securityContext:
             seccompProfile:
@@ -49,9 +66,12 @@ spec:
             - name: backup-storage
               persistentVolumeClaim:
                 claimName: backup-pvc
-          containers:
+            - name: tmp
+              emptyDir:
+                sizeLimit: 16Mi
+          initContainers:
             - name: backup
-              image: postgres:16-alpine
+              image: postgres:16
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -60,16 +80,6 @@ spec:
                 - name: backup-storage
                   mountPath: /backups
               env:
-                - name: APP_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: benevoles-secret
-                      key: NEXT_PUBLIC_APP_URL
-                - name: CRON_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: benevoles-secret
-                      key: CRON_SECRET
                 - name: PGHOST
                   value: postgres
                 - name: PGPORT
@@ -95,17 +105,25 @@ spec:
                 - sh
                 - -c
                 - |
+                  # >>> BACKUP_SCRIPT_START (run as is by scripts/test-offsite-backup.sh)
                   set -e
-                  FILENAME="benevoles_$(date -u +%Y-%m-%d_%H-%M).sql.gz.enc"
+                  FILENAME="benevoles_$(date -u +%Y-%m-%d_%H-%M).sql.gz.gpg"
                   echo "==> Dump : ${FILENAME}"
 
-                  # postgres:16-alpine does not ship an openssl CLI (only libssl3). Every backup
-                  # has failed on this ever since the job was created: with the old "cmd | cmd |
-                  # openssl > file" pipeline, the redirection still creates the (empty) output
-                  # file before "openssl: not found" fails the last stage of the pipe.
-                  apk add --no-cache -q openssl
+                  if [ -z "${BACKUP_PASSPHRASE}" ]; then
+                    echo "ERREUR : BACKUP_PASSPHRASE est vide, backup abandonné." >&2
+                    exit 1
+                  fi
 
-                  # pg_dump writes to a plain file (not a pipe) on purpose: "cmd | gzip | openssl"
+                  # Symmetric GnuPG encryption. The passphrase is read from standard input
+                  # (--passphrase-fd 0), fed by the shell's own printf: it is never an argument
+                  # of a process, so it never shows in the process list. gpg reads one line.
+                  gpg_backup() {
+                    printf '%s\n' "${BACKUP_PASSPHRASE}" | gpg --batch --yes --no-tty \
+                      --pinentry-mode loopback --passphrase-fd 0 --no-symkey-cache "$@"
+                  }
+
+                  # pg_dump writes to a plain file (not a pipe) on purpose: "cmd | gzip | gpg"
                   # only checks the LAST command's exit code, so a failing pg_dump would still
                   # produce a "successful", empty encrypted file. A direct redirection is caught
                   # by set -e like any other command.
@@ -118,18 +136,29 @@ spec:
                   fi
 
                   gzip -c /tmp/dump.sql > /tmp/dump.sql.gz
-                  openssl enc -aes-256-cbc -pbkdf2 -iter 100000 \
-                    -pass "pass:${BACKUP_PASSPHRASE}" \
-                    -in /tmp/dump.sql.gz -out "/backups/${FILENAME}"
+                  # AES-256 with gpg's integrity check (MDC): a file changed after the fact no
+                  # longer decrypts, gpg exits non-zero. Not the newer OCB mode, which only
+                  # GnuPG 2.3+ reads: these files must open with any gpg 2.2 or later. The data
+                  # is already gzip, so gpg does not compress it again.
+                  if ! gpg_backup --symmetric --cipher-algo AES256 \
+                    --s2k-digest-algo SHA512 --s2k-count 65011712 --compress-algo none \
+                    --output "/backups/${FILENAME}" /tmp/dump.sql.gz; then
+                    echo "ERREUR : chiffrement échoué, backup abandonné." >&2
+                    rm -f "/backups/${FILENAME}"
+                    exit 1
+                  fi
 
                   # Verify the file just written actually decrypts back to the same dump, instead
-                  # of trusting that openssl/gzip exiting 0 means the backup is usable. Each step
-                  # writes to a plain file so a failure is caught by its own exit code (set -e),
-                  # not hidden behind the exit code of a later stage in a pipe.
-                  openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \
-                    -pass "pass:${BACKUP_PASSPHRASE}" \
-                    -in "/backups/${FILENAME}" -out /tmp/verify.sql.gz
-                  gunzip -c /tmp/verify.sql.gz > /tmp/verify.sql
+                  # of trusting that gpg/gzip exiting 0 means the backup is usable. Each step
+                  # writes to a plain file so a failure is caught by its own exit code, not
+                  # hidden behind the exit code of a later stage in a pipe. A file that fails
+                  # the check is removed, so the off-site copy never picks it up.
+                  if ! gpg_backup --decrypt --output /tmp/verify.sql.gz "/backups/${FILENAME}" \
+                    || ! gunzip -c /tmp/verify.sql.gz > /tmp/verify.sql; then
+                    echo "ERREUR : vérification échouée (déchiffrement ou décompression), fichier supprimé." >&2
+                    rm -f "/backups/${FILENAME}"
+                    exit 1
+                  fi
                   VERIFY_SIZE=$(wc -c < /tmp/verify.sql)
                   if [ "$VERIFY_SIZE" != "$DUMP_SIZE" ]; then
                     echo "ERREUR : vérification échouée (${VERIFY_SIZE} vs ${DUMP_SIZE} octets), fichier corrompu." >&2
@@ -139,17 +168,60 @@ spec:
                   echo "==> Vérifié : déchiffrement + décompression redonnent ${VERIFY_SIZE} octets"
 
                   rm -f /tmp/dump.sql /tmp/dump.sql.gz /tmp/verify.sql.gz /tmp/verify.sql
-                  echo "==> Taille finale : $(du -sh /backups/${FILENAME} | cut -f1)"
+                  echo "==> Taille finale : $(du -sh "/backups/${FILENAME}" | cut -f1)"
 
-                  # Rotation : supprime les backups de plus de 30 jours
-                  DELETED=$(find /backups -name "benevoles_*.sql.gz.enc" \
+                  # Rotation : supprime les backups de plus de 30 jours, dans les deux formats
+                  # (.gpg, et l'ancien .enc d'openssl tant qu'il en reste).
+                  DELETED=$(find /backups \( -name "benevoles_*.sql.gz.gpg" -o -name "benevoles_*.sql.gz.enc" \) \
                     -mtime +30 -print -delete | wc -l)
                   echo "==> ${DELETED} ancien(s) backup(s) supprimé(s)"
 
                   # Inventaire final
                   echo "==> Backups conservés :"
-                  ls -lh /backups/benevoles_*.sql.gz.enc 2>/dev/null || echo "(aucun)"
-                  # Heartbeat for the super-admin health page (#383); a failure to report must not fail the job.
-                  wget -q -O - --post-data='{"job":"backup","ok":true}' \
-                    --header="Authorization: Bearer ${CRON_SECRET}" --header="Content-Type: application/json" \
-                    "${APP_URL}/api/cron/heartbeat" || echo "heartbeat non envoyé"
+                  find /backups \( -name "benevoles_*.sql.gz.gpg" -o -name "benevoles_*.sql.gz.enc" \) \
+                    -exec ls -lh {} +
+                  # <<< BACKUP_SCRIPT_END
+          containers:
+            # Heartbeat for the super-admin health page (#383), sent only after the dump container
+            # succeeded; a failure to report must not fail the job. Same restricted curl
+            # container as the other CronJobs: curl_user (uid 100, gid 101), read-only root
+            # filesystem, the response body goes to an emptyDir /tmp.
+            - name: heartbeat
+              image: curlimages/curl:8.7.1
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 100
+                runAsGroup: 101
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: [ALL]
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+              env:
+                - name: APP_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: NEXT_PUBLIC_APP_URL
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: CRON_SECRET
+              command:
+                - sh
+                - -c
+                - |
+                  STATUS=$(curl -s -o /tmp/body -w "%{http_code}" --max-time 30 \
+                    -X POST \
+                    -H "Authorization: Bearer ${CRON_SECRET}" \
+                    -H "Content-Type: application/json" \
+                    -d '{"job":"backup","ok":true}' \
+                    "${APP_URL}/api/cron/heartbeat") || true
+                  if [ "${STATUS}" = "200" ]; then
+                    echo "heartbeat envoyé : $(cat /tmp/body)"
+                  else
+                    echo "heartbeat non envoyé (HTTP ${STATUS})"
+                  fi
