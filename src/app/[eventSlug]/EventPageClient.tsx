@@ -54,7 +54,8 @@ import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
 import HydrationNotice from "@/components/HydrationNotice"
 import { groupDaysByMonth, isLongEvent, usesMonthView, visibleDays } from "@/lib/long-event"
-import { readShiftView, saveShiftView, type ShiftView } from "@/lib/shift-view"
+import { readShiftView, saveShiftView, shiftViewButtonLook, shownShiftView, WIDE_SHIFT_VIEW_QUERY, type ShiftView, type ShiftViewButtonLook } from "@/lib/shift-view"
+import { useMediaQuery } from "@/lib/use-media-query"
 import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter, { type FooterSite } from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
@@ -245,11 +246,18 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // « Voir tous les postes » (#947): the visitor lifts the group link's filter, and can put it back.
   const [showAllRoles, setShowAllRoles] = useState(false)
   const [groupNote, setGroupNote] = useState("")
-  // « Frise » or « Liste » (#808): the timeline by default (and in the server HTML), the visitor's
-  // choice kept on the device and read once hydrated. The admin preview never reads storage.
+  // « Frise » or « Liste » (#808): the visitor's choice kept on the device and read once hydrated
+  // (the admin preview never reads storage); with none, the list on a phone, the timeline from
+  // `sm` up (#1407). Before the width is known, « auto » renders both and CSS shows one.
   const hydrated = useHydrated()
+  const wideScreen = useMediaQuery(WIDE_SHIFT_VIEW_QUERY)
   const [chosenShiftView, setChosenShiftView] = useState<ShiftView | null>(null)
-  const shiftView: ShiftView = chosenShiftView ?? (hydrated && !preview ? readShiftView() : null) ?? "frise"
+  // The screen's default stops following the width (a phone turned sideways, a page zoomed past
+  // the breakpoint) once a shift is focused or picked: it must not vanish under the visitor's
+  // finger or keyboard focus. Picked counts too: Safari on iOS does not focus a tapped button.
+  const [keptShiftView, setKeptShiftView] = useState<ShiftView | null>(null)
+  const keepShiftView = () => { if (shiftView !== "auto" && !keptShiftView) setKeptShiftView(shiftView) }
+  const shiftView = shownShiftView(chosenShiftView ?? keptShiftView, hydrated && !preview ? readShiftView() : null, wideScreen)
   const chooseShiftView = (view: ShiftView) => {
     setChosenShiftView(view)
     if (!preview) saveShiftView(view)
@@ -542,6 +550,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
   /** Selects or unselects a shift; false when refused (the reason is said where it applies). */
   function toggleShift(id: string): boolean {
+    keepShiftView()
     if (!accepting && !selectedShifts.has(id)) return false
     const target = event?.shifts.find((s) => s.id === id)
     if (!isShiftSelectable(target, myShiftIds)) return false
@@ -1071,18 +1080,25 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 « Voir qui est inscrit » (#1068) beside it, a separate switch, only for an identified
                 visitor; its label never changes. */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <div role="group" aria-label="Affichage des créneaux" className="inline-flex rounded-xl border border-gray-300 text-sm">
+            {/* Named by visible words, each choice with a small picture of what it shows (#1407):
+                the two words alone were easy to miss on a phone. While the width is unknown
+                (« auto »), the look of the pressed button follows the CSS breakpoint. */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span id="shift-view-label" className="text-sm text-gray-700">Affichage des créneaux</span>
+            <div role="group" aria-labelledby="shift-view-label" className="inline-flex rounded-xl border border-gray-300 text-sm">
               {(["frise", "liste"] as const).map((view) => (
                 <button
                   key={view}
                   type="button"
-                  aria-pressed={shiftView === view}
+                  aria-pressed={shiftView === "auto" ? undefined : shiftView === view}
                   onClick={() => chooseShiftView(view)}
-                  className={`min-h-11 px-4 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${shiftView === view ? "bg-gray-900 text-white" : "text-gray-700 hover:bg-gray-50"}`}
+                  className={`inline-flex min-h-11 items-center gap-2 px-4 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${SHIFT_VIEW_BUTTON_LOOK[shiftViewButtonLook(view, shiftView)]}`}
                 >
+                  <ShiftViewIcon view={view} />
                   {view === "frise" ? "Frise" : "Liste"}
                 </button>
               ))}
+            </div>
             </div>
             {rosterUrl && (
               // A switch (DESIGN.md §5), not a third view: an on/off display setting beside the
@@ -1116,7 +1132,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             {/* minmax(0,1fr): the timelines column may shrink below the chart width and scroll */}
             <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start">
               {/* Left: timelines */}
-              <div className="space-y-6">
+              <div className="space-y-6" onFocusCapture={keepShiftView}>
                 {months && month && (
                   // A view filter of this page, not navigation: a group, like « Affichage des créneaux ».
                   <div role="group" aria-label="Choisir le mois" className="flex flex-wrap gap-2">
@@ -1151,7 +1167,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           <span aria-hidden="true">← </span>Fais défiler pour voir toutes les plages<span aria-hidden="true"> →</span>
                         </p>
                       )}
-                      {shiftView === "liste" ? (
+                      {/* « auto » (#1407): both, the list below `sm`, the timeline from there up;
+                          display:none keeps the hidden one out of the tab order and the reading. */}
+                      {shiftView !== "frise" && (
+                        <div className={shiftView === "auto" ? "sm:hidden" : undefined}>
                         <ShiftDayList
                           shifts={dayShifts}
                           shows={dayShows}
@@ -1167,7 +1186,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           dayLabel={formatCalendarDay(day)}
                           roster={shownRoster}
                         />
-                      ) : (
+                        </div>
+                      )}
+                      {shiftView !== "liste" && (
+                        <div className={shiftView === "auto" ? "hidden sm:block" : undefined}>
                       <DayTimeline
                         shifts={dayShifts}
                         shows={dayShows}
@@ -1182,6 +1204,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         dayLabel={formatCalendarDay(day)}
                         roster={shownRoster}
                       />
+                        </div>
                       )}
                       {limitNotice && limitNoticeDay === day && (
                         <p className="mt-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-950">{limitNotice}</p>
@@ -1634,6 +1657,34 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
  * preview it is a plain <div>, the admin layout's <main id="main"> already wrapping the page.
  * The header (title, session) stays a banner outside it, the dialogs and the footer after it.
  */
+// The pressed look of « Frise » / « Liste »; with the width unknown, `sm` decides (#1407).
+const SHIFT_VIEW_BUTTON_LOOK: Record<ShiftViewButtonLook, string> = {
+  on: "bg-gray-900 text-white",
+  off: "text-gray-700 hover:bg-gray-50",
+  "on-when-wide": "text-gray-700 hover:bg-gray-50 sm:bg-gray-900 sm:text-white sm:hover:bg-gray-900",
+  "on-when-narrow": "bg-gray-900 text-white sm:bg-transparent sm:text-gray-700 sm:hover:bg-gray-50",
+}
+
+/** A small picture of each view (#1407): bars across a line of time, or rows one under another. */
+function ShiftViewIcon({ view }: { view: ShiftView }) {
+  return (
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+      {view === "frise" ? (
+        <>
+          <path d="M2 4h6" />
+          <path d="M6 8h7" />
+          <path d="M4 12h5" />
+        </>
+      ) : (
+        <>
+          <path d="M2 4h.01M2 8h.01M2 12h.01" strokeWidth="2.5" />
+          <path d="M5.5 4H14M5.5 8H14M5.5 12H14" />
+        </>
+      )}
+    </svg>
+  )
+}
+
 function ContentLandmark({ preview, className, children }: { preview: boolean; className: string; children: React.ReactNode }) {
   if (preview) return <div className={className}>{children}</div>
   return (

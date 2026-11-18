@@ -581,7 +581,8 @@ async function main() {
       await page.screencast.showChapter(manifest.title, { description: "Le parcours bénévole, simplement", duration: 2_300 })
     })
 
-    const shift = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : sélectionner/ })
+    // A phone opens on the list (#1407): the list item is named by its visible text.
+    const shift = page.getByRole("button", { name: /^15h–18h · Accueil\b/ })
     await scene("discover", async () => {
       await shift.scrollIntoViewIfNeeded()
       await page.waitForTimeout(700)
@@ -2162,6 +2163,8 @@ async function main() {
       await scene("mobile", async (at) => {
         await page.setViewportSize({ width: 390, height: 800 })
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+        // A phone opens on the list (#1407); this scene shows the Frise, chosen with its button.
+        await tap(page, page.getByRole("button", { name: "Frise", exact: true }))
         const hint = page.getByText(/Fais défiler pour voir toutes les plages/).first()
         await hint.scrollIntoViewIfNeeded()
         await at("Glisse doucement pour parcourir la")
