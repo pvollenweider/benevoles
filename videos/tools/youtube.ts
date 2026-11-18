@@ -28,7 +28,8 @@ import { createServer } from "node:http"
 import { homedir, tmpdir } from "node:os"
 import path from "node:path"
 import { chromium } from "playwright"
-import { catalogEntry, loadManifest, videosRoot } from "../lib/manifest"
+import { THEMES } from "../../src/lib/video-catalog"
+import { catalogEntry, loadCatalog, loadManifest, videosRoot } from "../lib/manifest"
 import { framePlacement, frameHtml, FRAME_SCALE, isPhoneRecording, thumbnailContent, thumbnailHtml, thumbnailKey, type ThumbnailContent } from "../lib/youtube-thumbnail"
 import {
   CATEGORY_EDUCATION,
@@ -36,8 +37,11 @@ import {
   THUMBNAIL_HEIGHT,
   THUMBNAIL_MAX_BYTES,
   THUMBNAIL_WIDTH,
+  QUOTA_REASONS,
   mediaUrls,
+  parseYoutubeState,
   planYoutube,
+  playlistMetadata,
   videoStatus,
   youtubeMetadata,
   type PlanItem,
@@ -62,17 +66,27 @@ const privacyIndex = args.indexOf("--privacy")
 /** Asked privacy; without it a new upload is private and a video already sent keeps its own. */
 const requestedPrivacy = privacyIndex >= 0 ? (args[privacyIndex + 1] as Privacy) : undefined
 const privacy: Privacy = requestedPrivacy ?? "private"
-const ids = args.filter((a, i) => !a.startsWith("--") && !(privacyIndex >= 0 && i === privacyIndex + 1))
+const exceptIndex = args.indexOf("--except")
+const except = new Set(exceptIndex >= 0 ? (args[exceptIndex + 1] ?? "").split(/[\s,]+/).filter(Boolean) : [])
+const all = args.includes("--all")
+const ids = args
+  .filter((a, i) => !a.startsWith("--") && !(privacyIndex >= 0 && i === privacyIndex + 1) && !(exceptIndex >= 0 && i === exceptIndex + 1))
+  .flatMap((a) => a.split(/[\s,]+/))
+  .filter(Boolean)
+
+/** The daily quota is spent: stop, a later run resumes where this one stopped. */
+class QuotaError extends Error {}
 
 type Client = { client_id: string; client_secret?: string }
 
 async function loadState(): Promise<YoutubeState> {
-  return existsSync(STATE_FILE) ? JSON.parse(await readFile(STATE_FILE, "utf8")) : {}
+  return parseYoutubeState(existsSync(STATE_FILE) ? JSON.parse(await readFile(STATE_FILE, "utf8")) : {})
 }
 
+const sortKeys = <T,>(record: Record<string, T>) => Object.fromEntries(Object.keys(record).sort().map((k) => [k, record[k]]))
+
 async function saveState(state: YoutubeState) {
-  const sorted = Object.fromEntries(Object.keys(state).sort().map((k) => [k, state[k]]))
-  await writeFile(STATE_FILE, JSON.stringify(sorted, null, 2) + "\n")
+  await writeFile(STATE_FILE, JSON.stringify({ playlists: sortKeys(state.playlists), videos: sortKeys(state.videos) }, null, 2) + "\n")
 }
 
 async function loadClient(): Promise<Client> {
@@ -160,6 +174,7 @@ async function accessToken(): Promise<string> {
 async function apiError(res: Response, what: string): Promise<Error> {
   const body = (await res.json().catch(() => ({}))) as { error?: { message?: string; errors?: { reason?: string }[] } }
   const reason = body.error?.errors?.[0]?.reason
+  if (reason && QUOTA_REASONS.includes(reason)) return new QuotaError(`${what} : quota YouTube du jour atteint (${reason})`)
   return Object.assign(new Error(`${what} : ${res.status} ${reason ?? ""} ${body.error?.message ?? ""}`.trim()), { status: res.status, reason })
 }
 
@@ -278,39 +293,63 @@ async function setStatus(token: string, videoId: string, to: Privacy) {
   if (!res.ok) throw await apiError(res, `Changement de visibilité de ${videoId} refusé`)
 }
 
+async function createPlaylist(token: string, label: string): Promise<string> {
+  const res = await fetch(`${API}/playlists?part=snippet,status`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json; charset=UTF-8" },
+    body: JSON.stringify({ snippet: { ...playlistMetadata(label), defaultLanguage: "fr" }, status: { privacyStatus: "public" } }),
+  })
+  if (!res.ok) throw await apiError(res, `Création de la playlist « ${label} » refusée`)
+  return ((await res.json()) as { id: string }).id
+}
+
+async function addToPlaylist(token: string, playlistId: string, videoId: string) {
+  const res = await fetch(`${API}/playlistItems?part=snippet`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json; charset=UTF-8" },
+    body: JSON.stringify({ snippet: { playlistId, resourceId: { kind: "youtube#video", videoId } } }),
+  })
+  if (!res.ok) throw await apiError(res, `Ajout à la playlist ${playlistId} refusé`)
+}
+
+function themeTitle(id: string): string {
+  return THEMES.find((t) => t.id === id)?.label ?? id
+}
+
 function describe(item: PlanItem): string {
-  switch (item.action) {
-    case "upload":
-      return "nouvel envoi"
-    case "replace":
-      return `nouvel envoi (révision ${item.revision} ou nouveau format), l'ancienne version (${item.previousVideoId}) ${item.previousPrivacy === "private" ? "reste privée" : "passera en non répertoriée"}`
-    case "finish":
-      return `à terminer (${[item.captions && "sous-titres", item.thumbnail && "vignette"].filter(Boolean).join(", ")}) sur ${item.videoId}`
-    case "status":
-      return `visibilité ${item.from} → ${item.to}, voix de synthèse déclarée, sur ${item.videoId}`
-    case "unchanged":
-      return `déjà en ligne : https://youtu.be/${item.videoId}`
+  if (item.action === "unchanged") return `déjà en ligne : https://youtu.be/${item.videoId}`
+  if (item.action === "upload") return "nouvel envoi"
+  if (item.action === "replace") {
+    return `nouvel envoi (révision ${item.revision} ou nouveau format), l'ancienne version (${item.previousVideoId}) ${item.previousPrivacy === "private" ? "reste privée" : "passera en non répertoriée"}`
   }
+  const todo = [
+    item.captions && "sous-titres",
+    item.thumbnail && "vignette",
+    item.playlists.length && `playlists (${item.playlists.map(themeTitle).join(" ; ")})`,
+    item.status && `visibilité ${item.status.from} → ${item.status.to}, voix de synthèse déclarée`,
+  ].filter(Boolean)
+  return `à compléter sur ${item.videoId} : ${todo.join(", ")}`
 }
 
 async function main() {
-  if (!ids.length) {
-    console.error("Indiquez les vidéos à envoyer : make video-youtube ID=ADMIN_NAVIGATION (ou IDS=\"A B\").")
+  if (!ids.length && !all) {
+    console.error("Indiquez les vidéos à envoyer : make video-youtube ID=ADMIN_NAVIGATION (ou IDS=\"A B\", ou ALL=1 [EXCEPT=\"A B\"]).")
     process.exit(2)
   }
+  const selected = (all ? (await loadCatalog()).videos.filter((v) => v.published).map((v) => v.id) : ids).filter((id) => !except.has(id))
   if (requestedPrivacy && !PRIVACIES.includes(requestedPrivacy)) {
     console.error(`--privacy doit valoir ${PRIVACIES.join(", ")}.`)
     process.exit(2)
   }
   const state = await loadState()
   const videos = await Promise.all(
-    ids.map(async (id) => {
+    selected.map(async (id) => {
       const entry = await catalogEntry(id)
       const manifest = await loadManifest(entry.manifest)
       const revision = entry.revision ?? 1
       const thumb = thumbnailContent(manifest, entry)
       const format: VideoFormat = isPhoneRecording(manifest) ? "framed" : "native"
-      return { entry, manifest, slug: manifest.slug, revision, thumb, thumbnailKey: thumbnailKey(thumb), format }
+      return { entry, manifest, slug: manifest.slug, revision, thumb, thumbnailKey: thumbnailKey(thumb), format, themes: entry.themes ?? [] }
     }),
   )
   const plan = planYoutube(videos, state, requestedPrivacy)
@@ -332,78 +371,107 @@ async function main() {
     }
   }
 
+  const counts = plan.reduce<Record<string, number>>((acc, item) => ({ ...acc, [item.action]: (acc[item.action] ?? 0) + 1 }), {})
+  console.log(`\n${plan.length} vidéo(s) : ${Object.entries(counts).map(([k, n]) => `${k} ${n}`).join(", ")}`)
   if (!apply) {
     console.log("\nAperçu seulement. Relancez avec APPLY=1 (make video-youtube … APPLY=1) pour envoyer.")
     return
   }
   if (plan.every((item) => item.action === "unchanged")) {
-    console.log("\nRien à envoyer.")
+    console.log("Rien à envoyer.")
     return
   }
 
   const token = await accessToken()
   const failures: string[] = []
+  let quota: string | undefined
   for (const [i, item] of plan.entries()) {
     if (item.action === "unchanged") continue
     const { manifest, entry, thumb, thumbnailKey: key, format } = videos[i]
     const dir = await mkdtemp(path.join(tmpdir(), "benevol-youtube-"))
+    // A step that fails is noted and the next one runs; a spent quota stops everything.
+    const step = async (what: () => Promise<void>, hint = "") => {
+      try {
+        await what()
+      } catch (error) {
+        if (error instanceof QuotaError) throw error
+        failures.push(`${entry.id} : ${(error as Error).message}${hint && (error as { status?: number }).status === 403 ? hint : ""}`)
+      }
+    }
     try {
       const urls = mediaUrls(item.slug)
-      let videoId: string
-      if (item.action === "status") {
-        await setStatus(token, item.videoId, item.to)
-        Object.assign(state[item.slug], { privacy: item.to, synthetic: true })
-        await saveState(state)
-        console.log(`\n${entry.id} : visibilité ${item.to} : https://youtu.be/${item.videoId}`)
-        continue
-      }
-      if (item.action === "finish") {
-        videoId = item.videoId
-      } else {
-        console.log(`\n${entry.id} : envoi de la vidéo…`)
+      console.log(`\n${entry.id} : ${describe(item)}`)
+      if (item.action === "upload" || item.action === "replace") {
         const mp4 = await download(urls.mp4, dir)
-        videoId = await uploadVideo(token, format === "framed" ? await frameVideo(thumb, mp4, dir) : mp4, youtubeMetadata(manifest, entry))
-        const replaced = item.action === "replace" ? [...(state[item.slug]?.replaced ?? []), item.previousVideoId] : state[item.slug]?.replaced
-        state[item.slug] = { videoId, revision: item.revision, privacy, captions: false, thumbnail: false, synthetic: true, format, uploadedAt: new Date().toISOString(), ...(replaced ? { replaced } : {}) }
+        const videoId = await uploadVideo(token, format === "framed" ? await frameVideo(thumb, mp4, dir) : mp4, youtubeMetadata(manifest, entry))
+        const previous = state.videos[item.slug]
+        const replaced = item.action === "replace" ? [...(previous?.replaced ?? []), item.previousVideoId!] : previous?.replaced
+        state.videos[item.slug] = { videoId, revision: item.revision, privacy, captions: false, thumbnail: false, synthetic: true, format, playlists: [], uploadedAt: new Date().toISOString(), ...(replaced ? { replaced } : {}) }
         await saveState(state)
         console.log(`  envoyée : https://youtu.be/${videoId}`)
         if (item.action === "replace" && item.previousPrivacy !== "private") {
-          await setStatus(token, item.previousVideoId, "unlisted").then(
-            () => console.log(`  ancienne version ${item.previousVideoId} passée en non répertoriée`),
-            (error) => failures.push(`${entry.id} : ${error.message}`),
-          )
+          await step(async () => {
+            await setStatus(token, item.previousVideoId!, "unlisted")
+            console.log(`  ancienne version ${item.previousVideoId} passée en non répertoriée`)
+          })
         }
       }
-      const current = state[item.slug]
-      if (!current.captions) {
-        try {
-          await uploadCaptions(token, videoId, await download(urls.vtt, dir))
+      const current = state.videos[item.slug]
+      if (item.status) {
+        await step(async () => {
+          await setStatus(token, current.videoId, item.status!.to)
+          Object.assign(current, { privacy: item.status!.to, synthetic: true })
+          await saveState(state)
+          console.log(`  visibilité ${item.status!.to}`)
+        })
+      }
+      if (item.captions) {
+        await step(async () => {
+          await uploadCaptions(token, current.videoId, await download(urls.vtt, dir))
           current.captions = true
           await saveState(state)
           console.log("  sous-titres ajoutés")
-        } catch (error) {
-          failures.push(`${entry.id} : ${(error as Error).message}`)
-        }
+        })
       }
-      if (!current.thumbnail || current.thumbnailKey !== key) {
-        try {
-          await uploadThumbnail(token, videoId, await renderThumbnail(thumb, await download(urls.poster, dir)))
+      if (item.thumbnail) {
+        await step(async () => {
+          await uploadThumbnail(token, current.videoId, await renderThumbnail(thumb, await download(urls.poster, dir)))
           Object.assign(current, { thumbnail: true, thumbnailKey: key })
           await saveState(state)
           console.log("  vignette ajoutée")
-        } catch (error) {
-          const e = error as Error & { status?: number }
-          failures.push(`${entry.id} : ${e.message}${e.status === 403 ? " (vignettes personnalisées : vérifiez la chaîne par téléphone dans YouTube Studio)" : ""}`)
-        }
+        }, " (vignettes personnalisées : vérifiez la chaîne par téléphone dans YouTube Studio)")
+      }
+      for (const theme of item.playlists) {
+        await step(async () => {
+          let playlist = state.playlists[theme]
+          if (!playlist) {
+            playlist = { playlistId: await createPlaylist(token, themeTitle(theme)), title: themeTitle(theme) }
+            state.playlists[theme] = playlist
+            await saveState(state)
+            console.log(`  playlist créée : « ${playlist.title} » https://www.youtube.com/playlist?list=${playlist.playlistId}`)
+          }
+          await addToPlaylist(token, playlist.playlistId, current.videoId)
+          current.playlists = [...(current.playlists ?? []), theme]
+          await saveState(state)
+          console.log(`  ajoutée à « ${playlist.title} »`)
+        })
       }
     } catch (error) {
+      if (error instanceof QuotaError) {
+        quota = error.message
+        break
+      }
       failures.push(`${entry.id} : ${(error as Error).message}`)
     } finally {
       await rm(dir, { recursive: true, force: true })
     }
   }
-  if (failures.length) {
-    console.error(`\nÀ reprendre (relancer la même commande termine ce qui manque) :\n${failures.map((f) => `  - ${f}`).join("\n")}`)
+  if (quota) {
+    console.error(`\n${quota}. Le quota se renouvelle à minuit, heure du Pacifique (9 h en Suisse) ; relancer la même commande reprend là où celle-ci s'est arrêtée.`)
+  }
+  if (failures.length || quota) {
+    if (failures.length) console.error(`\nÀ reprendre (relancer la même commande termine ce qui manque) :\n${failures.map((f) => `  - ${f}`).join("\n")}`)
+    await saveState(state)
     process.exit(1)
   }
   console.log("\nTerminé. Pensez à commiter videos/youtube.json.")

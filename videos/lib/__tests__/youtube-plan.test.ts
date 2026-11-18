@@ -9,6 +9,11 @@ import {
   TAGS_MAX_CHARS,
   TITLE_MAX,
   mediaUrls,
+  parseYoutubeState,
+  playlistMetadata,
+  type PlanInput,
+  type Privacy,
+  type YoutubeState,
   videoStatus,
   planYoutube,
   tagsLength,
@@ -107,46 +112,68 @@ describe("youtubeMetadata", () => {
 })
 
 describe("planYoutube", () => {
-  const ok = { videoId: "abc", revision: 3, privacy: "private" as const, captions: true, thumbnail: true, synthetic: true, uploadedAt: "2026-11-18T00:00:00Z" }
+  const ok = { videoId: "abc", revision: 3, privacy: "private" as const, captions: true, thumbnail: true, synthetic: true, uploadedAt: "2026-11-18T00:00:00Z", playlists: ["jour-j"] }
+  const state = (videos: YoutubeState["videos"]): YoutubeState => ({ playlists: {}, videos })
+  const one = (input: PlanInput, videos: YoutubeState["videos"], privacy?: Privacy) => planYoutube([input], state(videos), privacy)[0]
 
-  it("uploads a video never sent", () => {
-    expect(planYoutube([{ slug: "a", revision: 1 }], {}, "private")).toEqual([{ slug: "a", action: "upload", revision: 1 }])
+  it("uploads a video never sent, with everything to add", () => {
+    expect(one({ slug: "a", revision: 1, themes: ["jour-j"] }, {})).toEqual({ slug: "a", revision: 1, action: "upload", captions: true, thumbnail: true, playlists: ["jour-j"] })
   })
 
-  it("leaves a video alone when the revision is the one on YouTube", () => {
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: ok }, "private")[0]).toMatchObject({ action: "unchanged", videoId: "abc" })
+  it("leaves a video alone when nothing is missing", () => {
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: ok })).toMatchObject({ action: "unchanged", videoId: "abc" })
   })
 
   it("replaces a video whose revision changed", () => {
-    expect(planYoutube([{ slug: "a", revision: 4 }], { a: ok }, "private")[0]).toEqual({ slug: "a", action: "replace", revision: 4, previousVideoId: "abc", previousPrivacy: "private" })
+    expect(one({ slug: "a", revision: 4, themes: ["jour-j"] }, { a: ok })).toMatchObject({ action: "replace", previousVideoId: "abc", previousPrivacy: "private", playlists: ["jour-j"] })
   })
 
   it("replaces a video sent in another format (a phone recording now framed in 16:9)", () => {
-    expect(planYoutube([{ slug: "a", revision: 3, format: "framed" }], { a: ok })[0]).toMatchObject({ action: "replace", previousVideoId: "abc" })
-    expect(planYoutube([{ slug: "a", revision: 3, format: "framed" }], { a: { ...ok, format: "framed" } })[0]).toMatchObject({ action: "unchanged" })
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: ok })[0]).toMatchObject({ action: "unchanged" })
+    expect(one({ slug: "a", revision: 3, format: "framed" }, { a: ok })).toMatchObject({ action: "replace" })
+    expect(one({ slug: "a", revision: 3, format: "framed" }, { a: { ...ok, format: "framed", playlists: [] } })).toMatchObject({ action: "unchanged" })
   })
 
-  it("only updates the status when the privacy changes or the synthetic voice is not declared yet", () => {
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: ok }, "public")[0]).toEqual({ slug: "a", action: "status", revision: 3, videoId: "abc", from: "private", to: "public" })
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, synthetic: undefined } }, "private")[0]).toMatchObject({ action: "status", to: "private" })
-  })
-
-  it("keeps the current privacy of a video already sent when none is asked", () => {
-    const pub = { ...ok, privacy: "public" as const }
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: pub })[0]).toMatchObject({ action: "unchanged" })
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...pub, synthetic: undefined } })[0]).toMatchObject({ action: "status", from: "public", to: "public" })
+  it("finishes only what is missing: captions, thumbnail, playlists", () => {
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: { ...ok, captions: false } })).toMatchObject({ action: "update", captions: true, thumbnail: false, playlists: [] })
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: { ...ok, thumbnail: false } })).toMatchObject({ action: "update", captions: false, thumbnail: true })
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j", "planning-creneaux"] }, { a: ok })).toMatchObject({ action: "update", playlists: ["planning-creneaux"] })
   })
 
   it("makes the thumbnail again when what it shows changed", () => {
     const sent = { ...ok, thumbnailKey: "k1" }
-    expect(planYoutube([{ slug: "a", revision: 3, thumbnailKey: "k1" }], { a: sent })[0]).toMatchObject({ action: "unchanged" })
-    expect(planYoutube([{ slug: "a", revision: 3, thumbnailKey: "k2" }], { a: sent })[0]).toMatchObject({ action: "finish", captions: false, thumbnail: true })
+    expect(one({ slug: "a", revision: 3, thumbnailKey: "k1", themes: ["jour-j"] }, { a: sent })).toMatchObject({ action: "unchanged" })
+    expect(one({ slug: "a", revision: 3, thumbnailKey: "k2", themes: ["jour-j"] }, { a: sent })).toMatchObject({ action: "update", thumbnail: true })
   })
 
-  it("finishes only what failed: captions, thumbnail, or both", () => {
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, captions: false } }, "private")[0]).toEqual({ slug: "a", action: "finish", revision: 3, videoId: "abc", captions: true, thumbnail: false })
-    expect(planYoutube([{ slug: "a", revision: 3 }], { a: { ...ok, thumbnail: false } }, "private")[0]).toMatchObject({ action: "finish", captions: false, thumbnail: true })
+  it("updates the status when the privacy changes or the synthetic voice is not declared yet", () => {
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: ok }, "public")).toMatchObject({ action: "update", status: { from: "private", to: "public" } })
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: { ...ok, synthetic: undefined } })).toMatchObject({ status: { from: "private", to: "private" } })
+  })
+
+  it("keeps the current privacy of a video already sent when none is asked", () => {
+    const pub = { ...ok, privacy: "public" as const }
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: pub })).toMatchObject({ action: "unchanged" })
+  })
+})
+
+describe("parseYoutubeState", () => {
+  it("reads the current shape", () => {
+    const s = { playlists: { "jour-j": { playlistId: "PL1", title: "Jour J" } }, videos: { a: { videoId: "x" } } }
+    expect(parseYoutubeState(s)).toEqual(s)
+  })
+
+  it("reads the first shape (videos only) and an empty file", () => {
+    expect(parseYoutubeState({ a: { videoId: "x" } })).toEqual({ playlists: {}, videos: { a: { videoId: "x" } } })
+    expect(parseYoutubeState({})).toEqual({ playlists: {}, videos: {} })
+  })
+})
+
+describe("playlistMetadata", () => {
+  it("titles the playlist with the theme and links the library", () => {
+    const meta = playlistMetadata("Préparer et vivre le jour J")
+    expect(meta.title).toBe("Préparer et vivre le jour J")
+    expect(meta.description).toContain("https://www.benevol.app/videos")
+    expect(meta.description).toContain(BRAND_DEFINITION)
   })
 })
 

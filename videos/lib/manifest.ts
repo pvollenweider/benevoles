@@ -54,6 +54,7 @@ export type VideoCatalogEntry = {
   captureReady?: boolean
   seedScenario?: string
   audience?: string[]
+  themes?: string[]
   revision?: number
   thumbnailTitle?: string
 }

@@ -552,13 +552,20 @@ medias.benevol.app :
 make video-youtube ID=VOLUNTEER_REGISTER                           # aperçu
 make video-youtube ID=VOLUNTEER_REGISTER APPLY=1                   # envoi, en privé
 make video-youtube IDS="A B" PRIVACY=public APPLY=1                # envoi public
+make video-youtube ALL=1 EXCEPT="A B" PRIVACY=public APPLY=1        # toutes les vidéos publiées, sauf A et B
 ```
+
+Chaque thème du catalogue (`themes`, libellés de `src/lib/video-catalog.ts`) a sa playlist publique,
+créée au premier besoin ; une vidéo entre dans la playlist de chacun de ses thèmes. Quota : chaque
+nouvelle vidéo coûte environ 500 unités (400 pour les sous-titres, 50 pour la vignette, 50 par
+playlist) sur les 10 000 du jour. Quand le quota est épuisé, l'outil s'arrête proprement et la
+même commande, relancée le lendemain (après 9 h en Suisse), reprend où il s'était arrêté.
 
 Un nouvel envoi est privé sauf `PRIVACY=…` (l'API publie en public quand rien n'est dit) ; une
 vidéo déjà envoyée garde sa visibilité, sauf si `PRIVACY=…` la change (sans nouvel envoi). La
 narration est une voix de synthèse (Gemini) : chaque vidéo est déclarée comme contenu synthétique
 (`containsSyntheticMedia`).
-`videos/youtube.json` garde, par slug, l'identifiant YouTube, la révision envoyée et ce qui est
+`videos/youtube.json` garde les playlists par thème et, par slug, l'identifiant YouTube, la révision envoyée et ce qui est
 fait (sous-titres, vignette) ; il se commite. Une révision plus récente dans `catalog.json` donne
 un nouvel envoi (YouTube ne remplace pas le fichier d'une vidéo), de même qu'un changement de
 format ; l'ancienne version passe en « non répertoriée », ou reste privée si elle n'a jamais été

@@ -31,25 +31,37 @@ export const PRIVACIES: readonly Privacy[] = ["private", "unlisted", "public"]
 
 export type VideoFormat = "native" | "framed"
 
-export type YoutubeState = Record<
-  string,
-  {
-    videoId: string
-    revision: number
-    privacy: Privacy
-    captions: boolean
-    thumbnail: boolean
-    /** The narration voice is generated (Gemini): declared as synthetic content to YouTube. */
-    synthetic?: boolean
-    /** What the thumbnail sent shows (videos/lib/youtube-thumbnail.ts thumbnailKey). */
-    thumbnailKey?: string
-    /** « framed »: a phone recording sent inside a 16:9 frame; « native » (or absent): the MP4 as published. */
-    format?: VideoFormat
-    uploadedAt: string
-    /** Earlier uploads of the same video, set to unlisted when a new revision replaced them. */
-    replaced?: string[]
-  }
->
+export type YoutubeVideo = {
+  videoId: string
+  revision: number
+  privacy: Privacy
+  captions: boolean
+  thumbnail: boolean
+  /** The narration voice is generated (Gemini): declared as synthetic content to YouTube. */
+  synthetic?: boolean
+  /** What the thumbnail sent shows (videos/lib/youtube-thumbnail.ts thumbnailKey). */
+  thumbnailKey?: string
+  /** « framed »: a phone recording sent inside a 16:9 frame; « native » (or absent): the MP4 as published. */
+  format?: VideoFormat
+  /** Themes (catalog `themes`) whose playlist already holds this upload. */
+  playlists?: string[]
+  uploadedAt: string
+  /** Earlier uploads of the same video, set to unlisted when a new revision replaced them. */
+  replaced?: string[]
+}
+
+/** videos/youtube.json: one playlist per theme, and what was sent per manifest slug. */
+export type YoutubeState = {
+  playlists: Record<string, { playlistId: string; title: string }>
+  videos: Record<string, YoutubeVideo>
+}
+
+/** Reads videos/youtube.json, including its first shape (the videos only, keyed by slug). */
+export function parseYoutubeState(raw: unknown): YoutubeState {
+  const data = (raw ?? {}) as Partial<YoutubeState> & Record<string, unknown>
+  if (data.videos && typeof data.videos === "object") return { playlists: data.playlists ?? {}, videos: data.videos }
+  return { playlists: {}, videos: data as Record<string, YoutubeVideo> }
+}
 
 export type YoutubeMetadata = {
   title: string
@@ -118,40 +130,66 @@ export function youtubeMetadata(manifest: VideoManifest, entry: VideoCatalogEntr
   return { title: youtubeTitle(manifest.title), description: youtubeDescription(manifest), tags: youtubeTags(entry.tags) }
 }
 
-export type PlanItem =
-  | { slug: string; action: "upload"; revision: number }
-  | { slug: string; action: "replace"; revision: number; previousVideoId: string; previousPrivacy: Privacy }
-  | { slug: string; action: "finish"; revision: number; videoId: string; captions: boolean; thumbnail: boolean }
-  | { slug: string; action: "status"; revision: number; videoId: string; from: Privacy; to: Privacy }
-  | { slug: string; action: "unchanged"; revision: number; videoId: string }
+export type PlanItem = {
+  slug: string
+  revision: number
+  /** upload: never sent; replace: new revision or format; update: something to finish or change. */
+  action: "upload" | "replace" | "update" | "unchanged"
+  videoId?: string
+  previousVideoId?: string
+  previousPrivacy?: Privacy
+  captions: boolean
+  thumbnail: boolean
+  /** Themes whose playlist must receive the video. */
+  playlists: string[]
+  status?: { from: Privacy; to: Privacy }
+}
+
+export type PlanInput = { slug: string; revision: number; thumbnailKey?: string; format?: VideoFormat; themes?: string[] }
 
 /**
  * What to do for each video. YouTube cannot swap the file of an existing video, so a new revision
  * or a new format is a new upload; the earlier one is then set to unlisted, or left private if it
- * never was public (never deleted: links keep working).
- * An upload whose captions or thumbnail failed is finished on the next run, without a new upload;
- * so is a thumbnail whose content or design changed.
- * A video whose privacy differs from the one asked, or not yet declared as synthetic, only gets
- * its status updated. Without an explicit privacy, a video already on YouTube keeps its own.
+ * never was public (never deleted: links keep working). For a video already sent, whatever is
+ * missing is finished without a new upload: captions, thumbnail (also when its content or design
+ * changed), theme playlists, and the status (privacy asked, synthetic voice declared). Without an
+ * explicit privacy, a video already on YouTube keeps its own.
  */
-export function planYoutube(
-  videos: { slug: string; revision: number; thumbnailKey?: string; format?: VideoFormat }[],
-  state: YoutubeState,
-  privacy?: Privacy,
-): PlanItem[] {
-  return videos.map(({ slug, revision, thumbnailKey, format = "native" }) => {
-    const known = state[slug]
-    if (!known) return { slug, action: "upload", revision }
-    if (known.revision !== revision || (known.format ?? "native") !== format) return { slug, action: "replace", revision, previousVideoId: known.videoId, previousPrivacy: known.privacy }
-    const thumbnail = !known.thumbnail || (thumbnailKey !== undefined && known.thumbnailKey !== thumbnailKey)
-    if (!known.captions || thumbnail) return { slug, action: "finish", revision, videoId: known.videoId, captions: !known.captions, thumbnail }
+export function planYoutube(videos: PlanInput[], state: YoutubeState, privacy?: Privacy): PlanItem[] {
+  return videos.map(({ slug, revision, thumbnailKey, format = "native", themes = [] }) => {
+    const known = state.videos[slug]
+    const fresh = { captions: true, thumbnail: true, playlists: [...themes] }
+    if (!known) return { slug, revision, action: "upload", ...fresh }
+    if (known.revision !== revision || (known.format ?? "native") !== format) {
+      return { slug, revision, action: "replace", previousVideoId: known.videoId, previousPrivacy: known.privacy, ...fresh }
+    }
     const to = privacy ?? known.privacy
-    if (to !== known.privacy || !known.synthetic) return { slug, action: "status", revision, videoId: known.videoId, from: known.privacy, to }
-    return { slug, action: "unchanged", revision, videoId: known.videoId }
+    const item: PlanItem = {
+      slug,
+      revision,
+      action: "update",
+      videoId: known.videoId,
+      captions: !known.captions,
+      thumbnail: !known.thumbnail || (thumbnailKey !== undefined && known.thumbnailKey !== thumbnailKey),
+      playlists: themes.filter((t) => !(known.playlists ?? []).includes(t)),
+      ...(to !== known.privacy || !known.synthetic ? { status: { from: known.privacy, to } } : {}),
+    }
+    if (!item.captions && !item.thumbnail && !item.playlists.length && !item.status) item.action = "unchanged"
+    return item
   })
 }
 
-/** Published files the upload starts from: the video, its captions (the narration text, timed) and its poster. */
+/** Title and description of a theme's playlist. */
+export function playlistMetadata(label: string): { title: string; description: string } {
+  return {
+    title: stripAngleBrackets(label).slice(0, 150),
+    description: [`Tutoriels vidéo benevol.app : ${stripAngleBrackets(label)}.`, `Toutes les vidéos, avec leur guide : ${SITE_URL}/videos`, "", BRAND_DEFINITION, SITE_URL].join("\n"),
+  }
+}
+
+/** Errors after which nothing more can be sent today: the daily quota is spent. */
+export const QUOTA_REASONS = ["quotaExceeded", "dailyLimitExceeded", "uploadLimitExceeded", "rateLimitExceeded"]
+
 /**
  * Full `status` of an upload. An update with part=status resets every writable field it omits,
  * so the same complete object is sent on insert and on every status change. The narration is a
@@ -161,6 +199,7 @@ export function videoStatus(privacy: Privacy) {
   return { privacyStatus: privacy, selfDeclaredMadeForKids: false, containsSyntheticMedia: true, embeddable: true, license: "youtube", publicStatsViewable: true }
 }
 
+/** Published files the upload starts from: the video, its captions (the narration text, timed) and its poster. */
 export function mediaUrls(slug: string): { mp4: string; vtt: string; poster: string } {
   const base = `${MEDIA_BASE_URL}/${slug}/${slug}`
   return { mp4: `${base}.mp4`, vtt: `${base}.vtt`, poster: `${base}.jpg` }
