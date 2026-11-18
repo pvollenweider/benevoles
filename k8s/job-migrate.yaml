@@ -42,11 +42,13 @@ spec:
               drop: [ALL]
           env:
             # The entrypoint and `prisma migrate deploy` (prisma.config.ts) read only DATABASE_URL.
+            # Here it is the schema owner's URL (benevoles_owner, allowed to change the schema),
+            # not the app's (docs/deploiement.md, « Rôles PostgreSQL »).
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: benevoles-secret
-                  key: DATABASE_URL
+                  key: MIGRATE_DATABASE_URL
             - name: NODE_ENV
               value: production
             - name: MIGRATE_ON_START

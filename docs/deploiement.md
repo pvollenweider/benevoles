@@ -117,7 +117,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `rbac-ci-deployer.yaml` | ServiceAccount `ci-deployer`, Secret `ci-deployer-token`, Role et RoleBinding `ci-deployer` | non | Compte de déploiement du workflow, limité au namespace `benevoles` ; appliqué à la main, voir « Accès du workflow aux secrets et au cluster » ci-dessous |
 | `secret.yaml` | Secret `benevoles-secret` | non | Modèle incomplet ; le secret réel est régénéré par le workflow (voir [configuration.md](configuration.md#secrets-kubernetes)) |
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
-| `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
+| `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée, sous le rôle `benevoles_owner` (voir « Rôles PostgreSQL » ci-dessous) ; `backoffLimit: 0`, 300 s au plus |
 | `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, clés de `benevoles-secret` données une à une (voir [configuration.md](configuration.md#secrets-kubernetes)), limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
 | `networkpolicy.yaml` | NetworkPolicies `default-deny-ingress`, `app-from-traefik`, `media-from-traefik`, `acme-solver-from-traefik`, `postgres-from-clients` | oui, avant la migration ; retirées si le déploiement échoue ensuite | Entrées refusées par défaut dans le namespace, voir « Isolation réseau » ci-dessous |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
@@ -161,6 +161,25 @@ kubectl -n benevoles get networkpolicy
 kubectl -n benevoles delete networkpolicy -l app.kubernetes.io/part-of=benevoles-netpol   # retrait d'urgence
 ```
 
+### Rôles PostgreSQL
+
+La base de production a trois rôles. Le workflow ne crée ni ne modifie aucun rôle : l'opérateur les crée à la main, une fois, et le mot de passe de chacun doit être celui de son secret GitHub.
+
+| Rôle | Utilisé par | Peut | Ne peut pas |
+|------|-------------|------|-------------|
+| `POSTGRES_USER` (superutilisateur, créé par l'image `postgres:16-alpine` au premier démarrage) | pod PostgreSQL, sauvegarde (`pg_dump`), interventions à la main | tout | |
+| `benevoles_owner` | Job de migration (`MIGRATE_DATABASE_URL`) | posséder et modifier toutes les tables, séquences, fonctions et types du schéma `public`, y créer des objets | créer une base, un schéma, un rôle ou une extension ; exécuter un programme ou lire un fichier du serveur |
+| `benevoles_app` | application (`DATABASE_URL`), et donc les CronJobs qui l'appellent en HTTP | lire, ajouter, modifier et supprimer des lignes de toutes les tables ; lire `_prisma_migrations` | écrire dans `_prisma_migrations` ; créer, modifier, vider (`TRUNCATE`) ou supprimer une table ; tout ce que `benevoles_owner` ne peut pas |
+
+Des droits par défaut donnent à `benevoles_app` la lecture et l'écriture des lignes de chaque nouvelle table et séquence créée par `benevoles_owner` ou par le superutilisateur : une migration n'a rien à accorder.
+
+Conséquences :
+
+- **Extensions** : `benevoles_owner` n'a pas le droit `CREATE` sur la base, il ne peut donc pas créer d'extension, même « trusted ». Une migration qui en ajoute une demande de la créer d'abord en superutilisateur (`CREATE EXTENSION IF NOT EXISTS …` dans le pod PostgreSQL), avant la fusion ; sinon le Job de migration échoue et la version en cours continue de servir. `unaccent` existe déjà.
+- **Migration appliquée en superutilisateur** (à la main, ou par un déploiement qui précède le passage aux rôles) : les objets qu'elle crée appartiennent au superutilisateur, et `benevoles_owner` ne pourra plus les modifier. L'application y garde accès (droits par défaut). La procédure de l'opérateur rejoue le transfert de propriété, qui ne change rien aux objets déjà transférés.
+- **Scripts de l'opérateur** (`scripts/erasure-register.ts`, `regenerate-links.ts`, `reset-two-factor.ts`, `prisma/seed.ts`) : ils ne font que lire et écrire des lignes, avec le code de l'application. Ils se lancent avec l'URL de `benevoles_app`.
+- **Tests** : la CI (tests d'intégration et E2E) se connecte en superutilisateur. Les tests d'intégration passent aussi sous un rôle qui a les droits de `benevoles_app`, sauf `migration-upgrade.int.test.ts` et `sector-scoped-leaders.int.test.ts`, qui créent une base jetable (`CREATE DATABASE`).
+
 ### Adresse des visiteurs et limites de débit
 
 Les limites de débit (inscription, lien personnel, invitation, mot de passe oublié…) comptent les requêtes par adresse de visiteur, lue dans `X-Forwarded-For` (`TRUSTED_PROXY_HOPS`, 1 par défaut). Avec le réglage par défaut de k3s (`externalTrafficPolicy: Cluster`), le répartiteur de charge interne remplace l'adresse de chaque visiteur par celle du nœud (`10.42.0.1`) : toutes les limites deviennent alors un seul compteur partagé par tout le monde, et une heure chargée bloque tous les visiteurs. `traefik-config.yaml` règle `externalTrafficPolicy: Local` ; sur ce cluster à un seul nœud, cela n'a pas d'inconvénient. Ce Traefik sert aussi les autres sites du cluster.
@@ -187,7 +206,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
 3. **deploy** (environnement GitHub `production`), après **check** et **build-push** :
    1. refuse de déployer une version plus ancienne que celle en production (« Refuse an older version ») : si le commit de l'image en production contient déjà le commit de ce run, le job échoue avant de toucher au cluster. C'est le cas de la relance d'un ancien run, ou d'un run dont l'image a fini après celle d'un commit plus récent. Redéployer le commit en production (relance pour recopier un secret) reste possible ; un retour volontaire à une version précédente suit la « Mise en place manuelle » ci-dessous ;
    2. régénère le secret de tirage `ghcr-secret` ;
-   3. s'arrête, avant de toucher au reste, si l'un des secrets `TOKEN_ENCRYPTION_KEY`, `AUTH_SECRET`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `CRON_SECRET`, `SMTP_HOST`, `SMTP_PASSWORD`, `EMAIL_FROM` ou `OFFSITE_BUCKET` est vide (le journal ne nomme que les secrets vides) ;
+   3. s'arrête, avant de toucher au reste, si l'un des secrets `TOKEN_ENCRYPTION_KEY`, `AUTH_SECRET`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `CRON_SECRET`, `SMTP_HOST`, `SMTP_PASSWORD`, `EMAIL_FROM`, `OFFSITE_BUCKET`, `APP_DB_PASSWORD` ou `MIGRATE_DB_PASSWORD` est vide (le journal ne nomme que les secrets vides) ;
    4. régénère `benevoles-secret` (« Sync k8s secret ») ;
    5. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    6. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
@@ -283,6 +302,11 @@ kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cr
 APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
 kubectl -n benevoles rollout status deploy/benevoles-app
 ```
+
+Sur une base neuve, les rôles de [Rôles PostgreSQL](#rôles-postgresql) n'existent pas : le pod PostgreSQL ne crée que le superutilisateur. Entre les étapes 2 et 3, les créer avec leur mot de passe, en superutilisateur, et leur donner leurs droits (procédure de l'opérateur). La première migration demande en plus un droit que `benevoles_owner` n'a pas ensuite : `0001_init` commence par `CREATE SCHEMA IF NOT EXISTS "public"` et une migration crée l'extension `unaccent`, deux instructions refusées sans le droit `CREATE` sur la base, même quand le schéma existe déjà. Deux façons de faire :
+
+- donner ce droit le temps de la première migration (`GRANT CREATE ON DATABASE benevoles TO benevoles_owner`), le retirer après (`REVOKE CREATE ON DATABASE benevoles FROM benevoles_owner`), puis rejouer l'attribution des droits, qui retire à l'application l'écriture dans `_prisma_migrations`, créée entre-temps ;
+- ou appliquer la première migration avec l'URL du superutilisateur, puis transférer la propriété comme sur une base existante.
 
 Si l'étape 3 échoue, ne pas passer à la suite : lire les journaux du Job, corriger, relancer. Un Job en échec ne remplit jamais la condition `complete` : `kubectl wait` ne rend la main qu'à l'expiration du délai (300 s, comme `activeDeadlineSeconds`), et `kubectl -n benevoles logs job/benevoles-migrate` peut être lu sans attendre.
 
@@ -663,6 +687,13 @@ Déchiffrement (commande donnée en en-tête du manifeste) :
 openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ```
+
+**Créer les rôles avant de restaurer.** Le dump nomme les rôles `benevoles_owner` et `benevoles_app` (propriétaires des objets, droits, droits par défaut), mais ne les contient pas : un rôle appartient au serveur PostgreSQL, pas à la base. Dans le même serveur, ils existent déjà. Sur un serveur neuf (volume perdu, autre cluster) :
+
+- si les deux rôles existent avant le chargement avec `psql`, la base restaurée a les mêmes propriétaires, droits et droits par défaut que l'originale, sans aucune erreur ;
+- sinon, `psql` signale une erreur `role "benevoles_app" does not exist` ou `role "benevoles_owner" does not exist` pour chaque ligne qui les nomme (135 avec le schéma actuel), mais charge toutes les données ; tous les objets appartiennent alors à celui qui restaure, et l'application n'a aucun droit. Créer ensuite les rôles et rejouer le transfert de propriété et l'attribution des droits (procédure de l'opérateur) donne le même résultat que la restauration précédente.
+
+Dans les deux cas, un rôle recréé reçoit à nouveau le mot de passe de son secret GitHub. `scripts/restore-test-offsite.sh` charge le dump sans créer ces rôles et ignore ces erreurs : il prouve que les données se restaurent, pas les droits.
 
 **Restaurer dans la base de production ramène les données des bénévoles effacés depuis la sauvegarde (#516).** Avant la restauration, exporter le registre des effacements de la base actuelle ; après, le rejouer. Procédure complète : [rgpd/procedure-effacement.md](rgpd/procedure-effacement.md).
 

@@ -28,7 +28,12 @@ const NOT_FOR_THE_APP = [
   "ADMIN_EMAIL", // startup bootstrap (self-hosted image) and prisma/seed.ts; deliberately not passed in k8s
   "ADMIN_PASSWORD",
   "OFFSITE_BUCKET", // k8s/cronjob-backup-offsite.yaml
+  "MIGRATE_DATABASE_URL", // k8s/job-migrate.yaml: the schema owner, allowed to change the schema
 ]
+
+// Keys that only the migration Job (MIGRATE_DATABASE_URL), or the postgres pod and the backup
+// (POSTGRES_PASSWORD), may receive: never the app Deployment nor a CronJob that calls it.
+const DATABASE_ADMIN_KEYS = ["MIGRATE_DATABASE_URL", "POSTGRES_PASSWORD"]
 
 // The app refuses to start without these (src/lib/env.ts, src/lib/production-guards.ts): a missing
 // key keeps the new pod from being created, the old one keeps serving.
@@ -150,8 +155,31 @@ describe("explicit secret keys for the app (#1050)", () => {
     expect(app.filter((e) => !e.optional).map((e) => e.key).sort()).toEqual([...REQUIRED_FOR_THE_APP].sort())
   })
 
-  it("the migration Job gets DATABASE_URL only", () => {
-    expect(secretEnv(read("k8s/job-migrate.yaml"))).toEqual([{ name: "DATABASE_URL", key: "DATABASE_URL", optional: false }])
+  it("the migration Job gets the schema owner's URL only, under the name DATABASE_URL", () => {
+    expect(secretEnv(read("k8s/job-migrate.yaml"))).toEqual([{ name: "DATABASE_URL", key: "MIGRATE_DATABASE_URL", optional: false }])
+  })
+
+  it("the app connects as benevoles_app and the migration Job as benevoles_owner, never as POSTGRES_USER", () => {
+    const workflow = read(".github/workflows/deploy.yml")
+    const url = (key: string) => workflow.match(new RegExp(`^\\s+${key}: "(postgresql://[^"]+)"$`, "m"))?.[1]
+    expect(url("DATABASE_URL")).toBe("postgresql://benevoles_app:${{ secrets.APP_DB_PASSWORD }}@postgres:5432/benevoles")
+    expect(url("MIGRATE_DATABASE_URL")).toBe("postgresql://benevoles_owner:${{ secrets.MIGRATE_DB_PASSWORD }}@postgres:5432/benevoles")
+    expect(workflow).not.toMatch(/postgresql:\/\/\$\{\{ secrets\.POSTGRES_USER/)
+  })
+
+  it.each(POD_MANIFESTS.filter((f) => f !== "k8s/job-migrate.yaml" && f !== "k8s/cronjob-backup.yaml"))(
+    "%s never receives the schema owner's URL nor the superuser password",
+    (file) => {
+      const m = read(file)
+      for (const key of DATABASE_ADMIN_KEYS) expect(m, `${file}: ${key}`).not.toMatch(new RegExp(`key: ${key}\\b`))
+    },
+  )
+
+  it("only the backup reads the superuser password, as PGPASSWORD", () => {
+    const readers = POD_MANIFESTS.filter((f) => /key: POSTGRES_PASSWORD\b/.test(read(f)))
+    expect(readers).toEqual(["k8s/cronjob-backup.yaml"])
+    expect(read("k8s/cronjob-backup.yaml")).toMatch(/- name: PGPASSWORD\n\s+valueFrom:\n\s+secretKeyRef:\n\s+name: benevoles-secret\n\s+key: POSTGRES_PASSWORD\n/)
+    expect(read("k8s/cronjob-backup.yaml")).not.toMatch(/key: MIGRATE_DATABASE_URL\b/)
   })
 
   it("the hand-managed backup passphrase still reaches the backup job", () => {
