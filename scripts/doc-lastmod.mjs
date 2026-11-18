@@ -5,7 +5,7 @@
 
 // Writes doc-lastmod.json at the repo root: each source file of the apex sitemap (the `source` of
 // PUBLIC_PAGES in src/lib/doc-pages.ts, the documentation units content/guide/*.md and the video pages'
-// own code, VIDEO_PAGE_SOURCES) mapped to the ISO date of its last commit. The sitemap (src/app/sitemap.ts) reads it as each page's lastmod: the
+// own code, VIDEO_PAGE_SOURCES, and the home's, HOME_PAGE_SOURCES) mapped to the ISO date of its last commit. The sitemap (src/app/sitemap.ts) reads it as each page's lastmod: the
 // files' mtime in the image is the build time, identical for every page on every deploy.
 //
 // Run by deploy.yml before the image build, on a full clone (fetch-depth: 0): a shallow clone
@@ -30,6 +30,12 @@ export const VIDEO_PAGE_SOURCES = {
 }
 
 /**
+ * The files the apex home is rendered from: its sitemap lastmod is the later of their last
+ * commits. Same list as HOME_PAGE_SOURCES in src/lib/doc-pages.ts; a test checks the two match.
+ */
+export const HOME_PAGE_SOURCES = ["src/app/page.tsx", "content/pages/FAQ-ACCUEIL.md"]
+
+/**
  * The sitemap's source files, read from the code itself so the list can't drift: every
  * `source: "…"` of src/lib/doc-pages.ts, then every unit of content/guide/ (not the index README.md nor the role guides' introductions GUIDE_*.md)
  * (the same rule as readDocUnits in src/lib/doc-units.ts). A test checks it covers both.
@@ -45,7 +51,7 @@ export function docLastmodSources(root = ROOT) {
   const units = existsSync(guideDir)
     ? readdirSync(guideDir).filter((f) => f.endsWith(".md") && !notUnits.includes(f)).sort().map((f) => `content/guide/${f}`)
     : []
-  return [...new Set([...sources, ...units, ...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video])]
+  return [...new Set([...sources, ...units, ...HOME_PAGE_SOURCES, ...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video])]
 }
 
 /**

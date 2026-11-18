@@ -53,6 +53,10 @@ export type VideoCatalogEntry = {
   /** False while a video's real UI recorder and fixture are still being prepared. */
   captureReady?: boolean
   seedScenario?: string
+  audience?: string[]
+  themes?: string[]
+  revision?: number
+  thumbnailTitle?: string
 }
 
 type VideoCatalog = {

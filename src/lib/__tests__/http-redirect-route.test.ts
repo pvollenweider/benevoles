@@ -25,6 +25,20 @@ describe("HTTP to HTTPS route (#759)", () => {
     expect(regexp.test("evil-benevol.app")).toBe(false)
   })
 
+  it("sends the bare domain straight to www over https, in one hop, above the catch-all", () => {
+    const regex = /redirectRegex:\s*\n\s*regex: '([^']+)'/.exec(manifest)?.[1] ?? ""
+    const replacement = /replacement: '([^']+)'/.exec(manifest)?.[1] ?? ""
+    expect(manifest).toMatch(/redirectRegex:[\s\S]*?permanent: true/)
+    const redirect = (url: string) => url.replace(new RegExp(regex), replacement.replace("${1}", "$1"))
+    expect(redirect("http://benevol.app/tarifs?utm=x")).toBe("https://www.benevol.app/tarifs?utm=x")
+    expect(redirect("http://benevol.app/")).toBe("https://www.benevol.app/")
+    expect(new RegExp(regex).test("http://www.benevol.app/")).toBe(false)
+    const routes = [...manifest.matchAll(/priority: (\d+)\s*\n\s*match: (.+)\s*\n\s*middlewares:\s*\n\s*- name: (\S+)/g)]
+    const apex = routes.find((r) => r[3] === "benevoles-apex-www-redirect")
+    expect(apex?.[2]).toBe("Host(`benevol.app`)")
+    expect(Number(apex?.[1])).toBeGreaterThan(Number(routes.find((r) => r[3] === "benevoles-https-redirect")?.[1]))
+  })
+
   it("stays under the token route, which keeps its own unlogged HTTP route", () => {
     const priority = Number(/priority: (\d+)/.exec(manifest)?.[1])
     const tokenPriorities = [...tokens.matchAll(/priority: (\d+)/g)].map((m) => Number(m[1]))

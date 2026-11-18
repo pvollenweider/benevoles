@@ -207,6 +207,14 @@ describe("apexSitemap", () => {
     expect(entries.find((e) => e.url.endsWith("/doc/benevole"))).not.toHaveProperty("lastModified")
   })
 
+  it("dates the home by the later of its own files' last commits", () => {
+    const early = new Date("2026-10-01T10:00:00Z")
+    const late = new Date("2026-11-17T08:00:00Z")
+    const dates: Record<string, Date> = { "src/app/page.tsx": early, "content/pages/FAQ-ACCUEIL.md": late }
+    const entries = apexSitemap("https://www.benevol.app", (src) => dates[src] ?? null)
+    expect(entries[0]).toEqual({ url: "https://www.benevol.app/", changeFrequency: "weekly", priority: 1, lastModified: late })
+  })
+
   it("lists the documentation units after the pages, with their own file's date (#649)", () => {
     const d = new Date("2026-10-01T10:00:00Z")
     const entries = apexSitemap("https://www.benevol.app", (src) => (src === "content/guide/b.md" ? d : null), [{ slug: "a", source: "content/guide/a.md" }, { slug: "b", source: "content/guide/b.md" }])

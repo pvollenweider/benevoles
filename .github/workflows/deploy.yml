@@ -144,6 +144,7 @@ jobs:
       # Re-deploying the deployed commit (re-run to copy a secret again) stays allowed; a rollback
       # on purpose follows docs/deploiement.md.
       - name: Refuse an older version
+        id: deployed
         run: |
           deployed=$(kubectl -n benevoles get deployment benevoles-app \
             -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null || true)
@@ -159,6 +160,10 @@ jobs:
             exit 1
           else
             echo "Deployed commit: $deployed_sha, older than or unrelated to $GITHUB_SHA."
+          fi
+          # Its date, for IndexNow after the rollout (scripts/indexnow.mjs): the pages changed since.
+          if [ -n "$deployed_sha" ] && [ "$deployed_sha" != "$GITHUB_SHA" ]; then
+            echo "date=$(git show -s --format=%cI "$deployed_sha")" >> "$GITHUB_OUTPUT"
           fi
 
       # k8s/namespace.yaml is cluster-scoped: applied by hand (docs/deploiement.md), the deploy
@@ -400,6 +405,14 @@ jobs:
             [ "$code" = "200" ] || { fail=1; break; }
           done
           [ "$fail" = "0" ] || { echo "::error::The site does not answer through the NetworkPolicy"; exit 1; }
+
+      # Bing (ChatGPT search) and the other IndexNow engines learn which pages this deploy changed.
+      # Never fails the deploy: the site is already live, the engines crawl again anyway.
+      - name: Tell IndexNow about the changed pages
+        continue-on-error: true
+        env:
+          SINCE: ${{ steps.deployed.outputs.date }}
+        run: node scripts/indexnow.mjs "$SINCE"
 
       # :latest names the image production runs: moved without a rebuild, by digest.
       - name: Login to GHCR
