@@ -1386,3 +1386,10 @@ Les quinze vidéos des points 1 à 9 ont été traitées : **douze READY publié
 ## À refilmer : « Partager ce créneau » sur « Où manque-t-il du monde ? » (#1386, 17 novembre 2026)
 
 Chaque créneau à compléter porte maintenant un troisième lien, **Partager ce créneau**, après « Chercher des bénévoles » et « Voir les disponibilités » ; il ouvre une fenêtre avec le lien public du créneau, « Copier le lien », « QR code PNG » et la case « Accepter une inscription même si les inscriptions de l'événement sont fermées ». Les sélecteurs de capture visent des liens de `staffing-underfilled` et ne cassent pas ; seule l'image change. Vidéos touchées : **STAFFING_GAPS** (manifeste `staffing-gaps`, à compléter d'un segment sur le partage dans un groupe de discussion), **LAST_MINUTE_CHANGES** (`last-minute-changes`, le geste le plus utile la veille : un segment à ajouter), **SECTORS** (`sectors`, image seulement). À reprendre au prochain lot vidéo.
+
+## À refilmer : planning en liste sur téléphone (#1407, 18 novembre 2026)
+
+Sur la page d'inscription, un téléphone tenu droit ouvre maintenant le planning en **Liste** (la frise reste l'affichage des écrans plus larges), et le choix « Frise / Liste » porte un libellé visible, « Affichage des créneaux », et une icône par bouton.
+
+- **volunteer-register-mobile** : l'image montre la frise et l'ancien choix sans libellé ; la capture sélectionne maintenant le créneau dans la liste (`videos/tools/record.ts`). La narration ne parle pas de la frise : elle reste juste, la vidéo est à refilmer pour l'image.
+- **volunteer-discover-event**, scène « Sur téléphone » : la narration dit que le planning est plus large que l'écran et qu'on le fait défiler ; c'est vrai de la frise, plus de l'affichage d'office. La capture touche maintenant « Frise » avant de faire défiler. Narration à revoir (dire que le téléphone ouvre la liste, et que « Frise » ou le téléphone tourné à l'horizontale donne la journée entière), puis refilmer.

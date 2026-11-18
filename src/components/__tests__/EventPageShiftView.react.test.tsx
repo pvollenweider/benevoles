@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, cleanup, fireEvent, within } from "@testing-library/react"
+import { render, screen, cleanup, fireEvent, within, act } from "@testing-library/react"
 import { renderToString } from "react-dom/server"
 
 vi.mock("next/navigation", () => ({
@@ -14,7 +14,8 @@ vi.mock("next/navigation", () => ({
 import EventPageClient, { type EventData } from "@/app/[eventSlug]/EventPageClient"
 import { SHIFT_VIEW_KEY } from "@/lib/shift-view"
 
-// #808: « Frise » by default, « Liste » chosen with the toggle and kept on the device.
+// #808: « Frise » / « Liste », the choice kept on the device. #1407: with no choice, the list on a
+// phone and the timeline from `sm` up; jsdom has no matchMedia, which counts as a wide screen.
 const shift = (id: string, over: object = {}) => ({ id, roleName: "Bar", label: "Bar", description: null, date: "2030-06-01T00:00:00.000Z", startTime: "10:00", endTime: "12:00",
   capacity: 2, registered: 0, spotsLeft: 2, status: "open", locationDetails: null, displayOrder: 0, waitlistEnabled: false, minAge: null, colorKey: null, ...over })
 const event = {
@@ -26,10 +27,16 @@ const event = {
 } satisfies EventData
 
 describe("EventPageClient — Frise / Liste (#808)", () => {
-  afterEach(() => { cleanup(); localStorage.clear() })
+  afterEach(() => { cleanup(); localStorage.clear(); Reflect.deleteProperty(window, "matchMedia") })
 
-  it("shows the timeline first, in the server HTML too", () => {
-    expect(renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)).toContain('aria-pressed="true"')
+  it("renders both views in the server HTML, CSS showing the one for the screen", () => {
+    const html = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+    expect(html).toContain('class="sm:hidden"')
+    expect(html).toContain('class="hidden sm:block"')
+    expect(html).not.toContain('aria-pressed="true"')
+  })
+
+  it("shows the timeline on a wide screen, the toggle named by its visible label", () => {
     render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
     const group = screen.getByRole("group", { name: "Affichage des créneaux" })
     expect(within(group).getByRole("button", { name: "Frise" })).toHaveAttribute("aria-pressed", "true")
@@ -56,6 +63,45 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
 
     unmount()
     render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+    expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
+  })
+
+  it("shows the list on a phone, follows the phone turned sideways, and stops once a shift is picked", () => {
+    const listeners = new Set<() => void>()
+    let wide = false
+    Object.defineProperty(window, "matchMedia", { configurable: true, value: () => ({
+      get matches() { return wide },
+      addEventListener: (_: string, l: () => void) => listeners.add(l),
+      removeEventListener: (_: string, l: () => void) => listeners.delete(l),
+    }) })
+    const turn = (w: boolean) => act(() => { wide = w; listeners.forEach((l) => l()) })
+
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+    expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
+    turn(true)
+    expect(screen.getByRole("button", { name: "Frise" })).toHaveAttribute("aria-pressed", "true")
+    turn(false)
+    const list = screen.getByRole("list", { name: /Créneaux du/ })
+    fireEvent.click(within(list).getByRole("button", { name: "10h–12h · Bar 2 places libres sur 2" }))
+    turn(true)
+    expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
+    // Not a choice: nothing kept on the device.
+    expect(localStorage.getItem(SHIFT_VIEW_KEY)).toBeNull()
+  })
+
+  it("stops following the width once the keyboard focus enters the shifts", () => {
+    const listeners = new Set<() => void>()
+    let wide = false
+    Object.defineProperty(window, "matchMedia", { configurable: true, value: () => ({
+      get matches() { return wide },
+      addEventListener: (_: string, l: () => void) => listeners.add(l),
+      removeEventListener: (_: string, l: () => void) => listeners.delete(l),
+    }) })
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+    const item = within(screen.getByRole("list", { name: /Créneaux du/ })).getAllByRole("button")[0]
+    act(() => item.focus())
+    act(() => { wide = true; listeners.forEach((l) => l()) })
+    expect(item).toHaveFocus()
     expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
   })
 })
