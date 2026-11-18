@@ -64,7 +64,8 @@ describe("ownership of the application files in the Docker image", () => {
   it("no COPY fills a cache folder: a volume mounted there hides nothing", () => {
     for (const dir of WRITABLE_APP_DIRS) {
       for (const line of instructions.filter((l) => l.startsWith("COPY "))) {
-        expect(line.split(" ").at(-1), line).not.toMatch(new RegExp(`^\\./${dir.replace(/\./g, "\\.")}(/|$)`))
+        const target = line.split(" ").at(-1)!
+        expect(target === `./${dir}` || target.startsWith(`./${dir}/`), line).toBe(false)
       }
     }
     // The builder removes Turbopack's build cache, so the standalone copy brings no .next/cache.
