@@ -5,7 +5,9 @@
 
 # Restore test for the off-site backup copy (#524): picks the most recent encrypted dump from a
 # local Swiss Backup mount or from the rclone remote (read-only on both), decrypts it with
-# BACKUP_PASSPHRASE and checks the gzip/pg_dump envelope. By default it also loads the dump into
+# BACKUP_PASSPHRASE and checks the gzip/pg_dump envelope. Both dump formats are read: the current
+# benevoles_*.sql.gz.gpg (GnuPG, needs gpg 2.2 or later on this machine) and the former
+# benevoles_*.sql.gz.enc (openssl), still present off site. By default it also loads the dump into
 # a disposable PostgreSQL 16 container (no published port) and compares the row counts, so the
 # backup is actually known to restore — not merely known to start with the pg_dump banner.
 #
@@ -88,11 +90,12 @@ if [ "$SOURCE" = "local" ]; then
     echo "ERREUR : le dossier Swiss Backup ${DUMP_DIR} n'existe pas." >&2
     exit 1
   fi
-  LATEST_PATH=$(for candidate in "$DUMP_DIR"/benevoles_*.sql.gz.enc; do
+  # Both formats; the names start with the date, so the last one sorted is the most recent.
+  LATEST_PATH=$(for candidate in "$DUMP_DIR"/benevoles_*.sql.gz.gpg "$DUMP_DIR"/benevoles_*.sql.gz.enc; do
     [ -f "$candidate" ] && printf '%s\n' "$candidate"
   done | sort | tail -n1)
   if [ -z "$LATEST_PATH" ]; then
-    echo "ERREUR : aucun fichier benevoles_*.sql.gz.enc trouvé dans ${DUMP_DIR}." >&2
+    echo "ERREUR : aucun fichier benevoles_*.sql.gz.gpg ni benevoles_*.sql.gz.enc trouvé dans ${DUMP_DIR}." >&2
     exit 1
   fi
   LATEST=${LATEST_PATH##*/}
@@ -107,14 +110,27 @@ else
   echo "==> Source : remote rclone ${REMOTE} (lecture seule)"
   echo "==> Inventaire Swiss Backup (${REMOTE}) :"
   rclone lsl "$REMOTE" --config "$RCLONE_CONFIG"
-  LATEST=$(rclone lsf "$REMOTE" --config "$RCLONE_CONFIG" | grep '^benevoles_.*\.sql\.gz\.enc$' | sort | tail -n1)
+  LATEST=$(rclone lsf "$REMOTE" --config "$RCLONE_CONFIG" | grep -E '^benevoles_.*\.sql\.gz\.(gpg|enc)$' | sort | tail -n1)
   if [ -z "$LATEST" ]; then
-    echo "ERREUR : aucun fichier benevoles_*.sql.gz.enc trouvé sur ${REMOTE}." >&2
+    echo "ERREUR : aucun fichier benevoles_*.sql.gz.gpg ni benevoles_*.sql.gz.enc trouvé sur ${REMOTE}." >&2
     exit 1
   fi
 fi
 
 echo "==> Dernier fichier : ${LATEST}"
+
+case "$LATEST" in
+  *.sql.gz.gpg)
+    FORMAT="gpg"
+    if ! command -v gpg >/dev/null 2>&1; then
+      echo "ERREUR : gpg est introuvable ; il est nécessaire pour déchiffrer ${LATEST} (GnuPG 2.2 ou plus récent)." >&2
+      exit 1
+    fi
+    ;;
+  *)
+    FORMAT="openssl"
+    ;;
+esac
 
 WORK=$(mktemp -d)
 
@@ -150,15 +166,27 @@ else
 fi
 
 # ---- decrypt, then drop the passphrase immediately ---------------------------------------
-echo "==> Déchiffrement"
+# Neither tool gets the passphrase as an argument: gpg reads it on standard input, from the
+# shell's own printf; openssl reads it from its environment.
+echo "==> Déchiffrement (${FORMAT})"
 DECRYPT_OK=0
-if openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \
+if [ "$FORMAT" = "gpg" ]; then
+  # A throwaway GnuPG home: nothing is read from, or left in, the operator's own keyring. gpg
+  # exits non-zero on a wrong passphrase and on a file modified after encryption.
+  mkdir -m 700 "${WORK}/gnupg"
+  if printf '%s\n' "$BACKUP_PASSPHRASE" | gpg --homedir "${WORK}/gnupg" --quiet --batch --yes --no-tty \
+    --pinentry-mode loopback --passphrase-fd 0 --no-symkey-cache \
+    --decrypt --output "${WORK}/dump.sql.gz" "$INPUT"; then
+    DECRYPT_OK=1
+  fi
+elif openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \
   -pass env:BACKUP_PASSPHRASE \
   -in "$INPUT" -out "${WORK}/dump.sql.gz"; then
   DECRYPT_OK=1
 fi
 unset BACKUP_PASSPHRASE
 if [ "$DECRYPT_OK" -ne 1 ]; then
+  rm -f "${WORK}/dump.sql.gz"
   echo "ERREUR : le déchiffrement a échoué (phrase secrète incorrecte ou fichier corrompu)." >&2
   exit 1
 fi

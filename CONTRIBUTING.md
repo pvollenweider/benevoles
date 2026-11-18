@@ -164,6 +164,8 @@ Ne jamais modifier les fichiers dans `src/generated/prisma/` : ils sont régén�
 
 Ne jamais modifier une migration déjà appliquée en production : Prisma enregistre une somme de contrôle de chaque migration appliquée, et le déploiement suivant échouerait.
 
+En production, les migrations tournent sous `benevoles_owner`, propriétaire du schéma sans être superutilisateur ([docs/deploiement.md](docs/deploiement.md#rôles-postgresql)) : une migration ne crée ni extension, ni schéma, ni rôle. Une extension nouvelle se crée d'abord à la main en superutilisateur, avant la fusion. Une migration n'accorde aucun droit : l'application reçoit d'office la lecture et l'écriture des lignes des nouvelles tables.
+
 ### Migrations compatibles avec le déploiement progressif
 
 Le déploiement applique les migrations une fois, dans un Job Kubernetes lancé avec la nouvelle image (`k8s/job-migrate.yaml`), avant de mettre à jour l'application ; les pods de l'application ne migrent pas au démarrage (`MIGRATE_ON_START=false`, alors que `docker-compose` garde la migration au démarrage). Kubernetes remplace ensuite l'ancien pod progressivement (`maxSurge: 1`, `maxUnavailable: 0`) : entre la migration et la fin du remplacement, **l'ancienne version du code tourne sur le nouveau schéma**. Si la migration échoue, le déploiement s'arrête et l'ancienne version continue de servir. Une migration doit donc rester compatible avec le code de la version précédente (principe *expand/contract*) :

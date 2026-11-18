@@ -13,8 +13,26 @@
 # logs and port-forward do not go through the pod network. The CronJobs call the public address
 # (https://www.benevol.app), so they reach the app through Traefik like any visitor.
 #
-# Egress is not restricted: the app talks to SMTP, Sentry, ntfy, web push services and GitHub, the
-# backup job installs openssl from the Alpine mirrors and the off-site copy goes to Swiss Backup.
+# Egress is restricted pod by pod, for the pods whose needs are closed and known:
+#   postgres, media server           -> nothing (they only answer; replies to an accepted
+#                                       connection are not egress for the policy controller)
+#   migration Job                    -> cluster DNS, postgres :5432
+#   CronJobs calling the app         -> cluster DNS, Traefik :8443 (they call the public address,
+#                                       which the node hands to the Traefik pod)
+#   database backup                  -> cluster DNS, postgres :5432, Traefik :8443 (its heartbeat)
+#   off-site copy                    -> cluster DNS, Traefik :8443, the internet on :443 only
+#                                       (Swiss Backup), never an address inside the cluster
+#   app                              -> cluster DNS, postgres :5432, the internet on any port
+#                                       (SMTP, Sentry, ntfy, GitHub, and web push services, whose
+#                                       hosts and ports each browser chooses), never an address
+#                                       inside the cluster: no other pod, no service, not the
+#                                       cluster API. The app never calls its own public address.
+# A pod without one of the labels below keeps free egress, so a Job started from an older template
+# is never cut off.
+#
+# "The internet" below is every address except the pod and service ranges of k3s, the link-local
+# range and the node's own addresses: the cluster API answers on the node, so leaving the node in
+# would leave the API reachable. On another cluster, put its own ranges and node addresses there.
 #
 # Applied by the deploy workflow before the migration, so the migration Job and the new app pod
 # open fresh connections through these rules in the same deploy; deploy.yml removes them again if
@@ -117,6 +135,241 @@ spec:
       ports:
         - protocol: TCP
           port: 5432
+---
+# Egress rules. A policy without an egress list allows no outgoing connection at all.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-no-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres
+  policyTypes: [Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: media-no-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: benevoles-media
+  policyTypes: [Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: migrate-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: benevoles-migrate
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+---
+# websecure entry point of the Traefik pod: https://www.benevol.app from inside the cluster.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cron-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: benevoles-cron
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8443
+---
+# The dump container talks to postgres, the heartbeat container to the public address.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backup-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres-backup
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8443
+---
+# rclone to Swiss Backup (identity and storage, both HTTPS), then the heartbeat.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backup-offsite-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: backup-offsite
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8443
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.42.0.0/16
+              - 10.43.0.0/16
+              - 169.254.0.0/16
+              - 188.165.255.51/32
+              - 188.165.255.107/32
+      ports:
+        - protocol: TCP
+          port: 443
+---
+# The widest rule of the file, and still the one that matters most: code running in the app can
+# no longer reach the cluster API, the node, or the pods and services of the other sites hosted on
+# this cluster.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: app-egress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: benevoles-app
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.42.0.0/16
+              - 10.43.0.0/16
+              - 169.254.0.0/16
+              - 188.165.255.51/32
+              - 188.165.255.107/32
 ---
 # Last: kubectl applies in file order, so the allow rules are in place before anything is denied.
 apiVersion: networking.k8s.io/v1

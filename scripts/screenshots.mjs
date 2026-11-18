@@ -192,9 +192,11 @@ async function run() {
     await save(p, "public-signup", { target: p.locator("main") })
   })
 
+  // The Frise on a phone, chosen with « Frise » (a phone opens on the list, #1407).
   await shot("public-timeline-mobile", async () => {
     const mob = await browser.newContext(MOBILE)
     const m = await mob.newPage()
+    await m.addInitScript(() => localStorage.setItem("benevoles:public-shift-view", "frise"))
     await m.goto(withOrg(`/${EVENT_SLUG}`))
     await settle(m)
     await save(m, "public-timeline-mobile")

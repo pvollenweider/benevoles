@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { shiftListText, shiftViewState, type TimelineShift } from "../public-timeline"
-import { readShiftView, saveShiftView, SHIFT_VIEW_KEY } from "../shift-view"
+import { readShiftView, saveShiftView, SHIFT_VIEW_KEY, shiftViewButtonLook, shownShiftView, WIDE_SHIFT_VIEW_QUERY } from "../shift-view"
 
 const shift = (over: Partial<TimelineShift> = {}): TimelineShift => ({ id: "s", roleName: "Bar", label: "Bar", startTime: "10:00", endTime: "12:00", status: "open", capacity: 3, registered: 1, spotsLeft: 2, ...over })
 const state = (over: Partial<Parameters<typeof shiftViewState>[0]> = {}) => shiftViewState({ shift: shift(), selected: false, conflict: false, reserved: false, locked: false, ...over })
@@ -42,5 +42,31 @@ describe("one rule for the timeline and the list (#808)", () => {
     const broken = { getItem: () => { throw new Error("blocked") }, setItem: () => { throw new Error("blocked") } }
     expect(readShiftView(broken)).toBeNull()
     expect(() => saveShiftView("frise", broken)).not.toThrow()
+  })
+})
+
+describe("default view by screen width (#1407)", () => {
+  it("shows the choice made on the page, then the one kept on the device, then the screen's default", () => {
+    expect(shownShiftView("frise", "liste", false)).toBe("frise")
+    expect(shownShiftView(null, "frise", false)).toBe("frise")
+    expect(shownShiftView(null, "liste", true)).toBe("liste")
+    expect(shownShiftView(null, null, false)).toBe("liste")
+    expect(shownShiftView(null, null, true)).toBe("frise")
+  })
+
+  it("leaves the view to CSS while the width is unknown, unless a view was chosen", () => {
+    expect(shownShiftView(null, null, null)).toBe("auto")
+    expect(shownShiftView("liste", null, null)).toBe("liste")
+  })
+
+  it("marks the pressed button, or lets the breakpoint mark it", () => {
+    expect(shiftViewButtonLook("frise", "frise")).toBe("on")
+    expect(shiftViewButtonLook("liste", "frise")).toBe("off")
+    expect(shiftViewButtonLook("frise", "auto")).toBe("on-when-wide")
+    expect(shiftViewButtonLook("liste", "auto")).toBe("on-when-narrow")
+  })
+
+  it("uses Tailwind's sm breakpoint", () => {
+    expect(WIDE_SHIFT_VIEW_QUERY).toBe("(min-width: 40rem)")
   })
 })

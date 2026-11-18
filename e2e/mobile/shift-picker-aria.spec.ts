@@ -22,6 +22,8 @@ test.beforeAll(async ({ browser }) => {
 test("a tapped bar is pressed; the selection card and one « Continuer » follow", async ({ page }) => {
   test.setTimeout(90_000) // dev server compiles each page on first visit
   await page.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
+  // A phone opens on the list (#1407): this snapshot is about the Frise, chosen beforehand.
+  await page.addInitScript(() => localStorage.setItem("benevoles:public-shift-view", "frise"))
   await page.goto(`/${event.slug}?org=default`)
   const region = page.getByRole("region", { name: "Planning du mardi 1 octobre" })
   const bar = region.getByRole("button", { name: /^10h–12h \d+\/\d+, Bar\b/ })

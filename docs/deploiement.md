@@ -20,6 +20,8 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` (affiché sur la page Santé du service) sont des arguments de build, `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
 4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`content/guide/GUIDE_ADMIN.md`, `content/guide/GUIDE_BENEVOLE.md`, `content/pages/FEATURES.md`, `content/pages/ACCESSIBILITE.md`, `CHANGELOG.md`, les autres pages publiques de `content/` comme `content/pages/TARIFS.md`, `content/pages/FAQ-ACCUEIL.md` ou `content/legal/SOUS-TRAITANTS.md` : liste exacte dans le `Dockerfile`), les pages de documentation (`content/guide/`) et les articles (`content/blog/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
 
+Les fichiers copiés dans l'image appartiennent à root : l'utilisateur `nextjs`, sous lequel tourne le serveur, les lit sans pouvoir les modifier. Il n'écrit que dans `/tmp` et dans deux dossiers de cache créés vides pour lui, `.next/cache` (images redimensionnées, 200 Mio au plus) et `.next/server/route-cache` ; l'image tourne donc telle quelle avec Docker Compose, sans volume. Sur Kubernetes, ces trois chemins sont des volumes et le reste est en lecture seule (voir [Restrictions des pods](#restrictions-des-pods)).
+
 Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js` et, en arrière-plan, le préchauffage de ses pages publiques (voir [Préchauffage avant la mise en service](#préchauffage-avant-la-mise-en-service)). Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
 ### Images publiées
@@ -117,9 +119,9 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `rbac-ci-deployer.yaml` | ServiceAccount `ci-deployer`, Secret `ci-deployer-token`, Role et RoleBinding `ci-deployer` | non | Compte de déploiement du workflow, limité au namespace `benevoles` ; appliqué à la main, voir « Accès du workflow aux secrets et au cluster » ci-dessous |
 | `secret.yaml` | Secret `benevoles-secret` | non | Modèle incomplet ; le secret réel est régénéré par le workflow (voir [configuration.md](configuration.md#secrets-kubernetes)) |
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
-| `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
+| `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée, sous le rôle `benevoles_owner` (voir « Rôles PostgreSQL » ci-dessous) ; `backoffLimit: 0`, 300 s au plus |
 | `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, clés de `benevoles-secret` données une à une (voir [configuration.md](configuration.md#secrets-kubernetes)), limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
-| `networkpolicy.yaml` | NetworkPolicies `default-deny-ingress`, `app-from-traefik`, `media-from-traefik`, `acme-solver-from-traefik`, `postgres-from-clients` | oui, avant la migration ; retirées si le déploiement échoue ensuite | Entrées refusées par défaut dans le namespace, voir « Isolation réseau » ci-dessous |
+| `networkpolicy.yaml` | NetworkPolicies `default-deny-ingress`, `app-from-traefik`, `media-from-traefik`, `acme-solver-from-traefik`, `postgres-from-clients`, et pour les sorties `postgres-no-egress`, `media-no-egress`, `migrate-egress`, `cron-egress`, `backup-egress`, `backup-offsite-egress`, `app-egress` | oui, avant la migration ; retirées si le déploiement échoue ensuite | Entrées refusées par défaut dans le namespace, sorties limitées pour chaque pod, voir « Isolation réseau » ci-dessous |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
 | `middleware-compress.yaml` | Middlewares `benevoles-compress` et `benevoles-identity-upstream` | oui, avant `ingress.yaml` | Compression des réponses texte par Traefik (zstd, Brotli ou gzip selon le navigateur) ; l'application reçoit la requête sans `Accept-Encoding` et répond donc sans compression, ce que Traefik exige pour compresser. Voir « Compression » ci-dessous |
 | `middleware-hsts.yaml` | Middleware `benevoles-hsts` | oui, avant `ingress.yaml` et `ingressroute-tokens.yaml` | En-tête `Strict-Transport-Security` (1 an, sans `includeSubDomains` ni `preload`) ; un routeur qui nomme un middleware absent est désactivé par Traefik |
@@ -132,7 +134,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-outbox.yaml` | CronJob `app-outbox` | oui | Envoi des emails arrivés à échéance (`POST /api/cron/outbox`), toutes les 5 minutes : emails groupés « inscrit par un organisateur » et désistements d'un même événement |
 | `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
-| `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
+| `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (GnuPG, AES-256 avec contrôle d'intégrité), 01:00 UTC, rétention 30 jours |
 | `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; demande le secret `rclone-config` et la clé `OFFSITE_BUCKET` de `benevoles-secret` |
 | `log-rotation.md`, `node/` | | | Journaux du nœud, procédure manuelle : journaux d'accès de Traefik gardés 1 an, adresses réduites après 90 jours (`node/` : logrotate, script et tâche cron à installer sur le nœud), analyse à la demande avec GoAccess ; journaux des conteneurs, 90 jours pas encore garantis |
 
@@ -140,9 +142,18 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 
 Les pods de l'application, du Job de migration et des CronJobs ne reçoivent pas de jeton de compte de service (`automountServiceAccountToken: false`), tournent avec le profil seccomp `RuntimeDefault`, sans élévation de privilèges (`allowPrivilegeEscalation: false`) et sans aucune capacité Linux (`capabilities.drop: [ALL]`) ; `k8s-hardening.test.ts` le vérifie.
 
-- L'application et la migration tournent sous l'utilisateur `nextjs` de l'image (uid 1001, groupe 1001), donné en chiffres : `runAsNonRoot` ne peut pas vérifier un utilisateur désigné par son nom. Leur système de fichiers reste en écriture : Next.js écrit son cache à l'exécution (`.next/cache`, et les pages qu'il régénère dans `.next/server/app`).
+- L'application et la migration tournent sous l'utilisateur `nextjs` de l'image (uid 1001, groupe 1001), donné en chiffres : `runAsNonRoot` ne peut pas vérifier un utilisateur désigné par son nom. Dans l'image, les fichiers de l'application appartiennent à root : cet utilisateur les lit, il ne peut pas les modifier (`docker-app-ownership.test.ts`). Seuls deux dossiers de cache, vides dans l'image, lui appartiennent : `.next/cache` et `.next/server/route-cache`.
+- Le conteneur de l'application a un système de fichiers en lecture seule (`readOnlyRootFilesystem: true`). Les trois chemins où le serveur écrit sont des volumes `emptyDir`, vidés avec le pod :
+
+  | Chemin | Ce qui s'y écrit | Limite |
+  |---|---|---|
+  | `/tmp` | le fichier que le préchauffage écrit pour dire qu'il est terminé (`docker-entrypoint.sh`) | 16 Mi |
+  | `/app/.next/cache` | les images redimensionnées par `/_next/image` ; Next.js en garde au plus 200 Mio (`images.maximumDiskCacheSize`, `src/lib/image-disk-cache.ts`) et efface les moins récemment servies au-delà | 512 Mi |
+  | `/app/.next/server/route-cache` | la copie que Next.js fait des routes statiques de l'image (icônes, images de partage) à leur première demande, environ 5 Mio en tout | 64 Mi |
+
+  Aucune page n'est réécrite dans `.next/server/app` : aucune route du build n'a de délai de revalidation, et ce dossier reste celui de l'image. Un pod dont un `emptyDir` dépasse sa limite est évincé par Kubernetes : la limite du cache d'images vaut plus du double du plafond de Next.js, ce que `k8s-hardening.test.ts` vérifie. Un nouveau chemin d'écriture (cache, fichier temporaire, export écrit sur disque) demande un volume de plus, ou `/tmp`. Le Job de migration garde un système de fichiers en écriture : Prisma écrit dans le dossier personnel de `nextjs`.
 - Les quatre CronJobs `curl` tournent sous `curl_user` (uid 100, groupe 101), système de fichiers en lecture seule, avec un `emptyDir` pour `/tmp`.
-- La sauvegarde et la copie hors site restent root sans capacité : la sauvegarde installe `openssl` avec `apk add`, et les fichiers de `backup-pvc` appartiennent à root.
+- La sauvegarde et la copie hors site restent root sans capacité : les fichiers de `backup-pvc` appartiennent à root. La sauvegarde n'installe rien à l'exécution ; son signal de vie part d'un second conteneur `curl`, sous `curl_user` et en lecture seule comme les quatre CronJobs ci-dessus.
 - PostgreSQL (`postgres.yaml`) et le serveur de médias (`media.yaml`) gardent leur démarrage root, sans jeton de compte de service, avec `RuntimeDefault`, sans élévation de privilèges, et avec les seules capacités qu'il utilise : le point d'entrée de PostgreSQL vérifie le propriétaire du répertoire de données puis passe sous l'utilisateur `postgres` (uid 70) avec `su-exec` (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETGID`, `SETUID`) ; le serveur de médias fait tourner ses processus sous `nginx` et reçoit les fichiers de `make video-publish` par `tar` en root (les mêmes, plus `FSETID`). Leurs volumes gardent leurs propriétaires : ni `runAsUser` ni `fsGroup`. PostgreSQL est remplacé (`strategy: Recreate`) et non mis à jour progressivement : deux serveurs ne tournent jamais sur le même répertoire de données, au prix de quelques secondes sans base à chaque changement de son modèle de pod.
 
 ### Isolation réseau
@@ -152,7 +163,19 @@ Les pods de l'application, du Job de migration et des CronJobs ne reçoivent pas
 - Traefik (pod `app.kubernetes.io/name=traefik` du namespace `kube-system`) vers l'application (port 3000), le serveur de médias (8080) et le pod de validation HTTP-01 de cert-manager (8089), qui renouvelle le certificat de `benevol.app` dans ce namespace ;
 - l'application, le Job de migration et la sauvegarde (étiquettes `app: benevoles-app`, `benevoles-migrate`, `postgres-backup`) vers PostgreSQL (5432).
 
-Les sondes du kubelet partent du nœud et passent toujours ; `kubectl exec`, `logs` et `port-forward` ne passent pas par le réseau des pods. Les CronJobs appellent l'adresse publique et arrivent donc par Traefik. Un nouveau pod qui doit joindre PostgreSQL reçoit l'une de ces étiquettes, sinon sa connexion est refusée. Les sorties ne sont pas filtrées (SMTP, Sentry, ntfy, notifications push, GitHub, miroirs Alpine, Swiss Backup).
+Les sondes du kubelet partent du nœud et passent toujours ; `kubectl exec`, `logs` et `port-forward` ne passent pas par le réseau des pods. Les CronJobs appellent l'adresse publique et arrivent donc par Traefik. Un nouveau pod qui doit joindre PostgreSQL reçoit l'une de ces étiquettes, sinon sa connexion est refusée.
+
+Les sorties sont limitées pour les pods dont les besoins sont connus et fermés :
+
+- PostgreSQL et le serveur de médias (`postgres-no-egress`, `media-no-egress`) n'ouvrent aucune connexion sortante ; ils répondent seulement ;
+- le Job de migration (`migrate-egress`) ne joint que le DNS du cluster et PostgreSQL ;
+- les quatre CronJobs qui appellent l'application (`cron-egress`, étiquette `app: benevoles-cron`) ne joignent que le DNS du cluster et Traefik (port 8443) : l'adresse publique désigne le nœud, qui remet la connexion au pod Traefik ;
+- la sauvegarde de la base (`backup-egress`) ne joint que le DNS du cluster, PostgreSQL et Traefik (son signal de fin) ;
+- la copie hors site (`backup-offsite-egress`, étiquette `app: backup-offsite`) ne joint que le DNS du cluster, Traefik et internet sur le port 443 (Swiss Backup), jamais une adresse du cluster.
+
+« Internet » désigne toute adresse sauf les plages des pods et des services de k3s (`10.42.0.0/16`, `10.43.0.0/16`), la plage `169.254.0.0/16` et les deux adresses du nœud : l'API du cluster répond sur le nœud, la laisser dans la règle la laisserait joignable. Sur un autre cluster, y mettre ses propres plages et les adresses de ses nœuds.
+
+L'application (`app-egress`) joint le DNS du cluster, PostgreSQL et internet sur tous les ports (SMTP, Sentry, ntfy, GitHub, et les services de notification push, dont chaque navigateur choisit l'hôte et le port), jamais une adresse du cluster : ni un autre pod, ni un service, ni l'API du cluster. Elle n'appelle jamais sa propre adresse publique. Un pod sans l'une de ces étiquettes garde ses sorties libres : un Job lancé avec un ancien modèle n'est donc jamais coupé. Un nouveau CronJob qui appelle autre chose que l'adresse publique ne reçoit pas l'étiquette `app: benevoles-cron`.
 
 `deploy.yml` applique ces règles avant la migration : le Job de migration et le nouveau pod ouvrent alors de nouvelles connexions à travers elles. Il applique d'abord `cronjob-backup.yaml` (étiquette de la sauvegarde) et attend la fin d'une sauvegarde lancée avec l'ancien modèle ; le fichier liste le refus par défaut en dernier. Après le déploiement, l'étape « Check the site through the NetworkPolicy » interroge les adresses publiques ; si elle échoue, ou si une étape échoue ou si l'exécution est annulée après le début de l'application des règles, elles sont retirées et le site reste joignable. À la main :
 
@@ -160,6 +183,25 @@ Les sondes du kubelet partent du nœud et passent toujours ; `kubectl exec`, `lo
 kubectl -n benevoles get networkpolicy
 kubectl -n benevoles delete networkpolicy -l app.kubernetes.io/part-of=benevoles-netpol   # retrait d'urgence
 ```
+
+### Rôles PostgreSQL
+
+La base de production a trois rôles. Le workflow ne crée ni ne modifie aucun rôle : l'opérateur les crée à la main, une fois, et le mot de passe de chacun doit être celui de son secret GitHub.
+
+| Rôle | Utilisé par | Peut | Ne peut pas |
+|------|-------------|------|-------------|
+| `POSTGRES_USER` (superutilisateur, créé par l'image `postgres:16-alpine` au premier démarrage) | pod PostgreSQL, sauvegarde (`pg_dump`), interventions à la main | tout | |
+| `benevoles_owner` | Job de migration (`MIGRATE_DATABASE_URL`) | posséder et modifier toutes les tables, séquences, fonctions et types du schéma `public`, y créer des objets | créer une base, un schéma, un rôle ou une extension ; exécuter un programme ou lire un fichier du serveur |
+| `benevoles_app` | application (`DATABASE_URL`), et donc les CronJobs qui l'appellent en HTTP | lire, ajouter, modifier et supprimer des lignes de toutes les tables ; lire `_prisma_migrations` | écrire dans `_prisma_migrations` ; créer, modifier, vider (`TRUNCATE`) ou supprimer une table ; tout ce que `benevoles_owner` ne peut pas |
+
+Des droits par défaut donnent à `benevoles_app` la lecture et l'écriture des lignes de chaque nouvelle table et séquence créée par `benevoles_owner` ou par le superutilisateur : une migration n'a rien à accorder.
+
+Conséquences :
+
+- **Extensions** : `benevoles_owner` n'a pas le droit `CREATE` sur la base, il ne peut donc pas créer d'extension, même « trusted ». Une migration qui en ajoute une demande de la créer d'abord en superutilisateur (`CREATE EXTENSION IF NOT EXISTS …` dans le pod PostgreSQL), avant la fusion ; sinon le Job de migration échoue et la version en cours continue de servir. `unaccent` existe déjà.
+- **Migration appliquée en superutilisateur** (à la main, ou par un déploiement qui précède le passage aux rôles) : les objets qu'elle crée appartiennent au superutilisateur, et `benevoles_owner` ne pourra plus les modifier. L'application y garde accès (droits par défaut). La procédure de l'opérateur rejoue le transfert de propriété, qui ne change rien aux objets déjà transférés.
+- **Scripts de l'opérateur** (`scripts/erasure-register.ts`, `regenerate-links.ts`, `reset-two-factor.ts`, `prisma/seed.ts`) : ils ne font que lire et écrire des lignes, avec le code de l'application. Ils se lancent avec l'URL de `benevoles_app`.
+- **Tests** : la CI (tests d'intégration et E2E) se connecte en superutilisateur. Les tests d'intégration passent aussi sous un rôle qui a les droits de `benevoles_app`, sauf `migration-upgrade.int.test.ts` et `sector-scoped-leaders.int.test.ts`, qui créent une base jetable (`CREATE DATABASE`).
 
 ### Adresse des visiteurs et limites de débit
 
@@ -187,7 +229,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
 3. **deploy** (environnement GitHub `production`), après **check** et **build-push** :
    1. refuse de déployer une version plus ancienne que celle en production (« Refuse an older version ») : si le commit de l'image en production contient déjà le commit de ce run, le job échoue avant de toucher au cluster. C'est le cas de la relance d'un ancien run, ou d'un run dont l'image a fini après celle d'un commit plus récent. Redéployer le commit en production (relance pour recopier un secret) reste possible ; un retour volontaire à une version précédente suit la « Mise en place manuelle » ci-dessous ;
    2. régénère le secret de tirage `ghcr-secret` ;
-   3. s'arrête, avant de toucher au reste, si l'un des secrets `TOKEN_ENCRYPTION_KEY`, `AUTH_SECRET`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `CRON_SECRET`, `SMTP_HOST`, `SMTP_PASSWORD`, `EMAIL_FROM` ou `OFFSITE_BUCKET` est vide (le journal ne nomme que les secrets vides) ;
+   3. s'arrête, avant de toucher au reste, si l'un des secrets `TOKEN_ENCRYPTION_KEY`, `AUTH_SECRET`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `CRON_SECRET`, `SMTP_HOST`, `SMTP_PASSWORD`, `EMAIL_FROM`, `OFFSITE_BUCKET`, `APP_DB_PASSWORD` ou `MIGRATE_DB_PASSWORD` est vide (le journal ne nomme que les secrets vides) ;
    4. régénère `benevoles-secret` (« Sync k8s secret ») ;
    5. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    6. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
@@ -283,6 +325,11 @@ kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cr
 APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
 kubectl -n benevoles rollout status deploy/benevoles-app
 ```
+
+Sur une base neuve, les rôles de [Rôles PostgreSQL](#rôles-postgresql) n'existent pas : le pod PostgreSQL ne crée que le superutilisateur. Entre les étapes 2 et 3, les créer avec leur mot de passe, en superutilisateur, et leur donner leurs droits (procédure de l'opérateur). La première migration demande en plus un droit que `benevoles_owner` n'a pas ensuite : `0001_init` commence par `CREATE SCHEMA IF NOT EXISTS "public"` et une migration crée l'extension `unaccent`, deux instructions refusées sans le droit `CREATE` sur la base, même quand le schéma existe déjà. Deux façons de faire :
+
+- donner ce droit le temps de la première migration (`GRANT CREATE ON DATABASE benevoles TO benevoles_owner`), le retirer après (`REVOKE CREATE ON DATABASE benevoles FROM benevoles_owner`), puis rejouer l'attribution des droits, qui retire à l'application l'écriture dans `_prisma_migrations`, créée entre-temps ;
+- ou appliquer la première migration avec l'URL du superutilisateur, puis transférer la propriété comme sur une base existante.
 
 Si l'étape 3 échoue, ne pas passer à la suite : lire les journaux du Job, corriger, relancer. Un Job en échec ne remplit jamais la condition `complete` : `kubectl wait` ne rend la main qu'à l'expiration du délai (300 s, comme `activeDeadlineSeconds`), et `kubectl -n benevoles logs job/benevoles-migrate` peut être lu sans attendre.
 
@@ -653,16 +700,36 @@ Ne la lancer qu'après avoir listé les lignes concernées avec le `SELECT` fina
 
 ## Sauvegarde et restauration
 
-`cronjob-backup.yaml` produit chaque nuit, à 01:00 UTC, un `pg_dump` chiffré avec `BACKUP_PASSPHRASE`, sur le volume `backup-pvc`, conservé 30 jours. Les fichiers s'appellent `/backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc`.
+`cronjob-backup.yaml` produit chaque nuit, à 01:00 UTC, un `pg_dump` chiffré avec `BACKUP_PASSPHRASE`, sur le volume `backup-pvc`, conservé 30 jours. Les fichiers s'appellent `/backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.gpg`.
 
-> **Les fichiers antérieurs au 22/09/2026 sont vides (0 octet) et ne sont pas restaurables : les ignorer.** Le script installe `openssl` au démarrage, écrit chaque étape dans un fichier, vérifie que le dump dépasse 1 Ko et re-déchiffre le fichier produit avant de le garder ; toute anomalie fait échouer le job.
+Le chiffrement est fait par GnuPG (`gpg --symmetric`, AES-256, avec son contrôle d'intégrité) : un fichier modifié après coup ne se déchiffre plus, `gpg` s'arrête sur une erreur. La phrase secrète est lue sur l'entrée standard de `gpg` ; elle n'est jamais un argument de commande et n'apparaît pas dans la liste des processus. Le format est celui que lit tout GnuPG 2.2 ou plus récent (macOS avec Homebrew, Debian, Ubuntu).
 
-Déchiffrement (commande donnée en en-tête du manifeste) :
+Le job a deux conteneurs. Le premier (`backup`, image `postgres:16`, qui fournit `pg_dump` et `gpg` : rien n'est installé à l'exécution) écrit chaque étape dans un fichier, vérifie que le dump dépasse 1 Ko, re-déchiffre le fichier produit avant de le garder et supprime les fichiers de plus de 30 jours ; toute anomalie fait échouer le job, et un fichier qui ne passe pas la vérification est supprimé. Le second (`heartbeat`, image `curl`) n'est lancé que si le premier a réussi et envoie le signal de vie. Journaux d'un job : `kubectl -n benevoles logs job/<nom> -c backup` pour la sauvegarde, `kubectl -n benevoles logs job/<nom>` pour le signal de vie.
+
+Déchiffrement (commandes données en en-tête du manifeste) ; `gpg` demande la phrase secrète :
 
 ```bash
-openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
+gpg --pinentry-mode loopback --output dump.sql.gz --decrypt benevoles_<date>.sql.gz.gpg \
+  && gunzip dump.sql.gz
+```
+
+Si `gpg` signale une erreur (mauvaise phrase secrète, ou « encrypted message has been manipulated »), le fichier `dump.sql.gz` éventuellement écrit n'est pas fiable : le supprimer et prendre une autre sauvegarde.
+
+**Ancien format.** Les fichiers `benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc` ont été chiffrés avec `openssl` (AES-256-CBC, sans contrôle d'intégrité), avec la même phrase secrète. Il en reste sur le volume jusqu'à leur rotation à 30 jours, et hors site jusqu'à 90 jours. Ceux antérieurs au 22/09/2026 sont vides (0 octet) et ne sont pas restaurables : les ignorer. `openssl` demande la phrase secrète :
+
+```bash
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \
   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ```
+
+Dans un script, ne pas écrire la phrase secrète sur la ligne de commande : `gpg --batch --pinentry-mode loopback --passphrase-fd 0` la lit sur l'entrée standard, et `openssl … -pass env:BACKUP_PASSPHRASE` dans une variable d'environnement (c'est ce que fait `scripts/restore-test-offsite.sh`).
+
+**Créer les rôles avant de restaurer.** Le dump nomme les rôles `benevoles_owner` et `benevoles_app` (propriétaires des objets, droits, droits par défaut), mais ne les contient pas : un rôle appartient au serveur PostgreSQL, pas à la base. Dans le même serveur, ils existent déjà. Sur un serveur neuf (volume perdu, autre cluster) :
+
+- si les deux rôles existent avant le chargement avec `psql`, la base restaurée a les mêmes propriétaires, droits et droits par défaut que l'originale, sans aucune erreur ;
+- sinon, `psql` signale une erreur `role "benevoles_app" does not exist` ou `role "benevoles_owner" does not exist` pour chaque ligne qui les nomme (135 avec le schéma actuel), mais charge toutes les données ; tous les objets appartiennent alors à celui qui restaure, et l'application n'a aucun droit. Créer ensuite les rôles et rejouer le transfert de propriété et l'attribution des droits (procédure de l'opérateur) donne le même résultat que la restauration précédente.
+
+Dans les deux cas, un rôle recréé reçoit à nouveau le mot de passe de son secret GitHub. `scripts/restore-test-offsite.sh` charge le dump sans créer ces rôles et ignore ces erreurs : il prouve que les données se restaurent, pas les droits.
 
 **Restaurer dans la base de production ramène les données des bénévoles effacés depuis la sauvegarde (#516).** Avant la restauration, exporter le registre des effacements de la base actuelle ; après, le rejouer. Procédure complète : [rgpd/procedure-effacement.md](rgpd/procedure-effacement.md).
 
@@ -680,7 +747,7 @@ kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASS
 
 ### Copie hors site
 
-`cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume `backup-pvc` hors site avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, le fournisseur ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`.
+`cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume `backup-pvc` hors site avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, le fournisseur ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`. Tout le volume est copié : les fichiers `.sql.gz.gpg` comme les anciens `.sql.gz.enc`.
 
 - Envoi avec `rclone copy` (upload seulement, ne touche jamais aux fichiers déjà présents chez le fournisseur) puis purge des fichiers de plus de **90 jours** avec `rclone delete --min-age`. Volontairement plus long que la rétention locale de 30 jours du PVC : le but est de pouvoir revenir à un état antérieur à une erreur découverte tard, indépendamment de ce que la rotation locale a déjà supprimé.
 - Ce n'est pas un `rclone sync` : un `sync` effacerait chez le fournisseur tout fichier que le PVC a déjà purgé, ce qui viderait la copie hors site en même temps que le volume local en cas de perte du cluster — exactement le scénario que la copie hors site est censée couvrir.
@@ -704,11 +771,11 @@ kubectl create secret generic rclone-config -n benevoles \
 
 **`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
 
-**Restauration / test.** `scripts/restore-test-offsite.sh` prend le dump chiffré le plus récent, le déchiffre avec `BACKUP_PASSPHRASE`, vérifie le gzip et l'en-tête `pg_dump`, puis, par défaut, le recharge dans un conteneur PostgreSQL 16 jetable (sans port publié, supprimé à la fin) et compare les comptages : organisations, événements, bénévoles, inscriptions et migrations terminées. La sauvegarde est donc réellement restaurable, pas seulement bien formée. Le script ne modifie jamais la copie hors site : montage local en lecture seule, ou `rclone lsl`/`lsf`/`copy` depuis le remote uniquement.
+**Restauration / test.** `scripts/restore-test-offsite.sh` prend le dump chiffré le plus récent, dans l'un ou l'autre format (`.sql.gz.gpg`, lu avec `gpg`, à installer sur le poste : GnuPG 2.2 ou plus récent ; ou l'ancien `.sql.gz.enc`, lu avec `openssl`), le déchiffre avec `BACKUP_PASSPHRASE`, vérifie le gzip et l'en-tête `pg_dump`, puis, par défaut, le recharge dans un conteneur PostgreSQL 16 jetable (sans port publié, supprimé à la fin) et compare les comptages : organisations, événements, bénévoles, inscriptions et migrations terminées. La sauvegarde est donc réellement restaurable, pas seulement bien formée. Le script ne modifie jamais la copie hors site : montage local en lecture seule, ou `rclone lsl`/`lsf`/`copy` depuis le remote uniquement.
 
 Source du dump, au choix :
 
-- **Montage local Swiss Backup** (application de bureau) : si `SWISSBACKUP_DIR` est défini, ou si `$HOME/SwissBackup/benevol-backups/benevol-backups` existe, le script y prend le plus récent `benevoles_*.sql.gz.enc`, en lecture seule.
+- **Montage local Swiss Backup** (application de bureau) : si `SWISSBACKUP_DIR` est défini, ou si `$HOME/SwissBackup/benevol-backups/benevol-backups` existe, le script y prend le plus récent `benevoles_*.sql.gz.gpg` ou `benevoles_*.sql.gz.enc`, en lecture seule.
 - **Remote rclone** : sinon, avec `OFFSITE_BUCKET` (container Swiss Backup) et éventuellement `RCLONE_CONFIG` :
 
   ```bash
@@ -721,11 +788,11 @@ Source du dump, au choix :
   ./scripts/restore-test-offsite.sh
   ```
 
-La phrase secrète est lue dans `BACKUP_PASSPHRASE` si elle est définie, sinon demandée en saisie masquée sur le terminal ; elle n'apparaît jamais dans la liste des processus. `make restore-test-offsite` lance la même chose sans afficher de secret. Sans Docker, `RESTORE_MODE=header` se limite à l'ancienne vérification d'en-tête ; le script indique toujours le mode utilisé. L'image PostgreSQL se change avec `RESTORE_PG_IMAGE` (défaut `postgres:16`, la version de production).
+La phrase secrète est lue dans `BACKUP_PASSPHRASE` si elle est définie, sinon demandée en saisie masquée sur le terminal ; elle n'apparaît jamais dans la liste des processus, et un fichier `.sql.gz.gpg` modifié après son chiffrement est refusé. `make restore-test-offsite` lance la même chose sans afficher de secret. Sans Docker, `RESTORE_MODE=header` se limite à l'ancienne vérification d'en-tête ; le script indique toujours le mode utilisé. L'image PostgreSQL se change avec `RESTORE_PG_IMAGE` (défaut `postgres:16`, la version de production).
 
 Le script affiche à la fin la commande `kubectl exec` à lancer pour enregistrer le test sur la page de santé (voir « Checklist opérationnelle » ci-dessous) ; il ne l'envoie pas lui-même et ne lit pas `CRON_SECRET` sur le poste, pour qu'un essai local ne signale jamais un faux succès en production. La phrase secrète doit rester dans un gestionnaire de mots de passe hors du serveur : sans elle, les copies hors site restent indéchiffrables si le cluster est perdu (voir « `BACKUP_PASSPHRASE` est un point unique de défaillance » ci-dessus).
 
-`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`docker`/`wget`) du script du CronJob et du script de restauration ; voir son en-tête. `make test-offsite-backup` le lance.
+`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`docker`/`wget`/`pg_dump`, vrais `gpg` et `openssl`) des scripts des deux CronJobs de sauvegarde et du script de restauration : fichier écrit et vérifié, rotation des deux formats, refus d'un fichier modifié ; voir son en-tête. `make test-offsite-backup` le lance.
 
 **Retrait de Dropbox (#697), côté opérateur**, une fois ce changement déployé :
 
@@ -768,7 +835,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
   fetch("http://localhost:3000/api/cron/heartbeat", {
     method: "POST",
     headers: { authorization: `Bearer ${process.env.CRON_SECRET}`, "content-type": "application/json" },
-    body: JSON.stringify({ job: "restore-test", ok: true, summary: { dump: "benevoles_2026-09-30_01-00.sql.gz.enc", mode: "full" } }),
+    body: JSON.stringify({ job: "restore-test", ok: true, summary: { dump: "benevoles_2026-11-30_01-00.sql.gz.gpg", mode: "full" } }),
   }).then(async r => console.log(r.status, await r.text()))'
   ```
 

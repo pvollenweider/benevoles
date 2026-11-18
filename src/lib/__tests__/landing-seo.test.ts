@@ -54,7 +54,8 @@ describe("landing structured data", () => {
 
   it("links the site, its publisher, the application and its code", () => {
     expect(node("WebSite")).toMatchObject({ url: `${BASE}/`, publisher: { "@id": `${BASE}/#organization` } })
-    expect(node("Organization")).toMatchObject({ sameAs: ["https://github.com/pvollenweider/benevoles"] })
+    // The code first on every instance; the hosted service adds its YouTube channel (structured-data.test.ts).
+    expect((node("Organization").sameAs as string[])[0]).toBe("https://github.com/pvollenweider/benevoles")
     expect(node("SoftwareApplication")).toMatchObject({ operatingSystem: "Web", isAccessibleForFree: true, license: "https://www.gnu.org/licenses/agpl-3.0.html" })
     expect(node("SoftwareSourceCode")).toMatchObject({ codeRepository: "https://github.com/pvollenweider/benevoles", targetProduct: { "@id": `${BASE}/#application` } })
   })

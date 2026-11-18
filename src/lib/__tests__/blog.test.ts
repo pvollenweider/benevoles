@@ -179,7 +179,7 @@ describe("metadata, structured data and sitemap", () => {
 
   it("describes a post as a BlogPosting with its breadcrumb", () => {
     const graph = blogPostJsonLd(p, "https://www.benevol.app") as { "@graph": Record<string, unknown>[] }
-    expect(graph["@graph"][0]).toMatchObject({ "@type": "BlogPosting", headline: p.title, datePublished: "2026-10-12", url: "https://www.benevol.app/blog/neuf", image: "https://www.benevol.app/og-image.png" })
+    expect(graph["@graph"][0]).toMatchObject({ "@type": "BlogPosting", headline: p.title, datePublished: "2026-10-12", dateModified: "2026-10-12", url: "https://www.benevol.app/blog/neuf", image: "https://www.benevol.app/og-image.png" })
     expect(graph["@graph"][1]).toMatchObject({ "@type": "BreadcrumbList" })
   })
 

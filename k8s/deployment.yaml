@@ -38,17 +38,44 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 
+      # Emptied with the pod: each new pod starts with empty caches, as each new container did.
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 16Mi
+        - name: next-cache
+          emptyDir:
+            sizeLimit: 512Mi
+        - name: next-route-cache
+          emptyDir:
+            sizeLimit: 64Mi
+
       containers:
         - name: app
           image: ${APP_IMAGE}
           ports:
             - containerPort: 3000
-          # readOnlyRootFilesystem stays off: Next.js writes its cache at run time, optimised images
-          # in .next/cache and pages it renders again in .next/server/app (#1050).
+          # Read-only root filesystem: the application files belong to root in the image
+          # (Dockerfile) and nothing outside the three volumes below can be written. They are the
+          # paths the server writes, measured with `docker diff` on a running container; no page is
+          # rendered again into .next/server/app (no route of the build has a revalidation delay).
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
+          volumeMounts:
+            # The readiness file written after the warm-up (docker-entrypoint.sh).
+            - name: tmp
+              mountPath: /tmp
+            # Optimised images (/_next/image). Next.js keeps at most 200 MiB there
+            # (src/lib/image-disk-cache.ts); the volume leaves it more than twice that.
+            - name: next-cache
+              mountPath: /app/.next/cache
+            # Copies of the static routes built into the image (icons, social cards), made the
+            # first time each is asked: about 5 MiB once all are there. Empty in the image too.
+            - name: next-route-cache
+              mountPath: /app/.next/server/route-cache
           env:
             # Only the keys of benevoles-secret the app reads (#1050), not the whole secret:
             # POSTGRES_USER/POSTGRES_PASSWORD (postgres pod), BACKUP_PASSPHRASE (backup CronJob),

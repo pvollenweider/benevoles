@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { pageAvailable, publicPage, publicPageMetadata } from "@/lib/doc-pages"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import { apexBaseUrl } from "@/lib/urls"
 import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
@@ -23,7 +24,7 @@ export default function PrivacyPage() {
   if (!pageAvailable(publicPage("/legal/privacy"))) notFound()
   return (
     <>
-      <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl(), [], loadDocLastmod())} />
       <h1>Politique de confidentialité</h1>
       <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 16 novembre 2026</p>
 

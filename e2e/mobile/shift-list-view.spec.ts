@@ -3,8 +3,9 @@ import { waitForHydration } from "../helpers/hydration"
 import { createPublicEvent, randomIp, type PublicEvent } from "../helpers/public-signup"
 
 /**
- * « Liste » on a 320 px screen (#808): the shifts without horizontal scrolling, chosen with the
- * keyboard, and the choice kept after a reload. Project "webkit-iphone".
+ * « Liste » on a 320 px screen (#808): shown first with no choice (#1407), the shifts without
+ * horizontal scrolling, chosen with the keyboard; « Frise » chosen is kept after a reload. Project
+ * "webkit-iphone".
  */
 
 let event: PublicEvent
@@ -17,7 +18,7 @@ test.beforeAll(async ({ browser }) => {
   ])
 })
 
-test("the list fits 320 px, selects with the keyboard, and stays chosen", async ({ page }) => {
+test("the list comes first at 320 px, fits, selects with the keyboard; a chosen Frise stays", async ({ page }) => {
   test.setTimeout(90_000)
   await page.setViewportSize({ width: 320, height: 640 })
   await page.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
@@ -25,8 +26,6 @@ test("the list fits 320 px, selects with the keyboard, and stays chosen", async 
 
   const liste = page.getByRole("button", { name: "Liste" })
   await waitForHydration(liste)
-  await expect(page.getByRole("button", { name: "Frise" })).toHaveAttribute("aria-pressed", "true")
-  await liste.click()
   await expect(liste).toHaveAttribute("aria-pressed", "true")
 
   const list = page.getByRole("list", { name: /^Créneaux du / })
@@ -39,7 +38,24 @@ test("the list fits 320 px, selects with the keyboard, and stays chosen", async 
   await page.keyboard.press("Enter")
   await expect(bar).toHaveAttribute("aria-pressed", "true")
 
+  // Not a choice: nothing kept on the device yet.
+  expect(await page.evaluate(() => localStorage.getItem("benevoles:public-shift-view"))).toBeNull()
+
+  await page.getByRole("button", { name: "Frise" }).click()
   await page.reload()
+  await expect(page.getByRole("button", { name: "Frise" })).toHaveAttribute("aria-pressed", "true")
+  await expect(page.getByRole("region", { name: /^Planning du / })).toBeVisible()
+})
+
+test("turned sideways, the phone shows the Frise", async ({ page }) => {
+  test.setTimeout(90_000)
+  await page.setViewportSize({ width: 844, height: 390 })
+  await page.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
+  await page.goto(`/${event.slug}?org=default`)
+  const frise = page.getByRole("button", { name: "Frise" })
+  await waitForHydration(frise)
+  await expect(frise).toHaveAttribute("aria-pressed", "true")
+  await page.setViewportSize({ width: 390, height: 844 })
   await expect(page.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
   await expect(page.getByRole("list", { name: /^Créneaux du / })).toBeVisible()
 })

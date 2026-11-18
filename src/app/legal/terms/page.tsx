@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { pageAvailable, publicPage, publicPageMetadata } from "@/lib/doc-pages"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import { apexBaseUrl } from "@/lib/urls"
 import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
@@ -17,7 +18,7 @@ export default function TermsPage() {
   if (!pageAvailable(publicPage("/legal/terms"))) notFound()
   return (
     <>
-      <JsonLd data={publicPageJsonLd("/legal/terms", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/legal/terms", apexBaseUrl(), [], loadDocLastmod())} />
       <h1>Conditions générales d&apos;utilisation</h1>
       <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 15 novembre 2026</p>
 

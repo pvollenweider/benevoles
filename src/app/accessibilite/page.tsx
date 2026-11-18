@@ -6,6 +6,7 @@ import { pageAvailable, publicPage, publicPageMetadata } from "@/lib/doc-pages"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import { notFound } from "next/navigation"
 
@@ -22,7 +23,7 @@ export default function AccessibilityPage() {
   const { title, html } = renderPublicSource("content/pages/ACCESSIBILITE.md", "Accessibilité")
   return (
     <>
-      <JsonLd data={publicPageJsonLd("/accessibilite", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/accessibilite", apexBaseUrl(), [], loadDocLastmod())} />
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>

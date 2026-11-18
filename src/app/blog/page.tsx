@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import { blogIndexMetadata, loadBlogPosts } from "@/lib/blog"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import { BlogIndex } from "@/components/public/Blog"
 
@@ -17,7 +18,7 @@ export function generateMetadata(): Metadata {
 export default function BlogPage() {
   return (
     <>
-      <JsonLd data={publicPageJsonLd("/blog", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/blog", apexBaseUrl(), [], loadDocLastmod())} />
       <BlogIndex posts={loadBlogPosts()} />
     </>
   )

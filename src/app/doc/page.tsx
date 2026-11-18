@@ -6,6 +6,7 @@ import { docUnitHref } from "@/lib/doc-href"
 import { docQuickstartUnit } from "@/lib/doc-quickstart"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd } from "@/lib/structured-data"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import JsonLd from "@/components/public/JsonLd"
 import DocUnitIndex from "@/components/public/DocUnitIndex"
 import DocFrame from "@/components/public/DocFrame"
@@ -23,7 +24,7 @@ export default function DocIndexPage() {
   const quickstart = docQuickstartUnit(units)
   return (
     <DocFrame>
-      <JsonLd data={publicPageJsonLd("/doc", apexBaseUrl())} />
+      <JsonLd data={publicPageJsonLd("/doc", apexBaseUrl(), [], loadDocLastmod())} />
       <h1>Documentation</h1>
       <p>{DOC_GUIDES.length > 1 ? `${DOC_GUIDES.length} guides` : "Un guide"}, selon ce que vous cherchez à faire sur {SITE_NAME}&nbsp;:</p>
       <ul>
