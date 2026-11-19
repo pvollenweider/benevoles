@@ -1373,9 +1373,9 @@ Les quinze vidéos des points 1 à 9 ont été traitées : **douze READY publié
 
 **SHIFT_CREATE_EDIT_DETAIL : READY, publiée, révision 6, 134,76 s.** Troisième vidéo H dans l’ordre initial : nouvelle voix Kore continue, six limites corrigées avant la prise, sept ASR source/final et contrôle de voix conformes. Deux répétitions, une seule prise narrée ; pauses des heures raccourcies avant la prise pour terminer leur saisie pendant leur explication. Sept revues AV / 25 points sans signalement, quatorze images finales inspectées. Minimum (optionnel), aide des paramètres du poste et libellés actuels sont visibles ; le vrai créneau 18h–21h30 est enregistré avec trois places et ses informations pratiques, puis relu. Les écarts historiques de minimum et de libellés de cette vidéo sont résolus. Musique 15,4–19,1 LU sans trou, zéro tutoiement, dix-neuf clics réels sonorisés. Aperçu puis APPLY=1, cinq fichiers envoyés ; vérification distante cinq inchangés et durée publiée synchronisée. [Rapport et preuves](evidence/batch41/phase2/shift-create-edit-detail/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
 
-## À refilmer : « Partager ce créneau » sur « Où manque-t-il du monde ? » (#1386, 17 novembre 2026)
+## Refilmé au lot 43 : « Partager ce créneau » sur « Où manque-t-il du monde ? » (#1386)
 
-Chaque créneau à compléter porte maintenant un troisième lien, **Partager ce créneau**, après « Chercher des bénévoles » et « Voir les disponibilités » ; il ouvre une fenêtre avec le lien public du créneau, « Copier le lien », « QR code PNG » et la case « Accepter une inscription même si les inscriptions de l'événement sont fermées ». Les sélecteurs de capture visent des liens de `staffing-underfilled` et ne cassent pas ; seule l'image change. Vidéos touchées : **LAST_MINUTE_CHANGES** (`last-minute-changes`, le geste le plus utile la veille : un segment à ajouter). À reprendre au prochain lot vidéo.
+Chaque créneau à compléter porte maintenant un troisième lien, **Partager ce créneau**, après « Chercher des bénévoles » et « Voir les disponibilités » ; il ouvre une fenêtre avec le lien public du créneau, « Copier le lien », « QR code PNG » et la case « Accepter une inscription même si les inscriptions de l'événement sont fermées ». Les sélecteurs de capture visent des liens de `staffing-underfilled` et ne cassent pas ; seule l'image change. Le lot 43 montre l'ouverture du partage et le retour « Lien copié » dans **LAST_MINUTE_CHANGES**, révision 7. [Image du rendu](evidence/batch43/last-minute-changes/take2/shift-share.jpg).
 
 ## À refilmer : planning en liste sur téléphone (#1407, 18 novembre 2026)
 
@@ -1425,7 +1425,6 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 - **VOLUNTEER_CONFIRMATION_ERRORS** (`volunteer-confirmation-errors`) : email de confirmation et email « Demande d'inscription non enregistrée », tous deux avec leur lien personnel.
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
 - **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
-- **LAST_MINUTE_CHANGES** (`last-minute-changes`) : email d'offre, email de changement d'horaire et emails d'annulation.
 - **SHIFT_WAITLIST_OFFER** (`shift-waitlist-offer`) : email d'offre de place (lien d'action propre à l'événement, à conserver tel quel).
 - **TARGETED_MESSAGES** (`targeted-messages`) et **MEMBERS_REMINDERS** (`members-reminders`) : emails de message ciblé, dont le bouton de gestion.
 - **ORG_EMAIL_SETTINGS** (`org-email-settings`) : email de test d'un message ciblé.
@@ -1449,3 +1448,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **TARGETED_MESSAGES — NOT READY après deux prises.** Le cadrage de la seconde montre le bouton commun et la phrase de confidentialité. Le clic « Modifier » du chapitre final devance encore son annonce. La révision 5 du lot 42 reste publiée. [Revue et preuves](evidence/batch43/targeted-messages/take2/review.md).
 
 **REMINDERS_CHANGES — NOT READY après deux prises.** Le contrôle du build a écarté la première prise après la fusion de #1440 pendant la capture. La deuxième montre le lien commun dans les vrais rappels et le courriel de changement avec assez de temps de lecture. La narration finale attribue au courriel de Lucas une précision distincte sur sa demande qui ne figure pas dans le texte reçu. La révision 5 reste publiée. [Revue et preuves](evidence/batch43/reminders-changes/take2/review.md).
+
+**LAST_MINUTE_CHANGES — READY, publiée, révision 7, 465,44 s.** Le vrai courriel de changement est lisible 14,88 s, avec les deux horaires, le bouton commun et sa phrase de confidentialité. Le partage montre « Lien copié ». La seconde prise rétablit les consignes de saisie du nom et sépare les confirmations. Douze chapitres vérifiés, onze courriels fictifs reçus et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/last-minute-changes/take2/review.md).

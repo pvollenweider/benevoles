@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:42:39.252Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "8c6a526acf2977743d9f2858505ccde324866dfd9e2f84f8db941ead53260ab9",
+  "clipSha256": "1083ed9ad0d0cb0819d0ae01984a37d945de738a3dfbca8fa443b2fcecd05d54",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Terminons dans la vue de couverture",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Terminons dans la vue de couverture et les inscriptions à jour.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de l'onglet Inscriptions avec la liste des bénévoles inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Nicolas a accepté sa place, Zoé est sur le créneau convenu, le nouvel horaire est visible",
+        "visibleSeconds": 4.5,
+        "visible": "Défilement montrant Nicolas Peeters dans la liste ainsi que Zoé Papadopoulos sur le créneau de 14h30 à 16h30.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Nous avons vérifié les résultats, pas seulement cliqué sur des boutons.",
+        "visibleSeconds": 12.2,
+        "visible": "Retour sur l'onglet Créneaux en vue liste récapitulant les statuts et effectifs.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "En cas d'imprévu : un besoin précis, une proposition claire",
+        "visibleSeconds": 16,
+        "visible": "Affichage de la page « Où manque-t-il du monde ? » pour le récapitulatif de synthèse.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et naturelle, parfaitement synchronisée avec la démonstration récapitulative."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

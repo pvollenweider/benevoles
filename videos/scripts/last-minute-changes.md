@@ -81,3 +81,7 @@ Le modèle a confondu les lignes du tableau : à 15,5 s de `offer`, avant la fin
 ## Partager le besoin pour demain (lot 42)
 
 Après la couverture, ouvrir « Partager ce créneau » sur Installation du matériel. Copier le lien pour un groupe de discussion et laisser la fenêtre lisible. Le lien ouvre le seul créneau de midi à quatorze heures. La case permet une inscription après la fermeture de l’événement tant qu’il reste une place et que le créneau n’a pas commencé.
+
+## Révision du 19 novembre 2026 — lot 43
+
+Ouvrir le changement d'horaire dès « Lisons l'ancien et le nouvel horaire ». Le courriel a déjà été repéré dans la boîte de démonstration. Garder les deux horaires visibles, puis cadrer « Mes inscriptions » et sa phrase de confidentialité avant le retour au planning. Montrer le même lien d'organisation dans le message ciblé. L'offre garde « Confirmer ma participation » pour cette seule place. Le courriel d'annulation garde « Voir les créneaux disponibles » pour cet événement. Le chapitre « Partager le besoin pour demain » conserve la copie du lien du créneau.

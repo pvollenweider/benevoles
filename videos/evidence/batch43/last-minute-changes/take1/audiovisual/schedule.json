@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:26:09.066Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "1c02864f3f31ee4d65bb65eea6db3763a0347bed5ca01f08cd91f64dd071003c",
+  "clipSha256": "61b713066a0b7410069c427068ea8815419004009ee47b5f6fbf614ed3ad7dbe",
+  "scene": "schedule",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tard",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier.",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture du formulaire de modification du créneau du vendredi 20 novembre (14:00 - 16:00).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Décalons les deux heures, puis enregistrons.",
+        "visibleSeconds": 10.5,
+        "visible": "Modification des horaires à 14:30 et 16:30, puis clic sur Enregistrer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
+        "spoken": "Lisons l'ancien et le nouvel horaire dans le message reçu.",
+        "visibleSeconds": 17.3,
+        "visible": "Affichage de l'email de notification de changement d'horaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "L'ancien est barré et le nouveau est mis en évidence.",
+        "visibleSeconds": 21,
+        "visible": "L'ancien créneau 14:00-16:00 apparaît barré et le nouveau 14:30-16:30 en gras.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.8,
+        "spoken": "La phrase sous le bouton rappelle la confidentialité du lien.",
+        "visibleSeconds": 29.8,
+        "visible": "Texte visible sous le bouton : « Ce lien ouvre toutes tes inscriptions [...] Ne le partage pas. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33.5,
+        "spoken": "Revenons au planning et vérifions la nouvelle heure de début.",
+        "visibleSeconds": 33.5,
+        "visible": "Retour à la vue liste des créneaux affichant le nouvel horaire 14:30-16:30.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -34,7 +34,7 @@
     },
     {
       "id": "withdrawal",
-      "transcript": "Aline ne peut plus venir à l'accueil. Depuis son lien personnel, elle annule son inscription. C'est un retrait individuel : le créneau existe toujours. Revenons dans les inscriptions côté organisation. Son inscription n'est plus une confirmation active. Comme une personne attendait cette place, l'application lui propose de la prendre. Ouvrons le vrai email reçu par Nicolas. On y retrouve le créneau et un délai de réponse. Ne partagez pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.",
+      "transcript": "Aline ne peut plus venir à l'accueil. Depuis son lien personnel, elle annule son inscription. C'est un retrait individuel : le créneau existe toujours. Revenons dans les inscriptions côté organisation. Son inscription n'est plus une confirmation active. Comme une personne attendait cette place, l'application lui propose de la prendre. Ouvrons le vrai email reçu par Nicolas. On y retrouve le créneau et un délai de réponse. Le bouton Confirmer ma participation concerne cette seule place. Ne partagez pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.",
       "fallbackDurationMs": 50000
     },
     {
@@ -59,7 +59,7 @@
     },
     {
       "id": "message",
-      "transcript": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau, puis Installation du matériel. Emma y est déjà inscrite : ce message lui sera adressé, pas à toute l'organisation. Écrivons un objet clair et une courte demande. Il reste une place de midi à quatorze heures ; connaît-elle quelqu'un qui pourrait aider ? Le poste, l'horaire et la manière de répondre doivent être compréhensibles. Vérifions l'aperçu et le destinataire, puis confirmons l'envoi. Ouvrons le vrai email reçu. Ce message ne crée aucune inscription. Pour la suite de la démonstration, supposons que Zoé a donné son accord. Revenons aux inscriptions et ouvrons l'ajout manuel. Saisissons son prénom, puis son nom. Renseignons ensuite la même adresse email que sur sa fiche membre. Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la. Enfin, revenons à la couverture : le poste est rempli. Nous avons vérifié une nouvelle inscription, pas seulement envoyé une demande d'aide.",
+      "transcript": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau, puis Installation du matériel. Emma y est déjà inscrite : ce message lui sera adressé, pas à toute l'organisation. Écrivons un objet clair et une courte demande. Il reste une place de midi à quatorze heures ; connaît-elle quelqu'un qui pourrait aider ? Le poste, l'horaire et la manière de répondre doivent être compréhensibles. Ouvrons l'aperçu. Vérifions le message et le nom d'Emma, l'unique destinataire. Passons à la confirmation. Confirmons l'envoi. Le formulaire indique que le message a été envoyé. Ouvrons le vrai email reçu. Le bouton Mes inscriptions rassemble les inscriptions auprès de cette organisation. La phrase sous le bouton rappelle que le lien reste personnel. Ce message ne crée aucune inscription. Supposons que Zoé a donné son accord. Ouvrons l'ajout manuel dans les inscriptions. Saisissons le prénom et le nom de Zoé. Entrez ensuite l'adresse email de sa fiche membre. Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la. Enfin, revenons à la couverture : le poste est rempli. Nous avons vérifié une nouvelle inscription, pas seulement envoyé une demande d'aide.",
       "fallbackDurationMs": 70000
     },
     {
@@ -69,12 +69,12 @@
     },
     {
       "id": "schedule",
-      "transcript": "Le matériel arrive plus tard : nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu, puis revenons au planning. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contactez aussi les personnes directement.",
+      "transcript": "Le matériel arrive plus tard : nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu. L'ancien est barré et le nouveau est mis en évidence. Le bouton Mes inscriptions ouvre la page commune à l'organisation. La phrase sous le bouton rappelle la confidentialité du lien. Revenons au planning et vérifions la nouvelle heure de début. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contactez aussi les personnes directement.",
       "fallbackDurationMs": 52000
     },
     {
       "id": "cancel",
-      "transcript": "Une mission n'a plus lieu : cette fois, on annule le créneau entier, pas une seule personne. Ouvrons la confirmation et prenons le temps de lire les conséquences. Après confirmation, les inscriptions concernées sont annulées et les personnes sont prévenues. Une demande en attente de validation est aussi concernée. Vérifions le statut, puis le vrai email reçu. Si des présences ont déjà été enregistrées, elles ne doivent pas être effacées pour arranger le planning. Annuler n'est pas simplement fermer les nouvelles inscriptions.",
+      "transcript": "Une mission n'a plus lieu : cette fois, on annule le créneau entier, pas une seule personne. Ouvrons la confirmation et prenons le temps de lire les conséquences. Après confirmation, les inscriptions concernées sont annulées et les personnes sont prévenues. Une demande en attente de validation est aussi concernée. Vérifions le statut. Ouvrons le courrier d'annulation. Il indique le créneau annulé et permet de voir les créneaux disponibles de cet événement. Si des présences ont déjà été enregistrées, elles ne doivent pas être effacées pour arranger le planning. Annuler n'est pas simplement fermer les nouvelles inscriptions.",
       "fallbackDurationMs": 54000
     },
     {

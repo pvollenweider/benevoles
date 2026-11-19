@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:40:59.303Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
+  "clipSha256": "46cd75d4d950eb7a3cfb0f9a6b65ca76ea517bc306bb2816336bd7b943ffd8f9",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un désistement, un horaire qui bouge",
+    "checkpoints": [
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Le plus important, c'est de vérifier les faits, prévenir les bonnes personnes et regarder le résultat.",
+        "visibleSeconds": 8,
+        "visible": "Encart central affichant le titre « Gérer un imprévu sans perdre le fil » et le sous-titre « Vérifier, prévenir, contrôler le résultat ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "visibleSeconds": 14.5,
+        "visible": "L'encart disparaît pour révéler la page « Aperçu » de l'événement « Fête des imprévus – démonstration ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "Chaque changement sera réellement enregistré dans notre environnement de formation.",
+        "visibleSeconds": 26.5,
+        "visible": "Page d'accueil de l'événement stable avec les rubriques « Où manque-t-il du monde ? » et « À traiter ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec l'affichage de l'écran d'introduction."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

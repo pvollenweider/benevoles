@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:25:20.662Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "771264862ff2453f11e613510d6d18ce833eaef2e0a417ecb37413b9a1d869c4",
+  "clipSha256": "4452f38c72d217faa59463a63ff8713584d2d8af776c9af59e1e282168a45256",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités générales",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Zoé a indiqué le matin avec une remarque.",
+        "visibleSeconds": 4.5,
+        "visible": "Filtre sur Zoé affichant le contact avec la mention « Matin - Peut aussi aider en début d'après-midi après confirmation. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "Il ne l'inscrit pas automatiquement",
+        "visibleSeconds": 11.5,
+        "visible": "Ouverture de la fenêtre « Modifier le membre » montrant la case « Matin » cochée sous « Disponible en général »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement.",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de la page « Activité de Zoé Papadopoulos » listant ses inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33.5,
+        "spoken": "Sarah répond Je ne peux pas pour ce seul créneau.",
+        "visibleSeconds": 32.2,
+        "visible": "Clic sur « Confirmer que je ne peux pas » puis message de confirmation enregistré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.8,
+        "spoken": "Dans Chercher des bénévoles, A répondu non le indique sa réponse",
+        "visibleSeconds": 37.8,
+        "visible": "Page « Chercher des bénévoles » avec la mention « A répondu non le 19 novembre 2026 » sous Sarah Smith",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:41:11.537Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "d1c3441fbcb7b39363c5765c03105f1db5be827fcf99c1898445761654f50599",
+  "clipSha256": "89948b0b92b221a2d9004624c20cf7ba2a7fe21702156c3a3fb5bba4e8876e7c",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Une place proposée n'est pas encore une personne confirmée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Une place proposée n'est pas encore une personne confirmée.",
+        "visibleSeconds": 1,
+        "visible": "Page 'Mes inscriptions' pour Nicolas Peeters avec le statut 'Une place t'est proposée' sur le créneau Accueil du matin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple.",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la page 'Une place s'est libérée' puis clic sur 'Prendre la place' et confirmation 'Place confirmée !'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Puis vérifions le statut dans les inscriptions.",
+        "visibleSeconds": 14,
+        "visible": "Retour à la liste des inscriptions de l'événement montrant Nicolas Peeters",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

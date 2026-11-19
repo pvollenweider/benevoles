@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:42:22.067Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "e09ff38193e7712dc98f332ee0f9752a292f30c72ca6c53b9bb0f1c7fac17b94",
+  "clipSha256": "2c6a551347d2d01c3d9c133acc0066968ef79e1312dbd43ad4302d659f7d5de8",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Une mission n'a plus lieu : cette fois, on annule le créneau entier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
+        "visibleSeconds": 5.5,
+        "visible": "Ouverture de la fenêtre modale de confirmation de suppression du créneau détaillant les conséquences",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Après confirmation, les inscriptions concernées sont annulées",
+        "visibleSeconds": 9.5,
+        "visible": "Clic sur le bouton rouge Supprimer pour valider l'annulation du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Vérifions le statut.",
+        "visibleSeconds": 15,
+        "visible": "Affichage du journal montrant l'annulation de l'inscription et de la demande à traiter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Ouvrons le courrier d'annulation.",
+        "visibleSeconds": 20,
+        "visible": "Affichage de l'e-mail d'annulation envoyé au bénévole avec le bouton Voir les créneaux disponibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33,
+        "spoken": "Annuler n'est pas simplement fermer les nouvelles inscriptions.",
+        "visibleSeconds": 33.5,
+        "visible": "Retour à la page des inscriptions de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, fluide et claire, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

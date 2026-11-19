@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:25:34.780Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "9e67d4e43b4d465597b98ef68d13ad9ba25e08c3ee6d1bad9dc345720ea42018",
+  "clipSha256": "258330fa5f21b17db589cf38b50b80acb49bfef4092d38a55639b7188a8cf222",
+  "scene": "need",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tôt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Sur la page Jour J, ouvrons Ajouter un besoin.",
+        "visibleSeconds": 6.8,
+        "visible": "Navigation vers l'onglet Jour J et ouverture du formulaire Ajouter un besoin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Indiquons le poste Renfort matériel, le début, la fin et une place.",
+        "visibleSeconds": 10.5,
+        "visible": "Saisie du poste Renfort matériel, des horaires et du nombre de places",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.1,
+        "spoken": "Ajouter le créneau enregistre d'abord le besoin.",
+        "visibleSeconds": 15.6,
+        "visible": "Clic sur Ajouter le créneau et passage à l'étape 2 sur 2 : prévenir",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone.",
+        "visibleSeconds": 22.8,
+        "visible": "Affichage des options Inscrits aujourd'hui et notification sur le téléphone cochées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.2,
+        "spoken": "Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons.",
+        "visibleSeconds": 27.2,
+        "visible": "Sélection du membre, ouverture de la modale d'aperçu de l'email et clic sur Envoyer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et au rythme fluide, parfaitement en phase avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-11-19T20:39:37.756Z",
+  "scope": "actual local SMTP inbox and outbox; not proof of reading by a person or audiovisual validation",
+  "messages": [
+    {
+      "kind": "waitlist_offered",
+      "mailId": "7BURXhMHVLQR3qiaRdpNmN",
+      "recipient": "video.last-minute.person.1@example.org"
+    },
+    {
+      "kind": "registration_cancelled",
+      "mailId": "4pGfs8aPIWzM3JZcrunZF4",
+      "recipient": "video.last-minute.owner@example.org"
+    },
+    {
+      "kind": "registration_withdrawn",
+      "mailId": "3KPagygW3YB13lFNLUjjVU",
+      "recipient": "video.last-minute.person.0@example.org"
+    },
+    {
+      "kind": "registration_confirmation",
+      "mailId": "24i6eNTf9mLNb95IEVc7N9",
+      "recipient": "video.last-minute.person.1@example.org"
+    },
+    {
+      "kind": "open_shifts",
+      "mailId": "7fu7mB3Lm680veuBdm3mAK",
+      "recipient": "video.last-minute.person.4@example.org"
+    },
+    {
+      "kind": "targeted_message",
+      "mailId": "4NKPX91Go8m9yhmn5VWJqL",
+      "recipient": "video.last-minute.person.3@example.org"
+    },
+    {
+      "kind": "registration_added_by_organizer",
+      "mailId": "3t3yEOHJUjBRygX5h6WdQJ",
+      "recipient": "video.last-minute.person.2@example.org"
+    },
+    {
+      "kind": "open_shifts",
+      "mailId": "1mkcSsvkbqePR8lJuST7mQ",
+      "recipient": "video.last-minute.person.3@example.org"
+    },
+    {
+      "kind": "shift_modified",
+      "mailId": "0qQnX0rjkOphwgYzUQiD7C",
+      "recipient": "video.last-minute.person.4@example.org"
+    },
+    {
+      "kind": "shift_cancelled",
+      "mailId": "4o5jnvtLPH2fgUbZyNIEza",
+      "recipient": "video.last-minute.person.0@example.org"
+    },
+    {
+      "kind": "shift_cancelled",
+      "mailId": "6kSLUorg8j1bfrPkxOukWQ",
+      "recipient": "video.last-minute.person.5@example.org"
+    }
+  ],
+  "suppressed": [],
+  "allNotificationsDelivered": true,
+  "schedulePendingExcluded": true,
+  "activeAndRequestedCancellationDelivered": true
+}

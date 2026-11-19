@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:41:38.017Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "771264862ff2453f11e613510d6d18ce833eaef2e0a417ecb37413b9a1d869c4",
+  "clipSha256": "c0f5e653d7f22f55881d1952a12ec3997ad54239cca3d1a617a319ce6ba43549",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités générales",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "regardons les disponibilités générales dans les membres",
+        "visibleSeconds": 2.5,
+        "visible": "Filtre sur 'Zoe' dans la liste des membres et affichage de sa disponibilité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Zoé a indiqué le matin avec une remarque",
+        "visibleSeconds": 7,
+        "visible": "Affichage de la remarque dans la liste puis ouverture de la fenêtre 'Modifier le membre' avec la case Matin cochée et la note",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement",
+        "visibleSeconds": 18,
+        "visible": "Clic sur 'Activité' et ouverture de la page 'Activité de Zoé Papadopoulos' avec son inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33.2,
+        "spoken": "Sarah répond Je ne peux pas pour ce seul créneau",
+        "visibleSeconds": 31,
+        "visible": "Clic sur 'Confirmer que je ne peux pas' pour le créneau Logistique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.8,
+        "spoken": "Dans Chercher des bénévoles, A répondu non le indique sa réponse",
+        "visibleSeconds": 37.5,
+        "visible": "Page Chercher des bénévoles avec la mention 'A répondu non le 19 novembre 2026' sous Sarah Smith",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine fluide, claire et bien articulée, parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

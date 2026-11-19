@@ -10,7 +10,8 @@ import { verifyProductBuild } from "../lib/product-build"
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
-  const product = await verifyProductBuild("http://localhost:43102")
+  const productOrigin = process.env.VIDEO_BASE_URL ?? "http://localhost:43102"
+  const product = await verifyProductBuild(productOrigin)
   const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   const heldUntil = new Date(Date.now() + 3600000)
   const held: { id: string; nextAttemptAt: Date }[] = []
@@ -28,7 +29,7 @@ async function main() {
       assert.equal(result.count, 1); held.push({ id: row.id, nextAttemptAt: row.nextAttemptAt })
     }
     for (const row of own) await db.notificationOutbox.updateMany({ where: { id: row.id, organizationId: org.id, status: "pending", nextAttemptAt: row.nextAttemptAt }, data: { nextAttemptAt: new Date(Date.now() - 1000) } })
-    const response = await fetch("http://localhost:43102/api/cron/outbox", { method: "POST", headers: { Authorization: `Bearer ${process.env.CRON_SECRET ?? "local-video-fixture-cron-only"}` } })
+    const response = await fetch(new URL("/api/cron/outbox", productOrigin), { method: "POST", headers: { Authorization: `Bearer ${process.env.CRON_SECRET ?? "local-video-fixture-cron-only"}` } })
     assert(response.ok, `Actual outbox cron HTTP ${response.status}`)
     const result = await response.json()
     const after = await db.notificationOutbox.findMany({ where: { id: { in: own.map(row => row.id) } } })

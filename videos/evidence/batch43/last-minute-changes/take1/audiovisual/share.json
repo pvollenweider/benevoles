@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:25:15.125Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "5ffc8f14dfe0b43a58a26337e90fa8adb5b1347abf8b6bb0d967cda5bb18033b",
+  "clipSha256": "6debcb0bfb5d8a11b2109028972f0ec5916d4da06c91890350573e8f60e58842",
+  "scene": "share",
+  "review": {
+    "heardOpening": "Il manque encore quelqu'un",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "ouvrez Partager ce créneau",
+        "visibleSeconds": 5,
+        "visible": "Clic sur 'Partager ce créneau' et ouverture de la fenêtre modale de partage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Cliquez sur Copier le lien",
+        "visibleSeconds": 8,
+        "visible": "Clic sur le bouton 'Copier le lien' et affichage de la mention 'Lien copié.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.2,
+        "spoken": "cette case permet de laisser ce créneau accessible",
+        "visibleSeconds": 20.2,
+        "visible": "Affichage de la case à cocher 'Accepter une inscription même si les inscriptions de l'événement sont fermées'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, bien articulée et parfaitement synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

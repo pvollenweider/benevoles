@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:25:48.074Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "945ad312f4c55bf6365ddc5e450aebbf26c9e4b35e25ea93b47b02f090aed04d",
+  "clipSha256": "55dd3bb1d8d5e01863c6c7384c7966b5887a9b3750755729bcb167a4f7820f2b",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel.",
+        "visibleSeconds": 2,
+        "visible": "Option 'Les bénévoles d'un créneau' cochée et sélection de 'Logistique - Installation du matériel'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25,
+        "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi.",
+        "visibleSeconds": 21.5,
+        "visible": "L'aperçu et la modale de confirmation ont déjà été ouverts et validés entre 00:21 et 00:24 ; l'écran affiche déjà la confirmation d'envoi.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 29.8,
+        "spoken": "Ouvrons le vrai email reçu.",
+        "visibleSeconds": 28,
+        "visible": "Affichage de l'email reçu adressé à Emma.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 47,
+        "spoken": "Renseignons ensuite la même adresse email que sur sa fiche membre.",
+        "visibleSeconds": 50.5,
+        "visible": "Saisie de l'adresse email dans le formulaire d'inscription manuelle.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 51,
+        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la.",
+        "visibleSeconds": 52.5,
+        "visible": "Sélection du créneau de logistique dans la liste déroulante et clic sur Ajouter.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 56.5,
+        "spoken": "Enfin, revenons à la couverture : le poste est rempli.",
+        "visibleSeconds": 57,
+        "visible": "Retour à la page des créneaux / couverture 'Où manque-t-il du monde ?'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:25, la voix annonce « Vérifions l'aperçu et le destinataire, puis confirmons l'envoi » alors que l'aperçu et la boîte de confirmation ont déjà été validés et fermés à l'écran entre 00:21 et 00:24.",
+      "À ~00:46, la voix saute une partie du script de référence (« Revenons aux inscriptions et ouvrons l'ajout manuel. Saisissons son prénom, puis son nom. ») et passe directement à l'adresse email pendant que la saisie du nom se termine."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

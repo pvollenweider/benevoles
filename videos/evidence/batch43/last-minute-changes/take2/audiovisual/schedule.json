@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:42:23.845Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "1c02864f3f31ee4d65bb65eea6db3763a0347bed5ca01f08cd91f64dd071003c",
+  "clipSha256": "36c571e046cff8618f988c9fc2257897cd813ee1859f2c009e0817b0d1aa781a",
+  "scene": "schedule",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tard",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4,
+        "spoken": "Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier.",
+        "visibleSeconds": 4.8,
+        "visible": "Ouverture du formulaire Modifier le créneau avec date au 20 novembre et horaires 14:00 - 16:00.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Décalons les deux heures, puis enregistrons.",
+        "visibleSeconds": 9.2,
+        "visible": "Modification des heures en 14:30 et 16:30, puis clic sur Enregistrer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Lisons l'ancien et le nouvel horaire dans le message reçu. L'ancien est barré et le nouveau est mis en évidence.",
+        "visibleSeconds": 17.2,
+        "visible": "Email affiché avec l'ancien horaire barré et le nouvel horaire 14:30-16:30 mis en valeur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "Le bouton Mes inscriptions ouvre la page commune à l'organisation.",
+        "visibleSeconds": 24,
+        "visible": "Bouton Mes Inscriptions bien visible dans l'email.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.5,
+        "spoken": "La phrase sous le bouton rappelle la confidentialité du lien.",
+        "visibleSeconds": 28,
+        "visible": "Phrase de confidentialité visible sous le bouton précisant de ne pas partager le lien.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 31,
+        "spoken": "Revenons au planning et vérifions la nouvelle heure de début.",
+        "visibleSeconds": 31.5,
+        "visible": "Retour à la vue planning affichant le créneau décalé à 14:30-16:30.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, débit régulier et synchronisé avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

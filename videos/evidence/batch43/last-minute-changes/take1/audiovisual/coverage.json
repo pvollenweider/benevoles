@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:25:05.712Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "89dc6c86291ffd8cdcb0702a76030c16dac146dc0f864111bb9017553e41b290",
+  "clipSha256": "a76924b84e4f966a7a0a8c634cedf778ebcad8874c0a6106aa6ce692b427ec79",
+  "scene": "coverage",
+  "review": {
+    "heardOpening": "Où manque-t-il encore du monde ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Ouvrons la vue de couverture de l'événement.",
+        "visibleSeconds": 2.1,
+        "visible": "L'onglet Créneaux sous la vue « Où manque-t-il du monde ? » est affiché à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif.",
+        "visibleSeconds": 4.5,
+        "visible": "La section « Créneaux complets » affiche les créneaux Accueil du matin et du soir remplis (1/1).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
+        "visibleSeconds": 9.8,
+        "visible": "Détails visibles dans « Créneaux à compléter » : intitulé, date, tranche horaire et mention « manque 1 ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Une demande à valider réserve déjà une place, sans être une présence confirmée.",
+        "visibleSeconds": 16.2,
+        "visible": "Mention « 1 demande à traiter » visible sur la ligne du créneau de Préparation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
