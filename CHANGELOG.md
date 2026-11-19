@@ -20,6 +20,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Taille des événements** : le graphique à bulles place les événements selon leur date de début (jours depuis aujourd'hui, à l'heure de Zurich), la surface suit désormais le nombre de créneaux et le tableau est classé par date de début ; l'axe des dates n'est jamais plafonné. <!-- interne -->
 - **Page d'accueil** : sous le titre, la première phrase dit ce qu'est benevol.app, « un logiciel libre de planning pour bénévoles », comme la page Citer benevol.app, avant de décrire l'inscription par lien.
 - **Isolation réseau de l'application** : l'application ne joint plus que la base, le DNS du cluster et internet ; elle ne peut plus atteindre l'API du cluster, le serveur ni les autres services hébergés à côté. <!-- interne -->
 - **Isolation réseau des sauvegardes** : la sauvegarde de la base ne joint plus que la base, le DNS du cluster et Traefik ; la copie hors site ne joint plus que le DNS, Traefik et internet en HTTPS, jamais une adresse du cluster. <!-- interne -->

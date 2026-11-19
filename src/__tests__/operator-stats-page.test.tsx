@@ -144,11 +144,12 @@ describe("the operator statistics page", () => {
     expect(within(bubbleTable).getByText("▲")).toHaveAttribute("aria-hidden", "true")
 
     // Named by the encoding (a hidden paragraph, not read twice); the visible summary follows as text.
-    const canvas = screen.getByRole("img", { name: "Graphique à bulles : créneaux en horizontal, inscriptions en vertical, surface selon le nombre de postes." })
+    const canvas = screen.getByRole("img", { name: "Graphique à bulles : date de début en horizontal, inscriptions en vertical, surface selon le nombre de créneaux." })
     expect(canvas.tagName).toBe("CANVAS")
     expect(canvas).toHaveAttribute("aria-labelledby", "operator-bubble-encoding")
     expect(canvas).not.toHaveAttribute("aria-describedby")
     expect(document.getElementById("operator-bubble-encoding")).toHaveAttribute("aria-hidden", "true")
+    expect(screen.getByText("Une bulle par événement ; sa surface suit le nombre de créneaux.")).toBeInTheDocument()
     expect(screen.getByText(bubble.summary)).toBeInTheDocument()
 
     await waitFor(() => expect(mocks.chartInstances).toHaveLength(1))
@@ -159,6 +160,33 @@ describe("the operator statistics page", () => {
 
     unmount()
     expect(mocks.chartDestroy).toHaveBeenCalledTimes(1)
+  })
+
+  it("orders the table rows by start date and shows the start date with the shifts count", async () => {
+    // The query returns the later event first; the table still reads by start date.
+    mocks.loadOperatorActivity.mockResolvedValueOnce({
+      ...operator,
+      bubble: bubbleChartData(
+        [
+          event({ id: "event-2", title: "Festival du lac", organizationName: "Lac", startDate: day("2026-07-13"), endDate: day("2026-07-14"), shifts: 6, registrations: 40, roles: 3 }),
+          event({ id: "event-1", title: "Fête du village" }),
+        ],
+        now,
+      ),
+    })
+    const tree = await StatsPage()
+    render(tree)
+
+    const bubbleTable = screen.getByRole("table", { name: /Événements en cours ou qui commencent dans les 30 jours/ })
+    const rows = within(bubbleTable).getAllByRole("rowheader")
+    expect(rows[0]).toHaveTextContent("Fête du village")
+    expect(rows[1]).toHaveTextContent("Festival du lac")
+    const firstRow = rows[0].closest("tr")!
+    expect(within(firstRow).getByText("10 juillet 2026")).toBeInTheDocument()
+    expect(within(firstRow).getByText("2")).toBeInTheDocument()
+    const secondRow = rows[1].closest("tr")!
+    expect(within(secondRow).getByText("13–14 juillet 2026")).toBeInTheDocument()
+    expect(within(secondRow).getByText("6")).toBeInTheDocument()
   })
 
   it("moves the busiest hour and the waiting emails out of the comparison table into a definition list", async () => {
