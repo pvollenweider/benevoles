@@ -76,6 +76,14 @@ describe("message template library", () => {
     }
   })
 
+  it("never asks to forward the email: it carries the volunteer's personal link", () => {
+    for (const template of LIBRARY_TEMPLATES) {
+      const text = `${template.subject}\n${template.body}`
+      if (/transf[eè]r/i.test(text)) expect(text, template.id).toMatch(/Ne lui transfère pas ce message/)
+      expect(text, template.id).not.toMatch(/fais suivre ce (message|mail|email)/i)
+    }
+  })
+
   it("does not repeat the personal link or the shifts (they are appended at send time)", () => {
     for (const template of LIBRARY_TEMPLATES) {
       expect(template.body).not.toMatch(/https?:\/\//)
@@ -96,7 +104,7 @@ describe("library preview", () => {
     expect(preview.html).toContain("Gérer mes inscriptions")
     expect(preview.html).toContain("https://fete.benevol.app/my/apercu")
     expect(preview.html).toContain("<mark")
-    expect(preview.html).toContain("[à compléter : tente, abri, boissons chaudes…]")
+    expect(preview.html).toContain("[à compléter : tente, abri…]")
     expect(preview.text).toContain("Gérer tes inscriptions")
   })
 
