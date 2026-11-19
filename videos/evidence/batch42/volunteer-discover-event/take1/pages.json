@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T13:16:47.009Z",
+  "videoSha256": "59d054e39250ec2d0de5ea934b3bb613bf3b1d9b787336875ece1b854c580e77",
+  "promptSha256": "45f8e4ae49b34875622410f34c3c989ab75d79f640ba2bd23413df5c537b2ac6",
+  "clipSha256": "89cf8923e715165ce69a6862b3643a4b1a5ca28870c65d7e17cb0338b9da5fea",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Les boutons juste sous les consignes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Les boutons juste sous les consignes ouvrent des pages complémentaires.",
+        "visibleSeconds": 0.9,
+        "visible": "Clic sur le bouton « Accès et parking » et ouverture de la page correspondante.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Accès et parking explique les transports, le stationnement et la navette.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page « Accès et parking » détaillée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Questions fréquentes précise l’assurance et la tenue.",
+        "visibleSeconds": 7.9,
+        "visible": "Affichage de la page « Questions fréquentes », qui disparaît dès 08.9s pour revenir au planning.",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Tu peux revenir au planning sans perdre le contexte",
+        "visibleSeconds": 9,
+        "visible": "L'écran est déjà revenu sur le planning avant que la phrase ne commence.",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:08.9, la page « Questions fréquentes » se ferme après à peine une seconde d'affichage, alors que la voix est encore en train de détailler son contenu.",
+      "À 00:09.0, le retour au planning intervient de manière prématurée par rapport à la phrase « Tu peux revenir au planning » prononcée à 00:10.8."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et naturelle, bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

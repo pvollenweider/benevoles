@@ -13,9 +13,10 @@
 
 - `VOLUNTEER_REGISTER` — READY, publiée (révision 5). [Répétition](volunteer-register-mobile/rehearsal.json), [validation](volunteer-register-mobile/validation.json), [Liste au chargement](volunteer-register-mobile/default-list.jpg) et [mesure distante](volunteer-register-mobile/published-ffprobe.json). Affiche vérifiée par HEAD (200).
 
+- `VOLUNTEER_DISCOVER_EVENT` — READY, publiée (révision 4), le 19 novembre à 14 h 21 ; état et catalogue rattrapés après coup. [Rapport](volunteer-discover-event/review-report.txt), [validation](volunteer-discover-event/validation.json).
+
 ## Reprises restantes
 
-5. `VOLUNTEER_DISCOVER_EVENT`
 6. `VOLUNTEER_CONFIRMATION_ERRORS`
 7. `REGISTRATION_MONITOR_FOLLOWUP`
 
