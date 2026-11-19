@@ -781,6 +781,13 @@ contrôle Playwright de rester locales. Aucun Origin, écran ou résultat produi
 n’est réécrit. Les liens d’activation et la redirection d’ancien slug viennent
 ainsi du produit et sont vérifiés sur leurs véritables adresses publiques.
 
+Pour filmer la confirmation du désabonnement (lot 42), construire la copie
+jetable vérifiée avec `VIDEO_BUILD_ORIGIN=https://www.benevol.app`. Next intègre
+cette adresse dans la redirection du POST. Servir cette copie avec
+`operator-local.ts serve-public` sur 43104, puis filmer via la même passerelle
+locale. Les contrôles d'origine HTTP utilisent la compilation habituelle,
+sans ce réglage.
+
 ### Reprise opérateur : cadrage du vrai message (lot 27-2)
 
 Mailpit 1.30.3 impose une date anglaise dans ses en-têtes, même avec le navigateur

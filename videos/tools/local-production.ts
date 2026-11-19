@@ -36,9 +36,11 @@ async function main() {
     const next = path.join(copy, "node_modules/next/dist/bin/next")
     childWorkingDirectory = copy
     await access(next)
-    // The proxy can inline NEXT_PUBLIC_APP_URL: build and capture use the same HTTP origin.
-    // Runtime wrappers keep each local port explicit; no product security check is changed.
-    env.NEXT_PUBLIC_APP_URL = "http://localhost:43102"
+    // Next can inline NEXT_PUBLIC_APP_URL into the operator's unsubscribe redirect.
+    // A dedicated build served through the local TLS proxy keeps that redirect on its capture host.
+    const buildOrigin = process.env.VIDEO_BUILD_ORIGIN ?? "http://localhost:43102"
+    if (buildOrigin !== "http://localhost:43102" && buildOrigin !== PUBLIC_APP_URL) throw new Error("Unsupported local video build origin")
+    env.NEXT_PUBLIC_APP_URL = buildOrigin
     commandArgs = [next, "build", copy, "--webpack"]
   } else if (mode === "serve" || mode === "serve-public" || mode === "serve-capture" || mode === "serve-delivery" || mode === "serve-dayof" || mode === "serve-merge" || mode === "serve-questions" || mode === "serve-hours") {
     const copy = path.resolve(args[0] ?? "")

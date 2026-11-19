@@ -228,7 +228,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await page.getByRole("heading", { name: "Serveur", exact: true }).evaluate(heading => heading.scrollIntoView({ block: "center" }))
       await at("Regardons les états visibles"); await page.getByText(/Version .*vérifiée le/).scrollIntoViewIfNeeded()
       await at("Recharger relance la vérification."); await page.reload(); await settle(page)
-      await at("Dans notre environnement local"); await page.getByRole("heading", { name: "Tâches planifiées et sauvegardes", exact: true }).scrollIntoViewIfNeeded()
+      await at("Dans notre environnement local"); await page.getByRole("heading", { name: "Tâches planifiées et sauvegardes", exact: true }).evaluate(heading => heading.scrollIntoView({ block: "start" }))
       await at(.84); await page.getByRole("heading", { name: "Configuration", exact: true }).scrollIntoViewIfNeeded()
       assert.equal(await db.jobRun.count(), 0)
       checks.realHealthWithoutInventedJobs = true
@@ -271,6 +271,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       const redirect = new URL(unsubscribe.headers().location)
       assert.equal(redirect.pathname, "/product-updates/unsubscribe")
       await session(null); await go(`${redirect.pathname}${redirect.search}`)
+      await at("confirmons, et le choix")
       await tap(page, page.getByRole("button", { name: "Me désabonner", exact: true }))
       await page.waitForURL(/\/product-updates\/unsubscribed\?ok=1/)
       assert.equal((await db.adminUser.findUniqueOrThrow({ where: { email: ownerEmail } })).receiveProductUpdates, false)

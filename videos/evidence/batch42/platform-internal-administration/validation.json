@@ -1,0 +1,95 @@
+{
+  "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+  "slug": "platform-internal-administration",
+  "validatedAt": "2026-11-19T11:41:51.081Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 458240,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 29272,
+      "audioMs": 29265,
+      "driftMs": 7
+    },
+    {
+      "id": "create",
+      "visualMs": 29350,
+      "audioMs": 29348,
+      "driftMs": 2
+    },
+    {
+      "id": "renew",
+      "visualMs": 32380,
+      "audioMs": 32379,
+      "driftMs": 1
+    },
+    {
+      "id": "activate",
+      "visualMs": 30055,
+      "audioMs": 30054,
+      "driftMs": 1
+    },
+    {
+      "id": "identity",
+      "visualMs": 36565,
+      "audioMs": 36563,
+      "driftMs": 2
+    },
+    {
+      "id": "availability",
+      "visualMs": 32788,
+      "audioMs": 32785,
+      "driftMs": 3
+    },
+    {
+      "id": "context",
+      "visualMs": 30202,
+      "audioMs": 30197,
+      "driftMs": 5
+    },
+    {
+      "id": "health",
+      "visualMs": 36527,
+      "audioMs": 36526,
+      "driftMs": 1
+    },
+    {
+      "id": "preview",
+      "visualMs": 48706,
+      "audioMs": 48703,
+      "driftMs": 3
+    },
+    {
+      "id": "broadcast",
+      "visualMs": 57816,
+      "audioMs": 57815,
+      "driftMs": 1
+    },
+    {
+      "id": "delete",
+      "visualMs": 33093,
+      "audioMs": 33091,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 33836,
+      "audioMs": 33835,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 37,
+  "music": {
+    "voicedWindows": 422,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 12.9,
+    "largestGapLu": 18.6,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.2
+  },
+  "issues": []
+}

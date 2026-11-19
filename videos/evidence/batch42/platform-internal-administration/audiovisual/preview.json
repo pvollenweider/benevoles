@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:44:08.786Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "51245843813192b09f778b469cdf275dd9efdf7cf8e1964e490d09ed4e13a785",
+  "clipSha256": "ce557037af784556b5b5afd5c3014f85c24d2ec34153b693c1f3f2fdaf0f842f",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Préparons une communication destinée aux organisateurs abonnés.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Donnons-lui un objet clair : Formation, préparer votre prochain événement.",
+        "visibleSeconds": 5,
+        "visible": "Saisie de l'objet « Formation — préparer votre prochain événement » dans le champ dédié.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Le contenu commence par un titre, Bienvenue.",
+        "visibleSeconds": 9.8,
+        "visible": "Saisie de « # Bienvenue ! » et affichage instantané du titre dans l'aperçu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Un lien vers le guide termine le message.",
+        "visibleSeconds": 18,
+        "visible": "Ajout du lien Markdown vers le guide et affichage du lien cliquable dans l'aperçu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 32,
+        "spoken": "Utilisons Envoyer un test, uniquement vers notre adresse de formation.",
+        "visibleSeconds": 32.5,
+        "visible": "Clic sur « Envoyer un test » et apparition de la confirmation « Email de test envoyé à votre propre adresse. ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.5,
+        "spoken": "Ouvrons le vrai email pour contrôler l'objet et le contenu reçu.",
+        "visibleSeconds": 36.8,
+        "visible": "Basculement vers la boîte de réception montrant l'e-mail reçu.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, posée et parfaitement synchronisée avec la saisie et les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

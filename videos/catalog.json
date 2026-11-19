@@ -1675,8 +1675,8 @@
         "super-admin"
       ],
       "feature": "Administration de la plateforme",
-      "updatedAt": "2026-10-21",
-      "revision": 4,
+      "updatedAt": "2026-11-19",
+      "revision": 5,
       "level": "avance"
     },
     {

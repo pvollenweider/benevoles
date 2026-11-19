@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:44:28.978Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "fd5461cad4bb1cbcc9f11fa1d9e053d5f960b374f3bfe5824065fa3b341c8e15",
+  "clipSha256": "124e4f732cb76fa6561f59e746b239580a98a2c07f75bbc34eef1a5f01f6d930",
+  "scene": "broadcast",
+  "review": {
+    "heardOpening": "Le test est bon ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "Revenons au formulaire pour préparer la diffusion.",
+        "visibleSeconds": 2,
+        "visible": "Retour à la page du formulaire de communication admin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Reprenons notre objet, puis le contenu que nous venons de vérifier.",
+        "visibleSeconds": 5,
+        "visible": "Saisie de l'objet et du contenu en Markdown avec rendu en direct dans l'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Avant la diffusion, vérifions le nombre de destinataires et lisons la confirmation.",
+        "visibleSeconds": 21,
+        "visible": "Apparition de la boîte de dialogue de confirmation indiquant 2 organisateurs",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33,
+        "spoken": "Validons, puis regardons le nombre d'envois réussis et l'historique.",
+        "visibleSeconds": 34.5,
+        "visible": "Clic sur Envoyer puis affichage de l'historique avec 2/2 envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 40,
+        "spoken": "Ouvrons un message livré et suivons son lien de désabonnement.",
+        "visibleSeconds": 41,
+        "visible": "Affichage de l'email reçu puis ouverture de la page de désabonnement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 45,
+        "spoken": "confirmons, et le choix est enregistré.",
+        "visibleSeconds": 46,
+        "visible": "Clic sur Me désabonner et confirmation de désabonnement à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, posée et bien articulée, parfaitement synchronisée avec chaque action montrée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
