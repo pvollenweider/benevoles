@@ -1,0 +1,95 @@
+{
+  "id": "LAST_MINUTE_CHANGES",
+  "slug": "last-minute-changes",
+  "validatedAt": "2026-11-19T12:44:09.602Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 442040,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 30708,
+      "audioMs": 30706,
+      "driftMs": 2
+    },
+    {
+      "id": "withdrawal",
+      "visualMs": 32054,
+      "audioMs": 32053,
+      "driftMs": 1
+    },
+    {
+      "id": "offer",
+      "visualMs": 27650,
+      "audioMs": 27650,
+      "driftMs": 0
+    },
+    {
+      "id": "coverage",
+      "visualMs": 30874,
+      "audioMs": 30874,
+      "driftMs": 0
+    },
+    {
+      "id": "share",
+      "visualMs": 26977,
+      "audioMs": 26976,
+      "driftMs": 1
+    },
+    {
+      "id": "availability",
+      "visualMs": 43451,
+      "audioMs": 43450,
+      "driftMs": 1
+    },
+    {
+      "id": "message",
+      "visualMs": 64645,
+      "audioMs": 64644,
+      "driftMs": 1
+    },
+    {
+      "id": "need",
+      "visualMs": 36832,
+      "audioMs": 36831,
+      "driftMs": 1
+    },
+    {
+      "id": "schedule",
+      "visualMs": 29710,
+      "audioMs": 29708,
+      "driftMs": 2
+    },
+    {
+      "id": "cancel",
+      "visualMs": 30399,
+      "audioMs": 30398,
+      "driftMs": 1
+    },
+    {
+      "id": "journal",
+      "visualMs": 30584,
+      "audioMs": 30583,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 28927,
+      "audioMs": 28926,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 45,
+  "music": {
+    "voicedWindows": 403,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 20,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -33.4,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

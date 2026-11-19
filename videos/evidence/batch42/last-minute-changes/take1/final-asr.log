@@ -1,0 +1,12 @@
+welcome: 0.0% word difference
+withdrawal: 0.0% word difference
+offer: 0.0% word difference
+coverage: 0.0% word difference
+share: 0.0% word difference
+availability: 0.8% word difference
+message: 0.0% word difference
+need: 2.5% word difference
+schedule: empty ASR response (attempt 1/3); retrying identical audio
+schedule: empty ASR response (attempt 2/3); retrying identical audio
+schedule: empty ASR response (attempt 3/3); retrying identical audio
+Empty transcription response for schedule after 3 attempts

@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:33:01.446Z",
+  "videoSha256": "b6416ea622f38039c87a9f78c106fb4e9f8353d362694c2566a15907261aa102",
+  "promptSha256": "9e67d4e43b4d465597b98ef68d13ad9ba25e08c3ee6d1bad9dc345720ea42018",
+  "clipSha256": "80a3214b5d89c971bc7d0363779f49aaab0d8158902a5d0f70cb55c2ea226279",
+  "scene": "need",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tôt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sur la page Jour J, ouvrons Ajouter un besoin.",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur l'onglet Jour J puis sur le bouton Ajouter un besoin qui ouvre le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Indiquons le poste Renfort matériel, le début, la fin et une place.",
+        "visibleSeconds": 11.5,
+        "visible": "Renseignement du poste Renfort matériel, des horaires 13:15 - 15:15 et de 1 place.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Ajouter le créneau enregistre d'abord le besoin.",
+        "visibleSeconds": 15.5,
+        "visible": "Clic sur Ajouter le créneau et affichage de l'Étape 2 sur 2 : prévenir.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone.",
+        "visibleSeconds": 24.5,
+        "visible": "Défilement montrant les deux options cochées par défaut.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Sélectionnons une personne proposée",
+        "visibleSeconds": 26.5,
+        "visible": "Sélection de la case à cocher pour Emma Johansson.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.5,
+        "spoken": "vérifions l'aperçu, puis envoyons.",
+        "visibleSeconds": 28.5,
+        "visible": "La fenêtre Aperçu de l'email s'ouvre à 00:28 et l'envoi est validé immédiatement à 00:28-00:29, la fenêtre étant déjà refermée avant l'annonce vocale.",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:28-00:29, l'aperçu de l'email s'affiche et est immédiatement envoyé avant que la voix n'ait dit 'vérifions l'aperçu, puis envoyons' (00:29-00:32), empêchant toute lecture de l'aperçu."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond sonore musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -7,9 +7,10 @@
 
 - `STAFFING_GAPS` — READY, publiée (révision 4). [Répétition](staffing-gaps/rehearsal.json), [validation](staffing-gaps/validation.json), [lien copié](staffing-gaps/shift-share.jpg) et [mesure distante](staffing-gaps/published-ffprobe.json). Affiche vérifiée par HEAD (200).
 
+- `LAST_MINUTE_CHANGES` — NOT READY après deux prises. [La deuxième](last-minute-changes/take2/validation.json) passe la validation, mais l'email de changement d'horaire arrive trop tard et reste visible 1,08 s. [Revue du chapitre](last-minute-changes/take2/schedule.json).
+
 ## Reprises restantes
 
-2. `LAST_MINUTE_CHANGES`
 3. `SECTORS`
 4. `VOLUNTEER_REGISTER`
 5. `VOLUNTEER_DISCOVER_EVENT`

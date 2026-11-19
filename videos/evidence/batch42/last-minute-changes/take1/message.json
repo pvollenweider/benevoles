@@ -1,0 +1,92 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:33:05.522Z",
+  "videoSha256": "b6416ea622f38039c87a9f78c106fb4e9f8353d362694c2566a15907261aa102",
+  "promptSha256": "71494cc00f44ebfd6f03a271ee673c79e97308e91d446457a477abe2a1e01428",
+  "clipSha256": "50843c14033233a26f998526bdc222e7aa6b8de07b1fbc31fbdff5f2c674fc86",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel.",
+        "visibleSeconds": 2,
+        "visible": "Sélection du bouton radio 'Les bénévoles d'un créneau' et choix de 'Logistique - Installation du matériel'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Écrivons un objet clair et une courte demande.",
+        "visibleSeconds": 14,
+        "visible": "L'objet et le texte du message demandant de l'aide pour le créneau de 12h à 14h sont saisis.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.5,
+        "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi.",
+        "visibleSeconds": 26.5,
+        "visible": "Clic sur 'Voir l'aperçu et envoyer', ouverture de la fenêtre de confirmation puis clic sur 'Confirmer l'envoi'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.5,
+        "spoken": "Ouvrons le vrai email reçu.",
+        "visibleSeconds": 33,
+        "visible": "Affichage de l'email reçu adressé à Emma avec les détails du créneau et le message.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 39.5,
+        "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel.",
+        "visibleSeconds": 41.5,
+        "visible": "Retour à l'onglet Inscriptions et clic sur le bouton '+ Ajouter manuellement'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 43.5,
+        "spoken": "Saisissons son prénom, puis son nom.",
+        "visibleSeconds": 44.5,
+        "visible": "Saisie de 'Zoé' dans le prénom et de 'Papadopoulos' dans le nom.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 46.5,
+        "spoken": "Renseignons ensuite la même adresse email que sur sa fiche membre.",
+        "visibleSeconds": 47.5,
+        "visible": "Saisie de l'adresse email dans le champ correspondant.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 50.5,
+        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la.",
+        "visibleSeconds": 51.5,
+        "visible": "Sélection du créneau '12h-14h Logistique - Installation du matériel' et clic sur 'Ajouter'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 55.5,
+        "spoken": "Enfin, revenons à la couverture : le poste est rempli.",
+        "visibleSeconds": 57,
+        "visible": "Navigation vers l'onglet Créneaux montrant que le créneau de logistique n'est plus à compléter.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
