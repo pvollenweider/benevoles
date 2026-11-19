@@ -13,17 +13,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { db, organizationId } = guard
   const { id } = await params
 
-  const parsed = templateSchema.safeParse(await req.json().catch(() => ({})))
+  const body = await req.json().catch(() => ({}))
+  const parsed = templateSchema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
 
   // The scoped client makes a template of another organisation look like a missing one.
   const existing = await db.messageTemplate.findFirst({ where: { id }, select: { id: true } })
   if (!existing) return NextResponse.json({ error: "Modèle introuvable" }, { status: 404 })
 
+  // A client from before the category column (#1414) does not send one: keep the stored category
+  // instead of resetting it to « Autres ».
+  const data = body && typeof body === "object" && "category" in body ? parsed.data : { ...parsed.data, category: undefined }
   const template = await db.messageTemplate.update({
     where: { id },
-    data: parsed.data,
-    select: { id: true, name: true, subject: true, body: true, updatedAt: true },
+    data,
+    select: { id: true, name: true, category: true, subject: true, body: true, updatedAt: true },
   })
   await logOrgEvent({ organizationId, actor: adminActor(guard.session), action: "template.updated", entityType: "MessageTemplate", entityId: id })
   return NextResponse.json(template)

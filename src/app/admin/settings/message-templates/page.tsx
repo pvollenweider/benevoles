@@ -7,6 +7,7 @@ import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import MessageTemplatesManager from "@/components/admin/messages/MessageTemplatesManager"
 import HelpLink from "@/components/admin/HelpLink"
+import { orgBaseUrl } from "@/lib/urls"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Modèles de messages" }
@@ -17,8 +18,9 @@ export default async function MessageTemplatesPage() {
   if (!ctx) redirect("/admin/login")
   const templates = await ctx.db.messageTemplate.findMany({
     orderBy: { name: "asc" },
-    select: { id: true, name: true, subject: true, body: true },
+    select: { id: true, name: true, category: true, subject: true, body: true },
   })
+  const organization = await ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { name: true, slug: true } })
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
@@ -28,10 +30,10 @@ export default async function MessageTemplatesPage() {
         <h1 className="text-2xl font-bold text-gray-900 mt-1">Modèles de messages</h1>
         <HelpLink route="/admin/settings/message-templates" />
         <p className="text-sm text-gray-700 mt-1">
-          Les messages que vous envoyez souvent (infos pratiques, convocation, remerciements). Dans « Écrire aux bénévoles », « Partir d&apos;un modèle » remplit l&apos;objet et le message, que vous pouvez encore modifier avant l&apos;envoi.
+          Les messages que vous envoyez souvent (infos pratiques, convocation, remerciements), classés par catégorie. Ajoutez-en un depuis la bibliothèque ou écrivez le vôtre. Dans « Écrire aux bénévoles », « Partir d&apos;un modèle » remplit l&apos;objet et le message, que vous pouvez encore modifier avant l&apos;envoi.
         </p>
       </div>
-      <MessageTemplatesManager initialTemplates={templates} />
+      <MessageTemplatesManager initialTemplates={templates} organizationName={organization?.name ?? "Votre organisation"} previewBaseUrl={organization ? orgBaseUrl(organization.slug) : undefined} />
     </div>
   )
 }

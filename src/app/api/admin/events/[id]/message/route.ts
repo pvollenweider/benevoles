@@ -10,7 +10,7 @@ import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { messagePushPayload, messageSchema, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
 import { buildTargetedMessage, sectorAudienceAvailable, SECTOR_AUDIENCE_NOT_FOUND } from "@/lib/targeted-message-build"
-import { renderVariables, templateProblems } from "@/lib/message-template"
+import { renderVariables, sendProblems } from "@/lib/message-template"
 import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
 import { after } from "next/server"
@@ -55,7 +55,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   // Template variables (#482): refused before anything is sent when unknown or out of place, then
   // replaced per recipient. The history keeps the text as written, variables included.
-  const problems = templateProblems(`${subject}\n${message}`, audience.kind)
+  const problems = sendProblems(`${subject}\n${message}`, audience.kind)
   if (problems.length > 0) return NextResponse.json({ error: problems.join(" ") }, { status: 400 })
   const payloadFor = (r: Target, batchId: string) => buildPayload(r, `message:${batchId}:${r.volunteerId}`)
 

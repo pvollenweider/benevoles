@@ -8,7 +8,8 @@ import { flushSync } from "react-dom"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 import { MESSAGE_BODY_MAX, MESSAGE_SUBJECT_MAX, type Audience } from "@/lib/targeted-message"
-import { templateProblems, VARIABLES } from "@/lib/message-template"
+import { sendProblems, hasUnfilledPlaceholder, VARIABLES } from "@/lib/message-template"
+import { filterTemplates, groupTemplatesByCategory, TEMPLATE_SEARCH_THRESHOLD } from "@/lib/message-template-category"
 import { announce } from "@/lib/announce"
 import RequiredMark from "@/components/RequiredMark"
 import { formatScheduledFor, localNow, scheduledInstant, scheduleProblem, SCHEDULE_DELAY_MINUTES, type ScheduleProblem } from "@/lib/scheduled-message"
@@ -23,8 +24,8 @@ type Props = {
    */
   sectors?: { value: string; label: string }[]
   initialAudience: Audience
-  /** The organisation's message templates (#482). */
-  templates?: { id: string; name: string; subject: string; body: string }[]
+  /** The organisation's message templates (#482), grouped by category (#1414). */
+  templates?: { id: string; name: string; category: string; subject: string; body: string }[]
   /** The organisation's time zone: a scheduled send (#1019) is chosen in it. */
   timeZone?: string
   /** « Programmer l'envoi » is offered (not on an archived event). */
@@ -58,8 +59,17 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
   const [templateNotice, setTemplateNotice] = useState("")
   // Choosing a template and applying it are two steps (#482), and the replaced text can come back.
   const [templateId, setTemplateId] = useState("")
+  // A search field once the list is long (#1414): names, subjects and categories, accents ignored.
+  const [templateQuery, setTemplateQuery] = useState("")
+  // What the search found, announced ~500 ms after typing rather than on every keystroke.
+  const [searchStatus, setSearchStatus] = useState("")
+  const searchTyped = useRef(false)
+  // Set when the search drops the chosen template: said with the count, in one announcement.
+  const selectionCleared = useRef(false)
   const [beforeTemplate, setBeforeTemplate] = useState<{ subject: string; message: string } | null>(null)
   const [attempted, setAttempted] = useState(false)
+  // Bumped on every attempt so the same summary alert is announced again.
+  const [attempt, setAttempt] = useState(0)
   // « Quand l'envoyer ? » (#1019): now, or on a date and time of the organisation's zone.
   const [when, setWhen] = useState<"now" | "later">("now")
   const [date, setDate] = useState("")
@@ -74,11 +84,18 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
   const audience: Audience =
     kind === "role" ? { kind, roleName } : kind === "shift" ? { kind, shiftId } : kind === "sector" ? { kind, sectorId } : { kind }
   const audienceKey = JSON.stringify(audience)
-  // Template variables (#482) checked as the text is typed, with the same rule as the server.
-  const subjectProblems = templateProblems(subject, kind)
-  const messageProblems = templateProblems(message, kind)
+  // Template variables and `[à compléter]` (#482, #1414) checked as the text is typed, with the same rule as the server.
+  const subjectProblems = sendProblems(subject, kind)
+  const messageProblems = sendProblems(message, kind)
+  // Fields whose text itself must be corrected (variable or `[à compléter]`), for the summary.
   const subjectMissing = subject.trim().length === 0
   const messageMissing = message.trim().length === 0
+  const problemFields = [subjectProblems.length > 0 && "objet", messageProblems.length > 0 && "message"].filter(Boolean).join(", ")
+  // Every field to fix (missing or with a problem), in the order the focus goes: one list for the
+  // alert and the focus, so they never disagree.
+  const subjectToFix = subjectMissing || subjectProblems.length > 0
+  const messageToFix = messageMissing || messageProblems.length > 0
+  const fieldsToFix = [subjectToFix && "objet", messageToFix && "message"].filter(Boolean).join(", ")
   const later = when === "later"
   // Checked with the same rule as the server, only once « Programmer l'envoi » is chosen (the
   // clock is read on the client then, never during the first render).
@@ -104,19 +121,36 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
   const counting = dryFor?.key !== audienceKey
   const dry = counting ? null : dryFor?.data ?? null
 
+  // The picker (#1414): grouped by category, filtered by the search field once the list is long.
+  const filteredTemplates = filterTemplates(templates, templateQuery)
+  const filteredCount = filteredTemplates.length
+  const templateGroups = groupTemplatesByCategory(filteredTemplates)
+  const searchableTemplates = templates.length >= TEMPLATE_SEARCH_THRESHOLD
+  // A filtered-out choice would leave the select blank: clear it instead.
+  const clearsTemplateSelection = (query: string) => Boolean(templateId) && !filterTemplates(templates, query).some((t) => t.id === templateId)
+
   const [restartCount, setRestartCount] = useState(0)
   useEffect(() => { if (sent || scheduled) resultRef.current?.focus() }, [sent, scheduled])
   // After « Écrire un autre message » the clicked button is gone: land on the subject field.
   useEffect(() => { if (restartCount > 0) document.getElementById(`${id}-subject`)?.focus() }, [restartCount, id])
+  // The count of matching templates, debounced: one announcement while typing, never the query.
+  useEffect(() => {
+    if (!searchTyped.current) return
+    const timer = setTimeout(() => {
+      const count = filteredCount === 0
+        ? "Aucun modèle ne correspond."
+        : `${filteredCount} modèle${filteredCount > 1 ? "s" : ""} dans la liste.`
+      setSearchStatus(`${selectionCleared.current ? "Le modèle choisi n'est plus dans la liste filtrée. " : ""}${count}`)
+      selectionCleared.current = false
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [templateQuery, filteredCount])
 
   async function preview() {
     setAttempted(true)
-    if (subjectProblems.length > 0 || messageProblems.length > 0) {
-      document.getElementById(subjectProblems.length > 0 ? `${id}-subject` : `${id}-message`)?.focus()
-      return
-    }
-    if (subjectMissing || messageMissing) {
-      document.getElementById(subjectMissing ? `${id}-subject` : `${id}-message`)?.focus()
+    setAttempt((n) => n + 1)
+    if (subjectToFix || messageToFix) {
+      document.getElementById(subjectToFix ? `${id}-subject` : `${id}-message`)?.focus()
       return
     }
     if (whenProblem) {
@@ -199,8 +233,76 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
   const addressesToVerifyWarning = addressesToVerify > 0
     ? `${addressesToVerify} ${addressesToVerify > 1 ? "destinataires ont une adresse à vérifier (un précédent message leur a été définitivement refusé)" : "destinataire a une adresse à vérifier (un précédent message lui a été définitivement refusé)"}.`
     : null
-  const restart = () => { setSent(null); setScheduled(null); setSubject(""); setMessage(""); setPush(false); setTemplateId(""); setTemplateNotice(""); setBeforeTemplate(null); setAttempted(false); setWhen("now"); setDate(""); setTime(""); setServerWhen(null); setRestartCount((n) => n + 1) }
+  const restart = () => { setSent(null); setScheduled(null); setSubject(""); setMessage(""); setPush(false); setTemplateId(""); setTemplateQuery(""); setTemplateNotice(""); setBeforeTemplate(null); setSearchStatus(""); searchTyped.current = false; setAttempted(false); setWhen("now"); setDate(""); setTime(""); setServerWhen(null); setRestartCount((n) => n + 1) }
   const inputClass = (missing: boolean, hasProblems = false) => `input ${(attempted && missing) || hasProblems ? "!border-red-600" : ""}`
+  // « Partir d'un modèle » is one label on the select while the list is short; from 8 templates it
+  // becomes the group legend, the search gets its own hint, and the select is labelled « Modèle ».
+  const templatePicker = (
+    <>
+      {searchableTemplates && (
+        <div className="mb-2">
+          <label htmlFor={`${id}-template-search`} className="block text-xs font-medium text-gray-600 mb-1">Rechercher un modèle</label>
+          <input
+            id={`${id}-template-search`}
+            type="search"
+            value={templateQuery}
+            aria-controls={`${id}-template`}
+            aria-describedby={`${id}-template-search-hint ${id}-template-search-status`}
+            onChange={(e) => {
+              const next = e.target.value
+              searchTyped.current = true
+              setTemplateQuery(next)
+              if (clearsTemplateSelection(next)) {
+                setTemplateId("")
+                selectionCleared.current = true
+              }
+            }}
+            className="input"
+          />
+          <p id={`${id}-template-search-hint`} className="text-xs text-gray-600 mt-1">Nom, objet ou catégorie.</p>
+          <p id={`${id}-template-search-status`} role="status" className="text-xs text-gray-700 mt-1">{searchStatus}</p>
+        </div>
+      )}
+      <label htmlFor={`${id}-template`} className="block text-sm font-medium text-gray-800 mb-1">{searchableTemplates ? "Modèle" : "Partir d'un modèle"}</label>
+      <div className="flex flex-wrap items-center gap-2">
+        <select id={`${id}-template`} value={templateId} onChange={(e) => setTemplateId(e.target.value)} aria-describedby={`${id}-template-hint`} className="input flex-1 min-w-48">
+          <option value="">Choisir un modèle…</option>
+          {templateGroups.map((group) => (
+            <optgroup key={group.category} label={group.category}>
+              {group.items.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+            </optgroup>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={() => {
+            const t = templates.find((x) => x.id === templateId)
+            if (!t) return
+            setBeforeTemplate(subject.trim() || message.trim() ? { subject, message } : null)
+            setSubject(t.subject)
+            setMessage(t.body)
+            const placeholder = hasUnfilledPlaceholder(t.subject) || hasUnfilledPlaceholder(t.body)
+            announce(setTemplateNotice, `Modèle « ${t.name} » appliqué : objet et message remplacés, modifiables avant l'envoi.${placeholder ? " Des mentions [à compléter] sont à remplacer avant l'envoi." : ""}`)
+          }}
+          aria-disabled={!templateId || undefined}
+          className={`text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded px-1 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${templateId ? "" : "opacity-60 cursor-not-allowed"}`}
+        >
+          Utiliser ce modèle
+        </button>
+        {beforeTemplate && (
+          <button
+            type="button"
+            onClick={() => { setSubject(beforeTemplate.subject); setMessage(beforeTemplate.message); setBeforeTemplate(null); announce(setTemplateNotice, "Objet et message précédents rétablis.") }}
+            className="text-sm text-gray-700 underline underline-offset-2 hover:text-gray-900 rounded px-1 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Rétablir le texte précédent
+          </button>
+        )}
+      </div>
+      <p id={`${id}-template-hint`} className="text-xs text-gray-600 mt-1">{searchableTemplates ? "La recherche filtre la liste. " : ""}Remplace l&apos;objet et le message actuels ; vous pouvez les modifier ensuite.</p>
+      <p role="status" className="text-xs text-gray-700 mt-1">{templateNotice}</p>
+    </>
+  )
 
   if (scheduled) {
     return (
@@ -304,43 +406,14 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
         {counting && <p aria-hidden="true" className="text-sm text-gray-600">Comptage…</p>}
       </fieldset>
 
-      {templates.length > 0 && (
-        <div>
-          <label htmlFor={`${id}-template`} className="block text-sm font-medium text-gray-800 mb-1">Partir d&apos;un modèle</label>
-          <div className="flex flex-wrap items-center gap-2">
-            <select id={`${id}-template`} value={templateId} onChange={(e) => setTemplateId(e.target.value)} aria-describedby={`${id}-template-hint`} className="input flex-1 min-w-48">
-              <option value="">Choisir un modèle…</option>
-              {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-            </select>
-            <button
-              type="button"
-              onClick={() => {
-                const t = templates.find((x) => x.id === templateId)
-                if (!t) return
-                setBeforeTemplate(subject.trim() || message.trim() ? { subject, message } : null)
-                setSubject(t.subject)
-                setMessage(t.body)
-                announce(setTemplateNotice, `Modèle « ${t.name} » appliqué : objet et message remplacés, modifiables avant l'envoi.`)
-              }}
-              aria-disabled={!templateId || undefined}
-              className={`text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded px-1 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${templateId ? "" : "opacity-60 cursor-not-allowed"}`}
-            >
-              Utiliser ce modèle
-            </button>
-            {beforeTemplate && (
-              <button
-                type="button"
-                onClick={() => { setSubject(beforeTemplate.subject); setMessage(beforeTemplate.message); setBeforeTemplate(null); announce(setTemplateNotice, "Objet et message précédents rétablis.") }}
-                className="text-sm text-gray-700 underline underline-offset-2 hover:text-gray-900 rounded px-1 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              >
-                Rétablir le texte précédent
-              </button>
-            )}
-          </div>
-          <p id={`${id}-template-hint`} className="text-xs text-gray-600 mt-1">Remplace l&apos;objet et le message actuels ; vous pouvez les modifier ensuite.</p>
-          <p role="status" className="text-xs text-gray-700 mt-1">{templateNotice}</p>
-        </div>
-      )}
+      {templates.length > 0 && (searchableTemplates ? (
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium text-gray-800">Partir d&apos;un modèle</legend>
+          {templatePicker}
+        </fieldset>
+      ) : (
+        <div>{templatePicker}</div>
+      ))}
 
       <div>
         <label htmlFor={`${id}-subject`} className={`block text-sm font-medium mb-1 ${attempted && subjectMissing ? "text-red-700" : "text-gray-800"}`}>Objet<RequiredMark /></label>
@@ -357,7 +430,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
         <label htmlFor={`${id}-message`} className={`block text-sm font-medium mb-1 ${attempted && messageMissing ? "text-red-700" : "text-gray-800"}`}>Message<RequiredMark /></label>
         <textarea id={`${id}-message`} rows={6} value={message} maxLength={MESSAGE_BODY_MAX} required aria-invalid={messageProblems.length > 0 || (attempted && messageMissing) ? true : undefined} aria-describedby={`${id}-message-hint${messageProblems.length > 0 ? ` ${id}-message-problems` : ""}`} onChange={(e) => setMessage(e.target.value)} className={inputClass(messageMissing, messageProblems.length > 0)} />
         <p id={`${id}-message-hint`} className="text-xs text-gray-600 mt-1">
-          Texte simple, les retours à la ligne sont conservés. {message.length}/{MESSAGE_BODY_MAX} caractères. Variables possibles : {Object.keys(VARIABLES).map((k) => `{${k}}`).join(", ")}.
+          Texte simple, les retours à la ligne sont conservés. {message.length}/{MESSAGE_BODY_MAX} caractères. Variables possibles : {Object.keys(VARIABLES).map((k) => `{${k}}`).join(", ")}. Une mention [à compléter] doit être remplacée avant l'envoi.
         </p>
         {messageProblems.length > 0 && (
           <ul id={`${id}-message-problems`} role="list" className="text-xs text-red-700 mt-1 space-y-0.5">
@@ -420,11 +493,15 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
         </fieldset>
       )}
 
-      {attempted && (subjectMissing || messageMissing) ? (
-        <p role="alert" className="text-sm text-red-700">Champs obligatoires manquants : {[subjectMissing && "objet", messageMissing && "message"].filter(Boolean).join(", ")}.</p>
+      {attempted && fieldsToFix && !problemFields ? (
+        <p key={`missing-${attempt}`} role="alert" className="text-sm text-red-700">Champs obligatoires manquants : {fieldsToFix}.</p>
+      ) : attempted && fieldsToFix ? (
+        // A variable or `[à compléter]` left in a field (with any missing one): every field to fix,
+        // in focus order, announced on every attempt.
+        <p key={`problems-${attempt}`} role="alert" className="text-sm text-red-700">À corriger : {fieldsToFix}.</p>
       ) : attempted && whenProblem ? (
         // The reason is under the field; the summary names the field, like the missing ones.
-        <p role="alert" className="text-sm text-red-700">À corriger : {whenProblem.field === "date" ? "date d'envoi" : "heure d'envoi"}.</p>
+        <p key={`when-${attempt}`} role="alert" className="text-sm text-red-700">À corriger : {whenProblem.field === "date" ? "date d'envoi" : "heure d'envoi"}.</p>
       ) : null}
       {error && <p ref={errorRef} tabIndex={-1} role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700 focus:outline-none">{error}</p>}
 

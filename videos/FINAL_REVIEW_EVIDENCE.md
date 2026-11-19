@@ -1393,3 +1393,10 @@ Sur la page d'inscription, un téléphone tenu droit ouvre maintenant le plannin
 
 - **volunteer-register-mobile** : l'image montre la frise et l'ancien choix sans libellé ; la capture sélectionne maintenant le créneau dans la liste (`videos/tools/record.ts`). La narration ne parle pas de la frise : elle reste juste, la vidéo est à refilmer pour l'image.
 - **volunteer-discover-event**, scène « Sur téléphone » : la narration dit que le planning est plus large que l'écran et qu'on le fait défiler ; c'est vrai de la frise, plus de l'affichage d'office. La capture touche maintenant « Frise » avant de faire défiler. Narration à revoir (dire que le téléphone ouvre la liste, et que « Frise » ou le téléphone tourné à l'horizontale donne la journée entière), puis refilmer.
+
+## À refilmer : bibliothèque de modèles de messages (#1414, 19 novembre 2026)
+
+Les **Paramètres › Modèles de messages** proposent maintenant **Ajouter des modèles** (une bibliothèque de 50 textes avec leur aperçu et « Ajouter à mes modèles »), une catégorie par modèle et une limite de 100 ; dans « Écrire aux bénévoles », **Partir d'un modèle** est groupé par catégorie, avec **Rechercher un modèle** à partir de 8 modèles, et une mention `[à compléter]` bloque l'envoi. Aucun libellé utilisé par les captures n'a disparu ; les deux sélecteurs du choix de modèle de `videos/tools/record.ts` acceptent « Partir d'un modèle » ou « Modèle ». Vidéos touchées :
+
+- **targeted-messages** : la scène de création de modèle ne montre ni la bibliothèque ni la catégorie ; narration à compléter d'un segment « partir d'un texte prêt à l'emploi », puis refilmer.
+- **admin-features-tour** : image seulement (l'écran des modèles a changé), narration toujours juste.

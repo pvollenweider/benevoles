@@ -9,8 +9,9 @@
  * sending, never sent raw. Pure.
  */
 import { z } from "zod"
+import { OTHER_CATEGORY, TEMPLATE_CATEGORIES } from "./message-template-category"
 
-export const TEMPLATE_LIMIT = 20
+export const TEMPLATE_LIMIT = 100
 export const TEMPLATE_NAME_MAX = 60
 
 export const VARIABLES = {
@@ -54,6 +55,27 @@ export function unknownVariables(text: string): string[] {
   return templateProblems(text, "shift").filter((p) => p.startsWith("Variable inconnue"))
 }
 
+/** A library placeholder the organiser has not replaced yet (#1414). */
+export const PLACEHOLDER_PROBLEM = "Le texte contient encore « [à compléter] » : remplacez cette mention par l'information réelle avant l'envoi."
+const PLACEHOLDER = /\[\s*à\s+compléter/i
+
+export function hasUnfilledPlaceholder(text: string): boolean {
+  return PLACEHOLDER.test(text)
+}
+
+/** Placeholder problems of a text; a sibling of templateProblems() so the library can still be validated. */
+export function placeholderProblems(text: string): string[] {
+  return hasUnfilledPlaceholder(text) ? [PLACEHOLDER_PROBLEM] : []
+}
+
+/**
+ * Everything that blocks a send (#482, #1414): unknown or misplaced variables, and a `[à compléter]`
+ * left in the text. The APIs, the scheduled dispatcher and the form all use this one rule.
+ */
+export function sendProblems(text: string, audienceKind: string): string[] {
+  return [...templateProblems(text, audienceKind), ...placeholderProblems(text)]
+}
+
 /** Replaces the variables for one recipient (text in, text out: the email escapes it). */
 export function renderVariables(text: string, ctx: VariableContext): string {
   return text.replace(TOKEN, (match, name: string | undefined) => {
@@ -68,4 +90,9 @@ export const templateSchema = z.object({
   name: z.string().trim().min(1, "Le nom est obligatoire.").max(TEMPLATE_NAME_MAX),
   subject: z.string().trim().min(1, "L'objet est obligatoire.").max(120),
   body: z.string().trim().min(1, "Le message est obligatoire.").max(2000),
+  /**
+   * Library category (#1414): one of the known categories, « Autres » for a template written by
+   * hand or a client that omits it. Older rows may still hold another value; writes are restricted.
+   */
+  category: z.enum(TEMPLATE_CATEGORIES, { error: "Choisissez une catégorie dans la liste." }).default(OTHER_CATEGORY),
 })
