@@ -54,6 +54,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Page de chargement interrompu** : après une connexion interrompue, souvent pendant une mise à jour du service, la page se recharge d'elle-même ou propose « Recharger la page » au lieu d'un écran d'erreur en anglais.
+- **Mise à jour sans coupure** : lors d'un déploiement, l'ancien pod attend quelques secondes avant de s'arrêter, le temps que le routeur cesse de lui envoyer des requêtes. <!-- interne -->
 - **Bibliothèque de modèles de messages** : textes relus une seconde fois ; « Poste à compléter » ne demande plus de transférer l'email (il contient le lien personnel du bénévole) mais d'envoyer le lien de la page d'inscription, et les faits propres à l'événement (météo, horaires, abri, matériel fourni, démarches après une annulation, droits sur les photos) sont à compléter au lieu d'être affirmés.
 - **Pages introuvables** : depuis l'isolation réseau de l'application, une adresse inconnue répondait 500 au lieu de la page 404, car l'application appelle sa propre adresse publique pour afficher cette page ; elle peut de nouveau joindre Traefik, et seulement lui dans le cluster. <!-- interne -->
 - **Inscription avec confirmation par e-mail** : une personne n'est plus refusée parce qu'une autre a envoyé des demandes avec son adresse. La limite de 5 demandes par heure pour une même adresse et un même événement compte désormais par connexion : depuis une autre connexion, la personne peut s'inscrire normalement. Une adresse reçoit toujours au plus 5 emails de confirmation par heure.

@@ -29,6 +29,11 @@ spec:
         - name: ghcr-secret
       # The app never calls the Kubernetes API (#1050).
       automountServiceAccountToken: false
+      # Rolling update (#1442): the preStop sleep runs before SIGTERM, and this grace period
+      # leaves room for it plus the app's own shutdown. Traefik stops routing to a pod once it is
+      # terminating, but the update takes a moment to reach it; without the sleep, a request sent
+      # in that window reaches a process already gone and the browser reports a network failure.
+      terminationGracePeriodSeconds: 30
       # The image runs as nextjs (uid 1001, Dockerfile); runAsNonRoot needs the numeric id since
       # the image only names the user. Group 1001 (nodejs) owns the app files.
       securityContext:
@@ -55,6 +60,13 @@ spec:
           image: ${APP_IMAGE}
           ports:
             - containerPort: 3000
+          # Native kubelet sleep action (k3s v1.34), no binary needed in the read-only image:
+          # during a rolling update Traefik stops routing to the pod when it becomes terminating,
+          # and this delay lets that update propagate before the app receives SIGTERM (#1442).
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: 5
           # Read-only root filesystem: the application files belong to root in the image
           # (Dockerfile) and nothing outside the three volumes below can be written. They are the
           # paths the server writes, measured with `docker diff` on a running container; no page is

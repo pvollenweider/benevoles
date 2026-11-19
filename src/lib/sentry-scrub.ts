@@ -180,8 +180,9 @@ export function isStacklessDomEventRejection(event: Event): boolean {
 // What browsers say when a fetch never got an answer: Safari « Load failed », Chrome « Failed to
 // fetch », Firefox « NetworkError when attempting to fetch resource. ». Seen when a tab opened
 // before a deploy asks for a file of the previous build, or the network drops; Next reloads the
-// page itself. With no stack there is no code of ours to point at.
-const NETWORK_FAILURE = /^(?:Load failed|Failed to fetch|NetworkError when attempting to fetch resource\.?)$/
+// page itself. With no stack there is no code of ours to point at. Shared with the recovery page
+// (src/lib/global-error-recovery.ts) so the two never disagree on what a network failure is.
+export const NETWORK_FAILURE = /^(?:Load failed|Failed to fetch|NetworkError when attempting to fetch resource\.?)$/
 
 /** An unhandled rejection that is only a browser network failure, without any stack (client only). */
 export function isStacklessNetworkRejection(event: Event): boolean {

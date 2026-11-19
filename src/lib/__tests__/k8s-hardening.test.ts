@@ -106,6 +106,18 @@ describe("k8s pod hardening (#1050)", () => {
     }
   })
 
+  // Rolling update (#1442): Traefik stops routing to a pod once it is terminating, but the update
+  // takes a moment to reach it. The kubelet sleeps before SIGTERM, with a grace period to spare.
+  it("the app drains the old pod before SIGTERM: native preStop sleep and a grace period", () => {
+    const app = read("k8s/deployment.yaml")
+    const grace = app.match(/^ {6}terminationGracePeriodSeconds: (\d+)$/m)
+    const sleep = app.match(/^ {10}lifecycle:\n {12}preStop:\n {14}sleep:\n {16}seconds: (\d+)$/m)
+    expect(grace, "terminationGracePeriodSeconds on the pod spec").not.toBeNull()
+    expect(sleep, "lifecycle.preStop.sleep on the app container").not.toBeNull()
+    expect(Number(sleep![1])).toBe(5)
+    expect(Number(grace![1])).toBeGreaterThan(Number(sleep![1]))
+  })
+
   // The app container (pentest INF-06): the image's application files belong to root
   // (docker-app-ownership.test.ts) and the root filesystem is read-only. The volumes are the paths
   // the server writes, measured with `docker diff`: the readiness file in /tmp, the optimised
