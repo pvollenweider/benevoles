@@ -1,0 +1,64 @@
+{
+  "id": "VOLUNTEER_ORG_REGISTRATIONS",
+  "slug": "volunteer-org-registrations",
+  "title": "Retrouver toutes mes inscriptions",
+  "description": "Retrouve ton lien personnel par email et gère tes créneaux auprès d’une organisation.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "French, warm and friendly, with an audible smile. Clear articulation, around 130 words per minute.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "recover",
+      "transcript": "Tu as perdu ton lien personnel ? Sur la page d’inscription de l’un des événements, descends sous le planning. Ouvre J’ai perdu mon lien personnel. Saisis l’adresse email que tu as utilisée pour t’inscrire. Choisis Recevoir mon lien par email. La page confirme que ta demande est enregistrée.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "email",
+      "transcript": "Tu reçois un seul email. Sous le bouton Voir mes inscriptions, le message précise que ton lien ouvre toutes tes inscriptions auprès de cette association. Garde ce lien pour toi. Ouvre la page avec le bouton Voir mes inscriptions.",
+      "fallbackDurationMs": 18000
+    },
+    {
+      "id": "events",
+      "transcript": "Dans Mes inscriptions, tu vois ton prochain créneau confirmé, puis tous tes créneaux à venir. Ici, l’Accueil de la Fête du parc et la Buvette du Marché des voisins sont sur la même page.",
+      "fallbackDurationMs": 13000
+    },
+    {
+      "id": "cancel",
+      "transcript": "Si tu as un empêchement, utilise Annuler sur le créneau concerné. Le délai dépend de l’événement. Vérifie le nom du créneau, puis confirme l’annulation. Ton inscription à l’autre événement reste visible.",
+      "fallbackDurationMs": 16000
+    },
+    {
+      "id": "calendar",
+      "transcript": "La carte Mon calendrier permet de t’abonner une seule fois à tous tes créneaux confirmés auprès de l’association. Pour un agenda en ligne, ouvre la rubrique correspondante. Copie l’adresse de l’abonnement pour la coller dans ton agenda.",
+      "fallbackDurationMs": 18000
+    },
+    {
+      "id": "renew",
+      "transcript": "Si tu penses avoir partagé ton lien personnel, choisis Renouveler mon lien. La confirmation indique que l’ancien lien ne fonctionne plus. Ouvre le nouvel email et garde le nouveau lien pour toi. Si tu avais abonné ton agenda, abonne-toi de nouveau depuis ce lien.",
+      "fallbackDurationMs": 20000
+    }
+  ],
+  "viewer": {
+    "summary": "Retrouve ton lien personnel et tous tes créneaux auprès de la même organisation.",
+    "steps": [
+      "Sur la page d’inscription, ouvre « J’ai perdu mon lien personnel ».",
+      "Saisis l’adresse utilisée à l’inscription et demande ton lien par email.",
+      "Ouvre « Voir mes inscriptions » depuis l’email.",
+      "Vérifie les créneaux de chaque événement. Pour en annuler un, lis le délai et confirme.",
+      "Dans « Mon calendrier », copie l’adresse pour t’abonner aux créneaux confirmés.",
+      "Si ton lien a été partagé, renouvelle-le et ouvre le nouvel email."
+    ],
+    "remember": [
+      "Garde ton lien personnel pour toi.",
+      "Le renouvellement invalide l’ancien lien et son adresse d’abonnement au calendrier."
+    ]
+  },
+  "posterAtMs": 41200
+}

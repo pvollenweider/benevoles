@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:43:03.916Z",
+  "videoSha256": "a8c2dc7ef840b7727f45b02b304a443d1d2f91f9e617b718ec1ba0a707d98a0f",
+  "promptSha256": "ecdeb0482124432a07913926141e02581055d28d5989862b88c0619d55664f26",
+  "clipSha256": "b19376e6e219cf4251b94b896c2c4bbda2e1ec660c288f403e0733a84f2417d2",
+  "scene": "renew",
+  "review": {
+    "heardOpening": "Si tu penses avoir partagé ton lien personnel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "choisis Renouveler mon lien",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le bouton Renouveler mon lien",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "La confirmation indique que l'ancien lien ne fonctionne plus",
+        "visibleSeconds": 3.4,
+        "visible": "Message de confirmation affiché précisant que l'ancien lien ne fonctionne plus",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Ouvre le nouvel email",
+        "visibleSeconds": 8,
+        "visible": "Affichage de l'email de renouvellement reçu par Léa",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

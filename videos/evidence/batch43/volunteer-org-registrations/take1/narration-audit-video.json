@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T17:39:05.469Z",
+  "revalidatedAt": "2026-11-19T17:39:05.471Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "e0dae3d791960f3ac4bd93ea2bf789cf95180bf70247be64e3aa5ece9b571c89",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "recover",
+      "audioSha256": "d24a3b3e2beab03691facd051044580ffe79b1f370aa6f3c66505fc82aee4d2c",
+      "recognized": "Tu as perdu ton lien personnel ? Sur la page d'inscription de l'un des événements, descends sous le planning. Ouvre « J'ai perdu mon lien personnel ». Saisis l'adresse e-mail que tu as utilisée pour t'inscrire. Choisis « Recevoir mon lien par e-mail ». La page confirme que ta demande est enregistrée.",
+      "expected": "Tu as perdu ton lien personnel ? Sur la page d’inscription de l’un des événements, descends sous le planning. Ouvre J’ai perdu mon lien personnel. Saisis l’adresse email que tu as utilisée pour t’inscrire. Choisis Recevoir mon lien par email. La page confirme que ta demande est enregistrée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "email",
+      "audioSha256": "71116d9425139fc734de95bc65d8d9f57b4f9585644855401bb505c9d0cd6f54",
+      "recognized": "Tu reçois un seul e-mail. Sous le bouton Voir mes inscriptions, le message précise que ton lien ouvre toutes tes inscriptions auprès de cette association. Garde ce lien pour toi. Ouvre la page avec le bouton Voir mes inscriptions.",
+      "expected": "Tu reçois un seul email. Sous le bouton Voir mes inscriptions, le message précise que ton lien ouvre toutes tes inscriptions auprès de cette association. Garde ce lien pour toi. Ouvre la page avec le bouton Voir mes inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "events",
+      "audioSha256": "4f4e9a06b7161d97e9297e265609b99321b18fad3980344a57f0586e76c00b46",
+      "recognized": "Dans mes inscriptions, tu vois ton prochain créneau confirmé, puis tous tes créneaux à venir. Ici, l'accueil de la fête du parc et la buvette du marché des voisins sont sur la même page.",
+      "expected": "Dans Mes inscriptions, tu vois ton prochain créneau confirmé, puis tous tes créneaux à venir. Ici, l’Accueil de la Fête du parc et la Buvette du Marché des voisins sont sur la même page.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "cancel",
+      "audioSha256": "cec5fe2905cb4ecb7b3e259071fdd3206a27c0777181d39bcd0e2bf356974d91",
+      "recognized": "Si tu as un empêchement, utilise Annuler sur le créneau concerné. Le délai dépend de l'événement. Vérifie le nom du créneau, puis confirme l'annulation. Ton inscription à l'autre événement reste visible.",
+      "expected": "Si tu as un empêchement, utilise Annuler sur le créneau concerné. Le délai dépend de l’événement. Vérifie le nom du créneau, puis confirme l’annulation. Ton inscription à l’autre événement reste visible.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "calendar",
+      "audioSha256": "f3bffbaecfe635cd3ded3f852690f7ec90a8ed66e3a70b5f70da6504eefdfdb5",
+      "recognized": "La carte Mon calendrier permet de t'abonner une seule fois à tous tes créneaux confirmés auprès de l'association. Pour un agenda en ligne, ouvre la rubrique correspondante. Copie l'adresse de l'abonnement pour la coller dans ton agenda.",
+      "expected": "La carte Mon calendrier permet de t’abonner une seule fois à tous tes créneaux confirmés auprès de l’association. Pour un agenda en ligne, ouvre la rubrique correspondante. Copie l’adresse de l’abonnement pour la coller dans ton agenda.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "renew",
+      "audioSha256": "d43424f91ae8032b5a220b24383bcab3a6cf7ab5cf0f317279d19b85f21cbc7a",
+      "recognized": "Si tu penses avoir partagé ton lien personnel, choisis renouveler mon lien. La confirmation indique que l'ancien lien ne fonctionne plus. Ouvre le nouvel email et garde le nouveau lien pour toi. Si tu avais abonné ton agenda, abonne-toi de nouveau depuis ce lien.",
+      "expected": "Si tu penses avoir partagé ton lien personnel, choisis Renouveler mon lien. La confirmation indique que l’ancien lien ne fonctionne plus. Ouvre le nouvel email et garde le nouveau lien pour toi. Si tu avais abonné ton agenda, abonne-toi de nouveau depuis ce lien.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

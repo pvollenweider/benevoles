@@ -728,6 +728,29 @@
       ]
     },
     {
+      "id": "VOLUNTEER_ORG_REGISTRATIONS",
+      "manifest": "volunteer-org-registrations",
+      "category": "volunteer-experience",
+      "tags": [
+        "lien-personnel",
+        "inscriptions",
+        "calendrier"
+      ],
+      "seedScenario": "volunteer-org-registrations",
+      "feature": "Page « Mes inscriptions » de l’organisation",
+      "level": "essentiel",
+      "published": true,
+      "audience": [
+        "benevole"
+      ],
+      "updatedAt": "2026-11-19",
+      "revision": 1,
+      "themes": [
+        "parcours-benevole"
+      ],
+      "thumbnailTitle": "Retrouver toutes mes inscriptions"
+    },
+    {
       "id": "VOLUNTEER_CALENDAR",
       "manifest": "volunteer-calendar",
       "category": "volunteer-experience",

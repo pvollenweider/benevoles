@@ -12,6 +12,8 @@ aliases: []
 
 <!-- video: VOLUNTEER_SESSION_AVAILABILITY -->
 
+<!-- video: VOLUNTEER_ORG_REGISTRATIONS -->
+
 L'email de confirmation et les rappels contiennent un bouton **Mes inscriptions** vers ton **lien personnel pour toutes tes inscriptions auprès de l'organisation**. Il ouvre [ta page « Mes inscriptions »](ma-page-personnelle.md), où tu retrouves tes créneaux de tous les événements de l'organisation et peux les annuler jusqu'au début du créneau, ou jusqu'au délai fixé par l'organisation (voir [Jusqu'à quand annuler](ma-page-personnelle.md#jusqu-a-quand-annuler)) : **ne le partage pas**. Les liens personnels déjà reçus pour un événement continuent de fonctionner. Chaque annulation faite avec l'un de ces liens t'est confirmée par email (plusieurs annulations à la suite, dans un seul email) : si tu en reçois une que tu n'as pas faite, réponds à cet email pour prévenir l'organisation.
 
 Sur ta page **Mes inscriptions**, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans ta boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre ta messagerie avec l'objet déjà rempli.

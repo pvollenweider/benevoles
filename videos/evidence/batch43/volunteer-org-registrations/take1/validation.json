@@ -1,0 +1,59 @@
+{
+  "id": "VOLUNTEER_ORG_REGISTRATIONS",
+  "slug": "volunteer-org-registrations",
+  "validatedAt": "2026-11-19T17:38:32.898Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 90760,
+  "scenes": [
+    {
+      "id": "recover",
+      "visualMs": 18339,
+      "audioMs": 18338,
+      "driftMs": 1
+    },
+    {
+      "id": "email",
+      "visualMs": 14776,
+      "audioMs": 14776,
+      "driftMs": 0
+    },
+    {
+      "id": "events",
+      "visualMs": 11204,
+      "audioMs": 11199,
+      "driftMs": 5
+    },
+    {
+      "id": "cancel",
+      "visualMs": 14049,
+      "audioMs": 14045,
+      "driftMs": 4
+    },
+    {
+      "id": "calendar",
+      "visualMs": 13870,
+      "audioMs": 13867,
+      "driftMs": 3
+    },
+    {
+      "id": "renew",
+      "visualMs": 15738,
+      "audioMs": 15735,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 10,
+  "music": {
+    "voicedWindows": 84,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "issues": []
+}

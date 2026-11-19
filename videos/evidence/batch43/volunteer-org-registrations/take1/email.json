@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:39:19.708Z",
+  "videoSha256": "e0dae3d791960f3ac4bd93ea2bf789cf95180bf70247be64e3aa5ece9b571c89",
+  "promptSha256": "093b48676c240b5e533b2176ff874562d024520e686c35a03defaa3a68dddfbc",
+  "clipSha256": "103f8848f0acb4b149cf915c046e642d922ebd5784e45785ecbe74facfe4472d",
+  "scene": "email",
+  "review": {
+    "heardOpening": "Tu reçois un seul email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Tu reçois un seul email.",
+        "visibleSeconds": 0.6,
+        "visible": "Affichage d'un courriel avec le bouton bleu « Voir mes inscriptions ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Sous le bouton Voir mes inscriptions, le message précise que ton lien ouvre toutes tes inscriptions",
+        "visibleSeconds": 2.8,
+        "visible": "Texte explicatif affiché sous le bouton bleu détaillant l'accès aux inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.3,
+        "spoken": "Ouvre la page avec le bouton Voir mes inscriptions.",
+        "visibleSeconds": 14.5,
+        "visible": "Aucun clic sur le bouton et la page suivante n'est pas ouverte ; l'écran reste figé sur l'email.",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À partir de 00:11, l'action « Ouvre la page avec le bouton Voir mes inscriptions » est demandée mais aucun clic n'est effectué et l'écran reste statique jusqu'à la fin de la vidéo."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, posée et bien articulée, avec un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

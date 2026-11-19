@@ -12,6 +12,8 @@ aliases: []
 
 <!-- video: VOLUNTEER_PERSONAL_REGISTRATIONS -->
 
+<!-- video: VOLUNTEER_ORG_REGISTRATIONS -->
+
 Ta page **Mes inscriptions** s'ouvre avec ton **lien personnel**, reçu par email (voir [Ton lien personnel](lien-personnel.md)). L'email de confirmation et les rappels mènent à la page de toutes tes inscriptions auprès de l'organisation ; les liens déjà reçus pour un événement ouvrent la page de cet événement :
 
 ```

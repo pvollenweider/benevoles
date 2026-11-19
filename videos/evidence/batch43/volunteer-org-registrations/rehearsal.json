@@ -1,0 +1,256 @@
+{
+  "slug": "volunteer-org-registrations",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-11-19T17:35:23.241Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "e08c20ba48490bce0e3db83a87cb8ce1f4be6ae6",
+    "sourceTree": "4a4df4b4abe8dca4302d515780f11089614d3195",
+    "productSourceSha256": "8460485d0e5802d594ab6b52a2b392091e8c730b66862e7cb86762f7c923b2c8",
+    "buildId": "ukgq7Atgkesv7nsI1f36Z",
+    "snapshot": "/private/tmp/benevoles-video-production.TGUHeI7V",
+    "builtAt": "2026-11-19T17:27:33.168Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-parc",
+    "scenario": "VOLUNTEER_ORG_REGISTRATIONS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 964
+    },
+    {
+      "kind": "click",
+      "atMs": 1804
+    },
+    {
+      "kind": "key",
+      "atMs": 2115
+    },
+    {
+      "kind": "key",
+      "atMs": 2174
+    },
+    {
+      "kind": "key",
+      "atMs": 2232
+    },
+    {
+      "kind": "key",
+      "atMs": 2290
+    },
+    {
+      "kind": "key",
+      "atMs": 2349
+    },
+    {
+      "kind": "key",
+      "atMs": 2407
+    },
+    {
+      "kind": "key",
+      "atMs": 2465
+    },
+    {
+      "kind": "key",
+      "atMs": 2523
+    },
+    {
+      "kind": "key",
+      "atMs": 2582
+    },
+    {
+      "kind": "key",
+      "atMs": 2640
+    },
+    {
+      "kind": "key",
+      "atMs": 2697
+    },
+    {
+      "kind": "key",
+      "atMs": 2756
+    },
+    {
+      "kind": "key",
+      "atMs": 2814
+    },
+    {
+      "kind": "key",
+      "atMs": 2873
+    },
+    {
+      "kind": "key",
+      "atMs": 2931
+    },
+    {
+      "kind": "key",
+      "atMs": 2990
+    },
+    {
+      "kind": "key",
+      "atMs": 3048
+    },
+    {
+      "kind": "key",
+      "atMs": 3106
+    },
+    {
+      "kind": "key",
+      "atMs": 3164
+    },
+    {
+      "kind": "key",
+      "atMs": 3221
+    },
+    {
+      "kind": "key",
+      "atMs": 3278
+    },
+    {
+      "kind": "key",
+      "atMs": 3338
+    },
+    {
+      "kind": "click",
+      "atMs": 3892
+    },
+    {
+      "kind": "click",
+      "atMs": 6534
+    },
+    {
+      "kind": "click",
+      "atMs": 8703
+    },
+    {
+      "kind": "click",
+      "atMs": 9535
+    },
+    {
+      "kind": "click",
+      "atMs": 10845
+    },
+    {
+      "kind": "click",
+      "atMs": 11691
+    },
+    {
+      "kind": "click",
+      "atMs": 13005
+    }
+  ],
+  "cues": [
+    {
+      "id": "recover",
+      "startMs": 87,
+      "endMs": 4213
+    },
+    {
+      "id": "email",
+      "startMs": 4664,
+      "endMs": 7230
+    },
+    {
+      "id": "events",
+      "startMs": 7682,
+      "endMs": 7749
+    },
+    {
+      "id": "cancel",
+      "startMs": 8214,
+      "endMs": 9859
+    },
+    {
+      "id": "calendar",
+      "startMs": 10310,
+      "endMs": 12058
+    },
+    {
+      "id": "renew",
+      "startMs": 12511,
+      "endMs": 13609
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "recover",
+      "phrase": "Sur la page d’inscription",
+      "startMs": 2371,
+      "endMs": 8155,
+      "cueMs": 256
+    },
+    {
+      "segmentId": "recover",
+      "phrase": "Ouvre J’ai perdu",
+      "startMs": 8155,
+      "endMs": 10905,
+      "cueMs": 384
+    },
+    {
+      "segmentId": "recover",
+      "phrase": "Saisis l’adresse email",
+      "startMs": 10905,
+      "endMs": 15362,
+      "cueMs": 1279
+    },
+    {
+      "segmentId": "recover",
+      "phrase": "Choisis Recevoir",
+      "startMs": 15362,
+      "endMs": 18207,
+      "cueMs": 3396
+    },
+    {
+      "segmentId": "email",
+      "phrase": "Ouvre la page",
+      "startMs": 13935,
+      "endMs": 18000,
+      "cueMs": 5783
+    },
+    {
+      "segmentId": "events",
+      "phrase": "Ici, l’Accueil",
+      "startMs": 6721,
+      "endMs": 13000,
+      "cueMs": 7716
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "Vérifie le nom",
+      "startMs": 7610,
+      "endMs": 11902,
+      "cueMs": 9012
+    },
+    {
+      "segmentId": "calendar",
+      "phrase": "Pour un agenda en ligne",
+      "startMs": 8719,
+      "endMs": 13219,
+      "cueMs": 10333
+    },
+    {
+      "segmentId": "calendar",
+      "phrase": "Copie l’adresse",
+      "startMs": 13219,
+      "endMs": 18000,
+      "cueMs": 11149
+    },
+    {
+      "segmentId": "renew",
+      "phrase": "Ouvre le nouvel email",
+      "startMs": 10660,
+      "endMs": 14906,
+      "cueMs": 13317
+    }
+  ]
+}

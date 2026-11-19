@@ -234,7 +234,7 @@ export function parseDocUnit(fileName: string, source: string): DocUnit {
 /**
  * The problems of a set of units, as messages (empty when all is well): reserved or duplicate
  * slugs, aliases colliding with a slug, unknown related units, titles or summaries used twice,
- * more than one video per unit, forbidden separators in a title or a summary.
+ * more than two videos per unit, forbidden separators in a title or a summary.
  */
 export function docUnitProblems(units: readonly DocUnit[], reserved: readonly string[] = RESERVED_DOC_SLUGS): string[] {
   const problems: string[] = []
@@ -265,7 +265,7 @@ export function docUnitProblems(units: readonly DocUnit[], reserved: readonly st
     seenSummaries.set(unit.summary, unit.slug)
     if (FORBIDDEN_SEPARATORS.test(unit.title)) problems.push(`${unit.slug}: no « · » or em dash in the title`)
     if (FORBIDDEN_SEPARATORS.test(unit.summary)) problems.push(`${unit.slug}: no « · » or em dash in the summary`)
-    if (findVideoReferences(unit.body).length > 1) problems.push(`${unit.slug}: one video at most per unit`)
+    if (findVideoReferences(unit.body).length > 2) problems.push(`${unit.slug}: two videos at most per unit`)
   }
   const legacyOwners = new Map<string, string>()
   for (const unit of units) {

@@ -11,6 +11,7 @@ import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { pgAdapter } from "../../src/lib/prisma-adapter"
 import assert from "node:assert/strict"
+import { orgRegistrationsFixture } from "../lib/org-registrations-fixture"
 import { pathToFileURL } from "node:url"
 import { ROSTER_SURNAMES, surnameOf } from "../lib/fixture-names"
 import { ownsRecordedNoEmailMember, ownsTargetedMessageNoEmailMember, recordedMembers } from "./prepare-demo"
@@ -65,8 +66,8 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["VOLUNTEER_CONFIRMATION_ERRORS", "FRONT_DESK_ACCESS", "SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
-  if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
+  if (!["VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "FRONT_DESK_ACCESS", "SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (memberDemoVideos.includes(manifest.id) || manifest.id === "VOLUNTEER_ORG_REGISTRATIONS" || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
   }
@@ -218,6 +219,22 @@ async function main() {
     } else if (manifest.id === "WORKLOAD_PROTECTION") {
       const { verifyWorkloadReviewFixture } = await import("../lib/verify-workload-review-fixture")
       await verifyWorkloadReviewFixture(db)
+    } else if (manifest.id === "VOLUNTEER_ORG_REGISTRATIONS") {
+      const sample = orgRegistrationsFixture
+      const org = await db.organization.findUniqueOrThrow({
+        where: { id: sample.id },
+        include: { volunteers: true, admins: true, events: { include: { registrations: true } } },
+      })
+      const [volunteer] = org.volunteers
+      assert(org.slug === sample.slug && org.name === sample.name && org.admins.length === 0)
+      assert(org.volunteers.length === 1 && volunteer.email === sample.email && !volunteer.phone)
+      assert(org.events.length === sample.events.length)
+      for (const [index, event] of sample.events.entries()) {
+        const recorded = org.events.find(candidate => candidate.slug === event.slug)
+        assert(recorded?.title === event.title && recorded.registrations.length === 1)
+        assert(recorded.registrations[0].volunteerId === volunteer.id)
+        assert(recorded.registrations[0].status === (index === 0 ? "cancelled" : "active"))
+      }
     } else if (manifest.id === "PRIVACY_PERSONAL_LINKS") {
       const { verifyPrivacyReviewFixture } = await import("../lib/verify-privacy-review-fixture")
       await verifyPrivacyReviewFixture(db, videoDir(manifest.slug))

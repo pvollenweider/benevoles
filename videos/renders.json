@@ -377,6 +377,12 @@
     "height": 800,
     "poster": true
   },
+  "volunteer-org-registrations": {
+    "durationMs": 90760,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "volunteer-personal-registrations": {
     "durationMs": 172040,
     "width": 1280,

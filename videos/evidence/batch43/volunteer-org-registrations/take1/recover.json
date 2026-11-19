@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:39:20.081Z",
+  "videoSha256": "e0dae3d791960f3ac4bd93ea2bf789cf95180bf70247be64e3aa5ece9b571c89",
+  "promptSha256": "0cb64944573697714dcfbcc7d0a2e0aaf931c8cefa2d458eba5410251ae35edf",
+  "clipSha256": "78d2cf8ee6ee46a1a5fc1e835310702265c6fa7cf63041c61501dad13ac18d36",
+  "scene": "recover",
+  "review": {
+    "heardOpening": "Tu as perdu ton lien personnel ? Sur la page d'inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6,
+        "spoken": "Ouvre J’ai perdu mon lien personnel.",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur le lien déroulant 'J'ai perdu mon lien personnel' qui affiche le formulaire d'adresse email.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Saisis l’adresse email que tu as utilisée pour t’inscrire.",
+        "visibleSeconds": 9.5,
+        "visible": "L'adresse email leo.rochat@example.org est saisie dans le champ dédié.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Choisis Recevoir mon lien par email.",
+        "visibleSeconds": 12.6,
+        "visible": "Clic sur le bouton bleu 'Recevoir mon lien par email'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "La page confirme que ta demande est enregistrée.",
+        "visibleSeconds": 13.5,
+        "visible": "Le message de confirmation 'Demande enregistrée. Si une inscription existe à cette adresse...' s'affiche sous le bouton.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:42:50.569Z",
+  "videoSha256": "a8c2dc7ef840b7727f45b02b304a443d1d2f91f9e617b718ec1ba0a707d98a0f",
+  "promptSha256": "0aadd34d67f13d3a1b86d01b18efbc557119bc01ffb121d3b5d90d762d09de30",
+  "clipSha256": "9da1a01ef5703345a2de8907485ba1ba39f450062371fe335bd9864eae0fa5e5",
+  "scene": "events",
+  "review": {
+    "heardOpening": "Dans Mes inscriptions, tu vois ton prochain créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "tu vois ton prochain créneau confirmé",
+        "visibleSeconds": 0.5,
+        "visible": "Section « Ton prochain créneau » affichée avec la mention Confirmé pour la Fête du parc",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "puis tous tes créneaux à venir",
+        "visibleSeconds": 5,
+        "visible": "Défilement vers la section « Tous tes créneaux à venir »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "l’Accueil de la Fête du parc et la Buvette du Marché des voisins sont sur la même page",
+        "visibleSeconds": 6,
+        "visible": "Affichage simultané des deux créneaux (Fête du parc / Accueil et Marché des voisins / Buvette)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
