@@ -1405,3 +1405,7 @@ Les **Paramètres › Modèles de messages** proposent maintenant **Ajouter des 
 ## À refilmer : ressources du serveur sur « Santé du service » (#1415, 19 novembre 2026)
 
 La page « Santé du service » gagne une section **Serveur** entre « Service » et « Tâches planifiées et sauvegardes » : mémoire, CPU, retard de la boucle d'événements, durée de marche, taille de la base et connexions ouvertes, ou « non disponible » quand les fichiers cgroup manquent. La narration de **PLATFORM_INTERNAL_ADMINISTRATION** (`platform-internal-administration`) disait « trois ensembles d'informations » ; elle est corrigée en « quatre ensembles » dans le manifeste et le script, avec les ressources du serveur nommées. La vidéo doit être refilmée pour montrer la nouvelle section et sa narration régénérée ; les sélecteurs de capture restent valides.
+
+## À refilmer : liste avec téléphones par jour (#1431, 19 novembre 2026)
+
+La **liste avec téléphones** est maintenant un tableau en paysage : une ligne par bénévole (nom, téléphone, email) et une colonne par jour de l'événement, avec les créneaux qui se suivent sur le même poste réunis. La narration d'**EVENT_REPORTS** (`event-reports`) reste juste — retrouver une personne, son email, son téléphone et ses créneaux — mais l'image du chapitre Contacts est périmée. Aucun sélecteur de capture ne vise la mise en page ; la vidéo est à refilmer au prochain lot. Le planning par jour et l'export complet ne changent que sur une journée dense, absente du jeu de tournage.

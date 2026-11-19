@@ -20,8 +20,6 @@
 #   CronJobs calling the app         -> cluster DNS, Traefik :8443 (they call the public address,
 #                                       which the node hands to the Traefik pod)
 #   database backup                  -> cluster DNS, postgres :5432, Traefik :8443 (its heartbeat)
-#   off-site copy                    -> cluster DNS, Traefik :8443, the internet on :443 only
-#                                       (Swiss Backup), never an address inside the cluster
 #   app                              -> cluster DNS, postgres :5432, Traefik :8443 (its own public
 #                                       address: the standalone build sends the 404 rewrite out
 #                                       as an HTTP request), the internet on any port (SMTP,
@@ -31,6 +29,10 @@
 #                                       cluster API.
 # A pod without one of the labels below keeps free egress, so a Job started from an older template
 # is never cut off.
+#
+# The off-site copy of the backups runs in its own namespace, benevoles-offsite: a NetworkPolicy
+# only acts in its namespace, so its rules are in k8s/backup-offsite-namespace.yaml, applied by
+# hand, with the same internal ranges as below.
 #
 # "The internet" below is every address except the pod and service ranges of k3s, the link-local
 # range and the node's own addresses: the cluster API answers on the node, so leaving the node in
@@ -278,55 +280,6 @@ spec:
       ports:
         - protocol: TCP
           port: 8443
----
-# rclone to Swiss Backup (identity and storage, both HTTPS), then the heartbeat.
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: backup-offsite-egress
-  namespace: benevoles
-  labels:
-    app.kubernetes.io/part-of: benevoles-netpol
-spec:
-  podSelector:
-    matchLabels:
-      app: backup-offsite
-  policyTypes: [Egress]
-  egress:
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: kube-system
-          podSelector:
-            matchLabels:
-              k8s-app: kube-dns
-      ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: kube-system
-          podSelector:
-            matchLabels:
-              app.kubernetes.io/name: traefik
-      ports:
-        - protocol: TCP
-          port: 8443
-    - to:
-        - ipBlock:
-            cidr: 0.0.0.0/0
-            except:
-              - 10.42.0.0/16
-              - 10.43.0.0/16
-              - 169.254.0.0/16
-              - 188.165.255.51/32
-              - 188.165.255.107/32
-      ports:
-        - protocol: TCP
-          port: 443
 ---
 # The widest rule of the file, and still the one that matters most: code running in the app can
 # no longer reach the cluster API, the node, or the pods and services of the other sites hosted on

@@ -10,7 +10,8 @@ import { IMAGE_DISK_CACHE_MAX_BYTES } from "../image-disk-cache"
 // account token, and the app given only the secret keys it reads instead of the whole secret.
 const read = (f: string) => readFileSync(join(process.cwd(), f), "utf8")
 
-// Every manifest with a pod that the deploy workflow applies.
+// Every manifest with a pod that the deploy workflow applies, and the off-site copy, applied by
+// hand in its own namespace.
 const POD_MANIFESTS = [
   "k8s/deployment.yaml",
   "k8s/job-migrate.yaml",
@@ -29,7 +30,7 @@ const NOT_FOR_THE_APP = [
   "POSTGRES_PASSWORD",
   "ADMIN_EMAIL", // startup bootstrap (self-hosted image) and prisma/seed.ts; deliberately not passed in k8s
   "ADMIN_PASSWORD",
-  "OFFSITE_BUCKET", // k8s/cronjob-backup-offsite.yaml
+  "OFFSITE_BUCKET", // no pod of the namespace: copied by hand to benevoles-offsite (offsite-settings)
   "MIGRATE_DATABASE_URL", // k8s/job-migrate.yaml: the schema owner, allowed to change the schema
 ]
 
@@ -392,7 +393,7 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     const dns = /namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+k8s-app: kube-dns\n\s+ports:\n\s+- protocol: UDP\n\s+port: 53\n\s+- protocol: TCP\n\s+port: 53\n/
 
     it("restricts every pod of the namespace, each by its own label", () => {
-      expect(egress.map(selectorOf).sort()).toEqual(["backup-offsite", "benevoles-app", "benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres", "postgres-backup"])
+      expect(egress.map(selectorOf).sort()).toEqual(["benevoles-app", "benevoles-cron", "benevoles-media", "benevoles-migrate", "postgres", "postgres-backup"])
       // One pod label per policy, never the whole namespace: an unlabelled pod (a Job started from
       // an older template) keeps free egress instead of being cut off.
       for (const d of egress) expect(d).not.toMatch(/podSelector: \{\}/)
@@ -421,7 +422,7 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
 
     it("every rule to the internet leaves out the same internal ranges", () => {
       const withBlock = egress.filter((d) => d.includes("ipBlock"))
-      expect(withBlock.map(selectorOf).sort()).toEqual(["backup-offsite", "benevoles-app"])
+      expect(withBlock.map(selectorOf).sort()).toEqual(["benevoles-app"])
       for (const d of withBlock) expect(exceptOf(d), selectorOf(d)).toEqual(INTERNAL)
     })
 
@@ -437,21 +438,9 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
       expect(d).not.toContain("ipBlock")
     })
 
-    it("lets the off-site copy reach the cluster DNS, Traefik and the internet on 443, never the cluster", () => {
-      const d = byName("backup-offsite-egress")
-      expect(d).toMatch(dns)
-      expect(d).toMatch(traefikOut)
-      expect(d.match(/^\s+- to:/gm)).toHaveLength(3)
-      // Pod and service ranges, link-local, and both addresses of the node: the cluster API is
-      // published on the node, so a rule that left the node in would leave the API reachable
-      // (measured on the cluster with the service address 10.43.0.1).
-      const block = d.match(/ipBlock:\n\s+cidr: 0\.0\.0\.0\/0\n\s+except:\n((?:\s+- \S+\n)+)\s+ports:\n\s+- protocol: TCP\n\s+port: 443\n/)
-      expect(block).not.toBeNull()
-      const except = block![1].trim().split("\n").map((l) => l.trim().replace(/^- /, ""))
-      expect(except.sort()).toEqual(["10.42.0.0/16", "10.43.0.0/16", "169.254.0.0/16", "188.165.255.107/32", "188.165.255.51/32"])
-      expect(read("k8s/cronjob-backup-offsite.yaml")).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: backup-offsite\n/)
-      // The job needs nothing from postgres, and postgres lets no such pod in.
-      expect(d).not.toContain("5432")
+    it("holds no rule for the off-site copy, which runs in its own namespace", () => {
+      // k8s/backup-offsite-namespace.yaml: a NetworkPolicy only acts in its own namespace.
+      expect(policy.split("\n").filter((l) => !l.startsWith("#")).join("\n")).not.toContain("backup-offsite")
       expect(byName("postgres-from-clients")).not.toContain("backup-offsite")
     })
 
@@ -533,6 +522,188 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     // The backup CronJob gets its label before the policy is in place.
     expect(workflow.indexOf("kubectl apply -f k8s/cronjob-backup.yaml")).toBeLessThan(apply)
     expect(workflow.indexOf("Check the site through the NetworkPolicy")).toBeGreaterThan(workflow.indexOf("rollout status deployment/benevoles-app"))
+  })
+})
+
+// Pentest P-11: the deploy credential may create Jobs in the namespace benevoles, and a Job mounts
+// any secret of its namespace. The off-site copy and the credential of the off-site storage live
+// in benevoles-offsite, where that credential has no right and which the workflow never touches.
+describe("off-site copy in its own namespace", () => {
+  const OFFSITE_NS = "benevoles-offsite"
+  const nsFile = read("k8s/backup-offsite-namespace.yaml")
+  const cron = read("k8s/cronjob-backup-offsite.yaml")
+  /** A manifest without its comment lines, cut into documents. */
+  const documents = (text: string) =>
+    text.split("\n").filter((l) => !l.trim().startsWith("#")).join("\n").split(/^---$/m).filter((d) => /^kind: \w+$/m.test(d))
+  const kindOf = (d: string) => d.match(/^kind: (\w+)$/m)![1]
+  const namespaceOf = (d: string) => d.match(/^metadata:\n(?: {2}.*\n)*? {2}namespace: ([\w-]+)$/m)?.[1]
+  const nsDocs = documents(nsFile)
+  const one = (kind: string, name: string) => {
+    const doc = nsDocs.find((d) => kindOf(d) === kind && d.includes(`\n  name: ${name}\n`))
+    expect(doc, `${kind} ${name}`).toBeDefined()
+    return doc!
+  }
+  const manifests = readdirSync(join(process.cwd(), "k8s")).filter((f) => f.endsWith(".yaml")).map((f) => `k8s/${f}`)
+
+  it("declares the namespace, the read-only volume, its claim and two network rules, nothing else", () => {
+    expect(nsDocs.map(kindOf)).toEqual(["Namespace", "PersistentVolume", "PersistentVolumeClaim", "NetworkPolicy", "NetworkPolicy"])
+    expect(one("Namespace", OFFSITE_NS)).toMatch(/labels:\n\s+pod-security\.kubernetes\.io\/enforce: baseline\n\s+pod-security\.kubernetes\.io\/enforce-version: latest\n/)
+  })
+
+  it("every namespaced object of the file, and the CronJob, is in benevoles-offsite", () => {
+    for (const d of nsDocs) {
+      // The Namespace and the PersistentVolume are cluster-scoped.
+      const expected = ["Namespace", "PersistentVolume"].includes(kindOf(d)) ? undefined : OFFSITE_NS
+      expect(namespaceOf(d), kindOf(d)).toBe(expected)
+    }
+    const cronDocs = documents(cron)
+    expect(cronDocs.map(kindOf)).toEqual(["CronJob"])
+    expect(namespaceOf(cronDocs[0])).toBe(OFFSITE_NS)
+    expect(cron).not.toMatch(/^\s+namespace: benevoles$/m)
+  })
+
+  it("no object of the namespace benevoles names rclone-config, in any manifest", () => {
+    expect(manifests.length).toBeGreaterThan(20)
+    let inBenevoles = 0
+    for (const file of manifests) {
+      for (const d of documents(read(file))) {
+        if (namespaceOf(d) !== "benevoles") continue
+        inBenevoles++
+        expect(d, `${file}: ${kindOf(d)}`).not.toContain("rclone-config")
+        expect(d, `${file}: ${kindOf(d)}`).not.toContain("offsite-settings")
+      }
+    }
+    expect(inBenevoles).toBeGreaterThan(20)
+    // The only manifest that mounts it is the CronJob of the other namespace.
+    const users = manifests.filter((f) => documents(read(f)).some((d) => d.includes("secretName: rclone-config")))
+    expect(users).toEqual(["k8s/cronjob-backup-offsite.yaml"])
+  })
+
+  it("the job reads no key of benevoles-secret: its three settings come from offsite-settings", () => {
+    expect(secretEnv(cron)).toEqual([])
+    expect(documents(cron).join("\n")).not.toContain("benevoles-secret")
+    const refs = [...cron.matchAll(/- name: (\w+)\n\s+valueFrom:\n\s+secretKeyRef:\n\s+name: ([\w-]+)\n\s+key: (\w+)\n/g)].map((m) => `${m[1]}=${m[2]}/${m[3]}`)
+    expect(refs.sort()).toEqual(["APP_URL=offsite-settings/APP_URL", "CRON_SECRET=offsite-settings/CRON_SECRET", "OFFSITE_BUCKET=offsite-settings/OFFSITE_BUCKET"])
+    expect(cron).toMatch(/- name: rclone-config\n\s+secret:\n\s+secretName: rclone-config\n/)
+  })
+
+  describe("volume of the dumps", () => {
+    const pv = one("PersistentVolume", "benevoles-backups-ro")
+    const pvc = one("PersistentVolumeClaim", "backups-ro")
+
+    // Regression guard: this volume shares its directory with backup-pvc. With Delete, removing
+    // its claim would ask for the removal of the directory that holds the backups.
+    it("is never removed with its claim: reclaim policy Retain", () => {
+      expect(pv).toMatch(/^ {2}persistentVolumeReclaimPolicy: Retain$/m)
+      expect(nsFile).not.toMatch(/persistentVolumeReclaimPolicy: (Delete|Recycle)/)
+    })
+
+    it("is out of reach of the local-path provisioner: empty storage class on the volume and on the claim", () => {
+      expect(pv).toMatch(/^ {2}storageClassName: ""$/m)
+      expect(pvc).toMatch(/^ {2}storageClassName: ""$/m)
+      expect(nsDocs.join("\n")).not.toContain("local-path")
+    })
+
+    it("is read-only, on the node of the dumps, with the two cluster values left to envsubst", () => {
+      expect(pv).toMatch(/^ {2}accessModes: \[ReadOnlyMany\]$/m)
+      expect(pvc).toMatch(/^ {2}accessModes: \[ReadOnlyMany\]$/m)
+      expect(pv).toContain("  local:\n    path: ${BACKUP_PV_PATH}\n")
+      expect(pv).toMatch(/- key: kubernetes\.io\/hostname\n\s+operator: In\n\s+values: \["\$\{BACKUP_NODE\}"\]\n/)
+      expect(pv).not.toMatch(/hostPath:/)
+      // Nothing else for envsubst to replace in the objects.
+      expect([...new Set([...nsDocs.join("\n").matchAll(/\$\{?\w+\}?/g)].map((m) => m[0]))].sort()).toEqual(["${BACKUP_NODE}", "${BACKUP_PV_PATH}"])
+    })
+
+    it("can only be bound by the claim of benevoles-offsite, and that claim only binds it", () => {
+      expect(pv).toMatch(/^ {2}claimRef:\n {4}namespace: benevoles-offsite\n {4}name: backups-ro$/m)
+      expect(pvc).toMatch(/^ {2}volumeName: benevoles-backups-ro$/m)
+    })
+
+    it("has the capacity of backup-pvc", () => {
+      const size = (text: string) => text.match(/storage: (\d+Gi)/)![1]
+      const backupPvc = documents(read("k8s/cronjob-backup.yaml")).find((d) => kindOf(d) === "PersistentVolumeClaim")!
+      expect(backupPvc).toContain("  name: backup-pvc\n")
+      expect(size(pv)).toBe(size(backupPvc))
+      expect(size(pvc)).toBe(size(backupPvc))
+    })
+
+    it("is mounted read-only by the job, as a claim and as a mount", () => {
+      expect(cron).toMatch(/persistentVolumeClaim:\n(?:\s+#.*\n)*\s+claimName: backups-ro\n\s+readOnly: true\n/)
+      expect(cron).toMatch(/- name: backup-storage\n\s+mountPath: \/backups\n\s+readOnly: true\n/)
+      expect(cron).not.toContain("claimName: backup-pvc")
+      expect(cron).not.toMatch(/hostPath:/)
+    })
+  })
+
+  describe("network rules", () => {
+    const policies = nsDocs.filter((d) => kindOf(d) === "NetworkPolicy")
+    const egress = one("NetworkPolicy", "backup-offsite-egress")
+    const exceptOf = (d: string) =>
+      d.match(/ipBlock:\n\s+cidr: 0\.0\.0\.0\/0\n\s+except:\n((?:\s+- \S+\n)+)/)![1].trim().split("\n").map((l) => l.trim().replace(/^- /, "")).sort()
+
+    it("denies ingress to every pod of the namespace, listed last", () => {
+      expect(one("NetworkPolicy", "default-deny-ingress")).toMatch(/podSelector: \{\}\n\s+policyTypes: \[Ingress\]\n/)
+      expect(policies[policies.length - 1]).toContain("name: default-deny-ingress\n")
+      for (const d of policies) expect(d).not.toMatch(/^\s+ingress:/m)
+    })
+
+    it("lets the job reach the cluster DNS, Traefik and the internet on 443, never the cluster", () => {
+      expect(egress).toMatch(/podSelector:\n\s+matchLabels:\n\s+app: backup-offsite\n\s+policyTypes: \[Egress\]\n/)
+      expect(cron).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: backup-offsite\n/)
+      expect(egress).toMatch(/namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+k8s-app: kube-dns\n\s+ports:\n\s+- protocol: UDP\n\s+port: 53\n\s+- protocol: TCP\n\s+port: 53\n/)
+      // The heartbeat calls the public address, which the node hands to the Traefik pod.
+      expect(egress).toMatch(/namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+app\.kubernetes\.io\/name: traefik\n\s+ports:\n\s+- protocol: TCP\n\s+port: 8443\n/)
+      expect(egress.match(/^\s+- to:/gm)).toHaveLength(3)
+      // The internet rule is limited to HTTPS.
+      expect(egress).toMatch(/ipBlock:\n\s+cidr: 0\.0\.0\.0\/0\n\s+except:\n(?:\s+- \S+\n)+\s+ports:\n\s+- protocol: TCP\n\s+port: 443\n/)
+      expect(egress).not.toContain("5432")
+    })
+
+    it("leaves out exactly the internal ranges of the app's rule in k8s/networkpolicy.yaml", () => {
+      const appEgress = documents(read("k8s/networkpolicy.yaml")).find((d) => d.includes("  name: app-egress\n"))!
+      // Pod and service ranges, link-local, and both addresses of the node (the cluster API is
+      // published on the node).
+      expect(exceptOf(appEgress)).toEqual(["10.42.0.0/16", "10.43.0.0/16", "169.254.0.0/16", "188.165.255.107/32", "188.165.255.51/32"])
+      expect(exceptOf(egress)).toEqual(exceptOf(appEgress))
+    })
+
+    it("does not carry the label the deploy workflow removes the policies of benevoles by", () => {
+      expect(nsDocs.join("\n")).not.toContain("benevoles-netpol")
+    })
+  })
+
+  it("the upload never writes over a file already sent, and a refusal stops the job before the purge and the heartbeat", () => {
+    const script = cron.slice(cron.indexOf("# >>> OFFSITE_SCRIPT_START"), cron.indexOf("# <<< OFFSITE_SCRIPT_END"))
+    expect(script).toMatch(/if ! rclone copy \/backups "\$REMOTE" \\\n\s+--config \/config\/rclone\/rclone\.conf \\\n\s+--checksum --immutable -v \$DRY_RUN_FLAG; then\n(?:.*\n)?\s+exit 1\n\s+fi\n/)
+    // Still a copy, never a sync: a file rotated away locally stays off-site for 90 days.
+    expect(script).not.toMatch(/rclone sync/)
+    expect(script.indexOf("exit 1\n                  fi\n\n                  echo \"==> Purge")).toBeGreaterThan(-1)
+    expect(cron.indexOf("rclone delete")).toBeGreaterThan(cron.indexOf("--immutable -v"))
+    expect(cron.indexOf("/api/cron/heartbeat")).toBeGreaterThan(cron.indexOf("rclone delete"))
+  })
+
+  it("the deploy credential has no Role outside benevoles: no manifest binds it elsewhere", () => {
+    for (const file of manifests) {
+      for (const d of documents(read(file))) {
+        if (!["Role", "RoleBinding", "ClusterRole", "ClusterRoleBinding"].includes(kindOf(d))) continue
+        if (!d.includes("ci-deployer")) continue
+        expect(file).toBe("k8s/rbac-ci-deployer.yaml")
+        expect(["Role", "RoleBinding"]).toContain(kindOf(d))
+        expect(namespaceOf(d)).toBe("benevoles")
+      }
+    }
+    const rbac = documents(read("k8s/rbac-ci-deployer.yaml"))
+    for (const d of rbac) expect(namespaceOf(d), kindOf(d)).toBe("benevoles")
+    expect(rbac.join("\n")).not.toContain(OFFSITE_NS)
+    // Its only binding names the account of benevoles.
+    expect(rbac.find((d) => kindOf(d) === "RoleBinding")).toMatch(/subjects:\n\s+- kind: ServiceAccount\n\s+name: ci-deployer\n\s+namespace: benevoles\n/)
+  })
+
+  it("the deploy workflow applies neither file and never names the namespace", () => {
+    const workflow = read(".github/workflows/deploy.yml")
+    expect(workflow).not.toContain("cronjob-backup-offsite.yaml")
+    expect(workflow).not.toContain("backup-offsite-namespace.yaml")
+    expect(workflow).not.toContain(OFFSITE_NS)
   })
 })
 
