@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:14:08.690Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "0f8a0df57da5a9f1135fb14d8acf804f19c3d2cfa5ab19e99d853aa9886b553d",
+  "clipSha256": "ca337728c95747d54bcf050ebdcf9d8bd5830b790874b2c0370ce1c51672327f",
+  "scene": "empty",
+  "review": {
+    "heardOpening": "Postes sans personne attire l'attention",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Postes sans personne attire l'attention sur un poste entièrement vide.",
+        "visibleSeconds": 1,
+        "visible": "Section 'Postes sans personne' affichée avec la mention 'Photos' et '2 créneaux · 6 places à pourvoir'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Cliquez sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission.",
+        "visibleSeconds": 10,
+        "visible": "Navigation vers le planning des créneaux affichant les postes, dates et horaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Avant de recruter, assurez-vous que la demande est claire",
+        "visibleSeconds": 16,
+        "visible": "Affichage de la liste des créneaux puis retour à la vue de synthèse pour le conseil final",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

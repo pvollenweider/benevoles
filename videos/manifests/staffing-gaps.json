@@ -34,6 +34,11 @@
       "fallbackDurationMs": 43000
     },
     {
+      "id": "share",
+      "transcript": "Pour trouver du renfort, ouvrez Partager ce créneau sur la ligne de la buvette du soir. Cliquez sur Copier le lien. Collez-le dans le groupe de discussion de votre équipe : la personne qui l'ouvre arrive sur ce créneau. Vous pouvez aussi télécharger le code QR. Si les inscriptions de l'événement sont déjà fermées, cette case ouvre une exception. Elle concerne ce créneau seulement, tant qu'il reste une place et qu'il n'a pas commencé.",
+      "fallbackDurationMs": 31500
+    },
+    {
       "id": "requests",
       "transcript": "Les demandes à traiter gardent leur place pendant la décision. À la navette, deux demandes remplissent donc les deux places réservées, même si aucune n'est encore confirmée. Le rapport ne les présente pas comme deux places manquantes. Suivez le lien des demandes pour retrouver Lucas et Marc, puis examinez leurs informations avant de décider. La confirmation et la demande en attente restent deux situations différentes.",
       "fallbackDurationMs": 39000
@@ -65,6 +70,7 @@
       "Dans Aperçu, suivez « Voir les créneaux à compléter » pour ouvrir « Où manque-t-il du monde ? » et comparer les places pourvues à la capacité.",
       "Repérez les postes sans personne et ouvrez-les pour vérifier dates, horaires et mission.",
       "Parcourez les créneaux à compléter, du plus dégarni au plus proche du complet, et ouvrez la liste filtrée des inscriptions.",
+      "Dans « Partager ce créneau », copiez le lien direct pour votre groupe de discussion ou téléchargez le QR code.",
       "Suivez les demandes à traiter et les listes d'attente pour décider en connaissance de cause.",
       "Vérifiez les postes sans responsable de secteur.",
       "Ajoutez une personne disponible avec « Ajouter manuellement », puis revenez au rapport pour voir le besoin diminuer."
@@ -76,5 +82,8 @@
       "Complet ne veut dire ni que tout le monde est présent, ni que toutes les décisions sont prises."
     ]
   },
-  "continuousPauseTags": false
+  "continuousPauseTags": false,
+  "chapterTitles": {
+    "share": "Partager un créneau à compléter"
+  }
 }

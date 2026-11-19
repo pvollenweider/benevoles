@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:14:51.763Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "1e3ac7a4b840f648d8c88a40778df37b6356b2776a21c7982d6c388b7c0642a8",
+  "clipSha256": "56eaec0cbedbfd02c22b3c33e08e4f2082895b3db9694a88860f525f63f6e32e",
+  "scene": "full",
+  "review": {
+    "heardOpening": "Créneaux complets",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Créneaux complets rassemble les horaires sans besoin supplémentaire",
+        "visibleSeconds": 0,
+        "visible": "Section 'Créneaux complets 3' affichée en bas de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "L'accueil de midi est rempli par des inscriptions confirmées.",
+        "visibleSeconds": 5.8,
+        "visible": "Ligne 'Accueil sam. 28 nov. 12:00-15:00' avec la jauge pleine '3/3' visible dans la section",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "La navette, elle, reste complète grâce aux demandes qui gardent leur place.",
+        "visibleSeconds": 9.2,
+        "visible": "Ligne 'Navette_Chauffeur navette sam. 28 nov. 08:00-12:00' avec mention '0/2 : 2 demandes à traiter'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

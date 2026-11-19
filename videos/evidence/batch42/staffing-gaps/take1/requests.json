@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:00:53.476Z",
+  "videoSha256": "bccc643823866e9fce4258808bcb810b87461a79f21343ebfe3b55fd96c614a7",
+  "promptSha256": "ae4012b2fdc8ccf7898da5aaed761f84a72e7f376450c27f6dd51139e629c751",
+  "clipSha256": "a85900001fd9f38040cc9b1359ff64c3415ca7d2f1bf826a7fb0c9ef8c054d08",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Les demandes à traiter gardent leur place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "À la navette, deux demandes remplissent donc les deux places réservées",
+        "visibleSeconds": 4.5,
+        "visible": "Ligne du créneau Chauffeur navette indiquant '0/2 : 2 demandes à traiter'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Suivez le lien des demandes pour retrouver Lucas et Marc",
+        "visibleSeconds": 15,
+        "visible": "Affichage de la page Inscriptions avec le filtre Demandes à traiter coché montrant Lucas Girard et Marc Duc",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "puis examinez leurs informations avant de décider.",
+        "visibleSeconds": 18.2,
+        "visible": "Détails des candidatures visibles (permis de conduire, taille de t-shirt, boutons Accepter/Refuser)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:21, l'affichage revient inopinément sur le tableau de bord 'Où manque-t-il du monde ?' pendant la phrase de conclusion, sans lien avec le propos."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

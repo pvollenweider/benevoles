@@ -2927,6 +2927,24 @@ async function main() {
           // Keep the message visible through the complete explanation.
         })
         await returnToReport()
+        await scene("share", async at => {
+          const row = section("staffing-underfilled").getByRole("listitem").filter({
+            has: page.getByRole("link", { name: /^Buvette.*18:00.*22:00/ }),
+          })
+          await at("Pour trouver du renfort")
+          await tap(page, row.getByRole("button", { name: /^Partager ce créneau pour/ }))
+          const dialog = page.getByRole("dialog", { name: "Partager ce créneau", exact: true })
+          const publicLink = dialog.getByText(/^https:\/\/default\.benevol\.app\//)
+          await publicLink.waitFor()
+          const url = (await publicLink.innerText()).trim()
+          await at("Cliquez sur Copier le lien")
+          await tap(page, dialog.getByRole("button", { name: "Copier le lien", exact: true }))
+          if (await page.evaluate(() => navigator.clipboard.readText()) !== url) throw new Error("Copied URL differs from the displayed public shift link")
+          await dialog.getByRole("link", { name: /^QR code PNG/ }).waitFor()
+          await dialog.getByRole("checkbox", { name: /^Accepter une inscription même si/ }).waitFor()
+          checks.copiedPublicShiftLink = true
+        })
+        await tap(page, page.getByRole("dialog", { name: "Partager ce créneau", exact: true }).getByRole("button", { name: "Fermer", exact: true }))
         await scene("requests", async at => {
           await section("staffing-full").getByRole("link", { name: /Navette.*08:00.*12:00/ }).scrollIntoViewIfNeeded()
           const held = initial.full.find(s => s.roleName === "Navette" && s.startTime === "08:00")
@@ -2939,8 +2957,8 @@ async function main() {
           if (await page.locator("tbody tr").count() !== 2) throw new Error("Requests link didn't filter list")
           await page.getByRole("row").filter({ hasText: "Lucas Girard" }).waitFor()
           await page.getByRole("row").filter({ hasText: "Marc Duc" }).waitFor()
-          await at("La confirmation et la demande"); await returnToReport()
         })
+        await returnToReport()
         await scene("waiting", async at => {
           await section("staffing-waitlist").scrollIntoViewIfNeeded()
           await section("staffing-waitlist").getByText("3 personnes en attente", { exact: false }).waitFor()
@@ -2993,7 +3011,11 @@ async function main() {
           if (after.totals.missing !== initial.totals.missing - 1 || after.totals.active !== initial.totals.active + 1 || after.emptyRoles.some(r => r.roleName === "Photos")) throw new Error("Report didn't reflect actual assignment")
           checks.finalTotals = after.totals
           checks.photoRoleNoLongerEntirelyEmpty = true
-          await section("staffing-overview").scrollIntoViewIfNeeded()
+          const updatedShift = section("staffing-underfilled").getByRole("listitem").filter({
+            has: page.getByRole("link", { name: /^Photos.*sam\..*10:00.*12:00/ }),
+          })
+          await updatedShift.getByText(/manque 2/).waitFor()
+          await updatedShift.evaluate(row => row.scrollIntoView({ block: "center" }))
         })
         await writeFile(path.join(dir, "staffing-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
       } finally { await db.$disconnect() }

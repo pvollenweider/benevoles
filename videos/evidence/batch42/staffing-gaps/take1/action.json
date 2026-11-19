@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:01:29.582Z",
+  "videoSha256": "bccc643823866e9fce4258808bcb810b87461a79f21343ebfe3b55fd96c614a7",
+  "promptSha256": "8cb795ab12e4512dc1dda5f1976964a92bdc0c99454f896140e859b2dc94870d",
+  "clipSha256": "b11e7285d9ec727e745ecffa0ecbafdfaf6990c83533ffa9311b1bbd61f55c2f",
+  "scene": "action",
+  "review": {
+    "heardOpening": "Pour terminer, Julien nous a confirmé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Nous ouvrons le créneau concerné, puis Ajouter manuellement.",
+        "visibleSeconds": 6.1,
+        "visible": "Affichage de la page Inscriptions avec le volet Inscription manuelle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Son email retrouve sa fiche",
+        "visibleSeconds": 10.9,
+        "visible": "Saisie de l'email julien.favre@example.org et recherche du membre validée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "nous choisissons le bon horaire et enregistrons.",
+        "visibleSeconds": 14.1,
+        "visible": "Sélection du créneau samedi 10h-12h et clic sur Ajouter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "La nouvelle inscription apparaît.",
+        "visibleSeconds": 15.8,
+        "visible": "Confirmation verte et ajout de Julien Favre dans la liste des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "En revenant au rapport, le besoin diminue d'une place et Photos n'est plus un poste entièrement vide.",
+        "visibleSeconds": 19.5,
+        "visible": "Retour au rapport 'Où manque-t-il du monde ?', mais la ligne Photos affiche toujours 0/3 · manque 3",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À 00:19, la voix affirme que le besoin diminue d'une place et que Photos n'est plus vide, or le tableau affiche toujours '0/3 · manque 3' pour le créneau Photos (la page n'a pas été actualisée)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

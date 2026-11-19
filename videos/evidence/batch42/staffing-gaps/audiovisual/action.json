@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:15:15.978Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "8cb795ab12e4512dc1dda5f1976964a92bdc0c99454f896140e859b2dc94870d",
+  "clipSha256": "56b196e83a1ae8372366a9bf9edde47d9b8adeed3298d4bb1d957b237d31533b",
+  "scene": "action",
+  "review": {
+    "heardOpening": "Pour terminer, Julien nous a confirmé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Nous ouvrons le créneau concerné",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur le créneau Photos du samedi 28 novembre et ouverture de la page Inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "puis Ajouter manuellement",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur le bouton bleu « + Ajouter manuellement » et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.4,
+        "spoken": "Son email retrouve sa fiche",
+        "visibleSeconds": 10.9,
+        "visible": "Saisie de l'adresse email de Julien Favre et sélection de sa fiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "nous choisissons le bon horaire et enregistrons",
+        "visibleSeconds": 13.8,
+        "visible": "Créneau 10h-12h sélectionné et validation de l'enregistrement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "La nouvelle inscription apparaît",
+        "visibleSeconds": 14.5,
+        "visible": "L'inscription de Julien Favre s'affiche dans le tableau des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.4,
+        "spoken": "En revenant au rapport",
+        "visibleSeconds": 17.1,
+        "visible": "Retour à la page du rapport des besoins (« Où manque-t-il du monde ? »)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "le besoin diminue d'une place et Photos n'est plus un poste entièrement vide",
+        "visibleSeconds": 20,
+        "visible": "Le créneau Photos du samedi affiche désormais 1/3 (manque 2 au lieu de 3)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, posée et claire, parfaitement synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

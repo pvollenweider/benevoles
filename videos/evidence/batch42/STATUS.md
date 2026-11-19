@@ -5,9 +5,10 @@
 - `ADMIN_FEATURES_OVERVIEW` — READY, publiée (révision 7). [Répétition](admin-features-tour/rehearsal.json), [validation](admin-features-tour/validation.json), [écran des modèles](admin-features-tour/templates.jpg) et [mesure distante](admin-features-tour/published-ffprobe.json). Affiche vérifiée par HEAD (200).
 - `PLATFORM_INTERNAL_ADMINISTRATION` — READY, publiée (révision 5). [Répétition](platform-internal-administration/rehearsal.json), [validation](platform-internal-administration/validation.json), [section Serveur](platform-internal-administration/server-health.jpg) et [mesure distante](platform-internal-administration/published-ffprobe.json). Affiche vérifiée par HEAD (200).
 
+- `STAFFING_GAPS` — READY, publiée (révision 4). [Répétition](staffing-gaps/rehearsal.json), [validation](staffing-gaps/validation.json), [lien copié](staffing-gaps/shift-share.jpg) et [mesure distante](staffing-gaps/published-ffprobe.json). Affiche vérifiée par HEAD (200).
+
 ## Reprises restantes
 
-1. `STAFFING_GAPS`
 2. `LAST_MINUTE_CHANGES`
 3. `SECTORS`
 4. `VOLUNTEER_REGISTER`
