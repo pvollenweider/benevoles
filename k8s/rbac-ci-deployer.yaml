@@ -5,6 +5,14 @@
 # the benevoles namespace, covering exactly what the workflow applies. Applied by hand (the
 # account cannot change its own rights). Its token goes into the KUBECONFIG_BASE64 secret of the
 # GitHub `production` environment; deleting the ci-deployer-token Secret revokes it.
+#
+# Limit of this Role: the rule on secrets names two of them, but the account may create Jobs, and
+# a Job mounts any secret of its namespace. So whoever holds this credential can read every
+# secret of the namespace benevoles (and write to every volume claimed there), whatever the rule
+# on secrets says. That is why the credential of the off-site backup storage does not live here
+# but in the namespace benevoles-offsite (k8s/backup-offsite-namespace.yaml,
+# k8s/cronjob-backup-offsite.yaml), where this account has no Role and no RoleBinding: keep it so,
+# and never bind this account in another namespace or at cluster level.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -51,6 +59,7 @@ rules:
     resources: [replicasets]
     verbs: [get, list, watch]
   # job-migrate.yaml (delete, apply, wait) and the running-jobs check before the NetworkPolicy.
+  # Creating a Job is what gives read access to every secret of this namespace (see above).
   - apiGroups: [batch]
     resources: [jobs]
     verbs: [get, list, watch, create, patch, delete]

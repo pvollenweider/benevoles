@@ -11,7 +11,8 @@
 # Covers:
 #   1. The off-site CronJob's inline script (k8s/cronjob-backup-offsite.yaml), extracted verbatim
 #      from between the "OFFSITE_SCRIPT_START"/"OFFSITE_SCRIPT_END" markers: remote selection, the
-#      unset-OFFSITE_BUCKET error case, and DRY_RUN=true.
+#      unset-OFFSITE_BUCKET error case, DRY_RUN=true, and an upload that rclone refuses (a file
+#      already sent that changed on the volume): non-zero, nothing purged.
 #   2. The backup CronJob's inline script (k8s/cronjob-backup.yaml), extracted from between the
 #      "BACKUP_SCRIPT_START"/"BACKUP_SCRIPT_END" markers, with only /backups and /tmp moved to a
 #      temporary directory: a GnuPG file is written and verified, the rotation deletes files
@@ -64,6 +65,8 @@ case "$1" in
   lsl) echo "        0 2026-09-01 01:30:00.000000000 benevoles_2026-09-01_01-00.sql.gz.enc" ;;
   lsf) printf '%s\n' ${FAKE_REMOTE_LIST:-benevoles_2026-09-01_01-00.sql.gz.enc} ;;
   copy)
+    # A refused upload: rclone copy --immutable exits 6 when a file already sent has changed.
+    [ -n "${FAKE_RCLONE_COPY_FAIL:-}" ] && exit 6
     # Download direction ("rclone copy <remote>/<file> <localdir> ..."): find whichever
     # argument is an existing local directory and drop a fixture file there, under the name
     # that was asked for. The upload direction ("rclone copy /backups <remote> ...") has no
@@ -208,6 +211,21 @@ grep -q 'rclone copy /backups swissbackup:my-bucket/benevol-backups' "$FAKE_RCLO
 grep -q 'rclone delete swissbackup:my-bucket/benevol-backups' "$FAKE_RCLONE_LOG" || fail "swissbackup delete target"
 grep -q -- '--min-age 90d' "$FAKE_RCLONE_LOG" || fail "90-day retention flag missing"
 pass "swissbackup remote selection"
+
+# 1b. the upload never writes over a file already sent; the purge and the inventory never get the flag
+grep 'rclone copy /backups ' "$FAKE_RCLONE_LOG" | grep -q -- '--checksum --immutable' || fail "the upload must pass --checksum --immutable"
+[ "$(grep -c -- '--immutable' "$FAKE_RCLONE_LOG")" = 1 ] || fail "--immutable belongs to the upload only"
+pass "upload with --immutable"
+
+# 1c. a refused upload (a file already sent has changed on the volume): non-zero, nothing purged
+: > "$FAKE_RCLONE_LOG"
+if ( FAKE_RCLONE_COPY_FAIL=1 OFFSITE_BUCKET=my-bucket CRON_SECRET=x APP_URL=http://example.invalid DRY_RUN=false \
+     sh "$WORK/cronjob-script.sh" ) 2>"$WORK/err.txt"; then
+  fail "a refused upload should have failed the job"
+fi
+grep -q "ERREUR" "$WORK/err.txt" || fail "refused-upload error message"
+grep -q 'rclone delete' "$FAKE_RCLONE_LOG" && fail "nothing may be purged after a refused upload"
+pass "a refused upload fails the job before the purge"
 
 # 2. without a bucket: must fail fast, before calling rclone
 : > "$FAKE_RCLONE_LOG"
