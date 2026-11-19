@@ -10,7 +10,8 @@ type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
 /**
  * Removes secret access tokens from what is sent to Sentry. Some URLs of the
  * app carry a token that gives access to a volunteer's registration:
- *   /my/<token>, /waitlist/<token>/confirm, /api/public/registrations/<token>,
+ *   /my/<token>, /mes-inscriptions/<token> (#1429), /waitlist/<token>/confirm,
+ *   /api/public/registrations/<token>, /api/public/mes-inscriptions/<token>,
  *   /api/public/member-invite/<token>, /disponibilites/<token> and /api/public/availability/<token>
  *   (#1146), a sector leader's /leader/<token> (page and
  *   API) and ?token=<token> (invitations, password reset, account activation).
@@ -19,7 +20,7 @@ type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
  * kept out of the proxy's access log (k8s/ingressroute-tokens.yaml).
  */
 
-const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|confirmations|confirmation|leader|disponibilites|availability)\/)[^/?#\s"']+/g
+const TOKEN_PATH = /(\/(?:my|mes-inscriptions|waitlist|member-invite|registrations|confirmations|confirmation|leader|disponibilites|availability)\/)[^/?#\s"']+/g
 // « Je ne peux pas » for one shift (#1303): /ne-peux-pas/<invitation|inscription>/<token>/<shiftId>,
 // the token is the second segment.
 const DECLINE_TOKEN_PATH = /(\/ne-peux-pas\/[^/?#\s"']+\/)[^/?#\s"']+/g

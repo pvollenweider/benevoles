@@ -17,6 +17,7 @@ import { parsePersonalLayers, storedPersonalLayers, stricterLimits } from "./wor
 import type { OrgScopedPrisma } from "./prisma-org"
 import { generateToken } from "./utils"
 import { registrationToken, linkToken } from "./token-vault"
+import { clearOrgLinkData } from "./org-link"
 import { addressHash } from "./notifications/smtp-outcome"
 import { env } from "./env"
 import {
@@ -280,6 +281,7 @@ export async function runMemberMerge(
       data: {
         firstName: "", lastName: "", email: null, phone: null, notes: null, birthDate: null,
         tags: [], availabilityPeriods: [], availabilityNote: null,
+        orgLinkTokenHash: null, orgLinkTokenEnc: null, orgLinkTokenLegacy: null, orgLinkIssuedAt: null,
         active: false,
         mergedIntoId: keepId,
         mergedAt: new Date(),
@@ -311,6 +313,11 @@ export async function runMemberMerge(
     for (const id of plan.tokenRegeneration.inviteIds) {
       await tx.memberInvite.update({ where: { id }, data: linkToken.data(generateToken()) })
     }
+    // Same rule for the organisation-wide link (#1429): the surviving record's old one may have
+    // been delivered to the absorbed record's wrong address. Cleared by id inside this
+    // transaction (never by a hash read before it, which a concurrent issue could miss); the next
+    // need issues a fresh one lazily, so a merge never mass-issues.
+    await tx.volunteer.updateMany({ where: { id: keepId, orgLinkTokenHash: { not: null } }, data: clearOrgLinkData() })
 
     // 6b. Cancel pending outbox rows addressed to the absorbed record's (pre-merge) address —
     // owner decision, #600. NotificationOutbox has no FK to Volunteer (only the sealed payload

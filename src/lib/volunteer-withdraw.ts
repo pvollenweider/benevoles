@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { LIVE_STATUSES, OCCUPYING_STATUSES, COMMITTED_STATUSES } from "./registration-capacity"
-import { dayLabel } from "./action-recap"
+import { dayLabelWithYear } from "./spoken-time"
 import { fmtHour } from "./registrations-list"
 
 /**
@@ -117,17 +117,19 @@ type ShiftWhen = { label: string; date: string; startTime: string; endTime: stri
 /** « Bar, samedi 4 juillet, de 10h à 12h » : read in words, no « · » or dash for a screen reader. */
 function shiftInWords(s: ShiftWhen): string {
   // The API sends the shift's calendar day as an ISO timestamp at midnight UTC.
-  const day = dayLabel(s.date.slice(0, 10))
+  const day = dayLabelWithYear(s.date.slice(0, 10))
   return `${s.label}, ${day.charAt(0).toLowerCase()}${day.slice(1)}, de ${fmtHour(s.startTime)} à ${fmtHour(s.endTime)}`
 }
 
 /** The page status after a withdrawal, by the status the registration had. */
-export function withdrawDoneMessage(status: string, s: ShiftWhen): string {
+export function withdrawDoneMessage(status: string, s: ShiftWhen, eventTitle?: string): string {
   const what = shiftInWords(s)
-  if (status === "waiting") return `Tu as quitté la liste d'attente : ${what}.`
-  if (status === "offered") return `Place refusée : ${what}. Elle passe à la personne suivante.`
-  if (status === "requested") return `Demande retirée : ${what}.`
-  return `Créneau annulé : ${what}.`
+  // The event names the context when one page lists several of them (the organisation page, #1429).
+  const forEvent = eventTitle ? `, pour ${eventTitle}` : ""
+  if (status === "waiting") return `Tu as quitté la liste d'attente : ${what}${forEvent}.`
+  if (status === "offered") return `Place refusée : ${what}${forEvent}. Elle passe à la personne suivante.`
+  if (status === "requested") return `Demande retirée : ${what}${forEvent}.`
+  return `Créneau annulé : ${what}${forEvent}.`
 }
 
 /**

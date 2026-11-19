@@ -19,6 +19,8 @@ export const PERSONAL_API_PREFIXES = [
   "/api/cron",
   // Volunteers' personal links and everything reached with them.
   "/api/public/registrations",
+  // The organisation-wide personal link (#1429): cancellation and renewal.
+  "/api/public/mes-inscriptions",
   "/api/public/leader",
   "/api/public/member-invite",
   "/api/public/availability",

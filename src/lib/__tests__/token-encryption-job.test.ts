@@ -6,6 +6,7 @@ const m = vi.hoisted(() => ({
   leaderFindMany: vi.fn(), leaderUpdateMany: vi.fn(),
   inviteFindMany: vi.fn(), inviteUpdateMany: vi.fn(),
   availabilityFindMany: vi.fn().mockResolvedValue([]), availabilityUpdateMany: vi.fn(),
+  orgLinkFindMany: vi.fn().mockResolvedValue([]), orgLinkUpdateMany: vi.fn(),
   adminFindMany: vi.fn().mockResolvedValue([]), adminUpdateMany: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
@@ -14,6 +15,7 @@ vi.mock("../prisma", () => ({
     sectorLeader: { findMany: m.leaderFindMany, updateMany: m.leaderUpdateMany },
     memberInvite: { findMany: m.inviteFindMany, updateMany: m.inviteUpdateMany },
     availabilityRequest: { findMany: m.availabilityFindMany, updateMany: m.availabilityUpdateMany },
+    volunteer: { findMany: m.orgLinkFindMany, updateMany: m.orgLinkUpdateMany },
     adminUser: { findMany: m.adminFindMany, updateMany: m.adminUpdateMany },
   },
 }))
@@ -37,6 +39,8 @@ beforeEach(() => {
   for (const fn of Object.values(m)) fn.mockReset()
   // The availability links (#1146): none in these cases.
   m.availabilityFindMany.mockResolvedValue([])
+  m.orgLinkFindMany.mockResolvedValue([])
+  m.orgLinkUpdateMany.mockResolvedValue({ count: 1 })
   m.adminFindMany.mockResolvedValue([])
   m.regFindMany.mockImplementation(rows([], []))
   m.leaderFindMany.mockImplementation(rows([], []))
@@ -103,6 +107,24 @@ describe("encryptLegacyTokens (#290, #313)", () => {
     expect(first.data.totpSecretEnc.startsWith("v2:k2:")).toBe(true)
     expect(second.where).toEqual({ id: "a1", totpPendingSecretEnc: pending })
     expect(decryptValue(second.data.totpPendingSecretEnc, keyring())).toBe('{"s":"X"}')
+  })
+
+  it("encrypts and re-encrypts the organisation-wide link on the Volunteer row (#1429)", async () => {
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY", b64(newKey))
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY_ID", "k2")
+    vi.stubEnv("TOKEN_ENCRYPTION_PREVIOUS_KEYS", `k1:${b64(oldKey)}`)
+    const old = encryptToken("org-old", oldKey, "k1")
+    m.orgLinkFindMany.mockImplementation(async ({ where }: { where: Record<string, unknown> }) =>
+      "orgLinkTokenLegacy" in where ? [{ id: "v1", orgLinkTokenLegacy: "org-legacy" }] : [{ id: "v2", orgLinkTokenEnc: old }])
+
+    const res = await encryptLegacyTokens()
+    expect(res).toMatchObject({ encrypted: { orgLinks: 1 }, reencrypted: { orgLinks: 1 } })
+    const [legacy, rotation] = m.orgLinkUpdateMany.mock.calls.map((c) => c[0])
+    expect(legacy.where).toEqual({ id: "v1", orgLinkTokenLegacy: "org-legacy" })
+    expect(legacy.data.orgLinkTokenLegacy).toBeNull()
+    expect(decryptValue(legacy.data.orgLinkTokenEnc, keyring())).toBe("org-legacy")
+    expect(rotation.where).toEqual({ id: "v2", orgLinkTokenEnc: old })
+    expect(decryptValue(rotation.data.orgLinkTokenEnc, keyring())).toBe("org-old")
   })
 
   it("keeps going batch after batch until drained", async () => {

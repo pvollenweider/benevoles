@@ -13,17 +13,21 @@ const m = vi.hoisted(() => ({
   enqueue: vi.fn().mockResolvedValue(["n1"]),
   deliver: vi.fn(),
   headers: vi.fn(),
+  ensureOrgLink: vi.fn().mockResolvedValue({ token: "org-token", issuedAt: null }),
+  sendOrgLinkNow: vi.fn().mockResolvedValue("sent"),
 }))
 vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst: m.findFirst, findMany: m.findMany, updateMany: m.updateMany } } }))
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: m.rateLimit, getClientIp: () => "1.2.3.4" }))
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: m.enqueue, deliverAfterResponse: m.deliver }))
 vi.mock("@/lib/token-vault", () => ({ registrationToken: { where: (t: string) => ({ editTokenHash: `h:${t}` }), reveal: () => "tok-clear" } }))
 vi.mock("next/headers", () => ({ headers: m.headers }))
+vi.mock("@/lib/org-link", () => ({ ensureOrgLink: m.ensureOrgLink }))
+vi.mock("@/lib/org-link-send", () => ({ sendOrgLinkNow: m.sendOrgLinkNow }))
 
 const reg = {
   id: "r1", eventId: "e1", volunteerId: "v1", editTokenHash: "h", editTokenEnc: null, editTokenLegacy: null,
   volunteer: { firstName: "A", lastName: "B", email: "a@x.ch" },
-  event: { id: "e1", title: "Fête", organizationId: "org-a", organization: { ...OPEN_ORG, slug: "org" } },
+  event: { id: "e1", title: "Fête", organizationId: "org-a", organization: { id: "org-a", name: "Asso", ...OPEN_ORG, slug: "org" } },
 }
 
 describe("POST /api/public/registrations/[token]/resend-link", () => {
@@ -63,25 +67,41 @@ describe("POST /api/public/registrations/[token]/resend-link", () => {
 })
 
 describe("POST /api/public/registrations/link", () => {
-  beforeEach(() => { vi.clearAllMocks(); m.rateLimit.mockResolvedValue({ ok: true }); m.headers.mockResolvedValue(new Headers({ "x-org-slug": "org" })) })
+  beforeEach(() => {
+    vi.clearAllMocks()
+    m.rateLimit.mockResolvedValue({ ok: true })
+    m.headers.mockResolvedValue(new Headers({ "x-org-slug": "org" }))
+    m.ensureOrgLink.mockResolvedValue({ token: "org-token", issuedAt: null })
+    m.sendOrgLinkNow.mockResolvedValue("sent")
+  })
 
   const post = (body: unknown) => new Request("http://localhost/api/public/registrations/link", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
 
-  it("answers the same whether the address is known or not, scoped to the organization, one email per event", async () => {
-    m.findMany.mockResolvedValue([reg, { ...reg, id: "r2" }, { ...reg, id: "r3", eventId: "e2", event: { ...reg.event, id: "e2", title: "Autre" } }])
+  it("answers the same whether the address is known or not, and sends ONE organisation email", async () => {
+    m.findFirst.mockResolvedValue(reg)
     const { POST } = await import("@/app/api/public/registrations/link/route")
     const res = await POST(post({ email: "A@x.ch" }))
     expect(res.status).toBe(200)
-    expect((await res.json()).message).toMatch(/^Demande enregistrée\. Si une inscription existe/)
-    const where = m.findMany.mock.calls[0][0].where
+    const body = await res.json()
+    expect(body.message).toMatch(/^Demande enregistrée\. Si une inscription existe/)
+    const where = m.findFirst.mock.calls[0][0].where
     // Never for a deactivated or suspended organisation (src/lib/org-lifecycle.ts).
     expect(where.volunteer).toEqual({ email: { equals: "a@x.ch", mode: "insensitive" }, organization: { slug: "org", active: true, suspendedAt: null } })
-    expect(m.enqueue).toHaveBeenCalledTimes(2)
+    expect(m.ensureOrgLink).toHaveBeenCalledWith(expect.anything(), "v1", "org-a")
+    expect(m.sendOrgLinkNow).toHaveBeenCalledTimes(1)
+    expect(m.sendOrgLinkNow).toHaveBeenCalledWith(expect.objectContaining({
+      kind: "org_personal_link",
+      volunteer: expect.objectContaining({ id: "v1", email: "a@x.ch" }),
+      organization: expect.objectContaining({ id: "org-a", name: "Asso", slug: "org" }),
+      link: { token: "org-token", issuedAt: null },
+    }))
+    expect(JSON.stringify(body)).not.toContain("org-token")
 
-    m.findMany.mockResolvedValue([])
+    m.findFirst.mockResolvedValue(null)
     const unknown = await POST(post({ email: "nobody@x.ch" }))
     expect(unknown.status).toBe(200)
     expect((await unknown.json()).message).toMatch(/^Demande enregistrée\. Si une inscription existe/)
+    expect(m.sendOrgLinkNow).toHaveBeenCalledTimes(1)
   })
 
   it("rejects a malformed address and sends nothing without the proxy header (a ?org= alone is ignored)", async () => {
@@ -90,6 +110,6 @@ describe("POST /api/public/registrations/link", () => {
     m.headers.mockResolvedValue(new Headers())
     const spoof = new Request("http://localhost/api/public/registrations/link?org=other", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: "a@x.ch" }) })
     expect((await POST(spoof)).status).toBe(200)
-    expect(m.findMany).not.toHaveBeenCalled()
+    expect(m.findFirst).not.toHaveBeenCalled()
   })
 })

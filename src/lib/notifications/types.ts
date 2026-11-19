@@ -32,6 +32,8 @@ export type NotificationKind =
   | "sector_leader_withdrawal"
   | "product_update"
   | "registration_link_resend"
+  | "org_personal_link"
+  | "org_personal_link_renewed"
   | "targeted_message"
   | "registration_requested"
   | "registration_refused"

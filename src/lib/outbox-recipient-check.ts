@@ -53,6 +53,18 @@ export async function outboxRecipientVerdict(payload: NotificationPayload): Prom
     if (!live) return AVAILABILITY_LINK_REVOKED_REASON
   }
 
+  // The organisation-wide personal link (#1429): the token itself must still be the member's
+  // current one. A renewal, an address correction, a merge or an erasure replaces it, so an email
+  // queued with the old token is cancelled instead of sending a link that no longer works.
+  if (payload.kind === "org_personal_link" || payload.kind === "org_personal_link_renewed") {
+    const token = typeof data.orgToken === "string" ? data.orgToken : null
+    const member = token
+      ? await prisma.volunteer.findUnique({ where: { orgLinkTokenHash: hashToken(token) }, select: { email: true } })
+      : null
+    if (!member) return PERSONAL_LINK_REVOKED_REASON
+    return memberAddressChanged(recipient, member) ? MEMBER_ADDRESS_CHANGED_REASON : null
+  }
+
   if (payload.volunteerId) {
     const member = await prisma.volunteer.findUnique({ where: { id: payload.volunteerId }, select: { email: true } })
     return memberAddressChanged(recipient, member) ? MEMBER_ADDRESS_CHANGED_REASON : null

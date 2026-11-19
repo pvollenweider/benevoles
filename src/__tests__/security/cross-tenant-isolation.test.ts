@@ -122,6 +122,12 @@ const prismaMock = {
 vi.mock("next/server", async (importOriginal) => ({ ...(await importOriginal<typeof import("next/server")>()), after: vi.fn() }))
 vi.mock("@/lib/push", () => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn() }))
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
+
+// The organisation-wide link lookup is mocked here: its own token/scoping tests live in
+// src/__tests__/security/org-personal-link-isolation.test.ts. These entries only keep the new
+// routes in the cross-tenant inventory.
+const orgLinkLookupMock = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/org-link", () => ({ lookupOrgLink: orgLinkLookupMock, ensureOrgLink: vi.fn() }))
 // The targeted-message route hashes addresses for the "adresses à vérifier" warning (#599), which
 // needs AUTH_SECRET: mocked here like every other test that imports a module reaching @/lib/env.
 vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32), ADMIN_NOTIFICATION_EMAIL: undefined } }))
@@ -3343,5 +3349,40 @@ describe("Front desk — cross-tenant isolation (#1142)", () => {
     expect((await GET(makeRequest("/api/admin/events/evt-a/day-of"), params("evt-a"))).status).toBe(403)
     expect(grantFindFirst.mock.calls[0][0].where).toMatchObject({ adminUserId: "adm-paulo", eventId: "evt-a", organizationId: "org-b", event: { organizationId: "org-b" } })
     expect(scoped.event.findFirst).not.toHaveBeenCalled()
+  })
+})
+
+// ── Organisation-wide personal link (#1429) ─────────────────────────────────
+
+describe("Organisation-wide personal link — cross-tenant isolation (#1429)", () => {
+  const targetA = {
+    id: "vol-a", organizationId: ORG_A, firstName: "Même", lastName: "Adresse", email: "same@example.ch",
+    organization: { id: ORG_A, name: "Org A", slug: "org-a", timeZone: "Europe/Zurich", active: true, suspendedAt: null },
+  }
+
+  it("DELETE /api/public/mes-inscriptions/[token] answers 404 for a registration id of another organisation", async () => {
+    orgLinkLookupMock.mockResolvedValue(targetA)
+    prismaMock.registration.findFirst.mockResolvedValueOnce(null) // the id is org-B's
+    const { DELETE } = await import("@/app/api/public/mes-inscriptions/[token]/route")
+    const res = await DELETE(
+      makeRequest("/api/public/mes-inscriptions/tok-a", "DELETE", { registrationId: "reg-b" }),
+      { params: Promise.resolve({ token: "tok-a" }) },
+    )
+    expect(res.status).toBe(404)
+    expect(prismaMock.registration.findFirst.mock.calls.at(-1)?.[0].where).toMatchObject({
+      id: "reg-b",
+      volunteerId: "vol-a",
+      event: { organizationId: ORG_A },
+    })
+  })
+
+  it("POST /api/public/registrations/[token]/org-link answers 404 for an event token of another organisation", async () => {
+    prismaMock.registration.findFirst.mockResolvedValueOnce(null) // the scoped lookup finds nothing
+    const { POST } = await import("@/app/api/public/registrations/[token]/org-link/route")
+    const res = await POST(
+      makeRequest("/api/public/registrations/tok-b/org-link", "POST"),
+      { params: Promise.resolve({ token: "tok-b" }) },
+    )
+    expect(res.status).toBe(404)
   })
 })

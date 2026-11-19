@@ -77,6 +77,10 @@ describe("withdrawDoneMessage", () => {
     expect(withdrawDoneMessage("offered", bar)).toBe("Place refusée : Bar, samedi 4 juillet, de 10h à 12h. Elle passe à la personne suivante.")
   })
 
+  it("names the event when one page lists several of them", () => {
+    expect(withdrawDoneMessage("active", bar, "Fête")).toBe("Créneau annulé : Bar, samedi 4 juillet, de 10h à 12h, pour Fête.")
+  })
+
   it("says the request was withdrawn", () => {
     expect(withdrawDoneMessage("requested", bar)).toBe("Demande retirée : Bar, samedi 4 juillet, de 10h à 12h.")
   })

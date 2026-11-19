@@ -51,6 +51,8 @@ describe("personal-link rate limits (#609)", () => {
 
   it("thresholds are the agreed ones", () => {
     expect(TOKEN_MISS_LIMIT).toBe(20)
-    expect(TOKEN_USE_LIMITS).toEqual({ read: 60, withdraw: 30, availability: 30, answers: 30, roster: 60, calendar: 60, swaps: 60, swap: 30, limits: 30, availabilityLink: 60, availabilityAnswer: 30 })
+    // Existing families keep their agreed thresholds; the organisation page's renewal has its own
+    // key (`renew`), added for #1429 rather than tightening or reusing an existing one.
+    expect(TOKEN_USE_LIMITS).toEqual({ read: 60, withdraw: 30, renew: 5, availability: 30, answers: 30, roster: 60, calendar: 60, swaps: 60, swap: 30, limits: 30, availabilityLink: 60, availabilityAnswer: 30 })
   })
 })

@@ -1,10 +1,23 @@
 import { describe, it, expect } from "vitest"
-import { dayLabel, spokenShift, spokenShiftName, spokenShortWhen, spokenTimeRange } from "../spoken-time"
+import { dayLabel, dayLabelWithYear, spokenShift, spokenShiftName, spokenShortWhen, spokenTimeRange } from "../spoken-time"
 
 // #582: names and times read in words, without « · » (« point ») nor an en dash (« tiret »).
 describe("dayLabel", () => {
   it("gives the day in full, capitalised, the same in any time zone", () => {
     expect(dayLabel("2026-07-04")).toBe("Samedi 4 juillet")
+  })
+})
+
+describe("dayLabelWithYear", () => {
+  const now = new Date("2026-11-19T12:00:00Z")
+
+  it("omits the year in the current year", () => {
+    expect(dayLabelWithYear("2026-07-04", now)).toBe("Samedi 4 juillet")
+  })
+
+  it("adds the year when it differs, for a past or a future date", () => {
+    expect(dayLabelWithYear("2031-05-02", now)).toBe("Vendredi 2 mai 2031")
+    expect(dayLabelWithYear("2025-12-31", now)).toBe("Mercredi 31 décembre 2025")
   })
 })
 

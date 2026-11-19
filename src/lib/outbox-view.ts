@@ -145,6 +145,8 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   sector_leader_withdrawal: "Responsable : désistement",
   product_update: "Nouveautés du produit",
   registration_link_resend: "Renvoi du lien personnel",
+  org_personal_link: "Lien personnel pour toutes les inscriptions de l'organisation",
+  org_personal_link_renewed: "Renouvellement du lien personnel de l'organisation",
   targeted_message: "Message aux bénévoles",
   registration_requested: "Demande d'inscription reçue",
   registration_refused: "Demande d'inscription refusée",

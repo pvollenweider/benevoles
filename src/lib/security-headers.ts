@@ -27,6 +27,23 @@ export const CALENDAR_FEED_HEADER_RULES = [
 ] as const
 
 /**
+ * The organisation-wide personal page (#1429) is a secret address, like /my/<token>: never cached
+ * by the browser or an intermediary, never indexed, and no Referer at all (not even the origin)
+ * when the volunteer follows a link away from it.
+ */
+export const ORG_PERSONAL_PAGE_HEADER_RULES = [
+  {
+    source: "/mes-inscriptions/:path*",
+    headers: [
+      { key: "Cache-Control", value: "private, no-store" },
+      { key: "Pragma", value: "no-cache" },
+      { key: "Referrer-Policy", value: "no-referrer" },
+      { key: "X-Robots-Tag", value: "noindex" },
+    ],
+  },
+] as const
+
+/**
  * X-Content-Type-Options: nosniff (#1052). The browser takes every response for the type it
  * declares instead of guessing from its bytes, so an uploaded or generated file can never be run as
  * a script or a style sheet. Every route of the app declares its type (pages, JSON, CSV, ICS, PNG,
@@ -155,6 +172,7 @@ export const APP_TOP_LEVEL_SEGMENTS: readonly string[] = [
   "super-admin",
   "tableur-ou-outil-dedie",
   "manifeste",
+  "mes-inscriptions",
   "citer",
   "continuite-du-service",
   "tarifs",

@@ -16,6 +16,17 @@ export function dayLabel(date: string): string {
   return `${day.charAt(0).toUpperCase()}${day.slice(1)}`
 }
 
+/**
+ * « Samedi 4 juillet » in the current year, « Samedi 4 juillet 2027 » when the year differs: a
+ * date without its year becomes wrong once the page spans a new year (a shift booked in January
+ * for the following summer, for instance). `now` is explicit so the rule is testable and stable.
+ */
+export function dayLabelWithYear(date: string, now: Date = new Date()): string {
+  const label = dayLabel(date)
+  const year = Number(date.slice(0, 4))
+  return year === now.getFullYear() ? label : `${label} ${year}`
+}
+
 type ShiftNameParts = { roleName: string; label?: string | null }
 type ShiftWhenParts = { date: string; startTime: string; endTime: string }
 

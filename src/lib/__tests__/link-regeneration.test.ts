@@ -85,7 +85,7 @@ function availabilityRow(overrides: Partial<{ id: string; enabled: boolean; dead
   }
 }
 
-function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: ReturnType<typeof leaderRow>[]; invites?: ReturnType<typeof inviteRow>[]; availability?: ReturnType<typeof availabilityRow>[] }) {
+function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: ReturnType<typeof leaderRow>[]; invites?: ReturnType<typeof inviteRow>[]; availability?: ReturnType<typeof availabilityRow>[]; volunteers?: { id: string; orgLinkTokenHash: string | null }[] }) {
   const calls = {
     registrationWhere: [] as unknown[],
     leaderWhere: [] as unknown[],
@@ -96,6 +96,8 @@ function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: R
     availabilityWhere: [] as unknown[],
     availabilityUpdates: [] as { id: string; data: Record<string, unknown> }[],
     registrationUpdateMany: [] as unknown[],
+    volunteerWhere: [] as unknown[],
+    volunteerUpdateMany: [] as { where: Record<string, unknown>; data: Record<string, unknown> }[],
   }
   const db: LinkRegenerationDb = {
     registration: {
@@ -114,6 +116,13 @@ function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: R
     availabilityRequest: {
       findMany: vi.fn(async ({ where }) => { calls.availabilityWhere.push(where); return rows.availability ?? [] }),
       update: vi.fn(async ({ where, data }) => { calls.availabilityUpdates.push({ id: where.id, data }); return {} }),
+    },
+    volunteer: {
+      findMany: vi.fn(async ({ where }) => { calls.volunteerWhere.push(where); return rows.volunteers ?? [] }),
+      updateMany: vi.fn(async (args) => {
+        calls.volunteerUpdateMany.push(args)
+        return { count: (rows.volunteers ?? []).filter((v) => v.orgLinkTokenHash).length }
+      }),
     },
     $transaction: (async (fn) => fn(db)) as LinkRegenerationDb["$transaction"],
   }
@@ -163,7 +172,53 @@ describe("regenerateLinks — scope selection", () => {
     expect(calls.registrationWhere).toEqual([{ id: { in: ["reg-9"] } }])
     expect(calls.leaderWhere).toEqual([])
     expect(calls.inviteWhere).toEqual([])
-    expect(result.counts).toEqual({ registrations: 1, leaders: 0, invites: 0, availabilityLinks: 0 })
+    expect(result.counts).toEqual({ registrations: 1, leaders: 0, invites: 0, availabilityLinks: 0, orgLinks: 0 })
+  })
+})
+
+describe("regenerateLinks — organisation-wide link (#1429)", () => {
+  it("clears the organisation link by volunteer id inside the transaction, so one issued after the read is cleared too", async () => {
+    const { db, calls } = fakeDb({
+      registrations: [regRow({ volunteerId: "vol-1" }), regRow({ id: "r2", volunteerId: "vol-2" })],
+      // Simulates a token issued between the registration read and the transaction: the update is
+      // by volunteer id, never a hash list computed before it, so this one is revoked as well.
+      volunteers: [{ id: "vol-1", orgLinkTokenHash: "issued-after-read" }, { id: "vol-2", orgLinkTokenHash: "also-issued" }],
+    })
+    const result = await regenerateLinks(db, { eventId: "evt-1" })
+    // No organisation-token read before the transaction: the clear cannot be based on a stale list.
+    expect(calls.volunteerWhere).toEqual([])
+    expect(calls.volunteerUpdateMany).toHaveLength(1)
+    expect(calls.volunteerUpdateMany[0].where).toEqual({ id: { in: ["vol-1", "vol-2"] }, orgLinkTokenHash: { not: null } })
+    expect(calls.volunteerUpdateMany[0].data).toEqual({
+      orgLinkTokenHash: null,
+      orgLinkTokenEnc: null,
+      orgLinkTokenLegacy: null,
+      orgLinkIssuedAt: null,
+    })
+    expect(result.counts.orgLinks).toBe(2)
+  })
+
+  it("clears every organisation link of the organisation on an organisation-wide regeneration, with or without registrations", async () => {
+    const { db, calls } = fakeDb({
+      // No registration read at all: a member with an organisation link but no registration in the
+      // list (or one registered after the read) must still lose it.
+      registrations: [],
+      volunteers: [{ id: "vol-9", orgLinkTokenHash: "member-without-registration" }],
+    })
+    await regenerateLinks(db, { organizationId: orgA })
+    expect(calls.volunteerUpdateMany).toHaveLength(1)
+    expect(calls.volunteerUpdateMany[0].where).toEqual({ organizationId: orgA, orgLinkTokenHash: { not: null } })
+  })
+
+  it("does not clear anything when a volunteer's link was never issued", async () => {
+    const { db, calls } = fakeDb({
+      registrations: [regRow({ volunteerId: "vol-1" })],
+      volunteers: [{ id: "vol-1", orgLinkTokenHash: null }],
+    })
+    const result = await regenerateLinks(db, { eventId: "evt-1" })
+    expect(calls.volunteerUpdateMany).toHaveLength(1)
+    expect(calls.volunteerUpdateMany[0].where).toEqual({ id: { in: ["vol-1"] }, orgLinkTokenHash: { not: null } })
+    expect(result.counts.orgLinks).toBe(0)
   })
 })
 
@@ -265,7 +320,7 @@ describe("countLinksInScope — dry run", () => {
   it("reports counts without changing anything", async () => {
     const { db, calls } = fakeDb({ registrations: [regRow(), regRow({ id: "r2" })], leaders: [leaderRow()], invites: [inviteRow()] })
     const counts = await countLinksInScope(db, { eventId: "evt-1" })
-    expect(counts).toEqual({ registrations: 2, leaders: 1, invites: 1, availabilityLinks: 0 })
+    expect(counts).toEqual({ registrations: 2, leaders: 1, invites: 1, availabilityLinks: 0, orgLinks: 0 })
     expect(calls.registrationUpdates).toHaveLength(0)
     expect(calls.leaderUpdates).toHaveLength(0)
     expect(calls.inviteUpdates).toHaveLength(0)

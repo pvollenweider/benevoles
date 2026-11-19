@@ -18,7 +18,11 @@ vi.mock("../notifications/outbox", () => ({
   enqueueNotifications,
   deliverAfterResponse,
 }))
-vi.mock("../token-vault", () => ({ registrationToken: { reveal: () => "tok-1", data: (t: string) => ({ editTokenHash: `h:${t}` }) } }))
+vi.mock("../token-vault", () => ({
+  registrationToken: { reveal: () => "tok-1", data: (t: string) => ({ editTokenHash: `h:${t}` }) },
+  sealToken: (t: string) => ({ hash: `h:${t}`, enc: null, legacy: t }),
+  revealToken: (r: { enc: string | null; legacy: string | null }) => r.legacy ?? "",
+}))
 vi.mock("../utils", () => { let n = 0; return { generateToken: () => `new-${++n}` } })
 
 import { MEMBER_TOMBSTONE_WRITE } from "../member-erasure"
@@ -32,7 +36,7 @@ const reg = {
   event: { id: "e1", title: "Fête", organizationId: "org-1", organization: { slug: "org", timeZone: "Europe/Zurich" } },
 }
 
-function makeDb(over: { lockedVolunteer?: { erasedAt: Date | null; mergedIntoId: string | null }; reg?: unknown; from?: string; status?: string; occupied?: number; shiftStatus?: string; updateError?: unknown; availability?: ReturnType<typeof availabilityTx> } = {}) {
+function makeDb(over: { lockedVolunteer?: { erasedAt: Date | null; mergedIntoId: string | null }; orgLinkTokenHash?: string; reg?: unknown; from?: string; status?: string; occupied?: number; shiftStatus?: string; updateError?: unknown; availability?: ReturnType<typeof availabilityTx> } = {}) {
   const availability = over.availability ?? availabilityTx({ inUse: false })
   const tx = {
     event: availability.event,
@@ -55,7 +59,10 @@ function makeDb(over: { lockedVolunteer?: { erasedAt: Date | null; mergedIntoId:
       updateMany: vi.fn().mockResolvedValue({ count: 1 }),
     },
     shiftDecline: availability.shiftDecline,
-    volunteer: { findFirst: vi.fn().mockResolvedValue(over.lockedVolunteer ?? { erasedAt: null, mergedIntoId: null }) },
+    volunteer: {
+      findFirst: vi.fn().mockResolvedValue(over.lockedVolunteer ?? { erasedAt: null, mergedIntoId: null }),
+      updateMany: vi.fn().mockResolvedValue({ count: over.orgLinkTokenHash ? 1 : 0 }),
+    },
   }
   const db = {
     registration: { findFirst: vi.fn().mockResolvedValue(over.reg === undefined ? reg : over.reg) },
@@ -204,7 +211,7 @@ describe("restoreRegistration (#809)", () => {
   })
 
   it("with a new link: replaces every live link of the person on the event, emails the new one, logs it", async () => {
-    const { db, tx } = makeDb()
+    const { db, tx } = makeDb({ orgLinkTokenHash: "org-old" })
     await restoreRegistration(db, actor, "r1", before, { newLink: true })
     expect(tx.registration.findMany).toHaveBeenCalledWith({ where: { volunteerId: "v1", eventId: "e1", status: { in: ["active", "waiting", "offered", "requested"] } }, select: { id: true } })
     expect(tx.registration.update).toHaveBeenCalledTimes(2)
@@ -215,6 +222,13 @@ describe("restoreRegistration (#809)", () => {
     expect(tokens).toContain(`h:${data.editToken}`)
     expect(data.editToken).not.toBe("tok-1")
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ changes: expect.objectContaining({ personalLink: { from: "(ancien)", to: "(renouvelé)" } }) }))
+    // The organisation-wide link opens this event too (#1429): it is revoked with the others.
+    expect(tx.volunteer.updateMany).toHaveBeenCalledWith({ where: { id: "v1", orgLinkTokenHash: { not: null } }, data: {
+      orgLinkTokenHash: null,
+      orgLinkTokenEnc: null,
+      orgLinkTokenLegacy: null,
+      orgLinkIssuedAt: null,
+    } })
   })
 })
 

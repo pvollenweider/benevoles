@@ -7,6 +7,7 @@
  */
 
 import { orgBaseUrl } from "@/lib/urls"
+import { orgPersonalPagePath } from "@/lib/org-link-paths"
 import { onSiteContact, readBeforePages, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
 import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
@@ -18,6 +19,12 @@ export const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:30
 export function myPageUrl(orgSlug: string | undefined, editToken: string): string {
   const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
   return `${base}/my/${editToken}`
+}
+
+/** The organisation-wide personal page (#1429): one link for every registration of the member. */
+export function orgPersonalPageUrl(orgSlug: string | undefined, token: string): string {
+  const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
+  return `${base}${orgPersonalPagePath(token)}`
 }
 
 /**
