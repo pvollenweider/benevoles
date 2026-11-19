@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, expect, it } from "vitest"
-import { buildBubbleChartConfig, bubbleTooltipLines, bubbleTooltipTitle } from "../operator-bubble-chart-config"
+import { buildBubbleChartConfig, bubbleDateTicks, bubbleTooltipLines, bubbleTooltipTitle } from "../operator-bubble-chart-config"
 import { bubbleChartData, type BubbleEventFacts } from "../operator-activity"
 
 // The Chart.js configuration is pure: each dataset, shape, radius, axis and the tooltip are checked
@@ -45,23 +45,36 @@ describe("bubble chart configuration", () => {
     expect(datasets.map((set) => set.data?.map((point) => point.id))).toEqual([["now"], ["soon7"], ["soon30"]])
   })
 
-  it("plots the real values and the radius from the postes", () => {
+  it("plots the real values and the radius from the créneaux", () => {
     const config = buildBubbleChartConfig(data)
     const now = config.data.datasets[0].data![0]
-    expect(now).toMatchObject({ x: 2, y: 5, r: 13, shifts: 2, registrations: 5, roles: 1 })
+    expect(now).toMatchObject({ x: 0, y: 5, shifts: 2, registrations: 5, roles: 1 })
+    expect(now.r).toBeCloseTo(26 * Math.sqrt(2 / 4)) // area follows the 2 créneaux out of 4
     const soon30 = config.data.datasets[2].data![0]
-    expect(soon30.r).toBe(26)
+    expect(soon30).toMatchObject({ x: 10, y: 10, r: 26 })
   })
 
-  it("labels both axes with their unit and keeps integer ticks, naming a cap when there is one", () => {
+  it("labels the date axis and the registrations axis, naming a cap only on y", () => {
     const config = buildBubbleChartConfig(data)
-    const x = config.options!.scales!.x as { type: string; title: { text: string }; ticks: { precision: number } }
+    const x = config.options!.scales!.x as {
+      type: string
+      min: number
+      max: number
+      title: { text: string }
+      ticks: { precision: number; autoSkip: boolean; callback: (value: number) => string }
+    }
     const y = config.options!.scales!.y as { type: string; title: { text: string }; ticks: { precision: number } }
     expect(x.type).toBe("linear")
     expect(y.type).toBe("linear")
-    expect(x.title.text).toBe("Nombre de créneaux")
+    expect(x.title.text).toBe("Date de début")
     expect(y.title.text).toBe("Nombre d'inscriptions")
     expect(x.ticks.precision).toBe(0)
+    expect(x.min).toBe(-2)
+    expect(x.max).toBe(32)
+    expect(x.ticks.callback(0)).toBe("Aujourd'hui")
+    // At most about six ticks, never auto-skipped: « Aujourd'hui » stays even at narrow width.
+    expect(x.ticks.autoSkip).toBe(false)
+    expect(x.ticks.callback(3)).toBe("13 juil.")
 
     const capped = bubbleChartData(
       [
@@ -73,8 +86,15 @@ describe("bubble chart configuration", () => {
       at("2026-07-10T09:00:00Z"),
     )
     const cappedConfig = buildBubbleChartConfig(capped)
-    expect((cappedConfig.options!.scales!.x as { title: { text: string } }).title.text).toBe("Nombre de créneaux (plafonné à 5)")
+    expect((cappedConfig.options!.scales!.x as { title: { text: string } }).title.text).toBe("Date de début")
     expect((cappedConfig.options!.scales!.y as { title: { text: string } }).title.text).toBe("Nombre d'inscriptions (plafonné à 10)")
+  })
+
+  it("spaces the date ticks by a few days and keeps 0 for « Aujourd'hui »", () => {
+    expect(bubbleDateTicks(-2, 32)).toEqual([0, 7, 14, 21, 28])
+    expect(bubbleDateTicks(-10, 32)).toEqual([-7, 0, 7, 14, 21, 28])
+    expect(bubbleDateTicks(-200, 32)).toContain(0)
+    expect(bubbleDateTicks(-200, 32).length).toBeLessThanOrEqual(6)
   })
 
   it("draws a thicker border on a point clamped by a capped axis", () => {
@@ -104,7 +124,7 @@ describe("bubble chart configuration", () => {
     expect(noop(legend.onLeave)).toBeUndefined()
   })
 
-  it("pads a capped axis beyond the cap so a clamped bubble is not cut", () => {
+  it("pads a capped registrations axis beyond the cap so a clamped bubble is not cut", () => {
     const capped = bubbleChartData(
       [
         event({ id: "a", shifts: 2, registrations: 5 }),
@@ -114,15 +134,16 @@ describe("bubble chart configuration", () => {
       ],
       at("2026-07-10T09:00:00Z"),
     )
-    expect(capped.axis).toEqual({ xMax: 5, yMax: 10, capped: true })
+    expect(capped.axis).toEqual({ xMin: -2, xMax: 32, yMax: 10, capped: true })
     const config = buildBubbleChartConfig(capped)
-    const x = config.options!.scales!.x as { suggestedMax?: number }
+    const x = config.options!.scales!.x as { min: number; max: number; suggestedMax?: number }
     const y = config.options!.scales!.y as { suggestedMax?: number }
-    expect(x.suggestedMax).toBe(6)
+    // The date axis stays fixed and is never capped.
+    expect(x.min).toBe(-2)
+    expect(x.max).toBe(32)
+    expect(x.suggestedMax).toBeUndefined()
     expect(y.suggestedMax).toBe(11)
-    expect(config.data.datasets.flatMap((set) => set.data!).find((point) => point.id === "huge")).toMatchObject({ x: 5, y: 10, shifts: 1000, registrations: 2000 })
-    // A chart without outliers leaves the scale automatic.
-    expect((buildBubbleChartConfig(data).options!.scales!.x as { suggestedMax?: number }).suggestedMax).toBeUndefined()
+    expect(config.data.datasets.flatMap((set) => set.data!).find((point) => point.id === "huge")).toMatchObject({ x: 0, y: 10, shifts: 1000, registrations: 2000 })
   })
 
   it("never animates the entrance, whatever the motion preference", () => {

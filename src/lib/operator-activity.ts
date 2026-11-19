@@ -271,6 +271,13 @@ export type BubbleEventFacts = EventWindowFacts & {
   roles: number
 }
 
+/** Number of civil days from `today` to `day` (both "YYYY-MM-DD"), positive in the future. */
+export function civilDayOffset(day: string, today: string): number {
+  const [year, month, date] = day.split("-").map(Number)
+  const [todayYear, todayMonth, todayDate] = today.split("-").map(Number)
+  return Math.round((Date.UTC(year, month - 1, date) - Date.UTC(todayYear, todayMonth - 1, todayDate)) / DAY_MS)
+}
+
 export type BubblePoint = {
   id: string
   title: string
@@ -283,17 +290,20 @@ export type BubblePoint = {
   shifts: number
   registrations: number
   roles: number
-  /** Chart coordinates: the real value, capped on a capped axis. */
+  /** Days from today (Zurich civil day) to the event's start day; negative when it already started. */
   x: number
+  /** Registrations, capped only when one event dwarfs the others. */
   y: number
   radius: number
-  clampedX: boolean
+  /** Whether the point sits on the capped registrations axis. */
   clampedY: boolean
 }
 
 export type BubbleAxis = {
-  /** Axis maximum set by the chart when the data has an outlier, null for the automatic scale. */
-  xMax: number | null
+  /** Date axis bounds, in days from today; always includes today (0) and the 30-day horizon. */
+  xMin: number
+  xMax: number
+  /** Registrations axis maximum set when the data has an outlier, null for the automatic scale. */
   yMax: number | null
   capped: boolean
 }
@@ -301,20 +311,27 @@ export type BubbleAxis = {
 export type BubbleChartData = {
   points: BubblePoint[]
   axis: BubbleAxis
+  /** The Zurich civil day the chart is built from ("YYYY-MM-DD"). */
+  today: string
   /** One visible sentence: « 12 événements, le plus gros : … ». */
   summary: string
   empty: boolean
 }
 
-/** Largest bubble radius, in CSS pixels; the area grows with the number of postes. */
+/** Last charted start day, in days from today. */
+export const BUBBLE_DATE_HORIZON_DAYS = 30
+/** Empty days kept on each side of the date axis so an edge bubble is not cut in half. */
+export const BUBBLE_DATE_MARGIN_DAYS = 2
+
+/** Largest bubble radius, in CSS pixels; the area grows with the number of créneaux. */
 export const BUBBLE_MAX_RADIUS = 26
-/** Smallest radius, so an event with one poste stays visible (its area is then slightly over-proportional). */
+/** Smallest radius, so an event with one créneau stays visible (its area is then slightly over-proportional). */
 export const BUBBLE_MIN_RADIUS = 6
 
-/** Radius from the number of postes: the area is proportional to the postes (radius ∝ √postes). */
-export function bubbleRadius(roles: number, maxRoles: number): number {
-  if (roles <= 0 || maxRoles <= 0) return BUBBLE_MIN_RADIUS
-  return Math.max(BUBBLE_MIN_RADIUS, (BUBBLE_MAX_RADIUS * Math.sqrt(roles)) / Math.sqrt(maxRoles))
+/** Radius from the number of créneaux: the area is proportional to them (radius ∝ √créneaux). */
+export function bubbleRadius(shifts: number, maxShifts: number): number {
+  if (shifts <= 0 || maxShifts <= 0) return BUBBLE_MIN_RADIUS
+  return Math.max(BUBBLE_MIN_RADIUS, (BUBBLE_MAX_RADIUS * Math.sqrt(shifts)) / Math.sqrt(maxShifts))
 }
 
 /**
@@ -340,59 +357,57 @@ function bubbleCategory(event: EventWindowFacts, now: Date, timeZone: string): B
   return null
 }
 
-const CATEGORY_ORDER: Record<BubbleCategory, number> = { now: 0, within7: 1, within30: 2 }
-
 function bubbleSummary(points: readonly BubblePoint[], axis: BubbleAxis): string {
   if (points.length === 0) return "Aucun événement en cours ou dans les 30 jours."
-  // « Le plus gros » is the largest bubble (postes), then the busiest in registrations.
-  const biggest = [...points].sort((a, b) => b.roles - a.roles || b.registrations - a.registrations || b.shifts - a.shifts || a.title.localeCompare(b.title, "fr"))[0]
+  // « Le plus gros » is the largest bubble (créneaux), then the busiest in registrations.
+  const biggest = [...points].sort((a, b) => b.shifts - a.shifts || b.registrations - a.registrations || a.title.localeCompare(b.title, "fr"))[0]
   const count = `${points.length} événement${points.length > 1 ? "s" : ""}`
   const weight = `${biggest.shifts} créneau${biggest.shifts > 1 ? "x" : ""}, ${registrations(biggest.registrations)}, ${biggest.roles} poste${biggest.roles > 1 ? "s" : ""}`
-  const caps = [
-    axis.xMax === null ? null : capSentence(points, axis.xMax, "x"),
-    axis.yMax === null ? null : capSentence(points, axis.yMax, "y"),
-  ].filter((sentence): sentence is string => sentence !== null)
-  const cap = caps.length > 0 ? ` ; ${caps.join(" ; ")} ; le tableau donne les valeurs réelles` : ""
-  return `${count} ; le plus gros : « ${biggest.title} » (${weight})${cap}.`
+  const cap = axis.yMax === null ? null : capSentence(points, axis.yMax)
+  const capText = cap === null ? "" : ` ; ${cap} ; le tableau donne les valeurs réelles`
+  return `${count} ; le plus gros : « ${biggest.title} » (${weight})${capText}.`
 }
 
-/** The event furthest past a capped axis, with its real value: « l'axe des inscriptions est plafonné à 25 ; « X » le dépasse (400) ». */
-function capSentence(points: readonly BubblePoint[], cap: number, axis: "x" | "y"): string | null {
-  const over = points.filter((point) => (axis === "x" ? point.clampedX : point.clampedY))
+/** The event furthest past the capped registrations axis, with its real value: « l'axe des inscriptions est plafonné à 25 ; « X » le dépasse (400) ». */
+function capSentence(points: readonly BubblePoint[], cap: number): string | null {
+  const over = points.filter((point) => point.clampedY)
   if (over.length === 0) return null
-  const value = (point: BubblePoint) => (axis === "x" ? point.shifts : point.registrations)
-  const worst = over.reduce((best, point) => (value(point) > value(best) ? point : best))
-  const name = axis === "x" ? "créneaux" : "inscriptions"
-  return `l'axe des ${name} est plafonné à ${cap} ; « ${worst.title} » le dépasse (${value(worst)})`
+  const worst = over.reduce((best, point) => (point.registrations > best.registrations ? point : best))
+  return `l'axe des inscriptions est plafonné à ${cap} ; « ${worst.title} » le dépasse (${worst.registrations})`
 }
 
 /**
  * One bubble per published event happening now or starting within 30 days (drafts, archived and
- * past events excluded; unlisted events included, they are published). x = créneaux,
- * y = inscriptions, area = postes; the category is now / within 7 days / within 30 days.
+ * past events excluded; unlisted events included, they are published). x = the event's start day in
+ * days from today (a multi-day event keeps its real start, even before today), y = inscriptions,
+ * area = créneaux; the category is now / within 7 days / within 30 days. The date axis is never
+ * capped; only the registrations axis is, when one event dwarfs the others.
  */
 export function bubbleChartData(events: readonly BubbleEventFacts[], now: Date, timeZone: string = APP_TIME_ZONE): BubbleChartData {
+  const today = civilDate(now, timeZone)
   const chosen: { event: BubbleEventFacts; category: BubbleCategory }[] = []
   for (const event of events) {
     const category = bubbleCategory(event, now, timeZone)
     if (category) chosen.push({ event, category })
   }
+  // The table reads this order: by start date, then the busiest, so rows are stable.
   chosen.sort(
     (a, b) =>
-      CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category] ||
       isoDay(a.event.startDate).localeCompare(isoDay(b.event.startDate)) ||
       b.event.registrations - a.event.registrations ||
-      a.event.title.localeCompare(b.event.title, "fr"),
+      a.event.title.localeCompare(b.event.title, "fr") ||
+      a.event.id.localeCompare(b.event.id),
   )
 
-  const maxRoles = chosen.reduce((max, { event }) => Math.max(max, event.roles), 0)
-  const xMax = chartAxisCap(chosen.map(({ event }) => event.shifts))
+  const maxShifts = chosen.reduce((max, { event }) => Math.max(max, Math.max(0, event.shifts)), 0)
   const yMax = chartAxisCap(chosen.map(({ event }) => event.registrations))
+  const offsets = chosen.map(({ event }) => civilDayOffset(isoDay(event.startDate), today))
+  const xMin = Math.min(0, ...offsets) - BUBBLE_DATE_MARGIN_DAYS
+  const xMax = BUBBLE_DATE_HORIZON_DAYS + BUBBLE_DATE_MARGIN_DAYS
 
-  const points: BubblePoint[] = chosen.map(({ event, category }) => {
+  const points: BubblePoint[] = chosen.map(({ event, category }, index) => {
     const shifts = Math.max(0, event.shifts)
     const regs = Math.max(0, event.registrations)
-    const x = xMax === null ? shifts : Math.min(shifts, xMax)
     const y = yMax === null ? regs : Math.min(regs, yMax)
     return {
       id: event.id,
@@ -404,16 +419,15 @@ export function bubbleChartData(events: readonly BubbleEventFacts[], now: Date, 
       shifts,
       registrations: regs,
       roles: Math.max(0, event.roles),
-      x,
+      x: offsets[index],
       y,
-      radius: bubbleRadius(event.roles, maxRoles),
-      clampedX: xMax !== null && shifts > xMax,
+      radius: bubbleRadius(shifts, maxShifts),
       clampedY: yMax !== null && regs > yMax,
     }
   })
 
-  const axis: BubbleAxis = { xMax, yMax, capped: xMax !== null || yMax !== null }
-  return { points, axis, summary: bubbleSummary(points, axis), empty: points.length === 0 }
+  const axis: BubbleAxis = { xMin, xMax, yMax, capped: yMax !== null }
+  return { points, axis, today, summary: bubbleSummary(points, axis), empty: points.length === 0 }
 }
 
 // ── Formatting ──────────────────────────────────────────────────────────────────────────────
@@ -421,6 +435,14 @@ export function bubbleChartData(events: readonly BubbleEventFacts[], now: Date, 
 const fullDate = new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
 const dayOfMonth = new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", day: "numeric" })
 const monthAndYear = new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", month: "long", year: "numeric" })
+const shortDate = new Intl.DateTimeFormat("fr-FR", { timeZone: "UTC", day: "numeric", month: "short" })
+
+/** Date-axis tick: « Aujourd'hui » for day 0, otherwise a short French date (« 20 nov. »). */
+export function bubbleDateTickLabel(offsetDays: number, today: string): string {
+  const offset = Math.round(offsetDays)
+  if (offset === 0) return "Aujourd'hui"
+  return shortDate.format(new Date(`${addDays(today, offset)}T00:00:00Z`))
+}
 
 /** « 10 juillet 2026 », « 10–12 juillet 2026 » or « 30 juin – 2 juillet 2026 » (stored days, read in UTC). */
 export function eventDatesLabel(startDate: Date | string, endDate: Date | string): string {
