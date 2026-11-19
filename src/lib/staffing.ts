@@ -88,6 +88,11 @@ export function spokenStaffingState(s: { capacity: number; minVolunteers?: numbe
   return staffingStateText(s, state)
 }
 
+/** « 2 inscrits sur 3 places »: the spoken form of « 2/3 » on the printed sheets and the export. */
+export function placesInWords(registered: number, capacity: number): string {
+  return `${registered} inscrit${registered > 1 ? "s" : ""} sur ${capacity} place${capacity > 1 ? "s" : ""}`
+}
+
 /** The most places a shift can have, and so the most its minimum can ask for: far above any real shift, far below what a database integer holds. */
 export const SHIFT_PLACES_MAX = 10000
 

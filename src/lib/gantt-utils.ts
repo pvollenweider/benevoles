@@ -121,6 +121,23 @@ export function clamp(n: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, n))
 }
 
+/**
+ * Column widths of the Gantt, in percent of the table width (#923). The table is laid out with
+ * `table-layout: fixed; width: 100%`, so the time axis is scaled to the page instead of every
+ * 15-minute slot claiming a minimum width: a long day (08:00 to 02:00 is 72 slots) used to push
+ * the table past the right edge of the page and of the screen preview, cutting the evening off.
+ * The role and label columns keep a fixed share; the slots split the rest equally.
+ *
+ * Lives here, below both the full export and the printable sheets, so the dense-day rule
+ * (`day-sheet-bands.ts`) can read it without importing the export module back.
+ */
+export function ganttColumnWidths(slotCount: number, hasLabel: boolean): { role: number; label: number | null; slot: number } {
+  const role = hasLabel ? 9 : 11
+  const label = hasLabel ? 10 : null
+  const slot = slotCount > 0 ? Math.floor(((100 - role - (label ?? 0)) / slotCount) * 10000) / 10000 : 0
+  return { role, label, slot }
+}
+
 // A new shift for an *existing* role must join that role's own displayOrder (shared per role —
 // see reorder-roles/route.ts), not a hardcoded 0 default: a role's position on the timeline is
 // derived from the minimum displayOrder across its own shifts, so a stray 0 on a freshly added
