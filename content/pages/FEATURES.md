@@ -54,11 +54,11 @@ En savoir plus : [s'inscrire](../guide/s-inscrire.md), [la liste d'attente](../g
 
 ## Garder chacun informé
 
-<!-- image: TARGETED_MESSAGES | Les modèles de messages : un briefing réutilisable, avec le prénom du bénévole et le nom de l'événement remplis à l'envoi. -->
+<!-- image: TARGETED_MESSAGES | Les modèles de messages : une bibliothèque de textes prêts à l'emploi, avec l'aperçu de l'email et le prénom du bénévole rempli à l'envoi. -->
 
 - **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux et ses réponses à vos questions (et les corriger, vous êtes prévenu par email), en prendre d'autres tant que les inscriptions sont ouvertes, les annuler ou les ajouter à son calendrier, par un fichier à importer ou par un abonnement que son agenda met à jour tout seul quand un horaire change ou qu'un créneau est annulé. L'annulation reste possible jusqu'au début du créneau, ou jusqu'au délai que vous fixez (par exemple 2 jours avant) ; ensuite, le bénévole voit qui prévenir. Un bénévole qui a perdu son lien le redemande par email depuis la page d'inscription.
 - **Des rappels automatiques** deux jours avant, la veille et le jour même, ou les délais que vous fixez pour un événement (jusqu'à trois, en heures ou en jours). Quand un bénévole a plusieurs créneaux le même jour pour le même événement, un seul rappel les regroupe. Le bénévole peut aussi les recevoir en notification sur son téléphone ; sur iPhone, sa page personnelle lui explique comment l'ajouter à l'écran d'accueil, ce qu'iOS demande pour les notifications.
-- **Des messages ciblés** à tous les inscrits, à un poste, à un créneau ou à la liste d'attente, avec un aperçu, des modèles réutilisables et l'historique des envois.
+- **Des messages ciblés** à tous les inscrits, à un poste, à un créneau ou à la liste d'attente, avec un aperçu, des modèles réutilisables et l'historique des envois. Une bibliothèque de 50 textes prêts à l'emploi, classés par thème, montre l'email tel que le bénévole le recevra ; les mentions à compléter sont signalées et bloquent l'envoi tant qu'elles restent.
 - **Le suivi de chaque envoi groupé** : invitations, relances, rappels et messages sont listés avec leur nombre de destinataires et ce que sont devenus leurs emails (envoyés, en attente, en échec), y compris quand le plafond d'envoi en a fait attendre une partie, sans jamais garder les adresses.
 - **Un rappel à la date de votre choix** : programmez un message pour un jour et une heure précis, en plus des rappels automatiques ; les destinataires sont comptés au moment de l'envoi, et vous pouvez l'annuler jusque-là.
 - **Les inscrits sont prévenus** par email si un créneau change d'horaire ou est annulé.

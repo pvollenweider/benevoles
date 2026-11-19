@@ -1311,7 +1311,7 @@ describe("Shifts — cross-tenant isolation", () => {
     const db = { ...mockScopedDb(), messageTemplate: { findFirst: vi.fn().mockResolvedValue(null), update, delete: del } }
     requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
     const p = { params: Promise.resolve({ id: "tpl-b" }) }
-    expect((await mod.PATCH(makeRequest("/api/admin/settings/message-templates/tpl-b", "PATCH", { name: "X", subject: "x", body: "y" }), p)).status).toBe(404)
+    expect((await mod.PATCH(makeRequest("/api/admin/settings/message-templates/tpl-b", "PATCH", { name: "X", category: "Après", subject: "x", body: "y" }), p)).status).toBe(404)
     expect((await mod.DELETE(makeRequest("/api/admin/settings/message-templates/tpl-b", "DELETE"), p)).status).toBe(404)
     expect(update).not.toHaveBeenCalled()
     expect(del).not.toHaveBeenCalled()
@@ -3122,9 +3122,9 @@ describe("Members, templates, team, password, invitation — cross-tenant isolat
     Object.assign(db, extra)
     expect((await GET()).status).toBe(200)
     expect(extra.messageTemplate.findMany).toHaveBeenCalledOnce()
-    const res = await POST(makeRequest("/api/admin/settings/message-templates", "POST", { name: "Rappel", subject: "Rappel", body: "Bonjour" }))
+    const res = await POST(makeRequest("/api/admin/settings/message-templates", "POST", { name: "Rappel", category: "Après", subject: "Rappel", body: "Bonjour" }))
     expect(res.status).toBeLessThan(300)
-    expect(extra.messageTemplate.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A }) }))
+    expect(extra.messageTemplate.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A, category: "Après" }) }))
   })
 
   it("PATCH /api/admin/settings/admins/[id] returns 404 for an org-B admin and changes nothing", async () => {

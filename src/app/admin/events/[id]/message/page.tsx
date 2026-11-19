@@ -77,7 +77,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     upcomingShifts: hasUpcomingShift(event.shifts.map((s) => ({ date: s.date.toISOString().slice(0, 10), startTime: s.startTime })), now, timeZone),
     customRules: reminderRulesState.rules,
   })
-  const templates = await ctx.db.messageTemplate.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, subject: true, body: true } })
+  const templates = await ctx.db.messageTemplate.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, category: true, subject: true, body: true } })
 
   const roles = Array.from(new Set(event.shifts.map((s) => s.roleName)))
   const shifts = event.shifts.map((s) => ({

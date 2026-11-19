@@ -6,7 +6,7 @@ import { getOrgClient } from "./prisma-org"
 import { enqueueBatch } from "./notifications/outbox"
 import { buildTargetedMessage } from "./targeted-message-build"
 import { audienceSchema, messagePushPayload } from "./targeted-message"
-import { renderVariables, templateProblems } from "./message-template"
+import { renderVariables, sendProblems } from "./message-template"
 import { formatScheduledFor, SCHEDULE_STALE_CLAIM_MS, skipReason } from "./scheduled-message"
 import { logEvent, SYSTEM_ACTOR } from "./event-log"
 import { orgTimeZone } from "./time-zone"
@@ -102,8 +102,8 @@ async function dispatchOne(id: string, now: Date, deferPush?: DispatchOptions["d
   const db = getOrgClient(sm.organizationId)
   const shiftAvailable = audience.kind !== "shift" ||
     !!(await db.shift.findFirst({ where: { id: audience.shiftId, eventId: event.id, status: { not: "cancelled" } }, select: { id: true } }))
-  const problems = templateProblems(`${sm.subject}\n${sm.message}`, audience.kind)
-  if (problems.length > 0) return skip(`variables du texte refusées (${problems.join(" ")})`)
+  const problems = sendProblems(`${sm.subject}\n${sm.message}`, audience.kind)
+  if (problems.length > 0) return skip(`texte à corriger (${problems.join(" ")})`)
 
   const build = await buildTargetedMessage(db, event, audience, sm.subject, sm.message)
   const reason = skipReason({ eventStatus: event.publicStatus, audience, shiftAvailable, recipients: build.recipients.length, sectorGone: build.sectorGone })

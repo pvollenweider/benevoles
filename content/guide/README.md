@@ -110,7 +110,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 
 ### Communiquer avec les bénévoles
 
-- [Écrire aux bénévoles](ecrire-aux-benevoles.md) : Envoyer un email aux inscrits d'un événement, d'un poste ou d'un créneau, avec des modèles, et retrouver les messages envoyés. Pour : organisateurs.
+- [Écrire aux bénévoles](ecrire-aux-benevoles.md) : Envoyer un email aux inscrits d'un événement, d'un poste ou d'un créneau, avec des modèles ou la bibliothèque, et retrouver les envois. Pour : organisateurs.
 - [Paramètres et suivi des emails](parametres-et-suivi-des-emails.md) : Régler les rappels, les alertes et l'adresse de réponse de l'organisation, et suivre l'état de chaque email envoyé. Pour : organisateurs.
 
 ### Paramètres de l'organisation

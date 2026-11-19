@@ -8,7 +8,7 @@ import { rateLimit } from "@/lib/rate-limit"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
 import { buildTargetedMessage, sectorAudienceAvailable, SECTOR_AUDIENCE_NOT_FOUND } from "@/lib/targeted-message-build"
-import { templateProblems } from "@/lib/message-template"
+import { sendProblems } from "@/lib/message-template"
 import { formatScheduledFor, scheduledInstant, scheduleProblem, scheduleSchema } from "@/lib/scheduled-message"
 import { orgTimeZone } from "@/lib/time-zone"
 
@@ -48,7 +48,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (audience.kind === "sector" && !(await sectorAudienceAvailable(db, id, audience.sectorId))) {
     return NextResponse.json({ error: SECTOR_AUDIENCE_NOT_FOUND }, { status: 400 })
   }
-  const problems = templateProblems(`${subject}\n${message}`, audience.kind)
+  const problems = sendProblems(`${subject}\n${message}`, audience.kind)
   if (problems.length > 0) return NextResponse.json({ error: problems.join(" ") }, { status: 400 })
 
   // Shared with the immediate sends: a stuck button can't flood the queue for later either.

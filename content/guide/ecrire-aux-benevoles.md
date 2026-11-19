@@ -2,7 +2,7 @@
 roles: [admin]
 group: communiquer
 order: 10
-summary: Envoyer un email aux inscrits d'un événement, d'un poste ou d'un créneau, avec des modèles, et retrouver les messages envoyés.
+summary: Envoyer un email aux inscrits d'un événement, d'un poste ou d'un créneau, avec des modèles ou la bibliothèque, et retrouver les envois.
 related: [parametres-et-suivi-des-emails, inviter-des-membres, suivre-les-inscriptions]
 legacy: [admin#communications-benevoles, admin#ecrire-aux-benevoles, admin#rappel-manuel]
 aliases: []
@@ -53,7 +53,13 @@ Quand le plafond d'envoi a fait attendre une partie des emails, une phrase le di
 
 ## Modèles de messages
 
-**Paramètres**, puis **Modèles de messages**, ou le lien **gérer les modèles de messages** sous « Écrire aux bénévoles », dans l'onglet **Messages** : enregistrez les messages que vous envoyez souvent (infos pratiques, convocation, remerciements), jusqu'à 20 par organisation, avec un nom, un objet et un texte. Dans « Écrire aux bénévoles », **Partir d'un modèle** remplit l'objet et le message, que vous modifiez librement avant l'envoi. Variables, remplacées pour chaque destinataire : `{prénom}`, `{événement}`, `{poste}` (public « un poste » ou « un créneau ») et `{créneau}` (public « un créneau ») ; pour écrire une accolade, doublez-la (`{{`). Une variable inconnue ou hors de son public est signalée et bloque l'envoi, elle n'est jamais envoyée telle quelle. Les modèles appartiennent à l'organisation (tous ses événements) et figurent dans le journal d'activité.
+**Paramètres**, puis **Modèles de messages**, ou le lien **gérer les modèles de messages** sous « Écrire aux bénévoles », dans l'onglet **Messages** : enregistrez les messages que vous envoyez souvent (infos pratiques, convocation, remerciements), jusqu'à 100 par organisation, avec un nom, une catégorie, un objet et un texte.
+
+**Ajouter des modèles** ouvre la bibliothèque : 50 textes prêts à l'emploi, groupés par thème (recruter, accueil, infos pratiques, tenue, cadre, planning, météo, jour J, ressources, après, activités régulières). Chaque entrée permet de voir l'email tel que le bénévole le recevra, avec un prénom, un événement, un poste et un créneau d'exemple. **Ajouter à mes modèles** le copie dans vos modèles ; rien n'est ajouté avant ce clic. Une entrée déjà copiée affiche **Déjà dans mes modèles** (reconnue à son nom). La catégorie se change dans le modèle, qui s'édite comme les autres.
+
+Les textes de la bibliothèque contiennent des mentions **[à compléter : …]** (lieu, horaire, contact, parking…) : remplacez-les par vos informations. Tant qu'une mention `[à compléter]` reste dans l'objet ou le message, l'envoi est refusé et le champ concerné est signalé, comme pour une variable inconnue. Aucun détail propre à votre événement n'est inventé dans la bibliothèque ; les textes parlent aux bénévoles avec « tu », sans jargon.
+
+Dans « Écrire aux bénévoles », **Partir d'un modèle** est groupé par catégorie ; quand la liste est longue, **Rechercher un modèle** filtre par nom, objet ou catégorie. Le choix remplit l'objet et le message, que vous modifiez librement avant l'envoi. Variables, remplacées pour chaque destinataire : `{prénom}`, `{événement}`, `{poste}` (public « un poste » ou « un créneau ») et `{créneau}` (public « un créneau ») ; pour écrire une accolade, doublez-la (`{{`). Une variable inconnue ou hors de son public est signalée et bloque l'envoi, elle n'est jamais envoyée telle quelle. Le lien personnel et les créneaux du bénévole sont ajoutés automatiquement à l'email : ne les recopiez pas dans le message. Les modèles appartiennent à l'organisation (tous ses événements) et figurent dans le journal d'activité.
 
 ## Messages envoyés
 

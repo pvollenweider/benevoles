@@ -1505,6 +1505,9 @@ model MessageTemplate {
   id             String   @id @default(cuid())
   organizationId String
   name           String
+  // Library category (#1414): one of TEMPLATE_CATEGORIES (src/lib/message-template-category.ts),
+  // « Autres » for a template written by hand. Additive column, defaulted for existing rows.
+  category       String   @default("Autres")
   subject        String
   body           String
   createdAt      DateTime @default(now())

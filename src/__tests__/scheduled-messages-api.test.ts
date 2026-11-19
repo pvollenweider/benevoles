@@ -67,7 +67,7 @@ describe("POST /api/admin/events/[id]/scheduled-messages", () => {
     expect(logEvent).not.toHaveBeenCalled()
   })
 
-  it("refuses an archived event, a cancelled or foreign shift, unknown variables and too many messages", async () => {
+  it("refuses an archived event, a cancelled or foreign shift, unknown variables, [à compléter] and too many messages", async () => {
     db.event.findFirst.mockResolvedValueOnce({ id: "evt-a", title: "Fête", slug: "fete", organizationId: "org-a", publicStatus: "archived", organization: { name: "Org", slug: "org", timeZone: null } })
     expect((await call(base)).status).toBe(400)
     db.shift.findFirst.mockResolvedValueOnce(null)
@@ -75,6 +75,9 @@ describe("POST /api/admin/events/[id]/scheduled-messages", () => {
     expect(shift.status).toBe(400)
     expect(db.shift.findFirst.mock.calls.at(-1)?.[0].where).toEqual({ id: "gone", eventId: "evt-a", status: { not: "cancelled" } })
     expect((await call({ ...base, message: "Bonjour {inconnu}" })).status).toBe(400)
+    const placeholder = await call({ ...base, message: "Bonjour [à compléter : entrée]" })
+    expect(placeholder.status).toBe(400)
+    expect((await placeholder.json()).error).toMatch(/à compléter/)
     expect((await call({ ...base, date: "" })).status).toBe(400)
     rateLimit.mockResolvedValueOnce({ ok: false, remaining: 0, retryAfter: 60 })
     expect((await call(base)).status).toBe(429)

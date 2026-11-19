@@ -127,6 +127,22 @@ describe("POST /api/admin/events/[id]/message", () => {
     expect(enqueueNotifications).not.toHaveBeenCalled()
   })
 
+  it("refuses a message that still contains [à compléter], before anything is sent (#1414)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    for (const body of [
+      { ...base, message: "Rendez-vous à [à compléter : entrée]", audience: { kind: "event" } },
+      { ...base, subject: "Info [à compléter : lieu]", audience: { kind: "event" } },
+    ]) {
+      const res = await POST(post(body), params)
+      expect(res.status).toBe(400)
+      expect((await res.json()).error).toMatch(/à compléter/)
+    }
+    // Even a dry run (the preview) refuses it, like an unknown variable.
+    expect((await POST(post({ ...base, message: "À [à compléter]", audience: { kind: "event" }, dryRun: true }), params)).status).toBe(400)
+    expect(enqueueNotifications).not.toHaveBeenCalled()
+    expect(historyCreate).not.toHaveBeenCalled()
+  })
+
   it("adds a push to the recipients' devices when asked, after the response, apart from the emails (#468)", async () => {
     push.pushDeviceCount.mockResolvedValue(2)
     afterCallbacks.length = 0

@@ -2678,7 +2678,7 @@ async function main() {
           await page.goto(url); await settle(page)
           await writeField(page.getByLabel(/^Objet(?: \*)?$/), "Merci pour ton aide")
           await writeField(page.getByLabel(/^Message(?: \*)?$/), "On se retrouve au stand d'accueil.")
-          await page.getByLabel("Partir d'un modèle", { exact: true }).selectOption({ label: modelName })
+          await page.getByLabel(/^(Partir d'un modèle|Modèle)$/).selectOption({ label: modelName })
           if (await page.getByLabel(/^Objet(?: \*)?$/).inputValue() !== "Merci pour ton aide") throw new Error("Selection replaced text prematurely")
           await at("L'objet et le texte changent"); await tap(page, page.getByRole("button", { name: "Utiliser ce modèle", exact: true }))
           await at("Si ce n'est pas ce")
@@ -5591,7 +5591,7 @@ async function main() {
       await scene("message", async (at) => {
         await page.getByText(/personnes? recevr(?:a|ont) ce message/).waitFor()
         await at(0.10) /* mid-sentence */
-        await page.getByLabel("Partir d'un modèle").selectOption({ label: "Point de rendez-vous" })
+        await page.getByLabel(/^(Partir d'un modèle|Modèle)$/).selectOption({ label: "Point de rendez-vous" })
         await tap(page, page.getByRole("button", { name: "Utiliser ce modèle" }))
         await at("Avant d’envoyer quoi que ce")
         await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer" }))

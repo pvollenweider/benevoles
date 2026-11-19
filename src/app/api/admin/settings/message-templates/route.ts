@@ -13,7 +13,7 @@ export async function GET() {
   if (guard instanceof NextResponse) return guard
   const templates = await guard.db.messageTemplate.findMany({
     orderBy: { name: "asc" },
-    select: { id: true, name: true, subject: true, body: true, updatedAt: true },
+    select: { id: true, name: true, category: true, subject: true, body: true, updatedAt: true },
   })
   return NextResponse.json(templates)
 }
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
   }
   const template = await db.messageTemplate.create({
     data: { organizationId, ...parsed.data },
-    select: { id: true, name: true, subject: true, body: true, updatedAt: true },
+    select: { id: true, name: true, category: true, subject: true, body: true, updatedAt: true },
   })
   await logOrgEvent({ organizationId, actor: adminActor(guard.session), action: "template.created", entityType: "MessageTemplate", entityId: template.id })
   return NextResponse.json(template, { status: 201 })
