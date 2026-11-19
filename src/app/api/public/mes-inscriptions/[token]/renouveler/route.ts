@@ -12,6 +12,9 @@ import { enqueueOrgLink } from "@/lib/org-link-send"
 import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse } from "@/lib/notifications/outbox"
 import { ORG_LINK_RENEWED_RESPONSE } from "@/lib/personal-link"
+import { registrationToken } from "@/lib/token-vault"
+import { generateToken } from "@/lib/utils"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 const RATE_LIMITED = "Trop de tentatives. Réessaie dans une heure."
 
@@ -53,6 +56,15 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
     })
     // Someone else already renewed (or corrected the address): this link is invalid now.
     if (!rotated) return null
+
+    // « Voir l'événement » hands out the event links of these registrations: whoever held the old
+    // organisation link may have opened them. Renewing is the answer to a leak, so those event
+    // links are rotated in the same transaction; the new organisation link reaches every event.
+    const live = await tx.registration.findMany({
+      where: { volunteerId: target.id, status: { in: [...LIVE_STATUSES] }, event: { organizationId: target.organizationId } },
+      select: { id: true },
+    })
+    for (const r of live) await tx.registration.update({ where: { id: r.id }, data: registrationToken.data(generateToken()) })
 
     // Read the address after the rotation, inside the same transaction: a correction committed
     // before this point sent us here with a stale `target`, and it must never receive the email.

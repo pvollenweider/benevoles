@@ -15,6 +15,8 @@ const m = vi.hoisted(() => ({
   tokenLookupsBlocked: vi.fn(),
   recordTokenMiss: vi.fn(),
   tokenUseAllowed: vi.fn(),
+  regFindMany: vi.fn(),
+  regUpdate: vi.fn(),
   // The single row the transaction reads after the rotation.
   current: { firstName: "Léa", lastName: "M", email: "lea@example.ch" as string | null },
 }))
@@ -57,7 +59,10 @@ describe("POST /api/public/mes-inscriptions/[token]/renouveler", () => {
       volunteer: {
         findFirst: vi.fn(async () => m.current),
       },
+      registration: { findMany: m.regFindMany, update: m.regUpdate },
     }))
+    m.regFindMany.mockResolvedValue([{ id: "r1" }, { id: "r2" }])
+    m.regUpdate.mockResolvedValue({})
     m.rotate.mockResolvedValue({ token: "new-token", issuedAt: new Date("2031-01-01") })
     m.enqueue.mockResolvedValue(["o1"])
   })
@@ -153,5 +158,24 @@ describe("POST /api/public/mes-inscriptions/[token]/renouveler", () => {
     expect(res.status).toBe(429)
     expect((await res.json()).error).toBe("Trop de tentatives. Réessaie dans une heure.")
     expect(m.lookupOrgLink).not.toHaveBeenCalled()
+  })
+
+  it("also rotates the event links of the volunteer's live registrations in this organisation (they were reachable from the old link)", async () => {
+    const { POST } = await import("@/app/api/public/mes-inscriptions/[token]/renouveler/route")
+    const res = await POST(post(), { params: Promise.resolve({ token: "tok" }) })
+    expect(res.status).toBe(200)
+    expect(m.regFindMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: expect.objectContaining({ volunteerId: "v1", event: { organizationId: "org-a" } }),
+    }))
+    expect(m.regUpdate.mock.calls.map((c) => c[0].where.id)).toEqual(["r1", "r2"])
+    for (const c of m.regUpdate.mock.calls) expect(c[0].data.editTokenHash).toEqual(expect.any(String))
+  })
+
+  it("rotates no event link when the conditional rotation fails", async () => {
+    m.rotate.mockResolvedValue(null)
+    const { POST } = await import("@/app/api/public/mes-inscriptions/[token]/renouveler/route")
+    const res = await POST(post(), { params: Promise.resolve({ token: "tok" }) })
+    expect(res.status).toBe(404)
+    expect(m.regUpdate).not.toHaveBeenCalled()
   })
 })
