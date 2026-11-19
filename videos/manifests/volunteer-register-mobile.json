@@ -15,7 +15,7 @@
     ],
     "remember": [
       "Tes coordonnées servent à l'association qui organise l'événement.",
-      "Un email de confirmation contient ton lien personnel pour retrouver, modifier ou annuler ton inscription."
+      "L’email de confirmation contient ton lien personnel pour toutes tes inscriptions auprès de l’association. Garde ce lien pour toi."
     ]
   },
   "language": "fr-CH",
@@ -66,9 +66,9 @@
     },
     {
       "id": "success",
-      "transcript": "Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "transcript": "Et voilà, ta demande est envoyée ! Regarde tes emails. Ouvre le courriel de confirmation pour vérifier ton créneau. Le bouton Mes inscriptions ouvre ton lien personnel pour tous tes créneaux auprès de cette association. La phrase sous le bouton te rappelle de garder ce lien pour toi.",
       "style": "Use a broad, clearly audible smile and genuine celebratory warmth, as if welcoming a new teammate. Keep that smile in the practical sentences that follow, while becoming calmly reassuring and clear about the confirmation email and personal link. Energetic but never exaggerated.",
-      "fallbackDurationMs": 10500
+      "fallbackDurationMs": 22000
     }
   ],
   "continuousPauseTags": false

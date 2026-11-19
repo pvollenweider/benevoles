@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:57:15.906Z",
+  "videoSha256": "f66c2ed5e42daec5b072336412c4a20074d2c63891a4336cbeaa31dbd20600e2",
+  "promptSha256": "59ed9b6f90dd83522f91612c19a185c349cab01bad0306fafba8e1a1770ea248",
+  "clipSha256": "7aa838c489f15f63765205fff65e57c144b53053838322df2e06c1d48f5cbbfd",
+  "scene": "discover",
+  "review": {
+    "heardOpening": "Sur la page de l'événement, tu retrouves les horaires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "tu retrouves les horaires",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la liste des créneaux horaires (07h–09h, 08h–12h, etc.)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.6,
+        "spoken": "les postes",
+        "visibleSeconds": 0,
+        "visible": "Affichage des intitulés de postes (Montage, Navette, Accueil, Buvette)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "et le nombre de places encore disponibles",
+        "visibleSeconds": 0,
+        "visible": "Disponibilités affichées sous chaque créneau (ex. 2 places libres sur 6, Complet, 1 place libre sur 3)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

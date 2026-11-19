@@ -1,0 +1,128 @@
+{
+  "slug": "volunteer-register-mobile",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-19T18:56:25.060Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "a44d351dbef12c640f4d91fcc5c254c65cb2993c",
+    "sourceTree": "30f3eae7280b7055cab1d30c23db61ea7af51754",
+    "productSourceSha256": "9f381716bae823d6454340f7a56abf2dd90cc2f2b866063974304aab14026bdb",
+    "buildId": "zDAgQs_3wdt1qTFEEVf15",
+    "snapshot": "/private/tmp/benevoles-video-production.eCDMKok2",
+    "builtAt": "2026-11-19T17:59:20.785Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_REGISTER",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobile": true
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 14842
+    },
+    {
+      "kind": "click",
+      "atMs": 16588
+    },
+    {
+      "kind": "click",
+      "atMs": 20705
+    },
+    {
+      "kind": "click",
+      "atMs": 21688
+    },
+    {
+      "kind": "click",
+      "atMs": 22671
+    },
+    {
+      "kind": "click",
+      "atMs": 23688
+    },
+    {
+      "kind": "click",
+      "atMs": 27271
+    },
+    {
+      "kind": "click",
+      "atMs": 29021
+    },
+    {
+      "kind": "click",
+      "atMs": 30438
+    },
+    {
+      "kind": "click",
+      "atMs": 36872
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 8157
+    },
+    {
+      "id": "discover",
+      "startMs": 8609,
+      "endMs": 13903
+    },
+    {
+      "id": "choose",
+      "startMs": 14355,
+      "endMs": 19705
+    },
+    {
+      "id": "details",
+      "startMs": 20195,
+      "endMs": 26288
+    },
+    {
+      "id": "preferences",
+      "startMs": 26741,
+      "endMs": 32399
+    },
+    {
+      "id": "confirm",
+      "startMs": 32851,
+      "endMs": 37786
+    },
+    {
+      "id": "success",
+      "startMs": 38238,
+      "endMs": 52479
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "confirm",
+      "phrase": "Un dernier coup d’œil au",
+      "startMs": 250,
+      "endMs": 3071,
+      "cueMs": 33102
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "confirme ton inscription.",
+      "startMs": 3548,
+      "endMs": 4599,
+      "cueMs": 36400
+    },
+    {
+      "segmentId": "success",
+      "phrase": "Ouvre le courriel de confirmation",
+      "startMs": 3488,
+      "endMs": 6050,
+      "cueMs": 41726
+    }
+  ]
+}

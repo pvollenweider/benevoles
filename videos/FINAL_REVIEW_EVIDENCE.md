@@ -1421,7 +1421,6 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 
 - **ASSIGNMENT_PUBLICATION** (`assignment-publication`) : l'email de publication des missions montre « Gérer mes inscriptions ».
 - **VOLUNTEER_CONFIRMATION_ERRORS** (`volunteer-confirmation-errors`) : email de confirmation et email « Demande d'inscription non enregistrée », tous deux avec leur lien personnel.
-- **VOLUNTEER_REGISTER** (`volunteer-register-mobile`) : email de confirmation et son lien personnel.
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
 - **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
 - **LAST_MINUTE_CHANGES** (`last-minute-changes`) : email d'offre, email de changement d'horaire et emails d'annulation.
@@ -1431,7 +1430,7 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 - **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
 - **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
 
-**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `ASSIGNMENT_PUBLICATION`, `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`, `VOLUNTEER_REGISTER`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (dix-sept vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
+**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `ASSIGNMENT_PUBLICATION`, `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (seize vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
 
 ## Lot 43 — Retrouver toutes mes inscriptions, 19 novembre 2026
 
@@ -1442,3 +1441,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **PRIVACY_PERSONAL_LINKS — NOT READY après deux prises.** La première prise montre les libellés actuels et passe la validation, mais l’invitation et le courriel de renouvellement restent trop brefs. La narration de la seconde a été revue, puis la capture s’est arrêtée lorsque le courriel de récupération de Léa n’est pas arrivé. La révision publiée reste en place. [Suivi des deux prises](evidence/batch43/STATUS.md).
 
 **VOLUNTEER_CONFIRMATION_ERRORS — NOT READY après deux prises.** Les deux courriels ont été refilmés et leur temps de lecture est suffisant. Les consentements ont été recalés sur la deuxième prise. La confirmation suivant la coupure simulée part encore avant sa consigne. La révision publiée reste en place. [Suivi des prises](evidence/batch43/STATUS.md).
+
+**VOLUNTEER_REGISTER — READY, publiée, révision 6, 57,28 s.** Le tutoriel garde la liste au chargement du téléphone et montre le vrai courriel, son bouton « Mes inscriptions » et sa phrase de confidentialité. Le parcours s’arrête à ce message. [Revue et preuves](evidence/batch43/volunteer-register-mobile/review.md).

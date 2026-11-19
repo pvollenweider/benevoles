@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { createHash } from "node:crypto"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
@@ -604,6 +605,14 @@ async function main() {
     })
 
     const registrationEmail = "alex.martin@example.org"
+    const confirmationQuery = `to:${registrationEmail} subject:"Inscription confirmée"`
+    const confirmationMessages = async () => {
+      const response = await page.request.get(`${mailpitBase}/api/v1/search`, { params: { query: confirmationQuery } })
+      if (!response.ok()) throw new Error("Mobile confirmation mailbox unavailable")
+      const body = await response.json() as { messages?: { ID: string; To: { Address: string }[] }[] }
+      return (body.messages ?? []).filter(mail => mail.To.some(recipient => recipient.Address === registrationEmail))
+    }
+    const previousConfirmations = new Set((await confirmationMessages()).map(mail => mail.ID))
     await scene("details", async () => {
       await fillVisibly(page, page.getByRole("textbox", { name: "Prénom", exact: true }), "Alex", 180)
       await fillVisibly(page, page.getByRole("textbox", { name: "Nom", exact: true }), "Martin", 180)
@@ -635,11 +644,38 @@ async function main() {
       await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
     })
 
-    await scene("success", async () => {
-      // A public sign-up without proof of the address: the neutral page sends to the emails (AUTHZ-01).
+    await scene("success", async at => {
       const emailNotice = page.getByText(/^Merci pour ton engagement\. Vérifie tes emails/)
       await emailNotice.scrollIntoViewIfNeeded()
-      await page.waitForTimeout(900)
+      await at("Ouvre le courriel de confirmation")
+      const incoming = (await confirmationMessages()).filter(mail => !previousConfirmations.has(mail.ID))
+      if (incoming.length !== 1) throw new Error("Expected one new mobile confirmation email")
+      const message = await page.request.get(`${mailpitBase}/api/v1/message/${encodeURIComponent(incoming[0].ID)}`)
+      if (!message.ok()) throw new Error("The received mobile confirmation could not be read")
+      const body = await message.json() as { HTML?: string }
+      if (!body.HTML) throw new Error("The received mobile confirmation has no HTML body")
+      // Render the exact MIME body at phone width, without Mailpit's desktop chrome.
+      await page.goto("about:blank")
+      await page.setContent(body.HTML, { waitUntil: "domcontentloaded" })
+      const { ORG_EMAIL_SCOPE_SENTENCE } = await import("../../src/lib/org-personal-page")
+      const button = page.getByRole("link", { name: "Mes inscriptions", exact: true })
+      const target = new URL(await button.getAttribute("href") ?? "")
+      if (target.hostname !== "default.benevol.app" || !target.pathname.startsWith("/mes-inscriptions/")) {
+        throw new Error("The email does not open the organisation's registrations")
+      }
+      const scope = ORG_EMAIL_SCOPE_SENTENCE("Fêtes de Montvert")
+      const scopeText = page.getByText(scope, { exact: true })
+      await scopeText.waitFor()
+      await button.scrollIntoViewIfNeeded()
+      for (const element of [button, scopeText]) {
+        const frame = await element.boundingBox()
+        if (!frame || frame.y < 0 || frame.y + frame.height > manifest.viewport.height) throw new Error("Mobile confirmation text is outside the viewport")
+      }
+      await page.screenshot()
+      await writeFile(path.join(dir, "mobile-confirmation-mail.json"), JSON.stringify({
+        messageId: incoming[0].ID, recipient: registrationEmail, button: "Mes inscriptions", scope,
+        htmlSha256: createHash("sha256").update(body.HTML).digest("hex"),
+      }, null, 2) + "\n")
     })
     } else if (slug === "admin-navigation") {
       await scene("welcome", async () => {
