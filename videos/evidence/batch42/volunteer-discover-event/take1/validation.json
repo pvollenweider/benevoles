@@ -1,0 +1,77 @@
+{
+  "id": "VOLUNTEER_DISCOVER_EVENT",
+  "slug": "volunteer-discover-event",
+  "validatedAt": "2026-11-19T13:16:12.269Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 167920,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13829,
+      "audioMs": 13827,
+      "driftMs": 2
+    },
+    {
+      "id": "access",
+      "visualMs": 18334,
+      "audioMs": 18333,
+      "driftMs": 1
+    },
+    {
+      "id": "identity",
+      "visualMs": 14627,
+      "audioMs": 14626,
+      "driftMs": 1
+    },
+    {
+      "id": "pages",
+      "visualMs": 16850,
+      "audioMs": 16847,
+      "driftMs": 3
+    },
+    {
+      "id": "desktop",
+      "visualMs": 17739,
+      "audioMs": 17739,
+      "driftMs": 0
+    },
+    {
+      "id": "states",
+      "visualMs": 22702,
+      "audioMs": 22702,
+      "driftMs": 0
+    },
+    {
+      "id": "mobile",
+      "visualMs": 17764,
+      "audioMs": 17763,
+      "driftMs": 1
+    },
+    {
+      "id": "invitation",
+      "visualMs": 17728,
+      "audioMs": 17726,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 14401,
+      "audioMs": 14397,
+      "driftMs": 4
+    }
+  ],
+  "anchorsChecked": 17,
+  "music": {
+    "voicedWindows": 147,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.1,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": -33.7,
+    "loudestMusicOnlyLufs": -33.7,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}
