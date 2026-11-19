@@ -14,7 +14,14 @@
  */
 
 import type { ChartConfiguration, ChartDataset, PointStyle, TooltipItem } from "chart.js"
-import { BUBBLE_CATEGORY_LABELS, eventDatesLabel, type BubbleCategory, type BubbleChartData, type BubblePoint } from "./operator-activity"
+import {
+  BUBBLE_CATEGORY_LABELS,
+  bubbleDateTickLabel,
+  eventDatesLabel,
+  type BubbleCategory,
+  type BubbleChartData,
+  type BubblePoint,
+} from "./operator-activity"
 
 export type BubblePointData = BubblePoint & { x: number; y: number; r: number }
 export type BubbleDataset = ChartDataset<"bubble", BubblePointData[]>
@@ -62,12 +69,12 @@ function dataset(category: BubbleCategory, points: BubblePointData[]): BubbleDat
     // addition to the summary and the real values in the table.
     borderWidth: (context) => {
       const point = context.raw as BubblePointData
-      return point.clampedX || point.clampedY ? 3 : 1.5
+      return point.clampedY ? 3 : 1.5
     },
     // Hover thickens the border a little, never to the width that marks a capped point.
     hoverBorderWidth: (context) => {
       const point = context.raw as BubblePointData
-      return point.clampedX || point.clampedY ? 4 : 2.5
+      return point.clampedY ? 4 : 2.5
     },
     pointStyle: style.pointStyle,
   }
@@ -83,11 +90,30 @@ export function bubbleAxisTitle(base: string, cap: number | null): string {
   return cap === null ? base : `${base} (plafonné à ${cap})`
 }
 
+/** Tick steps that stay readable: one label every few days, never more than about six. */
+const TICK_STEPS = [1, 2, 3, 5, 7, 10, 14, 21, 30, 45, 60, 90, 120, 180, 365] as const
+
+/**
+ * Tick offsets (days from today) for the date axis: always includes 0 so « Aujourd'hui » can be
+ * shown, and widens its step with the range so a long-running event cannot crowd the labels.
+ */
+export function bubbleDateTicks(min: number, max: number): number[] {
+  const span = max - min
+  if (!(span > 0)) return [0]
+  const step = TICK_STEPS.find((candidate) => span / candidate <= 6) ?? TICK_STEPS[TICK_STEPS.length - 1]
+  const first = Math.ceil(min / step) * step
+  const ticks: number[] = []
+  for (let value = first; value <= max; value += step) ticks.push(value === 0 ? 0 : value)
+  return ticks
+}
+
 /**
  * The Chart.js configuration. Animation is always off: DESIGN.md forbids orchestrated entrances
  * on dashboards, and a chart that grows on load is exactly that (no reduced-motion exception).
  * The legend is display-only (no click/hover handler), so a dataset can never be hidden by mouse.
- * A capped axis gets a small padding beyond the cap so a clamped bubble is not cut in half.
+ * The date axis is fixed from the earliest start day to today + 30 days, with a small margin, and
+ * is never capped. A capped registrations axis gets a small padding beyond the cap so a clamped
+ * bubble is not cut in half.
  */
 export function buildBubbleChartConfig(data: BubbleChartData): ChartConfiguration<"bubble", BubblePointData[]> {
   const datasets = CATEGORY_ORDER.map((category) =>
@@ -125,11 +151,21 @@ export function buildBubbleChartConfig(data: BubbleChartData): ChartConfiguratio
       scales: {
         x: {
           type: "linear",
-          beginAtZero: true,
-          grace: "6%",
-          ...(data.axis.xMax !== null ? { suggestedMax: Math.ceil(data.axis.xMax * 1.08) } : {}),
-          title: { display: true, text: bubbleAxisTitle("Nombre de créneaux", data.axis.xMax), color: "#1f2937" },
-          ticks: { precision: 0, color: "#4b5563" },
+          min: data.axis.xMin,
+          max: data.axis.xMax,
+          afterBuildTicks: (axis) => {
+            axis.ticks = bubbleDateTicks(data.axis.xMin, data.axis.xMax).map((value) => ({ value }))
+          },
+          title: { display: true, text: "Date de début", color: "#1f2937" },
+          ticks: {
+            precision: 0,
+            color: "#4b5563",
+            maxRotation: 0,
+            // bubbleDateTicks gives at most about six ticks: no auto-skip, so « Aujourd'hui » (0) is
+            // never dropped at narrow width when the axis starts before today.
+            autoSkip: false,
+            callback: (value) => bubbleDateTickLabel(Number(value), data.today),
+          },
           grid: { color: "#e5e7eb" },
         },
         y: {

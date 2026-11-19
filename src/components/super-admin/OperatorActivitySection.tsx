@@ -26,9 +26,9 @@ export default function OperatorActivitySection({ data }: { data: BubbleChartDat
         {!data.empty && (
           <>
             <p id={ENCODING_ID} aria-hidden="true" className="sr-only">
-              Graphique à bulles : créneaux en horizontal, inscriptions en vertical, surface selon le nombre de postes.
+              Graphique à bulles : date de début en horizontal, inscriptions en vertical, surface selon le nombre de créneaux.
             </p>
-            <p className="mt-1 text-xs text-gray-600">Une bulle par événement ; sa surface suit le nombre de postes.</p>
+            <p className="mt-1 text-xs text-gray-600">Une bulle par événement ; sa surface suit le nombre de créneaux.</p>
           </>
         )}
       </div>

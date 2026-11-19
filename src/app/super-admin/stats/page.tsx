@@ -70,7 +70,7 @@ export default async function StatsPage() {
       <section className="space-y-2" aria-labelledby="stats-event-size">
         <h2 id="stats-event-size" className="text-lg font-semibold text-gray-900">Taille des événements</h2>
         <p id="stats-event-size-intro" className="text-sm text-gray-700">
-          Les événements en cours ou qui commencent dans les 30 jours : une bulle par événement, selon ses créneaux (horizontal), ses inscriptions (vertical) et ses postes (surface). Le tableau qui suit donne les mêmes valeurs, toujours accessibles.
+          Les événements en cours ou qui commencent dans les 30 jours : une bulle par événement, selon sa date de début (horizontal), ses inscriptions (vertical) et ses créneaux (surface). Le tableau qui suit donne les mêmes valeurs, toujours accessibles.
         </p>
         <OperatorActivitySection data={operator.bubble} />
       </section>
