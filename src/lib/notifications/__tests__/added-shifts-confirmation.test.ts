@@ -12,6 +12,7 @@ vi.mock("next/server", () => ({ after: vi.fn() }))
 
 import { groupsConfirmation, isAddedShiftsConfirmation, queueAddedShiftsConfirmation } from "../added-shifts-confirmation"
 import { openPayload } from "../outbox"
+import { orgLinkTokenData } from "@/lib/org-link"
 
 describe("groupsConfirmation", () => {
   it("confirms a first sign-up at once", () => {
@@ -41,7 +42,14 @@ describe("queueAddedShiftsConfirmation", () => {
   const base = { volunteerId: "v1", organizationId: "org1", recipient: { email: "ana@example.org", name: "Ana Rossi" }, data, now: new Date("2026-07-01T10:00:00Z"), delayMs: 300_000 }
 
   function tx(pending: { id: string; payload: unknown } | null, updated = 1) {
+    const orgLink = orgLinkTokenData("org-tok")
     return {
+      // The organisation-wide link (#1429, lot B) read when the row is queued.
+      volunteer: {
+        findFirst: vi.fn(async (args: { select: Record<string, unknown> }) =>
+          "organization" in args.select ? { organization: { name: "Village" } } : orgLink),
+        updateMany: vi.fn(),
+      },
       notificationOutbox: {
         findFirst: vi.fn().mockResolvedValue(pending),
         updateMany: vi.fn().mockResolvedValue({ count: updated }),
@@ -56,7 +64,7 @@ describe("queueAddedShiftsConfirmation", () => {
     const created = t.notificationOutbox.create.mock.calls[0][0].data
     expect(created.dedupeKey).toBe("registration_confirmation:added:ev1:v1:r2")
     expect(created.nextAttemptAt).toEqual(new Date("2026-07-01T10:05:00Z"))
-    expect(openPayload(created.payload)).toMatchObject({ kind: "registration_confirmation", volunteerId: "v1", data: { addedShifts: true, registrationIds: ["r2"] } })
+    expect(openPayload(created.payload)).toMatchObject({ kind: "registration_confirmation", volunteerId: "v1", data: { addedShifts: true, registrationIds: ["r2"], orgToken: "org-tok", organizationName: "Village" } })
   })
 
   it("joins the pending row, once per registration, and pushes it back", async () => {

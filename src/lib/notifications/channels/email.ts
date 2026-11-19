@@ -28,6 +28,17 @@ export function missingSmtpOutcome(nodeEnv: string | undefined): { ok: true } | 
   return { ok: true }
 }
 
+/**
+ * Masks the token of a personal link before a body is printed to the console (#598, #1429 lot B):
+ * the development fallback has no SMTP, and either segment opens the volunteer's page. Only the
+ * token is replaced, so the rest of the URL stays readable while debugging.
+ */
+export function maskPersonalLinkTokens(text: string): string {
+  return text
+    .replace(/(\/mes-inscriptions\/)[^/?#\s]+/g, "$1…")
+    .replace(/(\/my\/)[^/?#\s]+/g, "$1…")
+}
+
 function createTransport() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SECURE } = process.env
   if (!SMTP_HOST) return null
@@ -99,7 +110,7 @@ export const emailChannel: { send: Send } = {
         return { ok: false as const, reason: encodeOutcomeReason(classified[0]) }
       }
       console.log(`[notif:email→${to}] ${subject}`)
-      console.log(`[notif:body]\n${text}\n`)
+      console.log(`[notif:body]\n${maskPersonalLinkTokens(text)}\n`)
       return outcome
     }
 

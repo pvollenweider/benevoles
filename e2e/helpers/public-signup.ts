@@ -1,5 +1,5 @@
 import { expect, type Browser, type Page } from "@playwright/test"
-import { getMessageText, waitForMessage } from "./mailpit"
+import { getMessageText, waitForMessage, eventTokenFromEmail } from "./mailpit"
 
 /**
  * A published event and a volunteer's public sign-up, for specs that need a personal page (/my).
@@ -76,7 +76,7 @@ export async function publicSignUp(page: Page, event: PublicEvent, shiftIds: str
   })
   expect(res.ok(), `sign-up: ${res.status()} ${await res.text()}`).toBeTruthy()
   const mail = await waitForMessage(`to:"${email}"`)
-  const token = (await getMessageText(mail.ID)).match(/\/my\/([\w-]+)/)?.[1] ?? ""
+  const token = await eventTokenFromEmail(await getMessageText(mail.ID), event.eventId)
   expect(token, "the confirmation email carries the management link").toBeTruthy()
   return token
 }

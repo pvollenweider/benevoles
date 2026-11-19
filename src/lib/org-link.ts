@@ -91,6 +91,11 @@ function reveal(row: OrgLinkRow): string | null {
   }
 }
 
+/** The token a row read with ORG_LINK_TOKEN_SELECT holds, or null when it holds none. */
+export function orgLinkTokenOf(row: OrgLinkRow): string | null {
+  return row.orgLinkTokenHash ? reveal(row) : null
+}
+
 /** The volunteer and organisation a token resolves to, or null. */
 export type OrgLinkTarget = {
   id: string
@@ -150,6 +155,94 @@ export async function ensureOrgLink(
     if (count === 1) return { token, issuedAt: now }
   }
   return null
+}
+
+/** The slice of a client able to read the organisation's name for an email's scope sentence. */
+export interface OrgLinkEmailDb extends OrgLinkDb {
+  volunteer: OrgLinkDb["volunteer"] & {
+    findFirst(args: { where: Record<string, unknown>; select: { organization: { select: { name: true } } } }): Promise<{ organization: { name: string } | null } | null>
+  }
+}
+
+/**
+ * The token an email carries, with the organisation's name for the one-sentence scope under the
+ * button (#1429, lot B). Same lazy issue as `ensureOrgLink`, in the caller's transaction. A caller
+ * that already has the name (`knownOrganizationName`) skips the extra read.
+ */
+export async function ensureOrgLinkForEmail(
+  db: OrgLinkEmailDb,
+  volunteerId: string,
+  organizationId: string,
+  now = new Date(),
+  knownOrganizationName?: string | null,
+): Promise<(OrgLinkIssued & { organizationName: string }) | null> {
+  const issued = await ensureOrgLink(db, volunteerId, organizationId, now)
+  if (!issued) return null
+  if (knownOrganizationName?.trim()) return { ...issued, organizationName: knownOrganizationName }
+  const row = await db.volunteer.findFirst({
+    where: { id: volunteerId, organizationId },
+    select: { organization: { select: { name: true } } },
+  })
+  if (!row?.organization) return null
+  return { ...issued, organizationName: row.organization.name }
+}
+
+/** The columns read after the issue: the address the token belongs to, in the same row. */
+const ORG_LINK_RECIPIENT_SELECT = { email: true, ...ORG_LINK_TOKEN_SELECT } as const
+
+/** The slice of a client able to read an email's link together with its address. */
+export interface OrgLinkRecipientDb extends OrgLinkEmailDb {
+  volunteer: OrgLinkEmailDb["volunteer"] & {
+    findFirst(args: { where: Record<string, unknown>; select: typeof ORG_LINK_RECIPIENT_SELECT }): Promise<(OrgLinkRow & { email: string | null }) | null>
+  }
+}
+
+export type OrgLinkRecipientRead = {
+  /** The volunteer's address read after the token; null when it was never set. */
+  email: string | null
+  /** The link that belongs to that address, or null when no token could be read (revoked meanwhile). */
+  link: (OrgLinkIssued & { organizationName: string }) | null
+}
+
+/**
+ * Issues or reuses the organisation-wide link, then re-reads the volunteer's current address and
+ * the token actually stored, in the caller's transaction (#1429, lot B).
+ *
+ * A scheduled job selects its recipients (and their addresses) before this call. An address
+ * correction revokes the link and issues a fresh one for the new address, so a token read after
+ * that correction belongs to the NEW address: sending it to the address read at selection time
+ * would hand a valid link to whoever holds the old address. The caller must therefore compare
+ * `email` with its selection and skip on a change (`memberAddressChanged`), and send only to
+ * `email` with `link.token`. Returns null when the volunteer row is gone.
+ */
+export async function ensureOrgLinkForRecipient(
+  db: OrgLinkRecipientDb,
+  volunteerId: string,
+  organizationId: string,
+  now = new Date(),
+  knownOrganizationName?: string | null,
+): Promise<OrgLinkRecipientRead | null> {
+  const issued = await ensureOrgLink(db, volunteerId, organizationId, now)
+  if (!issued) return null
+  // One row for both: the address and the token must come from the same read, after the issue.
+  const row = await db.volunteer.findFirst({
+    where: { id: volunteerId, organizationId },
+    select: ORG_LINK_RECIPIENT_SELECT,
+  }) as (OrgLinkRow & { email: string | null }) | null
+  if (!row) return null
+  // Prefer the token stored now: a renewal between the issue and this read must not send the
+  // old one. A token cleared meanwhile means there is nothing to put in the email.
+  const token = orgLinkTokenOf(row)
+  if (!token) return { email: row.email, link: null }
+  let organizationName = knownOrganizationName?.trim()
+  if (!organizationName) {
+    const org = await db.volunteer.findFirst({
+      where: { id: volunteerId, organizationId },
+      select: { organization: { select: { name: true } } },
+    })
+    organizationName = org?.organization?.name
+  }
+  return { email: row.email, link: organizationName ? { token, organizationName, issuedAt: row.orgLinkIssuedAt } : null }
 }
 
 /**

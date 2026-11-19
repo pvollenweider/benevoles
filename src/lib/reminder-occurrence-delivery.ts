@@ -89,6 +89,8 @@ export type CustomReminderData = {
     readBefore?: { slug: string; title: string }[] | null
   }[]
   editToken: string
+  /** The organisation-wide link (#1429, lot B), issued when the reminder is queued. */
+  orgToken?: string
   hoursUntil: number
   /** The rule's delay in elapsed hours, for the generic copy. */
   ruleHours: number
@@ -200,6 +202,9 @@ export async function resolveCustomRuleReminder(payload: NotificationPayload, no
   }
   const built = buildCustomReminderPayload({ occurrenceId: occurrence.id, rule, event, group, now, timeZone })
   if (!built.recipient.email?.trim()) return { kind: "cancel", reason: "Aucune adresse email." }
+  // Keep the organisation-wide link issued when the reminder was queued (#1429, lot B): the
+  // fresh payload is rebuilt from the rows and would otherwise fall back to the event link.
+  if (typeof data.orgToken === "string" && data.orgToken) built.data.orgToken = data.orgToken
   return { kind: "send", payload: built }
 }
 

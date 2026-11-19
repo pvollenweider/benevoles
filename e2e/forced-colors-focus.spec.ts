@@ -4,7 +4,7 @@ import {
   checkFocused, checkSelectedStates, emulateForcedColors, expectNoFailures, shot, stateSignature, sweep,
   type Scheme,
 } from "./helpers/forced-colors"
-import { getMessageText, waitForMessage } from "./helpers/mailpit"
+import { getMessageText, waitForMessage, eventTokenFromEmail } from "./helpers/mailpit"
 import { passSecondFactor } from "./helpers/super-admin"
 
 /**
@@ -110,7 +110,7 @@ async function setUp(browser: Browser): Promise<Data> {
   expect(own.ok(), await own.text()).toBeTruthy()
   // The management link only goes out by email (#285): read it from Mailpit.
   const mail = await waitForMessage(`to:"e2e-fc-session-${stamp}@example.com"`)
-  const editToken = (await getMessageText(mail.ID)).match(/\/my\/([\w-]+)/)?.[1] ?? ""
+  const editToken = await eventTokenFromEmail(await getMessageText(mail.ID))
   expect(editToken, "the confirmation email carries the management link").toBeTruthy()
   await page.close()
   return {

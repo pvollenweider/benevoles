@@ -23,7 +23,12 @@ vi.mock("@/lib/notifications/outbox", () => ({
   deliverOutbox: vi.fn().mockResolvedValue(null),
   outboxHealth: vi.fn().mockResolvedValue({ healthy: true, stuck: false }),
 }))
-vi.mock("@/lib/token-vault", () => ({ registrationToken: { reveal: (r: { id: string }) => `tok-${r.id}` } }))
+vi.mock("@/lib/token-vault", () => ({
+  registrationToken: { reveal: (r: { id: string }) => `tok-${r.id}` },
+  // The organisation-wide link of the reminder (#1429, lot B), issued without a key here.
+  sealToken: (token: string) => ({ hash: `hash-${token}`, enc: null, legacy: token }),
+  revealToken: ({ legacy }: { legacy: string | null }) => legacy,
+}))
 vi.mock("@/lib/reminder-rules-server", () => ({ queueCustomRuleReminders: vi.fn().mockResolvedValue({ events: 0, rules: 0, eligible: 0, queued: 0, deferred: 0, cancelled: 0, handled: 0, failed: 0 }) }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
@@ -35,14 +40,26 @@ const everyRow = async ({ where }: UpdateManyArgs) => ({ count: typeof where.id 
 const calls = () => registrationUpdateMany.mock.calls.map((c) => c[0] as UpdateManyArgs)
 const registrationUpdateMany = vi.hoisted(() => vi.fn())
 const registrationFindMany = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({
-  prisma: {
+const volunteerFindFirst = vi.hoisted(() => vi.fn())
+const volunteerUpdateMany = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/prisma", () => {
+  const prisma = {
     registration: {
       findMany: registrationFindMany,
       updateMany: registrationUpdateMany,
     },
-  },
-}))
+    // The organisation-wide link of the reminder (#1429, lot B): an existing token, no issue.
+    volunteer: {
+      findFirst: volunteerFindFirst,
+      updateMany: volunteerUpdateMany,
+    },
+    $queryRaw: vi.fn().mockResolvedValue([]),
+    $transaction: vi.fn(),
+  }
+  // The reminder reads the current address and token in one transaction (#1429, lot B).
+  prisma.$transaction.mockImplementation(async (fn: (tx: typeof prisma) => Promise<unknown>) => fn(prisma))
+  return { prisma }
+})
 
 const shift = (over: Partial<{ startTime: string; label: string; roleName: string }> = {}) => ({
   date: new Date("2026-01-10T00:00:00Z"),
@@ -86,6 +103,14 @@ describe("POST /api/cron/reminders", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     registrationUpdateMany.mockImplementation(everyRow)
+    volunteerFindFirst.mockImplementation(async (args: { select: Record<string, unknown> }) => {
+      if ("organization" in args.select) return { organization: { name: "Org" } }
+      const tokenRow = { orgLinkTokenHash: "current-hash", orgLinkTokenEnc: null, orgLinkTokenLegacy: "current-token", orgLinkIssuedAt: null }
+      // The transactional re-read (#1429, lot B) asks for the address and the token together.
+      if ("email" in args.select) return { email: "v@x.ch", ...tokenRow }
+      return tokenRow
+    })
+    volunteerUpdateMany.mockResolvedValue({ count: 1 })
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2026-01-10T00:00:00Z"))
     // Only the J-day window (2-4h) matches this shift (starts at 03:00 the same day); the other
@@ -140,6 +165,25 @@ describe("POST /api/cron/reminders", () => {
       { where: { id: "reg-1", reminderDdSent: null }, data: { reminderDdSent: expect.any(Date) } },
       { where: { id: { in: ["reg-1"] } }, data: { reminderDdSent: null } },
     ])
+  })
+
+  it("never sends a token issued now to the old address when it changed after selection (#1429, lot B)", async () => {
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    // The candidate row was read with v@x.ch; the member has another address by the time the
+    // reminder is built, so the token issued for that row must not reach the old inbox.
+    volunteerFindFirst.mockImplementation(async (args: { select: Record<string, unknown> }) => {
+      if ("organization" in args.select) return { organization: { name: "Org" } }
+      const tokenRow = { orgLinkTokenHash: "current-hash", orgLinkTokenEnc: null, orgLinkTokenLegacy: "current-token", orgLinkIssuedAt: null }
+      if ("email" in args.select) return { email: "nouvelle@x.ch", ...tokenRow }
+      return tokenRow
+    })
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    const res = await POST(post())
+    const data = await res.json()
+    expect(sendNotificationMock).not.toHaveBeenCalled()
+    expect(data.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 0, failed: 0 })
+    // Claimed, then given back: a later run writes to the current address.
+    expect(calls().at(-1)).toEqual({ where: { id: { in: ["reg-1"] } }, data: { reminderDdSent: null } })
   })
 
   it("marks the group before the send, so a call running at the same time finds it taken", async () => {

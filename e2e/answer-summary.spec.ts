@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 import { randomIp } from "./helpers/public-signup"
 import { waitForHydration } from "./helpers/hydration"
-import { getMessageText, waitForMessage } from "./helpers/mailpit"
+import { getMessageText, waitForMessage, eventTokenFromEmail } from "./helpers/mailpit"
 
 /**
  * « Synthèse des réponses » of an event's Questions page (#686): one captioned table per question,
@@ -213,7 +213,7 @@ test("a follow-up « Nombre » shown only after « Oui », summed for those conc
     await expect(volunteer).toHaveURL(new RegExp(`/${event.slug}/success`))
     await volunteer.close()
     const mail = await waitForMessage(`to:"${email}"`)
-    return (await getMessageText(mail.ID)).match(/\/my\/([\w-]+)/)?.[1] ?? ""
+    return eventTokenFromEmail(await getMessageText(mail.ID))
   }
   const alice = await signUp("Alice", "Oui", "3")
   await signUp("Bruno", "Non")

@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: VOLUNTEER_PERSONAL_REGISTRATIONS -->
 
-Ta page **Mes inscriptions** s'ouvre avec ton **lien personnel**, reçu par email (voir [Ton lien personnel](lien-personnel.md)) :
+Ta page **Mes inscriptions** s'ouvre avec ton **lien personnel**, reçu par email (voir [Ton lien personnel](lien-personnel.md)). L'email de confirmation et les rappels mènent à la page de toutes tes inscriptions auprès de l'organisation ; les liens déjà reçus pour un événement ouvrent la page de cet événement :
 
 ```
 https://[organisation].benevol.app/my/[token]
@@ -22,7 +22,7 @@ https://[organisation].benevol.app/my/[token]
 
 ## Toutes tes inscriptions auprès de l'organisation
 
-La page de cet événement reste la page de référence pour ses créneaux, ses réponses, ses échanges et son calendrier. Un autre lien, **pour toutes tes inscriptions auprès de l'organisation**, rassemble tes créneaux à venir de tous ses événements : c'est le lien que « J'ai perdu mon lien » envoie, et tu peux aussi le demander depuis l'encadré **Retrouver toutes mes inscriptions** de cette page (il part par email, il ne s'affiche pas ici).
+La page de cet événement reste la page de référence pour ses créneaux, ses réponses, ses échanges et son calendrier. Un autre lien, **pour toutes tes inscriptions auprès de l'organisation**, rassemble tes créneaux à venir de tous ses événements : c'est celui que portent le bouton **Mes inscriptions** de l'email de confirmation et des rappels, celui que « J'ai perdu mon lien » envoie, et tu peux aussi le demander depuis l'encadré **Retrouver toutes mes inscriptions** de cette page (il part par email, il ne s'affiche pas ici).
 
 Cette page rassemble d'abord ton **prochain créneau confirmé**, puis tous tes créneaux à venir, du plus proche au plus lointain, avec la date, l'heure, l'événement, le poste et l'état en toutes lettres : **Confirmé**, **Liste d'attente**, **Place proposée** ou **Demande en attente de validation**. Les événements dépubliés ou archivés restent visibles tant qu'un créneau à venir y est inscrit. Chaque créneau s'annule avec les mêmes règles que sur la page de son événement (délai propre à l'événement, place rendue à la liste d'attente) ; **Voir l'événement** ouvre la page personnelle de cet événement pour le reste (réponses, échanges, calendrier, infos pratiques). Quand tu n'as plus de créneau à venir, la page le dit et te ramène aux événements de l'organisation ; ton lien reste valable pour tes prochaines inscriptions. **Renouveler mon lien** remplace le lien par un nouveau, envoie celui-ci par email et invalide l'ancien immédiatement. La phrase en haut de la page le rappelle : ce lien donne accès à toutes tes inscriptions auprès de l'organisation et permet de les modifier ; ne le partage pas.
 

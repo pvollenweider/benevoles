@@ -1409,3 +1409,30 @@ La page « Santé du service » gagne une section **Serveur** entre « Service �
 ## À refilmer : liste avec téléphones par jour (#1431, 19 novembre 2026)
 
 La **liste avec téléphones** est maintenant un tableau en paysage : une ligne par bénévole (nom, téléphone, email) et une colonne par jour de l'événement, avec les créneaux qui se suivent sur le même poste réunis. La narration d'**EVENT_REPORTS** (`event-reports`) reste juste — retrouver une personne, son email, son téléphone et ses créneaux — mais l'image du chapitre Contacts est périmée. Aucun sélecteur de capture ne vise la mise en page ; la vidéo est à refilmer au prochain lot. Le planning par jour et l'export complet ne changent que sur une journée dense, absente du jeu de tournage.
+
+## À refilmer : lien « Mes inscriptions » commun (#1429, 19 novembre 2026)
+
+L'email de confirmation, les rappels et les autres emails de gestion portent maintenant un seul bouton **Mes inscriptions** vers le lien personnel de l'organisation (`/mes-inscriptions/<token>`), avec la phrase « Ce lien ouvre toutes tes inscriptions auprès de [organisation]. Ne le partage pas. » ; les emails d'action propres à un événement (place proposée, échange, disponibilités, demande à valider, invitation) gardent leur lien, et les anciens liens d'événement continuent de fonctionner. Aucune capture n'est régénérée dans ce lot.
+
+**Narration à revoir sur le lien personnel et son renouvellement** :
+
+- **VOLUNTEER_PERSONAL_REGISTRATIONS** (`volunteer-personal-registrations`) : narration et images du lien personnel et de la page « Mes inscriptions » à reprendre pour dire que le lien reçu par email rassemble désormais les inscriptions de toute l'organisation, et montrer « Renouveler mon lien ».
+- **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : narration et images des chapitres « lien personnel », « lien invalide » et « renouvellement » à reprendre pour la portée organisation et la phrase affichée dans l'email.
+
+**Vidéos montrant un email de confirmation ou de rappel** (bouton et phrase de portée périmés ; capture à refaire, narration à ajuster quand elle cite le bouton ou le lien) :
+
+- **ASSIGNMENT_PUBLICATION** (`assignment-publication`) : l'email de publication des missions montre « Gérer mes inscriptions ».
+- **VOLUNTEER_CONFIRMATION_ERRORS** (`volunteer-confirmation-errors`) : email de confirmation et email « Demande d'inscription non enregistrée », tous deux avec leur lien personnel.
+- **VOLUNTEER_REGISTER** (`volunteer-register-mobile`) : email de confirmation et son lien personnel.
+- **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
+- **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
+- **LAST_MINUTE_CHANGES** (`last-minute-changes`) : email d'offre, email de changement d'horaire et emails d'annulation.
+- **SHIFT_WAITLIST_OFFER** (`shift-waitlist-offer`) : email d'offre de place (lien d'action propre à l'événement, à conserver tel quel).
+- **TARGETED_MESSAGES** (`targeted-messages`) et **MEMBERS_REMINDERS** (`members-reminders`) : emails de message ciblé, dont le bouton de gestion.
+- **ORG_EMAIL_SETTINGS** (`org-email-settings`) : email de test d'un message ciblé.
+- **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
+- **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
+
+**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `ASSIGNMENT_PUBLICATION`, `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PERSONAL_REGISTRATIONS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`, `VOLUNTEER_REGISTER`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (dix-huit vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
+
+**Vidéo bêta à créer (pas créée dans ce lot)** : une courte vidéo bénévole « Retrouver toutes mes inscriptions », scénario lien perdu → un seul email → page commune à tous les événements → annulation d'une semaine → renouvellement du lien. Elle documentera le parcours du lot A et le bouton commun du lot B ; titre, identifiant, manifeste et catalogue restent à définir au moment du tournage.

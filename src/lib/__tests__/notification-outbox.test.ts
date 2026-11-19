@@ -15,6 +15,8 @@ const m = vi.hoisted(() => ({
   after: vi.fn(),
   reported: vi.fn(),
   volunteerFindUnique: vi.fn(),
+  volunteerFindFirst: vi.fn(),
+  volunteerUpdateMany: vi.fn(),
   registrationFindUnique: vi.fn(),
   leaderFindUnique: vi.fn(),
   adminFindUnique: vi.fn(),
@@ -23,7 +25,7 @@ const m = vi.hoisted(() => ({
 }))
 vi.mock("../prisma", () => ({
   prisma: {
-    volunteer: { findUnique: m.volunteerFindUnique },
+    volunteer: { findUnique: m.volunteerFindUnique, findFirst: m.volunteerFindFirst, updateMany: m.volunteerUpdateMany },
     registration: { findUnique: m.registrationFindUnique },
     sectorLeader: { findUnique: m.leaderFindUnique },
     adminUser: { findUnique: m.adminFindUnique },
@@ -93,6 +95,26 @@ describe("collectNotifications / enqueueNotifications / deliverAfterResponse", (
     expect(m.create).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: "org-c" }) }))
     await enqueueNotifications([payload])
     expect(m.create).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: null }) }))
+  })
+
+  it("issues and attaches the organisation-wide link to a general email at enqueue (#1429, lot B)", async () => {
+    m.create.mockResolvedValue({ id: "n1" })
+    m.volunteerFindFirst.mockImplementation(async (args: { select: Record<string, unknown> }) =>
+      "organization" in args.select
+        ? { organization: { name: "Rhône Rocks" } }
+        : { orgLinkTokenHash: null, orgLinkTokenEnc: null, orgLinkTokenLegacy: null, orgLinkIssuedAt: null })
+    m.volunteerUpdateMany.mockResolvedValue({ count: 1 })
+    await enqueueNotifications([{
+      kind: "registration_confirmation",
+      recipient: { email: "julie@example.com", name: "Julie Martin" },
+      volunteerId: "vol-1",
+      organizationId: "org-1",
+      data: { volunteerName: "Julie Martin", eventTitle: "Festival", shifts: [] },
+    }])
+    const stored = openPayload((m.create.mock.calls[0][0] as { data: { payload: unknown } }).data.payload)
+    expect(stored.data.orgToken).toMatch(/^[A-Za-z0-9_-]{43}$/)
+    expect(stored.data.organizationName).toBe("Rhône Rocks")
+    expect(m.volunteerUpdateMany).toHaveBeenCalledOnce()
   })
 
   it("doesn't store a notification whose recipient has no email: it could never be delivered", async () => {
