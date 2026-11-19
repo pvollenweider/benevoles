@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:55:45.838Z",
+  "videoSha256": "9972cbbd38e0e091a42cda676febfde0d377314112cce9812203cde2b51dc454",
+  "promptSha256": "6f5d40308cf5d1940515e03bede7881ee28b33e032d7787a41181f5a490434a2",
+  "clipSha256": "948631c93f2d85b26869c6c728d87fa0101b675e5cda61254daea58c0421fe9c",
+  "scene": "sectors-enable",
+  "review": {
+    "heardOpening": "Dans les informations de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "la carte Secteurs propose l'interrupteur Organiser les postes par secteurs",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la carte Secteurs avec l'option à cocher Organiser les postes par secteurs",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Activons-le",
+        "visibleSeconds": 7,
+        "visible": "Clic sur l'interrupteur qui passe à l'état actif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Tant qu'aucun secteur n'est enregistré, vous pouvez encore le désactiver",
+        "visibleSeconds": 8,
+        "visible": "Texte explicatif affiché sous l'interrupteur indiquant que l'organisation peut être désactivée tant qu'aucun secteur n'est enregistré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Suivons le lien Organiser les secteurs dans Créneaux",
+        "visibleSeconds": 12.2,
+        "visible": "Clic sur le lien affiché sous l'interrupteur puis ouverture de la vue Créneaux",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:12, la voix annonce « Suivons le lien Organiser les secteurs dans Créneaux », alors que le lien affiché et cliqué s'intitule « Gérer les postes »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

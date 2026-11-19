@@ -1,0 +1,550 @@
+{
+  "slug": "sectors",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-19T12:55:07.114Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "04aac36196087830380b672268679e360c121ea1",
+    "sourceTree": "b7fcbe616cbc4fdeb7e4449e9a8fc8c855d6e5c1",
+    "productSourceSha256": "55eb9ac393a3d68acdbfa812aae5f95ec8673f9822502d7e403deadadc8de7bc",
+    "buildId": "yDSsdN_RxsiGKPfTZJMXN",
+    "snapshot": "/private/tmp/benevoles-video-production.Swyk5Ajr",
+    "builtAt": "2026-11-19T10:12:41.385Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-beta",
+    "scenario": "SECTORS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 29424
+    },
+    {
+      "kind": "click",
+      "atMs": 34445
+    },
+    {
+      "kind": "click",
+      "atMs": 40507
+    },
+    {
+      "kind": "click",
+      "atMs": 46828
+    },
+    {
+      "kind": "key",
+      "atMs": 47134
+    },
+    {
+      "kind": "key",
+      "atMs": 47232
+    },
+    {
+      "kind": "key",
+      "atMs": 47329
+    },
+    {
+      "kind": "key",
+      "atMs": 47425
+    },
+    {
+      "kind": "key",
+      "atMs": 47523
+    },
+    {
+      "kind": "key",
+      "atMs": 47621
+    },
+    {
+      "kind": "key",
+      "atMs": 47719
+    },
+    {
+      "kind": "click",
+      "atMs": 48489
+    },
+    {
+      "kind": "click",
+      "atMs": 49706
+    },
+    {
+      "kind": "key",
+      "atMs": 50013
+    },
+    {
+      "kind": "key",
+      "atMs": 50111
+    },
+    {
+      "kind": "key",
+      "atMs": 50210
+    },
+    {
+      "kind": "key",
+      "atMs": 50307
+    },
+    {
+      "kind": "key",
+      "atMs": 50405
+    },
+    {
+      "kind": "key",
+      "atMs": 50504
+    },
+    {
+      "kind": "key",
+      "atMs": 50602
+    },
+    {
+      "kind": "key",
+      "atMs": 50700
+    },
+    {
+      "kind": "click",
+      "atMs": 51439
+    },
+    {
+      "kind": "click",
+      "atMs": 67456
+    },
+    {
+      "kind": "click",
+      "atMs": 73424
+    },
+    {
+      "kind": "key",
+      "atMs": 73749
+    },
+    {
+      "kind": "key",
+      "atMs": 73847
+    },
+    {
+      "kind": "key",
+      "atMs": 73946
+    },
+    {
+      "kind": "key",
+      "atMs": 74045
+    },
+    {
+      "kind": "key",
+      "atMs": 74144
+    },
+    {
+      "kind": "key",
+      "atMs": 74241
+    },
+    {
+      "kind": "key",
+      "atMs": 74340
+    },
+    {
+      "kind": "key",
+      "atMs": 74438
+    },
+    {
+      "kind": "key",
+      "atMs": 74543
+    },
+    {
+      "kind": "key",
+      "atMs": 74646
+    },
+    {
+      "kind": "key",
+      "atMs": 74744
+    },
+    {
+      "kind": "key",
+      "atMs": 74941
+    },
+    {
+      "kind": "key",
+      "atMs": 75043
+    },
+    {
+      "kind": "key",
+      "atMs": 75142
+    },
+    {
+      "kind": "key",
+      "atMs": 75241
+    },
+    {
+      "kind": "key",
+      "atMs": 75339
+    },
+    {
+      "kind": "key",
+      "atMs": 75439
+    },
+    {
+      "kind": "key",
+      "atMs": 75538
+    },
+    {
+      "kind": "key",
+      "atMs": 75638
+    },
+    {
+      "kind": "key",
+      "atMs": 75736
+    },
+    {
+      "kind": "click",
+      "atMs": 76508
+    },
+    {
+      "kind": "click",
+      "atMs": 77339
+    },
+    {
+      "kind": "click",
+      "atMs": 78225
+    },
+    {
+      "kind": "key",
+      "atMs": 78554
+    },
+    {
+      "kind": "click",
+      "atMs": 79096
+    },
+    {
+      "kind": "key",
+      "atMs": 79416
+    },
+    {
+      "kind": "click",
+      "atMs": 80226
+    },
+    {
+      "kind": "click",
+      "atMs": 92729
+    },
+    {
+      "kind": "click",
+      "atMs": 93633
+    },
+    {
+      "kind": "click",
+      "atMs": 94674
+    },
+    {
+      "kind": "click",
+      "atMs": 99096
+    },
+    {
+      "kind": "click",
+      "atMs": 100029
+    },
+    {
+      "kind": "click",
+      "atMs": 100958
+    },
+    {
+      "kind": "click",
+      "atMs": 113353
+    },
+    {
+      "kind": "click",
+      "atMs": 115104
+    },
+    {
+      "kind": "click",
+      "atMs": 128680
+    },
+    {
+      "kind": "click",
+      "atMs": 145620
+    },
+    {
+      "kind": "click",
+      "atMs": 162420
+    },
+    {
+      "kind": "click",
+      "atMs": 164436
+    },
+    {
+      "kind": "click",
+      "atMs": 167102
+    },
+    {
+      "kind": "click",
+      "atMs": 177443
+    }
+  ],
+  "cues": [
+    {
+      "id": "sectors-welcome",
+      "startMs": 1368,
+      "endMs": 19710
+    },
+    {
+      "id": "sectors-enable",
+      "startMs": 21970,
+      "endMs": 37218
+    },
+    {
+      "id": "sectors-create",
+      "startMs": 39481,
+      "endMs": 60884
+    },
+    {
+      "id": "sectors-poste",
+      "startMs": 63142,
+      "endMs": 83145
+    },
+    {
+      "id": "sectors-move",
+      "startMs": 85436,
+      "endMs": 104659
+    },
+    {
+      "id": "sectors-timeline",
+      "startMs": 106927,
+      "endMs": 121857
+    },
+    {
+      "id": "sectors-pdf",
+      "startMs": 124127,
+      "endMs": 135705
+    },
+    {
+      "id": "sectors-filter",
+      "startMs": 139233,
+      "endMs": 159838
+    },
+    {
+      "id": "sectors-pages",
+      "startMs": 160290,
+      "endMs": 171781
+    },
+    {
+      "id": "sectors-message",
+      "startMs": 174045,
+      "endMs": 193541
+    },
+    {
+      "id": "sectors-result",
+      "startMs": 193995,
+      "endMs": 208809
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "sectors-enable",
+      "phrase": "la carte Secteurs propose l'interrupteur",
+      "startMs": 582,
+      "endMs": 6329,
+      "cueMs": 22551
+    },
+    {
+      "segmentId": "sectors-enable",
+      "phrase": "Activons-le",
+      "startMs": 6969,
+      "endMs": 7381,
+      "cueMs": 28942
+    },
+    {
+      "segmentId": "sectors-enable",
+      "phrase": "Suivons le lien Organiser les secteurs dans Créneaux",
+      "startMs": 11980,
+      "endMs": 14705,
+      "cueMs": 33950
+    },
+    {
+      "segmentId": "sectors-create",
+      "phrase": "Ouvrons Gérer les postes",
+      "startMs": 547,
+      "endMs": 1673,
+      "cueMs": 40028
+    },
+    {
+      "segmentId": "sectors-create",
+      "phrase": "Tapons Parking dans Nouveau secteur",
+      "startMs": 6825,
+      "endMs": 9502,
+      "cueMs": 46307
+    },
+    {
+      "segmentId": "sectors-create",
+      "phrase": "Ajoutons de même Backline",
+      "startMs": 9723,
+      "endMs": 10406,
+      "cueMs": 49205
+    },
+    {
+      "segmentId": "sectors-create",
+      "phrase": "Le bouton et le panneau s'appellent désormais",
+      "startMs": 17772,
+      "endMs": 20924,
+      "cueMs": 57255
+    },
+    {
+      "segmentId": "sectors-poste",
+      "phrase": "Sous Backline, le bouton",
+      "startMs": 3831,
+      "endMs": 9508,
+      "cueMs": 66975
+    },
+    {
+      "segmentId": "sectors-poste",
+      "phrase": "Tapons le nom du nouveau poste",
+      "startMs": 9764,
+      "endMs": 15989,
+      "cueMs": 72907
+    },
+    {
+      "segmentId": "sectors-poste",
+      "phrase": "puis son premier créneau",
+      "startMs": 9764,
+      "endMs": 15989,
+      "cueMs": 76016
+    },
+    {
+      "segmentId": "sectors-poste",
+      "phrase": "Le poste est créé avec ce créneau",
+      "startMs": 16590,
+      "endMs": 19577,
+      "cueMs": 79734
+    },
+    {
+      "segmentId": "sectors-move",
+      "phrase": "Les postes qui existaient avant le premier secteur",
+      "startMs": 327,
+      "endMs": 4093,
+      "cueMs": 85765
+    },
+    {
+      "segmentId": "sectors-move",
+      "phrase": "Pour Parking Nord, choisissons Parking",
+      "startMs": 6645,
+      "endMs": 9292,
+      "cueMs": 92085
+    },
+    {
+      "segmentId": "sectors-move",
+      "phrase": "Faisons de même pour Parking Mairie",
+      "startMs": 13130,
+      "endMs": 14690,
+      "cueMs": 98568
+    },
+    {
+      "segmentId": "sectors-move",
+      "phrase": "Le bar de la Grande Scène",
+      "startMs": 15144,
+      "endMs": 18860,
+      "cueMs": 101294
+    },
+    {
+      "segmentId": "sectors-timeline",
+      "phrase": "Revenons à la frise",
+      "startMs": 380,
+      "endMs": 1174,
+      "cueMs": 107312
+    },
+    {
+      "segmentId": "sectors-timeline",
+      "phrase": "Un clic sur cette ligne replie ses postes",
+      "startMs": 5826,
+      "endMs": 8748,
+      "cueMs": 112764
+    },
+    {
+      "segmentId": "sectors-timeline",
+      "phrase": "Les postes sans secteur sont regroupés à la fin",
+      "startMs": 9433,
+      "endMs": 12556,
+      "cueMs": 116362
+    },
+    {
+      "segmentId": "sectors-pdf",
+      "phrase": "Dans Documents, ouvrons l'export complet",
+      "startMs": 2356,
+      "endMs": 4819,
+      "cueMs": 126484
+    },
+    {
+      "segmentId": "sectors-pdf",
+      "phrase": "La frise de chaque jour et le récapitulatif par poste",
+      "startMs": 5010,
+      "endMs": 11173,
+      "cueMs": 129745
+    },
+    {
+      "segmentId": "sectors-filter",
+      "phrase": "Dans Inscriptions, choisissons Parking",
+      "startMs": 5872,
+      "endMs": 7607,
+      "cueMs": 145106
+    },
+    {
+      "segmentId": "sectors-filter",
+      "phrase": "La liste, les compteurs et l'export des présences",
+      "startMs": 7832,
+      "endMs": 13057,
+      "cueMs": 147066
+    },
+    {
+      "segmentId": "sectors-filter",
+      "phrase": "En la rouvrant, ou en la transmettant",
+      "startMs": 15508,
+      "endMs": 20278,
+      "cueMs": 154742
+    },
+    {
+      "segmentId": "sectors-pages",
+      "phrase": "Le même champ existe dans Où manque-t-il du monde",
+      "startMs": 342,
+      "endMs": 5641,
+      "cueMs": 160633
+    },
+    {
+      "segmentId": "sectors-pages",
+      "phrase": "Il ne propose que les secteurs actifs",
+      "startMs": 6242,
+      "endMs": 7724,
+      "cueMs": 167966
+    },
+    {
+      "segmentId": "sectors-message",
+      "phrase": "Revenons aux inscriptions du secteur Parking",
+      "startMs": 381,
+      "endMs": 2174,
+      "cueMs": 174427
+    },
+    {
+      "segmentId": "sectors-message",
+      "phrase": "Le bouton Écrire au secteur Parking",
+      "startMs": 2886,
+      "endMs": 7991,
+      "cueMs": 176932
+    },
+    {
+      "segmentId": "sectors-message",
+      "phrase": "Le compteur indique combien de personnes",
+      "startMs": 8699,
+      "endMs": 11201,
+      "cueMs": 182745
+    },
+    {
+      "segmentId": "sectors-result",
+      "phrase": "Votre événement est maintenant organisé par secteurs",
+      "startMs": 248,
+      "endMs": 2407,
+      "cueMs": 194245
+    }
+  ]
+}

@@ -9,9 +9,10 @@
 
 - `LAST_MINUTE_CHANGES` — NOT READY après deux prises. [La deuxième](last-minute-changes/take2/validation.json) passe la validation, mais l'email de changement d'horaire arrive trop tard et reste visible 1,08 s. [Revue du chapitre](last-minute-changes/take2/schedule.json).
 
+- `SECTORS` — READY, publiée (révision 4). [Répétition](sectors/rehearsal.json), [validation](sectors/validation.json), [partage dans Parking](sectors/parking-share.jpg) et [mesure distante](sectors/published-ffprobe.json). Affiche vérifiée par HEAD (200).
+
 ## Reprises restantes
 
-3. `SECTORS`
 4. `VOLUNTEER_REGISTER`
 5. `VOLUNTEER_DISCOVER_EVENT`
 6. `VOLUNTEER_CONFIRMATION_ERRORS`
