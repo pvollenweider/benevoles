@@ -21,6 +21,14 @@ const schema = z.object({
   EMAIL_FROM: z.string().optional(),
   EMAIL_REPLY_TO: z.string().optional(),
   ADMIN_NOTIFICATION_EMAIL: z.string().optional(),
+  // Mailbox read every 15 minutes for deferred bounces (#602, src/lib/bounce-mailbox.ts). All
+  // optional: without IMAP_USER and IMAP_PASSWORD the reader does nothing and the health page
+  // says « non configuré ». IMAP_HOST defaults to mail.gandi.net, IMAP_PORT to 993 (IMAPS only).
+  IMAP_HOST: z.string().optional(),
+  IMAP_PORT: z.string().optional(),
+  IMAP_USER: z.string().optional(),
+  IMAP_PASSWORD: z.string().optional(),
+  IMAP_PROCESSED_FOLDER: z.string().optional(),
   // First super admin of a self-hosted instance started from the published image, which has no
   // seed (#1334): read at startup, never required (the build does not see them). Once a super
   // admin exists they are ignored; ADMIN_NAME defaults to « Administrateur ».

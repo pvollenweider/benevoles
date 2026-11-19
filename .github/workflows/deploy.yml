@@ -233,6 +233,14 @@ jobs:
           SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          # Deferred bounces (#602): optional IMAPS mailbox of the notification sender. Empty
+          # values keep the reader off; the app falls back to mail.gandi.net:993 and the
+          # « Rejets traités » folder.
+          IMAP_HOST: ${{ secrets.IMAP_HOST }}
+          IMAP_PORT: ${{ secrets.IMAP_PORT }}
+          IMAP_USER: ${{ secrets.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+          IMAP_PROCESSED_FOLDER: ${{ secrets.IMAP_PROCESSED_FOLDER }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_REPLY_TO: ${{ secrets.EMAIL_REPLY_TO }}
           ADMIN_NOTIFICATION_EMAIL: ${{ secrets.ADMIN_NOTIFICATION_EMAIL }}
@@ -270,6 +278,11 @@ jobs:
           SMTP_SECURE
           SMTP_USER
           SMTP_PASSWORD
+          IMAP_HOST
+          IMAP_PORT
+          IMAP_USER
+          IMAP_PASSWORD
+          IMAP_PROCESSED_FOLDER
           EMAIL_FROM
           EMAIL_REPLY_TO
           ADMIN_NOTIFICATION_EMAIL
@@ -375,6 +388,7 @@ jobs:
           kubectl apply -f k8s/ingressroute-http.yaml
           kubectl apply -f k8s/cronjob-reminders.yaml
           kubectl apply -f k8s/cronjob-outbox.yaml
+          kubectl apply -f k8s/cronjob-bounces.yaml
           kubectl apply -f k8s/cronjob-cleanup.yaml
           kubectl apply -f k8s/cronjob-release-check.yaml
           kubectl apply -f k8s/cronjob-backup.yaml

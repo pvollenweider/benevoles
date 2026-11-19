@@ -171,6 +171,37 @@ spec:
                   name: benevoles-secret
                   key: SMTP_PASSWORD
                   optional: true
+            # Deferred bounces (#602), optional: the IMAPS mailbox read every 15 minutes.
+            - name: IMAP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_HOST
+                  optional: true
+            - name: IMAP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_PORT
+                  optional: true
+            - name: IMAP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_USER
+                  optional: true
+            - name: IMAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_PASSWORD
+                  optional: true
+            - name: IMAP_PROCESSED_FOLDER
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_PROCESSED_FOLDER
+                  optional: true
             - name: EMAIL_FROM
               valueFrom:
                 secretKeyRef:

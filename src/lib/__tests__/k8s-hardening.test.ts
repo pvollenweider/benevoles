@@ -16,6 +16,7 @@ const POD_MANIFESTS = [
   "k8s/job-migrate.yaml",
   "k8s/cronjob-reminders.yaml",
   "k8s/cronjob-outbox.yaml",
+  "k8s/cronjob-bounces.yaml",
   "k8s/cronjob-cleanup.yaml",
   "k8s/cronjob-release-check.yaml",
   "k8s/cronjob-backup.yaml",
@@ -166,7 +167,7 @@ describe("k8s pod hardening (#1050)", () => {
   })
 
   it("the curl CronJobs, which only write /tmp/body, have a read-only root filesystem", () => {
-    for (const job of ["reminders", "outbox", "cleanup", "release-check"]) {
+    for (const job of ["reminders", "outbox", "bounces", "cleanup", "release-check"]) {
       const m = read(`k8s/cronjob-${job}.yaml`)
       expect(m, job).toContain("readOnlyRootFilesystem: true")
       expect(m, job).toMatch(/runAsUser: 100\n\s+runAsGroup: 101\n/)
@@ -454,7 +455,7 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
       expect(d).toMatch(/app\.kubernetes\.io\/name: traefik\n\s+ports:\n\s+- protocol: TCP\n\s+port: 8443\n/)
       expect(d.match(/^\s+- to:/gm)).toHaveLength(2)
       expect(d).not.toContain("ipBlock")
-      for (const job of ["reminders", "outbox", "cleanup", "release-check"]) {
+      for (const job of ["reminders", "outbox", "bounces", "cleanup", "release-check"]) {
         const manifest = read(`k8s/cronjob-${job}.yaml`)
         expect(manifest, job).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: benevoles-cron\n/)
         // The label is only right for a job that calls the public address and nothing else.

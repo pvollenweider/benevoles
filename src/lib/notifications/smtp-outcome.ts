@@ -39,6 +39,9 @@ export type SmtpReason =
   | "policy_rejected"
   | "relay_error"
   | "timeout"
+  // A delivery status notification (DSN) for a message our relay had already accepted (#602):
+  // the recipient's server refused it later. Never produced by the synchronous classifier.
+  | "bounced_after_acceptance"
   | "other"
 
 export type RecipientOutcome = {

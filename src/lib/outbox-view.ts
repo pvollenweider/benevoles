@@ -49,6 +49,7 @@ const PERMANENT_REASON_TEXT: Partial<Record<SmtpReason, string>> = {
   mailbox_full: "boîte aux lettres pleine",
   domain_not_found: "domaine introuvable",
   policy_rejected: "rejeté par la politique du serveur destinataire",
+  bounced_after_acceptance: "refusé par le serveur destinataire après l'acceptation par notre relais",
 }
 
 const TEMPORARY_REASON_TEXT: Partial<Record<SmtpReason, string>> = {
@@ -94,6 +95,7 @@ export const REASON_LABEL_FR: Record<SmtpReason, string> = {
   policy_rejected: "rejeté par la politique du serveur destinataire",
   relay_error: "rejeté par notre propre serveur d'envoi",
   timeout: "délai dépassé",
+  bounced_after_acceptance: "refusé après l'acceptation par le relais",
   other: "cause non précisée",
 }
 

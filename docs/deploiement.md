@@ -56,7 +56,7 @@ Ce qu'il ne fait pas :
 
 - Il transmet `AUTH_URL` (par défaut la valeur de `NEXT_PUBLIC_APP_URL`) et, seulement si elles sont définies dans `.env` ou dans le shell, `AUTH_TRUST_HOST`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS`, `SITE_NAME`, `CONTACT_EMAIL`, `SUPPORT_URL`, `HOSTED_SERVICE`, `SIGNUP`, `RELEASE_CHECK`, `OPERATOR_ALERT_EMAIL`, les variables VAPID et `SENTRY_DSN`. Toute autre variable de [configuration.md](configuration.md) est à ajouter dans la section `environment`.
 - `AUTH_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer, comme pour `POSTGRES_PASSWORD`. Une valeur d'exemple ou trop simple est refusée au démarrage de l'application (`src/lib/production-guards.ts`).
-- `CRON_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer. Le service `cron` (`scripts/compose-cron.sh`) appelle l'application sur le réseau interne de Compose, aux mêmes heures UTC que les CronJobs de Kubernetes : `/api/cron/outbox` toutes les 5 minutes, `/api/cron/reminders` toutes les heures, `/api/cron/cleanup` à 02:00, `/api/cron/release-check` à 03:00 (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README). Il démarre quand l'application est saine et écrit une ligne par appel : `docker compose logs cron`. Un cron de l'hôte qui appelait déjà ces endpoints est à retirer. Les sauvegardes de la base ne sont pas incluses.
+- `CRON_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer. Le service `cron` (`scripts/compose-cron.sh`) appelle l'application sur le réseau interne de Compose, aux mêmes heures UTC que les CronJobs de Kubernetes : `/api/cron/outbox` toutes les 5 minutes, `/api/cron/reminders` toutes les heures, `/api/cron/bounces` toutes les 15 minutes, `/api/cron/cleanup` à 02:00, `/api/cron/release-check` à 03:00 (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README). Il démarre quand l'application est saine et écrit une ligne par appel : `docker compose logs cron`. Un cron de l'hôte qui appelait déjà ces endpoints est à retirer. Les sauvegardes de la base ne sont pas incluses.
 - L'application a un contrôle de santé (`/api/health` : le serveur répond et joint la base) : `docker compose ps` l'affiche « healthy », et `docker compose up -d --wait` rend la main quand elle l'est.
 - Le premier super admin peut être créé au démarrage à partir de `ADMIN_EMAIL` et `ADMIN_PASSWORD` dans `.env` (et `ADMIN_NAME` pour son nom), sans passer par un checkout : les définir avant `docker compose up -d`, puis se connecter par la page habituelle. Le compte n'est créé qu'une fois, tant qu'aucun super admin n'existe ; changer `ADMIN_PASSWORD` ensuite ne le modifie pas. Détails : [configuration.md](configuration.md#premier-super-admin-auto-hébergement).
 - Il n'exécute pas le seed, et l'image ne contient pas `tsx` : pour l'organisation `default`, son admin et l'événement de démonstration, lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*`, le temps d'un accès local à la base (ci-dessous) :
@@ -132,6 +132,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `gandi-webhook.yaml` | Deployment `cert-manager-webhook-gandi`, APIService `v1alpha1.acme.bwolf.me`… (`cert-manager`) | non | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard ; lit le secret `gandi-api-key` |
 | `cronjob-reminders.yaml` | CronJob `app-reminders` | oui | Rappels, toutes les heures |
 | `cronjob-outbox.yaml` | CronJob `app-outbox` | oui | Envoi des emails arrivés à échéance (`POST /api/cron/outbox`), toutes les 5 minutes : emails groupés « inscrit par un organisateur » et désistements d'un même événement |
+| `cronjob-bounces.yaml` | CronJob `app-bounces` | oui | Rejets différés (`POST /api/cron/bounces`), toutes les 15 minutes : lecture IMAPS de la boîte des notifications, refus définitifs rapprochés par `Message-ID` et enregistrés comme les refus immédiats. Sans réglage IMAP, l'appel ne fait rien |
 | `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (GnuPG, AES-256 avec contrôle d'intégrité), 01:00 UTC, rétention 30 jours |
@@ -152,8 +153,8 @@ Les pods de l'application, du Job de migration et des CronJobs ne reçoivent pas
   | `/app/.next/server/route-cache` | la copie que Next.js fait des routes statiques de l'image (icônes, images de partage) à leur première demande, environ 5 Mio en tout | 64 Mi |
 
   Aucune page n'est réécrite dans `.next/server/app` : aucune route du build n'a de délai de revalidation, et ce dossier reste celui de l'image. Un pod dont un `emptyDir` dépasse sa limite est évincé par Kubernetes : la limite du cache d'images vaut plus du double du plafond de Next.js, ce que `k8s-hardening.test.ts` vérifie. Un nouveau chemin d'écriture (cache, fichier temporaire, export écrit sur disque) demande un volume de plus, ou `/tmp`. Le Job de migration garde un système de fichiers en écriture : Prisma écrit dans le dossier personnel de `nextjs`.
-- Les quatre CronJobs `curl` tournent sous `curl_user` (uid 100, groupe 101), système de fichiers en lecture seule, avec un `emptyDir` pour `/tmp`.
-- La sauvegarde et la copie hors site restent root sans capacité : les fichiers de `backup-pvc` appartiennent à root. La sauvegarde n'installe rien à l'exécution ; son signal de vie part d'un second conteneur `curl`, sous `curl_user` et en lecture seule comme les quatre CronJobs ci-dessus.
+- Les cinq CronJobs `curl` tournent sous `curl_user` (uid 100, groupe 101), système de fichiers en lecture seule, avec un `emptyDir` pour `/tmp`.
+- La sauvegarde et la copie hors site restent root sans capacité : les fichiers de `backup-pvc` appartiennent à root. La sauvegarde n'installe rien à l'exécution ; son signal de vie part d'un second conteneur `curl`, sous `curl_user` et en lecture seule comme les cinq CronJobs ci-dessus.
 - PostgreSQL (`postgres.yaml`) et le serveur de médias (`media.yaml`) gardent leur démarrage root, sans jeton de compte de service, avec `RuntimeDefault`, sans élévation de privilèges, et avec les seules capacités qu'il utilise : le point d'entrée de PostgreSQL vérifie le propriétaire du répertoire de données puis passe sous l'utilisateur `postgres` (uid 70) avec `su-exec` (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETGID`, `SETUID`) ; le serveur de médias fait tourner ses processus sous `nginx` et reçoit les fichiers de `make video-publish` par `tar` en root (les mêmes, plus `FSETID`). Leurs volumes gardent leurs propriétaires : ni `runAsUser` ni `fsGroup`. PostgreSQL est remplacé (`strategy: Recreate`) et non mis à jour progressivement : deux serveurs ne tournent jamais sur le même répertoire de données, au prix de quelques secondes sans base à chaque changement de son modèle de pod.
 
 ### Isolation réseau
@@ -169,7 +170,7 @@ Les sorties sont limitées pour les pods dont les besoins sont connus et fermés
 
 - PostgreSQL et le serveur de médias (`postgres-no-egress`, `media-no-egress`) n'ouvrent aucune connexion sortante ; ils répondent seulement ;
 - le Job de migration (`migrate-egress`) ne joint que le DNS du cluster et PostgreSQL ;
-- les quatre CronJobs qui appellent l'application (`cron-egress`, étiquette `app: benevoles-cron`) ne joignent que le DNS du cluster et Traefik (port 8443) : l'adresse publique désigne le nœud, qui remet la connexion au pod Traefik ;
+- les cinq CronJobs qui appellent l'application (`cron-egress`, étiquette `app: benevoles-cron`) ne joignent que le DNS du cluster et Traefik (port 8443) : l'adresse publique désigne le nœud, qui remet la connexion au pod Traefik ;
 - la sauvegarde de la base (`backup-egress`) ne joint que le DNS du cluster, PostgreSQL et Traefik (son signal de fin) ;
 - la copie hors site (`backup-offsite-egress`, étiquette `app: backup-offsite`) ne joint que le DNS du cluster, Traefik et internet sur le port 443 (Swiss Backup), jamais une adresse du cluster.
 
@@ -233,7 +234,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
    4. régénère `benevoles-secret` (« Sync k8s secret ») ;
    5. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    6. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   7. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
+   7. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les sept CronJobs ;
    8. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé ;
    9. une fois le site vérifié, déplace `:latest` sur l'image déployée, par son empreinte, sans la reconstruire.
 
@@ -319,7 +320,7 @@ kubectl -n benevoles logs job/benevoles-migrate
 
 # 4. Exposition et tâches planifiées
 kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/middleware-hsts.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
-kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
+kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cronjob-bounces.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 
 # 5. Seulement ensuite, l'application
 APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
@@ -359,7 +360,7 @@ Quand le script se termine, échoue ou atteint sa limite, l'entrée écrit le fi
 | `WARMUP_READY_FILE` | `/tmp/benevoles-ready` | Fichier qui marque la fin du préchauffage |
 
 Avec Docker Compose, le préchauffage tourne de la même façon (sur l'hôte de `NEXT_PUBLIC_APP_URL`, `localhost` par défaut) ; rien n'attend `/api/health/ready`, le serveur répond dès son démarrage. Le préchauffage ne se lance que pour la commande `node server.js` : le Job de migration, qui utilise la même image, n'est pas concerné.
-- Les cron jobs de rappels, d'envoi des emails et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
+- Les cron jobs de rappels, d'envoi des emails, de rejets différés et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`. La lecture des rejets différés lit en plus `IMAP_*` dans l'application (facultatif, voir [configuration.md](configuration.md#rejets-différés-optionnel)).
 
 ## Mise à jour depuis 2.7.x
 

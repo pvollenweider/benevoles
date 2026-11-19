@@ -10,6 +10,7 @@
 # database (#1362), so another scheduler calling them at the same time sends nothing twice.
 #   every 5 minutes  POST /api/cron/outbox         emails waiting in the outbox
 #   every hour       POST /api/cron/reminders      reminders before each shift
+#   every 15 minutes POST /api/cron/bounces        deferred bounces read from the IMAPS mailbox
 #   02:00            POST /api/cron/cleanup        daily cleanup and retention
 #   03:00            POST /api/cron/release-check  latest published release (RELEASE_CHECK)
 # Needs APP_URL (the app as seen from this container) and CRON_SECRET (the app's own value).
@@ -24,6 +25,7 @@ set -u
 due() {
   case "$2" in *0 | *5) echo outbox ;; esac
   [ "$2" = "00" ] && echo reminders
+  case "$2" in 00 | 15 | 30 | 45) echo bounces ;; esac
   [ "$1$2" = "0200" ] && echo cleanup
   [ "$1$2" = "0300" ] && echo release-check
   return 0
