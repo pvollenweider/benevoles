@@ -64,7 +64,7 @@
     },
     {
       "id": "health",
-      "transcript": "La page Santé du service regroupe trois ensembles d'informations : le service, les tâches planifiées et les sauvegardes, puis la configuration. Regardons les états visibles, la date de contrôle et la version. Recharger relance la vérification. Dans notre environnement local, certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement. Nous ne le transformons pas en succès pour la démonstration. Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée. Ces indicateurs aident à repérer un problème ; ils ne remplacent pas son analyse.",
+      "transcript": "La page Santé du service regroupe quatre ensembles d'informations : le service, les ressources du serveur, les tâches planifiées et les sauvegardes, puis la configuration. Regardons les états visibles, la date de contrôle et la version. Recharger relance la vérification. Dans notre environnement local, certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement. Nous ne le transformons pas en succès pour la démonstration. Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée. Ces indicateurs aident à repérer un problème ; ils ne remplacent pas son analyse.",
       "fallbackDurationMs": 60000
     },
     {
