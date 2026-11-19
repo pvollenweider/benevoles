@@ -111,7 +111,10 @@ beforeEach(() => {
   mocks.loadSignupSources.mockResolvedValue([])
   mocks.observePastEvents.mockResolvedValue([])
   mocks.loadHealth.mockResolvedValue({
-    items: [{ id: "server:memory", label: "Mémoire de l'application", level: "ok", detail: "100 Mo sur 1 Go (9,8 %)." }],
+    items: [
+      { id: "server:memory", label: "Mémoire de l'application", level: "ok", detail: "100 Mo sur 1 Go (9,8 %)." },
+      { id: "deferred-bounces", label: "Rejets différés", level: "ok", detail: "Dernier passage il y a 5 min : 3 analysés, 1 signalé." },
+    ],
     version: "2.8.0",
     gitSha: null,
     migrations: null,
@@ -246,5 +249,8 @@ describe("the health page's server section", () => {
     expect(screen.getByRole("heading", { name: "Serveur" })).toBeInTheDocument()
     expect(screen.getByText("Mémoire de l'application")).toBeInTheDocument()
     expect(screen.getByText("100 Mo sur 1 Go (9,8 %).")).toBeInTheDocument()
+    // Deferred bounces (#602): its own item, shown in the Service group next to the outbox.
+    expect(screen.getByText("Rejets différés")).toBeInTheDocument()
+    expect(screen.getByText("Dernier passage il y a 5 min : 3 analysés, 1 signalé.")).toBeInTheDocument()
   })
 })

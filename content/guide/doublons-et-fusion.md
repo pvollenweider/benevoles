@@ -45,4 +45,4 @@ C'est normal : elle est gardée 30 jours après la fusion, puis supprimée autom
 
 ### Une personne s'est inscrite avec une adresse email mal saisie et a maintenant deux fiches.
 
-Quand un email lui est définitivement refusé, sa fiche porte l'étiquette **Adresse à vérifier** : corrigez l'adresse depuis sa fiche. Si une seconde fiche a été créée, la page **Doublons possibles** la propose à côté de la première, avec les raisons du rapprochement ; le propriétaire de l'organisation peut alors **fusionner** les deux fiches, avec un aperçu de tout ce qui sera déplacé avant de confirmer.
+Quand un email lui est définitivement refusé, tout de suite ou plus tard, après l'acceptation par notre serveur d'envoi, sa fiche porte l'étiquette **Adresse à vérifier** : corrigez l'adresse depuis sa fiche. Si une seconde fiche a été créée, la page **Doublons possibles** la propose à côté de la première, avec les raisons du rapprochement ; le propriétaire de l'organisation peut alors **fusionner** les deux fiches, avec un aperçu de tout ce qui sera déplacé avant de confirmer.

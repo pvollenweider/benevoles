@@ -1,0 +1,55 @@
+Return-Path: <notifications@benevol.app>
+Delivered-To: notifications@benevol.app
+From: MAILER-DAEMON@mail.gandi.net (Mail Delivery System)
+To: notifications@benevol.app
+Subject: Undelivered Mail Returned to Sender
+Date: Mon, 16 Nov 2026 14:02:11 +0100 (CET)
+Message-ID: <20261116130211.5B2C3D4E5F@mail.gandi.net>
+MIME-Version: 1.0
+Auto-Submitted: auto-replied
+Content-Type: multipart/report; report-type=delivery-status; boundary="B2C3D4E5F6.20261116140211"
+
+This is a MIME-encapsulated message.
+
+--B2C3D4E5F6.20261116140211
+Content-Description: Notification
+Content-Type: text/plain; charset=utf-8
+
+This is the mail system at host mail.gandi.net.
+
+<inconnu@exemple.org>: host mx.exemple.org[192.0.2.10] said: 550 5.1.1
+    <inconnu@exemple.org>: Recipient address rejected: User unknown in
+    virtual mailbox table (in reply to RCPT TO command)
+
+--B2C3D4E5F6.20261116140211
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; mail.gandi.net
+X-Postfix-Queue-ID: 5B2C3D4E5F
+X-Postfix-Sender: rfc822; notifications@benevol.app
+Arrival-Date: Mon, 16 Nov 2026 14:01:59 +0100 (CET)
+
+Final-Recipient: rfc822; inconnu@exemple.org
+Original-Recipient: rfc822;inconnu@exemple.org
+Action: failed
+Status: 5.1.1
+Remote-MTA: dns; mx.exemple.org
+Diagnostic-Code: smtp; 550 5.1.1 <inconnu@exemple.org>: Recipient address
+	rejected: User unknown in virtual mailbox table
+Last-Attempt-Date: Mon, 16 Nov 2026 14:02:11 +0100 (CET)
+
+--B2C3D4E5F6.20261116140211
+Content-Description: Undelivered Message Headers
+Content-Type: text/rfc822-headers
+
+Return-Path: <notifications@benevol.app>
+From: benevol.app <notifications@benevol.app>
+To: inconnu@exemple.org
+Subject: Rappel : votre créneau demain
+Date: Mon, 16 Nov 2026 14:01:20 +0100
+Message-ID: <outbox-clx0000000000000000000002@www.benevol.app>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+--B2C3D4E5F6.20261116140211--

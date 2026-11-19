@@ -10,7 +10,6 @@ import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
 import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
-import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
 import { isAddedShiftsConfirmation, resolveAddedShiftsConfirmation } from "./added-shifts-confirmation"
 import { outboxRecipientVerdict } from "../outbox-recipient-check"
@@ -21,6 +20,9 @@ import { outboxFailureGroup } from "./outbox-failure"
 import { isCustomRuleReminder, resolveCustomRuleReminder, sendCustomReminderPush } from "../reminder-occurrence-delivery"
 import { nextReminderAttemptAt } from "../reminder-rules"
 import { ORG_ACCOUNT_ROLE_WHERE } from "../permissions"
+import { outboxMessageId } from "./outbox-message-id"
+
+export { outboxMessageId, outboxMessageHost } from "./outbox-message-id"
 
 /**
  * Notification outbox (#293).
@@ -224,14 +226,6 @@ async function enqueueRows(
     ids.push(row.id)
   }
   return ids
-}
-
-/** Stable Message-ID per outbox row: a re-send after a crash is recognizable as the same email. */
-export function outboxMessageId(rowId: string): string {
-  const host = (() => {
-    try { return new URL(process.env.NEXT_PUBLIC_APP_URL ?? "").hostname || siteDomain() } catch { return siteDomain() }
-  })()
-  return `<outbox-${rowId}@${host}>`
 }
 
 /**

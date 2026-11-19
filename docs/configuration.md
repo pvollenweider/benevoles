@@ -72,6 +72,21 @@ Sans `SMTP_HOST`, aucun email n'est envoyé. En production, chaque envoi échoue
 
 Exemples de réglages SMTP courants dans `.env.example` (Gmail, OVH, Infomaniak, Brevo).
 
+### Rejets différés (optionnel)
+
+Un relais d'envoi accepte souvent le message puis apprend plus tard que la boîte n'existe pas ; il envoie alors un avis de non-remise (DSN) à l'expéditeur d'enveloppe. La tâche planifiée `app-bounces` lit la boîte des notifications par IMAPS toutes les 15 minutes, rapproche chaque avis d'un email envoyé par son `Message-ID`, enregistre un refus définitif comme un refus immédiat (#598) et déplace l'avis traité dans un dossier. Les réponses automatiques, accusés de lecture et avis non rapprochés restent dans la boîte de réception et sont seulement comptés.
+
+Sans `IMAP_USER` et `IMAP_PASSWORD`, la lecture est désactivée (aucune connexion) et la page **Santé du service** affiche « Rejets différés : non configuré ». La connexion est toujours IMAPS (TLS implicite, certificat vérifié) : `IMAP_HOST` vaut `mail.gandi.net` par défaut, `IMAP_PORT` `993`. Le dossier `IMAP_PROCESSED_FOLDER` (« Rejets traités » par défaut) est créé s'il manque. Ces réglages sont facultatifs et ne bloquent jamais le démarrage.
+
+| Variable | Requis | Description |
+|----------|--------|-------------|
+| `IMAP_HOST` | non | Serveur IMAPS. Défaut `mail.gandi.net` |
+| `IMAP_PORT` | non | Port IMAPS, TLS implicite. Défaut `993` |
+| `IMAP_USER`, `IMAP_PASSWORD` | pour lire | Identifiants de la boîte qui reçoit les avis. Les deux sont nécessaires |
+| `IMAP_PROCESSED_FOLDER` | non | Dossier où sont déplacés les avis traités. Défaut « Rejets traités », créé s'il manque |
+
+Le contenu brut des avis n'est ni stocké en base ni écrit dans les journaux : seuls le résultat normalisé (type d'email, motif, code SMTP, empreinte de l'adresse) et des compteurs sont conservés.
+
 ## Notifications push (optionnel)
 
 Sans clés VAPID, aucun push n'est envoyé. Le bouton d'abonnement de la page personnelle reste affiché et disparaît au premier clic. La page Santé du service signale l'absence des clés.
@@ -162,6 +177,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 | `APP_DB_PASSWORD`, `MIGRATE_DB_PASSWORD` | secrets GitHub, pas des clés du secret Kubernetes : mots de passe des rôles `benevoles_app` et `benevoles_owner`, en hexadécimal (`openssl rand -hex 32`). Les deux URL sont construites sans encodage : un caractère réservé (`@`, `:`, `/`, `%`…) les casserait |
 | `AUTH_SECRET`, `CRON_SECRET`, `TOKEN_ENCRYPTION_KEY`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` | secrets GitHub du même nom |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `ADMIN_NOTIFICATION_EMAIL` | secrets GitHub du même nom |
+| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASSWORD`, `IMAP_PROCESSED_FOLDER` | secrets GitHub du même nom ; facultatifs (#602). Vides : la lecture des rejets différés est désactivée |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | secrets GitHub du même nom |
 | `NTFY_URL`, `NTFY_TOKEN`, `OPERATOR_ALERT_EMAIL` | secrets GitHub du même nom (#810) ; vides : pas d'alerte ntfy, alertes email aux super admins actifs |
 | `SIGNUP` | secret GitHub du même nom (#810) ; vide : inscription en libre-service ouverte, `off` la ferme |

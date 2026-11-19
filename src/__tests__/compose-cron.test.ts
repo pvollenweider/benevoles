@@ -48,13 +48,14 @@ function cronFires(expression: string, hour: number, minute: number): boolean {
   return field(m, minute) && field(h, hour)
 }
 
-const K8S_TASKS = { outbox: "cronjob-outbox.yaml", reminders: "cronjob-reminders.yaml", cleanup: "cronjob-cleanup.yaml", "release-check": "cronjob-release-check.yaml" }
+const K8S_TASKS = { outbox: "cronjob-outbox.yaml", reminders: "cronjob-reminders.yaml", bounces: "cronjob-bounces.yaml", cleanup: "cronjob-cleanup.yaml", "release-check": "cronjob-release-check.yaml" }
 
 describe("scheduled tasks of the Docker Compose install (scripts/compose-cron.sh)", () => {
   it("calls the daily tasks at their hour, on top of the hourly and five-minute ones", () => {
-    expect(due(2, 0)).toEqual(["outbox", "reminders", "cleanup"])
-    expect(due(3, 0)).toEqual(["outbox", "reminders", "release-check"])
-    expect(due(14, 0)).toEqual(["outbox", "reminders"])
+    expect(due(2, 0)).toEqual(["outbox", "reminders", "bounces", "cleanup"])
+    expect(due(3, 0)).toEqual(["outbox", "reminders", "bounces", "release-check"])
+    expect(due(14, 0)).toEqual(["outbox", "reminders", "bounces"])
+    expect(due(14, 15)).toEqual(["outbox", "bounces"])
     expect(due(14, 5)).toEqual(["outbox"])
     expect(due(2, 5)).toEqual(["outbox"])
     expect(due(14, 7)).toEqual([])
@@ -73,15 +74,17 @@ describe("scheduled tasks of the Docker Compose install (scripts/compose-cron.sh
     // reading to the script's real output.
     expect(script).toContain('case "$2" in *0 | *5) echo outbox ;; esac')
     expect(script).toContain('[ "$2" = "00" ] && echo reminders')
+    expect(script).toContain('case "$2" in 00 | 15 | 30 | 45) echo bounces ;; esac')
     expect(script).toContain('[ "$1$2" = "0200" ] && echo cleanup')
     expect(script).toContain('[ "$1$2" = "0300" ] && echo release-check')
     const scriptDue = (h: number, m: number) => [
       ...(m % 5 === 0 ? ["outbox"] : []),
       ...(m === 0 ? ["reminders"] : []),
+      ...(m % 15 === 0 ? ["bounces"] : []),
       ...(h === 2 && m === 0 ? ["cleanup"] : []),
       ...(h === 3 && m === 0 ? ["release-check"] : []),
     ]
-    for (const [h, m] of [[2, 0], [3, 0], [14, 0], [14, 5], [14, 7], [0, 0], [23, 55]]) expect(scriptDue(h, m), `${h}:${m}`).toEqual(due(h, m))
+    for (const [h, m] of [[2, 0], [3, 0], [14, 0], [14, 5], [14, 15], [14, 7], [0, 0], [23, 55]]) expect(scriptDue(h, m), `${h}:${m}`).toEqual(due(h, m))
     for (let h = 0; h < 24; h++) {
       for (let m = 0; m < 60; m++) {
         const expected = schedules.filter(([, schedule]) => cronFires(schedule, h, m)).map(([task]) => task).sort()

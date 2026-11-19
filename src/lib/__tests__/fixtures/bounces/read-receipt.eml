@@ -1,0 +1,26 @@
+Return-Path: <camille.membre@exemple.org>
+Delivered-To: notifications@benevol.app
+From: Camille Membre <camille.membre@exemple.org>
+To: notifications@benevol.app
+Subject: Lu : Confirmation de votre inscription
+Date: Mon, 16 Nov 2026 10:05:12 +0100
+Message-ID: <read-receipt-9a2b@exemple.org>
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=disposition-notification; boundary="E5F6A7B8C9"
+
+This is a MIME-encapsulated message.
+
+--E5F6A7B8C9
+Content-Type: text/plain; charset=utf-8
+
+Votre message a été lu.
+
+--E5F6A7B8C9
+Content-Type: message/disposition-notification
+
+Reporting-UA: exemple.org; Mail Client 1.0
+Original-Recipient: rfc822; notifications@benevol.app
+Final-Recipient: rfc822; camille.membre@exemple.org
+Disposition: manual-action/MDN-sent-manually; displayed
+
+--E5F6A7B8C9--

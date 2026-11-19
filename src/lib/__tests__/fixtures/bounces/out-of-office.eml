@@ -1,0 +1,26 @@
+Return-Path: <camille.membre@exemple.org>
+Delivered-To: notifications@benevol.app
+From: Camille Membre <camille.membre@exemple.org>
+To: notifications@benevol.app
+Subject: Absence du bureau : Camille Membre
+Date: Mon, 16 Nov 2026 10:04:00 +0100
+Message-ID: <vacation-8f3a1c@exemple.org>
+MIME-Version: 1.0
+Auto-Submitted: auto-replied
+X-Auto-Response-Suppress: All
+Content-Type: multipart/report; report-type=disposition-notification; boundary="D4E5F6A7B8"
+
+--D4E5F6A7B8
+Content-Type: text/plain; charset=utf-8
+
+Je suis absent du bureau jusqu'au 24 novembre. Pour toute urgence,
+contactez l'accueil.
+
+--D4E5F6A7B8
+Content-Type: message/disposition-notification
+
+Reporting-UA: exemple.org; Postfix
+Final-Recipient: rfc822; camille.membre@exemple.org
+Disposition: automatic-action/MDN-sent-automatically; displayed
+
+--D4E5F6A7B8--

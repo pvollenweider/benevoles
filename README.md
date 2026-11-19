@@ -200,12 +200,13 @@ En production, les migrations sont appliquées une fois par déploiement, par un
 
 ## Tâches planifiées (cron)
 
-Cinq endpoints, protégés par `Authorization: Bearer $CRON_SECRET` :
+Six endpoints, protégés par `Authorization: Bearer $CRON_SECRET` :
 
 | Endpoint | Méthodes | Rôle | Fréquence |
 |----------|----------|------|-----------|
 | `/api/cron/reminders` | `GET`, `POST` | Rappels J-2, J-1 et Jour J (email et push) selon les paramètres de l'organisation ; expiration des offres de liste d'attente et promotion du suivant ; nouvel essai des emails en échec (file d'envoi) | toutes les heures |
 | `/api/cron/outbox` | `POST` | Envoi des messages programmés arrivés à leur heure, puis des emails de la file arrivés à échéance, dont les emails groupés (« inscrit par un organisateur », désistements d'un même événement) qui attendent quelques minutes pour regrouper les créneaux ; sans lui, les messages programmés ne partent pas et les emails groupés partent au passage horaire des rappels | toutes les 5 minutes |
+| `/api/cron/bounces` | `POST` | Rejets différés (#602) : lecture IMAPS de la boîte des notifications, rapprochement des avis de non-remise par `Message-ID`, puis enregistrement d'un refus définitif comme un refus immédiat. Sans réglage `IMAP_*`, ne fait rien | toutes les 15 minutes |
 | `/api/cron/cleanup` | `GET`, `POST` | Purge RGPD : organisations désactivées depuis plus de 30 jours avec leurs comptes organisateurs, comptes organisateurs inactifs (désactivés ou invitation jamais acceptée) depuis plus de 30 jours, bénévoles orphelins, jetons de réinitialisation expirés, emails envoyés (en échec : après 30 jours), messages ciblés et messages programmés terminés de plus de 12 mois, compteurs de limites expirés, et les autres durées de [docs/retention.md](docs/retention.md) ; chiffrement des anciens liens personnels ; résumé quotidien des adresses à vérifier ; procédure d'inactivité des organisations et anonymisation des événements passés, si elles sont activées | une fois par jour |
 | `/api/cron/release-check` | `GET`, `POST` | Instances auto-hébergées (#612) : compare la version déployée à la dernière release publique GitHub (sans jeton), prévient les super admins par email une fois par nouvelle version, affiche la dernière version connue sur `/super-admin/health`. Sans effet si `RELEASE_CHECK=off` (aucune requête sortante) | une fois par jour |
 | `/api/cron/heartbeat` | `POST` | Signal de vie des tâches extérieures à l'application (`backup`, `backup-offsite`, `restore-test`), affiché sur `/super-admin/health` | à la fin de chaque sauvegarde réussie |
@@ -218,13 +219,14 @@ Si `CRON_SECRET` est vide, les endpoints refusent toutes les requêtes en produc
 # Exemple crontab (CRON_SECRET défini dans l'environnement du crontab)
 0 * * * * curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/reminders
 */5 * * * * curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/outbox
+*/15 * * * * curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/bounces
 0 2 * * * curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/cleanup
 0 3 * * * curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/release-check
 ```
 
-Sur Kubernetes, `k8s/` fournit les CronJobs `app-reminders` (toutes les heures), `app-outbox` (toutes les 5 minutes), `app-cleanup` (02:00 UTC), `app-release-check` (03:00 UTC), `postgres-backup` (`pg_dump` chiffré à 01:00 UTC, rétention 30 jours) et `backup-offsite` (copie des fichiers chiffrés vers Infomaniak Swiss Backup à 01:30 UTC, rétention 90 jours).
+Sur Kubernetes, `k8s/` fournit les CronJobs `app-reminders` (toutes les heures), `app-outbox` (toutes les 5 minutes), `app-bounces` (toutes les 15 minutes), `app-cleanup` (02:00 UTC), `app-release-check` (03:00 UTC), `postgres-backup` (`pg_dump` chiffré à 01:00 UTC, rétention 30 jours) et `backup-offsite` (copie des fichiers chiffrés vers Infomaniak Swiss Backup à 01:30 UTC, rétention 90 jours).
 
-Avec Docker Compose, le service `cron` de `docker-compose.yml` fait ces quatre appels aux mêmes heures, sans cron de l'hôte ; les sauvegardes restent à mettre en place.
+Avec Docker Compose, le service `cron` de `docker-compose.yml` fait ces cinq appels aux mêmes heures, sans cron de l'hôte ; les sauvegardes restent à mettre en place.
 
 ## Déploiement
 
@@ -273,7 +275,7 @@ src/
 │       ├── admin/                        # API protégée par org
 │       ├── super-admin/                  # API super admin
 │       ├── public/                       # API publique (inscriptions, liens personnels, push…)
-│       ├── cron/                         # reminders, outbox, cleanup, release-check, heartbeat
+│       ├── cron/                         # reminders, outbox, bounces, cleanup, release-check, heartbeat
 │       ├── health/                       # Sonde Kubernetes (SELECT 1)
 │       └── auth/                         # NextAuth
 ├── components/                           # admin/, public/, super-admin/, DayTimeline.tsx (timeline publique)

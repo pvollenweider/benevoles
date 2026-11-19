@@ -1,0 +1,64 @@
+Return-Path: <notifications@benevol.app>
+Delivered-To: notifications@benevol.app
+Received: from mail.gandi.net (mail.gandi.net [217.70.184.10])
+	by mail.gandi.net (Postfix) with ESMTPS id 4A1B2C3D4E
+	for <notifications@benevol.app>; Wed, 18 Nov 2026 09:15:42 +0100 (CET)
+From: MAILER-DAEMON@mail.gandi.net (Mail Delivery System)
+To: notifications@benevol.app
+Subject: Undelivered Mail Returned to Sender
+Date: Wed, 18 Nov 2026 09:15:42 +0100 (CET)
+Message-ID: <20261118081542.4A1B2C3D4E@mail.gandi.net>
+MIME-Version: 1.0
+Auto-Submitted: auto-replied
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="A1B2C3D4E5F6.20261118091542"
+
+This is a MIME-encapsulated message.
+
+--A1B2C3D4E5F6.20261118091542
+Content-Description: Notification
+Content-Type: text/plain; charset=utf-8
+
+This is the mail system at host mail.gandi.net.
+
+Your message could not be delivered to one or more recipients. The
+message was accepted by our relay and then refused by the destination
+mail server.
+
+<eleve.test@ecole-exemple.org>: host ecole-exemple-org.mail.protection.outlook.com
+    [203.0.113.25] said: 550 5.4.1 Recipient address rejected: Access denied.
+    [DM6PEPF00000000.eurprd00.prod.outlook.com 2026-11-18T08:15:40.123Z
+    00000000] (in reply to RCPT TO command)
+
+--A1B2C3D4E5F6.20261118091542
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; mail.gandi.net
+X-Postfix-Queue-ID: 4A1B2C3D4E
+X-Postfix-Sender: rfc822; notifications@benevol.app
+Arrival-Date: Wed, 18 Nov 2026 09:15:30 +0100 (CET)
+
+Final-Recipient: rfc822; eleve.test@ecole-exemple.org
+Original-Recipient: rfc822;eleve.test@ecole-exemple.org
+Action: failed
+Status: 5.4.1
+Remote-MTA: dns; ecole-exemple-org.mail.protection.outlook.com
+Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access denied.
+	[DM6PEPF00000000.eurprd00.prod.outlook.com 2026-11-18T08:15:40.123Z 00000000]
+Last-Attempt-Date: Wed, 18 Nov 2026 09:15:42 +0100 (CET)
+
+--A1B2C3D4E5F6.20261118091542
+Content-Description: Undelivered Message Headers
+Content-Type: text/rfc822-headers
+
+Return-Path: <notifications@benevol.app>
+From: benevol.app <notifications@benevol.app>
+To: eleve.test@ecole-exemple.org
+Subject: Confirmation de votre inscription
+Date: Wed, 18 Nov 2026 09:14:58 +0100
+Message-ID: <outbox-clx0000000000000000000001@www.benevol.app>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+--A1B2C3D4E5F6.20261118091542--
