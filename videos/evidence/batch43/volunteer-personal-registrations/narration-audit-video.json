@@ -1,0 +1,101 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T17:52:32.630Z",
+  "revalidatedAt": "2026-11-19T17:52:32.631Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "671c6d9a8302689b9f2cc784bd4c6f1a423447d56deaa08cf2fb7ba4c24bbf62",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "2426e730b7688d84f7f715992f388821e34f214d0c3e68e1fcf937998f5ab1fa",
+      "recognized": "Le lien personnel reçu par email ouvre toutes tes inscriptions à venir auprès de la même organisation sans créer de compte. Pour les détails d'un événement, choisis Voir l'événement. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. On va lire les informations utiles, puis voir comment retirer chaque engagement.",
+      "expected": "Le lien personnel reçu par email ouvre toutes tes inscriptions à venir auprès de la même organisation, sans créer de compte. Pour les détails d’un événement, choisis Voir l’événement. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. On va lire les informations utiles, puis voir comment retirer chaque engagement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "practical",
+      "audioSha256": "9262f1bc72267d8d6d3bf6632b3ad7ed6b262e738ef2da2d5a1bdc93dfc5d320",
+      "recognized": "Commençons par l'accueil confirmé. La carte indique le jour et les horaires. Le rendez-vous et les consignes expliquent où aller et comment se préparer. Le lien Carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits. Garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+      "expected": "Commençons par l'Accueil confirmé. La carte indique le jour et les horaires. Le rendez-vous et les consignes expliquent où aller et comment se préparer. Le lien carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits : garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "states",
+      "audioSha256": "d6c46a2d8810b700d2949fbcdd087a172888b42a01aa7332865e996e84419058",
+      "recognized": "Les autres cartes ne signifient pas la même chose. Liste d'attente indique ta position sans place confirmée. Une place proposée affiche une échéance et un lien pour la prendre. Tant que tu n'as pas accepté, ne la considère pas comme acquise. Une demande sur validation attend la décision de l'organisation qui te prévient par email. Lis toujours le statut avant de préparer ton planning.",
+      "expected": "Les autres cartes ne signifient pas la même chose. Liste d'attente indique ta position, sans place confirmée. Une place proposée affiche une échéance et un lien pour la prendre : tant que tu n'as pas accepté, ne la considère pas comme acquise. Une demande sur validation attend la décision de l'organisation, qui te prévient par email. Lis toujours le statut avant de préparer ton planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "cancel",
+      "audioSha256": "18235e29149f070bffcb92cd7e623d6b87bf4811575e04449a9ea60ae3bc220a",
+      "recognized": "Pour l'accueil, Annuler ouvre une confirmation. Tu peux encore choisir non, garder, rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page Mes inscriptions. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place. Cela aide l'équipe à réorganiser la relève.",
+      "expected": "Pour l'Accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder : rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page Mes inscriptions. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place : cela aide l'équipe à réorganiser la relève.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "waiting",
+      "audioSha256": "d238d98bf21c181d7bdeb7d480de306bd90e8971365db62e2a80673094d7684a",
+      "recognized": "Si tu n'es plus disponible pour la buvette en attente, choisis Quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît, tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+      "expected": "Si tu n'es plus disponible pour la Buvette en attente, choisis Quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît : tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "offer",
+      "audioSha256": "6d144e9b28bfa72d8f0aeffaafb7d20fe99606d25bd68e48c49e0466a1e62f4c",
+      "recognized": "Pour une place proposée, le bouton est Refuser la place. Lis les conséquences. La place passe à la personne suivante et tu quittes la liste d'attente. Après confirmation, cette offre disparaît. Et si tu voulais participer, il fallait au contraire utiliser Prendre la place et suivre la confirmation d'acceptation avant l'échéance indiquée.",
+      "expected": "Pour une place proposée, le bouton est Refuser la place. Lis les conséquences : la place passe à la personne suivante et tu quittes la liste d'attente. Après confirmation, cette offre disparaît. Si tu voulais participer, il fallait au contraire utiliser Prendre la place et suivre la confirmation d'acceptation avant l'échéance indiquée.",
+      "wordErrorRate": 0.018518518518518517,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "request",
+      "audioSha256": "50c0df36a721c8357f45616c8cb0042eb6270faf5145119655f4876fca1f3333",
+      "recognized": "Il reste la demande pour la navette du dimanche. Retirer ma demande ouvre sa confirmation. La place qui t'était réservée est libérée. En confirmant, tu retires cette candidature sans attendre une réponse de l'organisateur. C'est ici le dernier engagement de Camille. La page indique maintenant que toutes ses inscriptions ont été annulées.",
+      "expected": "Il reste la demande pour la Navette du dimanche. Retirer ma demande ouvre sa confirmation : la place qui t'était réservée est libérée. En confirmant, tu retires cette candidature sans attendre une réponse de l'organisateur. C'est ici le dernier engagement de Camille. La page indique maintenant que toutes ses inscriptions ont été annulées.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "return",
+      "audioSha256": "20ef84d3fc2b2c13afe1086dea75abc18174f8a4b115098347123ae28cfdba8b",
+      "recognized": "Le lien « s'inscrire à d'autres créneaux » ramène à la page d'inscription. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+      "expected": "Le lien S'inscrire à d'autres créneaux ramène à la page d'inscription. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "renew",
+      "audioSha256": "1c95595ec5d484e024e9b4815f82db1b3436568c26ec351b584e9b3772115084",
+      "recognized": "Reviens sur la page de toutes tes inscriptions. Ton lien personnel reste valable pour les prochains événements de cette organisation. Si tu penses l'avoir partagé, choisis renouveler mon lien. Un e-mail t'apporte le nouveau lien. L'ancien cesse de fonctionner et si ton agenda était abonné, ouvre le nouveau lien pour t'abonner de nouveau.",
+      "expected": "Reviens sur la page de toutes tes inscriptions. Ton lien personnel reste valable pour les prochains événements de cette organisation. Si tu penses l’avoir partagé, choisis Renouveler mon lien. Un email t’apporte le nouveau lien. L’ancien cesse de fonctionner et, si ton agenda était abonné, ouvre le nouveau lien pour t’abonner de nouveau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

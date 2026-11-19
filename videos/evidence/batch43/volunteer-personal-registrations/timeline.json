@@ -1,0 +1,220 @@
+{
+  "slug": "volunteer-personal-registrations",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-19T17:51:23.068Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "e08c20ba48490bce0e3db83a87cb8ce1f4be6ae6",
+    "sourceTree": "4a4df4b4abe8dca4302d515780f11089614d3195",
+    "productSourceSha256": "8460485d0e5802d594ab6b52a2b392091e8c730b66862e7cb86762f7c923b2c8",
+    "buildId": "ukgq7Atgkesv7nsI1f36Z",
+    "snapshot": "/private/tmp/benevoles-video-production.TGUHeI7V",
+    "builtAt": "2026-11-19T17:27:33.168Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 9145
+    },
+    {
+      "kind": "click",
+      "atMs": 68493
+    },
+    {
+      "kind": "click",
+      "atMs": 71887
+    },
+    {
+      "kind": "click",
+      "atMs": 75730
+    },
+    {
+      "kind": "click",
+      "atMs": 76531
+    },
+    {
+      "kind": "click",
+      "atMs": 89330
+    },
+    {
+      "kind": "click",
+      "atMs": 99146
+    },
+    {
+      "kind": "click",
+      "atMs": 106679
+    },
+    {
+      "kind": "click",
+      "atMs": 115262
+    },
+    {
+      "kind": "click",
+      "atMs": 130071
+    },
+    {
+      "kind": "click",
+      "atMs": 134930
+    },
+    {
+      "kind": "click",
+      "atMs": 146693
+    },
+    {
+      "kind": "click",
+      "atMs": 173478
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 72,
+      "endMs": 23204
+    },
+    {
+      "id": "practical",
+      "startMs": 23658,
+      "endMs": 43834
+    },
+    {
+      "id": "states",
+      "startMs": 44287,
+      "endMs": 67485
+    },
+    {
+      "id": "cancel",
+      "startMs": 67965,
+      "endMs": 88396
+    },
+    {
+      "id": "waiting",
+      "startMs": 88847,
+      "endMs": 105759
+    },
+    {
+      "id": "offer",
+      "startMs": 106210,
+      "endMs": 125848
+    },
+    {
+      "id": "request",
+      "startMs": 126302,
+      "endMs": 145462
+    },
+    {
+      "id": "return",
+      "startMs": 145922,
+      "endMs": 165470
+    },
+    {
+      "id": "renew",
+      "startMs": 165924,
+      "endMs": 184643
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Pour les détails",
+      "startMs": 8571,
+      "endMs": 11387,
+      "cueMs": 8645
+    },
+    {
+      "segmentId": "welcome",
+      "phrase": "Ici, Camille a une place",
+      "startMs": 11831,
+      "endMs": 18201,
+      "cueMs": 11904
+    },
+    {
+      "segmentId": "practical",
+      "phrase": "Le lien carte aide à",
+      "startMs": 9319,
+      "endMs": 11669,
+      "cueMs": 32978
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Une place proposée affiche une",
+      "startMs": 7220,
+      "endMs": 10995,
+      "cueMs": 51510
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Une demande sur validation attend",
+      "startMs": 14827,
+      "endMs": 19702,
+      "cueMs": 59119
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "Tu peux encore choisir Non,",
+      "startMs": 3436,
+      "endMs": 5000,
+      "cueMs": 71402
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "Reprenons et confirmons cette fois.",
+      "startMs": 7265,
+      "endMs": 8949,
+      "cueMs": 75233
+    },
+    {
+      "segmentId": "waiting",
+      "phrase": "Confirme uniquement si c'est ce",
+      "startMs": 9805,
+      "endMs": 11832,
+      "cueMs": 98653
+    },
+    {
+      "segmentId": "offer",
+      "phrase": "Après confirmation, cette offre disparaît.",
+      "startMs": 8584,
+      "endMs": 10780,
+      "cueMs": 114798
+    },
+    {
+      "segmentId": "request",
+      "phrase": "Retirer ma demande ouvre sa",
+      "startMs": 3272,
+      "endMs": 5423,
+      "cueMs": 129575
+    },
+    {
+      "segmentId": "request",
+      "phrase": "En confirmant, tu retires cette",
+      "startMs": 8156,
+      "endMs": 12630,
+      "cueMs": 134459
+    },
+    {
+      "segmentId": "return",
+      "phrase": "Retirer une inscription ne supprime",
+      "startMs": 9986,
+      "endMs": 14581,
+      "cueMs": 155910
+    },
+    {
+      "segmentId": "renew",
+      "phrase": "Si tu penses l’avoir partagé",
+      "startMs": 7056,
+      "endMs": 10393,
+      "cueMs": 172982
+    }
+  ]
+}

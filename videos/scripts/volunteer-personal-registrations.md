@@ -8,7 +8,7 @@ Retrouver ses engagements sans compte, lire les informations du jour J et préve
 
 ## Démonstration
 
-1. Ouvrir le lien personnel de Camille depuis un email réel. Expliquer sa confidentialité et le conserver pour les prochaines consultations.
+1. Partir de la page ouverte par le lien personnel reçu par email. Expliquer que cette page couvre tous les événements de l’organisation et utiliser « Voir l’événement » pour le détail.
 2. Lire le créneau Accueil confirmé : date, horaires, rendez-vous, consigne, carte et personne de contact. Ouvrir une carte locale de démonstration ou montrer son lien sans appel externe inutile.
 3. Parcourir quatre cartes pour la même personne : inscription confirmée, liste d'attente avec position, place offerte avec échéance, demande soumise à validation. Expliquer que seules les inscriptions confirmées constituent un engagement acquis ; une demande reste à décider.
 4. Ouvrir l'annulation du créneau confirmé puis choisir « Non, garder ». Vérifier que le créneau est toujours présent. Refaire l'action et confirmer : constater sa disparition, pas seulement la fermeture de la confirmation.
@@ -16,6 +16,7 @@ Retrouver ses engagements sans compte, lire les informations du jour J et préve
 6. Refuser la place offerte, lire que la place passe à la personne suivante et constater la disparition de l'offre. Ne pas laisser penser qu'une offre vaut inscription confirmée.
 7. Retirer la demande en attente de validation : la place réservée est libérée. Montrer le résultat dans la page Mes inscriptions.
 8. Après le dernier retrait, montrer « Toutes tes inscriptions ont été annulées ». Utiliser « S’inscrire à d’autres créneaux » et vérifier la destination réelle : la page d'inscription permet de choisir un autre créneau.
+9. Revenir à la page de toutes ses inscriptions et renouveler le lien. Vérifier le retour d’envoi et expliquer que tout abonnement au calendrier doit être renouvelé depuis le nouveau lien.
 
 ## Résultat visible
 
@@ -23,7 +24,7 @@ Chaque retrait est vérifié dans l'interface et dans l'état serveur. Un refus 
 
 ## Jeu de données à créer
 
-Une seule personne, Camille, avec quatre statuts simultanés sur des créneaux non chevauchants : Accueil samedi 9–12 confirmé ; Buvette samedi 14–18 en attente ; Buvette samedi 18–22 offerte, échéance dans 24 heures ; Navette dimanche 8–10 demandée. Contacts et commentaires fictifs. Un email personnel correspondant au lien doit être émis dans Mailpit.
+Une seule personne, Camille, avec quatre statuts simultanés sur des créneaux non chevauchants : Accueil samedi 9–12 confirmé ; Buvette samedi 14–18 en attente ; Buvette samedi 18–22 offerte, échéance dans 24 heures ; Navette dimanche 8–10 demandée. Contacts et commentaires fictifs. Le renouvellement envoie le nouveau lien dans Mailpit.
 
 ## Points d'attention
 

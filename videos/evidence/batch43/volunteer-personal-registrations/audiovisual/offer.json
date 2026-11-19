@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:54:19.472Z",
+  "videoSha256": "671c6d9a8302689b9f2cc784bd4c6f1a423447d56deaa08cf2fb7ba4c24bbf62",
+  "promptSha256": "f9d721797a5b5614e7c182e4736dbf4b8d4401cc6cd94d342e50dc975ef2f62e",
+  "clipSha256": "1a98e8e952a41d14dd948ceae6f7f152df28f4f2edbbf48e08f8b8146beed9a2",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Pour une place proposée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "le bouton est Refuser la place",
+        "visibleSeconds": 0.5,
+        "visible": "Clic sur le bouton « Refuser la place » pour le créneau Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Lis les conséquences : la place passe à la personne suivante et tu quittes la liste d'attente",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de la boîte de dialogue expliquant le transfert de la place et la sortie de la liste d'attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Après confirmation, cette offre disparaît",
+        "visibleSeconds": 8.2,
+        "visible": "Clic sur « Oui, refuser » et disparition du bloc d'offre Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

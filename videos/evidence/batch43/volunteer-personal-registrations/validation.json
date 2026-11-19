@@ -1,0 +1,77 @@
+{
+  "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+  "slug": "volunteer-personal-registrations",
+  "validatedAt": "2026-11-19T17:51:37.966Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 185120,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 23132,
+      "audioMs": 23130,
+      "driftMs": 2
+    },
+    {
+      "id": "practical",
+      "visualMs": 20176,
+      "audioMs": 20175,
+      "driftMs": 1
+    },
+    {
+      "id": "states",
+      "visualMs": 23198,
+      "audioMs": 23195,
+      "driftMs": 3
+    },
+    {
+      "id": "cancel",
+      "visualMs": 20431,
+      "audioMs": 20430,
+      "driftMs": 1
+    },
+    {
+      "id": "waiting",
+      "visualMs": 16912,
+      "audioMs": 16910,
+      "driftMs": 2
+    },
+    {
+      "id": "offer",
+      "visualMs": 19638,
+      "audioMs": 19637,
+      "driftMs": 1
+    },
+    {
+      "id": "request",
+      "visualMs": 19160,
+      "audioMs": 19148,
+      "driftMs": 12
+    },
+    {
+      "id": "return",
+      "visualMs": 19548,
+      "audioMs": 19546,
+      "driftMs": 2
+    },
+    {
+      "id": "renew",
+      "visualMs": 18719,
+      "audioMs": 18709,
+      "driftMs": 10
+    }
+  ],
+  "anchorsChecked": 13,
+  "music": {
+    "voicedWindows": 179,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

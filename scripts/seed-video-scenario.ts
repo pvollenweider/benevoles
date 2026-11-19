@@ -398,6 +398,9 @@ async function main() {
     const request = await prisma.shift.create({ data: { eventId: event.id, roleName: "Navette", label: "Navette du dimanche", date: sunday, startTime: "08:00", endTime: "10:00", capacity: 2, requiresApproval: true, colorKey: "violet", displayOrder: 3 } })
     await prisma.registration.create({ data: { eventId: event.id, volunteerId: camille.id, shiftId: offer.id, status: "offered", source: "public_form", waitingExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), ...registrationToken.data("demo-offer-camille-0001") } })
     await prisma.registration.create({ data: { eventId: event.id, volunteerId: camille.id, shiftId: request.id, status: "requested", source: "public_form", ...registrationToken.data("demo-request-camille-0001") } })
+    const { orgLinkTokenData } = await import("../src/lib/org-link")
+    const { personalTourOrgToken } = await import("../videos/lib/org-registrations-fixture")
+    await prisma.volunteer.update({ where: { id: camille.id }, data: orgLinkTokenData(personalTourOrgToken) })
     console.log("✓ Personal withdrawals: Camille has active, waiting, offered and requested registrations without overlapping shifts")
     return
   }

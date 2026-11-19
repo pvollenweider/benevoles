@@ -1416,7 +1416,6 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 
 **Narration à revoir sur le lien personnel et son renouvellement** :
 
-- **VOLUNTEER_PERSONAL_REGISTRATIONS** (`volunteer-personal-registrations`) : narration et images du lien personnel et de la page « Mes inscriptions » à reprendre pour dire que le lien reçu par email rassemble désormais les inscriptions de toute l'organisation, et montrer « Renouveler mon lien ».
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : narration et images des chapitres « lien personnel », « lien invalide » et « renouvellement » à reprendre pour la portée organisation et la phrase affichée dans l'email.
 
 **Vidéos montrant un email de confirmation ou de rappel** (bouton et phrase de portée périmés ; capture à refaire, narration à ajuster quand elle cite le bouton ou le lien) :
@@ -1433,8 +1432,10 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 - **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
 - **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
 
-**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `ASSIGNMENT_PUBLICATION`, `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PERSONAL_REGISTRATIONS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`, `VOLUNTEER_REGISTER`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (dix-huit vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
+**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `ASSIGNMENT_PUBLICATION`, `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`, `VOLUNTEER_REGISTER`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (dix-sept vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
 
 ## Lot 43 — Retrouver toutes mes inscriptions, 19 novembre 2026
 
 **VOLUNTEER_ORG_REGISTRATIONS — READY, publiée, révision 1, 90,76 s.** Le parcours couvre le lien perdu, les inscriptions de deux événements, l’annulation d’un créneau, la copie de l’adresse du calendrier et le renouvellement. Les courriels de récupération et de renouvellement filmés emploient le libellé « Voir mes inscriptions » et leur phrase complète de confidentialité. [Suivi et preuves](evidence/batch43/STATUS.md).
+
+**VOLUNTEER_PERSONAL_REGISTRATIONS — READY, publiée, révision 4, 185,12 s.** Le tour part de la page commune, ouvre le détail de l’événement et montre le renouvellement du lien de l’organisation. [Revue et contrôles](evidence/batch43/volunteer-personal-registrations/review.md).

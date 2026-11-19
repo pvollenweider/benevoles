@@ -11,3 +11,6 @@ export const orgRegistrationsFixture = {
     { slug: "marche-des-voisins", title: "Marché des voisins", role: "Buvette" },
   ],
 }
+
+// Synthetic fixed token for the personal page tour in the isolated local DB.
+export const personalTourOrgToken = "demo-personal-tour-organisation-link-v43-01"

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:53:33.618Z",
+  "videoSha256": "671c6d9a8302689b9f2cc784bd4c6f1a423447d56deaa08cf2fb7ba4c24bbf62",
+  "promptSha256": "289d75c30c5f3652120f9b05e71f272ccce88db60c2a094fe639f05f975e0270",
+  "clipSha256": "a3f2d8c45413be58f32fd4b919194625f8136ee453089f219620a0894cc0160a",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le lien personnel reçu par email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "ouvre toutes tes inscriptions à venir auprès de la même organisation",
+        "visibleSeconds": 0,
+        "visible": "Page 'Toutes mes inscriptions' affichée pour Camille Rochat avec le prochain créneau et le calendrier.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "choisis Voir l’événement",
+        "visibleSeconds": 8.5,
+        "visible": "Transition directe vers la page des détails de l'événement sans affichage du curseur ou du clic.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "une inscription en attente, une place proposée et une demande à valider",
+        "visibleSeconds": 12,
+        "visible": "Les cartes 'Liste d'attente - position 1', 'Une place t'est proposée' et 'En attente de validation' sont visibles à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19,
+        "spoken": "On va lire les informations utiles, puis voir comment retirer chaque engagement",
+        "visibleSeconds": 19,
+        "visible": "Écran stable présentant la liste des engagements pour introduire la suite de la démonstration.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec le défilement des étapes."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -439,7 +439,8 @@ async function main() {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      await page.goto(slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+      const personalTour = slug === "volunteer-personal-registrations" ? (await import("../lib/org-registrations-fixture")).personalTourOrgToken : null
+      await page.goto(personalTour ? `${baseUrl}/mes-inscriptions/${personalTour}` : slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
     }
 
     if (slug === "event-activity-log") {
@@ -2373,9 +2374,13 @@ async function main() {
       for (const status of ["active", "waiting", "offered", "requested"]) {
         if (!initial.registrations.some((r: { status: string }) => r.status === status)) throw new Error(`Personal demo missing ${status}`)
       }
+      const orgPage = page.url()
       await scene("welcome", async (at) => {
-        await page.screencast.showChapter(manifest.title, { description: "Ton planning et tes choix, depuis ton lien personnel", duration: 2_300 })
-        await page.getByRole("heading", { name: "Mes inscriptions" }).waitFor()
+        await page.getByRole("heading", { name: "Toutes mes inscriptions", exact: true }).waitFor()
+        await at("Pour les détails")
+        const list = page.getByRole("region", { name: "Tous tes créneaux à venir" })
+        await tap(page, list.getByRole("link", { name: /Voir l’événement|Voir l'événement/ }).first())
+        await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).waitFor()
         await at("Ici, Camille a une place")
         await page.getByText(/Créneau sur validation/).scrollIntoViewIfNeeded()
       })
@@ -2447,6 +2452,14 @@ async function main() {
         await page.getByRole("heading", { name: "Fête du village de Montvert", exact: true }).waitFor()
         await at("Retirer une inscription ne supprime")
         await page.getByRole("button", { name: /: sélectionner/ }).first().scrollIntoViewIfNeeded()
+      })
+      await scene("renew", async at => {
+        await page.goto(orgPage)
+        const renew = page.getByRole("button", { name: "Renouveler mon lien", exact: true })
+        await renew.scrollIntoViewIfNeeded()
+        await at("Si tu penses l’avoir partagé")
+        await tap(page, renew)
+        await page.getByText(/^Ton lien a été renouvelé/).waitFor()
       })
     } else if (slug === "volunteer-calendar") {
       const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`
