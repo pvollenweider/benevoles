@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:30.800Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "d1b2c6acc972a82b86c612aa935bd4ba4f4c6880a2956d8300e7448da1765336",
+  "clipSha256": "56e61cfe41f2fd84a5267c4d9c346cb1a1de15f7ea8986c15e04240645ad7211",
+  "scene": "registrations",
+  "review": {
+    "heardOpening": "La vue des inscriptions montre qui est inscrit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La vue des inscriptions montre qui est inscrit",
+        "visibleSeconds": 0.5,
+        "visible": "L'onglet Inscriptions affiche la liste des inscrits (ex. Camille Rochat)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "sur quel créneau et par quel moyen",
+        "visibleSeconds": 2.5,
+        "visible": "Colonnes « Créneau » et « Source » (Buvette, Accueil, Formulaire) visibles dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Vous pouvez filtrer, ajouter quelqu’un manuellement",
+        "visibleSeconds": 5.2,
+        "visible": "Champs de filtres et bouton bleu « + Ajouter manuellement » visibles au-dessus de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, adaptée à une introduction générale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

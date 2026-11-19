@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:17.526Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "a7180648bfad2e37efa7114b00ecbcdc0fd77a3c62ce2fc6cff0dd286dd4b096",
+  "clipSha256": "f7c6209be20e7be53c795b1287a7f11d87d4017a8ba09870889adfa15508d170",
+  "scene": "appearance",
+  "review": {
+    "heardOpening": "Dans ses paramètres, vous réglez le titre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.9,
+        "spoken": "Dans ses paramètres, vous réglez le titre, les dates, les messages et une couleur d'en-tête accessible.",
+        "visibleSeconds": 1.2,
+        "visible": "L'onglet Paramètres est affiché avec le champ Titre, puis défile vers les messages et la palette de couleur d'en-tête.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Le lieu peut recevoir des coordonnées :",
+        "visibleSeconds": 6,
+        "visible": "Affichage des champs Lieu et Coordonnées GPS ou lien de carte remplis.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.4,
+        "spoken": "les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.",
+        "visibleSeconds": 8.4,
+        "visible": "Le texte explicatif sous le champ de coordonnées mentionne le lien OpenStreetMap sur la page d'inscription, dans les emails et l'espace personnel.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

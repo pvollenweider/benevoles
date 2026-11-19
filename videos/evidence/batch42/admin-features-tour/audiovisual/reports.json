@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:59:00.566Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "f9d31f2d03c2a494a19d2d741f2746193b20a5e8d05f0a65fc8363cc823abbc9",
+  "clipSha256": "541c467416f7e7474099c32afde17fe9bd585c8b98e8c3964c5097f60d071a29",
+  "scene": "reports",
+  "review": {
+    "heardOpening": "Pour le terrain, Documents à imprimer propose",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Documents à imprimer propose le planning complet, une vue par poste, une vue par bénévole",
+        "visibleSeconds": 0,
+        "visible": "Page sur l'onglet Documents montrant la section 'Documents à imprimer' avec 'Planning par jour', 'Planning par poste' et 'Planning individuel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "la feuille de présence et la liste avec téléphones réservée aux organisateurs",
+        "visibleSeconds": 6.5,
+        "visible": "Défilement vers le bas affichant 'Feuille de présence' et 'Liste avec téléphones'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Les badges se génèrent en PDF, avec un filtre par poste et une sélection de bénévole pour la réimpression",
+        "visibleSeconds": 12.5,
+        "visible": "Section 'Badges' visible avec le bouton 'Ouvrir les badges PDF' et les filtres 'Poste' et 'Bénévole (réimpression)'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, synchronisation fluide avec le défilement de la page."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

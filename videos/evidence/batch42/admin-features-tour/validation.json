@@ -1,0 +1,119 @@
+{
+  "id": "ADMIN_FEATURES_OVERVIEW",
+  "slug": "admin-features-tour",
+  "validatedAt": "2026-11-19T10:57:49.904Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 293960,
+  "scenes": [
+    {
+      "id": "intro",
+      "visualMs": 12954,
+      "audioMs": 12952,
+      "driftMs": 2
+    },
+    {
+      "id": "organization",
+      "visualMs": 13335,
+      "audioMs": 13333,
+      "driftMs": 2
+    },
+    {
+      "id": "team",
+      "visualMs": 17032,
+      "audioMs": 17031,
+      "driftMs": 1
+    },
+    {
+      "id": "lifecycle",
+      "visualMs": 17428,
+      "audioMs": 17427,
+      "driftMs": 1
+    },
+    {
+      "id": "appearance",
+      "visualMs": 13633,
+      "audioMs": 13632,
+      "driftMs": 1
+    },
+    {
+      "id": "duplicate",
+      "visualMs": 10858,
+      "audioMs": 10858,
+      "driftMs": 0
+    },
+    {
+      "id": "shift-methods",
+      "visualMs": 14535,
+      "audioMs": 14533,
+      "driftMs": 2
+    },
+    {
+      "id": "shift-fields",
+      "visualMs": 18486,
+      "audioMs": 18484,
+      "driftMs": 2
+    },
+    {
+      "id": "registrations",
+      "visualMs": 15591,
+      "audioMs": 15591,
+      "driftMs": 0
+    },
+    {
+      "id": "members",
+      "visualMs": 14318,
+      "audioMs": 14318,
+      "driftMs": 0
+    },
+    {
+      "id": "questions",
+      "visualMs": 18944,
+      "audioMs": 18942,
+      "driftMs": 2
+    },
+    {
+      "id": "pages",
+      "visualMs": 15357,
+      "audioMs": 15356,
+      "driftMs": 1
+    },
+    {
+      "id": "messages",
+      "visualMs": 26211,
+      "audioMs": 26208,
+      "driftMs": 3
+    },
+    {
+      "id": "reminders",
+      "visualMs": 12408,
+      "audioMs": 12406,
+      "driftMs": 2
+    },
+    {
+      "id": "reports",
+      "visualMs": 20733,
+      "audioMs": 20732,
+      "driftMs": 1
+    },
+    {
+      "id": "activity",
+      "visualMs": 17754,
+      "audioMs": 17752,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 21,
+  "music": {
+    "voicedWindows": 254,
+    "musicOnlyWindows": 7,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -34.2,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

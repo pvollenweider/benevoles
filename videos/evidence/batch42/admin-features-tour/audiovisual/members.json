@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:47.136Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "9b588d79ff74793010e4d10d7635c5aee65fd3b5a815189218bf22169117e1d3",
+  "clipSha256": "7cdc1dcf1f5b177ea390cff7b14a1ca23a5699fa6c773ae71ac71ef37e134990",
+  "scene": "members",
+  "review": {
+    "heardOpening": "La liste des membres rassemble inscrits et personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La liste des membres rassemble inscrits et personnes importées",
+        "visibleSeconds": 0,
+        "visible": "Page Membres avec le tableau des membres affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "avec coordonnées, étiquettes, notes, disponibilités, heures prévues et activité",
+        "visibleSeconds": 0,
+        "visible": "Colonnes correspondantes visibles dans le tableau de la liste des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "La fiche d’une personne retrace ses invitations, inscriptions et présences",
+        "visibleSeconds": 9,
+        "visible": "Écran stable sur la liste des membres illustrant la présentation générale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire et bien articulée, avec un fond sonore musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
