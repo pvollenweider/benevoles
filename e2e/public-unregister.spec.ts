@@ -73,7 +73,7 @@ test("withdrawing with the keyboard: trapped dialog, Escape back to the ✕, the
 
   await expect(dialog(page)).toBeHidden()
   await expect(bar).toHaveCount(0)
-  await expect(notice(page)).toHaveText(/^Créneau annulé : Bar, mardi 1 octobre, de 10h à 12h\.$/)
+  await expect(notice(page)).toHaveText(/^Créneau annulé : Bar, mardi 1 octobre 2030, de 10h à 12h\.$/)
   // Focus on the row now at the ✕'s place in the same list.
   await expect(cancelX(page, "Accueil")).toBeFocused()
 

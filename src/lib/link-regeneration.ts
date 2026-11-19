@@ -27,6 +27,7 @@
 import { leaderInviteScope } from "./leader-scope"
 import { generateToken } from "./utils"
 import { registrationToken, linkToken } from "./token-vault"
+import { clearOrgLinkData } from "./org-link"
 import { sendNotification } from "./notifications"
 import { sendMemberInvite } from "./notification-helpers"
 import { LIVE_STATUSES } from "./registration-capacity"
@@ -49,7 +50,7 @@ export type RegenerateLinksOptions = {
 export type ResendCounts = { sent: number; failed: number; skipped: number }
 
 export type RegenerateLinksResult = {
-  counts: { registrations: number; leaders: number; invites: number; availabilityLinks: number }
+  counts: { registrations: number; leaders: number; invites: number; availabilityLinks: number; orgLinks: number }
   resend?: { registrations: ResendCounts; leaders: ResendCounts; invites: ResendCounts; availabilityLinks: ResendCounts }
 }
 
@@ -159,6 +160,14 @@ export interface LinkRegenerationDb {
     findMany(args: { where: Record<string, unknown>; select: typeof availabilitySelect }): Promise<AvailabilityRow[]>
     update(args: { where: { id: string }; data: Record<string, unknown> }): Promise<unknown>
   }
+  /**
+   * The volunteers behind the registrations in scope, for their organisation-wide link (#1429).
+   * Optional so the narrow test doubles that predate it keep working; the real client has it.
+   */
+  volunteer?: {
+    findMany(args: { where: { id: { in: string[] } }; select: { id: true; orgLinkTokenHash: true } }): Promise<{ id: string; orgLinkTokenHash: string | null }[]>
+    updateMany(args: { where: Record<string, unknown>; data: Record<string, unknown> }): Promise<{ count: number }>
+  }
   $transaction<T>(fn: (tx: LinkRegenerationDb) => Promise<T>, options?: { maxWait?: number; timeout?: number }): Promise<T>
 }
 
@@ -195,7 +204,17 @@ export async function countLinksInScope(db: LinkRegenerationDb, scope: LinkScope
     inviteWhere(scope) ? db.memberInvite.findMany({ where: inviteWhere(scope)!, select: inviteSelect }) : [],
     availabilityWhere(scope) ? db.availabilityRequest.findMany({ where: availabilityWhere(scope)!, select: availabilitySelect }) : [],
   ])
-  return { registrations: registrations.length, leaders: leaders.length, invites: invites.length, availabilityLinks: availability.length }
+  const volunteerIds = [...new Set(registrations.map((r) => r.volunteerId))]
+  const orgLinks = db.volunteer && volunteerIds.length
+    ? await db.volunteer.findMany({ where: { id: { in: volunteerIds } }, select: { id: true, orgLinkTokenHash: true } })
+    : []
+  return {
+    registrations: registrations.length,
+    leaders: leaders.length,
+    invites: invites.length,
+    availabilityLinks: availability.length,
+    orgLinks: orgLinks.filter((v) => v.orgLinkTokenHash).length,
+  }
 }
 
 /**
@@ -226,6 +245,14 @@ export async function regenerateLinks(
   const newTokenById = new Map<string, string>()
   for (const row of [...registrations, ...leaders, ...invites, ...availability]) newTokenById.set(row.id, generateToken())
 
+  // The organisation-wide link of these volunteers gives access to the very registrations being
+  // rotated (#1429): it must be revoked too, or a leaked link would keep showing all of them.
+  // Computed by id inside the transaction (never by a hash list read before it): a token issued
+  // between the reads above and this update is still cleared. Revocation only — the next need
+  // issues a fresh one lazily, so this never mass-issues.
+  const volunteerIds = [...new Set(registrations.map((r) => r.volunteerId))]
+  let orgLinks = 0
+
   await db.$transaction(async (tx) => {
     await Promise.all([
       ...registrations.map((r) => tx.registration.update({ where: { id: r.id }, data: registrationToken.data(newTokenById.get(r.id)!) })),
@@ -233,12 +260,26 @@ export async function regenerateLinks(
       ...invites.map((i) => tx.memberInvite.update({ where: { id: i.id }, data: linkToken.data(newTokenById.get(i.id)!) })),
       ...availability.map((a) => tx.availabilityRequest.update({ where: { id: a.id }, data: linkToken.data(newTokenById.get(a.id)!) })),
     ])
+    // Organisation scope: every organisation link of the organisation, whether or not its volunteer
+    // had a registration in the list read above (a member with no registration, or one registered
+    // between the reads and this transaction, is covered too). Narrower scopes: the volunteers of
+    // the rotated registrations.
+    const orgWide = "organizationId" in scope && typeof scope.organizationId === "string"
+    if (tx.volunteer && (orgWide || volunteerIds.length)) {
+      const cleared = await tx.volunteer.updateMany({
+        where: orgWide
+          ? { organizationId: (scope as { organizationId: string }).organizationId, orgLinkTokenHash: { not: null } }
+          : { id: { in: volunteerIds }, orgLinkTokenHash: { not: null } },
+        data: clearOrgLinkData(),
+      })
+      orgLinks = cleared.count
+    }
     // Swap requests given from the old links end (#1174 E18): a new link means a new agreement.
     if (registrations.length > 0) await endSwapsIn(tx, { registrationIds: registrations.map((r) => r.id) }, "link_revoked", { type: "system" })
   }, { maxWait: 10_000, timeout: 120_000 }) // a whole organization can hold thousands of rows: Prisma's 5 s default is too short
 
   const result: RegenerateLinksResult = {
-    counts: { registrations: registrations.length, leaders: leaders.length, invites: invites.length, availabilityLinks: availability.length },
+    counts: { registrations: registrations.length, leaders: leaders.length, invites: invites.length, availabilityLinks: availability.length, orgLinks },
   }
 
   if (options.resend) {

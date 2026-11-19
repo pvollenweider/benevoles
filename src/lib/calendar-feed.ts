@@ -81,6 +81,51 @@ export function calendarFeedLinkValid(parsed: ParsedFeedToken, editTokenHash: st
   return safeEqual(parsed.linkProof, linkProof(key, parsed.registrationId, editTokenHash))
 }
 
+/**
+ * The organisation-wide calendar subscription (#1429, lot C): one read-only address for every
+ * confirmed upcoming shift of one volunteer across the organisation's events. It follows the same
+ * pattern as the per-registration feed above, with the volunteer's organisation link in place of
+ * the event link:
+ *
+ *   <volunteerId>-1<s><h>
+ *     s  HMAC(key, "org-id" + volunteerId), checked before any database read;
+ *     h  HMAC(key, "org-link" + volunteerId + orgLinkTokenHash), ties the address to the
+ *        organisation link as it is now.
+ *
+ * Nothing is stored. A new organisation link (renewal, address correction, merge, erasure,
+ * regeneration, restore, « Renouveler mon lien ») changes orgLinkTokenHash and revokes the feed
+ * address with it. A distinct MAC namespace keeps an organisation feed token from ever being
+ * accepted as a per-registration one, or the other way round.
+ */
+const orgIdProof = (key: Buffer, volunteerId: string) => mac(key, "org-id", volunteerId).slice(0, S_LEN)
+const orgLinkProof = (key: Buffer, volunteerId: string, orgLinkTokenHash: string) =>
+  mac(key, "org-link", volunteerId, orgLinkTokenHash).slice(0, H_LEN)
+
+/** The organisation-wide calendar token of a volunteer's link. */
+export function orgCalendarFeedToken(volunteerId: string, orgLinkTokenHash: string, key: Buffer): string {
+  return `${volunteerId}-${VERSION}${orgIdProof(key, volunteerId)}${orgLinkProof(key, volunteerId, orgLinkTokenHash)}`
+}
+
+export type ParsedOrgFeedToken = { volunteerId: string; linkProof: string }
+
+/**
+ * The volunteer an organisation calendar token names, when the app made it (format and id proof
+ * right); null for anything else. Says nothing yet about whether the organisation link is current.
+ */
+export function parseOrgCalendarFeedToken(raw: string, key: Buffer): ParsedOrgFeedToken | null {
+  const token = raw.endsWith(".ics") ? raw.slice(0, -4) : raw
+  const m = TOKEN_RE.exec(token)
+  if (!m) return null
+  const [, volunteerId, s, h] = m
+  if (!safeEqual(s, orgIdProof(key, volunteerId))) return null
+  return { volunteerId, linkProof: h }
+}
+
+/** Whether a parsed organisation token still matches the volunteer's current organisation link. */
+export function orgCalendarFeedLinkValid(parsed: ParsedOrgFeedToken, orgLinkTokenHash: string | null, key: Buffer): boolean {
+  return !!orgLinkTokenHash && safeEqual(parsed.linkProof, orgLinkProof(key, parsed.volunteerId, orgLinkTokenHash))
+}
+
 /** Refresh hint of the feed, in hours (REFRESH-INTERVAL): calendar apps decide for themselves in the end. */
 export const FEED_REFRESH_HOURS = 6
 
@@ -91,6 +136,17 @@ export const calendarFeedPath = (token: string) => `/api/public/registrations/${
 export function calendarFeedUrls(baseUrl: string, token: string): { https: string; webcal: string } {
   const https = `${baseUrl.replace(/\/$/, "")}${calendarFeedPath(token)}`
   return { https, webcal: https.replace(/^https?:/, "webcal:") }
+}
+
+/**
+ * The same two forms for the organisation-wide feed (#1429, lot C), plus the one-off file: the
+ * calendar apps subscribe to the feed, the volunteer imports the file once.
+ */
+export const orgCalendarFeedPath = (token: string) => `/api/public/mes-inscriptions/${token}/calendar.ics`
+
+export function orgCalendarFeedUrls(baseUrl: string, token: string): { https: string; webcal: string; download: string } {
+  const https = `${baseUrl.replace(/\/$/, "")}${orgCalendarFeedPath(token)}`
+  return { https, webcal: https.replace(/^https?:/, "webcal:"), download: `${https}?download=1` }
 }
 
 const REVISION_EPOCH = Date.UTC(2025, 0, 1)
@@ -146,4 +202,24 @@ export function icsShiftsFor(
       lastModified,
     }
   })
+}
+
+/**
+ * The organisation-wide feed's entries (#1429, lot C): the same shifts, each with its own event,
+ * built through `icsShiftsFor`. Delegating keeps every UID and SEQUENCE identical to the
+ * per-registration feed for the same registration, so a volunteer subscribed to both sees the
+ * same events. `urlFor` points at each event's public page (or the organisation's home when the
+ * event is not published); the feed never contains a personal link.
+ */
+export function icsShiftsForOrg<E extends EventRow>(
+  regs: { id: string; updatedAt?: Date; shift: ShiftRow; event: E }[],
+  opts: { urlFor: (event: E) => string; orgUpdatedAt?: Date | null },
+): IcsShift[] {
+  return regs.map(
+    (r) =>
+      icsShiftsFor([{ id: r.id, updatedAt: r.updatedAt, shift: r.shift }], r.event, {
+        url: opts.urlFor(r.event),
+        orgUpdatedAt: opts.orgUpdatedAt,
+      })[0],
+  )
 }

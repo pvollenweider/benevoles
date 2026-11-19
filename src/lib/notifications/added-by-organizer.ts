@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@/generated/prisma/client"
 import { LIVE_STATUSES, type Tx } from "@/lib/registration-capacity"
 import { registrationToken } from "@/lib/token-vault"
+import { ensureOrgLinkForEmail, type OrgLinkEmailDb } from "@/lib/org-link"
 import { openPayload, sealPayload } from "./outbox"
 import type { NotificationPayload } from "./types"
 
@@ -33,6 +34,10 @@ const keyPrefix = (eventId: string, volunteerId: string) => `${KIND}:${eventId}:
 
 /** The part of the add's transaction used here, typed like OutboxDb so a scoped client fits. */
 type OutboxTx = Pick<Tx, "$queryRaw"> & {
+  volunteer: {
+    findFirst(args: { where: Record<string, unknown>; select: Record<string, unknown> }): Promise<unknown>
+    updateMany(args: { where: Record<string, unknown>; data: Record<string, unknown> }): Promise<{ count: number }>
+  }
   notificationOutbox: {
     findFirst(args: { where: { status: string; attempts: number; dedupeKey: { startsWith: string } }; select: { id: true; payload: true } }): Promise<{ id: string; payload: Prisma.JsonValue } | null>
     update(args: { where: { id: string }; data: { payload: Prisma.InputJsonValue; nextAttemptAt: Date } }): Promise<unknown>
@@ -54,6 +59,11 @@ export async function queueAddedByOrganizer(tx: OutboxTx, input: {
   await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${input.volunteerId} FOR UPDATE`
   const sendAt = new Date(input.now.getTime() + ADDED_BY_ORGANIZER_DELAY_MS)
   const prefix = keyPrefix(input.eventId, input.volunteerId)
+  // The general email's main link (#1429, lot B), issued in the add's transaction. A pending row
+  // is rewritten with the token read now: if it was revoked meanwhile, the email leaves with the
+  // current one instead of a link that no longer works.
+  const orgLink = await ensureOrgLinkForEmail(tx as unknown as OrgLinkEmailDb, input.volunteerId, input.organizationId, input.now, input.data.organizationName)
+  const orgData = orgLink ? { orgToken: orgLink.token, organizationName: orgLink.organizationName } : {}
   // Still waiting and never tried: a row already sending or retrying is left as it is.
   const pending = await tx.notificationOutbox.findFirst({
     where: { status: "pending", attempts: 0, dedupeKey: { startsWith: prefix } },
@@ -65,13 +75,13 @@ export async function queueAddedByOrganizer(tx: OutboxTx, input: {
     const registrationIds = [...new Set([...previous.registrationIds, input.registrationId])]
     await tx.notificationOutbox.update({
       where: { id: pending.id },
-      data: { payload: sealPayload({ ...base, data: { ...input.data, registrationIds } }), nextAttemptAt: sendAt },
+      data: { payload: sealPayload({ ...base, data: { ...input.data, ...orgData, registrationIds } }), nextAttemptAt: sendAt },
     })
     return
   }
   await tx.notificationOutbox.create({
     data: {
-      payload: sealPayload({ ...base, data: { ...input.data, registrationIds: [input.registrationId] } }),
+      payload: sealPayload({ ...base, data: { ...input.data, ...orgData, registrationIds: [input.registrationId] } }),
       dedupeKey: `${prefix}${input.registrationId}`,
       organizationId: input.organizationId,
       nextAttemptAt: sendAt,

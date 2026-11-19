@@ -12,13 +12,19 @@ aliases: []
 
 <!-- video: VOLUNTEER_PERSONAL_REGISTRATIONS -->
 
-Ta page **Mes inscriptions** s'ouvre avec ton **lien personnel**, reçu par email (voir [Ton lien personnel](lien-personnel.md)) :
+Ta page **Mes inscriptions** s'ouvre avec ton **lien personnel**, reçu par email (voir [Ton lien personnel](lien-personnel.md)). L'email de confirmation et les rappels mènent à la page de toutes tes inscriptions auprès de l'organisation ; les liens déjà reçus pour un événement ouvrent la page de cet événement :
 
 ```
 https://[organisation].benevol.app/my/[token]
 ```
 
 ![Page « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
+
+## Toutes tes inscriptions auprès de l'organisation
+
+La page de cet événement reste la page de référence pour ses créneaux, ses réponses, ses échanges et son calendrier. Un autre lien, **pour toutes tes inscriptions auprès de l'organisation**, rassemble tes créneaux à venir de tous ses événements : c'est celui que portent le bouton **Mes inscriptions** de l'email de confirmation et des rappels, celui que « J'ai perdu mon lien » envoie, et tu peux aussi le demander depuis l'encadré **Retrouver toutes mes inscriptions** de cette page (il part par email, il ne s'affiche pas ici).
+
+Cette page rassemble d'abord ton **prochain créneau confirmé**, puis tous tes créneaux à venir, du plus proche au plus lointain, avec la date, l'heure, l'événement, le poste et l'état en toutes lettres : **Confirmé**, **Liste d'attente**, **Place proposée** ou **Demande en attente de validation**. Les événements dépubliés ou archivés restent visibles tant qu'un créneau à venir y est inscrit. Chaque créneau s'annule avec les mêmes règles que sur la page de son événement (délai propre à l'événement, place rendue à la liste d'attente) ; **Voir l'événement** ouvre la page personnelle de cet événement pour le reste (réponses, échanges, calendrier, infos pratiques). La carte **Mon calendrier** propose aussi un abonnement qui couvre tous tes créneaux confirmés de l'organisation, tous événements confondus, et le téléchargement d'un fichier `.ics` (voir [Ajouter mes créneaux à mon calendrier](#ajouter-mes-creneaux-a-mon-calendrier)). Quand tu n'as plus de créneau à venir, la page le dit et te ramène aux événements de l'organisation ; ton lien reste valable pour tes prochaines inscriptions. **Renouveler mon lien** remplace le lien par un nouveau, envoie celui-ci par email et invalide l'ancien immédiatement. La phrase en haut de la page le rappelle : ce lien donne accès à toutes tes inscriptions auprès de l'organisation et permet de les modifier ; ne le partage pas.
 
 ## Avant ta mission
 
@@ -130,7 +136,9 @@ Dès que tu as un créneau confirmé, la carte **Mon calendrier** te propose deu
 
 L'abonnement couvre tes créneaux de cet événement. Il continue de fonctionner si tu annules le créneau dont tu as utilisé le lien : tes autres créneaux restent dans l'agenda. L'adresse d'abonnement n'est pas ton lien personnel : elle permet seulement de voir tes créneaux confirmés de cet événement (avec leurs horaires, lieux, contacts et consignes), pas de les annuler ni de modifier tes réponses. Garde-la quand même pour toi. Elle cesse de fonctionner quand ton lien personnel est remplacé (par exemple si l'organisation renouvelle les liens ou corrige ton adresse email) ou quand les données de l'événement sont effacées ; ton agenda garde alors en général les derniers créneaux reçus. Pour arrêter l'abonnement, supprime-le dans ton agenda.
 
-**Télécharger un fichier (une seule fois).** Avec plusieurs créneaux, **Télécharger tout mon planning (fichier .ics)** télécharge tes créneaux confirmés, et **Ajouter à mon calendrier** sous un créneau le fait pour lui seul. Ouvre le fichier pour l'importer. Ce fichier ne se met pas à jour tout seul : si un horaire change, tu reçois un email ; télécharge-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
+Depuis [ta page de toutes tes inscriptions auprès de l'organisation](#toutes-tes-inscriptions-aupres-de-l-organisation), la même carte **Mon calendrier** propose un abonnement qui couvre **tous tes créneaux confirmés de l'organisation**, tous événements confondus, et qui se met à jour tout seul de la même façon. Les créneaux y gardent le même identifiant que dans l'abonnement d'un événement : un agenda qui dédoublonne par identifiant n'affiche qu'une fois un créneau présent dans les deux. Si tu avais déjà abonné le calendrier d'un événement, retire cet ancien abonnement quand tu prends celui de l'organisation : certains agendas afficheraient sinon les mêmes créneaux deux fois. L'abonnement de l'organisation change lui aussi quand ton lien personnel est renouvelé (ou quand l'organisation corrige ton adresse email, fusionne ta fiche ou l'efface) : l'ancienne adresse cesse de fonctionner. Ouvre le nouveau lien reçu par email, abonne-toi de nouveau avec la nouvelle adresse de sa carte **Mon calendrier**, puis retire l'ancien abonnement de ton agenda : il ne se met plus à jour. Le fichier `.ics` de cette page contient les mêmes créneaux, à importer une seule fois.
+
+**Télécharger un fichier (une seule fois).** Avec plusieurs créneaux — et dès le premier sur [ta page de toutes tes inscriptions auprès de l'organisation](#toutes-tes-inscriptions-aupres-de-l-organisation) —, **Télécharger tout mon planning (fichier .ics)** télécharge tes créneaux confirmés, et **Ajouter à mon calendrier** sous un créneau le fait pour lui seul. Ouvre le fichier pour l'importer. Ce fichier ne se met pas à jour tout seul : si un horaire change, tu reçois un email ; télécharge-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
 
 ## Mes disponibilités
 

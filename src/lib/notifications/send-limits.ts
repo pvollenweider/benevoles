@@ -41,7 +41,7 @@ const BULK: readonly NotificationKind[] = ["targeted_message", "member_invite", 
 const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome", "front_desk_invite"]
 
 /** Kinds anyone can trigger from a public page: capped per recipient address. */
-export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend", "signup_confirmation", "signup_account_link", "registration_withdrawn", "signup_email_confirmation"]
+export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend", "org_personal_link", "org_personal_link_renewed", "signup_confirmation", "signup_account_link", "registration_withdrawn", "signup_email_confirmation"]
 
 /**
  * Public kinds whose per-recipient cap is taken when the request is made, not at delivery: a

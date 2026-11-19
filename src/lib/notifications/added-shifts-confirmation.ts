@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@/generated/prisma/client"
 import { registrationToken } from "@/lib/token-vault"
 import { pickShiftInfo } from "@/lib/shift-info"
+import { ensureOrgLinkForEmail, type OrgLinkEmailDb } from "@/lib/org-link"
 import { openPayload, sealPayload } from "./outbox"
 import { digestDelayMs } from "./digest-items"
 import type { NotificationPayload } from "./types"
@@ -37,6 +38,9 @@ export type AddedShiftsData = {
   cancelNotice?: string | null
   eventId: string
   registrationIds: string[]
+  /** The organisation-wide link (#1429, lot B), issued in the sign-up's transaction. */
+  orgToken?: string
+  organizationName?: string
 }
 
 /**
@@ -52,6 +56,10 @@ export function groupsConfirmation(heldBefore: readonly { status: string }[]): b
 const keyPrefix = (eventId: string, volunteerId: string) => `${KIND}:added:${eventId}:${volunteerId}:`
 
 type OutboxTx = {
+  volunteer: {
+    findFirst(args: { where: Record<string, unknown>; select: Record<string, unknown> }): Promise<unknown>
+    updateMany(args: { where: Record<string, unknown>; data: Record<string, unknown> }): Promise<{ count: number }>
+  }
   notificationOutbox: {
     findFirst(args: { where: { status: string; attempts: number; dedupeKey: { startsWith: string } }; select: { id: true; payload: true } }): Promise<{ id: string; payload: Prisma.JsonValue } | null>
     updateMany(args: { where: { id: string; status: string; attempts: number }; data: { payload: Prisma.InputJsonValue; nextAttemptAt: Date } }): Promise<{ count: number }>
@@ -79,6 +87,10 @@ export async function queueAddedShiftsConfirmation(tx: OutboxTx, input: {
   const sendAt = new Date(input.now.getTime() + delayMs)
   const due = delayMs <= 0
   const prefix = keyPrefix(input.data.eventId, input.volunteerId)
+  // The grouped confirmation carries the organisation-wide link (#1429, lot B), issued here in
+  // the sign-up's transaction; a pending row is rewritten with the token current now.
+  const orgLink = await ensureOrgLinkForEmail(tx as unknown as OrgLinkEmailDb, input.volunteerId, input.organizationId, input.now, input.data.organizationName)
+  const orgData = orgLink ? { orgToken: orgLink.token, organizationName: orgLink.organizationName } : {}
   const base = { kind: KIND, recipient: input.recipient, volunteerId: input.volunteerId, organizationId: input.organizationId }
   const pending = await tx.notificationOutbox.findFirst({
     where: { status: "pending", attempts: 0, dedupeKey: { startsWith: prefix } },
@@ -91,13 +103,13 @@ export async function queueAddedShiftsConfirmation(tx: OutboxTx, input: {
     // member lock) and sends what it read; then these shifts start an email of their own.
     const { count } = await tx.notificationOutbox.updateMany({
       where: { id: pending.id, status: "pending", attempts: 0 },
-      data: { payload: sealPayload({ ...base, data: { ...input.data, addedShifts: true, registrationIds } }), nextAttemptAt: sendAt },
+      data: { payload: sealPayload({ ...base, data: { ...input.data, ...orgData, addedShifts: true, registrationIds } }), nextAttemptAt: sendAt },
     })
     if (count > 0) return due ? pending.id : null
   }
   const row = await tx.notificationOutbox.create({
     data: {
-      payload: sealPayload({ ...base, data: { ...input.data, addedShifts: true, registrationIds: input.registrationIds } }),
+      payload: sealPayload({ ...base, data: { ...input.data, ...orgData, addedShifts: true, registrationIds: input.registrationIds } }),
       dedupeKey: `${prefix}${input.registrationIds[0]}`,
       organizationId: input.organizationId,
       nextAttemptAt: sendAt,
@@ -136,6 +148,8 @@ export async function resolveAddedShiftsConfirmation(payload: NotificationPayloa
       eventTitle: d.eventTitle,
       eventId: d.eventId,
       orgSlug: d.orgSlug,
+      ...(d.orgToken ? { orgToken: d.orgToken } : {}),
+      ...(d.organizationName ? { organizationName: d.organizationName } : {}),
       confirmationMessage: d.confirmationMessage,
       ...(d.cancelNotice ? { cancelNotice: d.cancelNotice } : {}),
       shifts: sorted.map((r) => ({

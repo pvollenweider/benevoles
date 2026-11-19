@@ -6,6 +6,7 @@ import { clearShiftDeclines } from "./shift-decline-clear"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { logEvent, type LogActor } from "./event-log"
 import { registrationToken } from "./token-vault"
+import { clearOrgLinkData } from "./org-link"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import { LIVE_STATUSES, OCCUPYING_STATUSES, isUniqueViolation, lockShifts } from "./registration-capacity"
 import { cancelledFrom, planRestore, type RestoredStatus } from "./registration-restore"
@@ -130,6 +131,11 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
           await tx.registration.update({ where: { id: row.id }, data: registrationToken.data(token) })
           if (row.id === id) editToken = token
         }
+        // The organisation-wide link gives access to this event too (#1429): a link the organiser
+        // says was used by someone else is revoked with the others, or it would keep opening it.
+        // Cleared by id inside the transaction, so a token issued since the registration was read
+        // is revoked too; the next need issues a fresh one lazily.
+        await tx.volunteer.updateMany({ where: { id: reg.volunteerId, orgLinkTokenHash: { not: null } }, data: clearOrgLinkData() })
       }
       // A place taken back can fill the shift: same rule as everywhere a place is added.
       if (plan.status === "active" && shift?.status === "open" && occupied + 1 >= (shift?.capacity ?? 0)) {

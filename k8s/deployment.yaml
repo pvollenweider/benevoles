@@ -79,8 +79,9 @@ spec:
           env:
             # Only the keys of benevoles-secret the app reads (#1050), not the whole secret:
             # POSTGRES_USER/POSTGRES_PASSWORD (postgres pod), BACKUP_PASSPHRASE (backup CronJob),
-            # OFFSITE_BUCKET (off-site copy) and ADMIN_EMAIL/ADMIN_PASSWORD (startup bootstrap and
-            # prisma/seed.ts, deliberately not given to the Kubernetes app) stay out. A key added to
+            # OFFSITE_BUCKET (off-site copy, namespace benevoles-offsite) and
+            # ADMIN_EMAIL/ADMIN_PASSWORD (startup bootstrap and prisma/seed.ts, deliberately not
+            # given to the Kubernetes app) stay out. A key added to
             # the secret in deploy.yml is added here too, or to the list of keys the app never reads
             # (src/lib/__tests__/k8s-hardening.test.ts).
             # Optional keys stay optional, as they were with envFrom.
@@ -170,6 +171,37 @@ spec:
                 secretKeyRef:
                   name: benevoles-secret
                   key: SMTP_PASSWORD
+                  optional: true
+            # Deferred bounces (#602), optional: the IMAPS mailbox read every 15 minutes.
+            - name: IMAP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_HOST
+                  optional: true
+            - name: IMAP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_PORT
+                  optional: true
+            - name: IMAP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_USER
+                  optional: true
+            - name: IMAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_PASSWORD
+                  optional: true
+            - name: IMAP_PROCESSED_FOLDER
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: IMAP_PROCESSED_FOLDER
                   optional: true
             - name: EMAIL_FROM
               valueFrom:

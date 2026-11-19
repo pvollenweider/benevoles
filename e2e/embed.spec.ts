@@ -140,7 +140,7 @@ test("a volunteer signs up inside an iframe of another site, storage blocked, he
     await expect(link).toHaveAttribute("target", "_blank")
   }
   const mail = await waitForMessage(`to:"${email}"`)
-  expect(await getMessageText(mail.ID)).toMatch(/\/my\/[\w-]+/)
+  expect(await getMessageText(mail.ID)).toMatch(/\/mes-inscriptions\/[\w-]+/)
   await expect(frame.getByRole("link", { name: "Revenir au planning" })).toHaveAttribute("href", `/${event.slug}?org=default&embed=1`)
   const confirmation = page.frames().find((f) => f.url().includes(`/${event.slug}/success`))
   expect(new URL(confirmation!.url()).searchParams.get("embed")).toBe("1")

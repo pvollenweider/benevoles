@@ -28,6 +28,8 @@ import {
  *   link or the member's shifts.
  * - A payload with a personal link (`data.editToken`) but no `volunteerId`: the link must still
  *   exist and its member have the recipient's address (previews are rendered, never queued).
+ * - A general email carrying the organisation-wide link (`data.orgToken`, #1429 lot B): the token
+ *   must still be the member's current one, and its member be the recipient's.
  * - Sector leader emails (`sector_leader_*`, `data.token`): the leader must still exist, with
  *   this link and this address. They carry the role's roster link and volunteers' names.
  * - Availability requests (`availability_request`, #1146, `data.token`): the request must still hold
@@ -51,6 +53,31 @@ export async function outboxRecipientVerdict(payload: NotificationPayload): Prom
       ? await prisma.availabilityRequest.findUnique({ where: { tokenHash: hashToken(data.token) }, select: { id: true } })
       : null
     if (!live) return AVAILABILITY_LINK_REVOKED_REASON
+  }
+
+  // The organisation-wide personal link (#1429): the token itself must still be the member's
+  // current one. A renewal, an address correction, a merge or an erasure replaces it, so an email
+  // queued with the old token is cancelled instead of sending a link that no longer works.
+  if (payload.kind === "org_personal_link" || payload.kind === "org_personal_link_renewed") {
+    const token = typeof data.orgToken === "string" ? data.orgToken : null
+    const member = token
+      ? await prisma.volunteer.findUnique({ where: { orgLinkTokenHash: hashToken(token) }, select: { email: true } })
+      : null
+    if (!member) return PERSONAL_LINK_REVOKED_REASON
+    return memberAddressChanged(recipient, member) ? MEMBER_ADDRESS_CHANGED_REASON : null
+  }
+
+  // A general email's organisation-wide link (#1429, lot B): the token must still be the member's
+  // current one. A renewal, an address correction, a merge or an erasure replaces it, so an email
+  // queued with the old token is cancelled instead of sending a link that no longer works.
+  if (typeof data.orgToken === "string" && data.orgToken) {
+    const member = await prisma.volunteer.findUnique({
+      where: { orgLinkTokenHash: hashToken(data.orgToken) },
+      select: { id: true, email: true },
+    })
+    if (!member) return PERSONAL_LINK_REVOKED_REASON
+    if (payload.volunteerId && member.id !== payload.volunteerId) return PERSONAL_LINK_REVOKED_REASON
+    if (!payload.volunteerId) return memberAddressChanged(recipient, member) ? MEMBER_ADDRESS_CHANGED_REASON : null
   }
 
   if (payload.volunteerId) {

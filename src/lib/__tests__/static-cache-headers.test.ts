@@ -33,7 +33,7 @@ describe("static cache headers (#773, #759 F3)", () => {
   })
 })
 
-describe("calendar subscription headers (#961)", () => {
+describe("calendar subscription headers (#961, #1429)", () => {
   it("sends no Referer at all from the feed, by a rule after the global strict-origin one", async () => {
     const { CALENDAR_FEED_HEADER_RULES } = await import("../security-headers")
     const rules = await nextConfig.headers!()
@@ -41,5 +41,14 @@ describe("calendar subscription headers (#961)", () => {
     expect(feedIndex).toBeGreaterThan(0)
     expect(rules[feedIndex].headers).toContainEqual({ key: "Referrer-Policy", value: "no-referrer" })
     expect(CALENDAR_FEED_HEADER_RULES[0].source).toBe(rules[feedIndex].source)
+  })
+
+  it("sends no Referer from the organisation-wide feed either (#1429, lot C)", async () => {
+    const { CALENDAR_FEED_HEADER_RULES } = await import("../security-headers")
+    const rules = await nextConfig.headers!()
+    const orgIndex = rules.findIndex((r) => r.source === "/api/public/mes-inscriptions/:token/calendar.ics")
+    expect(orgIndex).toBeGreaterThan(0)
+    expect(rules[orgIndex].headers).toContainEqual({ key: "Referrer-Policy", value: "no-referrer" })
+    expect(CALENDAR_FEED_HEADER_RULES.map((r) => r.source)).toContain(rules[orgIndex].source)
   })
 })

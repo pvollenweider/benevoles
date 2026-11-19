@@ -13,7 +13,7 @@ vi.mock("../../prisma", () => ({
 // env.ts validates the whole environment on import and exits when it is incomplete (as in CI).
 vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32) } }))
 
-import { emailChannel, missingSmtpOutcome } from "../channels/email"
+import { emailChannel, maskPersonalLinkTokens, missingSmtpOutcome } from "../channels/email"
 import type { NotificationPayload } from "../types"
 
 const deliveryOutcomeCreate = m.deliveryOutcomeCreate
@@ -35,6 +35,14 @@ describe("missingSmtpOutcome", () => {
     expect(missingSmtpOutcome("development")).toEqual({ ok: true })
     expect(missingSmtpOutcome("test")).toEqual({ ok: true })
     expect(missingSmtpOutcome(undefined)).toEqual({ ok: true })
+  })
+})
+
+describe("maskPersonalLinkTokens", () => {
+  it("masks the token of both personal link shapes, keeping the path and the rest", () => {
+    expect(maskPersonalLinkTokens(
+      "Voir https://org.benevol.app/mes-inscriptions/abc_DEF-123 et https://org.benevol.app/my/tok#echanges.",
+    )).toBe("Voir https://org.benevol.app/mes-inscriptions/… et https://org.benevol.app/my/…#echanges.")
   })
 })
 
@@ -71,11 +79,37 @@ describe("emailChannel without SMTP_HOST", () => {
     expect(log).not.toHaveBeenCalled()
   })
 
-  it("in development: prints the email to the console and succeeds", async () => {
+  it("in development: prints the email to the console and succeeds, masking the personal link", async () => {
     vi.stubEnv("NODE_ENV", "development")
     const outcome = await emailChannel.send(payload)
     expect(outcome.ok).toBe(true)
     expect(log).toHaveBeenCalled()
+    const body = log.mock.calls.map((call: unknown[]) => String(call[0])).join("\n")
+    expect(body).toContain("/my/…")
+    expect(body).not.toContain("secret-token-value")
+  })
+
+  it("in development: masks the organisation-wide personal link too (#1429, lot B)", async () => {
+    vi.stubEnv("NODE_ENV", "development")
+    const outcome = await emailChannel.send({
+      kind: "manual_reminder",
+      organizationId: null,
+      recipient: { email: "alice@example.org", name: "Alice" },
+      data: {
+        volunteerName: "Alice Martin",
+        organizationName: "Org",
+        eventTitle: "Fête",
+        customMessage: "",
+        shifts: [],
+        editToken: "event-token",
+        orgSlug: "org",
+        orgToken: "org-secret-token",
+      },
+    } as unknown as NotificationPayload)
+    expect(outcome.ok).toBe(true)
+    const body = log.mock.calls.map((call: unknown[]) => String(call[0])).join("\n")
+    expect(body).toContain("/mes-inscriptions/…")
+    expect(body).not.toContain("org-secret-token")
   })
 })
 

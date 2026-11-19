@@ -107,6 +107,11 @@ describe("erasedVolunteerData / ERASED_REGISTRATION_DATA (#516)", () => {
   it("clears the comment and the phone of each kept registration", () => {
     expect(ERASED_REGISTRATION_DATA).toEqual({ comment: null, phone: null })
   })
+
+  it("clears the organisation-wide personal link with the identity (#1429)", () => {
+    const data = erasedVolunteerData(new Date("2026-10-05T10:00:00Z"))
+    expect(data).toMatchObject({ orgLinkTokenHash: null, orgLinkTokenEnc: null, orgLinkTokenLegacy: null, orgLinkIssuedAt: null })
+  })
 })
 
 describe("tombstoneChain (#516, #600)", () => {

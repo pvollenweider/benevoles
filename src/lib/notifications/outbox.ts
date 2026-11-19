@@ -10,10 +10,10 @@ import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
 import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
-import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
 import { isAddedShiftsConfirmation, resolveAddedShiftsConfirmation } from "./added-shifts-confirmation"
 import { outboxRecipientVerdict } from "../outbox-recipient-check"
+import { attachOrgLinks } from "../org-link-email"
 import { hourStart, recordLimitHit } from "./limit-hits"
 import type { SendBatchKind } from "../send-batches"
 import { inactivityCopyVerdict } from "../org-inactivity-steps"
@@ -21,6 +21,9 @@ import { outboxFailureGroup } from "./outbox-failure"
 import { isCustomRuleReminder, resolveCustomRuleReminder, sendCustomReminderPush } from "../reminder-occurrence-delivery"
 import { nextReminderAttemptAt } from "../reminder-rules"
 import { ORG_ACCOUNT_ROLE_WHERE } from "../permissions"
+import { outboxMessageId } from "./outbox-message-id"
+
+export { outboxMessageId, outboxMessageHost } from "./outbox-message-id"
 
 /**
  * Notification outbox (#293).
@@ -206,7 +209,10 @@ async function enqueueRows(
     ...(opts.inactivityStepId ? { inactivityStepId: opts.inactivityStepId } : {}),
   }
   const ids: string[] = []
-  for (const { dedupeKey, ...payload } of payloads) {
+  // General management emails carry the organisation-wide personal link (#1429, lot B): issued
+  // here, in the caller's transaction, once per volunteer even when several are queued together.
+  const withOrgLinks = await attachOrgLinks(payloads, db)
+  for (const { dedupeKey, ...payload } of withOrgLinks) {
     if (!payload.recipient.email?.trim()) continue
     // Stored in clear on the row (#382): the page filters on it, the payload stays sealed.
     const organizationId = payload.organizationId ?? opts.organizationId ?? null
@@ -224,14 +230,6 @@ async function enqueueRows(
     ids.push(row.id)
   }
   return ids
-}
-
-/** Stable Message-ID per outbox row: a re-send after a crash is recognizable as the same email. */
-export function outboxMessageId(rowId: string): string {
-  const host = (() => {
-    try { return new URL(process.env.NEXT_PUBLIC_APP_URL ?? "").hostname || siteDomain() } catch { return siteDomain() }
-  })()
-  return `<outbox-${rowId}@${host}>`
 }
 
 /**
@@ -380,6 +378,12 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         kind = payload.kind
         // Read right before the send: a member whose address was corrected, a link replaced or
         // revoked, a leader removed since the email was queued. Cancelled, never redirected.
+        //
+        // Accepted risk (#1429, lot B): the check and the send are two statements, so a revocation
+        // that commits in between still delivers a link that no longer works. It is inert, never a
+        // working link to someone else: an address correction also rotates the organisation-wide
+        // token, and a renewal replaces it. Closing that window entirely would need the check and
+        // the send in one transaction, which SMTP cannot join; the cost is a dead link, not a leak.
         recipientRefused = await outboxRecipientVerdict(payload)
         if (recipientRefused) return { ok: true as const }
         // An inactivity message (#1114) goes only to a current administrator, while the procedure runs.

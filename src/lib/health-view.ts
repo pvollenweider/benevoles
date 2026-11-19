@@ -36,7 +36,7 @@ export function assessJob(label: string, run: JobRunFacts | null | undefined, no
   if (!run) return { id, label, level: "unknown", detail: "Jamais exécuté (ou pas encore de battement de cœur)." }
   if (run.finishedAt === null) {
     const stale = now.getTime() - run.startedAt.getTime() > 2 * HOUR
-    return { id, label, level: stale ? "error" : "ok", detail: stale ? `Démarré ${ago(run.startedAt, now)} et jamais terminé.` : `En cours depuis ${ago(run.startedAt, now)}.` }
+    return { id, label, level: stale ? "error" : "ok", detail: stale ? `Démarré ${ago(run.startedAt, now)} et jamais terminé.` : `En cours, démarré ${ago(run.startedAt, now)}.` }
   }
   const age = now.getTime() - run.finishedAt.getTime()
   if (run.ok === false) return { id, label, level: "error", detail: `Dernière exécution en échec ${ago(run.finishedAt, now)}${run.error ? ` : ${run.error}` : "."}` }
@@ -87,6 +87,108 @@ export function assessOutbox(o: OutboxFacts): HealthItem {
   if (o.oldestPendingMinutes !== null && o.oldestPendingMinutes > 15) parts.push(`en attente depuis ${o.oldestPendingMinutes} min`)
   const level: HealthLevel = o.otherFailuresLastDay > 0 || o.staleClaims > 0 ? "error" : "warn"
   return { id, label, level, detail: `${parts.join(", ")}.` }
+}
+
+export type DeferredBounceCounts = {
+  scanned: number
+  flagged: number
+  alreadyKnown: number
+  ignoredTemporary: number
+  ignored: number
+  uncorrelated: number
+  errors: number
+}
+
+function countOf(value: unknown): number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? Math.floor(value) : 0
+}
+
+/** The counts stored in the JobRun summary by src/lib/bounce-mailbox.ts, tolerant of old/absent JSON. */
+export function deferredBounceCounts(summary: unknown): DeferredBounceCounts {
+  const s = (summary ?? {}) as Record<string, unknown>
+  return {
+    scanned: countOf(s.scanned),
+    flagged: countOf(s.flagged),
+    alreadyKnown: countOf(s.alreadyKnown),
+    ignoredTemporary: countOf(s.ignoredTemporary),
+    ignored: countOf(s.ignored),
+    uncorrelated: countOf(s.uncorrelated),
+    errors: countOf(s.errors),
+  }
+}
+
+/**
+ * High-water mark of uncorrelated messages over the runs of the last 24 h. Uncorrelated messages
+ * are left in the inbox, so every run sees them again: the largest recent count is the useful
+ * figure, not the sum (which would increase by the same message every 15 minutes).
+ */
+export function uncorrelatedInLastDay(summary: unknown, now: Date): number {
+  const raw = (summary as { uncorrelatedRuns?: unknown } | null)?.uncorrelatedRuns
+  if (!Array.isArray(raw)) return 0
+  const cutoff = now.getTime() - DAY
+  let max = 0
+  for (const entry of raw) {
+    if (!entry || typeof entry !== "object") continue
+    const at = (entry as { at?: unknown }).at
+    const count = (entry as { count?: unknown }).count
+    if (typeof at !== "string" || typeof count !== "number" || !Number.isFinite(count) || count < 0) continue
+    const time = Date.parse(at)
+    if (!Number.isFinite(time) || time < cutoff) continue
+    max = Math.max(max, Math.floor(count))
+  }
+  return max
+}
+
+export type DeferredBounceFacts = {
+  configured: boolean
+  run: (JobRunFacts & { summary?: unknown }) | null | undefined
+}
+
+/** « Rejets différés » (#602): not configured, last run and counts, or an error/stale run to look at. */
+export function assessDeferredBounces(f: DeferredBounceFacts, now: Date): HealthItem {
+  const id = "deferred-bounces"
+  const label = "Rejets différés"
+  if (!f.configured) {
+    return { id, label, level: "unknown", detail: "Inconnu : la boîte des avis de non-remise n'est pas configurée, les rejets différés ne sont pas lus." }
+  }
+  const run = f.run
+  if (!run) return { id, label, level: "warn", detail: "Aucun passage enregistré depuis la configuration." }
+  if (run.finishedAt === null) {
+    const stale = now.getTime() - run.startedAt.getTime() > 2 * HOUR
+    return { id, label, level: stale ? "error" : "ok", detail: stale ? `Démarré ${ago(run.startedAt, now)} et jamais terminé.` : `En cours, démarré ${ago(run.startedAt, now)}.` }
+  }
+  if (run.ok === false) {
+    return { id, label, level: "error", detail: `Dernière exécution en échec ${ago(run.finishedAt, now)}${run.error ? ` : ${run.error}` : "."}` }
+  }
+
+  const counts = deferredBounceCounts(run.summary)
+  // One noun, then only the non-zero kinds: six bare numbers say nothing when read aloud.
+  const plural = (n: number, word: string) => `${n} ${word}${n > 1 ? "s" : ""}`
+  const kinds = [
+    counts.flagged > 0 ? plural(counts.flagged, "signalé") : null,
+    counts.alreadyKnown > 0 ? `${counts.alreadyKnown} déjà connu${counts.alreadyKnown > 1 ? "s" : ""}` : null,
+    counts.ignoredTemporary > 0 ? `${counts.ignoredTemporary} avis temporaire${counts.ignoredTemporary > 1 ? "s" : ""}` : null,
+    counts.uncorrelated > 0 ? plural(counts.uncorrelated, "non rattaché") : null,
+    counts.ignored > 0 ? plural(counts.ignored, "ignoré") : null,
+  ].filter((part): part is string => part !== null)
+  const countsText = `${counts.scanned} avis analysé${counts.scanned > 1 ? "s" : ""}${kinds.length > 0 ? ` : ${kinds.join(", ")}` : ""}`
+  const age = now.getTime() - run.finishedAt.getTime()
+  if (age > HOUR) {
+    return { id, label, level: "warn", detail: `Dernier succès ${ago(run.finishedAt, now)} ; attendu toutes les 15 min.` }
+  }
+  if (counts.errors > 0) {
+    return { id, label, level: "warn", detail: `Dernier passage ${ago(run.finishedAt, now)} : ${countsText}, ${counts.errors} erreur${counts.errors > 1 ? "s" : ""}.` }
+  }
+  const uncorrelated = uncorrelatedInLastDay(run.summary, now)
+  if (uncorrelated > 0) {
+    return {
+      id,
+      label,
+      level: "warn",
+      detail: `Dernier passage ${ago(run.finishedAt, now)} : ${countsText}. ${uncorrelated} message${uncorrelated > 1 ? "s" : ""} non rattaché${uncorrelated > 1 ? "s" : ""} en 24 h.`,
+    }
+  }
+  return { id, label, level: "ok", detail: `Dernier passage ${ago(run.finishedAt, now)} : ${countsText}.` }
 }
 
 /** Spaces awaiting the operator's validation (#810): fine while young, to look at after 24 hours. */

@@ -23,6 +23,7 @@ vi.mock("@/lib/env", () => ({
 }))
 vi.mock("@/lib/notifications/outbox", () => ({ outboxHealth: vi.fn().mockResolvedValue(null) }))
 vi.mock("@/lib/job-runs", () => ({ JOBS: {}, loadJobRuns: vi.fn().mockResolvedValue({}) }))
+vi.mock("@/lib/bounce-mailbox-config", () => ({ bounceMailboxConfigured: () => false }))
 vi.mock("@/lib/server-metrics-data", () => ({ loadServerMetrics: mocks.loadServerMetrics }))
 
 import { loadHealth } from "../health-data"
@@ -44,5 +45,6 @@ describe("loadHealth server section", () => {
     expect(server.every((item) => item.level === "unknown")).toBe(true)
     expect(server.every((item) => item.detail === "Non disponible (mesure impossible).")).toBe(true)
     expect(server.some((item) => item.detail.includes("fichiers cgroup absents"))).toBe(false)
+    expect(items.find((item) => item.id === "deferred-bounces")).toMatchObject({ level: "unknown", detail: "Inconnu : la boîte des avis de non-remise n'est pas configurée, les rejets différés ne sont pas lus." })
   })
 })

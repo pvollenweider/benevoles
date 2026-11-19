@@ -15,7 +15,7 @@ import { digestItems } from "../digest-items"
 import { eventPublicUrl } from "@/lib/urls"
 import { clockTime } from "../../gantt-utils"
 import { shiftInfoText, withReadBeforeOnce, type ShiftInfo } from "../../shift-info"
-import { myPageUrl, docUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { myPageUrl, docUrl, escapeHtml, shiftInfoHtml, btn, wrap, orgLinkInEmail, orgLinkScopeHtml, ORG_LINK_BUTTON_LABEL, type RenderedEmail } from "./shared"
 import { SECTION_DOC_LINKS } from "@/lib/help-links"
 
 /** « samedi 10 octobre » from the « 10/10/2026 » the senders format, for {date} mid-sentence; as given otherwise. */
@@ -29,7 +29,7 @@ function spokenDay(date: string): string {
 // ── Inscription confirmée ────────────────────────────────────────────────────
 
 export function renderConfirmation(p: NotificationPayload): RenderedEmail {
-  const { volunteerName, eventTitle, shifts, editToken, orgSlug, confirmationMessage, cancelNotice } = p.data as {
+  const { volunteerName, eventTitle, shifts, editToken, orgSlug, confirmationMessage, cancelNotice, orgToken, organizationName } = p.data as {
     volunteerName: string
     eventTitle: string
     shifts: ({ label: string; date: string; startTime: string; endTime: string } & ShiftInfo)[]
@@ -38,8 +38,12 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     confirmationMessage?: string
     /** The event's earlier self-cancellation deadline in one sentence (#946); absent = until the start. */
     cancelNotice?: string | null
+    /** The organisation-wide link (#1429, lot B), issued when the email is queued. */
+    orgToken?: string
+    organizationName?: string
   }
-  const editUrl = myPageUrl(orgSlug, editToken)
+  const org = orgLinkInEmail({ orgToken, orgSlug, organizationName })
+  const editUrl = org?.url ?? myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
   // One link per page, even when several confirmed shifts are on the same poste (#1324).
   const shiftsWithPages = withReadBeforeOnce(shifts)
@@ -66,6 +70,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     ...(message ? [message, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
     editUrl,
+    ...(org ? [org.scope] : []),
     ...(cancelNotice ? [cancelNotice] : []),
     ``,
     `${guideLabel} :`,
@@ -87,7 +92,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
         </div>`).join("")}
     </div>
     ${messageHtml ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${messageHtml}</div>` : ""}
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>${cancelNotice ? `
+    <p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}${cancelNotice ? `
     <p style="color:#555;font-size:0.9em">${escapeHtml(cancelNotice)}</p>` : ""}
     <p style="color:#555;font-size:0.9em"><a href="${guideUrl}" style="color:#1d4ed8;text-decoration:underline">${guideLabel}</a></p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
@@ -197,15 +202,21 @@ export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail
     eventSlug: string
     shifts: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }[]
     editToken?: string | null
+    /** The organisation-wide link (#1429, lot B): it still opens the member's other registrations. */
+    orgToken?: string
+    organizationName?: string
   }
   const firstName = d.volunteerName.split(" ")[0]
   const lines = d.shifts.map((s) => spokenShift(s))
   const several = lines.length > 1
   const intro = `L'organisation de ${d.eventTitle} a annulé ton inscription ${several ? "à ces créneaux" : "à ce créneau"} :`
-  const linkUrl = d.editToken ? myPageUrl(d.orgSlug, d.editToken) : eventPublicUrl(d.orgSlug, d.eventSlug)
-  const next = d.editToken
-    ? "Tes autres inscriptions sont toujours là. Ton lien personnel pour les voir ou les gérer :"
-    : "D'autres créneaux sont peut-être encore ouverts :"
+  const org = orgLinkInEmail(d)
+  const linkUrl = org?.url ?? (d.editToken ? myPageUrl(d.orgSlug, d.editToken) : eventPublicUrl(d.orgSlug, d.eventSlug))
+  const next = org
+    ? "Tes autres inscriptions sont toujours là. Tu peux les voir ou les gérer ici :"
+    : d.editToken
+      ? "Tes autres inscriptions sont toujours là. Ton lien personnel pour les voir ou les gérer :"
+      : "D'autres créneaux sont peut-être encore ouverts :"
   const subject = `Inscription annulée : ${d.eventTitle}`
 
   const text = [
@@ -216,6 +227,7 @@ export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail
     ``,
     next,
     linkUrl,
+    ...(org ? [org.scope] : []),
     ``,
     `Merci pour ton engagement !`,
   ].join("\n")
@@ -225,7 +237,7 @@ export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail
     <p style="color:#555">L'organisation de <strong>${escapeHtml(d.eventTitle)}</strong> a annulé ton inscription ${several ? "à ces créneaux" : "à ce créneau"} :</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
     <p style="color:#555">${escapeHtml(next)}</p>
-    <p style="margin-top:1.5em">${btn(linkUrl, d.editToken ? "Gérer mes inscriptions" : "Voir les créneaux")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, org ? ORG_LINK_BUTTON_LABEL : d.editToken ? "Gérer mes inscriptions" : "Voir les créneaux")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ton engagement !</p>
   `, several ? `${lines.length} créneaux annulés pour ${d.eventTitle}.` : `Créneau annulé : ${lines[0] ?? d.eventTitle}.`)
 
@@ -309,6 +321,8 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     shift: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }
     editToken: string
     newLink?: boolean
+    orgToken?: string
+    organizationName?: string
   }
   const firstName = d.volunteerName.split(" ")[0]
   const line = spokenShift(d.shift)
@@ -316,9 +330,12 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
   const what = d.status === "requested"
     ? `L'organisation de ${d.eventTitle} a rétabli ta demande d'inscription, qui attend sa réponse :`
     : `L'organisation de ${d.eventTitle} a rétabli ton inscription :`
-  const linkUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const linkUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const subject = `${d.status === "requested" ? "Demande rétablie" : "Inscription rétablie"} : ${d.eventTitle}`
-  const unwanted = "Tu ne veux plus de ce créneau ? Annule-le depuis ton lien personnel, ou réponds à cet email."
+  const unwanted = org
+    ? "Tu ne veux plus de ce créneau ? Annule-le depuis ta page « Mes inscriptions », ou réponds à cet email."
+    : "Tu ne veux plus de ce créneau ? Annule-le depuis ton lien personnel, ou réponds à cet email."
 
   const text = [
     `Hello ${firstName},`,
@@ -327,8 +344,9 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     `- ${line}`,
     ``,
     ...(d.newLink ? [renewed, ``] : []),
-    `Ton lien personnel pour gérer tes inscriptions :`,
+    org ? "Ta page « Mes inscriptions » :" : "Ton lien personnel pour gérer tes inscriptions :",
     linkUrl,
+    ...(org ? [org.scope] : []),
     ``,
     unwanted,
   ].join("\n")
@@ -338,7 +356,7 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     <p style="color:#555">${escapeHtml(what)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>${escapeHtml(line)}</li></ul>
     ${d.newLink ? `<p style="color:#555"><strong>${escapeHtml(renewed)}</strong></p>` : ""}
-    <p style="margin-top:1.5em">${btn(linkUrl, "Gérer mes inscriptions")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
   `, `${d.status === "requested" ? "Demande rétablie" : "Inscription rétablie"} : ${line}.`)
 
@@ -364,17 +382,23 @@ export function renderRegistrationAddedByOrganizer(p: NotificationPayload): Rend
     /** Every shift added and still held, read when the email leaves (added-by-organizer.ts). */
     shifts: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }[]
     editToken: string
+    orgToken?: string
   }
   const firstName = d.volunteerName.split(" ")[0]
   const lines = d.shifts.map((s) => spokenShift(s))
   const several = lines.length > 1
   const who = d.organizerName ? `${d.organizerName}, de ${d.organizationName},` : `L'organisation ${d.organizationName}`
   const what = `${who} t'a inscrit·e à ${d.eventTitle}${several ? `, sur ${lines.length} créneaux` : ""} :`
-  const linkUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const linkUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const subject = `Tu es inscrit·e : ${d.eventTitle}`
   const unwanted = several
-    ? "Un créneau ne te convient pas ? Annule-le depuis ton lien personnel, ou réponds à cet email."
-    : "Ce créneau ne te convient pas ? Annule-le depuis ton lien personnel, ou réponds à cet email."
+    ? org
+      ? "Un créneau ne te convient pas ? Annule-le depuis ta page « Mes inscriptions », ou réponds à cet email."
+      : "Un créneau ne te convient pas ? Annule-le depuis ton lien personnel, ou réponds à cet email."
+    : org
+      ? "Ce créneau ne te convient pas ? Annule-le depuis ta page « Mes inscriptions », ou réponds à cet email."
+      : "Ce créneau ne te convient pas ? Annule-le depuis ton lien personnel, ou réponds à cet email."
 
   const text = [
     `Hello ${firstName},`,
@@ -382,8 +406,9 @@ export function renderRegistrationAddedByOrganizer(p: NotificationPayload): Rend
     what,
     ...lines.map((l) => `- ${l}`),
     ``,
-    `Ton lien personnel pour gérer tes inscriptions :`,
+    org ? "Ta page « Mes inscriptions » :" : "Ton lien personnel pour gérer tes inscriptions :",
     linkUrl,
+    ...(org ? [org.scope] : []),
     ``,
     unwanted,
   ].join("\n")
@@ -392,7 +417,7 @@ export function renderRegistrationAddedByOrganizer(p: NotificationPayload): Rend
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
     <p style="color:#555">${escapeHtml(what)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
-    <p style="margin-top:1.5em">${btn(linkUrl, "Gérer mes inscriptions")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
   `, several ? `Inscrit·e sur ${lines.length} créneaux : ${d.eventTitle}.` : `Inscrit·e : ${lines[0] ?? d.eventTitle}.`)
 
@@ -414,8 +439,11 @@ export function renderShiftModified(p: NotificationPayload): RenderedEmail {
     newEnd: string
     editToken: string
     orgSlug?: string
+    orgToken?: string
+    organizationName?: string
   }
-  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const editUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
   const subject = `Info : changement d'horaire — ${d.eventTitle}`
 
@@ -429,6 +457,7 @@ export function renderShiftModified(p: NotificationPayload): RenderedEmail {
     ``,
     `Si ces nouveaux horaires ne te conviennent pas, tu peux gérer ton inscription ici :`,
     editUrl,
+    ...(org ? [org.scope] : []),
   ].join("\n")
 
   const html = wrap(`
@@ -439,7 +468,7 @@ export function renderShiftModified(p: NotificationPayload): RenderedEmail {
       <div style="font-weight:600;margin-top:4px">→ ${escapeHtml(d.newDate)} · ${escapeHtml(d.newStart)}–${escapeHtml(d.newEnd)}</div>
     </div>
     <p style="color:#555;font-size:0.9em">Si ces nouveaux horaires ne te conviennent pas, tu peux gérer ton inscription ci-dessous.</p>
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    <p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
   `, `Nouvel horaire : ${d.newDate} · ${d.newStart}–${d.newEnd} (était ${d.oldStart}–${d.oldEnd})`)
 
   return { subject, html, text }

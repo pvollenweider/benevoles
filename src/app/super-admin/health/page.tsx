@@ -27,7 +27,7 @@ export default async function HealthPage() {
   const { items, version, gitSha, checkedAt } = await loadHealth()
   const worst = worstLevel(items)
   const groups: { key: string; title: string; ids: (id: string) => boolean }[] = [
-    { key: "service", title: "Service", ids: (id) => id === "database" || id === "outbox" || id === "migrations" || id === "release" },
+    { key: "service", title: "Service", ids: (id) => id === "database" || id === "outbox" || id === "deferred-bounces" || id === "migrations" || id === "release" },
     { key: "server", title: "Serveur", ids: (id) => id.startsWith("server:") },
     { key: "jobs", title: "Tâches planifiées et sauvegardes", ids: (id) => id.startsWith("job:") },
     { key: "config", title: "Configuration", ids: (id) => id.startsWith("config:") },

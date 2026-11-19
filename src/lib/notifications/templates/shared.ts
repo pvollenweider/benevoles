@@ -7,6 +7,8 @@
  */
 
 import { orgBaseUrl } from "@/lib/urls"
+import { orgPersonalPagePath } from "@/lib/org-link-paths"
+import { ORG_EMAIL_SCOPE_SENTENCE } from "@/lib/org-personal-page"
 import { onSiteContact, readBeforePages, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
 import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
@@ -18,6 +20,36 @@ export const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:30
 export function myPageUrl(orgSlug: string | undefined, editToken: string): string {
   const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
   return `${base}/my/${editToken}`
+}
+
+/** The organisation-wide personal page (#1429): one link for every registration of the member. */
+export function orgPersonalPageUrl(orgSlug: string | undefined, token: string): string {
+  const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
+  return `${base}${orgPersonalPagePath(token)}`
+}
+
+/** The main button of every general email (#1429, lot B). */
+export const ORG_LINK_BUTTON_LABEL = "Mes inscriptions"
+
+export type OrgLinkInEmail = { url: string; scope: string }
+
+/**
+ * The organisation-wide link an email carries, when the payload has one (#1429, lot B): its URL
+ * and the one-sentence scope under the button. Null drops back to the event personal link, which
+ * keeps the emails sent by a preview or an older queued row working.
+ */
+export function orgLinkInEmail(data: {
+  orgToken?: string | null
+  orgSlug?: string
+  organizationName?: string | null
+}): OrgLinkInEmail | null {
+  if (!data.orgToken || !data.organizationName) return null
+  return { url: orgPersonalPageUrl(data.orgSlug, data.orgToken), scope: ORG_EMAIL_SCOPE_SENTENCE(data.organizationName) }
+}
+
+/** The short scope sentence under the « Mes inscriptions » button. */
+export function orgLinkScopeHtml(link: OrgLinkInEmail): string {
+  return `<p style="color:#666;font-size:0.85em;margin-top:0.5em">${escapeHtml(link.scope)}</p>`
 }
 
 /**

@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest"
-import { ago, assessConfig, assessDatabase, assessJob, assessPendingSpaces, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, healthHeadline, worstLevel } from "../health-view"
+import {
+  ago, assessConfig, assessDatabase, assessDeferredBounces, assessJob, assessPendingSpaces, assessMigrations, assessOutbox,
+  assessReleaseCheck, assessRestoreTest, deferredBounceCounts, healthHeadline, uncorrelatedInLastDay, worstLevel,
+} from "../health-view"
 
 const now = new Date("2026-07-10T12:00:00Z")
 const at = (iso: string) => new Date(iso)
@@ -92,5 +95,89 @@ describe("assessPendingSpaces (#810)", () => {
     expect(assessPendingSpaces([], now)).toMatchObject({ level: "ok", detail: "Aucun." })
     expect(assessPendingSpaces([hoursAgo(2), hoursAgo(5)], now)).toMatchObject({ level: "ok", detail: "2 en attente." })
     expect(assessPendingSpaces([hoursAgo(2), hoursAgo(30)], now)).toMatchObject({ level: "warn", detail: "2 en attente, dont 1 depuis plus de 24 heures." })
+  })
+})
+
+describe("assessDeferredBounces (#602)", () => {
+  const now = new Date("2026-11-19T12:00:00Z")
+  const at = (iso: string) => new Date(iso)
+  const summary = {
+    scanned: 4,
+    flagged: 1,
+    alreadyKnown: 1,
+    ignoredTemporary: 1,
+    ignored: 1,
+    uncorrelated: 0,
+    errors: 0,
+  }
+  const bounceRun = (over: Record<string, unknown> = {}) => ({
+    job: "bounces",
+    startedAt: at("2026-11-19T07:50:00Z"),
+    finishedAt: at("2026-11-19T07:51:00Z"),
+    ok: true,
+    error: null,
+    summary,
+    ...over,
+  })
+
+  it("says « non configuré » when IMAP settings are absent", () => {
+    expect(assessDeferredBounces({ configured: false, run: null }, now))
+      .toMatchObject({ id: "deferred-bounces", label: "Rejets différés", level: "unknown", detail: "Inconnu : la boîte des avis de non-remise n'est pas configurée, les rejets différés ne sont pas lus." })
+  })
+
+  it("warns when configured but never run", () => {
+    expect(assessDeferredBounces({ configured: true, run: null }, now)).toMatchObject({ level: "warn" })
+  })
+
+  it("shows an in-progress run, an abandoned one, and a failed one as an error", () => {
+    expect(assessDeferredBounces({ configured: true, run: bounceRun({ finishedAt: null, ok: null, startedAt: at("2026-11-19T11:50:00Z") }) }, now))
+      .toMatchObject({ level: "ok", detail: "En cours, démarré il y a 10 min." })
+    expect(assessDeferredBounces({ configured: true, run: bounceRun({ finishedAt: null, ok: null, startedAt: at("2026-11-19T08:00:00Z") }) }, now))
+      .toMatchObject({ level: "error", detail: "Démarré il y a 4 h et jamais terminé." })
+    expect(assessDeferredBounces({ configured: true, run: bounceRun({ ok: false, error: "IMAP down" }) }, now))
+      .toMatchObject({ level: "error", detail: "Dernière exécution en échec il y a 4 h : IMAP down" })
+  })
+
+  it("warns when the last success is older than an hour", () => {
+    expect(assessDeferredBounces({ configured: true, run: bounceRun({ finishedAt: at("2026-11-19T09:00:00Z") }) }, now))
+      .toMatchObject({ level: "warn", detail: "Dernier succès il y a 3 h ; attendu toutes les 15 min." })
+  })
+
+  it("shows the last run's counts and stays ok without uncorrelated messages", () => {
+    expect(assessDeferredBounces({ configured: true, run: bounceRun({ finishedAt: at("2026-11-19T11:50:00Z") }) }, now))
+      .toMatchObject({
+        level: "ok",
+        detail: "Dernier passage il y a 10 min : 4 avis analysés : 1 signalé, 1 déjà connu, 1 avis temporaire, 1 ignoré.",
+      })
+  })
+
+  it("warns on uncorrelated messages in the last 24 h, with their count only", () => {
+    const run = bounceRun({
+      finishedAt: at("2026-11-19T11:50:00Z"),
+      summary: { ...summary, uncorrelated: 2, uncorrelatedRuns: [{ at: "2026-11-19T11:45:00Z", count: 2 }] },
+    })
+    expect(assessDeferredBounces({ configured: true, run }, now)).toMatchObject({
+      level: "warn",
+      detail: "Dernier passage il y a 10 min : 4 avis analysés : 1 signalé, 1 déjà connu, 1 avis temporaire, 2 non rattachés, 1 ignoré. 2 messages non rattachés en 24 h.",
+    })
+  })
+
+  it("warns on per-message errors in an otherwise successful run", () => {
+    const run = bounceRun({ finishedAt: at("2026-11-19T11:50:00Z"), summary: { ...summary, errors: 1 } })
+    expect(assessDeferredBounces({ configured: true, run }, now)).toMatchObject({ level: "warn", detail: expect.stringContaining("1 erreur") })
+  })
+
+  it("reads tolerant counts and a 24 h high-water mark, ignoring old entries", () => {
+    expect(deferredBounceCounts({ scanned: 3.8, flagged: -1, bad: "x" })).toEqual({
+      scanned: 3, flagged: 0, alreadyKnown: 0, ignoredTemporary: 0, ignored: 0, uncorrelated: 0, errors: 0,
+    })
+    expect(uncorrelatedInLastDay({
+      uncorrelatedRuns: [
+        { at: "2026-11-19T11:45:00Z", count: 2 },
+        { at: "2026-11-19T07:00:00Z", count: 5 },
+        { at: "2026-11-17T07:00:00Z", count: 9 },
+      ],
+    }, now)).toBe(5)
+    expect(uncorrelatedInLastDay(null, now)).toBe(0)
   })
 })

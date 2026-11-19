@@ -1132,6 +1132,17 @@ model Volunteer {
   // while its registrations stay for counts, hours and history. Never cleared again; an erased
   // record can't be edited, merged or erased twice. See src/lib/member-erasure-transaction.ts.
   erasedAt       DateTime?
+  // Organisation-wide personal link (#1429, lot A): one token per volunteer and organisation that
+  // opens /mes-inscriptions/<token>, listing every upcoming registration of this member in the
+  // organisation, recent and future events alike. Issued lazily when first needed (lost link, renewal,
+  // old event page), never mass-issued. Same storage rules as Registration.editToken (#290):
+  // `…Hash` for lookup (SHA-256), `…Enc` (AES-256-GCM, TOKEN_ENCRYPTION_KEY) to re-send it,
+  // `…Legacy` only while no key is configured. Rotated on address correction, merge, erasure and
+  // link regeneration; « Renouveler mon lien » replaces it. See src/lib/org-link.ts.
+  orgLinkTokenHash   String?  @unique
+  orgLinkTokenEnc    String?
+  orgLinkTokenLegacy String?
+  orgLinkIssuedAt    DateTime?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

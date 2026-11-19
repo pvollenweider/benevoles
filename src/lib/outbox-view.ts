@@ -49,6 +49,7 @@ const PERMANENT_REASON_TEXT: Partial<Record<SmtpReason, string>> = {
   mailbox_full: "boîte aux lettres pleine",
   domain_not_found: "domaine introuvable",
   policy_rejected: "rejeté par la politique du serveur destinataire",
+  bounced_after_acceptance: "refusé par le serveur destinataire après l'acceptation par notre relais",
 }
 
 const TEMPORARY_REASON_TEXT: Partial<Record<SmtpReason, string>> = {
@@ -94,6 +95,7 @@ export const REASON_LABEL_FR: Record<SmtpReason, string> = {
   policy_rejected: "rejeté par la politique du serveur destinataire",
   relay_error: "rejeté par notre propre serveur d'envoi",
   timeout: "délai dépassé",
+  bounced_after_acceptance: "refusé après l'acceptation par le relais",
   other: "cause non précisée",
 }
 
@@ -143,6 +145,8 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   sector_leader_withdrawal: "Responsable : désistement",
   product_update: "Nouveautés du produit",
   registration_link_resend: "Renvoi du lien personnel",
+  org_personal_link: "Lien personnel pour toutes les inscriptions de l'organisation",
+  org_personal_link_renewed: "Renouvellement du lien personnel de l'organisation",
   targeted_message: "Message aux bénévoles",
   registration_requested: "Demande d'inscription reçue",
   registration_refused: "Demande d'inscription refusée",

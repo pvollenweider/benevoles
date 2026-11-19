@@ -5,6 +5,7 @@ import { createHash } from "crypto"
 import {
   APP_TOP_LEVEL_SEGMENTS,
   INLINE_SCRIPT_HASHES,
+  ORG_PERSONAL_PAGE_HEADER_RULES,
   SECURITY_HEADERS,
   contentSecurityPolicy,
   createNonce,
@@ -53,6 +54,7 @@ describe("pageSecurityHeaders: framing, per route family", () => {
       "/admin", "/admin?embed=1", "/admin/events/abc", "/admin/login?embed=1", "/admin/accept-invite?embed=1",
       "/super-admin?embed=1",
       "/my/token123", "/my/token123?embed=1", "/my?embed=1",
+      "/mes-inscriptions/token123", "/mes-inscriptions/token123?embed=1",
       "/leader/token123?embed=1", "/leader?embed=1",
       "/waitlist/confirm?embed=1", "/waitlist?embed=1",
       "/api/health?embed=1", "/api?embed=1", "/api/public/registrations?embed=1", "/api/auth/session?embed=1",
@@ -86,6 +88,20 @@ describe("APP_TOP_LEVEL_SEGMENTS", () => {
 
   it("names the Sentry tunnel", () => {
     expect(APP_TOP_LEVEL_SEGMENTS).toContain(SENTRY_TUNNEL_PATH.slice(1))
+  })
+})
+
+describe("ORG_PERSONAL_PAGE_HEADER_RULES (#1429)", () => {
+  it("never caches the organisation personal page, never indexes it and sends no Referer", () => {
+    expect(ORG_PERSONAL_PAGE_HEADER_RULES).toEqual([{
+      source: "/mes-inscriptions/:path*",
+      headers: [
+        { key: "Cache-Control", value: "private, no-store" },
+        { key: "Pragma", value: "no-cache" },
+        { key: "Referrer-Policy", value: "no-referrer" },
+        { key: "X-Robots-Tag", value: "noindex" },
+      ],
+    }])
   })
 })
 

@@ -9,7 +9,7 @@
 import type { NotificationPayload } from "../types"
 import { clockTime, fmtRange } from "../../gantt-utils"
 import { emergencyNoteFor, shiftInfoText, withReadBeforeOnce, type ShiftInfo } from "../../shift-info"
-import { myPageUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { myPageUrl, escapeHtml, shiftInfoHtml, btn, wrap, orgLinkInEmail, orgLinkScopeHtml, ORG_LINK_BUTTON_LABEL, type RenderedEmail } from "./shared"
 
 // ── Rappels auto (#672 : un email par bénévole, événement et jour) ──────────
 
@@ -30,11 +30,34 @@ type ReminderData = {
   cancelNotice?: string | null
   /** That deadline has passed (#946): the button leads to whom to tell, not to « Annuler ». */
   cancelClosed?: boolean
+  /** The organisation-wide link (#1429, lot B), issued when the email is queued. */
+  orgToken?: string
 }
 
 /** The self-cancellation line (#946), only when the event sets an earlier deadline. */
 const cancelText = (d: ReminderData): string[] => (d.cancelNotice ? [d.cancelNotice] : [])
 const cancelHtml = (d: ReminderData): string => (d.cancelNotice ? `<p style="color:#555;font-size:0.9em;margin-top:1.25em">${escapeHtml(d.cancelNotice)}</p>` : "")
+
+/**
+ * The lead line of a reminder, before its page link (#1429, lot B). With the organisation-wide
+ * link it names the page the button opens; without it, the historical wording stays, and the
+ * same-day reminder gains the line it lacked.
+ */
+function reminderLeadText(d: ReminderData, kind: "j2" | "j1" | "dd", orgLink: boolean): string {
+  if (orgLink) {
+    if (kind === "j1" || kind === "dd") return "Un empêchement de dernière minute ? Préviens-nous vite depuis ta page « Mes inscriptions »."
+    if (d.cancelClosed) return "Un empêchement ? Vois qui prévenir sur ta page « Mes inscriptions »."
+    return "Un empêchement ? Préviens-nous le plus vite possible depuis ta page « Mes inscriptions »."
+  }
+  if (kind === "j2") return "Un empêchement ? Préviens-nous le plus vite possible :"
+  return "Un empêchement de dernière minute ? Préviens-nous vite :"
+}
+
+/** The same line in HTML, only when the button opens the organisation-wide page. */
+function reminderLeadHtml(d: ReminderData, kind: "j2" | "j1" | "dd", orgLink: boolean): string {
+  if (!orgLink) return ""
+  return `<p style="color:#555;font-size:0.9em;margin-top:1.25em">${escapeHtml(reminderLeadText(d, kind, true))}</p>`
+}
 
 // Role and label joined like the rest of the emails (administration.ts, signup-recap.ts): no
 // em-dash, "·" between role and variant only — never between a time and a role (below).
@@ -70,7 +93,8 @@ function shiftBlockHtml(s: ReminderShift): string {
 
 export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const editUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
   // A page attached to a poste once in the group, even when several shifts are on it (#1324).
   const shifts = withReadBeforeOnce(d.shifts)
@@ -90,8 +114,9 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
         ...shiftInfoText(first),
         ...noteText(d.shifts),
         ``,
-        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        reminderLeadText(d, "j2", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `Une grosse bise et à très vite !`,
@@ -106,8 +131,9 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
         ...shifts.flatMap(shiftBlockText),
         ...noteText(d.shifts),
         ``,
-        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        reminderLeadText(d, "j2", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `Une grosse bise et à très vite !`,
@@ -124,7 +150,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
       <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
       ${shiftInfoHtml(first)}
     </div>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler si je ne peux plus venir")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "j2", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler si je ne peux plus venir")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${escapeHtml(roleLine(first))} · ${escapeHtml(first.date)} · ${escapeHtml(fmtRange(first.startTime, first.endTime))}`)
     : wrap(`
@@ -134,7 +160,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
       ${shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler un créneau si je ne peux plus venir")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "j2", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler un créneau si je ne peux plus venir")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux le ${escapeHtml(first.date)}`)
 
@@ -143,7 +169,8 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
 
 export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const editUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
   // A page attached to a poste once in the group, even when several shifts are on it (#1324).
   const shifts = withReadBeforeOnce(d.shifts)
@@ -159,8 +186,9 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
         ...shiftInfoText(first),
         ...noteText(d.shifts),
         ``,
-        `Un empêchement de dernière minute ? Préviens-nous vite :`,
+        reminderLeadText(d, "j1", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `On se réjouit de te retrouver !`,
@@ -173,8 +201,9 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
         ...shifts.flatMap(shiftBlockText),
         ...noteText(d.shifts),
         ``,
-        `Un empêchement de dernière minute ? Préviens-nous vite :`,
+        reminderLeadText(d, "j1", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `On se réjouit de te retrouver !`,
@@ -187,7 +216,7 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     <p style="color:#555;margin:0 0 1.25em"><strong>${escapeHtml(d.eventTitle)}</strong> demain à ${escapeHtml(clockTime(first.startTime))}${first.locationDetails ? `, à ${escapeHtml(first.locationDetails)}` : ""}.</p>
     <p>Tu fais : <strong>${escapeHtml(roleLine(first))}</strong></p>
     ${shiftInfoHtml(first)}${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "j1", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `RDV demain à ${clockTime(first.startTime)}${first.locationDetails ? ` · ${first.locationDetails}` : ""} — mission : ${roleLine(first)}`)
     : wrap(`
@@ -196,7 +225,7 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
       ${shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "j1", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux demain`)
 
@@ -205,7 +234,8 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
 
 export function renderReminderDd(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const editUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
   // A page attached to a poste once in the group, even when several shifts are on it (#1324).
   const shifts = withReadBeforeOnce(d.shifts)
@@ -223,7 +253,9 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
         ...shiftInfoText(first),
         ...noteText(d.shifts),
         ``,
+        reminderLeadText(d, "dd", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `On se réjouit de te retrouver !`,
@@ -236,7 +268,9 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
         ...shifts.flatMap(shiftBlockText),
         ...noteText(d.shifts),
         ``,
+        reminderLeadText(d, "dd", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `On se réjouit de te retrouver !`,
@@ -252,7 +286,7 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
       <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
       ${shiftInfoHtml(first)}
     </div>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Voir mes inscriptions")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "dd", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Voir mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${roleLine(first)} · RDV ${hoursLabel}${first.locationDetails ? ` à ${first.locationDetails}` : ""}`)
     : wrap(`
@@ -261,7 +295,7 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
       ${shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Voir mes inscriptions")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "dd", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Voir mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux aujourd'hui, RDV ${hoursLabel}`)
 
@@ -276,7 +310,8 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
  */
 export function renderReminderRule(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const editUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
   const shifts = withReadBeforeOnce(d.shifts)
   const first = shifts[0]
@@ -293,8 +328,9 @@ export function renderReminderRule(p: NotificationPayload): RenderedEmail {
         ...shiftInfoText(first),
         ...noteText(d.shifts),
         ``,
-        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        reminderLeadText(d, "j2", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `À très vite !`,
@@ -307,8 +343,9 @@ export function renderReminderRule(p: NotificationPayload): RenderedEmail {
         ...shifts.flatMap(shiftBlockText),
         ...noteText(d.shifts),
         ``,
-        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        reminderLeadText(d, "j2", !!org),
         editUrl,
+        ...(org ? [org.scope] : []),
         ...cancelText(d),
         ``,
         `À très vite !`,
@@ -325,7 +362,7 @@ export function renderReminderRule(p: NotificationPayload): RenderedEmail {
       <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
       ${shiftInfoHtml(first)}
     </div>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler si je ne peux plus venir")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "j2", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler si je ne peux plus venir")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${escapeHtml(roleLine(first))} · ${escapeHtml(first.date)} · ${escapeHtml(fmtRange(first.startTime, first.endTime))}`)
     : wrap(`
@@ -334,7 +371,7 @@ export function renderReminderRule(p: NotificationPayload): RenderedEmail {
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
       ${shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler un créneau si je ne peux plus venir")}</p>
+    ${cancelHtml(d)}${reminderLeadHtml(d, "j2", !!org)}<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler un créneau si je ne peux plus venir")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux le ${escapeHtml(first.date)}`)
 
@@ -352,8 +389,10 @@ export function renderManualReminder(p: NotificationPayload): RenderedEmail {
     shifts: { label: string; date: string; startTime: string; endTime: string; roleName: string }[]
     editToken: string
     orgSlug?: string
+    orgToken?: string
   }
-  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const org = orgLinkInEmail(d)
+  const editUrl = org?.url ?? myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
   const subject = `Rappel — ${d.eventTitle}`
 
@@ -365,7 +404,9 @@ export function renderManualReminder(p: NotificationPayload): RenderedEmail {
     `Tes créneaux pour ${d.eventTitle} :`,
     ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`),
     ``,
-    `Gérer tes inscriptions : ${editUrl}`,
+    org ? "Ta page « Mes inscriptions » :" : "Gérer tes inscriptions :",
+    editUrl,
+    ...(org ? [org.scope] : []),
     ``,
     `Un grand M E R C I, une grosse bise et à très vite !`,
     d.organizationName,
@@ -385,7 +426,7 @@ export function renderManualReminder(p: NotificationPayload): RenderedEmail {
           <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>
         </div>`).join("")}
     </div>
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    <p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I, une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, preheader)
 
@@ -408,8 +449,10 @@ export function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
     orgSlug?: string
     /** Invited without a shift (#481): their invitation link, to choose shifts. */
     signupUrl?: string
+    orgToken?: string
   }
-  const editUrl = d.editToken ? myPageUrl(d.orgSlug, d.editToken) : null
+  const org = orgLinkInEmail(d)
+  const editUrl = d.editToken ? (org?.url ?? myPageUrl(d.orgSlug, d.editToken)) : null
   const firstName = d.volunteerName.split(" ")[0]
   const subject = `${d.subject} — ${d.eventTitle}`
 
@@ -421,7 +464,7 @@ export function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
     ...(d.shifts.length > 0
       ? [`Tes créneaux concernés pour ${d.eventTitle} :`, ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`), ``]
       : []),
-    ...(editUrl ? [`Gérer tes inscriptions : ${editUrl}`, ``] : []),
+    ...(editUrl ? [org ? "Ta page « Mes inscriptions » :" : "Gérer tes inscriptions :", editUrl, ...(org ? [org.scope] : []), ``] : []),
     ...(d.signupUrl ? [`Choisir tes créneaux : ${d.signupUrl}`, ``] : []),
     `À très vite !`,
     d.organizationName,
@@ -441,7 +484,7 @@ export function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
           <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>
         </div>`).join("")}
     </div>` : ""}
-    ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>` : ""}
+    ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, org ? ORG_LINK_BUTTON_LABEL : "Gérer mes inscriptions")}</p>${org ? orgLinkScopeHtml(org) : ""}` : ""}
     ${d.signupUrl ? `<p style="margin-top:1.5em">${btn(d.signupUrl, "Choisir mes créneaux")}</p>` : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, preheader)

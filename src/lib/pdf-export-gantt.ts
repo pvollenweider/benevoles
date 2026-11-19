@@ -8,8 +8,14 @@
  * pulls in next-auth (via requireOrgSession), which fails to resolve in vitest's plain node
  * environment.
  */
-import { clockTime, toMin, toMinEnd } from "@/lib/gantt-utils"
+import { clockTime, ganttColumnWidths, toMin, toMinEnd } from "@/lib/gantt-utils"
+import { dayAxis, dayBands, shouldSplitDay } from "@/lib/day-sheet-bands"
+import { placesInWords } from "@/lib/staffing"
 import { groupedRoleOrder, groupRolesBySector, type SectorGroup, type SectorLike } from "@/lib/sectors"
+
+// Re-exported for the printable sheets, which import it from here (#923); the implementation now
+// lives in gantt-utils so day-sheet-bands can use it without a circular import.
+export { ganttColumnWidths } from "@/lib/gantt-utils"
 
 export type VolData       = { firstName: string; lastName: string; email: string | null; phone: string | null }
 export type RegData       = { volunteer: VolData; comment: string | null; source: string }
@@ -41,20 +47,6 @@ function fmtSlot(mins: number) {
   return m === 0 ? `${h}h` : `${h}h${String(m).padStart(2, "0")}`
 }
 
-/**
- * Column widths of the Gantt, in percent of the table width (#923). The table is laid out with
- * `table-layout: fixed; width: 100%`, so the time axis is scaled to the page instead of every
- * 15-minute slot claiming a minimum width: a long day (08:00 to 02:00 is 72 slots) used to push
- * the table past the right edge of the page and of the screen preview, cutting the evening off.
- * The role and label columns keep a fixed share; the slots split the rest equally.
- */
-export function ganttColumnWidths(slotCount: number, hasLabel: boolean): { role: number; label: number | null; slot: number } {
-  const role = hasLabel ? 9 : 11
-  const label = hasLabel ? 10 : null
-  const slot = slotCount > 0 ? Math.floor(((100 - role - (label ?? 0)) / slotCount) * 10000) / 10000 : 0
-  return { role, label, slot }
-}
-
 function fmtDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
 }
@@ -63,13 +55,18 @@ function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-// Returns {gantt, recap} HTML fragments for one day
+/**
+ * Returns {gantt, recap} HTML fragments for one day. The full export keeps the dense-day rule on
+ * (the default); the per-role and per-volunteer sheets pass `dense: false` to keep their single,
+ * narrow timeline, which is built from their own shifts only.
+ */
 export function buildDayParts(
   date: Date,
   shifts: ShiftRow[],
   shows: ShowEntry[],
   showWaitlist: boolean,
   bySector?: PdfSectors,
+  options: { dense?: boolean } = {},
 ): { gantt: string; recap: string } {
   // toMinEnd (not a raw toMin) for every end time: an overnight shift's end (e.g. "02:00") is a
   // small raw minute value with no +1440 rollover, which used to drag dayStart toward 0 and
@@ -151,6 +148,200 @@ export function buildDayParts(
     groupMap.get(key)!.shifts.push(shift)
   }
 
+  // ── Dense day (#1431): overview strip and 6-hour bands ────────────────────
+  //
+  // The printable day sheet and this export share the same rule and band geometry
+  // (day-sheet-bands.ts). A dense day keeps the day heading, but its single timeline becomes a
+  // compact overview (one cell per shift, « inscrits/places ») followed by one timeline per
+  // 6-hour band, wide enough for the names. Its recap table is left out: the bands already carry
+  // every name and count. Non-dense days take the exact path below, unchanged.
+  if (options.dense !== false && shouldSplitDay(shifts)) {
+    // Shows extend the axis as they do on a non-dense day, so a show after the last shift still
+    // appears in the overview and in its band.
+    const axis = dayAxis([...shifts, ...shows])
+    const step = axis.step
+    const bandCount = (startMin: number, endMin: number) => Math.max(1, Math.round((endMin - startMin) / step))
+    const fmtBound = (mins: number) => {
+      const h = Math.floor(mins / 60)
+      const m = mins % 60
+      return m === 0 ? `${h}h` : `${h}h${String(m).padStart(2, "0")}`
+    }
+    const bandRange = (band: { startMin: number; endMin: number; nextDay: boolean }) =>
+      band.nextDay
+        ? `de ${fmtBound(band.startMin - 1440)} à ${fmtBound(band.endMin - 1440)} (lendemain)`
+        : `de ${fmtBound(band.startMin)} à ${fmtBound(band.endMin)}`
+    const fillState = (s: ShiftRow) =>
+      s.registrations.length === 0 ? "empty" : s.registrations.length < s.capacity ? "free" : "complete"
+    const timeSpan = (s: ShiftRow) =>
+      `<span class="sr-only">de ${esc(clockTime(s.startTime))} à ${esc(clockTime(s.endTime))}</span>`
+    const overviewCell = (s: ShiftRow) => {
+      const filled = s.registrations.length
+      return `<span class="sr-only">de ${esc(clockTime(s.startTime))} à ${esc(clockTime(s.endTime))}, ${placesInWords(filled, s.capacity)}</span><strong class="mono" aria-hidden="true">${filled}/<wbr>${s.capacity}</strong>`
+    }
+    const bandCell = (s: ShiftRow) => {
+      const filled = s.registrations.length
+      if (filled === 0) return `${timeSpan(s)}<span aria-hidden="true">—</span><span class="sr-only">personne</span>`
+      const names = smartVolsList(s.registrations)
+      // A partial shift carries its count after the names, on its own line: the dense note says
+      // the counts are in the timeline, and the overview alone is not printed with the names.
+      if (filled >= s.capacity) return timeSpan(s) + names
+      return `${timeSpan(s)}${names}<br><span class="fill-count" aria-hidden="true">${filled}/<wbr>${s.capacity}</span><span class="sr-only">, ${placesInWords(filled, s.capacity)}</span>`
+    }
+
+    const tableFor = (startMin: number, endMin: number, tableShifts: ShiftRow[], caption: string, cellOf: (s: ShiftRow) => string, kind: "overview" | "band"): string => {
+      const count = bandCount(startMin, endMin)
+      const occupied = showSlotsFor(startMin, endMin)
+      // Groups are rebuilt from the shifts actually in this slice: a band omits a poste that has
+      // no shift in it, and only shows the labels it needs.
+      const tableSorted = [...tableShifts].sort((a, b) => {
+        const ri = roleOrder.indexOf(a.roleName) - roleOrder.indexOf(b.roleName)
+        return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
+      })
+      const tableGroups: GroupEntry[] = []
+      const tableGroupMap = new Map<string, GroupEntry>()
+      for (const shift of tableSorted) {
+        const key = `${shift.roleName}\0${shift.label}`
+        if (!tableGroupMap.has(key)) {
+          const g: GroupEntry = { roleName: shift.roleName, label: shift.label, shifts: [] }
+          tableGroups.push(g)
+          tableGroupMap.set(key, g)
+        }
+        tableGroupMap.get(key)!.shifts.push(shift)
+      }
+
+      const emptyCell = (slot: number) => {
+        const mins = startMin + slot * step
+        const cls = ["empty-cell", mins % 60 === 0 ? "hour-mark" : "", occupied.has(slot) ? "show-active" : ""].filter(Boolean).join(" ")
+        return `<td class="${cls}"></td>`
+      }
+
+      const roleRows = new Map<string, string>()
+      let gi = 0
+      while (gi < tableGroups.length) {
+        const role = tableGroups[gi].roleName
+        let roleEnd = gi + 1
+        while (roleEnd < tableGroups.length && tableGroups[roleEnd].roleName === role) roleEnd++
+        const roleSpan = roleEnd - gi
+        for (let m = gi; m < roleEnd; m++) {
+          const group = tableGroups[m]
+          let row = `<tr class="${m === roleEnd - 1 ? "role-last" : ""}">`
+          if (m === gi) {
+            row += `<th scope="row" class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</th>`
+          }
+          if (hasAnyLabel) {
+            row += group.label !== role
+              ? `<th scope="row" class="label-cell">${esc(group.label)}</th>`
+              : `<td class="label-cell"></td>`
+          }
+          let slot = 0
+          const sortedShifts = [...group.shifts].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))
+          for (const sh of sortedShifts) {
+            const rawStart = Math.round((toMin(sh.startTime) - startMin) / step)
+            const rawEnd = Math.round((toMinEnd(sh.endTime, sh.startTime) - startMin) / step)
+            if (rawEnd <= 0 || rawStart >= count) continue
+            const startSlot = Math.max(0, rawStart)
+            const endSlot = Math.min(count, Math.max(startSlot + 1, rawEnd))
+            if (endSlot <= slot) continue
+            while (slot < startSlot) { row += emptyCell(slot); slot++ }
+            const colspan = endSlot - startSlot
+            row += `<td class="shift-cell" data-fill="${fillState(sh)}"${colspan > 1 ? ` colspan="${colspan}"` : ""}>${cellOf(sh)}</td>`
+            slot = endSlot
+          }
+          while (slot < count) { row += emptyCell(slot); slot++ }
+          roleRows.set(role, (roleRows.get(role) ?? "") + row + "</tr>")
+        }
+        gi = roleEnd
+      }
+
+      let showRow = ""
+      const spans = showSpansFor(startMin, endMin)
+      if (spans.length > 0) {
+        showRow = `<tr class="show-row"><th scope="row" class="show-label-cell"${hasAnyLabel ? ` colspan="2"` : ""}>Spectacles</th>`
+        let s = 0
+        while (s < count) {
+          const span = spans.find((sp) => sp.start === s)
+          if (span) {
+            const colspan = span.end - span.start
+            const label = `<span aria-hidden="true">🎪</span> ${esc(span.show.name)}`
+            showRow += colspan > 1
+              ? `<td class="show-band-cell" colspan="${colspan}">${label}</td>`
+              : `<td class="show-band-cell">${label}</td>`
+            s = span.end
+          } else {
+            showRow += `<td class="show-empty-cell${(startMin + s * step) % 60 === 0 ? " hour-mark" : ""}"></td>`
+            s++
+          }
+        }
+        showRow += `</tr>`
+      }
+
+      const present = new Set(tableGroups.map((g) => g.roleName))
+      const columns = 1 + (hasAnyLabel ? 1 : 0) + count
+      const body = sectorGroups
+        ? sectorGroups.map((g) => {
+            const roles = g.roles.filter((r) => present.has(r))
+            if (roles.length === 0) return ""
+            return `<tbody class="sector-group">${sectorHeaderRow(g, columns)}${roles.map((r) => roleRows.get(r) ?? "").join("")}</tbody>`
+          }).join("") + (showRow ? `<tbody>${showRow}</tbody>` : "")
+        : `<tbody>${roleOrder.filter((r) => present.has(r)).map((r) => roleRows.get(r) ?? "").join("")}${showRow}</tbody>`
+
+      const slotHeaders = Array.from({ length: count }, (_, i) => {
+        const mins = startMin + i * step
+        const onHour = mins % 60 === 0
+        return `<th scope="col" class="slot-th${onHour ? " hour-th" : ""}">${onHour ? fmtSlot(mins) : `<span class="sr-only">${fmtSlot(mins)}</span>`}</th>`
+      }).join("")
+      const widths = ganttColumnWidths(count, hasAnyLabel)
+      const colgroup = `<colgroup><col style="width:${widths.role}%">${widths.label !== null ? `<col style="width:${widths.label}%">` : ""}<col span="${count}" style="width:${widths.slot}%"></colgroup>`
+      const tableClass = kind === "overview" ? "dense-overview" : "dense-band"
+      return `
+    <table class="gantt-table ${tableClass}">
+      <caption class="dense-caption">${esc(caption)}</caption>
+      ${colgroup}
+      <thead>
+        <tr>
+          <th scope="col" class="th-role">Rôle</th>
+          ${hasAnyLabel ? `<th scope="col" class="th-label">Libellé</th>` : ""}
+          ${slotHeaders}
+        </tr>
+      </thead>
+      ${body}
+    </table>`
+    }
+
+    // Shows overlapping a slice, clipped to it, once per table (the show row of the Gantt).
+    function showSpansFor(startMin: number, endMin: number) {
+      const count = bandCount(startMin, endMin)
+      return shows
+        .map((show) => {
+          const start = Math.max(0, Math.round((toMin(show.startTime) - startMin) / step))
+          const end = Math.min(count, Math.max(start + 1, Math.round((toMinEnd(show.endTime, show.startTime) - startMin) / step)))
+          return { start, end, show }
+        })
+        .filter((sp) => sp.end > sp.start)
+    }
+    function showSlotsFor(startMin: number, endMin: number): Set<number> {
+      const slots = new Set<number>()
+      for (const span of showSpansFor(startMin, endMin)) for (let s = span.start; s < span.end; s++) slots.add(s)
+      return slots
+    }
+
+    const overview = tableFor(axis.startMin, axis.endMin, shifts, `Vue d'ensemble du ${fmtDate(date)}`, overviewCell, "overview")
+    const bands = dayBands([...shifts, ...shows]).map((band) => {
+      const inBand = shifts.filter((s) => {
+        const start = toMin(s.startTime)
+        const end = toMinEnd(s.endTime, s.startTime)
+        return start < band.endMin && end > band.startMin
+      })
+      return tableFor(band.startMin, band.endMin, inBand, `Frise horaire du ${fmtDate(date)} ${bandRange(band)}`, bandCell, "band")
+    }).join("")
+
+    const denseDayLabel = `<h3 class="day-sub-title">${fmtDate(date)}</h3>`
+    return {
+      gantt: `<div class="day-block dense-day">${denseDayLabel}${overview}${bands}</div>`,
+      recap: `<div class="day-block dense-recap">${denseDayLabel}<p class="dense-note">Journée dense : le récapitulatif par poste de cette journée n'est pas repris ; les noms et les effectifs figurent dans la frise par tranches de 6 h.</p></div>`,
+    }
+  }
+
   const showSlots = new Set<number>()
   for (const show of shows) {
     const s0 = Math.round((toMin(show.startTime) - dayStart) / STEP)
@@ -169,18 +360,21 @@ export function buildDayParts(
 
     for (let m = gi; m < roleEnd; m++) {
       const group       = groups[m]
-      const displayLbl  = group.label !== role ? group.label : ""
       const isLastInRole = m === roleEnd - 1
 
       let row = `<tr class="${isLastInRole ? "role-last" : ""}">`
 
       if (m === gi) {
-        // In a sector's body, the sector heads the row group: a poste heads its own rows only.
-        const scope = roleSpan > 1 && !sectorGroups ? "rowgroup" : "row"
-        row += `<th scope="${scope}" class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</th>`
+        // A poste with several labels heads all its rows with one row header; the label is a
+        // second row header below it, never a cell with no heading role.
+        row += `<th scope="row" class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</th>`
       }
 
-      if (hasAnyLabel) row += `<td class="label-cell">${esc(displayLbl)}</td>`
+      if (hasAnyLabel) {
+        row += group.label !== role
+          ? `<th scope="row" class="label-cell">${esc(group.label)}</th>`
+          : `<td class="label-cell"></td>`
+      }
 
       let s = 0
       const sortedShifts = [...group.shifts].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))
@@ -194,7 +388,7 @@ export function buildDayParts(
         }
         const colspan = endSlot - startSlot
         // The time survives the colspan for screen readers (column headers only cover the first slot).
-        const vols    = `<span class="sr-only">${esc(clockTime(sh.startTime))}–${esc(clockTime(sh.endTime))} : </span>${smartVolsList(sh.registrations)}`
+        const vols    = `<span class="sr-only">de ${esc(clockTime(sh.startTime))} à ${esc(clockTime(sh.endTime))} : </span>${smartVolsList(sh.registrations)}`
         row += colspan > 1
           ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
           : `<td class="shift-cell">${vols}</td>`
@@ -214,14 +408,14 @@ export function buildDayParts(
 
   let showRow = ""
   if (shows.length > 0) {
-    showRow = `<tr class="show-row"><td class="show-label-cell"${hasAnyLabel ? ` colspan="2"` : ""}></td>`
+    showRow = `<tr class="show-row"><th scope="row" class="show-label-cell"${hasAnyLabel ? ` colspan="2"` : ""}>Spectacles</th>`
     let s = 0
     while (s < slots.length) {
       const show = shows.find((sh) => Math.round((toMin(sh.startTime) - dayStart) / STEP) === s)
       if (show) {
         const endSlot = Math.min(Math.round((toMinEnd(show.endTime, show.startTime) - dayStart) / STEP), slots.length)
         const colspan = endSlot - s
-        const label   = `🎪 ${esc(show.name)}`
+        const label   = `<span aria-hidden="true">🎪</span> ${esc(show.name)}`
         showRow += colspan > 1
           ? `<td class="show-band-cell" colspan="${colspan}">${label}</td>`
           : `<td class="show-band-cell">${label}</td>`

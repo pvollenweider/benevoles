@@ -56,3 +56,24 @@ export async function getMessageHtml(id: string): Promise<string> {
   const data = (await res.json()) as { HTML: string }
   return data.HTML
 }
+
+const APP_URL = (process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${process.env.E2E_PORT ?? "3100"}`).replace(/\/+$/, "")
+
+/**
+ * The event personal-page token (/my/<token>) a volunteer email leads to. General emails carry the
+ * organisation link (/mes-inscriptions/<token>, #1429 lot B), whose page links each event through
+ * a server hop that redirects to /my/<event token>: follow it, for `eventId` when given (else the
+ * first event listed). Emails still carrying /my/<token> return it directly.
+ */
+export async function eventTokenFromEmail(text: string, eventId?: string): Promise<string> {
+  const direct = text.match(/\/my\/([\w-]+)/)?.[1]
+  if (direct) return direct
+  const org = text.match(/\/mes-inscriptions\/([\w-]+)/)?.[1]
+  if (!org) return ""
+  const page = await fetch(`${APP_URL}/mes-inscriptions/${org}`).then((r) => r.text())
+  const ids = [...page.matchAll(new RegExp(`/mes-inscriptions/${org}/evenement/([\\w-]+)`, "g"))].map((m) => m[1])
+  const target = eventId && ids.includes(eventId) ? eventId : ids[0]
+  if (!target) return ""
+  const hop = await fetch(`${APP_URL}/mes-inscriptions/${org}/evenement/${target}`, { redirect: "manual" })
+  return (hop.headers.get("location") ?? "").match(/\/my\/([\w-]+)/)?.[1] ?? ""
+}

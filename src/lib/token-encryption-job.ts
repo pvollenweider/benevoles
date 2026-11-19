@@ -17,7 +17,7 @@ import { decryptValue, encryptValue, keyring, needsReencryption } from "./token-
 
 type Row = { id: string; value: string | null }
 type Table = {
-  name: "registrations" | "sectorLeaders" | "memberInvites" | "availabilityRequests" | "adminTotpSecrets" | "adminTotpPending"
+  name: "registrations" | "sectorLeaders" | "memberInvites" | "availabilityRequests" | "orgLinks" | "adminTotpSecrets" | "adminTotpPending"
   legacy?: (take: number) => Promise<Row[]>
   encrypted: (take: number, notPrefix: string) => Promise<Row[]>
   update: (id: string, from: { legacy?: string; enc?: string }, enc: string) => Promise<number>
@@ -58,6 +58,18 @@ const tables: Table[] = [
     }).then((r) => r.count),
   },
   {
+    // The organisation-wide personal link (#1429), on the Volunteer row.
+    name: "orgLinks",
+    legacy: (take) => prisma.volunteer.findMany({ where: { orgLinkTokenLegacy: { not: null } }, select: { id: true, orgLinkTokenLegacy: true }, take })
+      .then((rows) => rows.map((r) => ({ id: r.id, value: r.orgLinkTokenLegacy }))),
+    encrypted: (take, notPrefix) => prisma.volunteer.findMany({ where: { orgLinkTokenEnc: { not: null }, NOT: { orgLinkTokenEnc: { startsWith: notPrefix } } }, select: { id: true, orgLinkTokenEnc: true }, take })
+      .then((rows) => rows.map((r) => ({ id: r.id, value: r.orgLinkTokenEnc }))),
+    update: (id, from, enc) => prisma.volunteer.updateMany({
+      where: { id, ...(from.legacy ? { orgLinkTokenLegacy: from.legacy } : { orgLinkTokenEnc: from.enc }) },
+      data: { orgLinkTokenEnc: enc, orgLinkTokenLegacy: null },
+    }).then((r) => r.count),
+  },
+  {
     // The availability links (#1146), same columns as MemberInvite.
     name: "availabilityRequests",
     legacy: (take) => prisma.availabilityRequest.findMany({ where: { tokenLegacy: { not: null } }, select: { id: true, tokenLegacy: true }, take })
@@ -92,8 +104,8 @@ export async function encryptLegacyTokens(opts: { batchSize?: number; maxBatches
   const maxBatches = opts.maxBatches ?? 20
   const prefix = `v2:${ring.current.id}:`
 
-  const encrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0 }
-  const reencrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0, adminTotpSecrets: 0, adminTotpPending: 0 }
+  const encrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0, orgLinks: 0 }
+  const reencrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0, orgLinks: 0, adminTotpSecrets: 0, adminTotpPending: 0 }
 
   for (const t of tables) {
     for (let i = 0; t.legacy && i < maxBatches; i++) {

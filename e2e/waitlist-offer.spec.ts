@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test"
-import { getMessageText, waitForMessage } from "./helpers/mailpit"
+import { getMessageText, waitForMessage, eventTokenFromEmail } from "./helpers/mailpit"
 
 /**
  * The waitlist offer link (#1044): opening it, scripts included, accepts nothing (mail scanners
@@ -37,7 +37,7 @@ test("the offer page is read-only until « Prendre la place » is pressed", asyn
 
   // The first person withdraws: the spot is offered to the next one, by email.
   const firstMail = await waitForMessage(`to:"e2e-offer-first-${stamp}@example.com"`)
-  const firstLink = (await getMessageText(firstMail.ID)).match(/\/my\/([\w-]+)/)?.[1] ?? ""
+  const firstLink = await eventTokenFromEmail(await getMessageText(firstMail.ID))
   expect(firstLink).toBeTruthy()
   expect((await page.request.delete(`/api/public/registrations/${firstLink}`, { headers: { "x-forwarded-for": `10.82.${Math.floor(Math.random() * 250)}.1` }, data: {} })).ok()).toBeTruthy()
   const offerMail = await waitForMessage(`to:"e2e-offer-next-${stamp}@example.com" subject:"Une place"`)

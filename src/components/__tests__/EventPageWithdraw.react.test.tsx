@@ -198,7 +198,7 @@ describe("EventPageClient — withdrawing a held shift", () => {
     await waitFor(() => expect(screen.queryByRole("alertdialog")).toBeNull())
     expect(screen.queryAllByRole("button", { name: "Annuler le créneau Bar" })).toHaveLength(0)
     expect(accueilX()).toHaveFocus()
-    await waitFor(() => expect(notice()).toHaveTextContent("Créneau annulé : Bar, samedi 6 juillet, de 10h à 12h."))
+    await waitFor(() => expect(notice()).toHaveTextContent("Créneau annulé : Bar, samedi 6 juillet 2030, de 10h à 12h."))
     // The bar is offered again.
     expect(document.querySelector('[data-shift-id="s-bar"]')).toHaveAccessibleName(/, Bar : sélectionner/)
   })

@@ -10,6 +10,11 @@ Les pages publiques parlent presque toujours de « bénévoles ». Selon le publ
 - **Volontaires** : synonyme courant en France. Il ne doit jamais laisser croire à un contrat de volontariat, ni à un service civique.
 - **Collaborateurs** : uniquement pour une équipe qui mêle salariés et bénévoles, par exemple « staff, bénévoles et collaborateurs ». Jamais pour désigner des bénévoles seuls : un bénévole n'est pas un salarié.
 
+## La page et son lien
+
+- **« Mes inscriptions »** est le nom de la page du bénévole : le libellé du bouton qui l'ouvre, et dans une phrase « ta page « Mes inscriptions » ». On ne dit ni « ton espace », ni « ton compte », ni « ton tableau de bord ».
+- **« lien personnel »** est le lien qui ouvre cette page. On l'emploie quand on parle du lien lui-même (« ton lien personnel », « renouveler ton lien personnel »), jamais pour nommer la page.
+
 ## Garde-fous
 
 - L'interface, les emails et tout libellé d'interface cité restent « bénévole » : rien ne change dans les composants, les templates d'email et les libellés sous `src/`.

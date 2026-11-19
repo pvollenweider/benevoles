@@ -83,7 +83,7 @@ test("withdrawing with the keyboard: focus in the confirmation, back on the trig
   await page.keyboard.press("Enter")
   await expect(bar).toHaveCount(0)
   await expect(trigger(page, "Accueil")).toBeFocused()
-  await expect(pageStatus(page)).toHaveText(/^Créneau annulé : Bar, mardi 1 octobre, de 10h à 12h\.$/)
+  await expect(pageStatus(page)).toHaveText(/^Créneau annulé : Bar, mardi 1 octobre 2030, de 10h à 12h\.$/)
 
   // The last card of the list: focus on the previous one.
   await trigger(page, "Vestiaire").focus()

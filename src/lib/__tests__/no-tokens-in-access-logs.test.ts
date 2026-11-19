@@ -36,6 +36,11 @@ const TOKEN_ROUTE_PREFIXES = tokenRoutePrefixes()
 // read from the app router above; the query ones only exist here).
 const TOKEN_URLS = [
   `/my/${FAKE}`,
+  `/mes-inscriptions/${FAKE}`,
+  `/mes-inscriptions/${FAKE}/evenement/evt-1`,
+  `/api/public/mes-inscriptions/${FAKE}`,
+  `/api/public/mes-inscriptions/${FAKE}/renouveler`,
+  `/api/public/mes-inscriptions/${FAKE}/calendar.ics`,
   `/waitlist/${FAKE}/confirm`,
   `/leader/${FAKE}`,
   `/api/public/registrations/${FAKE}`,

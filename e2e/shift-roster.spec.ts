@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
 import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./helpers/public-signup"
-import { getMessageText, waitForMessage } from "./helpers/mailpit"
+import { getMessageText, waitForMessage, eventTokenFromEmail } from "./helpers/mailpit"
 
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
@@ -88,7 +88,7 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   await page.getByRole("button", { name: "Confirmer mon inscription" }).click()
   await expect(page).toHaveURL(new RegExp(`/${event.slug}/success`))
   const mail = await waitForMessage(`to:"${alineEmail}"`)
-  const alineLink = (await getMessageText(mail.ID)).match(/\/my\/([\w-]+)/)?.[1] ?? ""
+  const alineLink = await eventTokenFromEmail(await getMessageText(mail.ID))
   expect(alineLink).toBeTruthy()
 
   // 4. Another confirmed volunteer (Caisse): their card shows their own shift only, nobody named

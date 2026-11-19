@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { answerSummary } from "../question-answer-summary"
 import { EMERGENCY_NOTE } from "../shift-info"
-import { ATTENDANCE_SPARE_LINES, ganttOf, isSheetView, renderSheet, SHEET_VIEWS, shiftsByDay, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
+import { ATTENDANCE_SPARE_LINES, emailWithBreaks, ganttOf, isSheetView, mergeTouchingShifts, phoneDays, renderSheet, SHEET_VIEWS, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
 
 const alice = { firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 1", comment: null, checkedIn: true }
 const bob = { firstName: "Bob <B>", lastName: "Durand", email: null, phone: null, comment: "vient tard", checkedIn: false }
@@ -43,8 +43,8 @@ describe("print sheets", () => {
   })
 
   it("sums staffing for a section head", () => {
-    expect(staffingLine(data.shifts.slice(0, 2))).toBe("2 créneaux · 3/4 inscrits · <strong>1 place à pourvoir</strong>")
-    expect(staffingLine([shift({ id: "x", capacity: 1, registrations: [alice] })])).toBe("1 créneau · 1/1 inscrits · complet")
+    expect(staffingLine(data.shifts.slice(0, 2))).toBe("2 créneaux · <span aria-hidden=\"true\">3/4 inscrits</span><span class=\"sr-only\">3 inscrits sur 4 places</span> · <strong>1 place à pourvoir</strong>")
+    expect(staffingLine([shift({ id: "x", capacity: 1, registrations: [alice] })])).toBe("1 créneau · <span aria-hidden=\"true\">1/1 inscrits</span><span class=\"sr-only\">1 inscrit sur 1 place</span> · complet")
   })
 
   it("builds the export's Gantt for one day, first names in the bars, without its own day title", () => {
@@ -79,29 +79,25 @@ describe("print sheets", () => {
     expect((html.match(/class="gantt-table"/g) ?? []).length).toBe(3) // Bar: two days, Accueil: one
   })
 
-  it("phones: an organizers-only notice, one row per volunteer with their shifts", () => {
+  it("phones: organizers-only notice, one column per event day and a volunteer row header", () => {
     const html = renderSheet("phones", data)
-    expect(html).toContain("Ne pas afficher ni distribuer")
-    expect(html).toContain('<td class="nowrap mono">079 1</td>')
+    expect(html).toContain("Document pour les organisateurs")
+    expect(html).toContain('<table class="phones-table">')
+    expect(html).toContain('<caption class="sr-only">Bénévoles, coordonnées et créneaux par jour</caption>')
+    expect(html).toContain('<th scope="col">Bénévole</th>')
+    expect(html).toContain('<th scope="col"><span aria-hidden="true">sam. 4 juil.</span><span class="sr-only">samedi 4 juillet</span></th>')
+    expect(html).toContain('<th scope="col"><span aria-hidden="true">dim. 5 juil.</span><span class="sr-only">dimanche 5 juillet</span></th>')
+    expect(html).toContain('<th scope="row" class="vol-cell">')
+    expect(html).toContain('<span class="vol-name">Martin Alice</span>')
+    expect(html).toContain('<span class="vol-phone mono">079 1</span>')
     expect(html).toContain("2 bénévoles.")
-    expect(html).toContain("size: A4 portrait")
+    expect(html).toContain("size: A4 landscape")
     expect(html).not.toContain('class="gantt-table"')
-  })
-
-  it("phones: the shifts cell writes each day once, then the hours of every shift of that day", () => {
-    const one = data.shifts[0].registrations.slice(0, 1)
-    const shifts = [
-      { ...data.shifts[0], id: "a", date: "2026-07-05", startTime: "18:00", endTime: "20:00", label: "Bar soir", registrations: one },
-      { ...data.shifts[0], id: "b", date: "2026-07-04", startTime: "14:00", endTime: "16:00", registrations: one },
-      { ...data.shifts[0], id: "c", date: "2026-07-04", startTime: "10:00", endTime: "12:00", registrations: one },
-    ]
-    const days = shiftsByDay(shifts)
-    expect(days.map((d) => d.day)).toEqual(["sam. 4 juil.", "dim. 5 juil."])
-    expect(days[0].items.map((i) => i.time)).toEqual(["10:00–12:00", "14:00–16:00"])
-    expect(days[1].items[0]).toEqual({ time: "18:00–20:00", name: "Bar · Bar soir" })
-    const html = renderSheet("phones", { ...data, shifts })
-    expect(html.match(/sam\. 4 juil\./g)).toHaveLength(1)
-    expect(html).toContain('<span class="day">sam. 4 juil.</span>')
+    // « Bénévole » plus only the days that have shifts, never an empty day column.
+    expect((html.match(/<th scope="col">/g) ?? []).length).toBe(3)
+    // Bob has no shift on 5 July: that day cell says so, for sighted and screen-reader users.
+    const bobRow = html.split('<span class="vol-name">Durand Bob &lt;B&gt;</span>')[1].split("</tr>")[0]
+    expect(bobRow).toContain('<td class="day-cell"><span aria-hidden="true">—</span><span class="sr-only">aucun créneau</span></td>')
   })
 
   it("attendance: a checkbox per person, already-present people ticked, spare blank lines", () => {
@@ -192,6 +188,111 @@ describe("print sheets", () => {
     expect(renderSheet("answers", { ...data, answers: { confirmedCount: 0, waitingCount: 0, questions: [] } })).toContain("Aucune question posée aux bénévoles")
     const q = { id: "q", label: "Q", type: "text", rows: [] }
     expect(renderSheet("answers", { ...data, answers: { confirmedCount: 0, waitingCount: 2, questions: [q] } })).toContain("Aucun bénévole confirmé pour l'instant. 2 en attente")
+  })
+})
+
+describe("phone list (#1431)", () => {
+  it("keeps only the days that have shifts, chronological, with the short day header", () => {
+    expect(phoneDays([
+      shift({ id: "a", date: "2026-07-06" }),
+      shift({ id: "b", date: "2026-07-04" }),
+      shift({ id: "c", date: "2026-07-06" }),
+    ])).toEqual([
+      { date: "2026-07-04", label: "sam. 4 juil.", full: "samedi 4 juillet" },
+      { date: "2026-07-06", label: "lun. 6 juil.", full: "lundi 6 juillet" },
+    ])
+  })
+
+  it("merges touching shifts of the same role and day into one line", () => {
+    expect(mergeTouchingShifts([
+      shift({ id: "a", startTime: "10:00", endTime: "12:00" }),
+      shift({ id: "b", startTime: "12:00", endTime: "14:00" }),
+    ])).toEqual([
+      { date: "2026-07-04", startTime: "10:00", endTime: "14:00", roleName: "Bar", label: "Bar" },
+    ])
+  })
+
+  it("does not merge across roles, a gap, a different label, or days", () => {
+    const merged = mergeTouchingShifts([
+      shift({ id: "role", roleName: "Bar", label: "Bar", startTime: "10:00", endTime: "12:00" }),
+      shift({ id: "other", roleName: "Accueil", label: "Accueil", startTime: "12:00", endTime: "14:00" }),
+      shift({ id: "gap", roleName: "Accueil", label: "Accueil", startTime: "15:00", endTime: "17:00" }),
+      shift({ id: "label", roleName: "Accueil", label: "Accueil · soir", startTime: "17:00", endTime: "19:00" }),
+      shift({ id: "day", roleName: "Accueil", label: "Accueil · soir", date: "2026-07-05", startTime: "19:00", endTime: "21:00" }),
+    ])
+    expect(merged.map((m) => `${m.date} ${m.roleName} ${m.startTime}-${m.endTime}`)).toEqual([
+      "2026-07-04 Bar 10:00-12:00",
+      "2026-07-04 Accueil 12:00-14:00",
+      "2026-07-04 Accueil 15:00-17:00",
+      "2026-07-04 Accueil 17:00-19:00",
+      "2026-07-05 Accueil 19:00-21:00",
+    ])
+  })
+
+  it("keeps chronological order from unsorted input", () => {
+    const merged = mergeTouchingShifts([
+      shift({ id: "c", roleName: "Cuisine", label: "Cuisine", startTime: "14:00", endTime: "16:00" }),
+      shift({ id: "a", roleName: "Accueil", label: "Accueil", startTime: "10:00", endTime: "12:00" }),
+      shift({ id: "b", roleName: "Bar", label: "Bar", startTime: "12:00", endTime: "14:00" }),
+    ])
+    expect(merged.map((m) => m.startTime)).toEqual(["10:00", "12:00", "14:00"])
+  })
+
+  it("keeps a shift crossing midnight on its own day", () => {
+    expect(mergeTouchingShifts([
+      shift({ id: "night", date: "2026-07-04", startTime: "22:00", endTime: "02:00" }),
+      shift({ id: "early", date: "2026-07-05", startTime: "02:00", endTime: "04:00" }),
+    ])).toEqual([
+      { date: "2026-07-04", startTime: "22:00", endTime: "02:00", roleName: "Bar", label: "Bar" },
+      { date: "2026-07-05", startTime: "02:00", endTime: "04:00", roleName: "Bar", label: "Bar" },
+    ])
+  })
+
+  it("renders a merged shift once, as a time column and a role column in a real list", () => {
+    const role = "Restauration légère - gardien entrée Gymnase"
+    const html = renderSheet("phones", { ...data, shifts: [
+      shift({ id: "a", roleName: role, label: role, startTime: "10:00", endTime: "12:00", registrations: [alice] }),
+      shift({ id: "b", roleName: role, label: role, startTime: "12:00", endTime: "14:00", registrations: [alice] }),
+    ] })
+    expect(html).toContain('<ul class="shifts" role="list"><li><span class="shift-time mono">10:00<span aria-hidden="true">–</span><span class="sr-only"> à </span>14:00<span class="sr-only"> : </span></span><span class="shift-role">Restauration légère - gardien entrée Gymnase</span></li></ul>')
+    expect((html.match(/Restauration légère - gardien entrée Gymnase/g) ?? []).length).toBe(1)
+    // CSS subgrid: the role wraps inside its own column, never back under the time.
+    expect(html).toMatch(/\.phones-table \.shifts \{[^}]*display: grid;[^}]*grid-template-columns: max-content minmax\(0, 1fr\)/)
+    expect(html).toMatch(/\.phones-table \.shifts li \{[^}]*grid-template-columns: subgrid/)
+    expect(html).toMatch(/\.phones-table \.shift-time \{[^}]*white-space: nowrap/)
+    expect(html).toMatch(/\.phones-table \.shift-role \{[^}]*overflow-wrap: anywhere/)
+  })
+
+  it("marks a shift running past midnight next to its role, so the time column keeps its width", () => {
+    const html = renderSheet("phones", { ...data, shifts: [
+      shift({ id: "night", startTime: "22:00", endTime: "02:00", registrations: [alice] }),
+    ] })
+    expect(html).toContain('22:00<span aria-hidden="true">–</span><span class="sr-only"> à </span>02:00<span class="sr-only"> le lendemain</span><span class="sr-only"> : </span></span>')
+    expect(html).toContain('<span class="next-day" aria-hidden="true">(fin le lendemain)</span>')
+  })
+
+  it("puts the phone on its own line and breaks an email before @ or a dot, never mid-word", () => {
+    expect(emailWithBreaks("alice.martin@example.test")).toBe("alice<wbr>.martin<wbr>@example<wbr>.test")
+    expect(emailWithBreaks("a&b@x.ch")).toBe("a&amp;b<wbr>@x<wbr>.ch")
+    expect(emailWithBreaks(null)).toBe("")
+
+    const html = renderSheet("phones", { ...data, shifts: [
+      shift({ id: "a", registrations: [{ ...alice, email: "restauration.gymnase.entree@association-exemple.test" }] }),
+    ] })
+    expect(html).toContain('<span class="vol-email">restauration<wbr>.gymnase<wbr>.entree<wbr>@association-exemple<wbr>.test</span>')
+    expect(html).not.toContain("word-break: break-all")
+    expect(html).toMatch(/\.phones-table \.vol-email \{[^}]*word-break: normal;[^}]*overflow-wrap: anywhere/)
+    expect(html).toMatch(/\.phones-table \.vol-phone \{[^}]*white-space: nowrap/)
+    // The phone and email are normal weight; only the name stays bold.
+    expect(html).toContain(".phones-table tbody th { font-weight: 400; }")
+    expect(html).toContain(".phones-table .vol-name { display: block; font-weight: 700; }")
+  })
+
+  it("keeps rows together, zebra rows and a header repeated across pages", () => {
+    const html = renderSheet("phones", data)
+    expect(html).toMatch(/\.phones-table tr \{[^}]*page-break-inside: avoid;[^}]*break-inside: avoid/)
+    expect(html).toMatch(/\.phones-table tbody tr:nth-child\(even\) th, \.phones-table tbody tr:nth-child\(even\) td \{ background: var\(--band\)/)
+    expect(html).toContain(".phones-table thead { display: table-header-group; }")
   })
 })
 

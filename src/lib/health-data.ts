@@ -9,8 +9,9 @@ import { env, releaseCheckEnabled } from "./env"
 import { outboxHealth } from "./notifications/outbox"
 import { JOBS, loadJobRuns, type JobName } from "./job-runs"
 import {
-  assessConfig, assessDatabase, assessPendingSpaces, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, type HealthItem, type MigrationFacts,
+  assessConfig, assessDatabase, assessDeferredBounces, assessPendingSpaces, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, type HealthItem, type MigrationFacts,
 } from "./health-view"
+import { bounceMailboxConfigured } from "./bounce-mailbox-config"
 import { isNewerVersion } from "./release-check"
 import { assessServerMetrics, FAILED_SERVER_METRICS } from "./server-metrics"
 import { loadServerMetrics } from "./server-metrics-data"
@@ -36,7 +37,7 @@ export async function loadHealth(now: Date = new Date()) {
       ])
 
   const jobs: HealthItem[] = (Object.keys(JOBS) as JobName[])
-    .filter((j) => j !== "restore-test")
+    .filter((j) => j !== "restore-test" && j !== "bounces")
     .map((j) => assessJob(JOBS[j].label, runs[j] ?? null, now, JOBS[j].maxAgeHours))
   jobs.push(assessRestoreTest(runs["restore-test"] ?? null, now))
 
@@ -44,6 +45,7 @@ export async function loadHealth(now: Date = new Date()) {
   const items: HealthItem[] = [
     assessDatabase(database),
     outbox ? assessOutbox(outbox) : { id: "outbox", label: "File d'envoi des emails", level: "unknown", detail: "Non lue." },
+    assessDeferredBounces({ configured: bounceMailboxConfigured(), run: runs.bounces ?? null }, now),
     assessReleaseCheck(
       {
         enabled: releaseCheckEnabled(),

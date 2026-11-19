@@ -72,6 +72,30 @@ Sans `SMTP_HOST`, aucun email n'est envoyé. En production, chaque envoi échoue
 
 Exemples de réglages SMTP courants dans `.env.example` (Gmail, OVH, Infomaniak, Brevo).
 
+### Rejets différés (optionnel)
+
+Un relais d'envoi accepte souvent le message puis apprend plus tard que la boîte n'existe pas ; il envoie alors un avis de non-remise (DSN) à l'expéditeur d'enveloppe. La tâche planifiée `app-bounces` lit la boîte des notifications par IMAPS toutes les 15 minutes, rapproche chaque avis d'un email envoyé par son `Message-ID`, enregistre un refus définitif comme un refus immédiat (#598) et déplace l'avis traité dans un dossier. Les réponses automatiques, accusés de lecture et avis non rapprochés restent dans la boîte de réception et sont seulement comptés.
+
+Sans `IMAP_USER` et `IMAP_PASSWORD`, la lecture est désactivée (aucune connexion) et la page **Santé du service** affiche « Rejets différés : non configuré ». La connexion est toujours IMAPS (TLS implicite, certificat vérifié) : `IMAP_HOST` vaut `mail.gandi.net` par défaut, `IMAP_PORT` `993`. Le dossier `IMAP_PROCESSED_FOLDER` (« Rejets traités » par défaut) est créé s'il manque. Ces réglages sont facultatifs et ne bloquent jamais le démarrage.
+
+| Variable | Requis | Description |
+|----------|--------|-------------|
+| `IMAP_HOST` | non | Serveur IMAPS. Défaut `mail.gandi.net` |
+| `IMAP_PORT` | non | Port IMAPS, TLS implicite. Défaut `993` |
+| `IMAP_USER`, `IMAP_PASSWORD` | pour lire | Identifiants de la boîte qui reçoit les avis. Les deux sont nécessaires |
+| `IMAP_PROCESSED_FOLDER` | non | Dossier où sont déplacés les avis traités. Défaut « Rejets traités », créé s'il manque |
+
+Le contenu brut des avis n'est ni stocké en base ni écrit dans les journaux : seuls le résultat normalisé (type d'email, motif, code SMTP, empreinte de l'adresse) et des compteurs sont conservés.
+
+En production (Kubernetes), les identifiants se mettent dans l'environnement GitHub `production`, que `deploy.yml` recopie dans `benevoles-secret` à chaque déploiement :
+
+```bash
+gh secret set IMAP_USER --env production --repo pvollenweider/benevoles --body "notifications@benevol.app"
+gh secret set IMAP_PASSWORD --env production --repo pvollenweider/benevoles   # saisie masquée
+```
+
+Un secret ajouté ou changé n'arrive dans le cluster qu'au déploiement suivant, déclenché par un push sur `main` : GitHub fige les secrets à la création d'une exécution, si bien que relancer une exécution plus ancienne ne les apporte pas. Le premier passage apparaît ensuite sur la page **Santé du service** dans le quart d'heure.
+
 ## Notifications push (optionnel)
 
 Sans clés VAPID, aucun push n'est envoyé. Le bouton d'abonnement de la page personnelle reste affiché et disparaît au premier clic. La page Santé du service signale l'absence des clés.
@@ -162,6 +186,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 | `APP_DB_PASSWORD`, `MIGRATE_DB_PASSWORD` | secrets GitHub, pas des clés du secret Kubernetes : mots de passe des rôles `benevoles_app` et `benevoles_owner`, en hexadécimal (`openssl rand -hex 32`). Les deux URL sont construites sans encodage : un caractère réservé (`@`, `:`, `/`, `%`…) les casserait |
 | `AUTH_SECRET`, `CRON_SECRET`, `TOKEN_ENCRYPTION_KEY`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` | secrets GitHub du même nom |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `ADMIN_NOTIFICATION_EMAIL` | secrets GitHub du même nom |
+| `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASSWORD`, `IMAP_PROCESSED_FOLDER` | secrets GitHub du même nom ; facultatifs (#602). Vides : la lecture des rejets différés est désactivée |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | secrets GitHub du même nom |
 | `NTFY_URL`, `NTFY_TOKEN`, `OPERATOR_ALERT_EMAIL` | secrets GitHub du même nom (#810) ; vides : pas d'alerte ntfy, alertes email aux super admins actifs |
 | `SIGNUP` | secret GitHub du même nom (#810) ; vide : inscription en libre-service ouverte, `off` la ferme |
@@ -172,7 +197,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 | `AUTH_TRUST_HOST`, `HOSTED_SERVICE` | écrits en dur : `true` |
 | `VIDEO_MEDIA_BASE_URL` | écrit en dur : `https://medias.benevol.app` (#644) |
 | `BACKUP_PASSPHRASE` | non géré par le workflow : ajouté à la main dans le cluster, voir [deploiement.md](deploiement.md#backup_passphrase-est-un-point-unique-de-défaillance) |
-| `OFFSITE_BUCKET` | secret GitHub du même nom (#524) : container Swiss Backup des copies hors site, obligatoire pour le CronJob `backup-offsite` ; voir [deploiement.md](deploiement.md#copie-hors-site) |
+| `OFFSITE_BUCKET` | secret GitHub du même nom (#524) : container Swiss Backup des copies hors site. Aucun pod du namespace `benevoles` ne lit cette clé : le CronJob `backup-offsite` tourne dans le namespace `benevoles-offsite` et la lit dans son propre secret `offsite-settings`, que l'opérateur recopie à la main avec `CRON_SECRET` et l'adresse publique ; voir [deploiement.md](deploiement.md#copie-hors-site) |
 
 L'application ne reçoit pas tout le secret : `k8s/deployment.yaml` lui donne une à une les clés qu'elle lit, sans `POSTGRES_USER`, `POSTGRES_PASSWORD`, `MIGRATE_DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `OFFSITE_BUCKET` ni `BACKUP_PASSPHRASE`. `DATABASE_URL`, `AUTH_SECRET` et `TOKEN_ENCRYPTION_KEY` y sont obligatoires (sans elles le pod n'est pas créé et l'ancien continue de servir), les autres facultatives. Le Job de migration ne reçoit que `MIGRATE_DATABASE_URL`, sous le nom `DATABASE_URL` (le seul que lisent `docker-entrypoint.sh` et `prisma.config.ts`). En dehors du pod PostgreSQL, seule la sauvegarde reçoit `POSTGRES_PASSWORD` ; aucun CronJob ne reçoit `MIGRATE_DATABASE_URL` (`k8s-hardening.test.ts` le vérifie). Un secret GitHub absent de l'étape « Sync k8s secret » n'a aucun effet en production, même s'il porte le nom d'une variable de cette page. C'est le cas de `AUTH_URL` et `AUTH_TRUST_HOST`, que le workflow écrit en dur, et de `WARMUP`. Régler une autre variable en production demande donc deux lignes de plus dans cette étape : la clé et son secret dans son bloc `env:`, et le nom seul dans la liste des clés lue par `--from-env-file` (kubectl prend alors la valeur dans son environnement, jamais dans le texte du script ni dans le journal) ; puis son entrée `secretKeyRef` (avec `optional: true`) dans la liste `env:` de `k8s/deployment.yaml`. `k8s-hardening.test.ts` échoue si une clé du workflow n'est ni donnée à l'application ni déclarée comme non lue par elle. `SITE_NAME`, `CONTACT_EMAIL`, `SUPPORT_URL`, `RELEASE_CHECK`, les `EMAIL_LIMIT_*`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `VAPID_EMAIL` et `WARMUP` ne sont pas transmis : leurs valeurs par défaut s'appliquent. Un secret GitHub est lu au lancement de l'exécution du workflow : posé pendant un déploiement, il n'arrive qu'au déploiement suivant, ou après une relance de l'exécution suivie de `kubectl -n benevoles rollout restart deployment/benevoles-app`. Le workflow lit aussi, dans l'environnement `production` du job de déploiement, `KUBECONFIG_BASE64` (accès au cluster, voir [deploiement.md](deploiement.md#accès-du-workflow-aux-secrets-et-au-cluster)) et `GHCR_PULL_TOKEN` (secret de tirage `ghcr-secret`) ; et, dans l'environnement `production-build` du job de construction, `NEXT_PUBLIC_SENTRY_DSN` (argument de build) et `SENTRY_AUTH_TOKEN` (secret de build).
 
