@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:19:35.570Z",
+  "videoSha256": "b9ba5bf76da6613460b893338fc55f2ae674aabbd0bae5c9032ad21994258955",
+  "promptSha256": "c3485aac2b6de98dfff7abf2c59cde657fd96008351235f519209769d825aafe",
+  "clipSha256": "a6383e77c827115ad7efc1b64283a1e70cd64d2f9d6b3f8af39530951e89fea9",
+  "scene": "library",
+  "review": {
+    "heardOpening": "Pour prévenir votre équipe qu'il va pleuvoir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "ouvrez Modèles de messages",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur l'onglet Modèles de messages et affichage de la page correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "puis Ajouter des modèles",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur le lien Ajouter des modèles et ouverture de la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.2,
+        "spoken": "Dans Météo et imprévus",
+        "visibleSeconds": 13,
+        "visible": "Défilement de la liste faisant apparaître la section Météo et imprévus",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "choisissez Alerte météo, pluie",
+        "visibleSeconds": 15.5,
+        "visible": "Le modèle Alerte météo : pluie est bien visible à l'écran, mais aucun clic de sélection n'est effectué",
+        "sync": "uncertain",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:15, l'instruction « choisissez Alerte météo, pluie » n'est suivie d'aucune action concrète (pas de clic sur le modèle ou sur « Ajouter à mes modèles » avant la fin de l'extrait)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, sans bruit de fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -167,6 +167,12 @@
     "height": 800,
     "poster": true
   },
+  "message-templates": {
+    "durationMs": 98400,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "org-email-settings": {
     "durationMs": 202960,
     "width": 1280,

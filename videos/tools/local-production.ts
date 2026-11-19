@@ -12,8 +12,8 @@ import { PUBLIC_APP_URL, videoAdminEmail } from "../lib/public-hosts"
 
 const batch35Takes = ["WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"]
 const batch35Seeds = ["assignment-publication", "workload-protection", "assignment-proposals", "volunteer-event-availability"]
-const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
-const memberSeeds = ["members-import", "members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
+const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "MESSAGE_TEMPLATES", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
+const memberSeeds = ["members-import", "members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "message-templates", "targeted-messages", "reminders-changes"]
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -199,7 +199,7 @@ async function main() {
       if (memberSeeds.includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Member seeds require isolated common video DB and server")
         await verifyProductBuild("http://localhost:43102")
-        if (["registrations-place-member", "registrations-management"].includes(rest[0])) {
+        if (["registrations-place-member", "registrations-management", "targeted-messages"].includes(rest[0])) {
           await new Promise<void>((resolve, reject) => {
             const cleanup = spawn(process.execPath, ["--import", "tsx", "videos/tools/prepare-registration-mailbox.ts", rest[0]], { env, stdio: "inherit" })
             cleanup.on("error", reject)

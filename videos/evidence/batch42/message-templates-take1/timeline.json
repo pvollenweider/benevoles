@@ -1,0 +1,180 @@
+{
+  "slug": "message-templates",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-19T10:19:09.199Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "04aac36196087830380b672268679e360c121ea1",
+    "sourceTree": "b7fcbe616cbc4fdeb7e4449e9a8fc8c855d6e5c1",
+    "productSourceSha256": "55eb9ac393a3d68acdbfa812aae5f95ec8673f9822502d7e403deadadc8de7bc",
+    "buildId": "yDSsdN_RxsiGKPfTZJMXN",
+    "snapshot": "/private/tmp/benevoles-video-production.Swyk5Ajr",
+    "builtAt": "2026-11-19T10:12:41.385Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "MESSAGE_TEMPLATES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 5751
+    },
+    {
+      "kind": "click",
+      "atMs": 6557
+    },
+    {
+      "kind": "click",
+      "atMs": 20807
+    },
+    {
+      "kind": "click",
+      "atMs": 32073
+    },
+    {
+      "kind": "click",
+      "atMs": 40379
+    },
+    {
+      "kind": "click",
+      "atMs": 49572
+    },
+    {
+      "kind": "click",
+      "atMs": 57372
+    },
+    {
+      "kind": "click",
+      "atMs": 72722
+    },
+    {
+      "kind": "click",
+      "atMs": 75971
+    },
+    {
+      "kind": "click",
+      "atMs": 83237
+    },
+    {
+      "kind": "click",
+      "atMs": 88021
+    },
+    {
+      "kind": "click",
+      "atMs": 91587
+    }
+  ],
+  "cues": [
+    {
+      "id": "library",
+      "startMs": 1,
+      "endMs": 17721
+    },
+    {
+      "id": "inspect",
+      "startMs": 19986,
+      "endMs": 37447
+    },
+    {
+      "id": "apply",
+      "startMs": 39707,
+      "endMs": 54193
+    },
+    {
+      "id": "blocked",
+      "startMs": 56453,
+      "endMs": 69849
+    },
+    {
+      "id": "edit",
+      "startMs": 72111,
+      "endMs": 85095
+    },
+    {
+      "id": "preview",
+      "startMs": 87352,
+      "endMs": 98112
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "library",
+      "phrase": "Dans les paramètres de l'organisation",
+      "startMs": 5244,
+      "endMs": 10614,
+      "cueMs": 5246
+    },
+    {
+      "segmentId": "library",
+      "phrase": "Dans Météo et imprévus",
+      "startMs": 13232,
+      "endMs": 17393,
+      "cueMs": 13234
+    },
+    {
+      "segmentId": "inspect",
+      "phrase": "Cliquez sur Aperçu",
+      "startMs": 328,
+      "endMs": 5458,
+      "cueMs": 20315
+    },
+    {
+      "segmentId": "inspect",
+      "phrase": "Cliquez sur Ajouter à mes modèles",
+      "startMs": 11594,
+      "endMs": 13698,
+      "cueMs": 31580
+    },
+    {
+      "segmentId": "apply",
+      "phrase": "Dans Partir d'un modèle",
+      "startMs": 4936,
+      "endMs": 8782,
+      "cueMs": 44644
+    },
+    {
+      "segmentId": "apply",
+      "phrase": "Cliquez sur Utiliser ce modèle",
+      "startMs": 9401,
+      "endMs": 10175,
+      "cueMs": 49110
+    },
+    {
+      "segmentId": "blocked",
+      "phrase": "Demandez l'aperçu",
+      "startMs": 455,
+      "endMs": 1302,
+      "cueMs": 56909
+    },
+    {
+      "segmentId": "edit",
+      "phrase": "Indiquez qu'il pleuvra samedi",
+      "startMs": 3389,
+      "endMs": 9898,
+      "cueMs": 75501
+    },
+    {
+      "segmentId": "edit",
+      "phrase": "Enregistrez le modèle",
+      "startMs": 10634,
+      "endMs": 12568,
+      "cueMs": 82745
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Ouvrez l'aperçu de l'email",
+      "startMs": 3769,
+      "endMs": 4981,
+      "cueMs": 91122
+    }
+  ]
+}

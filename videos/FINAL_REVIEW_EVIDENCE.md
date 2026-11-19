@@ -988,7 +988,7 @@ Pour chaque vidéo, aperçu puis `make video-publish KUBE_CONTEXT=default ID=…
 
 ## À refilmer : page après une inscription publique sans preuve de l'adresse (2026-11-01)
 
-**Résolu pour VOLUNTEER_REGISTER (lot 41, 16 novembre 2026)** : nouvelle narration entière et nouvelle prise montrant « Demande d’inscription reçue », revue READY puis publication révision 4. Les autres vidéos de cette section conservent leurs écarts jusqu’à leur revue individuelle.
+**Résolu au lot 41 (16 novembre 2026)** pour `VOLUNTEER_REGISTER` (révision 4), `PRIVACY_PERSONAL_LINKS` (révision 6) et `SHIFT_ROSTER_VISIBILITY` (révision 3). Les deux reprises non publiées restent listées ci-dessous.
 
 
 Une inscription publique sans lien d'invitation ni lien personnel affiche
@@ -1007,15 +1007,9 @@ travail (voix et capture) ; révision du catalogue à incrémenter au rendu :
   chapitre et recorder réécrits (la scène du chevauchement montre la page
   neutre puis l'email reçu par Aline ; le nouvel essai de Nicolas montre la
   même page) ; nouvelle voix nécessaire.
-- `VOLUNTEER_REGISTER` : **À refilmer**. Narration de `success`
-  (« ta demande est envoyée ! Regarde tes emails ») et sélecteur du texte de la
-  page mis à jour ; nouvelle voix de ce segment.
-- `PRIVACY_PERSONAL_LINKS`, `SHIFT_ROSTER_VISIBILITY`,
-  `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : narration
-  inchangée, mais l'image de la page de succès d'une inscription publique
-  montre l'ancien titre ; sélecteurs mis à jour (les deux titres acceptés,
-  « Demande d'inscription reçue » exigé pour `PRIVACY_PERSONAL_LINKS`). À
-  refilmer au prochain passage.
+- `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : l'image publiée montre
+  l'ancien titre après une inscription publique. La narration reste juste et
+  le sélecteur de capture accepte le nouveau titre.
 
 ## Double authentification du super admin (constat F6) : outils de capture de l'opérateur
 
@@ -1405,3 +1399,9 @@ Les **Paramètres › Modèles de messages** proposent maintenant **Ajouter des 
 ## À refilmer : ressources du serveur sur « Santé du service » (#1415, 19 novembre 2026)
 
 La page « Santé du service » gagne une section **Serveur** entre « Service » et « Tâches planifiées et sauvegardes » : mémoire, CPU, retard de la boucle d'événements, durée de marche, taille de la base et connexions ouvertes, ou « non disponible » quand les fichiers cgroup manquent. La narration de **PLATFORM_INTERNAL_ADMINISTRATION** (`platform-internal-administration`) disait « trois ensembles d'informations » ; elle est corrigée en « quatre ensembles » dans le manifeste et le script, avec les ressources du serveur nommées. La vidéo doit être refilmée pour montrer la nouvelle section et sa narration régénérée ; les sélecteurs de capture restent valides.
+
+## Lot 42 — bibliothèque de modèles, 19 novembre 2026
+
+**MESSAGE_TEMPLATES : READY, publiée, révision 1, 98,40 s, 1280 × 800.** Main vérifié `04aac36196087830380b672268679e360c121ea1`. Répétition suivie de deux prises narrées. La seconde montre les trois mentions mises en évidence, le refus au champ Message, l'enregistrement du modèle corrigé et l'aperçu destiné à un bénévole fictif. Les catégories sont visibles dans la bibliothèque et dans l'éditeur. Le recorder vérifie le groupe « Météo et imprévus » du sélecteur natif au moment du choix. La capture Chromium montre le champ et la sélection effectuée. Le parcours se termine à l'aperçu.
+
+Six chapitres ASR source et final, 20 points de contrôle AV, musique 15,7–18,8 LU sous la voix. Le rapport automatique du chapitre bibliothèque signale « Déjà dans mes modèles » comme absent à tort. Le clic intervient à 31,789 s et l'image du MP4 à 34,8 s montre le libellé sur la bonne carte. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. Le MP4 distant a été mesuré et l'affiche répond HTTP 200. [État du lot](evidence/batch42/STATUS.md), [validation](evidence/batch42/message-templates-take2/validation.json), [rapport AV](evidence/batch42/message-templates-take2/inspect.json), [image après l'ajout](evidence/batch42/message-templates-take2/library-added.jpg).

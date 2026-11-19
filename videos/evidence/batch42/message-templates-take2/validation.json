@@ -1,0 +1,59 @@
+{
+  "id": "MESSAGE_TEMPLATES",
+  "slug": "message-templates",
+  "validatedAt": "2026-11-19T10:25:13.353Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 98400,
+  "scenes": [
+    {
+      "id": "library",
+      "visualMs": 16661,
+      "audioMs": 16659,
+      "driftMs": 2
+    },
+    {
+      "id": "inspect",
+      "visualMs": 17608,
+      "audioMs": 17607,
+      "driftMs": 1
+    },
+    {
+      "id": "apply",
+      "visualMs": 13824,
+      "audioMs": 13823,
+      "driftMs": 1
+    },
+    {
+      "id": "blocked",
+      "visualMs": 14566,
+      "audioMs": 14565,
+      "driftMs": 1
+    },
+    {
+      "id": "edit",
+      "visualMs": 12917,
+      "audioMs": 12916,
+      "driftMs": 1
+    },
+    {
+      "id": "preview",
+      "visualMs": 11071,
+      "audioMs": 11070,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 11,
+  "music": {
+    "voicedWindows": 77,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.7,
+    "largestGapLu": 18.8,
+    "quietestMusicOnlyLufs": -32.9,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

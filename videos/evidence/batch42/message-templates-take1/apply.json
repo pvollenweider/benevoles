@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:19:32.958Z",
+  "videoSha256": "b9ba5bf76da6613460b893338fc55f2ae674aabbd0bae5c9032ad21994258955",
+  "promptSha256": "90cce5c5842fbffd896931b39b073cf5799a94d75eb54148da5a295aa294f622",
+  "clipSha256": "90b099b43feb2e7c2371a0e6abc0a2db09eea38b890490517371944b77afcff4",
+  "scene": "apply",
+  "review": {
+    "heardOpening": "Dans les messages de votre événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans les messages de votre événement, ouvrez Écrire aux bénévoles.",
+        "visibleSeconds": 0.9,
+        "visible": "Affichage de l'onglet Messages et de la section Écrire aux bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Dans Partir d'un modèle, retrouvez l'alerte sous Météo et imprévus.",
+        "visibleSeconds": 8.8,
+        "visible": "Défilement vers la section Partir d'un modèle où Alerte météo : pluie est déjà sélectionné, sans ouverture du menu déroulant.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Cliquez sur Utiliser ce modèle.",
+        "visibleSeconds": 9.9,
+        "visible": "Clic sur le bouton Utiliser ce modèle.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "L'objet et le texte apparaissent dans le formulaire.",
+        "visibleSeconds": 10.2,
+        "visible": "Les champs Objet et Message sont remplis automatiquement dans le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 00:04 et 00:08, le déroulé du menu et la sous-catégorie 'Météo et imprévus' ne sont pas montrés à l'écran : le modèle 'Alerte météo : pluie' apparaît directement sélectionné à 00:09."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions principales."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

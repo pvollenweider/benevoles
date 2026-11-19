@@ -1386,6 +1386,29 @@
       "level": "essentiel"
     },
     {
+      "id": "MESSAGE_TEMPLATES",
+      "manifest": "message-templates",
+      "category": "registrations-followup",
+      "tags": [
+        "messages",
+        "modèles",
+        "email"
+      ],
+      "published": true,
+      "seedScenario": "message-templates",
+      "themes": [
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Bibliothèque de modèles de messages",
+      "updatedAt": "2026-11-19",
+      "revision": 1,
+      "level": "essentiel",
+      "thumbnailTitle": "Partir d’un modèle de message"
+    },
+    {
       "id": "STAFFING_GAPS",
       "manifest": "staffing-gaps",
       "category": "registrations-followup",

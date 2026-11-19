@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T10:19:49.997Z",
+  "revalidatedAt": "2026-11-19T10:19:49.999Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "b9ba5bf76da6613460b893338fc55f2ae674aabbd0bae5c9032ad21994258955",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "library",
+      "audioSha256": "75e21cff11e2315260f379faea43288ba38e4c8cde1da7632ad4920ed322358f",
+      "recognized": "Pour prévenir votre équipe qu'il va pleuvoir, vous pouvez partir d'un texte prêt à l'emploi. Dans les paramètres de l'organisation, ouvrez Modèles de messages, puis Ajouter des modèles. Les textes sont classés par catégorie. Dans Météo et imprévus, choisissez Alerte météo pluie.",
+      "expected": "Pour prévenir votre équipe qu'il va pleuvoir, vous pouvez partir d'un texte prêt à l'emploi. Dans les paramètres de l'organisation, ouvrez Modèles de messages, puis Ajouter des modèles. Les textes sont classés par catégorie. Dans Météo et imprévus, choisissez Alerte météo, pluie.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "inspect",
+      "audioSha256": "437d8479627b12aaa2683be6d6a7fcdab7e87b2c38f01fb8ddd7219014e891ee",
+      "recognized": "Cliquez sur aperçu pour voir l'e-mail tel qu'un bénévole le recevra avec des valeurs d'exemple. Les mentions soulignées indiquent les informations à remplacer comme l'heure et le lieu où s'abriter. Cliquez sur Ajouter à mes modèles. La mention Déjà dans mes modèles confirme l'ajout.",
+      "expected": "Cliquez sur Aperçu pour voir l'email tel qu'un bénévole le recevra, avec des valeurs d'exemple. Les mentions surlignées indiquent les informations à remplacer, comme l'heure et le lieu où s'abriter. Cliquez sur Ajouter à mes modèles. La mention Déjà dans mes modèles confirme l'ajout.",
+      "wordErrorRate": 0.02,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "apply",
+      "audioSha256": "eaaf55d4ef347140d947483b9aacd29eae64be6b0a41c5c7ace6b401e2f54d93",
+      "recognized": "Dans les messages de votre événement, ouvrez Écrire aux bénévoles. Dans Partir d'un modèle, retrouvez l'alerte sous Météo et imprévus. Cliquez sur Utiliser ce modèle. L'objet et le texte apparaissent dans le formulaire.",
+      "expected": "Dans les messages de votre événement, ouvrez Écrire aux bénévoles. Dans Partir d'un modèle, retrouvez l'alerte sous Météo et imprévus. Cliquez sur Utiliser ce modèle. L'objet et le texte apparaissent dans le formulaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "blocked",
+      "audioSha256": "87dd21b1df03faacc4d93cbf9212c8d17e19156db83916932846ce5ac2908e3c",
+      "recognized": "Demandez l'aperçu. Le message reste dans le formulaire. Le champ message signale les informations à compléter. Vous pouvez les renseigner ici pour cet envoi. Corrigeons le modèle lui-même pour que l'équipe retrouve le texte complet.",
+      "expected": "Demandez l'aperçu. Le message reste dans le formulaire. Le champ Message signale les informations à compléter. Vous pouvez les renseigner ici pour cet envoi. Corrigeons le modèle lui-même pour que l'équipe retrouve le texte complet.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "edit",
+      "audioSha256": "c079f1f28ba1807e1650da4a2dd056899934d8ee436a9eeb3d6fb1975bfbd709",
+      "recognized": "Dans vos modèles, ouvrez, modifiez. Indiquez qu'il pleuvra samedi dès quatorze heures, que la fête est maintenue et que l'équipe pourra s'abriter sous la halle. Enregistrez le modèle avec ces informations.",
+      "expected": "Dans vos modèles, ouvrez Modifier. Indiquez qu'il pleuvra samedi dès quatorze heures, que la fête est maintenue et que l'équipe pourra s'abriter sous la halle. Enregistrez le modèle avec ces informations.",
+      "wordErrorRate": 0.029411764705882353,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "6063b0efeee6891611228ae0a3a2a6f866459d19947dd2e130b768e5f823d219",
+      "recognized": "Revenez dans messages et appliquez le modèle corrigé. Ouvrez l'aperçu de l'email. Vérifiez l'horaire et l'abri avant de décider de l'envoi. L'aperçu vous laisse encore le temps de relire.",
+      "expected": "Revenez dans Messages et appliquez le modèle corrigé. Ouvrez l'aperçu de l'email. Vérifiez l'horaire et l'abri avant de décider de l'envoi. L'aperçu vous laisse encore le temps de relire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:25:28.714Z",
+  "videoSha256": "1046f21c5fe4569bdeba9fe5d02e857d7f7b60d5159a8fa35f04ba34bc19957d",
+  "promptSha256": "ce7168f76fe684a30086b4c3cdfcf399b5d373780eed71332b76a694368ab899",
+  "clipSha256": "6602a794c502068e9ff952f7d1adcef2fd2263938333105a814aef7d71ac8f51",
+  "scene": "apply",
+  "review": {
+    "heardOpening": "Dans les messages de votre événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrez Écrire aux bénévoles",
+        "visibleSeconds": 1,
+        "visible": "L'onglet Messages s'affiche avec la section Écrire aux bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "choisissez l'alerte pluie",
+        "visibleSeconds": 6,
+        "visible": "L'option Alerte météo : pluie est sélectionnée dans le menu déroulant Partir d'un modèle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Cliquez sur Utiliser ce modèle",
+        "visibleSeconds": 8.5,
+        "visible": "Clic sur le bouton Utiliser ce modèle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "L'objet et le texte apparaissent dans le formulaire",
+        "visibleSeconds": 9.5,
+        "visible": "Les champs Objet et Message se remplissent automatiquement avec le modèle choisi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

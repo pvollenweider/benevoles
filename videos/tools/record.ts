@@ -234,7 +234,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const batch22French = ["front-desk-access", "shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
+  const batch22French = ["front-desk-access", "shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "message-templates", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
   const frenchChromiumRevision = batch22French || slug === "members-import" ? "1254" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
@@ -329,7 +329,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["privacy-personal-links", "volunteer-confirmation-errors", "event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["privacy-personal-links", "volunteer-confirmation-errors", "event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "message-templates", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -435,11 +435,11 @@ async function main() {
       }
     }
 
-    if (slug === "targeted-messages" || slug === "staffing-gaps" || slug === "registrations-place-member" || slug === "registrations-management" || slug === "members-reminders" || slug === "members-invitations" || slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability" || slug === "volunteer-calendar") {
+    if (slug === "message-templates" || slug === "targeted-messages" || slug === "staffing-gaps" || slug === "registrations-place-member" || slug === "registrations-management" || slug === "members-reminders" || slug === "members-invitations" || slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability" || slug === "volunteer-calendar") {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      await page.goto(slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+      await page.goto(slug === "message-templates" ? `${baseUrl}/admin/settings/admins` : slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
     }
 
     if (slug === "event-activity-log") {
@@ -2594,6 +2594,93 @@ async function main() {
     } else if (slug === "reminders-changes") {
       const { recordReminders } = await import("../lib/record-reminders")
       await recordReminders({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "message-templates") {
+      page.setDefaultTimeout(12_000)
+      const name = "Alerte météo : pluie"
+      const category = "Météo et imprévus"
+      const library = page.getByRole("dialog", { name: "Ajouter des modèles" })
+      const card = library.getByRole("listitem").filter({ has: page.getByRole("heading", { name, exact: true }) })
+      const body = page.getByRole("textbox", { name: /^Message(?: \*)?$/ })
+      const preview = page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true })
+      const email = page.getByRole("dialog", { name: "Aperçu de l'email", exact: true })
+      const applyButton = page.getByRole("button", { name: "Utiliser ce modèle", exact: true })
+      const eventUrl = `${baseUrl}/admin/events/${featureEventId}`
+      const templatesUrl = `${baseUrl}/admin/settings/message-templates`
+      const chooseTemplate = async (showGroups = false) => {
+        const picker = page.getByLabel("Partir d'un modèle", { exact: true })
+        await picker.locator(`optgroup[label="${category}"]`).getByRole("option", { name, exact: true }).waitFor({ state: "attached" })
+        if (showGroups) {
+          await tap(page, picker)
+          await page.waitForTimeout(500)
+          await picker.press("Escape")
+        }
+        await picker.selectOption({ label: name })
+      }
+      let original = ""
+      let corrected = ""
+      await scene("library", async at => {
+        await at("Dans les paramètres de l'organisation")
+        await tap(page, page.getByRole("link", { name: "Modèles de messages", exact: true }))
+        await tap(page, page.getByRole("button", { name: "Ajouter des modèles", exact: true }))
+        await at("Repérez l'alerte pluie")
+        await card.scrollIntoViewIfNeeded()
+      })
+      await scene("inspect", async at => {
+        await at("Cliquez sur Aperçu")
+        await tap(page, card.getByRole("button", { name: /^Aperçu/ }))
+        const frameTitle = `Aperçu de l'email « ${name} »`
+        await page.getByTitle(frameTitle, { exact: true }).evaluate(frame => frame.scrollIntoView({ block: "center" }))
+        const highlighted = page.frameLocator(`iframe[title="${frameTitle}"]`).locator("mark:visible").filter({ hasText: "[à compléter" })
+        await highlighted.first().waitFor()
+        if (await highlighted.count() !== 3) throw new Error("Expected three highlighted placeholders")
+        await at("Les mentions surlignées indiquent")
+        await highlighted.last().evaluate(mark => mark.scrollIntoView({ block: "center" }))
+        await at("Cliquez sur Ajouter à mes modèles")
+        await tap(page, card.getByRole("button", { name: /^Ajouter à mes modèles/ }))
+        await card.getByText(/Déjà dans mes modèles/).waitFor()
+      })
+      await scene("apply", async at => {
+        await page.goto(eventUrl)
+        await tap(page, page.getByRole("link", { name: "Messages", exact: true }))
+        await page.getByRole("heading", { name: "Écrire aux bénévoles", exact: true }).waitFor()
+        await at("Dans Partir d'un modèle")
+        await chooseTemplate(true)
+        await at("Cliquez sur Utiliser ce modèle")
+        await tap(page, applyButton)
+        original = await body.inputValue()
+        if ((original.match(/\[à compléter/g) ?? []).length !== 3) throw new Error("Library text was not applied")
+      })
+      await scene("blocked", async at => {
+        await at("Demandez l'aperçu")
+        await tap(page, preview)
+        await page.getByRole("alert").filter({ hasText: "À corriger : message" }).waitFor()
+        if (await body.getAttribute("aria-invalid") !== "true" || await email.isVisible()) throw new Error("Incomplete message was not blocked at the field")
+        await body.scrollIntoViewIfNeeded()
+      })
+      await scene("edit", async at => {
+        await page.goto(templatesUrl)
+        await tap(page, page.getByRole("button", { name: `Modifier le modèle « ${name} »`, exact: true }))
+        await at("Indiquez qu'il pleuvra samedi")
+        corrected = original
+          .replace("[à compléter : quel jour, à quelle heure]", "samedi dès 14 h")
+          .replace("[à compléter : Pas de panique, tout est maintenu ! Ou ce qui change]", "La fête est maintenue !")
+          .replace("[à compléter : tente, abri…]", "la halle du village")
+        if (corrected.includes("[à compléter")) throw new Error("Unexpected placeholder in the library text")
+        await tap(page, body)
+        await body.fill(corrected)
+        await at("Enregistrez le modèle")
+        await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+        await body.waitFor({ state: "hidden" })
+      })
+      await scene("preview", async at => {
+        await page.goto(`${eventUrl}/message`)
+        await chooseTemplate()
+        await tap(page, applyButton)
+        if (await body.inputValue() !== corrected) throw new Error("Corrected template was not saved")
+        await at("Ouvrez l'aperçu de l'email")
+        await tap(page, preview)
+        await email.waitFor()
+      })
     } else if (slug === "targeted-messages") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Messages require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
@@ -2653,12 +2740,22 @@ async function main() {
           await tap(page, page.getByRole("radio", { name: "Les bénévoles d'un poste", exact: true })); await page.getByLabel(/^Poste(?: \*)?$/).selectOption("Buvette"); await settle(page)
           checks.multipleRegistrationsOneRecipient = true
         })
-        await scene("template-create", async at => {
+        const templateLibrary = page.getByRole("dialog", { name: "Ajouter des modèles" })
+        await scene("template-library", async at => {
           await page.goto(templatesUrl); await settle(page)
+          await at("Cliquez sur Ajouter des modèles")
+          await tap(page, page.getByRole("button", { name: "Ajouter des modèles", exact: true }))
+          await templateLibrary.getByRole("heading", { name: "Recruter et compléter" }).waitFor()
+        })
+        await scene("template-create", async at => {
           if (await db.messageTemplate.count({ where: { organizationId: "default", name: modelName } })) throw new Error("Model already exists; reset scenario")
+          await at("Pour écrire votre propre texte")
+          await tap(page, templateLibrary.getByRole("button", { name: "Fermer", exact: true }))
           await tap(page, page.getByRole("button", { name: "Nouveau modèle", exact: true }))
           await at("Prenons Briefing avant le créneau")
           await writeField(page.getByLabel(/^Nom du modèle(?: \*)?$/), modelName)
+          await at("Pour la catégorie, choisissons Infos pratiques")
+          await page.getByLabel("Catégorie", { exact: true }).selectOption("Infos pratiques")
           await at("L'objet annonce le sujet de l'email")
           await writeField(page.getByLabel(/^Objet(?: \*)?$/), subject)
           await at("Dans le message, une salutation")

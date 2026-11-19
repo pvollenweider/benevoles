@@ -179,6 +179,17 @@ async function main() {
     console.log(`✓ Reminder fixture: +48h/+24h/+3h local ${timeZone}; closed confirmed slot; draft/disabled witnesses; requested/waiting exclusions; separate change/cancel shifts; generated ${now.toISOString()}`)
     return
   }
+  if (scenario === "message-templates") {
+    const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const registrations = await prisma.registration.findMany({ where: { eventId: event.id }, include: { volunteer: true, shift: true } })
+    const recipients = selectRecipients(registrations, { kind: "event" })
+    if (!recipients.length || recipients.some(person => !person.volunteer.email?.endsWith("@example.org"))) {
+      throw new Error("Message templates requires confirmed fictional recipients")
+    }
+    await prisma.messageTemplate.deleteMany({ where: { organizationId: "default", name: "Alerte météo : pluie", category: "Météo et imprévus" } })
+    console.log("✓ Message templates: fictional recipients and rain template reset")
+    return
+  }
   if (scenario === "targeted-messages") {
     const recorderModel = await prisma.messageTemplate.findMany({ where: {
       organizationId: "default", name: "Briefing avant le créneau",
