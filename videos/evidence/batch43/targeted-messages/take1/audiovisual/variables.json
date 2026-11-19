@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:15:50.593Z",
+  "videoSha256": "c786a1c05cccae337974d33c5886f153f27144a54ab988a295954c5660d11f5c",
+  "promptSha256": "f902ceaad790ef125d23a7bb94d9ac6756a3e2df76ae6d48d562116498ec9af2",
+  "clipSha256": "5abc897d2184b69775ccb4ee1470f589ea7df587f0314c4f5492a0a4395b07af",
+  "scene": "variables",
+  "review": {
+    "heardOpening": "Les mots entre accolades sont remplacés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Les mots entre accolades sont remplacés pour chaque destinataire",
+        "visibleSeconds": 1.2,
+        "visible": "Ouverture du formulaire de modification du modèle avec le récapitulatif des variables sous le message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "si nous écrivons lieu entre accolades, l'application signale une variable inconnue",
+        "visibleSeconds": 14.2,
+        "visible": "Saisie de « {lieu} » dans l'objet et message d'erreur rouge indiquant la variable inconnue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.1,
+        "spoken": "Corrigeons le texte",
+        "visibleSeconds": 21.8,
+        "visible": "Suppression de « {lieu} », saisie de « {poste} » et clic sur Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la manipulation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

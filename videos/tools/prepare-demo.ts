@@ -53,7 +53,8 @@ const url = new URL(process.env.DATABASE_URL ?? "")
 assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname))
 assert.equal(url.port, "45433")
 assert.equal(url.pathname, "/benevoles_video")
-assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
+const baseUrl = process.env.VIDEO_BASE_URL
+assert(baseUrl === "http://localhost:43102" || baseUrl === "http://localhost:43100")
 const db = new PrismaClient({ adapter: pgAdapter(url.href) })
 try {
   const owned = await recordedMembers()
@@ -94,7 +95,7 @@ try {
 // Seed with the current verified product client, whose additive fields may
 // be newer than the tooling checkout's generated Prisma client.
 const { verifyProductBuild } = await import("../lib/product-build")
-const product = await verifyProductBuild("http://localhost:43102")
+const product = await verifyProductBuild(baseUrl)
 const { spawn } = await import("node:child_process")
 await new Promise<void>((resolve, reject) => {
   const child = spawn(process.execPath, ["--import", "tsx", "scripts/seed-demo.ts"], { cwd: product.snapshot, env: process.env, stdio: "inherit" })

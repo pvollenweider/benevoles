@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:27:25.554Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "f0bf28942702ed3bb7d2de52c8f7f6e91f1144fec4bedf584c13bf9320123a87",
+  "clipSha256": "eb4df11587acd303345d3bfb778ced84a2caf7f8d622d1953a1e8e61c6720ecf",
+  "scene": "apply",
+  "review": {
+    "heardOpening": "De retour dans le message, voici une première version",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "voici une première version écrite à la main",
+        "visibleSeconds": 2.4,
+        "visible": "Saisie manuelle du texte dans les champs Objet et Message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "il faut cliquer sur Utiliser ce modèle",
+        "visibleSeconds": 8.8,
+        "visible": "Clic sur le bouton Utiliser ce modèle et mise à jour des champs avec le modèle Briefing",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Rétablir le texte précédent récupère votre version",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur Rétablir le texte précédent et réapparition de la version saisie à la main",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "puis choisissons un créneau pour que toutes ses variables puissent être remplacées",
+        "visibleSeconds": 19.5,
+        "visible": "Sélection de l'option Les bénévoles d'un créneau et choix d'un créneau dans la liste déroulante",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, claire et posée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:27:43.346Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "e8051ce532a11cff2da59049558b85e16a1cca3c350adcf76c84539ea4cba748",
+  "clipSha256": "77cb5bdeae9fea4b16a1fc8d2d95239c6fbd320ed0be9df6a309d0fc5a108bef",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Quand l'envoyer permet de choisir Maintenant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Quand l'envoyer permet de choisir Maintenant ou de programmer le message.",
+        "visibleSeconds": 0.8,
+        "visible": "Les options radio « Maintenant » et « Programmer l'envoi » sont visibles à l'écran sous « Quand l'envoyer ? ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Ouvrons maintenant l'aperçu.",
+        "visibleSeconds": 7.8,
+        "visible": "Clic sur le bouton « Voir l'aperçu et envoyer », ouvrant la fenêtre modale « Aperçu de l'email ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte.",
+        "visibleSeconds": 12.5,
+        "visible": "Dans l'aperçu, les informations personnalisées apparaissent (Hello Théo !, Fêtes de Montvert, Buvette, samedi 28 novembre, 10:00–14:00).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.7,
+        "spoken": "retournez au message, corrigez-la",
+        "visibleSeconds": 24.5,
+        "visible": "Clic sur « Retour au message », fermeture de la modale et ajout de texte dans le champ Message.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

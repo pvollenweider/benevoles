@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:27:11.734Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "cb0ba8fcf0563e85595e35cfb32e7b69c3cd36e6a2ee0181bdd21fbd748ffdb3",
+  "clipSha256": "22a695201ad38a15e1bdc2a22b3ec210554edff232d77c713c8988c9566c2ef7",
+  "scene": "template-create",
+  "review": {
+    "heardOpening": "Pour écrire votre propre texte",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "fermez la bibliothèque et cliquez sur Nouveau modèle",
+        "visibleSeconds": 2,
+        "visible": "Fermeture de la fenêtre modale et clic sur Nouveau modèle affichant le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Prenons Briefing avant le créneau",
+        "visibleSeconds": 11.5,
+        "visible": "Saisie de « Briefing avant le créneau » dans le champ Nom du modèle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Pour la catégorie, choisissons Infos pratiques",
+        "visibleSeconds": 18.5,
+        "visible": "Sélection de la valeur « Infos pratiques » dans le menu déroulant Catégorie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 35.2,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 36.2,
+        "visible": "Clic sur le bouton Enregistrer, confirmation de création et apparition du modèle dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

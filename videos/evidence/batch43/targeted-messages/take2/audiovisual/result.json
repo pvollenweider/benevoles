@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:27:58.527Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "c68530a45b445d38735b9ecdde7397f47356e42b5c34f86bb81ab148ec4ab884",
+  "clipSha256": "f2f128ce75588b95651c116cd2ff945eb0945194047dba60915da8e16b3ec6dc",
+  "scene": "result",
+  "review": {
+    "heardOpening": "L'application affiche le résultat de l'envoi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'application affiche le résultat de l'envoi.",
+        "visibleSeconds": 0.5,
+        "visible": "L'écran affiche la confirmation 'Message envoyé à 5 personnes'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "ouvrons le premier email : il indique le prénom du bénévole",
+        "visibleSeconds": 4.8,
+        "visible": "Ouverture du message adressé à Théo avec ses créneaux et consignes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Dans le deuxième email, les consignes restent les mêmes et le prénom change.",
+        "visibleSeconds": 10.9,
+        "visible": "Ouverture du second email affichant 'Hello Gabriel !' avec le même texte.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.6,
+        "spoken": "Le bouton Mes inscriptions ouvre toutes les inscriptions du bénévole",
+        "visibleSeconds": 15,
+        "visible": "Défilement montrant le bouton bleu 'Mes inscriptions' et le texte de confidentialité en dessous.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "La section Messages programmés est séparée des messages déjà envoyés.",
+        "visibleSeconds": 28.8,
+        "visible": "Retour sur l'interface affichant les sections 'Messages programmés' et 'Envois groupés'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, fluide et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

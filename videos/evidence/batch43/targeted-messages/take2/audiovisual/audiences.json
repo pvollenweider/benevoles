@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:26:37.166Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "ffe5c6c5c000d92ba26d09a18a7d6d99fa6e694a867bf94c255a025d2c0a5cc6",
+  "clipSha256": "ba54555455063c495d5914eaa253f2a72c7ff477d593f07438b855096cc40e8f",
+  "scene": "audiences",
+  "review": {
+    "heardOpening": "Commencez par le public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Pour un poste, choisissez par exemple la buvette",
+        "visibleSeconds": 6.7,
+        "visible": "Sélection de l'option « Les bénévoles d'un poste » puis choix du poste « Buvette » dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "pour un créneau, précisez aussi la date et l'horaire",
+        "visibleSeconds": 9.3,
+        "visible": "Sélection de l'option « Les bénévoles d'un créneau » avec affichage de la date et de l'horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "La liste d'attente vise les personnes qui attendent une place",
+        "visibleSeconds": 13.1,
+        "visible": "Sélection de l'option « Les personnes en liste d'attente » et mise à jour du compteur à 3 personnes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.4,
+        "spoken": "les invités sans créneau confirmé permettent de reprendre contact",
+        "visibleSeconds": 18,
+        "visible": "Sélection de l'option « Les invités sans créneau confirmé » et mise à jour du compteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.9,
+        "spoken": "Regardez le compteur après chaque choix",
+        "visibleSeconds": 25,
+        "visible": "Le compteur de destinataires est bien visible sous la liste des choix",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine calme, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

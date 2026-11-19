@@ -203,7 +203,7 @@ async function main() {
       }
       if (memberSeeds.includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Member seeds require isolated common video DB and server")
-        await verifyProductBuild("http://localhost:43102")
+        await verifyProductBuild(productOrigin)
         if (["registrations-place-member", "registrations-management", "targeted-messages"].includes(rest[0])) {
           await new Promise<void>((resolve, reject) => {
             const cleanup = spawn(process.execPath, ["--import", "tsx", "videos/tools/prepare-registration-mailbox.ts", rest[0]], { env, stdio: "inherit" })
@@ -218,7 +218,7 @@ async function main() {
           preparation.on("error", reject)
           preparation.on("exit", code => code === 0 ? resolve() : reject(new Error(`Guarded demo preparation failed (${code}); member seed not executed`)))
         })
-        await verifyProductBuild("http://localhost:43102")
+        await verifyProductBuild(productOrigin)
       }
     } else if (script === "videos/tools/verify-registration-invitation-success.ts") {
       if (rest.length && !(rest.length === 1 && rest[0] === "--finish-readonly")) throw new Error("Only explicit read-only completion accepted")
@@ -227,7 +227,7 @@ async function main() {
     } else if (script === "videos/tools/prepare-foundation.ts") {
       if (rest.length !== 1 || !["charter", "identity", "milestones", "pages", "email", "team", "blank", "template", "planning"].includes(rest[0])) throw new Error("Only explicit owned foundation scenario accepted")
     } else if (rest.length) throw new Error("Unexpected tool arguments")
-    if (script === "videos/tools/prepare-demo.ts") await verifyProductBuild("http://localhost:43102")
+    if (script === "videos/tools/prepare-demo.ts") await verifyProductBuild(productOrigin)
     let tool = script
     if (["45433", "45439", "45441"].includes(url.port)) {
       const proof = JSON.parse(await readFile(`videos/output/product-server-${productPort}.json`, "utf8")) as ProductBuild

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:15:17.443Z",
+  "videoSha256": "c786a1c05cccae337974d33c5886f153f27144a54ab988a295954c5660d11f5c",
+  "promptSha256": "ffe5c6c5c000d92ba26d09a18a7d6d99fa6e694a867bf94c255a025d2c0a5cc6",
+  "clipSha256": "a7caa1f2f48a4c22e48cc8791fb419bc2b4ccf74ed4548686cfc76782c84fdf9",
+  "scene": "audiences",
+  "review": {
+    "heardOpening": "Commencez par le public. Tous les bénévoles inscrits vise les inscriptions confirmées.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Pour un poste, choisissez par exemple la buvette",
+        "visibleSeconds": 7.3,
+        "visible": "L'option « Les bénévoles d'un poste » est cochée et le poste « Buvette » est sélectionné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "pour un créneau, précisez aussi la date et l'horaire.",
+        "visibleSeconds": 9.9,
+        "visible": "L'option « Les bénévoles d'un créneau » est cochée avec la date et l'horaire affichés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "La liste d'attente vise les personnes qui attendent une place",
+        "visibleSeconds": 12.9,
+        "visible": "Le bouton radio « Les personnes en liste d'attente » est sélectionné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "les invités sans créneau confirmé permettent de reprendre contact",
+        "visibleSeconds": 18.5,
+        "visible": "Le bouton radio « Les invités sans créneau confirmé » est activé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.8,
+        "spoken": "Regardez le compteur après chaque choix.",
+        "visibleSeconds": 25,
+        "visible": "La mention du compteur sous les options indique le nombre de personnes concernées.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

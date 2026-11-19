@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-11-19T19:23:49.192Z",
+  "pushReceptionVerified": false,
+  "fiveAudienceCounts": true,
+  "multipleRegistrationsOneRecipient": true,
+  "unknownVariableVisible": true,
+  "modelApplyAndRestore": true,
+  "contextVariableErrorVisible": true,
+  "previewRecipientId": "cmwnxma2t000tmha5bfxig9tk",
+  "personalizedPreviewVisible": true,
+  "pushOptionExplainedNotReceipt": true,
+  "cancelCreatedNoSend": true,
+  "sent": {
+    "sent": 5,
+    "audience": "les bénévoles du créneau Buvette (samedi 28 novembre, 10:00–14:00)",
+    "pushDevices": 0
+  },
+  "organisationLinkVisibleInEmail": true,
+  "realEmailsPersonalizedAndDeduplicated": true,
+  "modelDeletedHistoryRetained": true
+}

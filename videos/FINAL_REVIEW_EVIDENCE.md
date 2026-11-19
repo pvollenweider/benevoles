@@ -1443,3 +1443,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **VOLUNTEER_CONFIRMATION_ERRORS — NOT READY après deux prises.** Les deux courriels ont été refilmés et leur temps de lecture est suffisant. Les consentements ont été recalés sur la deuxième prise. La confirmation suivant la coupure simulée part encore avant sa consigne. La révision publiée reste en place. [Suivi des prises](evidence/batch43/STATUS.md).
 
 **VOLUNTEER_REGISTER — READY, publiée, révision 6, 57,28 s.** Le tutoriel garde la liste au chargement du téléphone et montre le vrai courriel, son bouton « Mes inscriptions » et sa phrase de confidentialité. Le parcours s’arrête à ce message. [Revue et preuves](evidence/batch43/volunteer-register-mobile/review.md).
+
+**TARGETED_MESSAGES — NOT READY après deux prises.** Le cadrage de la seconde montre le bouton commun et la phrase de confidentialité. Le clic « Modifier » du chapitre final devance encore son annonce. La révision 5 du lot 42 reste publiée. [Revue et preuves](evidence/batch43/targeted-messages/take2/review.md).

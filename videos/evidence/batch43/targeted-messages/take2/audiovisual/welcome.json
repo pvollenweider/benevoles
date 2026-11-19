@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:26:40.544Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "8d19f48f6a04e7a3969fa64d2bd68c2080cb9b5bca4381c9489024725cbb647b",
+  "clipSha256": "a3645e8c0550f39be000aaec7a81eff298cfd21dc5011396fb0e9fcc97b1c2c7",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une consigne pour toute l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une consigne pour toute l'équipe",
+        "visibleSeconds": 0,
+        "visible": "Encadré de titre introductif 'Écrire aux bonnes personnes, avec un message qui leur parle' superposé à l'écran de gestion",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "ouvrez la page des messages",
+        "visibleSeconds": 11,
+        "visible": "L'onglet 'Messages' de l'événement 'Fête du village de Montvert' est déjà ouvert et affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.6,
+        "spoken": "Nous allons choisir les destinataires",
+        "visibleSeconds": 14.6,
+        "visible": "La section 'Destinataires' avec ses options à cocher est visible sous le formulaire d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et chaleureuse, enregistrement propre sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

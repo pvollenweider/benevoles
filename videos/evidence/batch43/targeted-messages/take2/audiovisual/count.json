@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:26:57.467Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "d755128be59b9fda0e88911458a262e8d3f363eb8bd3f8e6961abe17df548639",
+  "clipSha256": "5cdef4cf0c21061bdb6cb78b2fcfb29d32256569b86f6733ac6602e8119570f9",
+  "scene": "count",
+  "review": {
+    "heardOpening": "Le nombre affiché compte les personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le nombre affiché compte les personnes à qui un e-mail peut être adressé",
+        "visibleSeconds": 0,
+        "visible": "Page Inscriptions avec le récapitulatif des inscriptions actives et demandes à traiter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Une bénévole inscrite sur deux horaires reçoit un seul message pour cette audience.",
+        "visibleSeconds": 3,
+        "visible": "Filtrage sur « Lila Giroud » montrant ses deux créneaux d'inscription distincts à la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Vérifier ce chiffre et le public choisi, c'est éviter d'envoyer une consigne de buvette à toute la fête par erreur.",
+        "visibleSeconds": 16,
+        "visible": "Écran Messages avec sélection du poste « Buvette » et décompte « 22 personnes recevront ce message »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine posée, fluide et très claire, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

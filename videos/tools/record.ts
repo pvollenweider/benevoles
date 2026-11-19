@@ -2905,12 +2905,28 @@ async function main() {
           const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string; Subject: string; To: { Address: string }[]; Created: string }[] }
           const mails = inbox.messages.filter(m => m.Subject.includes("Ton briefing pour Buvette") && Date.parse(m.Created) >= history.createdAt.getTime() - 1000)
           if (mails.length !== recipients.length || mails.filter(m => m.To.some(t => t.Address === "lea.giroud@example.org")).length !== 1) throw new Error("Actual campaign mail deduplication failed")
-          for (const recipient of recipients.slice(0, 2)) {
-            await at("Dans notre boîte de test, ouvrons les emails")
+          const { ORG_EMAIL_SCOPE_SENTENCE } = await import("../../src/lib/org-personal-page")
+          for (const [index, recipient] of recipients.slice(0, 2).entries()) {
+            if (index === 0) await at("Dans la boîte de test")
+            else await at("Dans le deuxième email")
             const mail = mails.find(m => m.To.some(t => t.Address === recipient.volunteer.email)); if (!mail) throw new Error("Recipient mail missing")
             await openRegistrationTakeMailbox(page, dir, mail.ID, 'subject:"Ton briefing pour Buvette" "Fête du village de Montvert"')
-            const text = await page.frameLocator("iframe").locator("body").innerText()
+            const body = page.frameLocator("iframe")
+            const text = await body.locator("body").innerText()
             if (!text.includes(recipient.volunteer.firstName) || !text.includes("Prends aussi une gourde")) throw new Error("Actual personalized mail missing content")
+            const link = body.getByRole("link", { name: "Mes inscriptions", exact: true })
+            if (!(await link.getAttribute("href"))?.includes("/mes-inscriptions/")) throw new Error("Targeted message is missing the organisation link")
+            const scope = body.getByText(ORG_EMAIL_SCOPE_SENTENCE("Fêtes de Montvert"), { exact: true })
+            await scope.waitFor()
+            if (index === 1) {
+              await at("Le bouton Mes inscriptions")
+              await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+              for (const field of [link, scope]) {
+                const box = await field.boundingBox()
+                if (!box || box.y < 264 || box.y + box.height > 800) throw new Error("Targeted email content is outside the Mailpit crop")
+              }
+              checks.organisationLinkVisibleInEmail = true
+            }
           }
           await at("La section Messages programmés est séparée"); await page.goto(url); await settle(page)
           await page.getByRole("heading", { name: "Messages programmés", exact: true }).scrollIntoViewIfNeeded()

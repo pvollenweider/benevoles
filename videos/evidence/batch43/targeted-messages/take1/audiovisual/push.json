@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:16:22.756Z",
+  "videoSha256": "c786a1c05cccae337974d33c5886f153f27144a54ab988a295954c5660d11f5c",
+  "promptSha256": "cbe7d599130b3911542b4b81c1726e71064fcb1a2c68faefb34a1b3cd55e36df",
+  "clipSha256": "06c0c07956fcb5d9d217c078cbad2d07d4dacec95ffd1cff70e77c6f5f338819",
+  "scene": "push",
+  "review": {
+    "heardOpening": "Vous pouvez aussi demander une notification",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur.",
+        "visibleSeconds": 0.8,
+        "visible": "Coche de la case « Envoyer aussi une notification (téléphone ou ordinateur) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "L'objet sert de titre, et la première ligne non vide du message sert de texte court.",
+        "visibleSeconds": 13,
+        "visible": "Affichage du champ Message et du texte explicatif sous la case à cocher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "et vérifiez ce qui sera envoyé.",
+        "visibleSeconds": 23.5,
+        "visible": "Bouton « Voir l'aperçu et envoyer » bien visible sous les options d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement intelligible, débit régulier et synchronisé avec l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
