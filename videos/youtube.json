@@ -39,18 +39,21 @@
   },
   "videos": {
     "admin-features-tour": {
-      "videoId": "o6nQTrWD__M",
-      "revision": 6,
+      "videoId": "deIm46M8lG8",
+      "revision": 7,
       "privacy": "public",
       "captions": true,
       "thumbnail": true,
       "synthetic": true,
       "format": "native",
-      "uploadedAt": "2026-11-18T08:55:38.940Z",
-      "thumbnailKey": "de719f0c3d639f01",
       "playlists": [
         "decouvrir-administration"
-      ]
+      ],
+      "uploadedAt": "2026-11-19T19:47:05.276Z",
+      "replaced": [
+        "o6nQTrWD__M"
+      ],
+      "thumbnailKey": "de719f0c3d639f01"
     },
     "assignment-proposals": {
       "videoId": "eF5q9EzPmPA",
@@ -225,6 +228,21 @@
       "uploadedAt": "2026-11-18T09:31:20.219Z",
       "thumbnailKey": "120ae3285196606e"
     },
+    "sectors": {
+      "videoId": "5o96zWnfAfU",
+      "revision": 4,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "planning-creneaux",
+        "inscriptions-communication"
+      ],
+      "uploadedAt": "2026-11-19T19:47:32.193Z",
+      "thumbnailKey": "9a494f2daecc027b"
+    },
     "shift-create-edit-detail": {
       "videoId": "KGwVEPVlHis",
       "revision": 6,
@@ -311,6 +329,35 @@
       "uploadedAt": "2026-11-18T09:30:43.466Z",
       "thumbnailKey": "dd22115169f4e261"
     },
+    "staffing-gaps": {
+      "videoId": "xXKA4I1ft9s",
+      "revision": 4,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "inscriptions-communication",
+        "planning-creneaux"
+      ],
+      "uploadedAt": "2026-11-19T19:47:20.843Z",
+      "thumbnailKey": "48c2cbe4af1ec697"
+    },
+    "volunteer-discover-event": {
+      "videoId": "RiqcrWtfxUg",
+      "revision": 4,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "parcours-benevole"
+      ],
+      "uploadedAt": "2026-11-19T19:47:46.448Z",
+      "thumbnailKey": "658ea158c7f50dfa"
+    },
     "volunteer-event-availability": {
       "videoId": "uKNwiQAntE8",
       "revision": 1,
@@ -340,19 +387,50 @@
       ],
       "uploadedAt": "2026-11-18T10:38:56.227Z"
     },
-    "volunteer-register-mobile": {
-      "videoId": "eG3tCM7nH9M",
+    "volunteer-org-registrations": {
+      "videoId": "7LJKsqVmxLI",
+      "revision": 1,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "parcours-benevole"
+      ],
+      "uploadedAt": "2026-11-19T19:48:13.167Z",
+      "thumbnailKey": "2d29941044dcb8eb"
+    },
+    "volunteer-personal-registrations": {
+      "videoId": "X3vBIovh1CQ",
       "revision": 4,
       "privacy": "public",
       "captions": true,
       "thumbnail": true,
       "synthetic": true,
-      "format": "framed",
-      "uploadedAt": "2026-11-18T08:50:23.447Z",
-      "thumbnailKey": "ec30a73dfd9d118d",
+      "format": "native",
       "playlists": [
         "parcours-benevole"
-      ]
+      ],
+      "uploadedAt": "2026-11-19T19:48:23.830Z",
+      "thumbnailKey": "8ad9d8c3273de95b"
+    },
+    "volunteer-register-mobile": {
+      "videoId": "NDxqgGc8bx0",
+      "revision": 6,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "framed",
+      "playlists": [
+        "parcours-benevole"
+      ],
+      "uploadedAt": "2026-11-19T19:48:01.053Z",
+      "replaced": [
+        "eG3tCM7nH9M"
+      ],
+      "thumbnailKey": "ec30a73dfd9d118d"
     },
     "workload-protection": {
       "videoId": "jMxNcpje_WY",
