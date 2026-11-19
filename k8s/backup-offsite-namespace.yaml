@@ -1,0 +1,149 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Namespace of the off-site copy of the backups (k8s/cronjob-backup-offsite.yaml), apart from the
+# namespace of the application.
+#
+# Why: the deploy credential of the workflow (k8s/rbac-ci-deployer.yaml) may create Jobs in the
+# namespace benevoles, and a Job mounts any secret of its namespace. The credential of the
+# off-site storage (secret rclone-config), which can also delete the copies kept there, would be
+# readable by whoever steals the deploy credential. Here that account has no Role at all, and
+# deploy.yml never names this namespace: the off-site copy survives the loss of the deploy
+# credential.
+#
+# Applied by hand, never by deploy.yml (cluster-scoped objects, and a namespace the workflow must
+# not reach). Two values belong to the cluster and are filled in by envsubst:
+#   BACKUP_PV_PATH   directory of the node that holds the dumps, the one behind backup-pvc
+#   BACKUP_NODE      name of the node that has this directory
+#
+#   export BACKUP_PV_PATH=$(kubectl get pv "$(kubectl -n benevoles get pvc backup-pvc -o jsonpath='{.spec.volumeName}')" -o jsonpath='{.spec.local.path}')
+#   export BACKUP_NODE=$(kubectl get pv "$(kubectl -n benevoles get pvc backup-pvc -o jsonpath='{.spec.volumeName}')" -o jsonpath='{.spec.nodeAffinity.required.nodeSelectorTerms[0].matchExpressions[0].values[0]}')
+#   echo "$BACKUP_PV_PATH on $BACKUP_NODE"   # neither may be empty
+#   envsubst '$BACKUP_PV_PATH $BACKUP_NODE' < k8s/backup-offsite-namespace.yaml | kubectl apply -f -
+#
+# Then the two secrets and the CronJob, in the order of docs/deploiement.md « Mise en place /
+# migration de la copie hors site ».
+#
+# The volume: a PersistentVolumeClaim cannot be mounted from another namespace, and the Pod
+# Security level refuses hostPath. So a second, static PersistentVolume points at the directory of
+# backup-pvc, and only the claim of this namespace can bind it. The source of a PersistentVolume
+# cannot be changed once created: if backup-pvc is ever recreated (new directory), delete the
+# claim backups-ro and the volume benevoles-backups-ro, then apply this file again with the new
+# value (deploiement.md). Deleting them removes nothing on disk.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: benevoles-offsite
+  labels:
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/enforce-version: latest
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: benevoles-backups-ro
+spec:
+  capacity:
+    storage: 5Gi   # same as backup-pvc (k8s/cronjob-backup.yaml); a static volume enforces no size
+  volumeMode: Filesystem
+  # Read-only for every pod: the CronJob also mounts its claim with readOnly: true, which is what
+  # the kubelet enforces.
+  accessModes: [ReadOnlyMany]
+  # CRITICAL: Retain, never Delete. This volume shares its directory with backup-pvc. With Delete,
+  # removing the claim below would ask for the removal of the directory that holds the backups.
+  persistentVolumeReclaimPolicy: Retain
+  # Empty class: the local-path provisioner never manages, resizes or removes this volume.
+  storageClassName: ""
+  # Only the claim below may bind this volume, whatever another namespace asks for.
+  claimRef:
+    namespace: benevoles-offsite
+    name: backups-ro
+  local:
+    path: ${BACKUP_PV_PATH}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: ["${BACKUP_NODE}"]
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backups-ro
+  namespace: benevoles-offsite
+spec:
+  accessModes: [ReadOnlyMany]
+  storageClassName: ""
+  volumeName: benevoles-backups-ro
+  resources:
+    requests:
+      storage: 5Gi
+---
+# Network rules of this namespace. A NetworkPolicy only acts in its own namespace, so the rule of
+# the off-site job lives here and not in k8s/networkpolicy.yaml. These rules do not carry the
+# label app.kubernetes.io/part-of: benevoles-netpol: the deploy workflow removes the policies of
+# the namespace benevoles by that label after a failed deploy, and nothing of the workflow must
+# apply to this namespace. To remove them by hand:
+#   kubectl -n benevoles-offsite delete networkpolicy backup-offsite-egress default-deny-ingress
+#
+# rclone to Swiss Backup (identity and storage, both HTTPS), then the heartbeat to the public
+# address, which the node hands to the Traefik pod. « The internet » is every address except the
+# pod and service ranges of k3s, the link-local range and the node's own addresses, as in
+# k8s/networkpolicy.yaml (the test compares both lists): the cluster API answers on the node.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backup-offsite-egress
+  namespace: benevoles-offsite
+spec:
+  podSelector:
+    matchLabels:
+      app: backup-offsite
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8443
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.42.0.0/16
+              - 10.43.0.0/16
+              - 169.254.0.0/16
+              - 188.165.255.51/32
+              - 188.165.255.107/32
+      ports:
+        - protocol: TCP
+          port: 443
+---
+# Nothing has to reach a pod of this namespace. Last: the allow rule is in place before the deny.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: benevoles-offsite
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]

@@ -111,7 +111,7 @@ Le fichier lance aussi les tâches planifiées (service `cron`) et exige pour ce
 
 ## Kubernetes
 
-Manifestes dans `k8s/`, namespace `benevoles` :
+Manifestes dans `k8s/`, namespace `benevoles` ; la copie hors site des sauvegardes a le sien, `benevoles-offsite` :
 
 | Fichier | Objets | Appliqué par `deploy.yml` | Contenu |
 |---------|--------|---------------------------|---------|
@@ -121,7 +121,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
 | `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée, sous le rôle `benevoles_owner` (voir « Rôles PostgreSQL » ci-dessous) ; `backoffLimit: 0`, 300 s au plus |
 | `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, clés de `benevoles-secret` données une à une (voir [configuration.md](configuration.md#secrets-kubernetes)), limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
-| `networkpolicy.yaml` | NetworkPolicies `default-deny-ingress`, `app-from-traefik`, `media-from-traefik`, `acme-solver-from-traefik`, `postgres-from-clients`, et pour les sorties `postgres-no-egress`, `media-no-egress`, `migrate-egress`, `cron-egress`, `backup-egress`, `backup-offsite-egress`, `app-egress` | oui, avant la migration ; retirées si le déploiement échoue ensuite | Entrées refusées par défaut dans le namespace, sorties limitées pour chaque pod, voir « Isolation réseau » ci-dessous |
+| `networkpolicy.yaml` | NetworkPolicies `default-deny-ingress`, `app-from-traefik`, `media-from-traefik`, `acme-solver-from-traefik`, `postgres-from-clients`, et pour les sorties `postgres-no-egress`, `media-no-egress`, `migrate-egress`, `cron-egress`, `backup-egress`, `app-egress` | oui, avant la migration ; retirées si le déploiement échoue ensuite | Entrées refusées par défaut dans le namespace, sorties limitées pour chaque pod, voir « Isolation réseau » ci-dessous |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
 | `middleware-compress.yaml` | Middlewares `benevoles-compress` et `benevoles-identity-upstream` | oui, avant `ingress.yaml` | Compression des réponses texte par Traefik (zstd, Brotli ou gzip selon le navigateur) ; l'application reçoit la requête sans `Accept-Encoding` et répond donc sans compression, ce que Traefik exige pour compresser. Voir « Compression » ci-dessous |
 | `middleware-hsts.yaml` | Middleware `benevoles-hsts` | oui, avant `ingress.yaml` et `ingressroute-tokens.yaml` | En-tête `Strict-Transport-Security` (1 an, sans `includeSubDomains` ni `preload`) ; un routeur qui nomme un middleware absent est désactivé par Traefik |
@@ -136,7 +136,8 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (GnuPG, AES-256 avec contrôle d'intégrité), 01:00 UTC, rétention 30 jours |
-| `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; demande le secret `rclone-config` et la clé `OFFSITE_BUCKET` de `benevoles-secret` |
+| `backup-offsite-namespace.yaml` | Namespace `benevoles-offsite`, PersistentVolume `benevoles-backups-ro`, PVC `backups-ro`, NetworkPolicies `backup-offsite-egress` et `default-deny-ingress` (namespace `benevoles-offsite`) | non | Namespace de la copie hors site, où le compte de déploiement n'a aucun droit ; volume en lecture seule sur le répertoire de `backup-pvc`, jamais supprimé avec sa réclamation (`Retain`) ; appliqué à la main avec `envsubst`, voir « Mise en place / migration de la copie hors site » |
+| `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` (namespace `benevoles-offsite`) | non | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; lit les secrets `rclone-config` et `offsite-settings` de son namespace ; appliqué à la main |
 | `log-rotation.md`, `node/` | | | Journaux du nœud, procédure manuelle : journaux d'accès de Traefik gardés 1 an, adresses réduites après 90 jours (`node/` : logrotate, script et tâche cron à installer sur le nœud), analyse à la demande avec GoAccess ; journaux des conteneurs, 90 jours pas encore garantis |
 
 ### Restrictions des pods
@@ -172,9 +173,9 @@ Les sorties sont limitées pour les pods dont les besoins sont connus et fermés
 - le Job de migration (`migrate-egress`) ne joint que le DNS du cluster et PostgreSQL ;
 - les cinq CronJobs qui appellent l'application (`cron-egress`, étiquette `app: benevoles-cron`) ne joignent que le DNS du cluster et Traefik (port 8443) : l'adresse publique désigne le nœud, qui remet la connexion au pod Traefik ;
 - la sauvegarde de la base (`backup-egress`) ne joint que le DNS du cluster, PostgreSQL et Traefik (son signal de fin) ;
-- la copie hors site (`backup-offsite-egress`, étiquette `app: backup-offsite`) ne joint que le DNS du cluster, Traefik et internet sur le port 443 (Swiss Backup), jamais une adresse du cluster.
+- la copie hors site tourne dans le namespace `benevoles-offsite`, et une NetworkPolicy n'agit que dans son namespace : ses règles sont dans `k8s/backup-offsite-namespace.yaml`, appliqué à la main. Toute entrée y est refusée (`default-deny-ingress`), et le job (`backup-offsite-egress`, étiquette `app: backup-offsite`) ne joint que le DNS du cluster, Traefik et internet sur le port 443 (Swiss Backup), jamais une adresse du cluster. Ces deux règles ne portent pas l'étiquette `app.kubernetes.io/part-of: benevoles-netpol` : le retrait d'urgence ci-dessous et celui du workflow ne les touchent pas.
 
-« Internet » désigne toute adresse sauf les plages des pods et des services de k3s (`10.42.0.0/16`, `10.43.0.0/16`), la plage `169.254.0.0/16` et les deux adresses du nœud : l'API du cluster répond sur le nœud, la laisser dans la règle la laisserait joignable. Sur un autre cluster, y mettre ses propres plages et les adresses de ses nœuds.
+« Internet » désigne toute adresse sauf les plages des pods et des services de k3s (`10.42.0.0/16`, `10.43.0.0/16`), la plage `169.254.0.0/16` et les deux adresses du nœud : l'API du cluster répond sur le nœud, la laisser dans la règle la laisserait joignable. Sur un autre cluster, y mettre ses propres plages et les adresses de ses nœuds, dans les deux fichiers : `k8s-hardening.test.ts` échoue si la liste de la copie hors site diffère de celle de l'application.
 
 L'application (`app-egress`) joint le DNS du cluster, PostgreSQL, Traefik (port 8443) et internet sur tous les ports (SMTP, Sentry, ntfy, GitHub, et les services de notification push, dont chaque navigateur choisit l'hôte et le port), jamais une autre adresse du cluster : ni un autre pod, ni un service, ni l'API du cluster. Traefik est nécessaire parce qu'elle appelle sa propre adresse publique : le build autonome envoie la réécriture vers la page 404 (`/_404/page/introuvable`) comme une requête HTTP ; sans cette sortie, toute adresse inconnue répondait 500. Un pod sans l'une de ces étiquettes garde ses sorties libres : un Job lancé avec un ancien modèle n'est donc jamais coupé. Un nouveau CronJob qui appelle autre chose que l'adresse publique ne reçoit pas l'étiquette `app: benevoles-cron`.
 
@@ -234,7 +235,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
    4. régénère `benevoles-secret` (« Sync k8s secret ») ;
    5. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    6. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   7. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les sept CronJobs ;
+   7. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et six CronJobs (tous sauf la copie hors site) ;
    8. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé ;
    9. une fois le site vérifié, déplace `:latest` sur l'image déployée, par son empreinte, sans la reconstruire.
 
@@ -242,12 +243,12 @@ Un seul déploiement à la fois (groupe de concurrence `production-deploy`), jam
 
 L'image est toujours reconstruite après la fusion : celle que la CI de la pull request aurait pu construire vient d'un autre commit (le commit de fusion temporaire), avec d'autres arguments (`GIT_SHA`, DSN Sentry, `doc-lastmod.json`), et rien ne prouverait aujourd'hui qu'elle correspond au commit de `main`. Les limites et la piste d'une promotion sans reconstruction sont dans « Construction partagée en CI » plus bas.
 
-Le workflow n'applique pas `namespace.yaml` (objet de cluster), `rbac-ci-deployer.yaml` (ses propres droits), `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
+Le workflow n'applique pas `namespace.yaml` (objet de cluster), `rbac-ci-deployer.yaml` (ses propres droits), `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml`, `gandi-webhook.yaml`, ni `backup-offsite-namespace.yaml` et `cronjob-backup-offsite.yaml` : il ne nomme jamais le namespace `benevoles-offsite` (`workflow-hardening.test.ts` le vérifie).
 
 ### Accès du workflow aux secrets et au cluster
 
 - **Secrets dans des environnements GitHub** : le job **deploy** lit ses secrets dans l'environnement `production`, le job **build-push** les siens (`SENTRY_AUTH_TOKEN`, `NEXT_PUBLIC_SENTRY_DSN`) dans l'environnement `production-build`. Les deux n'acceptent que la branche `main` : un workflow lancé depuis une autre branche ou une pull request ne les lit pas. La CI des pull requests (`ci.yml`) n'utilise aucun secret. Deux environnements plutôt qu'un : chaque job qui nomme un environnement crée un déploiement GitHub, et `production` ne doit apparaître actif qu'après le vrai déploiement. Un secret de dépôt du même nom sert de repli tant que l'environnement n'en a pas.
-- **Compte de déploiement limité au namespace** : `KUBECONFIG_BASE64` contient le jeton du compte de service `ci-deployer` (`k8s/rbac-ci-deployer.yaml`), qui n'a de droits que dans le namespace `benevoles`, sur les seuls types d'objets que le workflow applique. Il atteint les secrets par leur nom (`benevoles-secret`, `ghcr-secret`, lecture et modification) : il ne lit ni `rclone-config` ni son propre jeton, et ne recrée pas ces deux secrets s'ils disparaissent (recréation à la main, comme sur un cluster neuf). Le niveau Pod Security `baseline` du namespace (`namespace.yaml`) refuse les pods privilégiés, `hostPath`, `hostNetwork` et `hostPID` : ce compte ne peut pas sortir du namespace vers le nœud. Un type d'objet nouveau dans un manifeste appliqué par le workflow s'ajoute au Role (`k8s-hardening.test.ts` échoue sinon), puis `kubectl apply -f k8s/rbac-ci-deployer.yaml` à la main avant la fusion. Supprimer le secret `ci-deployer-token` révoque le jeton ; `kubectl apply -f k8s/rbac-ci-deployer.yaml` en crée un nouveau, à reposer dans `KUBECONFIG_BASE64`.
+- **Compte de déploiement limité au namespace** : `KUBECONFIG_BASE64` contient le jeton du compte de service `ci-deployer` (`k8s/rbac-ci-deployer.yaml`), qui n'a de droits que dans le namespace `benevoles`, sur les seuls types d'objets que le workflow applique. Sa règle sur les secrets n'en nomme que deux (`benevoles-secret`, `ghcr-secret`, lecture et modification), et il ne les recrée pas s'ils disparaissent (recréation à la main, comme sur un cluster neuf). Cette règle ne protège pas les autres secrets du namespace : le compte peut créer des Jobs, et un Job monte n'importe quel secret de son namespace. Qui détient ce jeton peut donc lire tous les secrets de `benevoles`, et écrire sur les volumes qui y sont réclamés, dont celui des sauvegardes. C'est pourquoi l'identifiant du stockage hors site (`rclone-config`), qui permet aussi d'y supprimer les copies, n'est pas dans ce namespace mais dans `benevoles-offsite`, où ce compte n'a ni Role ni RoleBinding et que le workflow ne touche jamais : la copie hors site survit à la perte de ce jeton. Le niveau Pod Security `baseline` du namespace (`namespace.yaml`) refuse les pods privilégiés, `hostPath`, `hostNetwork` et `hostPID` : ce compte ne peut pas sortir du namespace vers le nœud. Un type d'objet nouveau dans un manifeste appliqué par le workflow s'ajoute au Role (`k8s-hardening.test.ts` échoue sinon), puis `kubectl apply -f k8s/rbac-ci-deployer.yaml` à la main avant la fusion. Supprimer le secret `ci-deployer-token` révoque le jeton ; `kubectl apply -f k8s/rbac-ci-deployer.yaml` en crée un nouveau, à reposer dans `KUBECONFIG_BASE64`.
 - **Règles de `main`** : pas de push direct ni de force-push, fusion par pull request (squash), contrôles de la CI verts et branche à jour exigés. Les actions des workflows sont épinglées par SHA de commit (`workflow-hardening.test.ts`, et le réglage du dépôt l'exige).
 
 Entre la migration et la fin du remplacement, l'ancienne version du code tourne sur le nouveau schéma : chaque migration doit rester compatible avec la version précédente (règles *expand/contract* dans [CONTRIBUTING.md](../CONTRIBUTING.md), vérifiées par la CI).
@@ -305,8 +306,6 @@ kubectl apply -f k8s/rbac-ci-deployer.yaml   # compte de déploiement du workflo
 kubectl apply -f k8s/secret.yaml
 kubectl -n benevoles create secret docker-registry ghcr-secret \
   --docker-server=ghcr.io --docker-username=<utilisateur> --docker-password=<jeton read:packages>
-kubectl -n benevoles create secret generic rclone-config \
-  --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf
 
 # 2. PostgreSQL, puis attendre qu'il soit prêt
 kubectl apply -f k8s/postgres.yaml
@@ -320,11 +319,14 @@ kubectl -n benevoles logs job/benevoles-migrate
 
 # 4. Exposition et tâches planifiées
 kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/middleware-hsts.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
-kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cronjob-bounces.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
+kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cronjob-bounces.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml
 
 # 5. Seulement ensuite, l'application
 APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
 kubectl -n benevoles rollout status deploy/benevoles-app
+
+# 6. Copie hors site, dans son propre namespace : voir « Mise en place / migration de la copie
+#    hors site » plus bas (le volume backup-pvc de l'étape 4 doit exister).
 ```
 
 Sur une base neuve, les rôles de [Rôles PostgreSQL](#rôles-postgresql) n'existent pas : le pod PostgreSQL ne crée que le superutilisateur. Entre les étapes 2 et 3, les créer avec leur mot de passe, en superutilisateur, et leur donner leurs droits (procédure de l'opérateur). La première migration demande en plus un droit que `benevoles_owner` n'a pas ensuite : `0001_init` commence par `CREATE SCHEMA IF NOT EXISTS "public"` et une migration crée l'extension `unaccent`, deux instructions refusées sans le droit `CREATE` sur la base, même quand le schéma existe déjà. Deux façons de faire :
@@ -748,10 +750,74 @@ kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASS
 
 ### Copie hors site
 
-`cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume `backup-pvc` hors site avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, le fournisseur ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`. Tout le volume est copié : les fichiers `.sql.gz.gpg` comme les anciens `.sql.gz.enc`.
+`cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume des sauvegardes hors site avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, le fournisseur ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`. Tout le volume est copié : les fichiers `.sql.gz.gpg` comme les anciens `.sql.gz.enc`.
 
-- Envoi avec `rclone copy` (upload seulement, ne touche jamais aux fichiers déjà présents chez le fournisseur) puis purge des fichiers de plus de **90 jours** avec `rclone delete --min-age`. Volontairement plus long que la rétention locale de 30 jours du PVC : le but est de pouvoir revenir à un état antérieur à une erreur découverte tard, indépendamment de ce que la rotation locale a déjà supprimé.
+- Envoi avec `rclone copy --checksum --immutable` (upload seulement) puis purge des fichiers de plus de **90 jours** avec `rclone delete --min-age`. Volontairement plus long que la rétention locale de 30 jours du PVC : le but est de pouvoir revenir à un état antérieur à une erreur découverte tard, indépendamment de ce que la rotation locale a déjà supprimé.
 - Ce n'est pas un `rclone sync` : un `sync` effacerait chez le fournisseur tout fichier que le PVC a déjà purgé, ce qui viderait la copie hors site en même temps que le volume local en cas de perte du cluster — exactement le scénario que la copie hors site est censée couvrir.
+
+- `--immutable` : un fichier déjà envoyé n'est jamais réécrit. Un dump modifié sur le volume après son envoi est refusé et la copie hors site garde son contenu ; les nouveaux fichiers de la même exécution sont quand même envoyés, puis `rclone` sort en erreur. Le job s'arrête alors avant la purge et sans signal de vie : la page de santé et l'alerte nocturne signalent la copie hors site, chaque nuit tant que le fichier modifié reste sur le volume. Son journal nomme le fichier (`immutable file modified`). Comparer alors ce fichier à sa copie hors site avant de le retirer du volume : un dump ne change jamais après son écriture.
+
+**Un namespace à part.** Le CronJob, l'identifiant du stockage (`rclone-config`) et ses réglages (`offsite-settings`) sont dans le namespace `benevoles-offsite`, pas dans `benevoles` : le compte de déploiement du workflow peut lire tous les secrets de `benevoles` (voir « Accès du workflow aux secrets et au cluster »), et cet identifiant permet aussi de supprimer les copies. Dans `benevoles-offsite`, ce compte n'a aucun droit, et `deploy.yml` n'y applique rien : tout s'y applique à la main.
+
+- Le volume : une réclamation ne se monte pas depuis un autre namespace, et le niveau Pod Security refuse `hostPath`. `k8s/backup-offsite-namespace.yaml` déclare donc un second PersistentVolume, `benevoles-backups-ro`, sur le répertoire du nœud où `backup-pvc` écrit, en lecture seule, que seule la réclamation `backups-ro` de `benevoles-offsite` peut lier. Sa politique est `Retain` et sa classe de stockage est vide : supprimer sa réclamation ne supprime jamais le répertoire des sauvegardes, et le provisionneur `local-path` ne le gère pas. Ne jamais passer cette politique à `Delete`.
+- Les réglages : `offsite-settings` porte `OFFSITE_BUCKET`, `CRON_SECRET` et `APP_URL` (signal de vie). Ce sont des copies de clés de `benevoles-secret` : **si `CRON_SECRET` change, recopier ce secret** (étape 2 ci-dessous), sinon la copie continue mais son signal de vie est refusé et la page de santé la dit en retard.
+- Ce qui reste possible avec le jeton de déploiement : modifier ou supprimer les dumps sur `backup-pvc`, ou y écrire d'autres fichiers. Les copies déjà envoyées n'en sont pas touchées (pas de `sync`, `--immutable`) ; un dump modifié avant son premier envoi part tel quel.
+
+**Mise en place / migration de la copie hors site.** Sur un cluster où la copie tourne encore dans `benevoles`, comme sur un cluster neuf, dans cet ordre. Aucune commande n'affiche la valeur d'un secret.
+
+```bash
+# 1. Namespace, volume en lecture seule, réclamation, règles réseau.
+#    Les deux valeurs viennent du volume de backup-pvc ; aucune ne doit être vide.
+PV=$(kubectl -n benevoles get pvc backup-pvc -o jsonpath='{.spec.volumeName}')
+export BACKUP_PV_PATH=$(kubectl get pv "$PV" -o jsonpath='{.spec.local.path}')
+export BACKUP_NODE=$(kubectl get pv "$PV" -o jsonpath='{.spec.nodeAffinity.required.nodeSelectorTerms[0].matchExpressions[0].values[0]}')
+echo "$BACKUP_PV_PATH sur $BACKUP_NODE"
+[ -n "$BACKUP_PV_PATH" ] && [ -n "$BACKUP_NODE" ] \
+  && envsubst '$BACKUP_PV_PATH $BACKUP_NODE' < k8s/backup-offsite-namespace.yaml | kubectl apply -f -
+kubectl -n benevoles-offsite get pvc backups-ro        # STATUS : Bound
+kubectl get pv benevoles-backups-ro -o jsonpath='{.spec.persistentVolumeReclaimPolicy}{"\n"}'   # Retain
+
+# 2. Les deux secrets, copiés du namespace benevoles par un tube.
+kubectl -n benevoles get secret rclone-config -o json \
+  | jq 'del(.metadata.uid, .metadata.resourceVersion, .metadata.creationTimestamp, .metadata.annotations, .metadata.ownerReferences, .metadata.managedFields) | .metadata.namespace = "benevoles-offsite"' \
+  | kubectl apply -f -
+kubectl -n benevoles get secret benevoles-secret -o json \
+  | jq '{apiVersion: "v1", kind: "Secret", type: "Opaque", metadata: {name: "offsite-settings", namespace: "benevoles-offsite"}, data: {OFFSITE_BUCKET: .data.OFFSITE_BUCKET, CRON_SECRET: .data.CRON_SECRET, APP_URL: .data.NEXT_PUBLIC_APP_URL}}' \
+  | kubectl apply -f -
+#    Contrôle, noms des clés seulement : ["rclone.conf"], puis trois fois true.
+kubectl -n benevoles-offsite get secret rclone-config -o json | jq '.data | keys'
+kubectl -n benevoles-offsite get secret offsite-settings -o json | jq '.data | map_values(length > 0)'
+
+# 3. Le CronJob.
+kubectl apply -f k8s/cronjob-backup-offsite.yaml
+
+# 4. Un essai à la main, puis son journal : envoi, purge, inventaire, et la réponse du signal de
+#    vie en dernière ligne (« heartbeat non envoyé » dit qu'il n'est pas parti).
+kubectl -n benevoles-offsite create job --from=cronjob/backup-offsite offsite-essai
+kubectl -n benevoles-offsite wait --for=condition=complete job/offsite-essai --timeout=600s
+kubectl -n benevoles-offsite logs job/offsite-essai
+#    /super-admin/health : « Copie hors site » porte l'heure de cet essai.
+kubectl -n benevoles-offsite delete job offsite-essai
+
+# 5. Seulement après un essai réussi, retirer l'ancienne copie du namespace benevoles
+#    (migration seulement ; kubectl apply ne supprime jamais ce qui a quitté un manifeste).
+kubectl -n benevoles delete cronjob backup-offsite
+kubectl -n benevoles delete networkpolicy backup-offsite-egress
+kubectl -n benevoles delete secret rclone-config
+```
+
+Sur un cluster neuf, `rclone-config` n'existe pas encore dans `benevoles` : à l'étape 2, le créer directement dans `benevoles-offsite` (commande de « Mise en place du remote Swiss Backup » ci-dessous), et il n'y a pas d'étape 5. Tant que l'étape 5 n'est pas faite, l'ancien CronJob de `benevoles` continue de copier chaque nuit : la migration ne laisse aucune nuit sans copie. Faire l'étape 5 dans la foulée d'un essai réussi, pour que deux jobs n'envoient pas les mêmes fichiers la même nuit. Si l'essai de l'étape 4 échoue (`kubectl -n benevoles-offsite describe job offsite-essai`, puis `describe pod`), ne rien supprimer.
+
+À refaire ensuite :
+
+- **`CRON_SECRET` change** : relancer la commande de l'étape 2 qui écrit `offsite-settings`, après le déploiement qui a mis la nouvelle valeur dans `benevoles-secret`. De même si `OFFSITE_BUCKET` change.
+- **Le mot de passe de l'appareil Swiss Backup change** : recréer `rclone-config` dans `benevoles-offsite` (commande ci-dessous).
+- **Le volume `backup-pvc` est recréé** (nouveau cluster, restauration) : son répertoire change, et la source d'un PersistentVolume ne se modifie pas. Supprimer la réclamation et le volume en lecture seule, ce qui n'efface rien sur le disque (`Retain`, aucune classe de stockage), puis refaire l'étape 1 avec la nouvelle valeur :
+
+  ```bash
+  kubectl -n benevoles-offsite delete pvc backups-ro
+  kubectl delete pv benevoles-backups-ro
+  ```
 
 **Fournisseur : Infomaniak Swiss Backup** (#524), stockage OpenStack Swift en Suisse, remote rclone `swissbackup`, container donné par `OFFSITE_BUCKET`. Jusqu'au 2026-10-05, la copie partait vers un compte Dropbox individuel (États-Unis) ; ce fournisseur est retiré du CronJob et des scripts (#697), et ses copies sont en cours de suppression.
 
@@ -759,18 +825,18 @@ kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASS
 
 1. Dans le Manager Infomaniak, créer un appareil Swiss Backup pour rclone et lui donner un mot de passe. Le Manager fournit un bloc `rclone.conf` de type `swift` (`user`, `auth = https://swiss-backup02.infomaniak.com/identity/v3`, `tenant`, `region = RegionOne`, `key = [password]`).
 2. Coller ce bloc dans un fichier `rclone.conf` local, renommer sa section en `[swissbackup]` (nom attendu par le CronJob) et remplacer `[password]` par le mot de passe de l'appareil (en clair : rclone ne le chiffre pas pour Swift). Vérifier : `rclone lsd swissbackup:`.
-3. Créer le container des sauvegardes : `rclone mkdir swissbackup:benevol-backups`. Son nom devient le secret GitHub `OFFSITE_BUCKET` (repris dans `benevoles-secret` au déploiement suivant, voir [configuration.md](configuration.md#secrets-kubernetes)).
-4. Créer ou mettre à jour le secret `rclone-config` :
+3. Créer le container des sauvegardes : `rclone mkdir swissbackup:benevol-backups`. Son nom devient le secret GitHub `OFFSITE_BUCKET` (repris dans `benevoles-secret` au déploiement suivant, voir [configuration.md](configuration.md#secrets-kubernetes), puis recopié à la main dans `offsite-settings`, étape 2 ci-dessus).
+4. Créer ou mettre à jour le secret `rclone-config`, dans le namespace `benevoles-offsite` :
 
 ```bash
-kubectl create secret generic rclone-config -n benevoles \
+kubectl create secret generic rclone-config -n benevoles-offsite \
   --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf \
   --save-config --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-À refaire si le mot de passe de l'appareil Swiss Backup change. Tant que ce secret n'existe pas, le CronJob échoue simplement (pod bloqué faute de volume) ; ça n'affecte pas le dump local (`cronjob-backup.yaml`), qui est un job séparé. Sans `OFFSITE_BUCKET`, le job s'arrête avant d'appeler rclone.
+À refaire si le mot de passe de l'appareil Swiss Backup change. Tant que ce secret ou `offsite-settings` n'existe pas, le CronJob échoue simplement (pod qui ne démarre pas) ; ça n'affecte pas le dump local (`cronjob-backup.yaml`), qui est un job séparé. Avec un `OFFSITE_BUCKET` vide, le job s'arrête avant d'appeler rclone.
 
-**`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
+**`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl -n benevoles-offsite create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
 
 **Restauration / test.** `scripts/restore-test-offsite.sh` prend le dump chiffré le plus récent, dans l'un ou l'autre format (`.sql.gz.gpg`, lu avec `gpg`, à installer sur le poste : GnuPG 2.2 ou plus récent ; ou l'ancien `.sql.gz.enc`, lu avec `openssl`), le déchiffre avec `BACKUP_PASSPHRASE`, vérifie le gzip et l'en-tête `pg_dump`, puis, par défaut, le recharge dans un conteneur PostgreSQL 16 jetable (sans port publié, supprimé à la fin) et compare les comptages : organisations, événements, bénévoles, inscriptions et migrations terminées. La sauvegarde est donc réellement restaurable, pas seulement bien formée. Le script ne modifie jamais la copie hors site : montage local en lecture seule, ou `rclone lsl`/`lsf`/`copy` depuis le remote uniquement.
 
@@ -799,7 +865,7 @@ Le script affiche à la fin la commande `kubectl exec` à lancer pour enregistre
 
 1. Supprimer les anciennes copies : `rclone purge dropbox:/benevol-backups`, puis vider la corbeille Dropbox et révoquer rclone dans les applications connectées du compte Dropbox.
 2. Retirer la section `[dropbox]` de `rclone.conf` et recréer le secret `rclone-config` (commande ci-dessus).
-3. Si ce n'est pas déjà fait, supprimer l'ancien CronJob : `kubectl delete cronjob backup-offsite-dropbox -n benevoles`.
+3. Si ce n'est pas déjà fait, supprimer le CronJob de ce fournisseur : `kubectl delete cronjob backup-offsite-dropbox -n benevoles`.
 
 Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour lister, `rclone copy <remote>:<chemin>/<fichier> .` pour télécharger, puis déchiffrer comme ci-dessus (ou utiliser `scripts/restore-test-offsite.sh`, qui fait tout cela et recharge le dump dans une base jetable).
 
@@ -818,7 +884,8 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 **Avant une mise en production** (premier déploiement ou nouveau cluster) :
 
 - [ ] `TOKEN_ENCRYPTION_KEY` et `BACKUP_PASSPHRASE` notées dans un gestionnaire de mots de passe, hors du cluster et hors de ce dépôt ;
-- [ ] secret `rclone-config` et clé `OFFSITE_BUCKET` créés, et une première copie Swiss Backup constatée le lendemain ;
+- [ ] copie hors site mise en place dans `benevoles-offsite` (« Mise en place / migration de la copie hors site ») : secrets `rclone-config` et `offsite-settings` créés, essai à la main réussi, et une première copie Swiss Backup constatée le lendemain ;
+- [ ] plus de secret `rclone-config`, de CronJob `backup-offsite` ni de NetworkPolicy `backup-offsite-egress` dans le namespace `benevoles` (`kubectl -n benevoles get secret,cronjob,networkpolicy`) ;
 - [ ] le Job de migration a réussi (`kubectl -n benevoles logs job/benevoles-migrate`) ;
 - [ ] `/super-admin/health` (connecté en super admin) est tout vert : base, file d'emails, rappels, nettoyage, sauvegarde, copie hors site, migrations, configuration (sur un cluster neuf, le nettoyage et les sauvegardes restent « Jamais exécuté » jusqu'à leur première nuit, et le test de restauration en avertissement jusqu'au premier test) ;
 - [ ] `/api/health` répond `200` ;
@@ -826,7 +893,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 
 **Chaque mois** :
 
-- [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump et copie hors site) ;
+- [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump) et `kubectl -n benevoles-offsite get jobs` (copie hors site) ;
 - [ ] le dernier fichier sur `backup-pvc` et sur Swiss Backup a une taille plausible (pas 0 octet) ;
 - [ ] **test de restauration** : `make restore-test-offsite` (ou `sh scripts/restore-test-offsite.sh`) prend le dernier dump — montage local Swiss Backup ou `OFFSITE_BUCKET=…` —, le déchiffre et le recharge dans un PostgreSQL 16 jetable, puis compare les comptages (organisations, événements, bénévoles, inscriptions, migrations terminées). Sans Docker, `RESTORE_MODE=header` vérifie seulement l'en-tête. La phrase secrète reste dans le gestionnaire de mots de passe hors du serveur : sans elle, les copies hors site sont indéchiffrables si le cluster est perdu.
   Puis le signaler à la page de santé (avertissement après 45 jours sans test, erreur après 90), depuis le cluster et sans manipuler `CRON_SECRET` sur le poste : reprendre la commande `kubectl exec` affichée par le script, qui remplit le nom du dump et le mode utilisés :
