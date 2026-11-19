@@ -87,6 +87,15 @@ Sans `IMAP_USER` et `IMAP_PASSWORD`, la lecture est désactivée (aucune connexi
 
 Le contenu brut des avis n'est ni stocké en base ni écrit dans les journaux : seuls le résultat normalisé (type d'email, motif, code SMTP, empreinte de l'adresse) et des compteurs sont conservés.
 
+En production (Kubernetes), les identifiants se mettent dans l'environnement GitHub `production`, que `deploy.yml` recopie dans `benevoles-secret` à chaque déploiement :
+
+```bash
+gh secret set IMAP_USER --env production --repo pvollenweider/benevoles --body "notifications@benevol.app"
+gh secret set IMAP_PASSWORD --env production --repo pvollenweider/benevoles   # saisie masquée
+```
+
+Un secret ajouté ou changé n'arrive dans le cluster qu'au déploiement suivant, déclenché par un push sur `main` : GitHub fige les secrets à la création d'une exécution, si bien que relancer une exécution plus ancienne ne les apporte pas. Le premier passage apparaît ensuite sur la page **Santé du service** dans le quart d'heure.
+
 ## Notifications push (optionnel)
 
 Sans clés VAPID, aucun push n'est envoyé. Le bouton d'abonnement de la page personnelle reste affiché et disparaît au premier clic. La page Santé du service signale l'absence des clés.
