@@ -806,6 +806,8 @@ kubectl -n benevoles delete networkpolicy backup-offsite-egress
 kubectl -n benevoles delete secret rclone-config
 ```
 
+Après une migration, changer le mot de passe de l'appareil Swiss Backup : l'ancien a vécu dans un namespace où le compte de déploiement pouvait le lire, et le déplacer ne le rend pas neuf. Dans le Manager Infomaniak, donner un nouveau mot de passe à l'appareil, le reporter dans le `rclone.conf` local, recréer `rclone-config` dans `benevoles-offsite` (commande de « Mise en place du remote Swiss Backup » ci-dessous), puis relancer l'essai de l'étape 4. La copie de l'étape 2 ne sert qu'à passer d'un namespace à l'autre sans nuit sans copie.
+
 Sur un cluster neuf, `rclone-config` n'existe pas encore dans `benevoles` : à l'étape 2, le créer directement dans `benevoles-offsite` (commande de « Mise en place du remote Swiss Backup » ci-dessous), et il n'y a pas d'étape 5. Tant que l'étape 5 n'est pas faite, l'ancien CronJob de `benevoles` continue de copier chaque nuit : la migration ne laisse aucune nuit sans copie. Faire l'étape 5 dans la foulée d'un essai réussi, pour que deux jobs n'envoient pas les mêmes fichiers la même nuit. Si l'essai de l'étape 4 échoue (`kubectl -n benevoles-offsite describe job offsite-essai`, puis `describe pod`), ne rien supprimer.
 
 À refaire ensuite :
