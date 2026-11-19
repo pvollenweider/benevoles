@@ -2171,6 +2171,9 @@ async function main() {
         await page.goto(`${publicEventUrl}/faq`); await settle(page)
         await page.getByRole("heading", { name: "Questions fréquentes" }).waitFor()
         await at("Tu peux revenir au planning")
+        // This narration joins the two sentences without a clean pause.
+        // Hold the FAQ until the actual onset of « Tu peux revenir ».
+        if (!quickRehearsal) await page.waitForTimeout(1500)
         await page.goto(publicEventUrl); await settle(page)
       })
 
@@ -2205,7 +2208,9 @@ async function main() {
       })
 
       await page.screencast.showChapter("Sur téléphone", { description: "De la liste à la frise", duration: 1_400 })
+      let portraitStart = 0
       await scene("mobile", async (at) => {
+        portraitStart = Math.round(performance.now() - startedAt)
         await page.setViewportSize({ width: 390, height: 800 })
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         const display = page.getByRole("group", { name: "Affichage des créneaux" })
@@ -2223,12 +2228,15 @@ async function main() {
         })
         if (!didScroll) throw new Error("The portrait Frise did not scroll horizontally")
         await at("Descends ensuite pour retrouver")
-        await page.getByText(/Brunch/).first().scrollIntoViewIfNeeded()
+        const sunday = page.getByRole("region", { name: /Planning du/ }).nth(1)
+        await sunday.getByText(/Brunch/).waitFor()
+        await sunday.evaluate(day => day.scrollIntoView({ block: "start" }))
       })
+      portraitFrames.push({ startMs: portraitStart, endMs: Math.round(performance.now() - startedAt), width: 390, height: 800 })
+      await page.setViewportSize({ width: 1280, height: 800 })
 
       await page.screencast.showChapter("Une invitation personnelle", { description: "Le bon accès, sans inscription automatique", duration: 1_400 })
       await scene("invitation", async (at) => {
-        await page.setViewportSize({ width: 1280, height: 800 })
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}&token=demo-invite-julien-security-0001`); await settle(page)
         const security = page.getByRole("button", { name: /, Sécurité[^:]* : sélectionner/ }).first()
         await security.scrollIntoViewIfNeeded()
