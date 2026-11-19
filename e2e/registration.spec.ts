@@ -116,7 +116,7 @@ test("signing up again with the same address: the same page, the reason and the 
   const notice = await waitForMessage(`to:"${email}" subject:"Demande d'inscription non enregistrée"`)
   const text = await getMessageText(notice.ID)
   expect(text).toContain("une inscription ou une place en liste d'attente")
-  expect(text).toMatch(/\/my\/[\w-]+/)
+  expect(text).toMatch(/\/mes-inscriptions\/[\w-]+/)
   await again.screenshot({ path: test.info().outputPath("duplicate.png"), fullPage: false })
 })
 
