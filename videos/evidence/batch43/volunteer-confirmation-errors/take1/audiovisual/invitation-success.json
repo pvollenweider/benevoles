@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:40:30.281Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "fc6ced2399d90a345ca6c65831b94bac8ae7a18aa588282e8f1cfb0f22124905",
+  "clipSha256": "3da1bd7cb8f83dab9549c5ef35e5d770eb10ffae858abddb36986fb0927ce688",
+  "scene": "invitation-success",
+  "review": {
+    "heardOpening": "Comparons maintenant deux confirmations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Zoé choisit le vestiaire dans le formulaire public ordinaire.",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur le créneau Vestiaire puis sur Continuer pour accéder au formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Après ses informations et les consentements, confirmons.",
+        "visibleSeconds": 9.7,
+        "visible": "Renseignement des champs, validation des cases de consentement et clic d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "La page affiche Demande d'inscription reçue",
+        "visibleSeconds": 11,
+        "visible": "Écran de confirmation affichant le titre Demande d'inscription reçue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.8,
+        "spoken": "Ouvrons ce lien pour choisir la logistique.",
+        "visibleSeconds": 24.8,
+        "visible": "Sélection du créneau Logistique sur le planning issu de l'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.5,
+        "spoken": "Ses informations sont préremplies ; vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements.",
+        "visibleSeconds": 30.2,
+        "visible": "Formulaire prérempli pour Aline, choix de la taille de t-shirt, cases cochées et clic sur Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.3,
+        "spoken": "Cette confirmation peut afficher Accéder à mon inscription",
+        "visibleSeconds": 34,
+        "visible": "Page Inscription confirmée avec le bouton Accéder à mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 41.5,
+        "spoken": "Ouvrons ce lien : Aline retrouve ses deux créneaux.",
+        "visibleSeconds": 44.8,
+        "visible": "Clic sur le lien et affichage de la page Tous mes créneaux avec Accueil et Logistique",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement intelligible, accompagnant fidèlement le déroulement des actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

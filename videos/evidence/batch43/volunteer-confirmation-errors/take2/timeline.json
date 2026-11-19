@@ -1,0 +1,452 @@
+{
+  "slug": "volunteer-confirmation-errors",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-19T18:46:21.217Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "a44d351dbef12c640f4d91fcc5c254c65cb2993c",
+    "sourceTree": "30f3eae7280b7055cab1d30c23db61ea7af51754",
+    "productSourceSha256": "9f381716bae823d6454340f7a56abf2dd90cc2f2b866063974304aab14026bdb",
+    "buildId": "zDAgQs_3wdt1qTFEEVf15",
+    "snapshot": "/private/tmp/benevoles-video-production.eCDMKok2",
+    "builtAt": "2026-11-19T17:59:20.785Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-erreurs",
+    "scenario": "VOLUNTEER_CONFIRMATION_ERRORS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 20537
+    },
+    {
+      "kind": "click",
+      "atMs": 21372
+    },
+    {
+      "kind": "click",
+      "atMs": 22191
+    },
+    {
+      "kind": "click",
+      "atMs": 23002
+    },
+    {
+      "kind": "click",
+      "atMs": 23803
+    },
+    {
+      "kind": "click",
+      "atMs": 24619
+    },
+    {
+      "kind": "click",
+      "atMs": 27773
+    },
+    {
+      "kind": "click",
+      "atMs": 28568
+    },
+    {
+      "kind": "click",
+      "atMs": 43920
+    },
+    {
+      "kind": "click",
+      "atMs": 50419
+    },
+    {
+      "kind": "click",
+      "atMs": 69800
+    },
+    {
+      "kind": "click",
+      "atMs": 85849
+    },
+    {
+      "kind": "click",
+      "atMs": 96783
+    },
+    {
+      "kind": "click",
+      "atMs": 167348
+    },
+    {
+      "kind": "click",
+      "atMs": 168163
+    },
+    {
+      "kind": "click",
+      "atMs": 168963
+    },
+    {
+      "kind": "click",
+      "atMs": 169781
+    },
+    {
+      "kind": "click",
+      "atMs": 170580
+    },
+    {
+      "kind": "click",
+      "atMs": 171363
+    },
+    {
+      "kind": "click",
+      "atMs": 172145
+    },
+    {
+      "kind": "click",
+      "atMs": 172945
+    },
+    {
+      "kind": "click",
+      "atMs": 173763
+    },
+    {
+      "kind": "click",
+      "atMs": 202330
+    },
+    {
+      "kind": "click",
+      "atMs": 203145
+    },
+    {
+      "kind": "click",
+      "atMs": 203945
+    },
+    {
+      "kind": "click",
+      "atMs": 204744
+    },
+    {
+      "kind": "click",
+      "atMs": 205528
+    },
+    {
+      "kind": "click",
+      "atMs": 206328
+    },
+    {
+      "kind": "click",
+      "atMs": 207111
+    },
+    {
+      "kind": "click",
+      "atMs": 207894
+    },
+    {
+      "kind": "click",
+      "atMs": 208678
+    },
+    {
+      "kind": "click",
+      "atMs": 217644
+    },
+    {
+      "kind": "click",
+      "atMs": 241244
+    },
+    {
+      "kind": "click",
+      "atMs": 242043
+    },
+    {
+      "kind": "click",
+      "atMs": 242860
+    },
+    {
+      "kind": "click",
+      "atMs": 243660
+    },
+    {
+      "kind": "click",
+      "atMs": 244442
+    },
+    {
+      "kind": "click",
+      "atMs": 245227
+    },
+    {
+      "kind": "click",
+      "atMs": 246026
+    },
+    {
+      "kind": "click",
+      "atMs": 246827
+    },
+    {
+      "kind": "click",
+      "atMs": 247626
+    },
+    {
+      "kind": "click",
+      "atMs": 262577
+    },
+    {
+      "kind": "click",
+      "atMs": 263375
+    },
+    {
+      "kind": "click",
+      "atMs": 267309
+    },
+    {
+      "kind": "click",
+      "atMs": 268109
+    },
+    {
+      "kind": "click",
+      "atMs": 268892
+    },
+    {
+      "kind": "click",
+      "atMs": 269675
+    },
+    {
+      "kind": "click",
+      "atMs": 280966
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 34,
+      "endMs": 17774
+    },
+    {
+      "id": "form",
+      "startMs": 20039,
+      "endMs": 38575
+    },
+    {
+      "id": "validation",
+      "startMs": 40841,
+      "endMs": 59044
+    },
+    {
+      "id": "capacity",
+      "startMs": 61303,
+      "endMs": 83056
+    },
+    {
+      "id": "network",
+      "startMs": 85315,
+      "endMs": 103743
+    },
+    {
+      "id": "success",
+      "startMs": 106000,
+      "endMs": 127567
+    },
+    {
+      "id": "email",
+      "startMs": 129826,
+      "endMs": 158505
+    },
+    {
+      "id": "overlap",
+      "startMs": 160765,
+      "endMs": 196429
+    },
+    {
+      "id": "response-loss",
+      "startMs": 198690,
+      "endMs": 234980
+    },
+    {
+      "id": "invitation-success",
+      "startMs": 237243,
+      "endMs": 286305
+    },
+    {
+      "id": "result",
+      "startMs": 288562,
+      "endMs": 317468
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "form",
+      "phrase": "puis acceptons la convention",
+      "startMs": 2146,
+      "endMs": 9961,
+      "cueMs": 25005
+    },
+    {
+      "segmentId": "form",
+      "phrase": "Avant d’envoyer, relis toujours",
+      "startMs": 10230,
+      "endMs": 11544,
+      "cueMs": 30271
+    },
+    {
+      "segmentId": "validation",
+      "phrase": "Confirmer affiche la question à",
+      "startMs": 2581,
+      "endMs": 6787,
+      "cueMs": 43424
+    },
+    {
+      "segmentId": "validation",
+      "phrase": "choisis une taille, puis tu",
+      "startMs": 9076,
+      "endMs": 10970,
+      "cueMs": 49918
+    },
+    {
+      "segmentId": "capacity",
+      "phrase": "La confirmation répond Ta sélection",
+      "startMs": 8009,
+      "endMs": 11592,
+      "cueMs": 69312
+    },
+    {
+      "segmentId": "capacity",
+      "phrase": "Une place visible quelques minutes",
+      "startMs": 16275,
+      "endMs": 21514,
+      "cueMs": 77580
+    },
+    {
+      "segmentId": "network",
+      "phrase": "Après retour de la connexion,",
+      "startMs": 10999,
+      "endMs": 15024,
+      "cueMs": 96314
+    },
+    {
+      "segmentId": "success",
+      "phrase": "n'affiche pas le lien de gestion",
+      "startMs": 11286,
+      "endMs": 15228,
+      "cueMs": 117287
+    },
+    {
+      "segmentId": "overlap",
+      "phrase": "Essayons le vestiaire",
+      "startMs": 6062,
+      "endMs": 9829,
+      "cueMs": 166828
+    },
+    {
+      "segmentId": "overlap",
+      "phrase": "Remplissons le formulaire et confirmons.",
+      "startMs": 10388,
+      "endMs": 12091,
+      "cueMs": 173267
+    },
+    {
+      "segmentId": "overlap",
+      "phrase": "Aucune nouvelle inscription n'a été ajoutée",
+      "startMs": 22813,
+      "endMs": 24472,
+      "cueMs": 183578
+    },
+    {
+      "segmentId": "overlap",
+      "phrase": "Ouvrons sa boîte",
+      "startMs": 24952,
+      "endMs": 25986,
+      "cueMs": 185717
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Nicolas choisit la logistique",
+      "startMs": 3127,
+      "endMs": 4895,
+      "cueMs": 201817
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Cette fois, la requête arrive réellement",
+      "startMs": 5227,
+      "endMs": 9277,
+      "cueMs": 208200
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Le formulaire affiche Connexion interrompue",
+      "startMs": 13124,
+      "endMs": 18316,
+      "cueMs": 211814
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Rétablissons la connexion et confirmons",
+      "startMs": 18481,
+      "endMs": 20965,
+      "cueMs": 217172
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Vérifions côté organisation",
+      "startMs": 28093,
+      "endMs": 30128,
+      "cueMs": 226784
+    },
+    {
+      "segmentId": "invitation-success",
+      "phrase": "Zoé choisit le vestiaire",
+      "startMs": 3485,
+      "endMs": 6945,
+      "cueMs": 240730
+    },
+    {
+      "segmentId": "invitation-success",
+      "phrase": "Après ses informations et les consentements",
+      "startMs": 7277,
+      "endMs": 10090,
+      "cueMs": 244752
+    },
+    {
+      "segmentId": "invitation-success",
+      "phrase": "Aline a ensuite reçu une",
+      "startMs": 19673,
+      "endMs": 23655,
+      "cueMs": 256917
+    },
+    {
+      "segmentId": "invitation-success",
+      "phrase": "Ouvrons ce lien pour choisir la logistique",
+      "startMs": 24132,
+      "endMs": 26946,
+      "cueMs": 261376
+    },
+    {
+      "segmentId": "invitation-success",
+      "phrase": "vérifions-les, choisissons sa taille",
+      "startMs": 29572,
+      "endMs": 34581,
+      "cueMs": 266815
+    },
+    {
+      "segmentId": "invitation-success",
+      "phrase": "Aline retrouve ses deux créneaux",
+      "startMs": 43224,
+      "endMs": 44625,
+      "cueMs": 280467
+    }
+  ],
+  "mailpitFocusFrames": [
+    {
+      "startMs": 130000,
+      "endMs": 160920
+    },
+    {
+      "startMs": 185840,
+      "endMs": 198800
+    }
+  ],
+  "mailpitHolds": [],
+  "mailpitBodyOnly": true
+}

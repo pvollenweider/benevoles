@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:48:09.565Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "fe7e583a15aed9c13cf3dd6c8c6dfe5e7c72d678a100c0eb94af0c992b333dd5",
+  "clipSha256": "4ed55fcebc96d0280e8e39b7e03896cea8e97654fe362ae7639bc59a099825f4",
+  "scene": "form",
+  "review": {
+    "heardOpening": "Choisis Accueil et continue.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "Choisis Accueil et continue.",
+        "visibleSeconds": 0.8,
+        "visible": "Sélection du créneau Accueil et chargement de la page de formulaire d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Nous remplissons le prénom, le nom, l’email et le téléphone,",
+        "visibleSeconds": 3.4,
+        "visible": "Saisie successive des champs prénom, nom, adresse email et numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "puis acceptons la convention et l’utilisation des données.",
+        "visibleSeconds": 8.5,
+        "visible": "Cochage des deux cases relatives à la convention et aux données personnelles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et bien rythmée, accompagnée d'un fond sonore musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

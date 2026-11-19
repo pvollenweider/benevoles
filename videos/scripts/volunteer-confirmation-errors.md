@@ -186,3 +186,7 @@ WAITING TTS — revue finale du 2026-10-16 : le WAV restauré prononce « Votre 
 ## Lot 41 — 16 novembre 2026
 
 Nouvelle narration Kore intégrale sur les sources du 1er novembre : demande publique reçue, suite par email et lien personnel seulement après preuve de l'adresse. Les anciennes notes de restauration sont historiques.
+
+## Reprise du 19 novembre 2026
+
+Le courriel de confirmation montre le bouton « Mes inscriptions » et sa phrase de confidentialité pour toute l’organisation. Le courriel « Demande d’inscription non enregistrée » montre le message et le lien de gestion que le produit envoie dans ce cas.

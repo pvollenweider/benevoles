@@ -1440,3 +1440,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **VOLUNTEER_PERSONAL_REGISTRATIONS — READY, publiée, révision 4, 185,12 s.** Le tour part de la page commune, ouvre le détail de l’événement et montre le renouvellement du lien de l’organisation. [Revue et contrôles](evidence/batch43/volunteer-personal-registrations/review.md).
 
 **PRIVACY_PERSONAL_LINKS — NOT READY après deux prises.** La première prise montre les libellés actuels et passe la validation, mais l’invitation et le courriel de renouvellement restent trop brefs. La narration de la seconde a été revue, puis la capture s’est arrêtée lorsque le courriel de récupération de Léa n’est pas arrivé. La révision publiée reste en place. [Suivi des deux prises](evidence/batch43/STATUS.md).
+
+**VOLUNTEER_CONFIRMATION_ERRORS — NOT READY après deux prises.** Les deux courriels ont été refilmés et leur temps de lecture est suffisant. Les consentements ont été recalés sur la deuxième prise. La confirmation suivant la coupure simulée part encore avant sa consigne. La révision publiée reste en place. [Suivi des prises](evidence/batch43/STATUS.md).

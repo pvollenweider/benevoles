@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:40:12.626Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "b879a5b8587ebac4339fa0d844bfa669d2599c1430d4a415cc1ed78f51e499bb",
+  "clipSha256": "03dbc5b282e989f03c38a240bd3c189d3339346cfcdbfa592f78580e0448df84",
+  "scene": "email",
+  "review": {
+    "heardOpening": "Voici le message réellement reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Voici le message réellement reçu dans la boîte de démonstration",
+        "visibleSeconds": 0,
+        "visible": "Affichage de l'e-mail de confirmation d'inscription pour Alex",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Il contient le créneau et le bouton Mes inscriptions",
+        "visibleSeconds": 4,
+        "visible": "Le créneau (26/11/2026 · 10:00–12:00) et le bouton bleu « Mes inscriptions » sont affichés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "La phrase sous ce bouton indique que ton lien personnel ouvre toutes tes inscriptions",
+        "visibleSeconds": 8,
+        "visible": "La mention « Ce lien ouvre toutes tes inscriptions auprès de Formation — inscription robuste. Ne le partage pas. » est visible sous le bouton",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, chaleureuse et parfaitement intelligible, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

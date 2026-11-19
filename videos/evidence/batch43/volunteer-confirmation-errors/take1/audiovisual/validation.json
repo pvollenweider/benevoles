@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:39:43.894Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "b453797ae6647115909cdae0f230038b001e68e32e29e11c3a4f56649a58f735",
+  "clipSha256": "cffd6bd9d76d43dedcbab3502f49da51560c1d7d405146a18849a57d26ee7f63",
+  "scene": "validation",
+  "review": {
+    "heardOpening": "La taille du t-shirt n'a pas été renseignée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "La taille du t-shirt n'a pas été renseignée",
+        "visibleSeconds": 0,
+        "visible": "Le formulaire d'inscription affiche le champ obligatoire « Taille du t-shirt * » non renseigné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Confirmer affiche la question à corriger",
+        "visibleSeconds": 2.8,
+        "visible": "L'infobulle d'erreur du navigateur « Veuillez sélectionner l'une de ces options. » apparaît devant le champ manquant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Le champ obligatoire est signalé",
+        "visibleSeconds": 7,
+        "visible": "Le message d'avertissement pointe toujours vers le choix obligatoire de taille",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique claire et fluide, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

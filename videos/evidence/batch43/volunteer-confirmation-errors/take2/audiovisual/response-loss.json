@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:49:11.378Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "a9ababfe4123beb36116af5cd1fd070d611388d6b59e1bda35509c6c63308481",
+  "clipSha256": "e1f68bf07e7feeaedac559620fee0236f8687e55d8315e15e4792b370fa744fa",
+  "scene": "response-loss",
+  "review": {
+    "heardOpening": "Une coupure peut arriver après l'enregistrement.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Nicolas choisit la logistique.",
+        "visibleSeconds": 3.5,
+        "visible": "Sélection du créneau Logistique 14h-16h sur le planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Le formulaire affiche Connexion interrompue parce qu'il ne sait pas si l'envoi a abouti.",
+        "visibleSeconds": 10.5,
+        "visible": "Encadré d'alerte rouge affichant « Connexion interrompue »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Rétablissons la connexion et confirmons à nouveau.",
+        "visibleSeconds": 18,
+        "visible": "Clic sur le bouton « Confirmer mon inscription »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "La page affiche de nouveau Demande d'inscription reçue",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de la page de confirmation intitulée « Demande d'inscription reçue »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28,
+        "spoken": "Vérifions côté organisation : une seule ligne de Nicolas apparaît sur ce créneau.",
+        "visibleSeconds": 28,
+        "visible": "Vue Inscriptions côté organisation avec une unique entrée pour Nicolas Peeters sur la logistique",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et très bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

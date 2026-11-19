@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:39:57.664Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "95de9a0ed9975144ccfa183bbef6da46c8aa2acb05f4060e4ebeef33236c20d4",
+  "clipSha256": "2ac26aa5c1be34337e8e4cc507acda10630b4be756b9357a92ec36f0a2694571",
+  "scene": "network",
+  "review": {
+    "heardOpening": "Nous rétablissons maintenant la place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "coupons volontairement la requête d’envoi pour montrer une interruption réseau",
+        "visibleSeconds": 1,
+        "visible": "L'encadré d'erreur passe à « Connexion interrompue » avec l'avertissement réseau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Le message dit que l’inscription n’a peut-être pas été reçue",
+        "visibleSeconds": 6.8,
+        "visible": "Le texte d'alerte « Ton inscription n'a peut-être pas été reçue » est bien lisible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "clique à nouveau sur Confirmer mon inscription",
+        "visibleSeconds": 11.2,
+        "visible": "Clic sur le bouton bleu « Confirmer mon inscription », avec indicateur de chargement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "le système évite de créer deux engagements identiques",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la page de confirmation « Demande d'inscription reçue »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse féminine fluide, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

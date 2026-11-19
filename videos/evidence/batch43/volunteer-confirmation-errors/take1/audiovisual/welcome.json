@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:39:22.713Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "34cd593676ab1f9de19d72eca24ab4207e1b14384d201d5a6cc6175b88051589",
+  "clipSha256": "1a6210e4f51bc0f463e0e29eb4a9308f915a8a97e0d64042a9c5cce504cec571",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une inscription doit rester compréhensible",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Une inscription doit rester compréhensible même quand quelque chose se passe mal.",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre introductif « Confirmer son inscription et gérer les erreurs » affiché au premier plan.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau.",
+        "visibleSeconds": 3,
+        "visible": "Retrait de l'encart de titre et affichage complet de la page de planning « Inscription robuste — démonstration ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Tu verras chaque message du formulaire et le résultat d’une inscription réussie.",
+        "visibleSeconds": 13.5,
+        "visible": "Écran d'introduction stable présentant les créneaux de l'événement fictif avant le début des démonstrations.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, avec un débit régulier et un fond sonore propre."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
