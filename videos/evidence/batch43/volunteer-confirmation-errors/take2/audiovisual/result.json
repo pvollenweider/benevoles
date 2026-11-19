@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:49:29.785Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "6338431d6467d6f3db90cfcd5ac140a4c39e83fde6e2a0d81d88d4cb12032d5d",
+  "clipSha256": "9cf0d8fda29bbca5f4647bff4c0504d788a948805a3b90b12605aea07488889a",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Revenons côté organisation pour vérifier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons côté organisation pour vérifier les inscriptions réellement présentes.",
+        "visibleSeconds": 0,
+        "visible": "Page d'administration de l'événement sur l'onglet Inscriptions affichant la liste des 5 inscriptions actives.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Une erreur de champ se corrige sur place. Une sélection indisponible se revoit dans le planning.",
+        "visibleSeconds": 5.2,
+        "visible": "Plan fixe sur le tableau de bord des inscriptions accompagnant le rappel méthodologique.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux.",
+        "visibleSeconds": 17.2,
+        "visible": "Écran stable montrant les adresses email et coordonnées associées aux créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "Dans cette démonstration, les personnes sont fictives, mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+        "visibleSeconds": 22.1,
+        "visible": "Vue d'ensemble des inscriptions avec les profils fictifs enregistrés.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, servant de conclusion pédagogique sur écran fixe."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

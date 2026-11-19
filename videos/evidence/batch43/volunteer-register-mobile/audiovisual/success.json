@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:57:57.420Z",
+  "videoSha256": "f66c2ed5e42daec5b072336412c4a20074d2c63891a4336cbeaa31dbd20600e2",
+  "promptSha256": "0c266b2a70b96b64f5086498d18695bf027049375f7676aac14035f5fcca9725",
+  "clipSha256": "179f087e4e3f47b74e043571f6368b70f13e7808c964d19a362fdf9e03f48671",
+  "scene": "success",
+  "review": {
+    "heardOpening": "Et voilà, ta demande est envoyée !",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "ta demande est envoyée",
+        "visibleSeconds": 0,
+        "visible": "Page affichant le message « Demande d'inscription reçue »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ouvre le courriel de confirmation pour vérifier ton créneau",
+        "visibleSeconds": 3.6,
+        "visible": "Affichage de l'email de confirmation avec le récapitulatif du créneau d'accueil",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.7,
+        "spoken": "Le bouton Mes inscriptions ouvre ton lien personnel",
+        "visibleSeconds": 6.7,
+        "visible": "Bouton bleu « Mes inscriptions » bien visible dans le corps du courriel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "La phrase sous le bouton te rappelle de garder ce lien pour toi",
+        "visibleSeconds": 11.2,
+        "visible": "Texte visible sous le bouton : « Ce lien ouvre toutes tes inscriptions auprès de Fêtes de Montvert. Ne le partage pas. »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, fluide et bien articulée, synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

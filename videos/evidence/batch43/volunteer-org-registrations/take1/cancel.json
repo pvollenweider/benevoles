@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:39:41.760Z",
+  "videoSha256": "e0dae3d791960f3ac4bd93ea2bf789cf95180bf70247be64e3aa5ece9b571c89",
+  "promptSha256": "3c6383df857280dbe2038444d22e5ea47f6ed9789512887c6fe6132b1e93b27f",
+  "clipSha256": "c883641e1c0a344ba70d5e978e084f4a9862a0606270a4dfcc9758fa2c21a339",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Si tu as un empêchement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "utilise Annuler sur le créneau concerné",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur le bouton Annuler du créneau du dimanche 29 novembre et ouverture de l'encart de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Vérifie le nom du créneau, puis confirme l’annulation",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur le bouton rouge 'Oui, annuler' et apparition de la confirmation 'Créneau annulé'",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Ton inscription à l’autre événement reste visible",
+        "visibleSeconds": 11,
+        "visible": "L'inscription au créneau du dimanche 6 décembre (Marché des voisins) reste affichée avec le statut Confirmé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:07, la confirmation par clic sur 'Oui, annuler' est validée avant que la consigne 'Vérifie le nom du créneau, puis confirme l'annulation' (00:07 - 00:10) ne soit prononcée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

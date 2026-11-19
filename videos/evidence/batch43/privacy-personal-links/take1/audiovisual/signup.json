@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:12:08.409Z",
+  "videoSha256": "8ada92cbe89fa11708d50d9ea6e7b4e80fe2dc4e0cdc97c2352caf3393569fd0",
+  "promptSha256": "d825dc852dfb02d2711302a6a517199ad0f197b9efc8053af8c6fb32daa93f3c",
+  "clipSha256": "6bdf95989217eb2189d0dc554f3746889091cc30c4ae7fab4ea915dbada8dac5",
+  "scene": "signup",
+  "review": {
+    "heardOpening": "Le lien public, ou son QR code",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Jules choisit un créneau et renseigne ses coordonnées.",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection du créneau de 10h à 12h puis affichage du formulaire de coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Prénom, nom, adresse email et téléphone",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie des informations de Jules dans les champs correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Il accepte ensuite les conditions du formulaire.",
+        "visibleSeconds": 17.5,
+        "visible": "Cochage des deux cases d'acceptation et clic sur Confirmer l'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Après l'envoi, l'inscription est enregistrée",
+        "visibleSeconds": 19.8,
+        "visible": "Affichage de l'écran « Demande d'inscription reçue »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.1,
+        "spoken": "Ouvrons donc le vrai message reçu par Jules",
+        "visibleSeconds": 30,
+        "visible": "Affichage du message de confirmation reçu avec le bouton Mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 41.5,
+        "spoken": "Nous arrivons sur sa page personnelle.",
+        "visibleSeconds": 42,
+        "visible": "Affichage de la page « Toutes mes inscriptions » de Jules Hansen",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien articulée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:48:55.937Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "c7a61631eada279567faf37f2e547f111e49b0abca8c99b3844d39feacad5921",
+  "clipSha256": "fad682f36956319f013f957be9a996f6c08ba1964ade293f96ca25b7e5104fd0",
+  "scene": "overlap",
+  "review": {
+    "heardOpening": "Le serveur revérifie aussi tes horaires.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Aline est déjà inscrite à l'accueil de dix heures à midi.",
+        "visibleSeconds": 2.5,
+        "visible": "Le planning affiche le créneau Accueil 10h–12h déjà réservé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Essayons le vestiaire de onze à treize heures avec sa même adresse.",
+        "visibleSeconds": 6.2,
+        "visible": "Clic sur le créneau Vestiaire 11h–13h ouvrant le formulaire d'inscription.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Remplissons le formulaire et confirmons.",
+        "visibleSeconds": 11.8,
+        "visible": "Les champs au nom d'Aline sont renseignés puis la demande est validée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Demande d'inscription reçue.",
+        "visibleSeconds": 13.5,
+        "visible": "La page de confirmation s'affiche avec le titre « Demande d'inscription reçue ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.8,
+        "spoken": "Ouvrons sa boîte : l'email Demande d'inscription non enregistrée nomme le créneau qui chevauche le sien",
+        "visibleSeconds": 25,
+        "visible": "L'email explicatif s'affiche à l'écran détaillant le chevauchement avec le bouton Gérer mes inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

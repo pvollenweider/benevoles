@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:40:10.294Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "c7a61631eada279567faf37f2e547f111e49b0abca8c99b3844d39feacad5921",
+  "clipSha256": "b7edaacf1eb2e94d847ff12f8faa962bbb4031cc3582395750602ff752a597b9",
+  "scene": "overlap",
+  "review": {
+    "heardOpening": "Le serveur revérifie aussi tes horaires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Aline est déjà inscrite à l'accueil de dix heures à midi.",
+        "visibleSeconds": 2.5,
+        "visible": "Planning affichant le créneau Accueil de 10h à 12h",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Essayons le vestiaire de onze à treize heures avec sa même adresse.",
+        "visibleSeconds": 6,
+        "visible": "Sélection du créneau Vestiaire 11h-13h puis clic sur Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "Remplissons le formulaire et confirmons.",
+        "visibleSeconds": 10,
+        "visible": "Saisie des coordonnées d'Aline et validation du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Demande d'inscription reçue.",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage de la page de confirmation Demande d'inscription reçue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.8,
+        "spoken": "Ouvrons sa boîte : l'email Demande d'inscription non enregistrée nomme le créneau qui chevauche le sien",
+        "visibleSeconds": 25,
+        "visible": "Affichage de l'email expliquant le chevauchement avec le créneau Accueil",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisation fluide avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

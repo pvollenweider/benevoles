@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:13:03.515Z",
+  "videoSha256": "8ada92cbe89fa11708d50d9ea6e7b4e80fe2dc4e0cdc97c2352caf3393569fd0",
+  "promptSha256": "e06d0d7377ff0269b90965ff8cea8bc90a0d06c94d50de9ac2daa471d70f980f",
+  "clipSha256": "69fdfc079f6ed691ca747be9701e7695584e5aee5ef5a57f15da44c40cabb02f",
+  "scene": "legal",
+  "review": {
+    "heardOpening": "Les informations publiques se trouvent aussi dans le pied de page.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Ouvrons Confidentialité.",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le lien « Confidentialité » dans le pied de page et affichage de la Politique de confidentialité.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Repérons aussi les indications de conservation et les moyens de contact.",
+        "visibleSeconds": 9.2,
+        "visible": "Défilement vers la section « 7. Conservation des données » puis les informations de contact dans la section 6.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.2,
+        "spoken": "Ouvrons maintenant les conditions d'utilisation",
+        "visibleSeconds": 20.5,
+        "visible": "Clic sur le lien « CGU » dans le pied de page et ouverture de la page « Conditions générales d'utilisation ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -51,6 +51,43 @@ async function freshOrganization() {
 }
 
 async function main() {
+  if (scenario === "volunteer-org-registrations") {
+    const database = new URL(process.env.DATABASE_URL!)
+    if (!["localhost", "127.0.0.1"].includes(database.hostname) || database.port !== "45433" || database.pathname !== "/benevoles_video") {
+      throw new Error("Organisation registrations fixture requires the isolated video database")
+    }
+    const { orgRegistrationsFixture: fixture } = await import("../videos/lib/org-registrations-fixture")
+    const organizationId = fixture.id
+    await prisma.$transaction(async tx => {
+      await tx.organization.upsert({
+        where: { id: organizationId },
+        create: { id: organizationId, slug: fixture.slug, name: fixture.name, timeZone: "Europe/Zurich" },
+        update: {},
+      })
+      await tx.registration.deleteMany({ where: { event: { organizationId } } })
+      await tx.event.deleteMany({ where: { organizationId } })
+      await tx.volunteer.deleteMany({ where: { organizationId } })
+      const volunteer = await tx.volunteer.create({
+        data: { organizationId, firstName: "Léa", lastName: "Rochat", email: fixture.email },
+      })
+      for (const [index, sample] of fixture.events.entries()) {
+        const date = new Date()
+        date.setUTCHours(0, 0, 0, 0)
+        date.setUTCDate(date.getUTCDate() + 10 + index * 7)
+        const event = await tx.event.create({
+          data: { organizationId, slug: sample.slug, title: sample.title, publicStatus: "published", startDate: date, endDate: date, cancelDeadlineHours: index === 0 ? 24 : null },
+        })
+        const shift = await tx.shift.create({
+          data: { eventId: event.id, label: sample.role, roleName: sample.role, date, startTime: "09:00", endTime: "11:00", capacity: 4 },
+        })
+        await tx.registration.create({
+          data: { eventId: event.id, shiftId: shift.id, volunteerId: volunteer.id, ...registrationToken.data(crypto.randomUUID()) },
+        })
+      }
+    })
+    console.log("✓ Organisation registrations: two upcoming events for Léa Rochat")
+    return
+  }
   if (scenario === "privacy-personal-links") {
     const { seedVideoPrivacy } = await import("./seed-video-privacy")
     return seedVideoPrivacy(prisma)
@@ -393,6 +430,9 @@ async function main() {
     const request = await prisma.shift.create({ data: { eventId: event.id, roleName: "Navette", label: "Navette du dimanche", date: sunday, startTime: "08:00", endTime: "10:00", capacity: 2, requiresApproval: true, colorKey: "violet", displayOrder: 3 } })
     await prisma.registration.create({ data: { eventId: event.id, volunteerId: camille.id, shiftId: offer.id, status: "offered", source: "public_form", waitingExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), ...registrationToken.data("demo-offer-camille-0001") } })
     await prisma.registration.create({ data: { eventId: event.id, volunteerId: camille.id, shiftId: request.id, status: "requested", source: "public_form", ...registrationToken.data("demo-request-camille-0001") } })
+    const { orgLinkTokenData } = await import("../src/lib/org-link")
+    const { personalTourOrgToken } = await import("../videos/lib/org-registrations-fixture")
+    await prisma.volunteer.update({ where: { id: camille.id }, data: orgLinkTokenData(personalTourOrgToken) })
     console.log("✓ Personal withdrawals: Camille has active, waiting, offered and requested registrations without overlapping shifts")
     return
   }

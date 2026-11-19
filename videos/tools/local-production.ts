@@ -19,7 +19,10 @@ async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.pathname !== "/benevoles_video") throw new Error("Only isolated local video DB accepted")
   const [mode, ...args] = process.argv.slice(2)
-  const env: NodeJS.ProcessEnv = { ...process.env, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1", NEXTAUTH_URL: "http://localhost:43102", VIDEO_BASE_URL: "http://localhost:43102",
+  const productPort = process.env.VIDEO_PRODUCT_PORT ?? "43102"
+  if (productPort !== "43102" && productPort !== "43100") throw new Error("Unsupported local video product port")
+  const productOrigin = `http://localhost:${productPort}`
+  const env: NodeJS.ProcessEnv = { ...process.env, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1", NEXTAUTH_URL: productOrigin, VIDEO_BASE_URL: productOrigin,
     // Public, deterministic fixture material, NOT a secret for any deployed app.
     // All tools reading this take must use this wrapper to read its encrypted rows.
     TOKEN_ENCRYPTION_KEY: createHash("sha256").update("benevol-local-video-fixture-only-never-production").digest("base64"),
@@ -38,8 +41,8 @@ async function main() {
     await access(next)
     // Next can inline NEXT_PUBLIC_APP_URL into the operator's unsubscribe redirect.
     // A dedicated build served through the local TLS proxy keeps that redirect on its capture host.
-    const buildOrigin = process.env.VIDEO_BUILD_ORIGIN ?? "http://localhost:43102"
-    if (buildOrigin !== "http://localhost:43102" && buildOrigin !== PUBLIC_APP_URL) throw new Error("Unsupported local video build origin")
+    const buildOrigin = process.env.VIDEO_BUILD_ORIGIN ?? productOrigin
+    if (buildOrigin !== productOrigin && buildOrigin !== "http://localhost:43102" && buildOrigin !== PUBLIC_APP_URL) throw new Error("Unsupported local video build origin")
     env.NEXT_PUBLIC_APP_URL = buildOrigin
     commandArgs = [next, "build", copy, "--webpack"]
   } else if (mode === "serve" || mode === "serve-public" || mode === "serve-capture" || mode === "serve-delivery" || mode === "serve-dayof" || mode === "serve-merge" || mode === "serve-questions" || mode === "serve-hours") {
@@ -51,7 +54,7 @@ async function main() {
     childWorkingDirectory = path.dirname(server)
     await access(server)
     // HTTP capture pages must have an HTTP deployment origin (#1062).
-    Object.assign(env, { PORT: "43102", HOSTNAME: "127.0.0.1", NEXT_PUBLIC_APP_URL: mode === "serve-capture" ? "http://localhost:43102" : PUBLIC_APP_URL })
+    Object.assign(env, { PORT: productPort, HOSTNAME: "127.0.0.1", NEXT_PUBLIC_APP_URL: mode === "serve-capture" ? productOrigin : PUBLIC_APP_URL })
     if (mode === "serve-delivery") Object.assign(env, { PORT: "43106", NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-dayof") Object.assign(env, { PORT: "43108", NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-merge") Object.assign(env, { PORT: "43110", NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
@@ -112,7 +115,7 @@ async function main() {
       Object.assign(env, { NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", VIDEO_ORG: "formation-livraisons", ORG_ADMIN_EMAIL: "video.delivery.owner@example.org", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     }
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
-      const commonTake = ["VOLUNTEER_BADGES", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "SHIFT_RECURRENCE", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_REGISTER", "VOLUNTEER_SESSION_AVAILABILITY", ...memberTakes].includes(rest[0])
+      const commonTake = ["VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_BADGES", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "SHIFT_RECURRENCE", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_REGISTER", "VOLUNTEER_SESSION_AVAILABILITY", ...memberTakes].includes(rest[0])
       if (batch35Takes.includes(rest[0]) && !["45439", "45441"].includes(url.port)) throw new Error("Batch35 requires its dedicated database")
       const validTake = ["FRONT_DESK_ACCESS", "SECTORS"].includes(rest[0]) || (mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : [...batch35Takes, "SHIFT_ROSTER_VISIBILITY", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0]))
       if (rest[0] === "SECTORS") Object.assign(env, { ORG_ADMIN_EMAIL: "video.beta.owner@example.org", VIDEO_ORG: "formation-beta", VIDEO_EVENT_SLUG: "festival-de-montvert" })
@@ -187,7 +190,7 @@ async function main() {
       await verifyProductBuild("http://localhost:43102")
     } else if (script === "scripts/seed-video-scenario.ts") {
       if (batch35Seeds.includes(rest[0]) && !["45439", "45441"].includes(url.port)) throw new Error("Batch35 seed requires its dedicated database")
-      if (rest.length !== 1 || ![...batch35Seeds, "sectors", "last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", "shift-eligibility-rules", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
+      if (rest.length !== 1 || ![...batch35Seeds, "volunteer-org-registrations", "sectors", "last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", "shift-eligibility-rules", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
       if (["sectors", "data-exports-archives", "event-activity-log"].includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Exports require the isolated video DB")
         await verifyProductBuild("http://localhost:43102")
@@ -227,8 +230,8 @@ async function main() {
     if (script === "videos/tools/prepare-demo.ts") await verifyProductBuild("http://localhost:43102")
     let tool = script
     if (["45433", "45439", "45441"].includes(url.port)) {
-      const proof = JSON.parse(await readFile("videos/output/product-server-43102.json", "utf8")) as ProductBuild
-      await verifyProductBuild("http://localhost:43102")
+      const proof = JSON.parse(await readFile(`videos/output/product-server-${productPort}.json`, "utf8")) as ProductBuild
+      await verifyProductBuild(productOrigin)
       await import("node:fs/promises").then(async fs => {
         for (const directory of ["videos/lib", "videos/tools", "scripts"]) await fs.cp(path.resolve(directory), path.join(proof.snapshot, directory), { recursive: true })
       })

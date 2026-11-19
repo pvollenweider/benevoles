@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:48:23.864Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "b453797ae6647115909cdae0f230038b001e68e32e29e11c3a4f56649a58f735",
+  "clipSha256": "60efda93428f2bbbe191c4f2e63b6e3a8794d9686ae485bef385cee049bc3409",
+  "scene": "validation",
+  "review": {
+    "heardOpening": "La taille du t-shirt n'a pas été renseignée.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "La taille du t-shirt n’a pas été renseignée.",
+        "visibleSeconds": 0,
+        "visible": "Formulaire d'inscription affiché avec les boutons radio de la taille de t-shirt non cochés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Confirmer affiche la question à corriger et conserve toutes les autres réponses.",
+        "visibleSeconds": 2.7,
+        "visible": "Défilement vers le bouton de confirmation et affichage de l'infobulle d'erreur « Veuillez sélectionner l'une de ces options. » sur la taille.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Le champ obligatoire est signalé",
+        "visibleSeconds": 7,
+        "visible": "L'infobulle de validation du navigateur reste visible sur le champ obligatoire.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'apparition de l'erreur sur le formulaire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

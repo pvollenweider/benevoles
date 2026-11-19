@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:43:01.284Z",
+  "videoSha256": "a8c2dc7ef840b7727f45b02b304a443d1d2f91f9e617b718ec1ba0a707d98a0f",
+  "promptSha256": "3c6383df857280dbe2038444d22e5ea47f6ed9789512887c6fe6132b1e93b27f",
+  "clipSha256": "44b1ed9297c617ae6fdfe70cba667e169f7c066cdf668cc139aef4cd475c44dc",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Si tu as un empêchement, utilise Annuler",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "utilise Annuler sur le créneau concerné.",
+        "visibleSeconds": 1.8,
+        "visible": "Un clic est effectué sur le bouton 'Annuler' du créneau du dimanche 29 novembre, affichant le bloc de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Vérifie le nom du créneau, puis confirme l’annulation.",
+        "visibleSeconds": 8.8,
+        "visible": "Clic sur le bouton rouge 'Oui, annuler', remplacé par un message vert confirmant l'annulation du créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Ton inscription à l’autre événement reste visible.",
+        "visibleSeconds": 11.2,
+        "visible": "Le créneau du dimanche 6 décembre reste affiché sous la liste des créneaux à venir.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

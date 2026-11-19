@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:40:50.961Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "6338431d6467d6f3db90cfcd5ac140a4c39e83fde6e2a0d81d88d4cb12032d5d",
+  "clipSha256": "1fd0f0f7b464718c35401d1bfe8477a8811ac8e7f147bf5b30e0408c2031f8c1",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Revenons côté organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons côté organisation pour vérifier les inscriptions réellement présentes.",
+        "visibleSeconds": 0.5,
+        "visible": "Page de gestion de l'événement côté organisation, onglet 'Inscriptions' affichant les 5 inscriptions actives.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Une erreur de champ se corrige sur place.",
+        "visibleSeconds": 5.2,
+        "visible": "Écran stable sur le tableau des inscriptions, en appui d'un rappel méthodologique général.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Une sélection indisponible se revoit dans le planning.",
+        "visibleSeconds": 8.1,
+        "visible": "Écran stable sur l'interface d'organisation sans changement d'onglet.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.2,
+        "spoken": "Dans cette démonstration, les personnes sont fictives",
+        "visibleSeconds": 22.2,
+        "visible": "Liste nominative d'exemples de bénévoles fictifs (Aline Martin, Zoé Papadopoulos, Nicolas Dupond) visible à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, chaleureuse et claire, avec un débit régulier et un fond musical léger et discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

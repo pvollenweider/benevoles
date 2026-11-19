@@ -15,7 +15,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Une inscription doit rester compréhensible même quand quelque chose se passe mal. Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau. Les exemples utilisent un événement de démonstration : tu verras les vrais messages du formulaire, puis une confirmation réelle.",
+      "transcript": "Une inscription doit rester compréhensible même quand quelque chose se passe mal. Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau. Tous ces exemples se déroulent sur un événement fictif. Tu verras chaque message du formulaire et le résultat d’une inscription réussie.",
       "fallbackDurationMs": 27000
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "id": "email",
-      "transcript": "Voici le message réellement reçu dans la boîte de démonstration. Il contient le créneau et le lien personnel. Si tu ne le trouves pas, regarde les indésirables et vérifie l’adresse donnée. Une page de succès ne prouve pas qu’un fournisseur email a accepté le message ; contacte l’association si la boîte n’existe pas ou si tu as fait une faute.",
+      "transcript": "Voici le message réellement reçu dans la boîte de démonstration. Il contient le créneau et le bouton Mes inscriptions. La phrase sous ce bouton indique que ton lien personnel ouvre toutes tes inscriptions auprès de cette organisation et doit rester privé. Si tu ne le trouves pas, regarde les indésirables et vérifie l’adresse donnée. Une page de succès ne prouve pas qu’un fournisseur email a accepté le message ; contacte l’association si la boîte n’existe pas ou si tu as fait une faute.",
       "fallbackDurationMs": 30000
     },
     {
@@ -97,5 +97,6 @@
     "response-loss": "Une réponse perdue, pas deux inscriptions",
     "invitation-success": "Public et invitation : deux confirmations",
     "result": "Vérifier le résultat côté organisation"
-  }
+  },
+  "musicGainDb": 0.9
 }

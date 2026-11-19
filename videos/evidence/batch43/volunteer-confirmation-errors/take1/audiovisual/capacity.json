@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:39:42.939Z",
+  "videoSha256": "2b8721c50ca7ce6741028bc13b06cec84521c003a48acfde8c79bd537847d720",
+  "promptSha256": "0d0481dd1a30452639160882ede10f90ef871d4b3a198efbb08d4902359811af",
+  "clipSha256": "019c885f37ad31ee1f93307694e91a0e81a1ca42085b165ca6a7e8700a4bda14",
+  "scene": "capacity",
+  "review": {
+    "heardOpening": "Une place peut être prise",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7.6,
+        "spoken": "La confirmation répond",
+        "visibleSeconds": 8,
+        "visible": "Clic sur le bouton 'Confirmer mon inscription' et chargement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Ta sélection n'est plus disponible",
+        "visibleSeconds": 9,
+        "visible": "Affichage du message d'erreur rouge 'Ta sélection n'est plus disponible'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Reviens au planning pour ajuster ton choix",
+        "visibleSeconds": 9,
+        "visible": "Le message et le lien 'Revenir au planning' sont affichés à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

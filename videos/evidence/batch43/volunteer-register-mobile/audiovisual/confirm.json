@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:57:42.793Z",
+  "videoSha256": "f66c2ed5e42daec5b072336412c4a20074d2c63891a4336cbeaa31dbd20600e2",
+  "promptSha256": "b0d2b92b78a4bf34ec5ae16ad9261d8dcd266616966c832ff7abd5c1c046591e",
+  "clipSha256": "6422ae90843f8abe97bdfa8b00797a6639284019a28e27f141ace6bdf2adab6e",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Un dernier coup d’œil au récapitulatif",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.2,
+        "spoken": "Un dernier coup d’œil au récapitulatif",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage du récapitulatif des informations et du créneau sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.6,
+        "spoken": "confirme ton inscription",
+        "visibleSeconds": 3.2,
+        "visible": "Bouton bleu « Confirmer mon inscription » visible après défilement puis cliqué",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "inscription",
+        "visibleSeconds": 4.1,
+        "visible": "Apparition du message de confirmation « Demande d'inscription reçue »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

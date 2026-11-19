@@ -2,7 +2,7 @@
   "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
   "slug": "volunteer-personal-registrations",
   "title": "Retrouver et gérer ses inscriptions",
-  "description": "Lire son planning et retirer un engagement, une attente, une offre ou une demande depuis son lien personnel.",
+  "description": "Retrouve tes inscriptions auprès d’une organisation, lis les informations d’un événement et gère tes places, attentes, offres et demandes.",
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
@@ -15,7 +15,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. Nous allons lire les informations utiles, puis montrer comment retirer chacun de ces engagements. Ce lien reste confidentiel : il permet d'agir sur tes inscriptions.",
+      "transcript": "Le lien personnel reçu par email ouvre toutes tes inscriptions à venir auprès de la même organisation, sans créer de compte. Pour les détails d’un événement, choisis Voir l’événement. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. On va lire les informations utiles, puis voir comment retirer chaque engagement.",
       "fallbackDurationMs": 30000
     },
     {
@@ -52,17 +52,23 @@
       "id": "return",
       "transcript": "Le lien S'inscrire à d'autres créneaux ramène à la page d'inscription. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
       "fallbackDurationMs": 30000
+    },
+    {
+      "id": "renew",
+      "transcript": "Reviens sur la page de toutes tes inscriptions. Ton lien personnel reste valable pour les prochains événements de cette organisation. Si tu penses l’avoir partagé, choisis Renouveler mon lien. Un email t’apporte le nouveau lien. L’ancien cesse de fonctionner et, si ton agenda était abonné, ouvre le nouveau lien pour t’abonner de nouveau.",
+      "fallbackDurationMs": 26000
     }
   ],
   "viewer": {
     "summary": "Dans cette vidéo, tu retrouves tes inscriptions depuis ton lien personnel et tu apprends à retirer une place, une attente, une offre ou une demande.",
     "steps": [
-      "Ouvre ton lien personnel : il affiche tes inscriptions sans créer de compte.",
+      "Ouvre ton lien personnel reçu par email, puis choisis « Voir l’événement » pour lire ses informations.",
       "Lis chaque carte : horaires, rendez-vous, consignes, carte et contact sur place.",
       "Repère le statut de chaque carte : place confirmée, liste d'attente, place proposée ou demande à valider.",
       "Pour annuler une place, clique sur « Annuler », puis confirme.",
       "Quitte une liste d'attente, refuse une place proposée ou retire une demande avec le bouton de sa carte.",
-      "Reviens à l'accueil de l'événement pour choisir un autre créneau si tes disponibilités changent."
+      "Reviens à l'accueil de l'événement pour choisir un autre créneau si tes disponibilités changent.",
+      "Dans la page de l’organisation, renouvelle ton lien s’il a été partagé. Le nouveau arrive par email."
     ],
     "remember": [
       "Ton lien personnel est confidentiel : il permet d'agir sur tes inscriptions.",

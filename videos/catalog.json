@@ -721,11 +721,34 @@
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-16",
-      "revision": 3,
+      "updatedAt": "2026-11-19",
+      "revision": 4,
       "themes": [
         "parcours-benevole"
       ]
+    },
+    {
+      "id": "VOLUNTEER_ORG_REGISTRATIONS",
+      "manifest": "volunteer-org-registrations",
+      "category": "volunteer-experience",
+      "tags": [
+        "lien-personnel",
+        "inscriptions",
+        "calendrier"
+      ],
+      "seedScenario": "volunteer-org-registrations",
+      "feature": "Page « Mes inscriptions » de l’organisation",
+      "level": "essentiel",
+      "published": true,
+      "audience": [
+        "benevole"
+      ],
+      "updatedAt": "2026-11-19",
+      "revision": 1,
+      "themes": [
+        "parcours-benevole"
+      ],
+      "thumbnailTitle": "Retrouver toutes mes inscriptions"
     },
     {
       "id": "VOLUNTEER_CALENDAR",
@@ -845,7 +868,7 @@
       ],
       "feature": "Inscription bénévole",
       "updatedAt": "2026-11-19",
-      "revision": 5,
+      "revision": 6,
       "level": "decouverte",
       "updated": "2026-11-19",
       "thumbnailTitle": "S’inscrire depuis son téléphone"

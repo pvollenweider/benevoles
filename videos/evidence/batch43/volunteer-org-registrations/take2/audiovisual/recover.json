@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:42:51.020Z",
+  "videoSha256": "a8c2dc7ef840b7727f45b02b304a443d1d2f91f9e617b718ec1ba0a707d98a0f",
+  "promptSha256": "0cb64944573697714dcfbcc7d0a2e0aaf931c8cefa2d458eba5410251ae35edf",
+  "clipSha256": "f4325c61499fa5944de485869a94bb600d04de940135a08eb310c9f8735a662b",
+  "scene": "recover",
+  "review": {
+    "heardOpening": "Tu as perdu ton lien personnel ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Ouvre J'ai perdu mon lien personnel.",
+        "visibleSeconds": 6,
+        "visible": "Clic sur le lien déroulant « J'ai perdu mon lien personnel » qui affiche le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Saisis l'adresse email que tu as utilisée pour t'inscrire.",
+        "visibleSeconds": 9.2,
+        "visible": "Saisie de l'adresse email leo.rochat@example.org dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Choisis Recevoir mon lien par email.",
+        "visibleSeconds": 12.5,
+        "visible": "Clic sur le bouton bleu « Recevoir mon lien par email »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "La page confirme que ta demande est enregistrée.",
+        "visibleSeconds": 13,
+        "visible": "Affichage du message de confirmation « Demande enregistrée »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

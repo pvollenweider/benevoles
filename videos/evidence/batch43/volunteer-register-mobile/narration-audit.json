@@ -1,0 +1,80 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T18:55:27.678Z",
+  "revalidatedAt": "2026-11-19T18:55:27.680Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "97245fd5dcf5b57ae96130cdc5643aaae503f3a1a2dfafc61fb4822afc3691db",
+      "recognized": "Envie de donner un coup de main ? Ouvre le lien reçu ou scanne le QR code affiché par l'association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "expected": "Envie de donner un coup de main ? Ouvre le lien reçu, ou scanne le QR code affiché par l’association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "discover",
+      "audioSha256": "64ec3f4c9bd23db47e0ad29a211998f67eb6e50d5bdb4747b3c56ebf6d495494",
+      "recognized": "Sur la page de l'événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "expected": "Sur la page de l’événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "choose",
+      "audioSha256": "2213cdbc3673794be545ca2709e84f43e2f0f1063d41ef00c87155b187d4d08e",
+      "recognized": "Choisis simplement le créneau qui te convient. Ici, on rejoint l'équipe d'accueil de quinze heures à dix-huit heures.",
+      "expected": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "details",
+      "audioSha256": "bf7ecd709e5befca1a0779079c2defe68255c43ba5993d921df693f4d2fa5262",
+      "recognized": "Ajoute ensuite tes coordonnées, elles servent uniquement à l'organisation de l'événement et à l'envoi des informations utiles.",
+      "expected": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l’organisation de l’événement et à l’envoi des informations utiles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preferences",
+      "audioSha256": "1c7790eee9c4b2cc35650103d4153ade3370a8898dc951dd69b37238c4657136",
+      "recognized": "Réponds à quelques questions pratiques, puis accepte la convention et l'utilisation de tes données pour cet événement.",
+      "expected": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation de tes données pour cet événement.",
+      "wordErrorRate": 0.05555555555555555,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "5326e56e6ff032c7035e1b17ce3189ef99838102bd16ba56c6094c6ddefb5dfb",
+      "recognized": "Un dernier coup d'œil au récapitulatif et c'est parti. Confirme ton inscription.",
+      "expected": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "success",
+      "audioSha256": "d818d76fa21db64facc5d34d0aedd0d40289f6d31db067593673fd649aa75889",
+      "recognized": "Et voilà, ta demande est envoyée. Regarde tes e-mails. Ouvre le courriel de confirmation pour vérifier ton créneau. Le bouton Mes inscriptions ouvre ton lien personnel pour tous tes créneaux auprès de cette association. La phrase sous le bouton te rappelle de garder ce lien pour toi.",
+      "expected": "Et voilà, ta demande est envoyée ! Regarde tes emails. Ouvre le courriel de confirmation pour vérifier ton créneau. Le bouton Mes inscriptions ouvre ton lien personnel pour tous tes créneaux auprès de cette association. La phrase sous le bouton te rappelle de garder ce lien pour toi.",
+      "wordErrorRate": 0.0425531914893617,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

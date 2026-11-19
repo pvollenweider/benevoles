@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:48:41.928Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "95de9a0ed9975144ccfa183bbef6da46c8aa2acb05f4060e4ebeef33236c20d4",
+  "clipSha256": "741683ff18877d6b735aaef1a443959536da6ed45f74c206f02dfb4a50a68bb5",
+  "scene": "network",
+  "review": {
+    "heardOpening": "Nous rétablissons maintenant la place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d’envoi pour montrer une interruption réseau.",
+        "visibleSeconds": 1,
+        "visible": "L'encadré d'erreur passe à « Connexion interrompue » au-dessus du bouton de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Le message dit que l’inscription n’a peut-être pas été reçue.",
+        "visibleSeconds": 6.3,
+        "visible": "Le texte d'avertissement rouge affiche « Ton inscription n'a peut-être pas été reçue. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "clique à nouveau sur Confirmer mon inscription",
+        "visibleSeconds": 10.8,
+        "visible": "Le clic sur le bouton a déjà eu lieu et la page affiche déjà l'écran de confirmation « Demande d'inscription reçue » dès 00:12.",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "Le clic sur « Confirmer mon inscription » est effectué à 00:10 et l'écran de confirmation s'affiche à 00:12, avant que la voix ne formule la consigne « clique à nouveau sur Confirmer mon inscription » (00:12 - 00:14)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, avec un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

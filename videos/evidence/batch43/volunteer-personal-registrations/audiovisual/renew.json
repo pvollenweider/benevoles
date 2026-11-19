@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:54:53.482Z",
+  "videoSha256": "671c6d9a8302689b9f2cc784bd4c6f1a423447d56deaa08cf2fb7ba4c24bbf62",
+  "promptSha256": "2bea8b1c1739e8ee7d29988ba7f6997a1d4f0d6319923b34d98982537ee12de2",
+  "clipSha256": "71f6cddbcbc6ff165d7878fda2b4c13d63afecdc47620fa362493c93919c81cf",
+  "scene": "renew",
+  "review": {
+    "heardOpening": "Reviens sur la page de toutes tes inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Reviens sur la page de toutes tes inscriptions.",
+        "visibleSeconds": 1,
+        "visible": "Page « Toutes mes inscriptions » affichée à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "choisis Renouveler mon lien.",
+        "visibleSeconds": 7.2,
+        "visible": "Clic sur le lien « Renouveler mon lien » dans l'encadré « Ton lien personnel ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "Un email t’apporte le nouveau lien.",
+        "visibleSeconds": 8,
+        "visible": "Bandeaux d'information confirmant le renouvellement et l'envoi d'un nouvel email.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

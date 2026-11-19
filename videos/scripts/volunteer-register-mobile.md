@@ -66,7 +66,7 @@ Chaleureux, détendu et complice. Les bénévoles donnent de leur temps : on les
 
 - **Écran** : confirmation et indication de l’e-mail envoyé.
 - **Action** : laisser le résultat visible. Le lien personnel n’est volontairement jamais révélé à l’écran après une inscription anonyme ; il part uniquement par e-mail.
-- **Voix** : « Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription. »
+- **Voix** : « Et voilà, ta demande est envoyée ! Regarde tes emails. Ouvre le courriel de confirmation pour vérifier ton créneau. Le bouton Mes inscriptions ouvre ton lien personnel pour tous tes créneaux auprès de cette association. La phrase sous le bouton te rappelle de garder ce lien pour toi. »
 
 ## Transcript
 
@@ -82,7 +82,7 @@ Réponds aux quelques questions pratiques, puis accepte la convention et l’uti
 
 Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.
 
-Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.
+Et voilà, ta demande est envoyée ! Regarde tes emails. Ouvre le courriel de confirmation pour vérifier ton créneau. Le bouton Mes inscriptions ouvre ton lien personnel pour tous tes créneaux auprès de cette association. La phrase sous le bouton te rappelle de garder ce lien pour toi.
 
 ## Contrôles avant publication
 
@@ -105,3 +105,5 @@ Narration conservée, audio restauré à contrôler par empreintes ou ASR indép
 ## Lot 41 — 16 novembre 2026
 
 Nouvelle narration Kore intégrale sur les sources du 1er novembre : demande publique reçue, suite par email et lien personnel seulement après preuve de l'adresse. Les anciennes notes de restauration sont historiques.
+
+La dernière scène affiche le corps HTML exact reçu dans Mailpit à la largeur du téléphone. Vérifier le bouton « Mes inscriptions », la phrase de confidentialité et la destination vers la page de l’organisation.

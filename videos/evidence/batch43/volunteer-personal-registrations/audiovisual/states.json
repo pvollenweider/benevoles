@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:52:48.667Z",
+  "videoSha256": "671c6d9a8302689b9f2cc784bd4c6f1a423447d56deaa08cf2fb7ba4c24bbf62",
+  "promptSha256": "6b42b1aea4d9e59b6c50bcdae11787ba09aafb7a1d4eae991b0aa8860c0a0f69",
+  "clipSha256": "ccd746be126d2ac8db105631e892246eda204ce83d7f5f1d697ad70ca2668402",
+  "scene": "states",
+  "review": {
+    "heardOpening": "Les autres cartes ne signifient pas la même chose",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Liste d'attente indique ta position, sans place confirmée",
+        "visibleSeconds": 3.3,
+        "visible": "Carte Buvette affichant le statut Liste d'attente - position 1",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Une place proposée affiche une échéance et un lien pour la prendre",
+        "visibleSeconds": 7.3,
+        "visible": "Carte Buvette avec mention Une place s'est proposée, date limite et bouton pour réserver",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Une demande sur validation attend la décision de l'organisation, qui te prévient par email",
+        "visibleSeconds": 14.8,
+        "visible": "Carte Navette du dimanche précisant Créneau sur validation et notification par email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

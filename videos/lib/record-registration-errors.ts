@@ -8,6 +8,7 @@ import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { linkToken } from "../../src/lib/token-vault"
+import { ORG_EMAIL_SCOPE_SENTENCE } from "../../src/lib/org-personal-page"
 import { loadManifest, type AudioMetadata } from "./manifest"
 import { prepareRegistrationErrorFixture, registrationErrorFixtureIp } from "./prepare-registration-error-fixture"
 import type { Cue } from "./sentence-timing"
@@ -114,7 +115,11 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await write(page.getByLabel("Email *", { exact: true }), "video.errors.alex@example.org")
       await write(page.getByLabel(/Téléphone/), "079 000 12 34")
       await at("puis acceptons la convention")
+      await at(0.39) /* mid-sentence */
       await agree()
+      assert(await page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox").isChecked())
+      assert(await page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox").isChecked())
+      checks.bothConsentsChecked = true
       await at("Avant d’envoyer, relis toujours")
       await page.getByLabel("Email *", { exact: true }).scrollIntoViewIfNeeded()
     })
@@ -148,7 +153,12 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await at("n'affiche pas le lien de gestion")
       checks.publicSuccessDoesNotExposeToken = true
     })
-    await scene("email", async () => { checks.publicConfirmationMailId = await mailFor("video.errors.alex@example.org") })
+    await scene("email", async () => {
+      checks.publicConfirmationMailId = await mailFor("video.errors.alex@example.org")
+      const message = page.frameLocator("iframe")
+      await message.getByRole("link", { name: "Mes inscriptions", exact: true }).waitFor()
+      await message.getByText(ORG_EMAIL_SCOPE_SENTENCE("Formation — inscription robuste"), { exact: true }).waitFor()
+    })
     await scene("overlap", async at => {
       await form("Vestiaire", "Aline", "video.errors.aline@example.org", undefined, undefined, async () => { await at("Essayons le vestiaire") })
       const before = await db.registration.count({ where: { eventId } })

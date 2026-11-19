@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:48:05.516Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "34cd593676ab1f9de19d72eca24ab4207e1b14384d201d5a6cc6175b88051589",
+  "clipSha256": "06bd277f8996f3b504bd974769d50e671414fa20227e467b6d567cd08820ca78",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une inscription doit rester compréhensible",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Une inscription doit rester compréhensible même quand quelque chose se passe mal.",
+        "visibleSeconds": 0,
+        "visible": "Encadré de titre affiché au centre : 'Confirmer son inscription et gérer les erreurs'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau.",
+        "visibleSeconds": 3,
+        "visible": "L'encadré disparaît pour afficher la page 'Inscription robuste – démonstration' avec la frise chronologique des créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Tu verras chaque message du formulaire et le résultat d’une inscription réussie.",
+        "visibleSeconds": 14,
+        "visible": "La vue générale de sélection des créneaux reste affichée en support de l'introduction.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:52:48.768Z",
+  "videoSha256": "671c6d9a8302689b9f2cc784bd4c6f1a423447d56deaa08cf2fb7ba4c24bbf62",
+  "promptSha256": "1099265bfc7fec578aeee29136ba6c246d5ef7de616ec2708825f7f6061a4a15",
+  "clipSha256": "82084020ddcb569329056bc8b6c9b0d229e3edea85e19962d7347c7f244b2efd",
+  "scene": "practical",
+  "review": {
+    "heardOpening": "Commençons par l'accueil confirmé.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "La carte indique le jour et les horaires.",
+        "visibleSeconds": 2.5,
+        "visible": "L'encadré Accueil affiche la date « samedi 28 novembre » et la plage horaire « 09:00–12:00 ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Le rendez-vous et les consignes expliquent où aller et comment se préparer.",
+        "visibleSeconds": 5.4,
+        "visible": "La section Lieu précise le point d'accueil et la section « À savoir » indique d'arriver 15 minutes avant au stand bleu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Le lien carte aide à retrouver le lieu.",
+        "visibleSeconds": 8.9,
+        "visible": "Le lien cliquable « Voir sur la carte » est affiché à côté de la description du lieu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "La personne de contact et son téléphone sont réservés aux inscrits",
+        "visibleSeconds": 12.2,
+        "visible": "Le contact du créneau affiche le nom de Pierre Test et son numéro de téléphone.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, avec un débit régulier parfaitement calé sur les informations fixes à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

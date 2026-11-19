@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:12:21.895Z",
+  "videoSha256": "8ada92cbe89fa11708d50d9ea6e7b4e80fe2dc4e0cdc97c2352caf3393569fd0",
+  "promptSha256": "4f2452aea400f1d8d97f570372ad46fa8631e9950df85893c5587b1e98a907a4",
+  "clipSha256": "28fda70d5a67b58e4b0e034f356d6de80774a4c42c6f941e926f1df519460eed",
+  "scene": "personal",
+  "review": {
+    "heardOpening": "Sur la page Mes inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Le panneau Ton lien personnel rappelle que cet accès permet aussi de modifier les inscriptions.",
+        "visibleSeconds": 5,
+        "visible": "Défilement vers le panneau intitulé « Ton lien personnel »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "choisissons Renouveler mon lien.",
+        "visibleSeconds": 13,
+        "visible": "Clic sur le lien « Renouveler mon lien » et apparition du message de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "Un nouveau lien arrive par email.",
+        "visibleSeconds": 15.8,
+        "visible": "Affichage de l'email reçu contenant le bouton « Voir mes inscriptions »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.9,
+        "spoken": "Ouvrons le nouveau lien pour retrouver ses créneaux.",
+        "visibleSeconds": 19,
+        "visible": "Retour sur la page « Toutes mes inscriptions »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le déroulement des actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:57:29.927Z",
+  "videoSha256": "f66c2ed5e42daec5b072336412c4a20074d2c63891a4336cbeaa31dbd20600e2",
+  "promptSha256": "49be947f69517dc4e6e4b6c44cb85a0f833d430385e0276837934a1c9c30e19e",
+  "clipSha256": "92a863f6750865e04f334f88ea107a22468961e899f69429624d9e8b31322615",
+  "scene": "choose",
+  "review": {
+    "heardOpening": "Choisis simplement le créneau qui te convient",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Choisis simplement le créneau qui te convient.",
+        "visibleSeconds": 0.4,
+        "visible": "Sélection du créneau '15h–18h · Accueil' dans la liste des créneaux disponibles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "qui te convient",
+        "visibleSeconds": 1.3,
+        "visible": "Clic sur le bouton bleu 'Continuer (1 nouveau créneau)'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.9,
+        "spoken": "Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
+        "visibleSeconds": 1.9,
+        "visible": "Affichage de la page 'Tes informations' récapitulant 'Accueil / Samedi 28 novembre · 15:00–18:00'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

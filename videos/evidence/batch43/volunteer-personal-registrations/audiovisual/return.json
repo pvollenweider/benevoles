@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:54:45.435Z",
+  "videoSha256": "671c6d9a8302689b9f2cc784bd4c6f1a423447d56deaa08cf2fb7ba4c24bbf62",
+  "promptSha256": "3d3516a9542702a988e2124bbc4aa09ce851a3ba86bf31540b7b308428c3bf56",
+  "clipSha256": "af9d11b8d55a8bcc77aec6cd42b25e0f8e1b71b39d1e5276f545be0b805f38f2",
+  "scene": "return",
+  "review": {
+    "heardOpening": "Le lien S'inscrire à d'autres créneaux",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le lien S'inscrire à d'autres créneaux ramène à la page d'inscription.",
+        "visibleSeconds": 0.9,
+        "visible": "Clic sur le lien puis affichage de la page d'inscription de la Fête du Village de Montvert.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Tu peux regarder les places disponibles et choisir un autre créneau",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de la frise chronologique avec les créneaux et places disponibles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Retirer une inscription ne supprime pas automatiquement ton profil",
+        "visibleSeconds": 10,
+        "visible": "Écran stable sur la page d'inscription pour cette explication générale.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "contacte l'organisation.",
+        "visibleSeconds": 16.8,
+        "visible": "Écran stable maintenu jusqu'à la fin de la consigne.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire, posée et bien synchronisée avec le retour à la page d'inscription."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

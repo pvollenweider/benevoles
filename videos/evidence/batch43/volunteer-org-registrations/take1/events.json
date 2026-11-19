@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:39:23.435Z",
+  "videoSha256": "e0dae3d791960f3ac4bd93ea2bf789cf95180bf70247be64e3aa5ece9b571c89",
+  "promptSha256": "0aadd34d67f13d3a1b86d01b18efbc557119bc01ffb121d3b5d90d762d09de30",
+  "clipSha256": "77faba5a2e42e68daf2e0f8deb559f5cc0942cfd8f9827c4b5eee5ab48577590",
+  "scene": "events",
+  "review": {
+    "heardOpening": "Dans Mes inscriptions, tu vois ton prochain",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Mes inscriptions, tu vois ton prochain créneau confirmé",
+        "visibleSeconds": 5.5,
+        "visible": "L'écran reste bloqué sur le courriel avec le bouton 'Voir mes inscriptions' jusqu'à 00:05.5, et la section spécifique du prochain créneau confirmé n'apparaît pas à l'écran",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "puis tous tes créneaux à venir",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de la section 'Tous tes créneaux à venir'",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Ici, l’Accueil de la Fête du parc et la Buvette du Marché des voisins sont sur la même page",
+        "visibleSeconds": 6,
+        "visible": "Les cartes 'Fête du parc - Accueil' et 'Marché des voisins - Buvette' sont visibles ensemble sur la page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Désynchronisation majeure : la page 'Mes inscriptions' n'apparaît qu'à 00:05.5 alors que la voix décrit son contenu dès 00:00 pendant que l'écran d'accueil/email reste affiché.",
+      "La section 'prochain créneau confirmé' mentionnée au début n'est pas visible lors du chargement de la page à 00:05.5 (l'affichage débute directement sur 'Tous tes créneaux à venir')."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

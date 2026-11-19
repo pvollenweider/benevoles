@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { createHash } from "node:crypto"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
@@ -234,7 +235,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const batch22French = ["front-desk-access", "shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "message-templates", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
+  const batch22French = ["volunteer-org-registrations", "front-desk-access", "shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "message-templates", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
   const frenchChromiumRevision = batch22French || slug === "members-import" ? "1254" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
@@ -439,7 +440,8 @@ async function main() {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      await page.goto(slug === "message-templates" ? `${baseUrl}/admin/settings/admins` : slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+      const personalTour = slug === "volunteer-personal-registrations" ? (await import("../lib/org-registrations-fixture")).personalTourOrgToken : null
+      await page.goto(personalTour ? `${baseUrl}/mes-inscriptions/${personalTour}` : slug === "message-templates" ? `${baseUrl}/admin/settings/admins` : slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
     }
 
     if (slug === "event-activity-log") {
@@ -553,7 +555,9 @@ async function main() {
     recording = true
     startedAt = performance.now()
 
-    if (slug === "shift-roster-visibility") {
+    if (slug === "volunteer-org-registrations") {
+      await (await import("../lib/record-org-registrations")).recordOrgRegistrations({ page, mailbox: mailpitBase, scene, tap })
+    } else if (slug === "shift-roster-visibility") {
       await (await import("../lib/record-shift-roster")).recordShiftRoster({ page, base: baseUrl, dir, scene, tap, settle, fill: fillVisibly })
     } else if (betaSlugs.includes(slug)) {
       const beta = await import("../lib/record-beta-features")
@@ -601,6 +605,14 @@ async function main() {
     })
 
     const registrationEmail = "alex.martin@example.org"
+    const confirmationQuery = `to:${registrationEmail} subject:"Inscription confirmée"`
+    const confirmationMessages = async () => {
+      const response = await page.request.get(`${mailpitBase}/api/v1/search`, { params: { query: confirmationQuery } })
+      if (!response.ok()) throw new Error("Mobile confirmation mailbox unavailable")
+      const body = await response.json() as { messages?: { ID: string; To: { Address: string }[] }[] }
+      return (body.messages ?? []).filter(mail => mail.To.some(recipient => recipient.Address === registrationEmail))
+    }
+    const previousConfirmations = new Set((await confirmationMessages()).map(mail => mail.ID))
     await scene("details", async () => {
       await fillVisibly(page, page.getByRole("textbox", { name: "Prénom", exact: true }), "Alex", 180)
       await fillVisibly(page, page.getByRole("textbox", { name: "Nom", exact: true }), "Martin", 180)
@@ -632,11 +644,38 @@ async function main() {
       await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
     })
 
-    await scene("success", async () => {
-      // A public sign-up without proof of the address: the neutral page sends to the emails (AUTHZ-01).
+    await scene("success", async at => {
       const emailNotice = page.getByText(/^Merci pour ton engagement\. Vérifie tes emails/)
       await emailNotice.scrollIntoViewIfNeeded()
-      await page.waitForTimeout(900)
+      await at("Ouvre le courriel de confirmation")
+      const incoming = (await confirmationMessages()).filter(mail => !previousConfirmations.has(mail.ID))
+      if (incoming.length !== 1) throw new Error("Expected one new mobile confirmation email")
+      const message = await page.request.get(`${mailpitBase}/api/v1/message/${encodeURIComponent(incoming[0].ID)}`)
+      if (!message.ok()) throw new Error("The received mobile confirmation could not be read")
+      const body = await message.json() as { HTML?: string }
+      if (!body.HTML) throw new Error("The received mobile confirmation has no HTML body")
+      // Render the exact MIME body at phone width, without Mailpit's desktop chrome.
+      await page.goto("about:blank")
+      await page.setContent(body.HTML, { waitUntil: "domcontentloaded" })
+      const { ORG_EMAIL_SCOPE_SENTENCE } = await import("../../src/lib/org-personal-page")
+      const button = page.getByRole("link", { name: "Mes inscriptions", exact: true })
+      const target = new URL(await button.getAttribute("href") ?? "")
+      if (target.hostname !== "default.benevol.app" || !target.pathname.startsWith("/mes-inscriptions/")) {
+        throw new Error("The email does not open the organisation's registrations")
+      }
+      const scope = ORG_EMAIL_SCOPE_SENTENCE("Fêtes de Montvert")
+      const scopeText = page.getByText(scope, { exact: true })
+      await scopeText.waitFor()
+      await button.scrollIntoViewIfNeeded()
+      for (const element of [button, scopeText]) {
+        const frame = await element.boundingBox()
+        if (!frame || frame.y < 0 || frame.y + frame.height > manifest.viewport.height) throw new Error("Mobile confirmation text is outside the viewport")
+      }
+      await page.screenshot()
+      await writeFile(path.join(dir, "mobile-confirmation-mail.json"), JSON.stringify({
+        messageId: incoming[0].ID, recipient: registrationEmail, button: "Mes inscriptions", scope,
+        htmlSha256: createHash("sha256").update(body.HTML).digest("hex"),
+      }, null, 2) + "\n")
     })
     } else if (slug === "admin-navigation") {
       await scene("welcome", async () => {
@@ -2390,9 +2429,13 @@ async function main() {
       for (const status of ["active", "waiting", "offered", "requested"]) {
         if (!initial.registrations.some((r: { status: string }) => r.status === status)) throw new Error(`Personal demo missing ${status}`)
       }
+      const orgPage = page.url()
       await scene("welcome", async (at) => {
-        await page.screencast.showChapter(manifest.title, { description: "Ton planning et tes choix, depuis ton lien personnel", duration: 2_300 })
-        await page.getByRole("heading", { name: "Mes inscriptions" }).waitFor()
+        await page.getByRole("heading", { name: "Toutes mes inscriptions", exact: true }).waitFor()
+        await at("Pour les détails")
+        const list = page.getByRole("region", { name: "Tous tes créneaux à venir" })
+        await tap(page, list.getByRole("link", { name: /Voir l’événement|Voir l'événement/ }).first())
+        await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).waitFor()
         await at("Ici, Camille a une place")
         await page.getByText(/Créneau sur validation/).scrollIntoViewIfNeeded()
       })
@@ -2464,6 +2507,14 @@ async function main() {
         await page.getByRole("heading", { name: "Fête du village de Montvert", exact: true }).waitFor()
         await at("Retirer une inscription ne supprime")
         await page.getByRole("button", { name: /: sélectionner/ }).first().scrollIntoViewIfNeeded()
+      })
+      await scene("renew", async at => {
+        await page.goto(orgPage)
+        const renew = page.getByRole("button", { name: "Renouveler mon lien", exact: true })
+        await renew.scrollIntoViewIfNeeded()
+        await at("Si tu penses l’avoir partagé")
+        await tap(page, renew)
+        await page.getByText(/^Ton lien a été renouvelé/).waitFor()
       })
     } else if (slug === "volunteer-calendar") {
       const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`

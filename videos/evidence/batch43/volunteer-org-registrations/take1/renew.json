@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:39:35.983Z",
+  "videoSha256": "e0dae3d791960f3ac4bd93ea2bf789cf95180bf70247be64e3aa5ece9b571c89",
+  "promptSha256": "ecdeb0482124432a07913926141e02581055d28d5989862b88c0619d55664f26",
+  "clipSha256": "4eccc03b7a8162ad74c6b9d8f42ce76c2fb99e278ef06fc701cb91dd765ab83e",
+  "scene": "renew",
+  "review": {
+    "heardOpening": "Si tu penses avoir partagé ton lien personnel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "choisis Renouveler mon lien",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur l'option 'Renouveler mon lien' dans l'encadré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "La confirmation indique que l’ancien lien ne fonctionne plus",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage du message de confirmation précisant que l'ancien lien ne fonctionne plus",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Ouvre le nouvel email",
+        "visibleSeconds": 8.4,
+        "visible": "Affichage du nouvel email avec le bouton 'Voir mes inscriptions'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

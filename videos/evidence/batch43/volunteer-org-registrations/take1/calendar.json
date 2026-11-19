@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T17:39:43.697Z",
+  "videoSha256": "e0dae3d791960f3ac4bd93ea2bf789cf95180bf70247be64e3aa5ece9b571c89",
+  "promptSha256": "f3d5256b6ebb3e6cfac0a246e8a903b1ec4d782dbe01924506673fb5adc6d434",
+  "clipSha256": "f655d951f83dd30bcb52ca51f06fd8e74c09eb5873083ef7a9bb3137d19f27ae",
+  "scene": "calendar",
+  "review": {
+    "heardOpening": "La carte Mon calendrier permet de t'abonner",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La carte Mon calendrier permet de t'abonner une seule fois",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la carte Mon calendrier en haut de page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "ouvre la rubrique correspondante",
+        "visibleSeconds": 7.5,
+        "visible": "Clic et dépliement de la rubrique 'Google Agenda ou autre agenda en ligne'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Copie l'adresse de l'abonnement",
+        "visibleSeconds": 10.8,
+        "visible": "Clic sur le bouton 'Copier l'adresse de l'abonnement' affichant la mention 'Adresse copiée'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:13:02.922Z",
+  "videoSha256": "8ada92cbe89fa11708d50d9ea6e7b4e80fe2dc4e0cdc97c2352caf3393569fd0",
+  "promptSha256": "959e6cee7b5d4752a5020d8428774ca53e21eb3997d61f608224b0e2af32ec86",
+  "clipSha256": "571a09da92b6beac67fe2eeda00b2be7908a8d0e823936a4b50645c1e6afadfb",
+  "scene": "admin",
+  "review": {
+    "heardOpening": "L'organisateur travaille dans son administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Dans les inscriptions, il retrouve les personnes et les réponses aux questions de l'événement.",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la liste des inscriptions avec les réponses aux questions pour chaque bénévole.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Dans les membres, il peut consulter les disponibilités et les notes internes de préparation.",
+        "visibleSeconds": 8.7,
+        "visible": "Affichage de l'onglet Membres avec les colonnes de disponibilités et notes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Regardons la fiche de Léa, puis comparons avec les deux vues précédentes.",
+        "visibleSeconds": 14.5,
+        "visible": "Ouverture de la fenêtre Modifier le membre pour Léa Müller avec sa note interne.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Sa page Mes inscriptions ne montre pas les notes internes.",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de la page publique Mes inscriptions de Léa Müller.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "Le responsable reçoit les contacts de son équipe, pas la fiche membre complète.",
+        "visibleSeconds": 22,
+        "visible": "Affichage de la vue Responsable - Accueil avec la liste des contacts de l'équipe.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

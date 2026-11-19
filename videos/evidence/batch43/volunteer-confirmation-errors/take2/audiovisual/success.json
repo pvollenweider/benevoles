@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:48:36.449Z",
+  "videoSha256": "feff7adde4af70c5f5527257e3e3c1d7b99514d1dbeeb503db9cdfe3fded31c5",
+  "promptSha256": "2e08b1fd3cd64fd849da206b71b76d168a79d7c05ad737ca5b779d9cbbbea0cb",
+  "clipSha256": "69bc4e358c544f8e1d743120cfed4dca14d158ffcc99c6426c38c6d7ac219c57",
+  "scene": "success",
+  "review": {
+    "heardOpening": "La connexion est rétablie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La connexion est rétablie et la demande est envoyée.",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la page de confirmation avec le message de fin de processus.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "La page affiche Demande d'inscription reçue et invite à regarder tes emails",
+        "visibleSeconds": 3.8,
+        "visible": "Titre « Demande d'inscription reçue » et consigne « Vérifie tes emails » bien visibles dans le bloc central.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Avec un formulaire public ordinaire, la page n'affiche pas le lien de gestion",
+        "visibleSeconds": 11.5,
+        "visible": "Seul le bouton « Revenir à l'événement » est proposé, aucun lien de gestion direct n'est présent.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, parfaitement audible sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
