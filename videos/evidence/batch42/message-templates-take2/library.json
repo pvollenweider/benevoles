@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:25:28.428Z",
+  "videoSha256": "1046f21c5fe4569bdeba9fe5d02e857d7f7b60d5159a8fa35f04ba34bc19957d",
+  "promptSha256": "c4974b3c37ba81e4cd892ee52709653a70f302231983a269df8e2f21ebe6ffdb",
+  "clipSha256": "13ea0687e9fdd84f8c6fa305c092118bec82a503c73706335fce66daaa29f3f2",
+  "scene": "library",
+  "review": {
+    "heardOpening": "Pour prévenir votre équipe qu'il va pleuvoir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "ouvrez Modèles de messages",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur l'onglet Modèles de messages et affichage de la page correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "puis Ajouter des modèles",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture de la fenêtre modale Ajouter des modèles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Repérez l'alerte pluie dans Météo et imprévus",
+        "visibleSeconds": 13.9,
+        "visible": "Défilement de la liste et affichage de la catégorie Météo et imprévus avec Alerte météo : pluie",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

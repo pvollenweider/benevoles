@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:43:23.512Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "4e18b7d59ac99a6f7fcfa6b900fbe38114804463c3f061f669d8272f33623fc5",
+  "clipSha256": "787759ce74cea11bc1f44d3bdf3f242fbf2486b7f6479c7b5a3d33634c8b0a6b",
+  "scene": "template-library",
+  "review": {
+    "heardOpening": "Pour partir d'un texte prêt à l'emploi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "ouvrez les modèles de messages de l'organisation",
+        "visibleSeconds": 0,
+        "visible": "La page Paramètres > Modèles de messages est déjà affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Cliquez sur Ajouter des modèles",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur le lien 'Ajouter des modèles' ouvrant la fenêtre modale correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "La bibliothèque rassemble des textes par catégorie, avec un aperçu de l'email",
+        "visibleSeconds": 6,
+        "visible": "Fenêtre modale affichant la liste des modèles par catégorie avec les liens 'Aperçu'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

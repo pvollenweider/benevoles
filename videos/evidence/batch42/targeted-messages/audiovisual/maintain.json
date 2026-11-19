@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:44:38.307Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "95ed5c2ec31ba24a7744499fdd6f172f1cf60cedb1dc074daabaec6f63be3cca",
+  "clipSha256": "b7804730d77de354581d8bbcb4c1ec9a5d2e9a5fcdf4e614e96f8c1f350abb22",
+  "scene": "maintain",
+  "review": {
+    "heardOpening": "Les modèles peuvent évoluer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Ouvrez Modifier, ajustez le nom ou le texte et enregistrez.",
+        "visibleSeconds": 2.1,
+        "visible": "Le formulaire de modification s'ouvre, le nom est complété puis le bouton Enregistrer est cliqué.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "La suppression demande une confirmation : vous pouvez encore annuler.",
+        "visibleSeconds": 8.2,
+        "visible": "Une fenêtre modale s'affiche pour confirmer ou annuler la suppression du modèle.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Pour chaque nouveau briefing, gardez le même réflexe : choisir les bonnes personnes, vérifier le texte personnalisé, confirmer, puis consulter le résultat.",
+        "visibleSeconds": 25.1,
+        "visible": "Navigation vers l'onglet Événements et la section Messages montrant la sélection des destinataires et l'historique.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

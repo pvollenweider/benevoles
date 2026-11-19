@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:44:08.753Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "e8051ce532a11cff2da59049558b85e16a1cca3c350adcf76c84539ea4cba748",
+  "clipSha256": "6114f0f287d02e5d884e3f7f9d74da7d4e2cdfa12fdc2686f5229d09112cd5df",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Quand l'envoyer permet de choisir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "gardons l'envoi immédiat",
+        "visibleSeconds": 4.5,
+        "visible": "L'option 'Maintenant' reste cochée sous la section 'Quand l'envoyer ?'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Ouvrons maintenant l'aperçu",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur 'Voir l'aperçu et envoyer' et affichage de la modale 'Aperçu de l'email'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte",
+        "visibleSeconds": 9.5,
+        "visible": "L'email affiche le prénom Théo, l'événement Fête du village de Montvert, le poste Buvette et la tranche horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "retournez au message, corrigez-la",
+        "visibleSeconds": 21.5,
+        "visible": "Fermeture de l'aperçu avec retour à la saisie du message, puis ajout d'une précision dans le champ texte",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

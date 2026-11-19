@@ -18,7 +18,8 @@
     "push": "Email et notification : deux canaux",
     "confirm": "Confirmer sans se précipiter",
     "result": "Contrôler le résultat réel",
-    "maintain": "Entretenir ses modèles"
+    "maintain": "Entretenir ses modèles",
+    "template-library": "Partir d'un texte prêt à l'emploi"
   },
   "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep the same voice throughout, never sound like an advertisement.",
   "viewport": {
@@ -43,8 +44,13 @@
       "fallbackDurationMs": 38000
     },
     {
+      "id": "template-library",
+      "transcript": "Pour partir d'un texte prêt à l'emploi, ouvrez les modèles de messages de l'organisation. Cliquez sur Ajouter des modèles. La bibliothèque rassemble des textes par catégorie, avec un aperçu de l'email. Le tutoriel sur les modèles détaille ce parcours.",
+      "fallbackDurationMs": 19500
+    },
+    {
       "id": "template-create",
-      "transcript": "Pour une consigne que vous réutilisez, ouvrez les modèles de messages de l'organisation, puis Nouveau modèle. Son nom sert à le retrouver dans l'administration : les bénévoles ne le voient pas. Prenons Briefing avant le créneau : un nom précis aide les autres organisateurs à retrouver le bon texte. L'objet annonce le sujet de l'email. Dans le message, une salutation, le rendez-vous et les consignes suffisent : les bénévoles n'ont pas besoin d'un long roman. Donnons-lui un objet court et un message accueillant, avec une consigne concrète. Enregistrons. Le modèle est maintenant disponible pour préparer un autre envoi, mais sa création n'a envoyé aucun email.",
+      "transcript": "Pour écrire votre propre texte, fermez la bibliothèque et cliquez sur Nouveau modèle. Son nom sert à le retrouver dans l'administration : les bénévoles ne le voient pas. Prenons Briefing avant le créneau : un nom précis aide les autres organisateurs à retrouver le bon texte. Pour la catégorie, choisissons Infos pratiques. L'objet annonce le sujet de l'email. Dans le message, une salutation, le rendez-vous et les consignes suffisent : les bénévoles n'ont pas besoin d'un long roman. Donnons-lui un objet court et un message accueillant, avec une consigne concrète. Enregistrons. Le modèle est maintenant disponible pour préparer un autre envoi, mais sa création n'a envoyé aucun email.",
       "fallbackDurationMs": 55000
     },
     {
@@ -93,7 +99,7 @@
     "steps": [
       "Dans Messages, choisissez le public : tous les inscrits, un poste, un créneau, la liste d'attente ou les invités sans créneau.",
       "Vérifiez le compteur de destinataires après chaque choix.",
-      "Créez un modèle dans les modèles de messages de l'organisation, avec un nom, un objet et un texte court.",
+      "Partez de « Ajouter des modèles » pour réutiliser un texte de la bibliothèque. Pour votre propre modèle, renseignez le nom, la catégorie, l'objet et le message.",
       "Dans le message, choisissez le modèle puis cliquez sur « Utiliser ce modèle » ; « Rétablir le texte précédent » récupère votre version.",
       "N'utilisez que les variables proposées, compatibles avec le public choisi.",
       "Ouvrez l'aperçu, relisez l'email du premier destinataire, puis confirmez l'envoi.",

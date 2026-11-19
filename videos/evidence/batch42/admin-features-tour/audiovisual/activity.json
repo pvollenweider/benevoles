@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:59:17.260Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "36163116f04c214c642289fc6921ea5d1dda4e961431b08c22289822f3f5c862",
+  "clipSha256": "b61ec20427e1801cce743aadf5b156127cd6976a8507c9a7e7628dc70308c278",
+  "scene": "activity",
+  "review": {
+    "heardOpening": "Enfin, le journal d'activité garde la chronologie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "le journal d'activité garde la chronologie",
+        "visibleSeconds": 0.5,
+        "visible": "L'onglet Journal est ouvert avec l'historique chronologique des actions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "On sait ce qui s'est passé, qui l'a fait et quand.",
+        "visibleSeconds": 10.8,
+        "visible": "Les entrées du journal affichent le nom de l'auteur, l'action réalisée et la date/heure",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "La recherche globale permet ensuite de tout retrouver rapidement.",
+        "visibleSeconds": 15.8,
+        "visible": "Saisie dans la barre de recherche en haut puis affichage de la page des résultats de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, bien synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

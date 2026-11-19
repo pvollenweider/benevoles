@@ -9,6 +9,7 @@ import { workloadWarnings } from "../src/lib/workload"
 import { staffingSummary } from "../src/lib/staffing"
 import { selectRecipients, selectInvitedWithoutShift } from "../src/lib/targeted-message"
 import { localDateTimeToUtc } from "../src/lib/time-zone"
+import { resolveDay } from "../src/lib/event-availability"
 import { mkdir, writeFile } from "node:fs/promises"
 import { expectedMemberV2, createSeedProofV2 } from "../videos/lib/member-fixture-v2"
 
@@ -216,6 +217,17 @@ async function main() {
     console.log(`✓ Reminder fixture: +48h/+24h/+3h local ${timeZone}; closed confirmed slot; draft/disabled witnesses; requested/waiting exclusions; separate change/cancel shifts; generated ${now.toISOString()}`)
     return
   }
+  if (scenario === "message-templates") {
+    const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const registrations = await prisma.registration.findMany({ where: { eventId: event.id }, include: { volunteer: true, shift: true } })
+    const recipients = selectRecipients(registrations, { kind: "event" })
+    if (!recipients.length || recipients.some(person => !person.volunteer.email?.endsWith("@example.org"))) {
+      throw new Error("Message templates requires confirmed fictional recipients")
+    }
+    await prisma.messageTemplate.deleteMany({ where: { organizationId: "default", name: "Alerte météo : pluie", category: "Météo et imprévus" } })
+    console.log("✓ Message templates: fictional recipients and rain template reset")
+    return
+  }
   if (scenario === "targeted-messages") {
     const recorderModel = await prisma.messageTemplate.findMany({ where: {
       organizationId: "default", name: "Briefing avant le créneau",
@@ -264,6 +276,26 @@ async function main() {
   }
   if (scenario === "staffing-gaps") {
     const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const photographer = await prisma.volunteer.findFirstOrThrow({
+      where: { organizationId: "default", email: "julien.favre@example.org", firstName: "Julien", lastName: "Favre" },
+    })
+    const saturday = event.startDate!
+    const response = await prisma.availabilityDay.findFirstOrThrow({
+      where: { eventId: event.id, date: saturday, request: { volunteerId: photographer.id, answeredBy: "volunteer" } },
+    })
+    const availability = resolveDay({ date: saturday.toISOString().slice(0, 10), ranges: [{ start: "10:00", end: "12:00" }] }, "Europe/Zurich")
+    if (!availability.ok) throw new Error(availability.error)
+    await prisma.availabilityDay.update({
+      where: { id: response.id },
+      data: {
+        ranges: {
+          deleteMany: {},
+          create: availability.value.ranges.map(({ startTime, endTime, startsAt, endsAt }) => ({
+            eventId: event.id, startTime, endTime, startsAt, endsAt,
+          })),
+        },
+      },
+    })
     const accueil = await prisma.shift.findFirstOrThrow({ where: { eventId: event.id, roleName: "Accueil", startTime: "09:00" } })
     await prisma.shift.update({ where: { id: accueil.id }, data: { capacity: 6 } })
     await prisma.shift.updateMany({ where: { eventId: event.id, roleName: "Accueil", startTime: "15:00" }, data: { status: "closed" } })

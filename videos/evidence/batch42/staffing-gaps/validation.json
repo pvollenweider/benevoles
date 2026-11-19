@@ -1,0 +1,83 @@
+{
+  "id": "STAFFING_GAPS",
+  "slug": "staffing-gaps",
+  "validatedAt": "2026-11-19T12:13:49.994Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 268320,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 26027,
+      "audioMs": 26026,
+      "driftMs": 1
+    },
+    {
+      "id": "overview",
+      "visualMs": 23054,
+      "audioMs": 23053,
+      "driftMs": 1
+    },
+    {
+      "id": "empty",
+      "visualMs": 23757,
+      "audioMs": 23756,
+      "driftMs": 1
+    },
+    {
+      "id": "needs",
+      "visualMs": 25353,
+      "audioMs": 25353,
+      "driftMs": 0
+    },
+    {
+      "id": "share",
+      "visualMs": 27696,
+      "audioMs": 27694,
+      "driftMs": 2
+    },
+    {
+      "id": "requests",
+      "visualMs": 26509,
+      "audioMs": 26508,
+      "driftMs": 1
+    },
+    {
+      "id": "waiting",
+      "visualMs": 25755,
+      "audioMs": 25755,
+      "driftMs": 0
+    },
+    {
+      "id": "leaders",
+      "visualMs": 23750,
+      "audioMs": 23749,
+      "driftMs": 1
+    },
+    {
+      "id": "full",
+      "visualMs": 24323,
+      "audioMs": 24322,
+      "driftMs": 1
+    },
+    {
+      "id": "action",
+      "visualMs": 29304,
+      "audioMs": 29303,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 17,
+  "music": {
+    "voicedWindows": 248,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.5,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -33.3,
+    "loudestMusicOnlyLufs": -33.3,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

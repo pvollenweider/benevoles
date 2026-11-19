@@ -1,0 +1,88 @@
+{
+  "appliedAt": "2026-11-19T10:52:13.850Z",
+  "sourceHash": "e900c2801715256b9d26d323b910fda374fe4a0ca69ee831f7ce5d6fe10d33f9",
+  "sourceDuration": 274.4,
+  "ranges": [
+    {
+      "id": "intro",
+      "start": 0,
+      "end": 12.952
+    },
+    {
+      "id": "organization",
+      "start": 12.952,
+      "end": 26.285
+    },
+    {
+      "id": "team",
+      "start": 26.285,
+      "end": 43.316
+    },
+    {
+      "id": "lifecycle",
+      "start": 43.316,
+      "end": 60.743
+    },
+    {
+      "id": "appearance",
+      "start": 60.743,
+      "end": 74.37525
+    },
+    {
+      "id": "duplicate",
+      "start": 74.37525,
+      "end": 85.233417
+    },
+    {
+      "id": "shift-methods",
+      "start": 85.233417,
+      "end": 99.765958
+    },
+    {
+      "id": "shift-fields",
+      "start": 114.61,
+      "end": 133.093521
+    },
+    {
+      "id": "registrations",
+      "start": 133.093521,
+      "end": 148.684666
+    },
+    {
+      "id": "members",
+      "start": 148.684666,
+      "end": 163.002729
+    },
+    {
+      "id": "questions",
+      "start": 163.002729,
+      "end": 181.945
+    },
+    {
+      "id": "pages",
+      "start": 181.945,
+      "end": 197.301
+    },
+    {
+      "id": "messages",
+      "start": 197.301,
+      "end": 223.509375
+    },
+    {
+      "id": "reminders",
+      "start": 223.509375,
+      "end": 235.915292
+    },
+    {
+      "id": "reports",
+      "start": 235.915292,
+      "end": 256.647709
+    },
+    {
+      "id": "activity",
+      "start": 256.647709,
+      "end": 274.4
+    }
+  ],
+  "note": "Original master preserved; omitted source passages explicitly visible. Independent chapter ASR and new capture required. No final validation claimed."
+}

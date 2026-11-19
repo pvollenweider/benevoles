@@ -867,10 +867,10 @@
         "benevole"
       ],
       "feature": "Inscription bénévole",
-      "updatedAt": "2026-11-16",
-      "revision": 4,
+      "updatedAt": "2026-11-19",
+      "revision": 5,
       "level": "decouverte",
-      "updated": "2026-11-16",
+      "updated": "2026-11-19",
       "thumbnailTitle": "S’inscrire depuis son téléphone"
     },
     {
@@ -915,10 +915,10 @@
         "organisateur"
       ],
       "feature": "Vue d'ensemble de l'administration",
-      "updatedAt": "2026-11-16",
-      "revision": 6,
+      "updatedAt": "2026-11-19",
+      "revision": 7,
       "level": "decouverte",
-      "updated": "2026-11-16",
+      "updated": "2026-11-19",
       "thumbnailTitle": "Organiser ses bénévoles"
     },
     {
@@ -1041,11 +1041,11 @@
         "organisateur"
       ],
       "feature": "Secteurs",
-      "updatedAt": "2026-11-16",
-      "revision": 3,
+      "updatedAt": "2026-11-19",
+      "revision": 4,
       "level": "avance",
       "added": "2026-10-29",
-      "updated": "2026-11-16"
+      "updated": "2026-11-19"
     },
     {
       "id": "SHIFT_SWAPS",
@@ -1404,9 +1404,32 @@
         "organisateur"
       ],
       "feature": "Messages ciblés et modèles",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
+      "updatedAt": "2026-11-19",
+      "revision": 5,
       "level": "essentiel"
+    },
+    {
+      "id": "MESSAGE_TEMPLATES",
+      "manifest": "message-templates",
+      "category": "registrations-followup",
+      "tags": [
+        "messages",
+        "modèles",
+        "email"
+      ],
+      "published": true,
+      "seedScenario": "message-templates",
+      "themes": [
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Bibliothèque de modèles de messages",
+      "updatedAt": "2026-11-19",
+      "revision": 1,
+      "level": "essentiel",
+      "thumbnailTitle": "Partir d’un modèle de message"
     },
     {
       "id": "STAFFING_GAPS",
@@ -1430,8 +1453,8 @@
         "organisateur"
       ],
       "feature": "Où manque-t-il du monde ?",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
+      "updatedAt": "2026-11-19",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1675,8 +1698,8 @@
         "super-admin"
       ],
       "feature": "Administration de la plateforme",
-      "updatedAt": "2026-10-21",
-      "revision": 4,
+      "updatedAt": "2026-11-19",
+      "revision": 5,
       "level": "avance"
     },
     {

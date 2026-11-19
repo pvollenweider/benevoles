@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:16.877Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "938056435b855e201047041c29f030b0be6435deaff1f7d1a0f6e7b34a7315bb",
+  "clipSha256": "3874236c322e4871d6266c54a7ed10ed0f5f1f3b8e159a22eac1f0d40727d395",
+  "scene": "duplicate",
+  "review": {
+    "heardOpening": "Pour repartir d'une édition précédente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "dupliquez l'événement",
+        "visibleSeconds": 0.5,
+        "visible": "Page affichant le titre « Dupliquer l'événement »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "et décalez toutes les dates",
+        "visibleSeconds": 2,
+        "visible": "Champ « Premier jour de la copie » avec mention indiquant le décalage automatique des dates",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "Vous choisissez ce qui est repris : les créneaux, les paramètres, les pages d’information et les responsables",
+        "visibleSeconds": 5,
+        "visible": "Défilement vers la section « Ce qui est copié » avec les cases à cocher correspondantes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le défilement de la page."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

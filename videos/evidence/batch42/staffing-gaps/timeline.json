@@ -1,0 +1,277 @@
+{
+  "slug": "staffing-gaps",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-19T12:13:34.002Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "04aac36196087830380b672268679e360c121ea1",
+    "sourceTree": "b7fcbe616cbc4fdeb7e4449e9a8fc8c855d6e5c1",
+    "productSourceSha256": "55eb9ac393a3d68acdbfa812aae5f95ec8673f9822502d7e403deadadc8de7bc",
+    "buildId": "yDSsdN_RxsiGKPfTZJMXN",
+    "snapshot": "/private/tmp/benevoles-video-production.Swyk5Ajr",
+    "builtAt": "2026-11-19T10:12:41.385Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "STAFFING_GAPS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 8657
+    },
+    {
+      "kind": "click",
+      "atMs": 60253
+    },
+    {
+      "kind": "click",
+      "atMs": 61548
+    },
+    {
+      "kind": "click",
+      "atMs": 87940
+    },
+    {
+      "kind": "click",
+      "atMs": 93033
+    },
+    {
+      "kind": "click",
+      "atMs": 104366
+    },
+    {
+      "kind": "click",
+      "atMs": 109739
+    },
+    {
+      "kind": "click",
+      "atMs": 132046
+    },
+    {
+      "kind": "click",
+      "atMs": 147682
+    },
+    {
+      "kind": "click",
+      "atMs": 174022
+    },
+    {
+      "kind": "click",
+      "atMs": 197132
+    },
+    {
+      "kind": "click",
+      "atMs": 241551
+    },
+    {
+      "kind": "click",
+      "atMs": 242824
+    },
+    {
+      "kind": "click",
+      "atMs": 245207
+    },
+    {
+      "kind": "click",
+      "atMs": 246856
+    },
+    {
+      "kind": "click",
+      "atMs": 247658
+    },
+    {
+      "kind": "click",
+      "atMs": 248456
+    },
+    {
+      "kind": "click",
+      "atMs": 249272
+    },
+    {
+      "kind": "click",
+      "atMs": 250056
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 199,
+      "endMs": 26226
+    },
+    {
+      "id": "overview",
+      "startMs": 26678,
+      "endMs": 49732
+    },
+    {
+      "id": "empty",
+      "startMs": 50183,
+      "endMs": 73940
+    },
+    {
+      "id": "needs",
+      "startMs": 74391,
+      "endMs": 99744
+    },
+    {
+      "id": "share",
+      "startMs": 103420,
+      "endMs": 131116
+    },
+    {
+      "id": "requests",
+      "startMs": 132351,
+      "endMs": 158860
+    },
+    {
+      "id": "waiting",
+      "startMs": 160714,
+      "endMs": 186469
+    },
+    {
+      "id": "leaders",
+      "startMs": 186922,
+      "endMs": 210672
+    },
+    {
+      "id": "full",
+      "startMs": 211123,
+      "endMs": 235446
+    },
+    {
+      "id": "action",
+      "startMs": 235903,
+      "endMs": 265207
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Cette vue regroupe les besoins",
+      "startMs": 7954,
+      "endMs": 15812,
+      "cueMs": 8155
+    },
+    {
+      "segmentId": "empty",
+      "phrase": "Cliquez sur le poste pour",
+      "startMs": 9579,
+      "endMs": 14875,
+      "cueMs": 59763
+    },
+    {
+      "segmentId": "empty",
+      "phrase": "quelqu'un doit comprendre ce qu'il",
+      "startMs": 19153,
+      "endMs": 23526,
+      "cueMs": 69337
+    },
+    {
+      "segmentId": "needs",
+      "phrase": "Cliquons sur la buvette du soir",
+      "startMs": 13043,
+      "endMs": 14904,
+      "cueMs": 87435
+    },
+    {
+      "segmentId": "needs",
+      "phrase": "Le lien Écrire à ce",
+      "startMs": 18149,
+      "endMs": 24902,
+      "cueMs": 92540
+    },
+    {
+      "segmentId": "share",
+      "phrase": "Pour trouver du renfort",
+      "startMs": 456,
+      "endMs": 5601,
+      "cueMs": 103878
+    },
+    {
+      "segmentId": "share",
+      "phrase": "Cliquez sur Copier le lien",
+      "startMs": 5828,
+      "endMs": 7424,
+      "cueMs": 109249
+    },
+    {
+      "segmentId": "requests",
+      "phrase": "Suivez le lien des demandes",
+      "startMs": 14798,
+      "endMs": 20698,
+      "cueMs": 147156
+    },
+    {
+      "segmentId": "waiting",
+      "phrase": "En cliquant, vous retrouvez les",
+      "startMs": 12808,
+      "endMs": 16222,
+      "cueMs": 173523
+    },
+    {
+      "segmentId": "waiting",
+      "phrase": "ce rapport ne les inscrit",
+      "startMs": 20387,
+      "endMs": 25181,
+      "cueMs": 181101
+    },
+    {
+      "segmentId": "leaders",
+      "phrase": "Le lien ouvre la gestion",
+      "startMs": 9715,
+      "endMs": 12379,
+      "cueMs": 196639
+    },
+    {
+      "segmentId": "action",
+      "phrase": "Nous ouvrons le créneau concerné",
+      "startMs": 5148,
+      "endMs": 7942,
+      "cueMs": 241055
+    },
+    {
+      "segmentId": "action",
+      "phrase": "Son email retrouve sa fiche",
+      "startMs": 8779,
+      "endMs": 10458,
+      "cueMs": 244683
+    },
+    {
+      "segmentId": "action",
+      "phrase": "nous choisissons le bon horaire et enregistrons",
+      "startMs": 11103,
+      "endMs": 14431,
+      "cueMs": 247964
+    },
+    {
+      "segmentId": "action",
+      "phrase": "nous choisissons le bon horaire et enregistrons",
+      "startMs": 11103,
+      "endMs": 14431,
+      "cueMs": 249577
+    },
+    {
+      "segmentId": "action",
+      "phrase": "La nouvelle inscription apparaît",
+      "startMs": 14938,
+      "endMs": 17044,
+      "cueMs": 250847
+    },
+    {
+      "segmentId": "action",
+      "phrase": "En revenant au rapport, le",
+      "startMs": 17260,
+      "endMs": 24227,
+      "cueMs": 253165
+    }
+  ]
+}

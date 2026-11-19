@@ -1,0 +1,78 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:45:37.865Z",
+  "videoSha256": "a919eba8f27cc70fed4d10b627a17b75e09f483a1df502caa8c7cae42e4b9492",
+  "promptSha256": "9e67d4e43b4d465597b98ef68d13ad9ba25e08c3ee6d1bad9dc345720ea42018",
+  "clipSha256": "a74d3e320da35696a90e1c9e355b98cb18faa0192f75a9f7a7c63f680b8b52f2",
+  "scene": "need",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tôt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Sur la page Jour J",
+        "visibleSeconds": 6.2,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "ouvrons Ajouter un besoin",
+        "visibleSeconds": 7.3,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Indiquons le poste Renfort matériel, le début, la fin",
+        "visibleSeconds": 10.4,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "et une place",
+        "visibleSeconds": 15.1,
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Ajouter le créneau enregistre d'abord le besoin",
+        "visibleSeconds": 16,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "Sélectionnons une personne proposée",
+        "visibleSeconds": 26.6,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.7,
+        "spoken": "vérifions l'aperçu",
+        "visibleSeconds": 28.2,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 31,
+        "spoken": "puis envoyons",
+        "visibleSeconds": 31,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:15, le champ « Places » affiche le chiffre « 2 » lors de la saisie alors que la voix indique « et une place » (bien que le récapitulatif à 00:16 indique ensuite « 1 place »)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

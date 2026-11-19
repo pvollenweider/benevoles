@@ -1,0 +1,121 @@
+{
+  "slug": "volunteer-register-mobile",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-11-19T12:59:06.285Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "04aac36196087830380b672268679e360c121ea1",
+    "sourceTree": "b7fcbe616cbc4fdeb7e4449e9a8fc8c855d6e5c1",
+    "productSourceSha256": "55eb9ac393a3d68acdbfa812aae5f95ec8673f9822502d7e403deadadc8de7bc",
+    "buildId": "yDSsdN_RxsiGKPfTZJMXN",
+    "snapshot": "/private/tmp/benevoles-video-production.Swyk5Ajr",
+    "builtAt": "2026-11-19T10:12:41.385Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_REGISTER",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobile": true
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4762
+    },
+    {
+      "kind": "click",
+      "atMs": 6538
+    },
+    {
+      "kind": "click",
+      "atMs": 7940
+    },
+    {
+      "kind": "click",
+      "atMs": 9129
+    },
+    {
+      "kind": "click",
+      "atMs": 10286
+    },
+    {
+      "kind": "click",
+      "atMs": 11345
+    },
+    {
+      "kind": "click",
+      "atMs": 12947
+    },
+    {
+      "kind": "click",
+      "atMs": 14052
+    },
+    {
+      "kind": "click",
+      "atMs": 15139
+    },
+    {
+      "kind": "click",
+      "atMs": 16508
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 2615
+    },
+    {
+      "id": "discover",
+      "startMs": 3067,
+      "endMs": 3791
+    },
+    {
+      "id": "choose",
+      "startMs": 4246,
+      "endMs": 6858
+    },
+    {
+      "id": "details",
+      "startMs": 7311,
+      "endMs": 11860
+    },
+    {
+      "id": "preferences",
+      "startMs": 12314,
+      "endMs": 15453
+    },
+    {
+      "id": "confirm",
+      "startMs": 15911,
+      "endMs": 16821
+    },
+    {
+      "id": "success",
+      "startMs": 17273,
+      "endMs": 18195
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "confirm",
+      "phrase": "Un dernier coup d’œil au",
+      "startMs": 0,
+      "endMs": 4069,
+      "cueMs": 15913
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "confirme ton inscription.",
+      "startMs": 4069,
+      "endMs": 6200,
+      "cueMs": 15936
+    }
+  ]
+}

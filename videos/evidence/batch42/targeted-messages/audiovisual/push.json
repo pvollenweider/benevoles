@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:44:02.184Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "cbe7d599130b3911542b4b81c1726e71064fcb1a2c68faefb34a1b3cd55e36df",
+  "clipSha256": "457122907606bd23c46dde890bfa5ca0424cf4008f58e64ae484bdb38b776f9e",
+  "scene": "push",
+  "review": {
+    "heardOpening": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 0.8,
+        "visible": "Coche de la case « Demander aussi une notification (téléphone ou ordinateur) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "L'objet sert de titre, et la première ligne non vide du message sert de texte court",
+        "visibleSeconds": 12.3,
+        "visible": "Affichage de la consigne sous la case cochée et du champ Message en amont",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "Gardez les informations utiles au début et vérifiez ce qui sera envoyé",
+        "visibleSeconds": 21.5,
+        "visible": "Bouton d'action « Voir l'aperçu et envoyer » bien visible sous les options",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation naturelle avec l'action à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

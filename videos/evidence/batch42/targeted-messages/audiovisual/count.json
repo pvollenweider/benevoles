@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:43:07.686Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "d755128be59b9fda0e88911458a262e8d3f363eb8bd3f8e6961abe17df548639",
+  "clipSha256": "49665026709aab1a55b23f2a6004eee7802bdfbb676edd9f7be0d7750f47a5e8",
+  "scene": "count",
+  "review": {
+    "heardOpening": "Le nombre affiché compte les personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Une bénévole inscrite sur deux horaires reçoit un seul message pour cette audience.",
+        "visibleSeconds": 4.5,
+        "visible": "Recherche filtrée sur Léa Giroud montrant deux inscriptions distinctes à la buvette pour la même bénévole.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Une demande à valider n'est pas encore une confirmation.",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage de la page Messages avec la section Destinataires.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Vérifier ce chiffre et le public choisi",
+        "visibleSeconds": 17,
+        "visible": "Sélection du poste Buvette avec l'indication '22 personnes recevront ce message'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible, bien synchronisée avec les exemples à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

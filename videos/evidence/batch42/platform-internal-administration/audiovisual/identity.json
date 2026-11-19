@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:43:09.935Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "b1ff09285b14fe2c7c4f73686105eb55c7e84015bdbbf30fe6ccec9954339d20",
+  "clipSha256": "eff8fb7502a7c078c8237b36dcdf54b7f66258976cc4852704d2929310c384f1",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Le nom affiché et l'identifiant public sont deux informations différentes.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Modifions d'abord le nom et enregistrons-le.",
+        "visibleSeconds": 8,
+        "visible": "Modification du champ Nom et affichage de la confirmation 'Enregistré.' avec mise à jour du titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "essayons une valeur déjà utilisée : l'application la refuse.",
+        "visibleSeconds": 11.2,
+        "visible": "Saisie d'un slug existant et affichage du message d'erreur rouge 'Ce slug est déjà utilisé.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Choisissons alors un identifiant libre et enregistrons.",
+        "visibleSeconds": 16.8,
+        "visible": "Saisie de 'formation-operateur-jetable-renommee' et validation avec le bouton OK",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.7,
+        "spoken": "Le détail s'ouvre sous ce nouvel identifiant.",
+        "visibleSeconds": 24.8,
+        "visible": "Rechargement de la page affichant le nouvel identifiant dans l'en-tête",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "Délai d'environ 7 secondes entre l'annonce du rechargement de la page sous le nouvel identifiant (00:18) et le rafraîchissement effectif à l'écran (00:25)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

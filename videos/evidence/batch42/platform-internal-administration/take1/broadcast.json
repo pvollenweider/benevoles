@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:30:02.561Z",
+  "videoSha256": "46b71e4ae0a4e1e8c0b7d7e98f16a4db8c602748cab8652b2371402e48164439",
+  "promptSha256": "fd5461cad4bb1cbcc9f11fa1d9e053d5f960b374f3bfe5824065fa3b341c8e15",
+  "clipSha256": "23023826a6773517ef58c95552c8950729981af08f2a4618e01b2f753853a81c",
+  "scene": "broadcast",
+  "review": {
+    "heardOpening": "Le test est bon ? Revenons au formulaire pour préparer la diffusion.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "Revenons au formulaire pour préparer la diffusion.",
+        "visibleSeconds": 2,
+        "visible": "Retour à la page « Communications admin » avec le formulaire de nouveau message.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Reprenons notre objet, puis le contenu que nous venons de vérifier.",
+        "visibleSeconds": 5,
+        "visible": "Saisie de l'objet « Formation — préparer votre prochain événement » puis du Markdown avec prévisualisation en direct.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Avant la diffusion, vérifions le nombre de destinataires et lisons la confirmation.",
+        "visibleSeconds": 21,
+        "visible": "Clic sur « Envoyer (2) » et apparition de la boîte de dialogue « Envoyer cette communication à 2 organisateurs ? ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33,
+        "spoken": "Validons, puis regardons le nombre d'envois réussis et l'historique.",
+        "visibleSeconds": 34,
+        "visible": "Clic sur « Envoyer » puis affichage de l'envoi dans la section « Historique des envois » avec la mention « 2/2 envoyés ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 40,
+        "spoken": "Ouvrons un message livré et suivons son lien de désabonnement.",
+        "visibleSeconds": 40.5,
+        "visible": "Retour sur l'aperçu du message, clic sur le lien « Se désabonner de ces communications » et affichage de la page de désabonnement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 45,
+        "spoken": "confirmons, et le choix est enregistré.",
+        "visibleSeconds": 42.5,
+        "visible": "Clic sur le bouton « Me désabonner » dès 00:42 menant à l'écran « Désabonnement confirmé » avant que la voix ne dise de confirmer.",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:29-00:32, raccord voix très audible sur la phrase « Dans notre base séparée, ce sont uniquement des comptes fictifs. » (changement net de timbre et de réverbération par rapport au reste de la prise).",
+      "À 00:42, l'action de confirmation sur « Me désabonner » est déclenchée environ 2 secondes avant l'invitation vocale « confirmons » (00:45)."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Voix claire et posée, mais présence d'un insert audio distinct à 00:29 rompant l'homogénéité sonore de la capsule."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

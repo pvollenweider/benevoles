@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:14:23.159Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "ae4012b2fdc8ccf7898da5aaed761f84a72e7f376450c27f6dd51139e629c751",
+  "clipSha256": "a5040292c8f6ba16324f677eeb014786a902b360e3c1d0d733486bff73e74d9b",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Les demandes à traiter gardent leur place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "À la navette, deux demandes remplissent donc les deux places réservées",
+        "visibleSeconds": 4,
+        "visible": "Section Créneaux complets affichant la ligne Navette, Chauffeur navette avec la mention 0/2 : 2 demandes à traiter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Suivez le lien des demandes pour retrouver Lucas et Marc",
+        "visibleSeconds": 14.3,
+        "visible": "Affichage de l'onglet Inscriptions filtré sur Demandes à traiter avec les fiches de Lucas Girard et Marc Duc",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "puis examinez leurs informations avant de décider",
+        "visibleSeconds": 18,
+        "visible": "Détails des réponses aux questions de formulaire et boutons Accepter et Refuser visibles sous chaque profil",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

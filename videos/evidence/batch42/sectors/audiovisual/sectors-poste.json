@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:55:59.619Z",
+  "videoSha256": "9972cbbd38e0e091a42cda676febfde0d377314112cce9812203cde2b51dc454",
+  "promptSha256": "4f765dd7923e73d1f925efdcc98fc70a6de6aa4f5585bba086de2d9914b28e59",
+  "clipSha256": "0c319ebd203a3ad387d35ea5adcfe90fee99b64ca92716df09f94a19046ed53a",
+  "scene": "sectors-poste",
+  "review": {
+    "heardOpening": "Ajoutons ensuite les postes dans chaque secteur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "le bouton Ajouter un poste dans Backline ouvre le formulaire de créneau, avec ce secteur déjà choisi",
+        "visibleSeconds": 3.6,
+        "visible": "Ouverture du formulaire « Nouveau poste : premier créneau » avec le secteur Backline présélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Tapons le nom du nouveau poste, Backline Scène du Lac",
+        "visibleSeconds": 10.4,
+        "visible": "Saisie du texte « Backline Scène du Lac » dans le champ Poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.1,
+        "spoken": "puis son premier créneau, avec le jour, les horaires et les places",
+        "visibleSeconds": 14.1,
+        "visible": "Renseignement de la date (vendredi 20 novembre), des horaires (14:00 - 18:00) et des places (4)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.3,
+        "spoken": "Le poste est créé avec ce créneau, directement dans son secteur",
+        "visibleSeconds": 16.8,
+        "visible": "Affichage de la liste avec le poste « Backline Scène du Lac » sous le secteur Backline",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

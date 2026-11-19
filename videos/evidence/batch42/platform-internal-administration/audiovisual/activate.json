@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:42:50.015Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "e77daa0b28db00e491079fe0195bbc8462c841672a83cc26e6a9f946b01580ed",
+  "clipSha256": "e8ed93aba1db8601085802d5eb17025692d753da628b2366390e167122ea5c32",
+  "scene": "activate",
+  "review": {
+    "heardOpening": "La personne invitée ouvre son nouveau lien",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La personne invitée ouvre son nouveau lien dans sa propre session.",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de la page de définition du mot de passe 'Bienvenue - Créez votre mot de passe'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Elle choisit son mot de passe et termine l'activation.",
+        "visibleSeconds": 4.9,
+        "visible": "Saisie du mot de passe, confirmation et validation via 'Créer mon mot de passe'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Connectons-nous ensuite avec ce nouveau compte",
+        "visibleSeconds": 11.2,
+        "visible": "Page de connexion 'Espace organisateur', saisie de l'identifiant et du mot de passe",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "nous arrivons dans son organisation, encore sans événement.",
+        "visibleSeconds": 14.8,
+        "visible": "Arrivée sur le tableau de bord de l'organisation sans événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Revenons au détail côté opérateur pour vérifier que le compte apparaît actif.",
+        "visibleSeconds": 16,
+        "visible": "Écran de gestion opérateur montrant l'organisation avec le statut 'Active'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

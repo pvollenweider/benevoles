@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:14:31.689Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "4908b1401c6294d4fe1ecfe6fe30697422e363fdf75eb4dad21cb7e4770802f0",
+  "clipSha256": "b577301f9786734ad18b25a08814a0da0bbf822bec9b626181cf982acbd7f5e7",
+  "scene": "share",
+  "review": {
+    "heardOpening": "Pour trouver du renfort",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "ouvrez Partager ce créneau sur la ligne de la buvette du soir",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la fenêtre modale « Partager ce créneau » pour la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Cliquez sur Copier le lien",
+        "visibleSeconds": 5.5,
+        "visible": "Le bouton « Copier le lien » est visible mais aucun clic n'est effectué à l'écran",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Vous pouvez aussi télécharger le code QR",
+        "visibleSeconds": 13.5,
+        "visible": "Bouton « QR code PNG » visible dans la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "cette case ouvre une exception",
+        "visibleSeconds": 18.5,
+        "visible": "Case à cocher « Accepter une inscription même si les inscriptions de l'événement sont fermées » visible",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:06, l'action annoncée (« Cliquez sur Copier le lien ») n'est pas démontrée à l'écran (l'image reste figée avec la mention « Lien copié » déjà affichée)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

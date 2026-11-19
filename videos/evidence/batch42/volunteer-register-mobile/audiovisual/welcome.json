@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T13:06:05.545Z",
+  "videoSha256": "0a32cbb3a91ce8cf89786bd422756088cdcd98715d4d832e266bfea9aab84df3",
+  "promptSha256": "2cac244ba4e01721e9b1a2bc83603751ceb1f013c370d9152bdc240fbfd273f4",
+  "clipSha256": "c72a31a051b51e290e675c38d3b3c1701518469f6bfa6c2f35af038fbbecf84b",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Envie de donner un coup de main",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Envie de donner un coup de main ?",
+        "visibleSeconds": 0.5,
+        "visible": "Titre d'introduction affiché : S'inscrire comme bénévole depuis son téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2,
+        "spoken": "Ouvre le lien reçu, ou scanne le QR code affiché par l'association.",
+        "visibleSeconds": 2.5,
+        "visible": "L'encart de titre disparaît, laissant apparaître la page de l'événement Fête du village de Montvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Tu peux choisir ton créneau directement depuis ton téléphone.",
+        "visibleSeconds": 6,
+        "visible": "Affichage de la liste des créneaux bénévoles disponibles sur l'interface mobile",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, fidèle au script."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -286,6 +286,7 @@ export async function recordSectors(options: Options) {
     await at("Le même champ existe dans Où manque-t-il du monde")
     await go(`${event}/staffing`)
     await chooseParking()
+    await page.getByRole("button", { name: /^Partager ce créneau pour Parking/ }).first().scrollIntoViewIfNeeded()
     await at(0.2) /* mid-sentence: « dans Jour J » */
     await page.goto(`${base}${event}/day-of`); await settleDom(page)
     await chooseParking()

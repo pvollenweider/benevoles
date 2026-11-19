@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:04.957Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "840f72f133f28a7fcb3523d9e3d0d24a87b819566edbfd1fd22f3162629e36bf",
+  "clipSha256": "0815325bfa1ea83754316337b0bc5fdc1f5c0f494f338b7f56c944097fe1d578",
+  "scene": "organization",
+  "review": {
+    "heardOpening": "Tout commence avec l'identité de l'organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Tout commence avec l'identité de l'organisation.",
+        "visibleSeconds": 0,
+        "visible": "Page des paramètres d'organisation avec logo et titre de page publique affichés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.4,
+        "spoken": "L'adresse de votre espace détermine votre sous-domaine sur benevol point app.",
+        "visibleSeconds": 2.2,
+        "visible": "Section 'Adresse de votre espace' visible avec l'adresse en .benevol.app.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Vous choisissez aussi le nom affiché, le fuseau horaire",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement de la page montrant le bloc 'Fuseau horaire'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "et la Charte des bénévoles que chacun devra accepter.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la section 'Charte des bénévoles' avec le texte d'engagement.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec le défilement de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

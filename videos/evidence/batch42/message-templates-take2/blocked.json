@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:25:50.990Z",
+  "videoSha256": "1046f21c5fe4569bdeba9fe5d02e857d7f7b60d5159a8fa35f04ba34bc19957d",
+  "promptSha256": "6b94e12d008bbf606cd1b8e68852c14ff7948684017ee488ddc29d74519f5c92",
+  "clipSha256": "f745772eacfa97de45cd127d1e9309f5f50bdaf057205aff80781bcfa56e08b6",
+  "scene": "blocked",
+  "review": {
+    "heardOpening": "Demandez l'aperçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Demandez l'aperçu",
+        "visibleSeconds": 0.9,
+        "visible": "Clic sur le bouton « Voir l'aperçu et envoyer »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Le champ Message signale les informations à compléter",
+        "visibleSeconds": 1.2,
+        "visible": "Encadré rouge autour du champ message et mention « À corriger : message »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Corrigeons le modèle lui-même pour que l'équipe retrouve le texte complet",
+        "visibleSeconds": 11,
+        "visible": "Écran stable sur le formulaire avec l'alerte d'erreur en transition vers l'étape suivante",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, naturelle et parfaitement intelligible, bien calée sur les éléments visuels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

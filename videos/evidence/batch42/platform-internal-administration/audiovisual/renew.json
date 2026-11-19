@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:42:39.234Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "c797aa8dcbf15e944bb96bc6e1db7a50188bfad746f6946f3e4b442afc5bd1fb",
+  "clipSha256": "b052400eb298249d24f1bd54033667f32137067415dec168c57a7db834339270",
+  "scene": "renew",
+  "review": {
+    "heardOpening": "Envoyons maintenant l'invitation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Envoyons maintenant l'invitation",
+        "visibleSeconds": 1,
+        "visible": "Clic sur le lien 'Envoyer l'invitation par email' et affichage du message de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons le vrai message reçu dans la boîte de formation.",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la boîte de réception avec le message d'invitation 'Bonjour Lou Tóth'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "revenons au détail de l'organisation et renvoyons l'invitation au compte encore en attente.",
+        "visibleSeconds": 8,
+        "visible": "Page de détail de l'organisation affichée avec la notification de renvoi d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Vérifions l'ancien : il est refusé.",
+        "visibleSeconds": 17,
+        "visible": "Écran d'activation affichant 'Bienvenue - Lien invalide (Lien invalide ou déjà utilisé.)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.2,
+        "spoken": "Ouvrons le second message reçu pour poursuivre.",
+        "visibleSeconds": 29.5,
+        "visible": "Affichage du second message d'invitation dans la boîte mail",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien articulée avec un débit régulier et un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

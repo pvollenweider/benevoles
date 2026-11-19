@@ -12,8 +12,8 @@ import { PUBLIC_APP_URL, videoAdminEmail } from "../lib/public-hosts"
 
 const batch35Takes = ["WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"]
 const batch35Seeds = ["assignment-publication", "workload-protection", "assignment-proposals", "volunteer-event-availability"]
-const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
-const memberSeeds = ["members-import", "members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
+const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "MESSAGE_TEMPLATES", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
+const memberSeeds = ["members-import", "members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "message-templates", "targeted-messages", "reminders-changes"]
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -39,9 +39,11 @@ async function main() {
     const next = path.join(copy, "node_modules/next/dist/bin/next")
     childWorkingDirectory = copy
     await access(next)
-    // The proxy can inline NEXT_PUBLIC_APP_URL: build and capture use the same HTTP origin.
-    // Runtime wrappers keep each local port explicit; no product security check is changed.
-    env.NEXT_PUBLIC_APP_URL = productOrigin
+    // Next can inline NEXT_PUBLIC_APP_URL into the operator's unsubscribe redirect.
+    // A dedicated build served through the local TLS proxy keeps that redirect on its capture host.
+    const buildOrigin = process.env.VIDEO_BUILD_ORIGIN ?? productOrigin
+    if (buildOrigin !== productOrigin && buildOrigin !== "http://localhost:43102" && buildOrigin !== PUBLIC_APP_URL) throw new Error("Unsupported local video build origin")
+    env.NEXT_PUBLIC_APP_URL = buildOrigin
     commandArgs = [next, "build", copy, "--webpack"]
   } else if (mode === "serve" || mode === "serve-public" || mode === "serve-capture" || mode === "serve-delivery" || mode === "serve-dayof" || mode === "serve-merge" || mode === "serve-questions" || mode === "serve-hours") {
     const copy = path.resolve(args[0] ?? "")
@@ -202,7 +204,7 @@ async function main() {
       if (memberSeeds.includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Member seeds require isolated common video DB and server")
         await verifyProductBuild("http://localhost:43102")
-        if (["registrations-place-member", "registrations-management"].includes(rest[0])) {
+        if (["registrations-place-member", "registrations-management", "targeted-messages"].includes(rest[0])) {
           await new Promise<void>((resolve, reject) => {
             const cleanup = spawn(process.execPath, ["--import", "tsx", "videos/tools/prepare-registration-mailbox.ts", rest[0]], { env, stdio: "inherit" })
             cleanup.on("error", reject)

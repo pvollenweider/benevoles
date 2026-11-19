@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:43:40.421Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "0eafd04b7589de4dcd88f686a90a71e3583664283eaef7597229a952f6f27413",
+  "clipSha256": "ad1f070567a3aba6db6b7af869d1d068927a543f8d2c91afc338370fc7c8b797",
+  "scene": "context",
+  "review": {
+    "heardOpening": "Pour travailler dans une organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sans ce choix, l'application demande de sélectionner un espace.",
+        "visibleSeconds": 4.2,
+        "visible": "Page Changer d'organisation invitant à choisir Travailler dans Formation Opérateur Parc",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Depuis son détail, utilisons Gérer et vérifions le nom du contexte avant d'ouvrir les événements.",
+        "visibleSeconds": 8,
+        "visible": "Fiche détaillée avec bouton Gérer, puis ouverture de la page Événements sous le contexte Formation Opérateur Parc",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Nous retrouvons ici ceux du Parc, pas ceux du Quartier.",
+        "visibleSeconds": 14,
+        "visible": "Liste des événements affichant l'événement Parc – Fête de formation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "regarder dans quel espace nous sommes.",
+        "visibleSeconds": 27,
+        "visible": "Nom de l'organisation active visible en haut à gauche de la barre de navigation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et naturelle, parfaitement synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
