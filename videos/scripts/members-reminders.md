@@ -34,3 +34,7 @@ WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narr
 
 - Dans Invitations, regardez d'abord la date d'envoi et les statuts.
 - Une fois le groupe et le texte vérifiés, confirmez l'envoi.
+
+## Révision du 19 novembre 2026 — lot 43
+
+Anna reçoit deux messages du vrai parcours. Le renvoi montre « Voir les missions et m'inscrire », et le message ciblé destiné aux invités sans créneau confirmé montre « Choisir mes créneaux ». Les deux boutons gardent son lien d'invitation pour cet événement. Laisser le message ciblé et son bouton à l'écran avant d'ouvrir l'historique.

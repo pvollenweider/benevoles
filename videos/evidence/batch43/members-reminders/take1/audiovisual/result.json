@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:20:33.349Z",
+  "videoSha256": "8231607c4ca38771494938165a956ad3507125df3b2f63958f4200680e57db05",
+  "promptSha256": "709ed43fc1b3db4e357fd03c7fc8e37e3779f322e26c4b63842dde8dacc3c42e",
+  "clipSha256": "17f88889881e9dd1f4bc4407e49abc441f9613facf27511c1c4ecd999c9f1631",
+  "scene": "result",
+  "review": {
+    "heardOpening": "De retour dans Invitations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "De retour dans Invitations",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la sous-rubrique Invitations dans l'onglet Inscriptions de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "les participations n'ont pas changé simplement parce qu'un message est parti",
+        "visibleSeconds": 2.2,
+        "visible": "Compteurs d'invitations (10 invités, 7 disponibles, 3 sans réponse) et liste des membres visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Une relance courte, au bon moment",
+        "visibleSeconds": 8.7,
+        "visible": "Présentation stable de l'interface montrant les options de relance sans action requise",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et posée, en parfaite cohérence avec le ton pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

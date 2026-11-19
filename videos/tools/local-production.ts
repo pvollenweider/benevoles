@@ -204,7 +204,7 @@ async function main() {
       if (memberSeeds.includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Member seeds require isolated common video DB and server")
         await verifyProductBuild(productOrigin)
-        if (["registrations-place-member", "registrations-management", "targeted-messages"].includes(rest[0])) {
+        if (["registrations-place-member", "registrations-management", "targeted-messages", "members-reminders"].includes(rest[0])) {
           await new Promise<void>((resolve, reject) => {
             const cleanup = spawn(process.execPath, ["--import", "tsx", "videos/tools/prepare-registration-mailbox.ts", rest[0]], { env, stdio: "inherit" })
             cleanup.on("error", reject)

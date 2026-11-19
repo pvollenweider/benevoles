@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:20:19.845Z",
+  "videoSha256": "8231607c4ca38771494938165a956ad3507125df3b2f63958f4200680e57db05",
+  "promptSha256": "11b8bcac492719e27a00c0c24be260c6fef573343c93c10c5b9bd3715e104acd",
+  "clipSha256": "292b8196376e0ee3d277fb1069060bbd4eca2e23304a0592833f4558d6f5ffbb",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Pour expliquer davantage, utilisez Écrire un message",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "utilisez Écrire un message aux personnes sans créneau",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur le lien « Écrire un message aux 3 sans créneau » puis ouverture de la page Messages",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Le groupe est déjà choisi dans la page de message",
+        "visibleSeconds": 4,
+        "visible": "L'option « Les invités sans créneau confirmé » est pré-cochée dans les destinataires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Nous saisissons un objet clair et quelques mots bienveillants",
+        "visibleSeconds": 9,
+        "visible": "Saisie dans le champ Objet (« Un horaire qui te convient ») puis dans Message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Avant d'envoyer, prévisualisez les destinataires et le contenu",
+        "visibleSeconds": 17.5,
+        "visible": "Clic sur « Voir l'aperçu et envoyer » et ouverture de la fenêtre modale « Aperçu de l'email »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

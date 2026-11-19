@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:20:33.349Z",
+  "videoSha256": "8231607c4ca38771494938165a956ad3507125df3b2f63958f4200680e57db05",
+  "promptSha256": "da98cea855f8147fe22a470fb9dbfb32e1a1c35b49edae6f426402d56171fec6",
+  "clipSha256": "6ab276a8e7939e21f6f4add6a69741e7ba7af4d326389e2fcb935b6ccca7721b",
+  "scene": "send",
+  "review": {
+    "heardOpening": "Une fois le groupe et le texte vérifiés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "ouvrons la confirmation d'envoi",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de la boîte modale 'Confirmer l'envoi'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Confirmons avec le bouton du récapitulatif",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur le bouton bleu 'Confirmer l'envoi'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Nous ouvrons le vrai message reçu par Anna",
+        "visibleSeconds": 8.7,
+        "visible": "Affichage de l'email 'Hello Anna !'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Le bouton Choisir mes créneaux conserve son invitation",
+        "visibleSeconds": 12,
+        "visible": "Bouton bleu 'Choisir mes créneaux' visible dans l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Passons à l'historique disponible dans l'administration",
+        "visibleSeconds": 19.6,
+        "visible": "Retour à l'administration avec la section 'Messages envoyés'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

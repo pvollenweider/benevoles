@@ -1425,7 +1425,7 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
 - **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
 - **SHIFT_WAITLIST_OFFER** (`shift-waitlist-offer`) : email d'offre de place (lien d'action propre à l'événement, à conserver tel quel).
-- **TARGETED_MESSAGES** (`targeted-messages`) et **MEMBERS_REMINDERS** (`members-reminders`) : emails de message ciblé, dont le bouton de gestion.
+- **TARGETED_MESSAGES** (`targeted-messages`) : email de message ciblé avec bouton de gestion.
 - **ORG_EMAIL_SETTINGS** (`org-email-settings`) : email de test d'un message ciblé.
 - **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
 - **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
@@ -1451,3 +1451,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **LAST_MINUTE_CHANGES — READY, publiée, révision 7, 465,44 s.** Le vrai courriel de changement est lisible 14,88 s, avec les deux horaires, le bouton commun et sa phrase de confidentialité. Le partage montre « Lien copié ». La seconde prise rétablit les consignes de saisie du nom et sépare les confirmations. Douze chapitres vérifiés, onze courriels fictifs reçus et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/last-minute-changes/take2/review.md).
 
 **ASSIGNMENT_PUBLICATION — READY, publiée, révision 2, 174,44 s.** Le vrai courriel des missions ouvre la page de l'organisation, puis « Voir l'événement » donne accès au détail et à l'annulation avec un mot. La nouvelle carte du lien commun apparaît sur le détail. La seconde prise cale la correction de disponibilité et la transition audio. Douze chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/assignment-publication/take2/review.md).
+
+**MEMBERS_REMINDERS — READY, publiée, révision 6, 212,32 s.** Les deux messages destinés à Anna gardent son lien d'invitation à l'événement, avec « Voir les missions et m'inscrire » et « Choisir mes créneaux ». Le message ciblé est lisible 10,12 s avant l'historique. Huit chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/members-reminders/take1/review.md).

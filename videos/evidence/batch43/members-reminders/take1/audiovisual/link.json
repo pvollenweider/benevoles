@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:20:05.529Z",
+  "videoSha256": "8231607c4ca38771494938165a956ad3507125df3b2f63958f4200680e57db05",
+  "promptSha256": "6af0b1a978133294a4ca79c4721f4e91c9e1f7c34711566c70cc533fb9506a8a",
+  "clipSha256": "3101c21c79992f27584f916fe561aecc34152a512ffe5e249cda581d32049706",
+  "scene": "link",
+  "review": {
+    "heardOpening": "Ouvrons l'email reçu dans la boîte de démonstration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ouvrons l'email reçu dans la boîte de démonstration.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de l'email d'invitation pour la Fête du village de Montvert.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Le bouton Voir les missions et m'inscrire renvoie à l'invitation pour cet événement.",
+        "visibleSeconds": 1,
+        "visible": "Le bouton bleu « Voir les missions et m'inscrire » est bien visible au centre de l'email.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Ce lien est conservé : la relance ne crée pas une deuxième invitation ni une inscription automatique.",
+        "visibleSeconds": 8,
+        "visible": "L'email reste affiché de manière stable pour illustrer l'explication conceptuelle sur le lien de relance.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, naturelle et posée, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
