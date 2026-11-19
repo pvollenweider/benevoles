@@ -103,6 +103,8 @@ export type OrgLinkTarget = {
   firstName: string
   lastName: string
   email: string | null
+  /** The current organisation link's hash: the organisation calendar feed is derived from it. */
+  orgLinkTokenHash: string | null
   organization: { id: string; name: string; slug: string; timeZone: string | null; active: boolean; suspendedAt: Date | null }
 }
 
@@ -112,6 +114,7 @@ const ORG_LINK_TARGET_SELECT = {
   firstName: true,
   lastName: true,
   email: true,
+  orgLinkTokenHash: true,
   organization: { select: { id: true, name: true, slug: true, timeZone: true, active: true, suspendedAt: true } },
 } as const
 

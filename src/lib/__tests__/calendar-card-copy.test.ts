@@ -6,8 +6,12 @@ const feed = { https: "https://o.benevol.app/x.ics", webcal: "webcal://o.benevol
 const r = (status: string) => ({ status })
 
 describe("calendarCard", () => {
-  it("shows with one confirmed shift, without the whole-planning file", () => {
+  it("shows with one confirmed shift, without the whole-planning file (the per-event page has a per-shift link)", () => {
     expect(calendarCard([r("active"), r("waiting")], feed, "/dl")).toEqual({ webcalUrl: feed.webcal, httpsUrl: feed.https, downloadHref: null })
+  })
+
+  it("keeps the whole-planning file with one confirmed shift when asked (the organisation page has no per-shift link)", () => {
+    expect(calendarCard([r("active"), r("waiting")], feed, "/dl", { alwaysDownload: true })?.downloadHref).toBe("/dl")
   })
 
   it("adds the one-off file with several confirmed shifts", () => {
@@ -15,8 +19,8 @@ describe("calendarCard", () => {
   })
 
   it("does not show without a confirmed shift (waitlist, offer, request only) or without an address", () => {
-    expect(calendarCard([r("waiting"), r("offered"), r("requested")], feed, "/dl")).toBeNull()
-    expect(calendarCard([r("active")], null, "/dl")).toBeNull()
-    expect(calendarCard([r("active")], undefined, "/dl")).toBeNull()
+    expect(calendarCard([r("waiting"), r("offered"), r("requested")], feed, "/dl", { alwaysDownload: true })).toBeNull()
+    expect(calendarCard([r("active")], null, "/dl", { alwaysDownload: true })).toBeNull()
+    expect(calendarCard([r("active")], undefined, "/dl", { alwaysDownload: true })).toBeNull()
   })
 })

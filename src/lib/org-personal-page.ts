@@ -17,6 +17,7 @@
 
 import { selfCancelState, shiftStartsAt, type CancelDeadlineSetting, type SelfCancelReason } from "./cancel-deadline"
 import { LIVE_STATUSES } from "./registration-capacity"
+import type { CalendarFeedUrls } from "./calendar-card-copy"
 
 export const ORG_SCOPE_SENTENCE = (organizationName: string) =>
   `Ce lien donne accès à toutes tes inscriptions auprès de ${organizationName} et permet de les modifier. Ne le partage pas.`
@@ -123,7 +124,15 @@ export type OrgPageData = {
   orgHomeUrl: string
   contactEmail: string | null
   scopeSentence: string
+  /**
+   * The organisation-wide calendar subscription (#1429, lot C): a read-only address of its own,
+   * never the organisation link, plus the one-off file. Null when no feed can be issued.
+   */
+  calendarFeed: OrgCalendarFeed | null
 }
+
+/** The two subscription forms and the one-off file of the organisation-wide card. */
+export type OrgCalendarFeed = CalendarFeedUrls & { download: string }
 
 export type OrgPageBuildInput = {
   volunteer: { firstName: string; lastName: string; email: string | null }
@@ -133,6 +142,7 @@ export type OrgPageBuildInput = {
   timeZone: string
   orgHomeUrl: string
   contactEmail?: string | null
+  calendarFeed?: OrgCalendarFeed | null
 }
 
 const LIVE = new Set<string>(LIVE_STATUSES)
@@ -192,5 +202,6 @@ export function buildOrgPageData(input: OrgPageBuildInput): OrgPageData {
     orgHomeUrl: input.orgHomeUrl,
     contactEmail: input.contactEmail ?? null,
     scopeSentence: ORG_SCOPE_SENTENCE(input.organization.name),
+    calendarFeed: input.calendarFeed ?? null,
   }
 }

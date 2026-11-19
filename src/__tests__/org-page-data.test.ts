@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest"
 
 // The organisation page's server read (#1429): the token resolves to (volunteer, organisation),
 // and every registration is constrained by both. Unpublished and archived events stay visible
@@ -27,6 +27,7 @@ const target = {
   firstName: "Léa",
   lastName: "M",
   email: "lea@example.ch",
+  orgLinkTokenHash: "a".repeat(64),
   organization: { id: "org-a", name: "Asso", slug: "asso", timeZone: "Europe/Zurich", active: true, suspendedAt: null },
 }
 
@@ -49,6 +50,9 @@ const row = (id: string, status: string, date: string, publicStatus: string, tit
 })
 
 describe("loadOrgPage", () => {
+  beforeAll(() => {
+    process.env.AUTH_SECRET = "s".repeat(48)
+  })
   beforeEach(() => {
     vi.clearAllMocks()
     m.guardTokenLookup.mockResolvedValue({ blocked: false, value: target })
@@ -73,6 +77,11 @@ describe("loadOrgPage", () => {
     expect(loaded.data.registrations.map((r) => r.id)).toEqual(["archived", "draft"])
     expect(loaded.data.orgHomeUrl).toBe("https://asso.example")
     expect(loaded.data.scopeSentence).toContain("auprès de Asso")
+    // The organisation calendar feed (#1429, lot C): a read-only address derived from the link,
+    // never the organisation link itself, plus its one-off file.
+    expect(loaded.data.calendarFeed?.https).toMatch(/^https:\/\/asso\.example\/api\/public\/mes-inscriptions\/v1-1[0-9a-f]+\/calendar\.ics$/)
+    expect(loaded.data.calendarFeed?.webcal).toBe(loaded.data.calendarFeed?.https.replace(/^https:/, "webcal:"))
+    expect(loaded.data.calendarFeed?.download).toBe(`${loaded.data.calendarFeed?.https}?download=1`)
   })
 
   it("never queries another organisation, even with the same address on both sides", async () => {

@@ -7,6 +7,7 @@ import { render, screen, fireEvent, waitFor, cleanup, within } from "@testing-li
 
 import OrgPersonalPage from "@/components/public/OrgPersonalPage"
 import { CANCEL_CONTACTS_INTRO } from "@/lib/cancel-deadline"
+import { CALENDAR_COPIED, ORG_CALENDAR_CARD_DESCRIPTION, ORG_CALENDAR_RENEWED_NOTICE } from "@/lib/calendar-card-copy"
 import type { OrgPageData, OrgPageRegistration } from "@/lib/org-personal-page"
 
 const reg = (over: Partial<OrgPageRegistration> & { id: string; status: string; date: string; title: string }): OrgPageRegistration => ({
@@ -40,6 +41,7 @@ const base: OrgPageData = {
   orgHomeUrl: "https://asso.example",
   contactEmail: "contact@example.ch",
   scopeSentence: "Ce lien donne accès à toutes tes inscriptions auprès de Asso et permet de les modifier. Ne le partage pas.",
+  calendarFeed: null,
 }
 
 const json = (body: unknown, status = 200) => ({ ok: status >= 200 && status < 300, status, json: async () => body })
@@ -189,6 +191,103 @@ describe("OrgPersonalPage", () => {
     await waitFor(() => expect(screen.getAllByText(message).length).toBeGreaterThan(0))
     expect(screen.queryByRole("button", { name: /Annuler le créneau/ })).not.toBeInTheDocument()
     expect(screen.queryByText(/new-token/)).not.toBeInTheDocument()
+  })
+
+  it("shows one organisation calendar card, subscribed to the organisation feed and with the duplicate warning", () => {
+    const feed = {
+      https: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+      webcal: "webcal://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+      download: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics?download=1",
+    }
+    const withFeed: OrgPageData = {
+      ...base,
+      calendarFeed: feed,
+      registrations: [
+        reg({ id: "r1", status: "active", date: "2031-05-02", title: "Fête" }),
+        reg({ id: "r2", status: "active", date: "2031-05-03", title: "Café" }),
+      ],
+    }
+    render(<OrgPersonalPage token="tok" data={withFeed} />)
+    const card = screen.getByRole("region", { name: "Mon calendrier" })
+    expect(within(card).getByText(/tous tes créneaux confirmés auprès de Asso/)).toBeInTheDocument()
+    expect(within(card).getByText(/Retire cet ancien abonnement/)).toBeInTheDocument()
+    // Two paragraphs: the subscription, then the duplicate warning.
+    for (const paragraph of ORG_CALENDAR_CARD_DESCRIPTION("Asso")) {
+      expect(within(card).getByText(paragraph)).toHaveClass("text-sm", "text-gray-700")
+    }
+    expect(within(card).getByRole("link", { name: "S'abonner avec l'agenda de cet appareil" })).toHaveAttribute("href", feed.webcal)
+    expect(within(card).getByRole("link", { name: /Télécharger/ })).toHaveAttribute("href", feed.download)
+    // The subscription address, not the organisation link, is the text to copy.
+    expect(within(card).getByText(feed.https).tagName).toBe("SPAN")
+  })
+
+  it("keeps the one-off planning file with exactly one confirmed shift, since the organisation page has no per-shift link", () => {
+    const feed = {
+      https: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+      webcal: "webcal://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+      download: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics?download=1",
+    }
+    render(<OrgPersonalPage token="tok" data={{ ...base, calendarFeed: feed, registrations: [base.registrations[0]] }} />)
+    const card = screen.getByRole("region", { name: "Mon calendrier" })
+    expect(within(card).getByRole("link", { name: "Télécharger tout mon planning (fichier .ics)" })).toHaveAttribute("href", feed.download)
+  })
+
+  it("removes the calendar card after a renewal, and says in the visible notice and the live region that the agenda must be subscribed again", async () => {
+    stubFetch((url, init) => init?.method === "POST" ? json({ ok: true, message: "Renouvelé." }) : json({}))
+    const withFeed: OrgPageData = {
+      ...base,
+      calendarFeed: {
+        https: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+        webcal: "webcal://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+        download: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics?download=1",
+      },
+    }
+    render(<OrgPersonalPage token="tok" data={withFeed} />)
+    expect(screen.getByRole("region", { name: "Mon calendrier" })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Renouveler mon lien" }))
+    await waitFor(() => expect(screen.queryByRole("region", { name: "Mon calendrier" })).not.toBeInTheDocument())
+    // The blue notice and the renewal status region both carry the sentence.
+    const mentions = screen.getAllByText(ORG_CALENDAR_RENEWED_NOTICE, { exact: false })
+    expect(mentions).toHaveLength(2)
+    expect(mentions.filter((el) => el.getAttribute("role") === "status")).toHaveLength(1)
+  })
+
+  it("does not mention the calendar subscription after a renewal when no calendar card was shown", async () => {
+    stubFetch((url, init) => init?.method === "POST" ? json({ ok: true, message: "Renouvelé." }) : json({}))
+    const withoutConfirmed: OrgPageData = {
+      ...base,
+      nextId: null,
+      registrations: [base.registrations[1]],
+      calendarFeed: {
+        https: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+        webcal: "webcal://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+        download: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics?download=1",
+      },
+    }
+    render(<OrgPersonalPage token="tok" data={withoutConfirmed} />)
+    expect(screen.queryByRole("region", { name: "Mon calendrier" })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Renouveler mon lien" }))
+    await waitFor(() => expect(screen.getByText("Renouvelé.")).toBeInTheDocument())
+    expect(screen.queryByText(ORG_CALENDAR_RENEWED_NOTICE, { exact: false })).not.toBeInTheDocument()
+  })
+
+  it("copies the organisation subscription address, with the same visible and announced feedback", async () => {
+    const feed = {
+      https: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+      webcal: "webcal://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics",
+      download: "https://asso.example/api/public/mes-inscriptions/feed-token/calendar.ics?download=1",
+    }
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true, writable: true })
+    try {
+      render(<OrgPersonalPage token="tok" data={{ ...base, calendarFeed: feed }} />)
+      const card = screen.getByRole("region", { name: "Mon calendrier" })
+      fireEvent.click(within(card).getByRole("button", { name: "Copier l'adresse de l'abonnement" }))
+      await waitFor(() => expect(within(card).getByRole("status")).toHaveTextContent(CALENDAR_COPIED))
+      expect(writeText).toHaveBeenCalledWith(feed.https)
+    } finally {
+      Object.defineProperty(navigator, "clipboard", { value: undefined, configurable: true, writable: true })
+    }
   })
 
   it("shows the renewal failure text with its next step", async () => {

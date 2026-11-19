@@ -3,10 +3,10 @@
  */
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, cleanup, waitFor, within } from "@testing-library/react"
 
 import CalendarSubscribeCard from "../public/CalendarSubscribeCard"
-import { CALENDAR_COPIED, CALENDAR_COPY_FAILED } from "@/lib/calendar-card-copy"
+import { CALENDAR_CARD_DESCRIPTION, CALENDAR_COPIED, CALENDAR_COPY_FAILED, ORG_CALENDAR_CARD_DESCRIPTION } from "@/lib/calendar-card-copy"
 
 // « Mon calendrier » on the personal page (#961).
 const HTTPS = "https://fete.benevol.app/api/public/registrations/cmreg0000001-1abc/calendar.ics"
@@ -54,6 +54,21 @@ describe("CalendarSubscribeCard", () => {
     fireEvent.click(screen.getByRole("button", { name: "Copier l'adresse de l'abonnement" }))
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(CALENDAR_COPY_FAILED))
     expect(window.getSelection()?.toString()).toBe(HTTPS)
+  })
+
+  it("keeps the per-event introduction as one paragraph", () => {
+    render(<CalendarSubscribeCard webcalUrl={WEBCAL} httpsUrl={HTTPS} downloadHref={null} />)
+    expect(screen.getByText(CALENDAR_CARD_DESCRIPTION)).toHaveClass("text-sm", "text-gray-700")
+  })
+
+  it("renders each description string as its own paragraph for the organisation card", () => {
+    const description = ORG_CALENDAR_CARD_DESCRIPTION("Asso")
+    render(<CalendarSubscribeCard webcalUrl={WEBCAL} httpsUrl={HTTPS} downloadHref={null} description={description} />)
+    const card = screen.getByRole("region", { name: "Mon calendrier" })
+    expect(description).toHaveLength(2)
+    for (const paragraph of description) {
+      expect(within(card).getByText(paragraph)).toHaveClass("text-sm", "text-gray-700")
+    }
   })
 
   it("keeps the one-off file of the whole planning, said not to update", () => {

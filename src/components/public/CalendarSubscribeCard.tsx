@@ -6,6 +6,7 @@
 import { useRef, useState } from "react"
 import { announce } from "@/lib/announce"
 import {
+  CALENDAR_CARD_DESCRIPTION,
   CALENDAR_COPIED,
   CALENDAR_COPY_FAILED,
   CALENDAR_CARD_TITLE,
@@ -28,10 +29,22 @@ export const CALENDAR_TITLE_ID = "calendar-title"
  * region, always mounted; when the clipboard refuses, the address is selected and the message says
  * how to copy it by hand (a selection alone brings no copy menu on phones).
  */
-export default function CalendarSubscribeCard({ webcalUrl, httpsUrl, downloadHref }: { webcalUrl: string; httpsUrl: string; downloadHref: string | null }) {
+export default function CalendarSubscribeCard({
+  webcalUrl,
+  httpsUrl,
+  downloadHref,
+  description = CALENDAR_CARD_DESCRIPTION,
+}: {
+  webcalUrl: string
+  httpsUrl: string
+  downloadHref: string | null
+  /** One paragraph, or one paragraph per string (the organisation-wide card says every event and warns about a former per-event subscription). */
+  description?: string | string[]
+}) {
   const [message, setMessage] = useState("")
   const [failed, setFailed] = useState(false)
   const urlRef = useRef<HTMLSpanElement>(null)
+  const paragraphs = Array.isArray(description) ? description : [description]
 
   function show(text: string, isFailure = false) {
     setFailed(isFailure)
@@ -51,9 +64,9 @@ export default function CalendarSubscribeCard({ webcalUrl, httpsUrl, downloadHre
   return (
     <section aria-labelledby={CALENDAR_TITLE_ID} className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
       <h2 id={CALENDAR_TITLE_ID} className="text-sm font-semibold text-gray-900">{CALENDAR_CARD_TITLE}</h2>
-      <p className="text-sm text-gray-700">
-        Abonne ton agenda à tes créneaux confirmés : il se met à jour tout seul si un horaire change, si un créneau est annulé ou ajouté (selon l&apos;agenda, après quelques heures, parfois un jour).
-      </p>
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph} className="text-sm text-gray-700">{paragraph}</p>
+      ))}
 
       <div>
         <a href={webcalUrl} aria-describedby="calendar-webcal-hint" className={linkClass}>

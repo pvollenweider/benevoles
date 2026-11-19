@@ -280,6 +280,24 @@ describe("MyRegistrationPage — more shifts", () => {
   })
 })
 
+// The per-event card (#961) keeps no whole-planning file with one confirmed shift: the link under
+// that shift downloads the same file. The organisation page, which has no per-shift link, keeps it.
+describe("MyRegistrationPage — calendar card download (#1429, lot C)", () => {
+  afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks() })
+
+  it("has no whole-planning file with one confirmed shift, since « Ajouter à mon calendrier » does it", async () => {
+    await renderPage([bar], undefined, {
+      calendarFeed: {
+        https: "https://asso.example/api/public/registrations/tok-bar/calendar.ics",
+        webcal: "webcal://asso.example/api/public/registrations/tok-bar/calendar.ics",
+      },
+    })
+    const card = screen.getByRole("region", { name: "Mon calendrier" })
+    expect(within(card).queryByRole("link", { name: /Télécharger/ })).toBeNull()
+    expect(screen.getByRole("link", { name: /Ajouter à mon calendrier/ })).toBeInTheDocument()
+  })
+})
+
 // #1324: a page attached to a shift's poste is named with the shift's practical information,
 // never inside the description list, and never twice on the personal page.
 describe("MyRegistrationPage — pages to read before a shift (#1324)", () => {

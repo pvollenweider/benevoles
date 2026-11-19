@@ -40,6 +40,7 @@ const TOKEN_URLS = [
   `/mes-inscriptions/${FAKE}/evenement/evt-1`,
   `/api/public/mes-inscriptions/${FAKE}`,
   `/api/public/mes-inscriptions/${FAKE}/renouveler`,
+  `/api/public/mes-inscriptions/${FAKE}/calendar.ics`,
   `/waitlist/${FAKE}/confirm`,
   `/leader/${FAKE}`,
   `/api/public/registrations/${FAKE}`,
