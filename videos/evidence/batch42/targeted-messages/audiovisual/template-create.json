@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:43:25.921Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "cb0ba8fcf0563e85595e35cfb32e7b69c3cd36e6a2ee0181bdd21fbd748ffdb3",
+  "clipSha256": "ef2622d26d6413c4d1d070d5201d8822c2f2d79bf27166f34dbc8e123f1dfc7a",
+  "scene": "template-create",
+  "review": {
+    "heardOpening": "Pour écrire votre propre texte, fermez la bibliothèque",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "fermez la bibliothèque et cliquez sur Nouveau modèle.",
+        "visibleSeconds": 2,
+        "visible": "Fermeture de la fenêtre modale puis affichage du formulaire Nouveau modèle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Prenons Briefing avant le créneau",
+        "visibleSeconds": 10.3,
+        "visible": "Saisie de « Briefing avant le créneau » dans le champ Nom du modèle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "choisissons Infos pratiques.",
+        "visibleSeconds": 16.8,
+        "visible": "Sélection de « Infos pratiques » dans la liste déroulante Catégorie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33.1,
+        "spoken": "Enregistrons.",
+        "visibleSeconds": 33.6,
+        "visible": "Clic sur Enregistrer et affichage de la confirmation « Modèle Briefing avant le créneau créé »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

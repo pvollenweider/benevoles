@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:43:09.410Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "ffe5c6c5c000d92ba26d09a18a7d6d99fa6e694a867bf94c255a025d2c0a5cc6",
+  "clipSha256": "424caf95d7d51440e516f3577889043f8cd639e69cc35b42a17b1b109900485e",
+  "scene": "audiences",
+  "review": {
+    "heardOpening": "Commencez par le public. Tous les bénévoles inscrits",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Pour un poste, choisissez par exemple la buvette",
+        "visibleSeconds": 5.5,
+        "visible": "L'option 'Les bénévoles d'un poste' est cochée avec 'Buvette' sélectionné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "pour un créneau, précisez aussi la date et l'horaire.",
+        "visibleSeconds": 9,
+        "visible": "L'option 'Les bénévoles d'un créneau' est sélectionnée avec la date et l'horaire (sam. 28 nov., 10:00-14:00).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "La liste d'attente vise les personnes qui attendent une place",
+        "visibleSeconds": 12.2,
+        "visible": "L'option 'Les personnes en liste d'attente' est cochée et le compteur indique 3 personnes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Enfin, les invités sans créneau confirmé",
+        "visibleSeconds": 17.5,
+        "visible": "L'option 'Les invités sans créneau confirmé' est sélectionnée et le compteur se met à jour.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, posée et bien synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

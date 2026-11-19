@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:43:42.784Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "f0bf28942702ed3bb7d2de52c8f7f6e91f1144fec4bedf584c13bf9320123a87",
+  "clipSha256": "64cb22c48d00991ce517430498178e1157f814f236be7525781de381acb60c8c",
+  "scene": "apply",
+  "review": {
+    "heardOpening": "De retour dans le message, voici une première version",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "voici une première version écrite à la main",
+        "visibleSeconds": 2.2,
+        "visible": "Saisie de l'objet « Merci pour ton aide » et du message dans les champs correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "il faut cliquer sur Utiliser ce modèle",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur le bouton Utiliser ce modèle après avoir sélectionné Briefing avant le créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.6,
+        "spoken": "L'objet et le texte changent alors ensemble",
+        "visibleSeconds": 10.1,
+        "visible": "L'objet et le corps du message sont mis à jour avec le modèle de briefing",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Rétablir le texte précédent récupère votre version",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur Rétablir le texte précédent et réapparition de la version saisie à la main",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "puis choisissons un créneau pour que toutes ses variables puissent être remplacées",
+        "visibleSeconds": 18.5,
+        "visible": "Sélection de l'option « Les bénévoles d'un créneau » et choix du créneau Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine naturelle, claire et posée, bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
