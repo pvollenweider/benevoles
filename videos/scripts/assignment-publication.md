@@ -37,3 +37,7 @@ Vingt-neuf inscriptions publiées, les emails réels de deux bénévoles, une an
 - Durée visée (décision du propriétaire) : environ 3 min 20 ; l'email de Noah n'a plus de segment à lui (il répétait celui d'Emma), il apparaît brièvement au début de « Ce que voit le bénévole ».
 - `videos/tools/audit-audiovisual.ts` accepte cette vidéo après `videos/lib/verify-publication-review-fixture.ts` : organisation et membres fictifs exacts, 29 inscriptions publiées dont le parking de Noah annulé, la réponse d'Emma à revoir, seuls les emails de la fixture.
 - **Sources prêtes, rendu en attente** (nouvelle, `published: false`, révision 1).
+
+## Révision du 19 novembre 2026 — lot 43
+
+Le courriel des missions montre le bouton « Mes inscriptions » et la phrase qui décrit sa portée à l'échelle de l'organisation. Noah ouvre ce lien, retrouve ses deux créneaux à venir et choisit « Voir l'événement ». C'est sur la page de l'événement qu'il ajoute son mot lors de l'annulation du parking.

@@ -1421,7 +1421,6 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 
 **Vidéos montrant un email de confirmation ou de rappel** (bouton et phrase de portée périmés ; capture à refaire, narration à ajuster quand elle cite le bouton ou le lien) :
 
-- **ASSIGNMENT_PUBLICATION** (`assignment-publication`) : l'email de publication des missions montre « Gérer mes inscriptions ».
 - **VOLUNTEER_CONFIRMATION_ERRORS** (`volunteer-confirmation-errors`) : email de confirmation et email « Demande d'inscription non enregistrée », tous deux avec leur lien personnel.
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
 - **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
@@ -1431,7 +1430,7 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 - **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
 - **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
 
-**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `ASSIGNMENT_PUBLICATION`, `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (seize vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
+**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (quinze vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
 
 ## Lot 43 — Retrouver toutes mes inscriptions, 19 novembre 2026
 
@@ -1450,3 +1449,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **REMINDERS_CHANGES — NOT READY après deux prises.** Le contrôle du build a écarté la première prise après la fusion de #1440 pendant la capture. La deuxième montre le lien commun dans les vrais rappels et le courriel de changement avec assez de temps de lecture. La narration finale attribue au courriel de Lucas une précision distincte sur sa demande qui ne figure pas dans le texte reçu. La révision 5 reste publiée. [Revue et preuves](evidence/batch43/reminders-changes/take2/review.md).
 
 **LAST_MINUTE_CHANGES — READY, publiée, révision 7, 465,44 s.** Le vrai courriel de changement est lisible 14,88 s, avec les deux horaires, le bouton commun et sa phrase de confidentialité. Le partage montre « Lien copié ». La seconde prise rétablit les consignes de saisie du nom et sépare les confirmations. Douze chapitres vérifiés, onze courriels fictifs reçus et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/last-minute-changes/take2/review.md).
+
+**ASSIGNMENT_PUBLICATION — READY, publiée, révision 2, 174,44 s.** Le vrai courriel des missions ouvre la page de l'organisation, puis « Voir l'événement » donne accès au détail et à l'annulation avec un mot. La nouvelle carte du lien commun apparaît sur le détail. La seconde prise cale la correction de disponibilité et la transition audio. Douze chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/assignment-publication/take2/review.md).

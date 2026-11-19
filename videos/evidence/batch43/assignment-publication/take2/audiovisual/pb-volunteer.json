@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:07:31.363Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "d1489c98c3fd8a568c92d5f9eb9bc6ee06f802438e2a159f6b74f41ef2b6d4db",
+  "clipSha256": "30f9b360ae3863f26c214c872d70e8ba9be96d246232873e7e649a97fc713bad",
+  "scene": "pb-volunteer",
+  "review": {
+    "heardOpening": "Noah a reçu le même e-mail",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Noah a reçu le même e-mail, avec ses deux créneaux.",
+        "visibleSeconds": 0,
+        "visible": "L'e-mail affiche les deux créneaux (Accueil samedi 5 décembre et Parking dimanche 6 décembre).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Il ouvre le bouton Mes inscriptions.",
+        "visibleSeconds": 4,
+        "visible": "Le curseur clique sur le bouton bleu « Mes inscriptions » et la page « Tous tes créneaux à venir » s'ouvre à 00:05.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Cette page rassemble tous ses créneaux à venir auprès de l'organisation.",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la liste des créneaux confirmés avec dates et missions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Avec Voir l'événement, Noah retrouve le détail de ses missions.",
+        "visibleSeconds": 10.8,
+        "visible": "Transition directe vers la page de l'événement détaillant les missions et créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "il peut annuler un créneau, ou Écrire à l'organisation.",
+        "visibleSeconds": 11,
+        "visible": "Les boutons « Annuler » en face des créneaux et le lien « Écrire à l'organisation » sont bien visibles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisation fluide avec l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

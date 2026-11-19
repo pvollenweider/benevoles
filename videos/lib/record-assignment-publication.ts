@@ -6,7 +6,7 @@
  * organisation of scripts/seed-video-publication.ts (scenario assignment-publication), the owner
  * publishes the 29 drafts for real, reads « Publication faite » and the registrations; then the
  * emails the product delivers to the local Mailpit (Emma's, then Noah's), what Noah sees from
- * « Gérer mes inscriptions » and his cancellation, the owner's « Désistement » email, Emma's
+ * « Mes inscriptions » and his cancellation from the event page, the owner's « Désistement » email, Emma's
  * correction of her availability from her availability link, and the mission « à revoir » it
  * leaves on the owner's « Affectations en brouillon ».
  *
@@ -25,6 +25,7 @@
  */
 import assert from "node:assert/strict"
 import type { BrowserContext, Locator, Page } from "playwright"
+import { ORG_EMAIL_SCOPE_SENTENCE } from "../../src/lib/org-personal-page"
 import type { Cue } from "./sentence-timing"
 import { fullNameOf } from "./fixture-names"
 
@@ -70,8 +71,11 @@ export const PB_EXPECTED = {
   emailSubject: "Tu es inscrit·e : Rencontres du Val d'Orsel",
   /** The organiser who published signs the email: the seed's owner, Colette. */
   emailLead: (firstName: string, count: number) => `${fullNameOf("Colette")}, de Association des Rencontres du Val d'Orsel, t'a inscrit·e à Rencontres du Val d'Orsel, sur ${count} créneaux :`,
-  emailButton: "Gérer mes inscriptions",
-  emailUnwanted: "Un créneau ne te convient pas ? Annule-le depuis ton lien personnel, ou réponds à cet email.",
+  emailButton: "Mes inscriptions",
+  emailScope: ORG_EMAIL_SCOPE_SENTENCE("Association des Rencontres du Val d'Orsel"),
+  emailUnwanted: "Un créneau ne te convient pas ? Annule-le depuis ta page « Mes inscriptions », ou réponds à cet email.",
+  orgTitle: "Toutes mes inscriptions",
+  upcoming: "Tous tes créneaux à venir",
   myTitle: "Mes inscriptions",
   myShifts: "Tous mes créneaux",
   writeToOrganisation: "Écrire à l'organisation",
@@ -118,7 +122,7 @@ async function deliveredMail(page: Page, address: string, subject: string): Prom
  * The first link of that kind in a delivered email, whole (never printed): the address its button
  * opens, on the organisation's own host, as the volunteer's browser would.
  */
-async function mailLink(page: Page, mail: Mail, kind: "my" | "disponibilites"): Promise<string> {
+async function mailLink(page: Page, mail: Mail, kind: "mes-inscriptions" | "disponibilites"): Promise<string> {
   const detail = (await (await page.request.get(`${MAILPIT}/api/v1/message/${mail.ID}`)).json()) as { Text: string }
   const link = new RegExp(`https?://[^\\s/]+/${kind}/[A-Za-z0-9_-]+`).exec(detail.Text)
   assert(link, `The email « ${mail.Subject} » has no /${kind}/ link`)
@@ -187,6 +191,16 @@ export async function recordAssignmentPublication(options: Options) {
     await page.goto(`${MAILPIT}/view/${id}`)
     await mailBody().getByText(greeting, exact).waitFor()
   }
+  const showPlacementLink = async () => {
+    const button = mailBody().getByRole("link", { name: PB_EXPECTED.emailButton, exact: true })
+    assert((await button.getAttribute("href"))?.includes("/mes-inscriptions/"))
+    const scope = mailBody().getByText(PB_EXPECTED.emailScope, exact)
+    await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+    for (const field of [button, scope]) {
+      const box = await field.boundingBox()
+      assert(box && box.y >= 312 && box.y + box.height <= 800, "The placement link and scope fit in the Mailpit crop")
+    }
+  }
   /** Mailpit opens a message's links in a new tab: the take follows the same link in this one. */
   const followMailLink = async (name: string, link: string) => {
     const popup = page.context().waitForEvent("page", { timeout: 2_500 }).catch(() => null)
@@ -220,18 +234,18 @@ export async function recordAssignmentPublication(options: Options) {
   await scene("pb-publish", async at => {
     await publishHeading.scrollIntoViewIfNeeded()
     await page.getByText(PB_EXPECTED.drafts, exact).waitFor()
-    await at("La confirmation le rappelle")
+    await at("Cliquons sur Publier les affectations")
     await tap(page, page.getByRole("button", { name: "Publier les affectations", exact: true }))
     await confirm.waitFor()
     await confirm.getByText(PB_EXPECTED.confirm).waitFor()
     await confirm.getByText(PB_EXPECTED.confirmTakes).waitFor()
     assert.equal(await confirm.getByText(/pas d'adresse email/).count(), 0, "every person of the fixture has an email")
+    await at("Confirmons avec Publier")
+    await tap(page, confirm.getByRole("button", { name: "Publier", exact: true }))
   })
 
   const done = page.getByRole("group", { name: "Publication faite" })
   await scene("pb-done", async at => {
-    // « Confirmons avec Publier » ended the previous segment.
-    await tap(page, confirm.getByRole("button", { name: "Publier", exact: true }))
     await confirm.waitFor({ state: "detached", timeout: 30_000 })
     await done.waitFor({ timeout: 30_000 })
     await done.getByText(PB_EXPECTED.published, exact).waitFor()
@@ -245,7 +259,7 @@ export async function recordAssignmentPublication(options: Options) {
 
   await scene("pb-registrations", async at => {
     await done.scrollIntoViewIfNeeded()
-    await at("La liste compte")
+    await at("Ouvrons Voir les inscriptions")
     await tap(page, done.getByRole("link", { name: "Voir les inscriptions", exact: true }))
     await page.waitForURL(/\/registrations$/); await settle(page)
     await page.getByText(PB_EXPECTED.registrations, exact).waitFor()
@@ -267,7 +281,8 @@ export async function recordAssignmentPublication(options: Options) {
     await openMail(emmaMail.ID, `Hello ${PB_TYPED.emma.firstName},`)
     await mailBody().getByText(PB_EXPECTED.emailLead(PB_TYPED.emma.firstName, 2), exact).waitFor()
     assert.equal(await mailBody().getByRole("listitem").filter({ hasText: /^Bar des Tilleuls, / }).count(), 2, "Emma's two evenings at the bar")
-    await mailBody().getByRole("link", { name: PB_EXPECTED.emailButton, exact: true }).waitFor()
+    await at("Sous le bouton Mes inscriptions")
+    await showPlacementLink()
   })
 
   const cards = page.locator("[id^='registration-']")
@@ -278,10 +293,19 @@ export async function recordAssignmentPublication(options: Options) {
     await mailBody().getByText(PB_EXPECTED.emailLead(PB_TYPED.noah.firstName, 2), exact).waitFor()
     await mailBody().getByRole("listitem").filter({ hasText: /^Accueil, samedi / }).waitFor()
     await mailBody().getByRole("listitem").filter({ hasText: /^Parking, dimanche / }).waitFor()
-    const noahLink = await mailLink(page, noahMail!, "my")
+    const noahLink = await mailLink(page, noahMail!, "mes-inscriptions")
+    await showPlacementLink()
     await asVolunteer()
-    await at("Sa page Mes inscriptions")
+    await at("Il ouvre le bouton Mes inscriptions")
     await followMailLink(PB_EXPECTED.emailButton, noahLink)
+    await page.getByRole("heading", { level: 1, name: PB_EXPECTED.orgTitle, exact: true }).waitFor()
+    const upcoming = page.getByRole("region", { name: PB_EXPECTED.upcoming, exact: true })
+    const parkingSummary = upcoming.getByRole("listitem").filter({ has: page.getByText("Parking", exact) })
+    await upcoming.getByRole("listitem").filter({ has: page.getByText("Accueil", exact) }).waitFor()
+    await upcoming.getByRole("heading", { name: PB_EXPECTED.upcoming, exact: true }).evaluate(element => element.scrollIntoView({ block: "start" }))
+    await at("Avec Voir l'événement")
+    await tap(page, parkingSummary.getByRole("link", { name: /^Voir l'événement/ }))
+    await page.waitForURL(/\/my\//)
     await page.getByRole("heading", { level: 1, name: PB_EXPECTED.myTitle, exact: true }).waitFor()
     const shifts = page.getByRole("heading", { level: 2, name: PB_EXPECTED.myShifts, exact: true })
     await shifts.evaluate(element => element.scrollIntoView({ block: "start" }))
@@ -294,7 +318,7 @@ export async function recordAssignmentPublication(options: Options) {
 
   await scene("pb-cancel", async at => {
     const parking = card("Parking")
-    await at("Il peut laisser un mot pour l'organisation")
+    await at("il appuie sur Annuler")
     await tap(page, parking.getByRole("button", { name: /^Annuler le créneau Parking/ }))
     await parking.getByText(PB_EXPECTED.cancelTitle, exact).waitFor()
     const message = parking.getByLabel(PB_EXPECTED.cancelMessage, exact)
@@ -303,7 +327,7 @@ export async function recordAssignmentPublication(options: Options) {
     assert.equal(await message.inputValue(), PB_TYPED.message)
     // Keep the typed words readable before the confirmation removes the form.
     await page.waitForTimeout(700)
-    await at("Il lui reste son créneau de samedi")
+    await at("il confirme avec Oui, annuler")
     await tap(page, parking.getByRole("button", { name: PB_EXPECTED.cancelConfirm, exact: true }))
     await parking.waitFor({ state: "detached" })
     await card("Accueil").scrollIntoViewIfNeeded()
@@ -320,6 +344,7 @@ export async function recordAssignmentPublication(options: Options) {
     await mailBody().getByRole("link", { name: PB_EXPECTED.replacement, exact: true }).waitFor()
   })
 
+  const friday = page.locator("fieldset[data-availability-day]").nth(PB_TYPED.emma.day)
   await scene("pb-correct", async at => {
     await openMail(setup.availabilityMailId, `Bonjour ${PB_TYPED.emma.firstName},`)
     await mailBody().getByRole("link", { name: PB_EXPECTED.availabilityButton, exact: true }).waitFor()
@@ -328,16 +353,17 @@ export async function recordAssignmentPublication(options: Options) {
     await page.getByRole("heading", { level: 1, name: PB_EXPECTED.availabilityTitle, exact: true }).waitFor()
     await page.getByText(PB_EXPECTED.correction, exact).waitFor()
     await at("Pour vendredi")
-    await page.locator("fieldset[data-availability-day]").nth(PB_TYPED.emma.day).scrollIntoViewIfNeeded()
+    await friday.scrollIntoViewIfNeeded()
+    await at("elle choisit Pas disponible")
+    const unavailable = friday.getByRole("radio", { name: PB_EXPECTED.unavailable, exact: true })
+    await tap(page, unavailable)
+    assert(await unavailable.isChecked())
   })
 
   await scene("pb-saved", async at => {
-    // « elle choisit Pas disponible » ended the previous segment.
-    const friday = page.locator("fieldset[data-availability-day]").nth(PB_TYPED.emma.day)
-    await tap(page, friday.getByRole("radio", { name: PB_EXPECTED.unavailable, exact: true }))
     const save = page.getByRole("button", { name: PB_EXPECTED.save, exact: true })
     await save.scrollIntoViewIfNeeded()
-    await at("La page confirme")
+    await at("Enregistrer mes disponibilités")
     await tap(page, save)
     const saved = page.getByRole("status").filter({ hasText: PB_EXPECTED.saved })
     await saved.waitFor()

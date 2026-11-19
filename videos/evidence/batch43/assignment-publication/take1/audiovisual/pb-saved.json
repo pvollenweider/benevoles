@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:00:27.745Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "8c246ae7a097a45a5a519f8ed6d1402512dff110894e421fac6b8de0a8336f4c",
+  "clipSha256": "d5d52a89f6872ea7ff01585a54109c3f3fac2efaa0ff1f0483c911a9415de524",
+  "scene": "pb-saved",
+  "review": {
+    "heardOpening": "Enregistrer mes disponibilités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Enregistrer mes disponibilités",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le bouton bleu « Enregistrer mes disponibilités »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "La page confirme :",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage du message de confirmation « C'est enregistré... » au-dessus du bouton",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "l'organisation est prévenue, et ses missions restent les mêmes.",
+        "visibleSeconds": 3,
+        "visible": "Texte de confirmation indiquant : « Si tes disponibilités ont changé, l'organisation est prévenue... ses missions restent les mêmes. »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

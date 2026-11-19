@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:59:36.889Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "c9786f201898a63a85140f76cc41859a79855ebf0262ca12fcad37568d2556b7",
+  "clipSha256": "8ce206e894817f996e441cec2bbbff670f05c7826aefcc5ec2ec6856a9106b36",
+  "scene": "pb-done",
+  "review": {
+    "heardOpening": "Publication faite",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Publication faite, 29 affectations publiées pour 11 personnes",
+        "visibleSeconds": 0.5,
+        "visible": "Bandeau vert affichant « Publication faite : 29 affectations publiées pour 11 personnes »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "et plus aucun brouillon",
+        "visibleSeconds": 4.5,
+        "visible": "Indication sous le bandeau « Aucune affectation en brouillon pour l'instant »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Sur le planning, chaque mission est maintenant Confirmée",
+        "visibleSeconds": 7,
+        "visible": "Défilement vers le tableau du planning montrant les pastilles vertes « Confirmée » à côté de chaque créneau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, parfaitement synchronisée avec l'affichage et le défilement de la page."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

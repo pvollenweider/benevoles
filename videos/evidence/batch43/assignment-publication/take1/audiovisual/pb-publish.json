@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:59:38.529Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "655300018a1e8b3fd817193e665bf8ffa1b4bcfdf78dab3518bbe2db6a1f9a73",
+  "clipSha256": "71c470e9bdf6fc206e157fefa09e2d815c59c84beecef3aee97cc4d4a34ffc21",
+  "scene": "pb-publish",
+  "review": {
+    "heardOpening": "Cliquons sur Publier les affectations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Cliquons sur Publier les affectations",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton 'Publier les affectations' et affichage de la fenêtre modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "La confirmation le rappelle : les places sont prises maintenant, et chaque personne reçoit un seul email avec ses missions",
+        "visibleSeconds": 3.2,
+        "visible": "Texte d'avertissement affiché dans la fenêtre de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Confirmons avec Publier",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur le bouton 'Publier' dans la modale, passage à l'état 'En cours...' puis affichage de 'Publication faite'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, dynamique et bien articulée, parfaitement synchronisée avec les étapes montrées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:00:29.942Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "782bba54028146352ee3b10b3c451c38d5245bccd3ad3c23680d38e3e2f9048f",
+  "clipSha256": "e95b5577a067a48cff04c792d3baf0e02ac87b9ab40b0f8250f04d65b6bbace2",
+  "scene": "pb-review",
+  "review": {
+    "heardOpening": "Sur Affectations en brouillon, vous voyez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Sur Affectations en brouillon, vous voyez une mission à revoir après une correction des disponibilités",
+        "visibleSeconds": 1,
+        "visible": "Section 'Affectations en brouillon' affichant '1 mission à revoir après une correction des disponibilités'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Emma, vendredi, au Bar des Tilleuls",
+        "visibleSeconds": 6,
+        "visible": "Lien et mention 'Emma Johansson, vendredi 4 décembre, Bar des Tilleuls, de 18h à 22h'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Dans sa case, Voir l'inscription mène à son inscription",
+        "visibleSeconds": 10,
+        "visible": "Tableau planning affiché avec le lien 'Voir l'inscription' dans la case du vendredi d'Emma Johansson",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et parfaitement intelligible, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

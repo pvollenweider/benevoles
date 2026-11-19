@@ -1,0 +1,395 @@
+{
+  "slug": "assignment-publication",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-11-19T21:02:17.494Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "9ca74264e2234bfaac258a925a2217601f6a3c76",
+    "sourceTree": "4d73cefda7c17693667bb88014ff82b65cc7e152",
+    "productSourceSha256": "6ea67eb42724d2eaff73fae841761cbeb01be6bc718e65f9219151922ab1082c",
+    "buildId": "bBtzxaQImIpvM7hmmnv_I",
+    "snapshot": "/private/tmp/benevoles-video-production.1tSPRbtI",
+    "builtAt": "2026-11-19T20:46:45.655Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "ASSIGNMENT_PUBLICATION",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6053
+    },
+    {
+      "kind": "click",
+      "atMs": 6870
+    },
+    {
+      "kind": "click",
+      "atMs": 10479
+    },
+    {
+      "kind": "click",
+      "atMs": 17250
+    },
+    {
+      "kind": "click",
+      "atMs": 18746
+    },
+    {
+      "kind": "click",
+      "atMs": 20085
+    },
+    {
+      "kind": "click",
+      "atMs": 20918
+    },
+    {
+      "kind": "key",
+      "atMs": 21226
+    },
+    {
+      "kind": "key",
+      "atMs": 21325
+    },
+    {
+      "kind": "key",
+      "atMs": 21424
+    },
+    {
+      "kind": "key",
+      "atMs": 21524
+    },
+    {
+      "kind": "key",
+      "atMs": 21624
+    },
+    {
+      "kind": "key",
+      "atMs": 21723
+    },
+    {
+      "kind": "key",
+      "atMs": 21822
+    },
+    {
+      "kind": "key",
+      "atMs": 21921
+    },
+    {
+      "kind": "key",
+      "atMs": 22020
+    },
+    {
+      "kind": "key",
+      "atMs": 22119
+    },
+    {
+      "kind": "key",
+      "atMs": 22218
+    },
+    {
+      "kind": "key",
+      "atMs": 22318
+    },
+    {
+      "kind": "key",
+      "atMs": 22417
+    },
+    {
+      "kind": "key",
+      "atMs": 22516
+    },
+    {
+      "kind": "key",
+      "atMs": 22616
+    },
+    {
+      "kind": "key",
+      "atMs": 22713
+    },
+    {
+      "kind": "key",
+      "atMs": 22811
+    },
+    {
+      "kind": "key",
+      "atMs": 22911
+    },
+    {
+      "kind": "key",
+      "atMs": 23010
+    },
+    {
+      "kind": "key",
+      "atMs": 23108
+    },
+    {
+      "kind": "key",
+      "atMs": 23208
+    },
+    {
+      "kind": "key",
+      "atMs": 23306
+    },
+    {
+      "kind": "key",
+      "atMs": 23405
+    },
+    {
+      "kind": "key",
+      "atMs": 23504
+    },
+    {
+      "kind": "key",
+      "atMs": 23709
+    },
+    {
+      "kind": "key",
+      "atMs": 23808
+    },
+    {
+      "kind": "key",
+      "atMs": 23906
+    },
+    {
+      "kind": "key",
+      "atMs": 24110
+    },
+    {
+      "kind": "click",
+      "atMs": 25585
+    },
+    {
+      "kind": "click",
+      "atMs": 31383
+    },
+    {
+      "kind": "click",
+      "atMs": 32852
+    },
+    {
+      "kind": "click",
+      "atMs": 34118
+    }
+  ],
+  "cues": [
+    {
+      "id": "pb-welcome",
+      "startMs": 11,
+      "endMs": 2719
+    },
+    {
+      "id": "pb-ready",
+      "startMs": 3171,
+      "endMs": 3234
+    },
+    {
+      "id": "pb-publish",
+      "startMs": 5497,
+      "endMs": 7179
+    },
+    {
+      "id": "pb-done",
+      "startMs": 7632,
+      "endMs": 7669
+    },
+    {
+      "id": "pb-registrations",
+      "startMs": 9930,
+      "endMs": 11319
+    },
+    {
+      "id": "pb-email",
+      "startMs": 13583,
+      "endMs": 14329
+    },
+    {
+      "id": "pb-volunteer",
+      "startMs": 16594,
+      "endMs": 19151
+    },
+    {
+      "id": "pb-cancel",
+      "startMs": 19603,
+      "endMs": 25917
+    },
+    {
+      "id": "pb-withdrawal",
+      "startMs": 28198,
+      "endMs": 28486
+    },
+    {
+      "id": "pb-correct",
+      "startMs": 30750,
+      "endMs": 33158
+    },
+    {
+      "id": "pb-saved",
+      "startMs": 33611,
+      "endMs": 34428
+    },
+    {
+      "id": "pb-review",
+      "startMs": 36694,
+      "endMs": 37434
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "pb-ready",
+      "phrase": "Sur le planning, ce sont encore des brouillons",
+      "startMs": 7802,
+      "endMs": 11417,
+      "cueMs": 3208
+    },
+    {
+      "segmentId": "pb-publish",
+      "phrase": "Cliquons sur Publier les affectations",
+      "startMs": 0,
+      "endMs": 3049,
+      "cueMs": 5538
+    },
+    {
+      "segmentId": "pb-publish",
+      "phrase": "Confirmons avec Publier",
+      "startMs": 12380,
+      "endMs": 14320,
+      "cueMs": 6376
+    },
+    {
+      "segmentId": "pb-done",
+      "phrase": "Sur le planning",
+      "startMs": 6774,
+      "endMs": 10740,
+      "cueMs": 7644
+    },
+    {
+      "segmentId": "pb-registrations",
+      "phrase": "Ouvrons Voir les inscriptions",
+      "startMs": 0,
+      "endMs": 2020,
+      "cueMs": 9968
+    },
+    {
+      "segmentId": "pb-registrations",
+      "phrase": "chacune avec la source Affectation publiée",
+      "startMs": 2020,
+      "endMs": 8080,
+      "cueMs": 11295
+    },
+    {
+      "segmentId": "pb-email",
+      "phrase": "Voici celui d'Emma",
+      "startMs": 7068,
+      "endMs": 10874,
+      "cueMs": 14102
+    },
+    {
+      "segmentId": "pb-email",
+      "phrase": "Sous le bouton Mes inscriptions",
+      "startMs": 10874,
+      "endMs": 16622,
+      "cueMs": 14303
+    },
+    {
+      "segmentId": "pb-volunteer",
+      "phrase": "Il ouvre le bouton Mes inscriptions",
+      "startMs": 3474,
+      "endMs": 6146,
+      "cueMs": 16776
+    },
+    {
+      "segmentId": "pb-volunteer",
+      "phrase": "Avec Voir l'événement",
+      "startMs": 11490,
+      "endMs": 16033,
+      "cueMs": 18236
+    },
+    {
+      "segmentId": "pb-volunteer",
+      "phrase": "Ici, pas de bouton pour changer de mission",
+      "startMs": 16033,
+      "endMs": 19061,
+      "cueMs": 19146
+    },
+    {
+      "segmentId": "pb-cancel",
+      "phrase": "il appuie sur Annuler",
+      "startMs": 4184,
+      "endMs": 6277,
+      "cueMs": 19604
+    },
+    {
+      "segmentId": "pb-cancel",
+      "phrase": "Il écrit son message",
+      "startMs": 10345,
+      "endMs": 15575,
+      "cueMs": 20394
+    },
+    {
+      "segmentId": "pb-cancel",
+      "phrase": "il confirme avec Oui, annuler",
+      "startMs": 10345,
+      "endMs": 15575,
+      "cueMs": 25097
+    },
+    {
+      "segmentId": "pb-withdrawal",
+      "phrase": "Trouver un remplaçant",
+      "startMs": 12348,
+      "endMs": 17670,
+      "cueMs": 28481
+    },
+    {
+      "segmentId": "pb-correct",
+      "phrase": "La page le dit",
+      "startMs": 9446,
+      "endMs": 10668,
+      "cueMs": 30889
+    },
+    {
+      "segmentId": "pb-correct",
+      "phrase": "Pour vendredi",
+      "startMs": 16669,
+      "endMs": 20670,
+      "cueMs": 32340
+    },
+    {
+      "segmentId": "pb-correct",
+      "phrase": "elle choisit Pas disponible",
+      "startMs": 16669,
+      "endMs": 20670,
+      "cueMs": 32349
+    },
+    {
+      "segmentId": "pb-saved",
+      "phrase": "Enregistrer mes disponibilités",
+      "startMs": 0,
+      "endMs": 2906,
+      "cueMs": 33634
+    },
+    {
+      "segmentId": "pb-review",
+      "phrase": "Personne n'a été déplacé ni désinscrit",
+      "startMs": 11069,
+      "endMs": 14149,
+      "cueMs": 37405
+    },
+    {
+      "segmentId": "pb-review",
+      "phrase": "Dans sa case, Voir l'inscription",
+      "startMs": 14149,
+      "endMs": 18480,
+      "cueMs": 37432
+    }
+  ]
+}

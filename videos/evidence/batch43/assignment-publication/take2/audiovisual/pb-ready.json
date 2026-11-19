@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:06:43.614Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "e6494001c3848e33b20fcc513c14e85b54d0296b85174a352504f90fcfd8b403",
+  "clipSha256": "a23f20d255f55985aa4517f798a6bd37f285e29b01af2a49149a3e38dbc64aee",
+  "scene": "pb-ready",
+  "review": {
+    "heardOpening": "Aux Rencontres du Val d'Orsel, 29 affectations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Aux Rencontres du Val d'Orsel",
+        "visibleSeconds": 0.5,
+        "visible": "Page de l'événement « Rencontres du Val d'Orsel » affichée dans l'onglet Inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "vingt-neuf affectations en brouillon attendent, pour onze personnes",
+        "visibleSeconds": 2.2,
+        "visible": "Mention « 29 affectations en brouillon pour 11 personnes » visible sous la section Publier les affectations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Sur le planning, ce sont encore des brouillons",
+        "visibleSeconds": 6.8,
+        "visible": "Défilement vers le bas révélant le tableau du planning par personne avec les mentions « Brouillon »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:07:41.083Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "e8bdb5913b65de0b6e2028e30636256119c5cf2329f3b73e7647aff6b3f991bc",
+  "clipSha256": "f5a92acdd4dcc81458b02ccf81c782d9ac2b45d7bb5f8804fd1c37af69ec4a1d",
+  "scene": "pb-correct",
+  "review": {
+    "heardOpening": "Emma, elle, n'est plus libre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Voici ce qu'elle voit avec le lien reçu pour ses disponibilités.",
+        "visibleSeconds": 7.5,
+        "visible": "Clic sur le bouton « Indiquer mes disponibilités » ouvrant la page du formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La page le dit : elle peut les corriger, et cela ne modifie ni n'annule ses missions.",
+        "visibleSeconds": 8,
+        "visible": "La page affiche le texte informatif : « Tu peux corriger tes disponibilités. Cela ne modifie ni n'annule tes missions. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.6,
+        "spoken": "Pour vendredi, elle choisit Pas disponible.",
+        "visibleSeconds": 13,
+        "visible": "Sélection de la case d'option « Pas disponible » sous la section Vendredi 4 décembre.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

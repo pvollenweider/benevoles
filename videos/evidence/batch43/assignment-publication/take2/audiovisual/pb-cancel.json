@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:07:20.293Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "60ee76d9ca78bd175fcc7f598c4b4725671977b1a5ac78a25c3e8ad7d9dd1747",
+  "clipSha256": "1d9e71443e23a97da3138608ee4b60d9faee973ef924971934a9c65775c65126",
+  "scene": "pb-cancel",
+  "review": {
+    "heardOpening": "Le parking de dimanche ne lui convient plus",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "il appuie sur Annuler.",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur le bouton Annuler en face du créneau Parking et ouverture de la boîte de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Il écrit son message,",
+        "visibleSeconds": 6.7,
+        "visible": "Saisie du message « Absent dimanche matin, désolé » dans le champ texte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "puis il confirme avec Oui, annuler.",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur le bouton rouge Oui, annuler",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "Il lui reste son créneau de samedi.",
+        "visibleSeconds": 11.5,
+        "visible": "Le créneau Parking du dimanche disparaît, seul le créneau Accueil du samedi reste visible",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, naturelle, bien posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

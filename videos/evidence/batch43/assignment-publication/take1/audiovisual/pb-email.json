@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:59:47.058Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "fea5134d935c511a8b2c7b73035298b05f7e5b2f5a6faf24b473b6248dedd5e4",
+  "clipSha256": "db3dc0c89a8e331fb00df8eb135302c17d73c569e5cd5e8734e4c97ab821fdbc",
+  "scene": "pb-email",
+  "review": {
+    "heardOpening": "Les emails partent une dizaine de minutes après la publication",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les emails partent une dizaine de minutes après la publication : un seul par personne",
+        "visibleSeconds": 0.5,
+        "visible": "Tableau récapitulatif des bénévoles avec le statut Affectation publiée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Voici celui d'Emma avec ses deux soirées au Bar des Tilleuls.",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de l'email adressé à Emma avec les deux créneaux au Bar des Tilleuls",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Sous le bouton Mes inscriptions, le texte précise que le lien couvre toute l'organisation.",
+        "visibleSeconds": 10.3,
+        "visible": "Bouton bleu « Mes inscriptions » et texte explicatif en dessous",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, parfaitement synchronisée avec la transition vers l'exemple d'email."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
