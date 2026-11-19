@@ -22,11 +22,13 @@
 #   database backup                  -> cluster DNS, postgres :5432, Traefik :8443 (its heartbeat)
 #   off-site copy                    -> cluster DNS, Traefik :8443, the internet on :443 only
 #                                       (Swiss Backup), never an address inside the cluster
-#   app                              -> cluster DNS, postgres :5432, the internet on any port
-#                                       (SMTP, Sentry, ntfy, GitHub, and web push services, whose
-#                                       hosts and ports each browser chooses), never an address
+#   app                              -> cluster DNS, postgres :5432, Traefik :8443 (its own public
+#                                       address: the standalone build sends the 404 rewrite out
+#                                       as an HTTP request), the internet on any port (SMTP,
+#                                       Sentry, ntfy, GitHub, and web push services, whose hosts
+#                                       and ports each browser chooses), never another address
 #                                       inside the cluster: no other pod, no service, not the
-#                                       cluster API. The app never calls its own public address.
+#                                       cluster API.
 # A pod without one of the labels below keeps free egress, so a Job started from an older template
 # is never cut off.
 #
@@ -361,6 +363,19 @@ spec:
       ports:
         - protocol: TCP
           port: 5432
+    # Its own public address, through Traefik: the proxy rewrites a missing page to
+    # /_404/page/introuvable, and the standalone build sends that rewrite out as an HTTP request
+    # to the public host. Without this rule every unknown URL answered 500.
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8443
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0

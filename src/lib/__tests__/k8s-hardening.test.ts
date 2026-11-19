@@ -379,18 +379,19 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     const exceptOf = (d: string) =>
       d.match(/ipBlock:\n\s+cidr: 0\.0\.0\.0\/0\n\s+except:\n((?:\s+- \S+\n)+)/)![1].trim().split("\n").map((l) => l.trim().replace(/^- /, "")).sort()
 
-    it("lets the app reach the cluster DNS, postgres and the internet, never the cluster", () => {
+    it("lets the app reach the cluster DNS, postgres, Traefik and the internet, never the rest of the cluster", () => {
       const d = byName("app-egress")
       expect(d).toMatch(dns)
       expect(d).toMatch(/- to:\n\s+- podSelector:\n\s+matchLabels:\n\s+app: postgres\n\s+ports:\n\s+- protocol: TCP\n\s+port: 5432\n/)
-      expect(d.match(/^\s+- to:/gm)).toHaveLength(3)
+      expect(d.match(/^\s+- to:/gm)).toHaveLength(4)
       // Web push services choose their own host and port, and the SMTP port is a setting: the
       // internet rule carries no port. What it must never include is the inside of the cluster.
       expect(exceptOf(d)).toEqual(INTERNAL)
       expect(d).not.toMatch(/ipBlock:[\s\S]*ports:/)
-      // The app does not call its own public address, so it gets no way to Traefik, through
-      // which it would reach the other sites of the cluster.
-      expect(d).not.toContain("traefik")
+      // Regression: the standalone build sends the proxy's 404 rewrite (/_404/page/introuvable)
+      // out as an HTTP request to the public host, which the node hands to Traefik. Without this
+      // rule every unknown URL answered 500. Only Traefik's port, nothing else in kube-system.
+      expect(d).toMatch(/namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+app\.kubernetes\.io\/name: traefik\n\s+ports:\n\s+- protocol: TCP\n\s+port: 8443\n/)
     })
 
     it("every rule to the internet leaves out the same internal ranges", () => {
