@@ -122,6 +122,20 @@ describe("deploy environments and namespaced credential", () => {
     }
   })
 
+  // Pentest P-11: the off-site copy and the credential of the off-site storage live in a
+  // namespace where the deploy account has no right; the operator applies them by hand.
+  it("never applies the off-site copy nor its namespace, and never names that namespace", () => {
+    for (const file of ["k8s/cronjob-backup-offsite.yaml", "k8s/backup-offsite-namespace.yaml"]) {
+      expect(deploy, file).not.toContain(file.slice("k8s/".length))
+    }
+    expect(deploy).not.toContain("benevoles-offsite")
+    for (const { line, script } of runScripts(deploy)) {
+      // Every kubectl call that names a namespace names benevoles.
+      for (const m of script.matchAll(/(?:^|\s)(?:-n|--namespace)[ =]([\w-]+)/g)) expect(m[1], `deploy.yml:${line}`).toBe("benevoles")
+      expect(script, `deploy.yml:${line}`).not.toMatch(/--all-namespaces|(^|\s)-A(\s|$)/)
+    }
+  })
+
   describe("Check required secrets", () => {
     const start = deploy.indexOf("- name: Check required secrets")
     const block = deploy.slice(start, deploy.indexOf("- name:", start + 1))
