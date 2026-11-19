@@ -11,9 +11,10 @@
 
 - `SECTORS` — READY, publiée (révision 4). [Répétition](sectors/rehearsal.json), [validation](sectors/validation.json), [partage dans Parking](sectors/parking-share.jpg) et [mesure distante](sectors/published-ffprobe.json). Affiche vérifiée par HEAD (200).
 
+- `VOLUNTEER_REGISTER` — READY, publiée (révision 5). [Répétition](volunteer-register-mobile/rehearsal.json), [validation](volunteer-register-mobile/validation.json), [Liste au chargement](volunteer-register-mobile/default-list.jpg) et [mesure distante](volunteer-register-mobile/published-ffprobe.json). Affiche vérifiée par HEAD (200).
+
 ## Reprises restantes
 
-4. `VOLUNTEER_REGISTER`
 5. `VOLUNTEER_DISCOVER_EVENT`
 6. `VOLUNTEER_CONFIRMATION_ERRORS`
 7. `REGISTRATION_MONITOR_FOLLOWUP`

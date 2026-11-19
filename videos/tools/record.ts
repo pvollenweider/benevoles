@@ -584,7 +584,10 @@ async function main() {
     // A phone opens on the list (#1407): the list item is named by its visible text.
     const shift = page.getByRole("button", { name: /^15h–18h · Accueil\b/ })
     await scene("discover", async () => {
-      await shift.scrollIntoViewIfNeeded()
+      const display = page.getByRole("group", { name: "Affichage des créneaux" })
+      await display.getByRole("button", { name: "Liste", exact: true, pressed: true }).waitFor()
+      await display.evaluate(group => group.scrollIntoView({ block: "start" }))
+      await shift.waitFor()
       await page.waitForTimeout(700)
     })
 
@@ -605,13 +608,15 @@ async function main() {
       await fillVisibly(page, page.getByRole("textbox", { name: /Téléphone/, exact: true }), "079 000 12 34", 180)
     })
 
-    await scene("preferences", async () => {
+    await scene("preferences", async at => {
       const size = page.getByRole("radio", { name: "M", exact: true })
       await size.scrollIntoViewIfNeeded()
       await tap(page, size)
       const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
+      await at(0.32) /* mid-sentence: accept the charter on « accepte la convention » */
       await tap(page, charter)
       const privacy = page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ })
+      await at(0.57) /* mid-sentence: accept the use of data when it is named */
       await tap(page, privacy)
     })
 
@@ -619,8 +624,9 @@ async function main() {
       const submit = page.getByRole("button", { name: "Confirmer mon inscription" })
       await at("Un dernier coup d’œil au")
       await page.getByText(/^Tes créneaux/).filter({ visible: true }).first().scrollIntoViewIfNeeded()
-      await at("confirme ton inscription.")
+      await at(0.54) /* mid-sentence: bring the button into view after showing the recap */
       await submit.scrollIntoViewIfNeeded()
+      await at("confirme ton inscription.")
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
       await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
@@ -2159,20 +2165,25 @@ async function main() {
         await reserved.focus()
       })
 
-      await page.screencast.showChapter("Sur téléphone", { description: "Faire défiler sans perdre les détails", duration: 1_400 })
+      await page.screencast.showChapter("Sur téléphone", { description: "De la liste à la frise", duration: 1_400 })
       await scene("mobile", async (at) => {
         await page.setViewportSize({ width: 390, height: 800 })
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
-        // A phone opens on the list (#1407); this scene shows the Frise, chosen with its button.
-        await tap(page, page.getByRole("button", { name: "Frise", exact: true }))
-        const hint = page.getByText(/Fais défiler pour voir toutes les plages/).first()
-        await hint.scrollIntoViewIfNeeded()
-        await at("Glisse doucement pour parcourir la")
+        const display = page.getByRole("group", { name: "Affichage des créneaux" })
+        await display.getByRole("button", { name: "Liste", exact: true, pressed: true }).waitFor()
+        await display.evaluate(group => group.scrollIntoView({ block: "start" }))
+        await page.getByRole("list", { name: /Créneaux du/ }).first().waitFor()
+        await at("Touche Frise pour retrouver")
+        await tap(page, display.getByRole("button", { name: "Frise", exact: true }))
         const timeline = page.getByRole("region", { name: /Planning du/ }).first()
-        await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth * 0.46 })
-        await at(0.65) /* mid-sentence: continue the demonstrated horizontal swipe */
-        await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth })
-        await at("Tu retrouves les heures, les")
+        await page.getByText(/Fais défiler pour voir toutes les plages/).first().scrollIntoViewIfNeeded()
+        await at("Glisse dans la frise")
+        const didScroll = await timeline.evaluate(element => {
+          element.scrollLeft = element.scrollWidth
+          return element.scrollLeft > 0
+        })
+        if (!didScroll) throw new Error("The portrait Frise did not scroll horizontally")
+        await at("Descends ensuite pour retrouver")
         await page.getByText(/Brunch/).first().scrollIntoViewIfNeeded()
       })
 

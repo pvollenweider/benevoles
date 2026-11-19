@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T13:03:15.148Z",
+  "revalidatedAt": "2026-11-19T13:03:15.148Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "a12f35b099bbf1df82b694884a402b0acdc4346e4eaa15a80023dd4922ea1e25",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "079a8d8477fcb9c79a4c9c51bf3c812655d70cf562f20ff704ad2516e9cd54b1",
+      "recognized": "Envie de donner un coup de main ? Ouvre le lien reçu ou scanne le QR code affiché par l'association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "expected": "Envie de donner un coup de main ? Ouvre le lien reçu, ou scanne le QR code affiché par l’association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "discover",
+      "audioSha256": "0a664b7729d483f1a74623cedae0f8407e79731a78a58e5dad11d41e5720e4df",
+      "recognized": "Sur la page de l'événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "expected": "Sur la page de l’événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "choose",
+      "audioSha256": "d2917d629bc52e8c79da841357a12844f98afc69483b4fc1b1d28f374b55627c",
+      "recognized": "Choisis simplement le créneau qui te convient. Ici, on rejoint l'équipe d'accueil de quinze heures à dix-huit heures.",
+      "expected": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "details",
+      "audioSha256": "0a567d7ddd3b854da3d3b36a57b7c9906600d98ef9a8293b6372a3e9677ff0ec",
+      "recognized": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l'organisation de l'événement et à l'envoi des informations utiles.",
+      "expected": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l’organisation de l’événement et à l’envoi des informations utiles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preferences",
+      "audioSha256": "e751dd488fa50e585bed4186f0ea6c857a0ed884e2e65c93a544dad804ae6bef",
+      "recognized": "Réponds aux quelques questions pratiques, puis accepte la convention et l'utilisation de tes données pour cet événement.",
+      "expected": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation de tes données pour cet événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "3f4c26ef8ca4c33941e42c38da04f9d92a6494fb187df579847e2d329113057b",
+      "recognized": "Un dernier coup d'œil au récapitulatif et c'est parti. Confirme ton inscription !",
+      "expected": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "success",
+      "audioSha256": "4f7402bab28fb3cec702d67c2e9847cf3c6fd715e62677cc16b36b22358aed6d",
+      "recognized": "Et voilà, ta demande est envoyée. Regarde tes emails, la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "expected": "Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}
