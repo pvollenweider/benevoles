@@ -12,6 +12,7 @@ import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { sectorFilterOfRequest } from "@/lib/sector-filter-data"
 import { sectorFilterCaption } from "@/lib/sector-filter"
 import { PRINT_BUTTON_SCRIPT_TAG } from "@/lib/inline-scripts"
+import { placesInWords } from "@/lib/staffing"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -93,6 +94,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     allRecaps += recap
   }
 
+  // Event-wide places, for the one stats line under the title: the visible « 814/1152 inscrits »
+  // stays hidden from screen readers, which get the same figures in words instead of a bare slash.
+  const totalCapacity = event.shifts.reduce((n, s) => n + s.capacity, 0)
+  const totalFilled = event.shifts.reduce((n, s) => n + s.registrations.filter((r) => r.status === "active").length, 0)
+  const statsHtml = totalCapacity > 0
+    ? `<p class="event-stats"><span aria-hidden="true">${totalFilled}/${totalCapacity} inscrits</span><span class="sr-only">${placesInWords(totalFilled, totalCapacity)}</span></p>`
+    : ""
+
   const volMap = new Map<string, VolData>()
   for (const shift of event.shifts) {
     for (const reg of directoryRegistrations(shift.registrations, showWaitlist)) {
@@ -157,6 +166,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     /* ── Header ───────────────────────────────────────────────────────── */
     .event-title { font-size: 17px; font-weight: 700; color: #111827; }
     .event-meta  { font-size: 10px; color: #374151; margin-top: 3px; }
+    .event-stats { font-size: 10px; color: #374151; margin: 0 0 10px; }
 
     /* ── Sections ─────────────────────────────────────────────────────── */
     .section { margin-bottom: 28px; }
@@ -198,7 +208,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       color: #111827;
       white-space: nowrap;
     }
-    tr { page-break-inside: avoid; }
+    tr { page-break-inside: avoid; break-inside: avoid; }
     .center { text-align: center; }
 
     /* ── Gantt ────────────────────────────────────────────────────────── */
@@ -208,12 +218,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; white-space: nowrap; }
     /* The hour label sits on the hour line and runs over the next (unlabelled) slots. */
     .slot-th  {
-      text-align: left; font-size: 8px; padding: 2px 0 2px 2px; overflow: visible;
+      text-align: left; font-size: 10px; padding: 2px 0 2px 2px; overflow: visible;
       color: #374151; border-left: 1px solid #9CA3AF; border-right: 1px solid #9CA3AF;
     }
     .gantt-table .empty-cell, .gantt-table .show-empty-cell { padding: 0; }
     .gantt-table .shift-cell, .gantt-table .show-band-cell { padding: 3px 3px; overflow-wrap: anywhere; }
-    .hour-th  { border-left: 2px solid #374151 !important; font-weight: 700; color: #111827; font-size: 9px; }
+    .hour-th  { border-left: 2px solid #374151 !important; font-weight: 700; color: #111827; font-size: 10px; }
     .hour-mark { border-left: 2px solid #9CA3AF !important; }
 
     /* A sector's first row (#1147): bold, framed, readable without its background in print. */
@@ -233,6 +243,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       background: #DBEAFE;
       color: #1E3A8A;
       font-size: 9px;
+      font-weight: 400;
       border-right: 1px solid #93C5FD;
       white-space: normal;
     }
@@ -267,7 +278,23 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       text-overflow: ellipsis;
     }
     .show-empty-cell { border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
-    .show-label-cell { background: #DBEAFE; border: 1px solid #93C5FD; }
+    .show-label-cell { background: #DBEAFE; color: #1E3A8A; text-align: left; font-size: 10px; border: 1px solid #93C5FD; }
+
+    /* ── Dense day (#1431): overview strip and 6-hour bands ───────────── */
+    /* Same rule and band geometry as the printable day sheet (day-sheet-bands.ts): the overview
+       gives one cell per shift with « inscrits/places », each band gets a readable axis, and the
+       day's recap table is left out (the bands carry every name and count). */
+    .dense-day .gantt-table { margin-top: 4px; }
+    .dense-caption { caption-side: top; text-align: left; font-weight: 700; font-size: 10px; color: #111827; padding: 4px 0 3px; }
+    .dense-overview .shift-cell { padding: 1px 0; text-align: center; font-size: 9px; line-height: 1.2; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; }
+    .dense-overview .shift-cell strong { font-weight: 700; white-space: normal; }
+    /* A white chip keeps the figures legible on the dark shift cells, on screen as on paper. */
+    .dense-overview .shift-cell strong, .fill-count { background: #fff; color: #1E40AF; padding: 0 1px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .fill-count { display: inline-block; font-weight: 400; line-height: 1.2; margin-top: 1px; }
+    .dense-band .shift-cell { font-size: 11px; }
+    .dense-band { margin-bottom: 10px; page-break-inside: avoid; break-inside: avoid; }
+    .dense-note { font-size: 10px; color: #374151; margin: 4px 0 0; }
+    .mono { font-variant-numeric: tabular-nums; }
 
     /* ── Recap ────────────────────────────────────────────────────────── */
     .recap-table { width: 100%; }
@@ -303,6 +330,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     @media print {
       body { padding: 0; }
       .section-title { color: #000 !important; border-bottom-color: #000 !important; }
+      /* The overview can hold one column per 15-minute shift: 8 px still fits the figures. */
+      .dense-overview .shift-cell { font-size: 8px; }
     }
 
     /* ── Print color fallback (force background printing) ─────────────── */
@@ -326,6 +355,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
   <section class="section section-planning" aria-label="Planning">
     <h2 class="section-title">Planning</h2>
+    ${statsHtml}
     ${allGantts}
   </section>
 
