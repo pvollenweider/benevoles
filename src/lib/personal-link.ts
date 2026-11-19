@@ -27,7 +27,26 @@ export function lastLinkEmailLabel(at: string | Date | null | undefined, timeZon
  * personal link is not replaced by a request, so the last one received keeps working.
  */
 export const LINK_REQUEST_RESPONSE =
-  "Demande enregistrée. Si une inscription existe à cette adresse, tu recevras un email avec ton lien personnel. Rien reçu ? Regarde dans tes indésirables. Le dernier lien reçu reste valable. Après plusieurs demandes, attends une heure avant de redemander."
+  "Demande enregistrée. Si une inscription existe à cette adresse, tu recevras un email avec ton lien personnel pour toutes tes inscriptions auprès de l'organisation. Rien reçu ? Regarde dans tes indésirables. Le dernier lien reçu reste valable. Après plusieurs demandes, attends une heure avant de redemander."
+
+/**
+ * From an old event page (#1429): the block « Retrouver toutes mes inscriptions » only emails the
+ * organisation link. The answer never says whether the address exists, and never contains the link.
+ */
+export const ORG_LINK_EMAILED_RESPONSE =
+  "Demande enregistrée : si une adresse email est enregistrée pour cette inscription, tu recevras le lien de toutes tes inscriptions auprès de l'organisation. Rien reçu ? Regarde dans tes indésirables."
+
+/**
+ * The same neutral answer when the per-volunteer throttle already sent one recently (#1429). It
+ * never says whether an address exists, and carries a next step; the route keeps the same HTTP
+ * status as a normal request so the answer cannot be used to tell the two cases apart.
+ */
+export const ORG_LINK_ALREADY_REQUESTED_RESPONSE =
+  "Une demande a déjà été faite il y a peu. Si une adresse email est enregistrée, le lien de toutes tes inscriptions est dans ta boîte de réception ou tes indésirables. Réessaie dans une heure."
+
+/** The renewal on the organisation page: an email is sent, the link is never returned on screen. */
+export const ORG_LINK_RENEWED_RESPONSE =
+  "Ton lien a été renouvelé : un email avec le nouveau lien vient de partir. L'ancien lien ne fonctionne plus."
 
 /**
  * From the personal page: the throttle has its own answer (LINK_THROTTLED_RESPONSE), but the
@@ -59,7 +78,7 @@ export const LINK_REQUEST_WINDOW_MS = 60 * 60 * 1000
 export const LOST_LINK_SUMMARY = "J'ai perdu mon lien personnel"
 
 export const LOST_LINK_INTRO =
-  "Si une inscription existe à cette adresse, ton lien personnel t'est envoyé par email."
+  "Si une inscription existe à cette adresse, ton lien personnel pour toutes tes inscriptions auprès de l'organisation t'est envoyé par email."
 
 /** The request form's button: a fresh copy on the « Ce lien ne fonctionne pas » page, the link itself when lost. */
 export const LINK_REQUEST_SUBMIT = {

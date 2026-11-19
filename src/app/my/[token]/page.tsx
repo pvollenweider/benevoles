@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import PersonalLinkPanel from "@/components/PersonalLinkPanel"
+import AllRegistrationsLinkCard from "@/components/public/AllRegistrationsLinkCard"
 import LinkRequestForm from "@/components/LinkRequestForm"
 import DocMoreLink from "@/components/DocMoreLink"
 import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
@@ -576,6 +577,9 @@ export default function MyRegistrationPage() {
           contactEmail={data.contactEmail ?? null}
           eventTitle={data.event.title}
         />
+
+        {/* One link for every event of the organisation (#1429): emailed, never shown here. */}
+        <AllRegistrationsLinkCard token={token} />
 
         {data.registrations.some((r) => r.status !== "active") && (
           <section aria-labelledby="waitlist-how" className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-900">

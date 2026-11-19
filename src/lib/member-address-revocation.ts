@@ -13,6 +13,8 @@ import { LIVE_STATUSES, type Tx } from "./registration-capacity"
 import { availabilityLinksToResend, linksToResend, memberLinkPayload } from "./member-address-change"
 import { availabilityEmailKey, availabilityRequestPayload } from "./event-availability-server"
 import { endSwapsIn } from "./shift-swap-server"
+import { clearOrgLinkData, newOrgLinkToken, orgLinkTokenData } from "./org-link"
+import { orgLinkNotification } from "./org-link-send"
 
 /**
  * The renewal of a member's links when an organiser corrects their address (rules in
@@ -37,8 +39,9 @@ export async function renewMemberLinks(tx: Tx, input: {
   oldEmail: string
   newEmail: string | null
   now: Date
-}): Promise<{ registrations: number; invites: number; availabilityLinks: number; pushSubscriptions: number; cancelled: number; outboxIds: string[] }> {
+}): Promise<{ registrations: number; invites: number; availabilityLinks: number; pushSubscriptions: number; cancelled: number; orgLink: boolean; outboxIds: string[] }> {
   const { organizationId, volunteer, newEmail, now } = input
+  const organization = await tx.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true } })
   const eventSelect = {
     select: { title: true, slug: true, startDate: true, endDate: true, location: true, organizationId: true, organization: { select: { name: true, slug: true } } },
   } as const
@@ -62,6 +65,20 @@ export async function renewMemberLinks(tx: Tx, input: {
     const token = generateToken()
     tokens.set(i.id, token)
     await tx.memberInvite.update({ where: { id: i.id }, data: linkToken.data(token) })
+  }
+
+  // The organisation-wide link (#1429): whoever reads the old inbox must lose it too. Cleared by
+  // id inside this transaction, never by a hash read before it: a token issued concurrently (or
+  // between that read and this write) is revoked as well. Only a link that was actually issued is
+  // replaced; a correction never mass-issues, and the fresh token below is the one emailed.
+  const { count: orgLinkCleared } = await tx.volunteer.updateMany({
+    where: { id: volunteer.id, orgLinkTokenHash: { not: null } },
+    data: clearOrgLinkData(),
+  })
+  let orgLinkToken: string | null = null
+  if (orgLinkCleared > 0) {
+    orgLinkToken = newOrgLinkToken()
+    await tx.volunteer.update({ where: { id: volunteer.id }, data: orgLinkTokenData(orgLinkToken, now) })
   }
 
   // 1b. Dated availability links (#1146): every live one gets a new secret; a revoked one stays revoked.
@@ -114,6 +131,15 @@ export async function renewMemberLinks(tx: Tx, input: {
         data: { volunteerName: name, eventTitle: r.event.title, orgSlug: r.event.organization.slug, editToken: tokens.get(r.id)! },
       })
     }
+    if (orgLinkToken && organization) {
+      payloads.push(orgLinkNotification({
+        kind: "org_personal_link",
+        volunteer: { firstName: volunteer.firstName, lastName: volunteer.lastName, email: newEmail },
+        volunteerId: volunteer.id,
+        organization: { id: organizationId, name: organization.name, slug: organization.slug },
+        token: orgLinkToken,
+      }))
+    }
     for (const i of invites.filter((x) => plan.inviteIds.includes(x.id))) {
       payloads.push(memberInvitePayload({
         to: newEmail,
@@ -159,5 +185,5 @@ export async function renewMemberLinks(tx: Tx, input: {
   // An agreement given from an old link is not renewed by itself (#1174 E18): swap requests end.
   await endSwapsIn(tx, { volunteerIds: [volunteer.id] }, "link_revoked", { type: "system" }, now)
 
-  return { registrations: registrations.length, invites: invites.length, availabilityLinks: availability.length, pushSubscriptions, cancelled: cancelled.length, outboxIds }
+  return { registrations: registrations.length, invites: invites.length, availabilityLinks: availability.length, pushSubscriptions, cancelled: cancelled.length, orgLink: !!orgLinkToken, outboxIds }
 }

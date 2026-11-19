@@ -20,6 +20,12 @@ https://[organisation].benevol.app/my/[token]
 
 ![Page « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
 
+## Toutes tes inscriptions auprès de l'organisation
+
+La page de cet événement reste la page de référence pour ses créneaux, ses réponses, ses échanges et son calendrier. Un autre lien, **pour toutes tes inscriptions auprès de l'organisation**, rassemble tes créneaux à venir de tous ses événements : c'est le lien que « J'ai perdu mon lien » envoie, et tu peux aussi le demander depuis l'encadré **Retrouver toutes mes inscriptions** de cette page (il part par email, il ne s'affiche pas ici).
+
+Cette page rassemble d'abord ton **prochain créneau confirmé**, puis tous tes créneaux à venir, du plus proche au plus lointain, avec la date, l'heure, l'événement, le poste et l'état en toutes lettres : **Confirmé**, **Liste d'attente**, **Place proposée** ou **Demande en attente de validation**. Les événements dépubliés ou archivés restent visibles tant qu'un créneau à venir y est inscrit. Chaque créneau s'annule avec les mêmes règles que sur la page de son événement (délai propre à l'événement, place rendue à la liste d'attente) ; **Voir l'événement** ouvre la page personnelle de cet événement pour le reste (réponses, échanges, calendrier, infos pratiques). Quand tu n'as plus de créneau à venir, la page le dit et te ramène aux événements de l'organisation ; ton lien reste valable pour tes prochaines inscriptions. **Renouveler mon lien** remplace le lien par un nouveau, envoie celui-ci par email et invalide l'ancien immédiatement. La phrase en haut de la page le rappelle : ce lien donne accès à toutes tes inscriptions auprès de l'organisation et permet de les modifier ; ne le partage pas.
+
 ## Avant ta mission
 
 En haut de la page, l'encadré **Avant ta mission** reprend ton prochain créneau confirmé, dans l'ordre :

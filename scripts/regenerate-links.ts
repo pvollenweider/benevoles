@@ -85,7 +85,7 @@ async function main() {
     if (!args.yes) {
       const counts = await countLinksInScope(prisma, scope)
       console.log(`Dry run for ${logLabel} — nothing was changed.`)
-      console.log(`Would regenerate: ${counts.registrations} registration link(s), ${counts.leaders} leader link(s), ${counts.invites} invite link(s), ${counts.availabilityLinks} availability link(s).`)
+      console.log(`Would regenerate: ${counts.registrations} registration link(s), ${counts.leaders} leader link(s), ${counts.invites} invite link(s), ${counts.availabilityLinks} availability link(s), ${counts.orgLinks} organisation link(s).`)
       if (args.resend) console.log("--resend has no effect on a dry run.")
       console.log("Re-run with --yes to apply.")
       return
@@ -93,7 +93,7 @@ async function main() {
 
     const result = await regenerateLinks(prisma, scope, { resend: args.resend })
     console.log(`Regenerated links for ${logLabel}.`)
-    console.log(`Registrations: ${result.counts.registrations}, leaders: ${result.counts.leaders}, invites: ${result.counts.invites}, availability links: ${result.counts.availabilityLinks}.`)
+    console.log(`Registrations: ${result.counts.registrations}, leaders: ${result.counts.leaders}, invites: ${result.counts.invites}, availability links: ${result.counts.availabilityLinks}, organisation links: ${result.counts.orgLinks}.`)
     if (result.resend) {
       console.log(`Resend — registrations: sent ${result.resend.registrations.sent}, failed ${result.resend.registrations.failed}, skipped ${result.resend.registrations.skipped}.`)
       console.log(`Resend — leaders: sent ${result.resend.leaders.sent}, failed ${result.resend.leaders.failed}, skipped ${result.resend.leaders.skipped}.`)
@@ -107,6 +107,7 @@ async function main() {
       leaders: { from: null, to: result.counts.leaders },
       invites: { from: null, to: result.counts.invites },
       availabilityLinks: { from: null, to: result.counts.availabilityLinks },
+      orgLinks: { from: null, to: result.counts.orgLinks },
     }
     if ("organizationId" in scope) {
       await logOrgEvent({

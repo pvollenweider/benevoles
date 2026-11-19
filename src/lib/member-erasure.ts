@@ -39,6 +39,12 @@ export function erasedVolunteerData(now: Date) {
     birthDate: null,
     availabilityPeriods: [] as string[],
     availabilityNote: null,
+    // The organisation-wide link (#1429): gone with the identity. The registrations it opened are
+    // kept without a name, and their own tokens are regenerated below.
+    orgLinkTokenHash: null,
+    orgLinkTokenEnc: null,
+    orgLinkTokenLegacy: null,
+    orgLinkIssuedAt: null,
     erasedAt: now,
   }
 }

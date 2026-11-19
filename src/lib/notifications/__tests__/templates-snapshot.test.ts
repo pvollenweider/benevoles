@@ -385,6 +385,16 @@ const cases: [string, NotificationPayload][] = [
     recipient,
     data: { volunteerName: "Julie Martin", eventTitle: tricky, orgSlug: "rhone", editToken: "edit-tok" },
   }],
+  ["org_personal_link", {
+    kind: "org_personal_link",
+    recipient,
+    data: { volunteerName: "Julie Martin", organizationName: tricky, orgSlug: "rhone", orgToken: "org-tok" },
+  }],
+  ["org_personal_link_renewed", {
+    kind: "org_personal_link_renewed",
+    recipient,
+    data: { volunteerName: "Julie Martin", organizationName: tricky, orgSlug: "rhone", orgToken: "org-tok" },
+  }],
   ["targeted_message", {
     kind: "targeted_message",
     recipient,
@@ -853,6 +863,8 @@ describe("render — snapshot of every notification kind", () => {
       sector_leader_withdrawal: true,
       product_update: true,
       registration_link_resend: true,
+      org_personal_link: true,
+      org_personal_link_renewed: true,
       targeted_message: true,
       registration_requested: true,
       registration_refused: true,

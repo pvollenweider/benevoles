@@ -1,6 +1,6 @@
 import type { NextConfig } from "next"
 import { withSentryConfig } from "@sentry/nextjs/config"
-import { CALENDAR_FEED_HEADER_RULES, SECURITY_HEADERS } from "./src/lib/security-headers"
+import { CALENDAR_FEED_HEADER_RULES, ORG_PERSONAL_PAGE_HEADER_RULES, SECURITY_HEADERS } from "./src/lib/security-headers"
 import { STATIC_CACHE_HEADERS } from "./src/lib/static-cache-headers"
 import { IMAGE_LOCAL_PATTERNS } from "./src/lib/image-local-patterns"
 import { IMAGE_DISK_CACHE_MAX_BYTES } from "./src/lib/image-disk-cache"
@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
       { source: "/:path*", headers: [...SECURITY_HEADERS] },
       ...STATIC_CACHE_HEADERS,
       ...CALENDAR_FEED_HEADER_RULES.map((r) => ({ source: r.source, headers: [...r.headers] })),
+      ...ORG_PERSONAL_PAGE_HEADER_RULES.map((r) => ({ source: r.source, headers: [...r.headers] })),
       // Personal data and tokens: never kept in a cache (src/lib/personal-api-headers.ts).
       ...PERSONAL_API_HEADER_RULES,
     ]

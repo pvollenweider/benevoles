@@ -12,23 +12,17 @@ import { signUpUrl, volunteerGroupCode } from "@/lib/personal-page-links"
 import { keptAnswerRows, myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
 import { splitByScope } from "@/lib/question-scope"
 import { answersEditState } from "@/lib/answer-changes"
-import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
-import { logEvent } from "@/lib/event-log"
-import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
 import { calendarFeedKeyFromEnv, calendarFeedToken, calendarFeedUrls } from "@/lib/calendar-feed"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { pagesForPostes } from "@/lib/event-page-postes"
-import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
 import { withdrawRequestSchema } from "@/lib/volunteer-withdraw-schema"
-import { queueWithdrawalNotifications } from "@/lib/withdrawal-notifications"
-import { queueWithdrawalConfirmation } from "@/lib/withdrawal-confirmation"
-import { deliverAfterResponse } from "@/lib/notifications/outbox"
-import { cancelRefusedError, isLateWithdrawal, selfCancelState, shiftStartsAt } from "@/lib/cancel-deadline"
-import { endSwapsAfter } from "@/lib/shift-swap-server"
+import { withdrawRegistration } from "@/lib/volunteer-withdraw-server"
+import { selfCancelState } from "@/lib/cancel-deadline"
 import { readWorkloadPerson, withPlaceNames } from "@/lib/workload-guard"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
@@ -225,93 +219,13 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "withdraw"))) return tooManyAttempts()
 
-  // Never once the shift has started, nor past the event's earlier deadline for a confirmed place
-  // (#946). The source of truth: the page may have been loaded before the deadline.
   const timeZone = orgTimeZone(registration.event.organization)
-  const now = new Date()
-  const cancel = selfCancelState({ status: registration.status, shift: registration.shift, setting: registration.event, timeZone, now })
-  if (!cancel.allowed) {
-    return NextResponse.json({ error: cancelRefusedError(cancel.reason), code: "cancel_closed", reason: cancel.reason }, { status: 409 })
-  }
-
-  // Conditional on still being in the status read above (#264): a double click would otherwise
-  // cancel twice, log twice and trigger two waitlist promotions for a single freed spot. Same
-  // for a request the organizer is deciding on, an offer being confirmed or expiring, or a
-  // waitlist entry being offered a spot right now: whichever runs first wins, the other finds
-  // it settled.
-  const { count } = await prisma.registration.updateMany({
-    where: { id: registration.id, status: registration.status },
-    data: { status: "cancelled" },
-  })
-  if (count === 0) {
+  const outcome = await withdrawRegistration({ registration, message, now: new Date(), timeZone })
+  if (outcome.kind === "already_settled") {
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
-  // A swap request built on this place can no longer happen (#1174): ended, the other person told.
-  await endSwapsAfter(prisma, { registrationIds: [registration.id] }, "registration_gone", { type: "volunteer", id: registration.volunteerId }, now)
-
-  const cancelLogId = await logEvent({
-    eventId: registration.eventId,
-    actor: { type: "volunteer", id: registration.volunteerId },
-    action: "registration.cancelled",
-    entityType: "Registration",
-    entityId: registration.id,
-    // shiftId unchanged: recorded so the narrative can still name the shift — see
-    // describeChanges's shiftId filter in event-log-narrative.ts. The optional message never
-    // goes in `changes`: it must not end up in the event log (#559).
-    changes: { status: { from: registration.status, to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
-  })
-
-  // Only a withdrawal that held a spot (place, request, offered spot) hands it to the next
-  // person on the waitlist. Leaving the waitlist frees nothing: the entries behind move up.
-  let waitlistTookSpot = false
-  if (plan.releasesSpot) {
-    waitlistTookSpot = await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch((e) => { reportError("waitlist.promote")(e); return false })
+  if (outcome.kind === "refused") {
+    return NextResponse.json({ error: outcome.error, code: "cancel_closed", reason: outcome.reason }, { status: 409 })
   }
-
-  // Tells the organization's admins and the role's sector leaders (#559): only for a confirmed
-  // place or a pending request. Best-effort: a failure here must not undo the withdrawal just
-  // recorded, already answered to the volunteer as settled.
-  if (plan.notifiesOrganizers) {
-    try {
-      const occupied = await prisma.registration.count({ where: { shiftId: registration.shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
-      // Grouped (#869): withdrawals of the event within a few minutes make one email per person.
-      // Less than 24 hours before the start (#946): sent at once, not grouped.
-      const late = isLateWithdrawal(shiftStartsAt(registration.shift, timeZone), now)
-      const dueIds = await queueWithdrawalNotifications({
-        registrationId: registration.id,
-        event: registration.event,
-        shift: registration.shift,
-        volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
-        message,
-        waitlistTookSpot,
-        placesMissing: Math.max(registration.shift.capacity - occupied, 0),
-        late,
-        timeZone,
-      }, now)
-      deliverAfterResponse(dueIds)
-    } catch (e) {
-      reportError("withdrawal.notify")(e)
-    }
-  }
-
-  // Says back to the volunteer what was just done from their link (#809): if the link is in
-  // someone else's hands, they learn it and can tell the organisation. Grouped (#1190): several
-  // withdrawals of the event in a row make one email listing them. Best-effort too.
-  if (registration.volunteer.email) {
-    try {
-      const outboxIds = await queueWithdrawalConfirmation({
-        registrationId: registration.id,
-        previousStatus: registration.status,
-        event: registration.event,
-        shift: registration.shift,
-        volunteer: { id: registration.volunteerId, firstName: registration.volunteer.firstName, lastName: registration.volunteer.lastName, email: registration.volunteer.email },
-        timeZone,
-      }, now)
-      deliverAfterResponse(outboxIds)
-    } catch (e) {
-      reportError("withdrawal.confirm")(e)
-    }
-  }
-
   return NextResponse.json({ success: true })
 }

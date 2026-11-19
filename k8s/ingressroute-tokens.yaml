@@ -14,7 +14,8 @@
 # logged as before: date, router, method, status, duration, size, client address.
 #
 # The families follow src/lib/sentry-scrub.ts (same secrets, scrubbed there from error reports):
-#   path  /my/…  /waitlist/…  /leader/…  /disponibilites/…  /confirmation/…  /api/public/registrations/…
+#   path  /my/…  /mes-inscriptions/…  /waitlist/…  /leader/…  /disponibilites/…  /confirmation/…
+#         /api/public/registrations/…  /api/public/mes-inscriptions/…
 #         /api/public/member-invite/…  /api/public/leader/…  /api/public/waitlist/…
 #         /api/public/availability/…  /api/public/confirmations/…
 #         (every src/app/**/[token] route: no-tokens-in-access-logs.test.ts lists them from the
@@ -58,8 +59,8 @@ spec:
       priority: 200
       match: >-
         (Host(`benevol.app`) || Host(`www.benevol.app`) || HostRegexp(`^[a-z0-9-]+\.benevol\.app$`))
-        && (PathPrefix(`/my/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
-        || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
+        && (PathPrefix(`/my/`) || PathPrefix(`/mes-inscriptions/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
+        || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/mes-inscriptions/`) || PathPrefix(`/api/public/member-invite/`)
         || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
         || PathPrefix(`/disponibilites/`) || PathPrefix(`/api/public/availability/`) || PathPrefix(`/ne-peux-pas/`)
         || PathPrefix(`/confirmation/`) || PathPrefix(`/api/public/confirmations/`)
@@ -94,8 +95,8 @@ spec:
       priority: 200
       match: >-
         (Host(`benevol.app`) || Host(`www.benevol.app`) || HostRegexp(`^[a-z0-9-]+\.benevol\.app$`))
-        && (PathPrefix(`/my/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
-        || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
+        && (PathPrefix(`/my/`) || PathPrefix(`/mes-inscriptions/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
+        || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/mes-inscriptions/`) || PathPrefix(`/api/public/member-invite/`)
         || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
         || PathPrefix(`/disponibilites/`) || PathPrefix(`/api/public/availability/`) || PathPrefix(`/ne-peux-pas/`)
         || PathPrefix(`/confirmation/`) || PathPrefix(`/api/public/confirmations/`)
