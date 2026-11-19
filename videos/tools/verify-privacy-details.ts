@@ -50,7 +50,7 @@ async function main() {
       assert(mail, "Expected actual fictitious email missing")
       const response = await page.request.get(`${mailpit}/api/v1/message/${mail.ID}`)
       const content = await response.json() as { Text: string }
-      assert(personalLink ? content.Text.includes("/my/") : content.Text.includes("?token="), "Actual email must contain the expected kind of link")
+      assert(personalLink ? content.Text.includes("/mes-inscriptions/") : content.Text.includes("?token="), "Actual email must contain the expected kind of link")
       received.push({ recipient, mailId: mail.ID, personalLink })
     }
     await writeFile(proofPath, JSON.stringify({ ...proof, detailsCheckedAt: new Date().toISOString(), actualEmailsReceived: received, invitationPrefillsOwnMemberOnly: true, invitationRefusedOnOtherOrganization: true, leaderRevocationRefusesOldLink: true }, null, 2))

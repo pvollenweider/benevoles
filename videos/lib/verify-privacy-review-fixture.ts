@@ -32,7 +32,7 @@ export async function verifyPrivacyReviewFixture(db: PrismaClient, directory: st
   const preflight = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8"))
   const capture = JSON.parse(await readFile(path.join(directory, "capture-checks.json"), "utf8"))
   if (!preflight.crossOrganizationDetailRefusedBothWays || !preflight.leaderRevocationRefusesOldLink || preflight.actualEmailsReceived?.length !== 3) throw new Error("Actual privacy preflight missing")
-  for (const key of ["anonymousSignupLinkOnlyInEmail", "sameRecoveryMessageThreeAddresses", "invitationPrefill", "actualLeaderRevocation", "actualAdminAnswerAndInternalNote", "actualPublicLegalPages", "actualReportVsMemberCsv"]) if (capture[key] !== true) throw new Error(`Actual capture proof missing: ${key}`)
+  for (const key of ["anonymousSignupLinkOnlyInEmail", "oldOrgLinkRevoked", "sameRecoveryMessageThreeAddresses", "invitationPrefill", "actualLeaderRevocation", "actualAdminAnswerAndInternalNote", "actualPublicLegalPages", "actualReportVsMemberCsv"]) if (capture[key] !== true) throw new Error(`Actual capture proof missing: ${key}`)
   const csv = await readFile(path.join(directory, "privacy-members.csv"))
   const leaderFrame = await readFile(path.join(directory, "leader-before-revocation.png"))
   if (createHash("sha256").update(leaderFrame).digest("hex") !== capture.leaderFrameSha256) throw new Error("Recorded leader recap image changed")
@@ -46,5 +46,5 @@ export async function verifyPrivacyReviewFixture(db: PrismaClient, directory: st
   const inbox = await response.json() as { total: number; messages: { ID: string; To: { Address: string }[] }[] }
   const syntheticRecipient = (address: string) => /@example\.(?:org|com|net)$/.test(address) || address === "org-admin@localhost"
   if (inbox.total > 1000 || inbox.messages.some(mail => mail.To.some(to => !syntheticRecipient(to.Address)))) throw new Error("Visible inbox has non-synthetic recipients or is not fully checked")
-  for (const [key, recipient] of [["signupMail", "video.privacy.a.new@example.org"], ["resendMail", "video.privacy.a.new@example.org"], ["recoveryMail", "video.privacy.a.member.0@example.org"], ["invitationMail", "video.privacy.a.member.3@example.org"]]) if (!inbox.messages.some(mail => mail.ID === capture[key] && mail.To.some(to => to.Address === recipient))) throw new Error("Actual captured email missing")
+  for (const [key, recipient] of [["signupMail", "video.privacy.a.new@example.org"], ["renewalMail", "video.privacy.a.new@example.org"], ["recoveryMail", "video.privacy.a.member.0@example.org"], ["invitationMail", "video.privacy.a.member.3@example.org"]]) if (!inbox.messages.some(mail => mail.ID === capture[key] && mail.To.some(to => to.Address === recipient))) throw new Error("Actual captured email missing")
 }

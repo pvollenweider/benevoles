@@ -32,22 +32,22 @@
     },
     {
       "id": "signup",
-      "transcript": "Le lien public, ou son QR code, sert à découvrir les missions et à s'inscrire. Jules choisit un créneau et renseigne ses coordonnées. Prénom, nom, adresse email et téléphone : ces informations permettent à l'organisation de retrouver Jules et de le contacter. Il accepte ensuite les conditions du formulaire. Après l'envoi, l'inscription est enregistrée et un email lui est adressé. Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation. Taper une adresse ne prouve pas qu'on peut lire sa boîte email. Ouvrons donc le vrai message reçu par Jules, puis son lien personnel. Nous arrivons sur sa propre inscription, pas sur la liste de toute l'équipe.",
+      "transcript": "Le lien public, ou son QR code, sert à découvrir les missions et à s'inscrire. Jules choisit un créneau et renseigne ses coordonnées. Prénom, nom, adresse email et téléphone : ces informations permettent à l'organisation de retrouver Jules et de le contacter. Il accepte ensuite les conditions du formulaire. Après l'envoi, l'inscription est enregistrée et un email lui est adressé. Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation. Taper une adresse ne prouve pas qu'on peut lire sa boîte email. Ouvrons donc le vrai message reçu par Jules, puis son lien personnel. Sous le bouton Mes inscriptions, le message rappelle que le lien ouvre toutes ses inscriptions auprès de cette organisation et doit rester privé. Nous arrivons sur sa page personnelle.",
       "fallbackDurationMs": 68000
     },
     {
       "id": "personal",
-      "transcript": "Sur la page Mes inscriptions, Jules retrouve son créneau et les actions prévues pour son inscription. Le panneau Ton lien personnel rappelle à quoi sert cet accès. Gardons ce lien pour son destinataire : une personne qui le reçoit peut accéder à la page correspondante. Ce n'est pas le lien public de recrutement. Utilisons Recevoir ce lien par email, puis ouvrons le nouveau message reçu. Cette action renvoie l'accès ; elle ne crée pas une deuxième inscription. Pour inviter des amis à participer, partagez plutôt la page d'inscription de l'événement.",
+      "transcript": "Sur la page Mes inscriptions, Jules retrouve ses créneaux à venir auprès de cette organisation. Le panneau Ton lien personnel rappelle que cet accès permet aussi de modifier les inscriptions. Si Jules pense avoir partagé son accès, choisissons Renouveler mon lien. Un nouveau lien arrive par email. Le bouton Voir mes inscriptions ouvre à nouveau les créneaux de Jules, et le message lui rappelle de garder ce lien pour lui. L'ancien lien ne fonctionne plus. Ouvrons le nouveau lien pour retrouver ses créneaux. Pour inviter d'autres bénévoles, partagez la page publique de l'événement.",
       "fallbackDurationMs": 55000
     },
     {
       "id": "recovery",
-      "transcript": "Le lien est perdu ? Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription. La réponse indique quoi faire ensuite, sans afficher de coordonnées ni de lien personnel. Vérifions le message reçu dans la boîte de Léa. Recommençons avec une adresse fictive inconnue : la réponse affichée reste la même. Enfin, demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B. La réponse ne révèle pas cette autre fiche et aucun email de B n'est envoyé. Si vous ne recevez rien, vérifiez votre adresse et les courriers indésirables, puis contactez l'organisation au besoin.",
+      "transcript": "Le lien est perdu ou la page indique qu'il ne fonctionne plus ? Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription. La réponse indique quoi faire ensuite, sans afficher de coordonnées ni de lien personnel. Vérifions le message reçu dans la boîte de Léa. L'email contient un seul lien pour ses inscriptions auprès de l'organisation A. Recommençons avec une adresse fictive inconnue : la réponse affichée reste la même. Enfin, demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B. La réponse ne révèle pas cette autre fiche et aucun email de B n'est envoyé. Si vous ne recevez rien, vérifiez votre adresse et les courriers indésirables, puis contactez l'organisation au besoin.",
       "fallbackDurationMs": 66000
     },
     {
       "id": "invitation",
-      "transcript": "Une invitation nominative est différente d'un lien public. L'organisation l'envoie à Zoé, puis nous ouvrons le vrai email reçu. Son lien conduit au formulaire avec les informations prévues pour cette invitation. Cela facilite l'inscription de la personne concernée ; ce n'est pas une affiche à diffuser à tout le monde. Vérifions le prénom, l'adresse et le créneau avant de continuer. Si vous recrutez largement, utilisez le lien public ou le QR code public, pas l'invitation adressée à une autre personne.",
+      "transcript": "Une invitation nominative est différente d'un lien public. L'organisation l'envoie à Zoé. Ouvrons le message qu'elle reçoit. Le bouton Voir les missions et m'inscrire lui donne accès au formulaire préparé pour elle. Son lien conduit au formulaire avec les informations prévues pour cette invitation. Cela facilite l'inscription de la personne concernée ; ce n'est pas une affiche à diffuser à tout le monde. Vérifions le prénom, l'adresse et le créneau avant de continuer. Si vous recrutez largement, utilisez le lien public ou le QR code public, pas l'invitation adressée à une autre personne.",
       "fallbackDurationMs": 57000
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "id": "result",
-      "transcript": "Revenons à la page Mes inscriptions et à son avertissement. Pour recruter, partagez la page d’inscription. Pour gérer une inscription, gardez le lien personnel pour son destinataire. Pour coordonner un poste, remettez le lien du responsable à la personne désignée. Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de continuer à le faire circuler. Et avant d'envoyer un document, vérifiez son contenu et ses destinataires. Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
+      "transcript": "Revenons à la page Mes inscriptions et à son avertissement. Pour recruter, partagez la page d’inscription. Pour gérer ses inscriptions auprès d'une organisation, gardez le lien personnel pour son destinataire. Pour coordonner un poste, remettez le lien du responsable à la personne désignée. Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de continuer à le faire circuler. Et avant d'envoyer un document, vérifiez son contenu et ses destinataires. Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
       "fallbackDurationMs": 56000
     }
   ],
@@ -80,7 +80,7 @@
     "summary": "Dans cette vidéo, vous distinguez le lien public, le lien personnel d'un bénévole et le lien d'un responsable, vous voyez comment retrouver un accès perdu et quelles informations partager.",
     "steps": [
       "Partagez le lien public ou son QR code pour faire découvrir l'événement et recruter.",
-      "Gardez le lien personnel reçu par email : il ouvre votre propre inscription et peut être renvoyé avec « Recevoir ce lien par email ».",
+      "Gardez le lien personnel reçu par email. Il ouvre toutes vos inscriptions auprès de l’organisation. Renouvelez-le si vous pensez l’avoir partagé.",
       "Si le lien est perdu, utilisez la page de récupération avec l'adresse de l'inscription.",
       "N'utilisez une invitation nominative que pour la personne invitée : jamais sur une affiche.",
       "Remettez le lien de responsable seulement à la personne désignée ; retirer le responsable désactive ce lien.",

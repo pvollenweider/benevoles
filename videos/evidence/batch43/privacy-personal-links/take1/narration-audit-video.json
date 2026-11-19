@@ -1,0 +1,111 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T18:11:50.928Z",
+  "revalidatedAt": "2026-11-19T18:11:50.929Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "8ada92cbe89fa11708d50d9ea6e7b4e80fe2dc4e0cdc97c2352caf3393569fd0",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "81d5171b9cfd65a524975a244134e1962a5d80c906f0c8434ffc261be1279711",
+      "recognized": "Un lien pour recruter, un lien pour gérer son inscription, un lien pour suivre une équipe : ils ne servent pas à la même chose. Voyons lesquels partager, lesquels garder pour soi et comment retrouver un accès perdu. Dans notre démonstration, deux organisations ont chacune une Léa Muller et une fête portant le même identifiant. Les noms se ressemblent, mais les fiches et les adresses sont différentes. Chaque organisation retrouve son propre événement dans son administration. Toutes les personnes et coordonnées utilisées ici sont fictives.",
+      "expected": "Un lien pour recruter, un lien pour gérer son inscription, un lien pour suivre une équipe : ils ne servent pas à la même chose. Voyons lesquels partager, lesquels garder pour soi, et comment retrouver un accès perdu. Dans notre démonstration, deux organisations ont chacune une Léa Müller et une fête portant le même identifiant. Les noms se ressemblent, mais les fiches et les adresses sont différentes. Chaque organisation retrouve son propre événement dans son administration. Toutes les personnes et coordonnées utilisées ici sont fictives.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "signup",
+      "audioSha256": "d92bb8d799d48a485ed2a425f30a05d741ad4a655dcc13fc4f06815cf07c66a8",
+      "recognized": "Le lien public ou son QR code sert à découvrir les missions et à s'inscrire. Jules choisit un créneau et renseigne ses coordonnées : prénom, nom, adresse e-mail et téléphone. Ces informations permettent à l'organisation de retrouver Jules et de le contacter. Il accepte ensuite les conditions du formulaire. Après l'envoi, l'inscription est enregistrée et un e-mail lui est adressé. Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation. Taper une adresse ne prouve pas qu'on peut lire sa boîte e-mail. Ouvrons donc le vrai message reçu par Jules, puis son lien personnel. Sous le bouton Mes inscriptions, le message rappelle que le lien ouvre toutes ses inscriptions auprès de cette organisation et doit rester privé. Nous arrivons sur sa page personnelle.",
+      "expected": "Le lien public, ou son QR code, sert à découvrir les missions et à s'inscrire. Jules choisit un créneau et renseigne ses coordonnées. Prénom, nom, adresse email et téléphone : ces informations permettent à l'organisation de retrouver Jules et de le contacter. Il accepte ensuite les conditions du formulaire. Après l'envoi, l'inscription est enregistrée et un email lui est adressé. Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation. Taper une adresse ne prouve pas qu'on peut lire sa boîte email. Ouvrons donc le vrai message reçu par Jules, puis son lien personnel. Sous le bouton Mes inscriptions, le message rappelle que le lien ouvre toutes ses inscriptions auprès de cette organisation et doit rester privé. Nous arrivons sur sa page personnelle.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "personal",
+      "audioSha256": "8c8ff9426d47b12d4ee0bc248dee94e498242288892fb953e30ea9bacd28fcfc",
+      "recognized": "Sur la page Mes inscriptions, Jules retrouve ses créneaux à venir auprès de cette organisation. Le panneau Ton lien personnel rappelle que cet accès permet aussi de modifier les inscriptions. Si Jules pense avoir partagé son accès, choisissons Renouveler mon lien. Un nouveau lien arrive par e-mail. L'ancien lien ne fonctionne plus. Ouvrons le nouveau lien pour retrouver ses créneaux. Pour inviter d'autres bénévoles, partagez la page publique de l'événement.",
+      "expected": "Sur la page Mes inscriptions, Jules retrouve ses créneaux à venir auprès de cette organisation. Le panneau Ton lien personnel rappelle que cet accès permet aussi de modifier les inscriptions. Si Jules pense avoir partagé son accès, choisissons Renouveler mon lien. Un nouveau lien arrive par email. L'ancien lien ne fonctionne plus. Ouvrons le nouveau lien pour retrouver ses créneaux. Pour inviter d'autres bénévoles, partagez la page publique de l'événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "recovery",
+      "audioSha256": "bda454d2b18b254c2422f416bb443a4cd6680b1f567b3995de7c5f4b670144a7",
+      "recognized": "Le lien est perdu ou la page indique qu'il ne fonctionne plus ? Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription. La réponse indique quoi faire ensuite sans afficher de coordonnées ni de lien personnel. Vérifions le message reçu dans la boîte de Léa. L'e-mail contient un seul lien pour ses inscriptions auprès de l'organisation A. Recommençons avec une adresse fictive inconnue. La réponse affichée reste la même. Enfin, demandons, depuis l'organisation A, le lien d'une adresse appartenant seulement à B. La réponse ne révèle pas cette autre fiche et aucun e-mail de B n'est envoyé. Si vous ne recevez rien, vérifiez votre adresse et les courriers indésirables, puis contactez l'organisation au besoin.",
+      "expected": "Le lien est perdu ou la page indique qu'il ne fonctionne plus ? Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription. La réponse indique quoi faire ensuite, sans afficher de coordonnées ni de lien personnel. Vérifions le message reçu dans la boîte de Léa. L'email contient un seul lien pour ses inscriptions auprès de l'organisation A. Recommençons avec une adresse fictive inconnue : la réponse affichée reste la même. Enfin, demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B. La réponse ne révèle pas cette autre fiche et aucun email de B n'est envoyé. Si vous ne recevez rien, vérifiez votre adresse et les courriers indésirables, puis contactez l'organisation au besoin.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invitation",
+      "audioSha256": "098a09373a715f48e744a0d9559cea4abdb68d4665d60bb987cee5645624c50f",
+      "recognized": "Une invitation nominative est différente d'un lien public. L'organisation l'envoie à Zoé, puis nous ouvrons le vrai e-mail reçu. Son lien conduit au formulaire avec des informations prévues pour cette invitation. Cela facilite l'inscription de la personne concernée, ce n'est pas une affiche à diffuser à tout le monde. Vérifions le prénom, l'adresse et le créneau avant de continuer. Si vous recrutez largement, utilisez le lien public ou le QR code public, pas l'invitation adressée à une autre personne.",
+      "expected": "Une invitation nominative est différente d'un lien public. L'organisation l'envoie à Zoé, puis nous ouvrons le vrai email reçu. Son lien conduit au formulaire avec les informations prévues pour cette invitation. Cela facilite l'inscription de la personne concernée ; ce n'est pas une affiche à diffuser à tout le monde. Vérifions le prénom, l'adresse et le créneau avant de continuer. Si vous recrutez largement, utilisez le lien public ou le QR code public, pas l'invitation adressée à une autre personne.",
+      "wordErrorRate": 0.011627906976744186,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "leader",
+      "audioSha256": "8b7c3760500385cd0e6e2132bc56665e9b3c68c6e6002dd59aed8d9726080031",
+      "recognized": "Le responsable a lui aussi un accès destiné à sa mission. Ouvrons le lien de Camille, responsable de l'accueil. Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles pour les contacter. Les personnes de la logistique et de l'autre organisation ne sont pas dans cette équipe. Ce lien donne accès à des informations opérationnelles, ne le publiez pas sur une affiche. Revenons dans l'administration et retirons ce responsable. En rouvrant son ancien lien, l'accès n'est plus disponible. Cela permet de retirer cet accès dès quand la responsabilité prend fin.",
+      "expected": "Le responsable a lui aussi un accès destiné à sa mission. Ouvrons le lien de Camille, responsable de l'accueil. Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles pour les contacter. Les personnes de la logistique et de l'autre organisation ne sont pas dans cette équipe. Ce lien donne accès à des informations opérationnelles : ne le publiez pas sur une affiche. Revenons dans l'administration et retirons ce responsable. En rouvrant son ancien lien, l'accès n'est plus disponible. Cela permet de retirer cet accès quand la responsabilité prend fin.",
+      "wordErrorRate": 0.010309278350515464,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "admin",
+      "audioSha256": "dd427e76680bca0f13c585af217dafcd2ef12c7071b85894741e014c62cbc300",
+      "recognized": "L'organisateur travaille dans son administration avec sa propre connexion. Dans les inscriptions, il retrouve les personnes et les réponses aux questions de l'événement. Dans les membres, il peut consulter les disponibilités et les notes internes de préparation. Regardons la fiche de Léa, puis comparons avec les deux vues précédentes. Sa page Mes inscriptions ne montre pas les notes internes. Le responsable reçoit les contacts de son équipe, pas la fiche membre complète. Avant de transmettre une information, demandez-vous qui en a besoin et pour quelle tâche. Une note utile à l'organisation n'a pas forcément sa place dans un document distribué.",
+      "expected": "L'organisateur travaille dans son administration, avec sa propre connexion. Dans les inscriptions, il retrouve les personnes et les réponses aux questions de l'événement. Dans les membres, il peut consulter les disponibilités et les notes internes de préparation. Regardons la fiche de Léa, puis comparons avec les deux vues précédentes. Sa page Mes inscriptions ne montre pas les notes internes. Le responsable reçoit les contacts de son équipe, pas la fiche membre complète. Avant de transmettre une information, demandez-vous qui en a besoin et pour quelle tâche. Une note utile à l'organisation n'a pas forcément sa place dans un document distribué.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "legal",
+      "audioSha256": "4c12e631b0ca6572a3a89819264761f713e299c1f88d4196f3191b34df1f7299",
+      "recognized": "Les informations publiques se trouvent aussi dans le pied de page. Ouvrons Confidentialité. Cette page décrit les usages annoncés et les destinataires des données. Repérons aussi les indications de conservation et les moyens de contact. Pour une question ou une demande concernant les données, appuyez-vous sur ces informations et sur l'organisation concernée. Ouvrons maintenant les conditions d'utilisation qui complètent ce cadre. Cette vidéo explique les gestes dans l'outil, elle ne remplace pas une lecture des textes actuels ni un avis juridique. Il n'existe pas un délai de conservation unique à appliquer sans regarder le contexte.",
+      "expected": "Les informations publiques se trouvent aussi dans le pied de page. Ouvrons Confidentialité. Cette page décrit les usages annoncés et les destinataires des données. Repérons aussi les indications de conservation et les moyens de contact. Pour une question ou une demande concernant les données, appuyez-vous sur ces informations et sur l'organisation concernée. Ouvrons maintenant les conditions d'utilisation, qui complètent ce cadre. Cette vidéo explique les gestes dans l'outil ; elle ne remplace pas une lecture des textes actuels ni un avis juridique. Il n'existe pas un délai de conservation unique à appliquer sans regarder le contexte.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "copies",
+      "audioSha256": "661e020226c4ab17635bd9a5696830683e888bf76b0188426ec841ecfd062d39",
+      "recognized": "Sur le terrain, une liste bien choisie peut suffire. Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient. Comparons-le au CSV des membres. Ce fichier comporte notamment des coordonnées et des notes internes. Il n'est donc pas à remettre indistinctement à toute l'équipe. Choisissez le document adapté à la personne qui en a besoin, rangez-le dans un espace protégé et limitez les copies. Un fichier téléchargé reste une photographie du moment, il ne se met pas à jour quand le planning change. Pensez aussi aux anciennes copies, devenues inutiles.",
+      "expected": "Sur le terrain, une liste bien choisie peut suffire. Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient. Comparons-le au CSV des membres : ce fichier comporte notamment des coordonnées et des notes internes. Il n'est donc pas à remettre indistinctement à toute l'équipe. Choisissez le document adapté à la personne qui en a besoin, rangez-le dans un espace protégé et limitez les copies. Un fichier téléchargé reste une photographie du moment : il ne se met pas à jour quand le planning change. Pensez aussi aux anciennes copies devenues inutiles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "60b04597ff59c632cf3a9ce9199cfb6fdc96ab1369d7d90aae56f2e50fa1c505",
+      "recognized": "Revenons à la page Mes inscriptions et à son avertissement. Pour recruter, partagez la page d'inscription. Pour gérer ses inscriptions auprès d'une organisation, gardez le lien personnel pour son destinataire. Pour coordonner un poste, remettez le lien du responsable à la personne désignée. Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de continuer à le faire circuler. Et avant d'envoyer un document, vérifiez son contenu et ses destinataires. Quelques gestes simples permettent de rester accueillant tout en prenant soin des informations confiées par les bénévoles.",
+      "expected": "Revenons à la page Mes inscriptions et à son avertissement. Pour recruter, partagez la page d’inscription. Pour gérer ses inscriptions auprès d'une organisation, gardez le lien personnel pour son destinataire. Pour coordonner un poste, remettez le lien du responsable à la personne désignée. Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de continuer à le faire circuler. Et avant d'envoyer un document, vérifiez son contenu et ses destinataires. Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

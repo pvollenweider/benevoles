@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:12:48.102Z",
+  "videoSha256": "8ada92cbe89fa11708d50d9ea6e7b4e80fe2dc4e0cdc97c2352caf3393569fd0",
+  "promptSha256": "a7e87e700c6e1f3caff04e680254553acc25bbf4ccee0ccc40a1c3bfe7d1b65c",
+  "clipSha256": "fbc6457b7db42b7ebe13c849b99575aeba94aa4f710ca49265715fd7070da8a0",
+  "scene": "leader",
+  "review": {
+    "heardOpening": "Le responsable a lui aussi un accès",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil.",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la page « Responsable - Accueil » listant les bénévoles inscrits et leurs créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "Revenons dans l'administration et retirons ce responsable.",
+        "visibleSeconds": 22.5,
+        "visible": "Retour dans les paramètres d'administration et confirmation de retrait de Camille Rossi.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.2,
+        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
+        "visibleSeconds": 27.5,
+        "visible": "Chargement de la page affichant le message « Lien introuvable ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et intelligible, parfaitement coordonnée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T18:12:44.846Z",
+  "videoSha256": "8ada92cbe89fa11708d50d9ea6e7b4e80fe2dc4e0cdc97c2352caf3393569fd0",
+  "promptSha256": "39d6081d1366e3d885603d0e352ee1cc410e70e86f3632730ff4d90ddd2932d6",
+  "clipSha256": "81b3ea73b9861a61a5cda80280af0f2f1053965c6fd6b2fa0750f2852df023f9",
+  "scene": "invitation",
+  "review": {
+    "heardOpening": "Une invitation nominative est différente d'un lien public.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "L'organisation l'envoie à Zoé",
+        "visibleSeconds": 4.2,
+        "visible": "Ouverture de la fenêtre 'Inviter des membres' avec Zoé Papadopoulos cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "nous ouvrons le vrai email reçu",
+        "visibleSeconds": 7,
+        "visible": "Affichage de l'email reçu adressé à Zoé avec le bouton 'Voir les missions et m'inscrire'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Son lien conduit au formulaire avec les informations prévues pour cette invitation",
+        "visibleSeconds": 10.8,
+        "visible": "Affichage du formulaire 'Tes informations' prérempli avec Zoé Papadopoulos",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer",
+        "visibleSeconds": 18.5,
+        "visible": "Champs prénom, adresse email et récapitulatif du créneau visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les enchaînements d'écrans."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
