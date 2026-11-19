@@ -1393,3 +1393,8 @@ Sur la page d'inscription, un téléphone tenu droit ouvre maintenant le plannin
 
 - **volunteer-register-mobile** : l'image montre la frise et l'ancien choix sans libellé ; la capture sélectionne maintenant le créneau dans la liste (`videos/tools/record.ts`). La narration ne parle pas de la frise : elle reste juste, la vidéo est à refilmer pour l'image.
 - **volunteer-discover-event**, scène « Sur téléphone » : la narration dit que le planning est plus large que l'écran et qu'on le fait défiler ; c'est vrai de la frise, plus de l'affichage d'office. La capture touche maintenant « Frise » avant de faire défiler. Narration à revoir (dire que le téléphone ouvre la liste, et que « Frise » ou le téléphone tourné à l'horizontale donne la journée entière), puis refilmer.
+
+
+## À refilmer : ressources du serveur sur « Santé du service » (#1415, 19 novembre 2026)
+
+La page « Santé du service » gagne une section **Serveur** entre « Service » et « Tâches planifiées et sauvegardes » : mémoire, CPU, retard de la boucle d'événements, durée de marche, taille de la base et connexions ouvertes, ou « non disponible » quand les fichiers cgroup manquent. La narration de **PLATFORM_INTERNAL_ADMINISTRATION** (`platform-internal-administration`) disait « trois ensembles d'informations » ; elle est corrigée en « quatre ensembles » dans le manifeste et le script, avec les ressources du serveur nommées. La vidéo doit être refilmée pour montrer la nouvelle section et sa narration régénérée ; les sélecteurs de capture restent valides.

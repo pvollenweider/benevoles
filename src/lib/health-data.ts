@@ -12,6 +12,8 @@ import {
   assessConfig, assessDatabase, assessPendingSpaces, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, type HealthItem, type MigrationFacts,
 } from "./health-view"
 import { isNewerVersion } from "./release-check"
+import { assessServerMetrics, FAILED_SERVER_METRICS } from "./server-metrics"
+import { loadServerMetrics } from "./server-metrics-data"
 import pkg from "../../package.json"
 
 /**
@@ -19,7 +21,9 @@ import pkg from "../../package.json"
  * probe (the database first of all) doesn't hide the others.
  */
 export async function loadHealth(now: Date = new Date()) {
-  const database = await probeDatabase()
+  // The resource probe reads cgroup files and samples the event loop; it runs beside the first
+  // database probe and never fails the page (missing files → « non disponible »).
+  const [database, server] = await Promise.all([probeDatabase(), loadServerMetrics().catch(() => null)])
   const none: Awaited<ReturnType<typeof loadJobRuns>> = {}
   const [outbox, runs, migrations, releaseState, pending] = database === null
     ? [null, none, null, null, null]
@@ -60,6 +64,7 @@ export async function loadHealth(now: Date = new Date()) {
       tokenEncryption: !!env.TOKEN_ENCRYPTION_KEY?.trim(),
       sentry: !!process.env.NEXT_PUBLIC_SENTRY_DSN,
     }),
+    ...assessServerMetrics(server ?? FAILED_SERVER_METRICS),
   ]
   return { items, version, gitSha: env.GIT_SHA ?? null, migrations, checkedAt: now }
 }
