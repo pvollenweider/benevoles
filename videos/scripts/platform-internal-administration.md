@@ -115,8 +115,8 @@ organisateurs des autres scénarios pour obtenir un compteur artificiel.
    peut agir dans une organisation sélectionnée : ne pas affirmer qu'il ne voit
    jamais ses données. Sans choix, montrer la demande de sélection ; pas de
    contexte implicite. Ne pas fabriquer de cookie pour contourner cette étape.
-8. **Santé du service.** Ouvrir la vraie page : service, tâches et sauvegardes,
-   configuration, version et date de contrôle. Expliquer les états effectivement
+8. **Santé du service.** Ouvrir la vraie page : service, ressources du serveur,
+   tâches et sauvegardes, configuration, version et date de contrôle. Expliquer les états effectivement
    visibles. Le serveur local n'a pas les tâches de production : conserver les
    états inconnus/avertissements, sans écrire de faux heartbeats pour tout verdir.
    Une sauvegarde signalée ne prouve pas à elle seule une restauration réussie.

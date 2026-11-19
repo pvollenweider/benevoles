@@ -1400,3 +1400,8 @@ Les **Paramètres › Modèles de messages** proposent maintenant **Ajouter des 
 
 - **targeted-messages** : la scène de création de modèle ne montre ni la bibliothèque ni la catégorie ; narration à compléter d'un segment « partir d'un texte prêt à l'emploi », puis refilmer.
 - **admin-features-tour** : image seulement (l'écran des modèles a changé), narration toujours juste.
+
+
+## À refilmer : ressources du serveur sur « Santé du service » (#1415, 19 novembre 2026)
+
+La page « Santé du service » gagne une section **Serveur** entre « Service » et « Tâches planifiées et sauvegardes » : mémoire, CPU, retard de la boucle d'événements, durée de marche, taille de la base et connexions ouvertes, ou « non disponible » quand les fichiers cgroup manquent. La narration de **PLATFORM_INTERNAL_ADMINISTRATION** (`platform-internal-administration`) disait « trois ensembles d'informations » ; elle est corrigée en « quatre ensembles » dans le manifeste et le script, avec les ressources du serveur nommées. La vidéo doit être refilmée pour montrer la nouvelle section et sa narration régénérée ; les sélecteurs de capture restent valides.
