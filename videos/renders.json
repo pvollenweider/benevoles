@@ -1,6 +1,6 @@
 {
   "admin-features-tour": {
-    "durationMs": 292680,
+    "durationMs": 293960,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -167,6 +167,12 @@
     "height": 800,
     "poster": true
   },
+  "message-templates": {
+    "durationMs": 98400,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "org-email-settings": {
     "durationMs": 202960,
     "width": 1280,
@@ -210,7 +216,7 @@
     "poster": true
   },
   "platform-internal-administration": {
-    "durationMs": 480640,
+    "durationMs": 458240,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -246,7 +252,7 @@
     "poster": true
   },
   "sectors": {
-    "durationMs": 226080,
+    "durationMs": 220840,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -318,13 +324,13 @@
     "poster": true
   },
   "staffing-gaps": {
-    "durationMs": 218000,
+    "durationMs": 268320,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "targeted-messages": {
-    "durationMs": 337720,
+    "durationMs": 361920,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -384,7 +390,7 @@
     "poster": true
   },
   "volunteer-register-mobile": {
-    "durationMs": 56080,
+    "durationMs": 54200,
     "width": 390,
     "height": 844,
     "poster": true

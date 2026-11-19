@@ -7,7 +7,7 @@ Vidéo autonome 40. Voix unique Kore, souriante et patiente. Le rapport est un o
 1. Dans Aperçu, suivre Voir les créneaux à compléter pour ouvrir le rapport Où manque-t-il du monde ?.
 2. Lire places pourvues/capacité, nombre de créneaux, attentes et demandes. Distinguer places et personnes différentes.
 3. Poste Photos vide : deux créneaux, six places ; ouvrir le vrai planning et vérifier ses horaires.
-4. Besoins triés, fermeture exclue ; suivre Buvette 18–22 vers les inscriptions filtrées et le message ciblé, sans envoyer ce message.
+4. Besoins triés, fermeture exclue. Suivre Buvette 18–22 vers les inscriptions filtrées et le message ciblé. Revenir au rapport, ouvrir Partager ce créneau et copier le lien direct pour un groupe de discussion. Montrer le QR code et la case limitée à ce créneau.
 5. Navette : 0 confirmation, 2 demandes sur 2 places ; retrouver Lucas et Marc. Ne pas confondre ratio de confirmations et nombre de places encore disponibles.
 6. Buvette 14–18 : quatre confirmations, trois attentes, positions visibles après ouverture du créneau.
 7. Postes sans responsable : ouvrir la gestion, montrer les responsables déjà existants.

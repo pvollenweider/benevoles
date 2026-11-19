@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:29:21.259Z",
+  "videoSha256": "46b71e4ae0a4e1e8c0b7d7e98f16a4db8c602748cab8652b2371402e48164439",
+  "promptSha256": "2e407362b9887c4c2b57fe9a08a6d871332734cf2e176fe0cd463d479c9da047",
+  "clipSha256": "ff7c316fb7e53374cdabe780c8599dd8c105ca91d2f6a9425e1a1a295d66c3a4",
+  "scene": "health",
+  "review": {
+    "heardOpening": "La page Santé du service regroupe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "La page Santé du service regroupe quatre ensembles d'informations",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Santé du service",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Regardons les états visibles, la date de contrôle et la version",
+        "visibleSeconds": 1,
+        "visible": "Présence en haut de page de la version 2.8.0, de la date de vérification et des statuts OK / Inconnu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement",
+        "visibleSeconds": 30.5,
+        "visible": "Défilement vers la section Tâches planifiées et sauvegardes montrant les statuts Inconnu et À surveiller",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 29.5,
+        "spoken": "qu'une restauration a été testée",
+        "visibleSeconds": 31,
+        "visible": "Ligne Test de restauration visible avec la mention À surveiller",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:18, l'explication sur les tâches planifiées et leurs états intervient alors que l'écran reste figé sur les sections Service et Serveur ; le défilement vers les tâches n'a lieu qu'à 00:30."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un débit régulier et un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

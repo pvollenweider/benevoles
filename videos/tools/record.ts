@@ -234,7 +234,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const batch22French = ["front-desk-access", "shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
+  const batch22French = ["front-desk-access", "shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "message-templates", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
   const frenchChromiumRevision = batch22French || slug === "members-import" ? "1254" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
@@ -329,7 +329,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["privacy-personal-links", "volunteer-confirmation-errors", "event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["privacy-personal-links", "volunteer-confirmation-errors", "event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "message-templates", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -435,11 +435,11 @@ async function main() {
       }
     }
 
-    if (slug === "targeted-messages" || slug === "staffing-gaps" || slug === "registrations-place-member" || slug === "registrations-management" || slug === "members-reminders" || slug === "members-invitations" || slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability" || slug === "volunteer-calendar") {
+    if (slug === "message-templates" || slug === "targeted-messages" || slug === "staffing-gaps" || slug === "registrations-place-member" || slug === "registrations-management" || slug === "members-reminders" || slug === "members-invitations" || slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability" || slug === "volunteer-calendar") {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      await page.goto(slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+      await page.goto(slug === "message-templates" ? `${baseUrl}/admin/settings/admins` : slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
     }
 
     if (slug === "event-activity-log") {
@@ -584,7 +584,10 @@ async function main() {
     // A phone opens on the list (#1407): the list item is named by its visible text.
     const shift = page.getByRole("button", { name: /^15h–18h · Accueil\b/ })
     await scene("discover", async () => {
-      await shift.scrollIntoViewIfNeeded()
+      const display = page.getByRole("group", { name: "Affichage des créneaux" })
+      await display.getByRole("button", { name: "Liste", exact: true, pressed: true }).waitFor()
+      await display.evaluate(group => group.scrollIntoView({ block: "start" }))
+      await shift.waitFor()
       await page.waitForTimeout(700)
     })
 
@@ -605,13 +608,15 @@ async function main() {
       await fillVisibly(page, page.getByRole("textbox", { name: /Téléphone/, exact: true }), "079 000 12 34", 180)
     })
 
-    await scene("preferences", async () => {
+    await scene("preferences", async at => {
       const size = page.getByRole("radio", { name: "M", exact: true })
       await size.scrollIntoViewIfNeeded()
       await tap(page, size)
       const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
+      await at(0.32) /* mid-sentence: accept the charter on « accepte la convention » */
       await tap(page, charter)
       const privacy = page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ })
+      await at(0.57) /* mid-sentence: accept the use of data when it is named */
       await tap(page, privacy)
     })
 
@@ -619,8 +624,9 @@ async function main() {
       const submit = page.getByRole("button", { name: "Confirmer mon inscription" })
       await at("Un dernier coup d’œil au")
       await page.getByText(/^Tes créneaux/).filter({ visible: true }).first().scrollIntoViewIfNeeded()
-      await at("confirme ton inscription.")
+      await at(0.54) /* mid-sentence: bring the button into view after showing the recap */
       await submit.scrollIntoViewIfNeeded()
+      await at("confirme ton inscription.")
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
       await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
@@ -2159,20 +2165,25 @@ async function main() {
         await reserved.focus()
       })
 
-      await page.screencast.showChapter("Sur téléphone", { description: "Faire défiler sans perdre les détails", duration: 1_400 })
+      await page.screencast.showChapter("Sur téléphone", { description: "De la liste à la frise", duration: 1_400 })
       await scene("mobile", async (at) => {
         await page.setViewportSize({ width: 390, height: 800 })
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
-        // A phone opens on the list (#1407); this scene shows the Frise, chosen with its button.
-        await tap(page, page.getByRole("button", { name: "Frise", exact: true }))
-        const hint = page.getByText(/Fais défiler pour voir toutes les plages/).first()
-        await hint.scrollIntoViewIfNeeded()
-        await at("Glisse doucement pour parcourir la")
+        const display = page.getByRole("group", { name: "Affichage des créneaux" })
+        await display.getByRole("button", { name: "Liste", exact: true, pressed: true }).waitFor()
+        await display.evaluate(group => group.scrollIntoView({ block: "start" }))
+        await page.getByRole("list", { name: /Créneaux du/ }).first().waitFor()
+        await at("Touche Frise pour retrouver")
+        await tap(page, display.getByRole("button", { name: "Frise", exact: true }))
         const timeline = page.getByRole("region", { name: /Planning du/ }).first()
-        await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth * 0.46 })
-        await at(0.65) /* mid-sentence: continue the demonstrated horizontal swipe */
-        await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth })
-        await at("Tu retrouves les heures, les")
+        await page.getByText(/Fais défiler pour voir toutes les plages/).first().scrollIntoViewIfNeeded()
+        await at("Glisse dans la frise")
+        const didScroll = await timeline.evaluate(element => {
+          element.scrollLeft = element.scrollWidth
+          return element.scrollLeft > 0
+        })
+        if (!didScroll) throw new Error("The portrait Frise did not scroll horizontally")
+        await at("Descends ensuite pour retrouver")
         await page.getByText(/Brunch/).first().scrollIntoViewIfNeeded()
       })
 
@@ -2594,6 +2605,93 @@ async function main() {
     } else if (slug === "reminders-changes") {
       const { recordReminders } = await import("../lib/record-reminders")
       await recordReminders({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "message-templates") {
+      page.setDefaultTimeout(12_000)
+      const name = "Alerte météo : pluie"
+      const category = "Météo et imprévus"
+      const library = page.getByRole("dialog", { name: "Ajouter des modèles" })
+      const card = library.getByRole("listitem").filter({ has: page.getByRole("heading", { name, exact: true }) })
+      const body = page.getByRole("textbox", { name: /^Message(?: \*)?$/ })
+      const preview = page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true })
+      const email = page.getByRole("dialog", { name: "Aperçu de l'email", exact: true })
+      const applyButton = page.getByRole("button", { name: "Utiliser ce modèle", exact: true })
+      const eventUrl = `${baseUrl}/admin/events/${featureEventId}`
+      const templatesUrl = `${baseUrl}/admin/settings/message-templates`
+      const chooseTemplate = async (showGroups = false) => {
+        const picker = page.getByLabel("Partir d'un modèle", { exact: true })
+        await picker.locator(`optgroup[label="${category}"]`).getByRole("option", { name, exact: true }).waitFor({ state: "attached" })
+        if (showGroups) {
+          await tap(page, picker)
+          await page.waitForTimeout(500)
+          await picker.press("Escape")
+        }
+        await picker.selectOption({ label: name })
+      }
+      let original = ""
+      let corrected = ""
+      await scene("library", async at => {
+        await at("Dans les paramètres de l'organisation")
+        await tap(page, page.getByRole("link", { name: "Modèles de messages", exact: true }))
+        await tap(page, page.getByRole("button", { name: "Ajouter des modèles", exact: true }))
+        await at("Repérez l'alerte pluie")
+        await card.scrollIntoViewIfNeeded()
+      })
+      await scene("inspect", async at => {
+        await at("Cliquez sur Aperçu")
+        await tap(page, card.getByRole("button", { name: /^Aperçu/ }))
+        const frameTitle = `Aperçu de l'email « ${name} »`
+        await page.getByTitle(frameTitle, { exact: true }).evaluate(frame => frame.scrollIntoView({ block: "center" }))
+        const highlighted = page.frameLocator(`iframe[title="${frameTitle}"]`).locator("mark:visible").filter({ hasText: "[à compléter" })
+        await highlighted.first().waitFor()
+        if (await highlighted.count() !== 3) throw new Error("Expected three highlighted placeholders")
+        await at("Les mentions surlignées indiquent")
+        await highlighted.last().evaluate(mark => mark.scrollIntoView({ block: "center" }))
+        await at("Cliquez sur Ajouter à mes modèles")
+        await tap(page, card.getByRole("button", { name: /^Ajouter à mes modèles/ }))
+        await card.getByText(/Déjà dans mes modèles/).waitFor()
+      })
+      await scene("apply", async at => {
+        await page.goto(eventUrl)
+        await tap(page, page.getByRole("link", { name: "Messages", exact: true }))
+        await page.getByRole("heading", { name: "Écrire aux bénévoles", exact: true }).waitFor()
+        await at("Dans Partir d'un modèle")
+        await chooseTemplate(true)
+        await at("Cliquez sur Utiliser ce modèle")
+        await tap(page, applyButton)
+        original = await body.inputValue()
+        if ((original.match(/\[à compléter/g) ?? []).length !== 3) throw new Error("Library text was not applied")
+      })
+      await scene("blocked", async at => {
+        await at("Demandez l'aperçu")
+        await tap(page, preview)
+        await page.getByRole("alert").filter({ hasText: "À corriger : message" }).waitFor()
+        if (await body.getAttribute("aria-invalid") !== "true" || await email.isVisible()) throw new Error("Incomplete message was not blocked at the field")
+        await body.scrollIntoViewIfNeeded()
+      })
+      await scene("edit", async at => {
+        await page.goto(templatesUrl)
+        await tap(page, page.getByRole("button", { name: `Modifier le modèle « ${name} »`, exact: true }))
+        await at("Indiquez qu'il pleuvra samedi")
+        corrected = original
+          .replace("[à compléter : quel jour, à quelle heure]", "samedi dès 14 h")
+          .replace("[à compléter : Pas de panique, tout est maintenu ! Ou ce qui change]", "La fête est maintenue !")
+          .replace("[à compléter : tente, abri…]", "la halle du village")
+        if (corrected.includes("[à compléter")) throw new Error("Unexpected placeholder in the library text")
+        await tap(page, body)
+        await body.fill(corrected)
+        await at("Enregistrez le modèle")
+        await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+        await body.waitFor({ state: "hidden" })
+      })
+      await scene("preview", async at => {
+        await page.goto(`${eventUrl}/message`)
+        await chooseTemplate()
+        await tap(page, applyButton)
+        if (await body.inputValue() !== corrected) throw new Error("Corrected template was not saved")
+        await at("Ouvrez l'aperçu de l'email")
+        await tap(page, preview)
+        await email.waitFor()
+      })
     } else if (slug === "targeted-messages") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Messages require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
@@ -2653,12 +2751,22 @@ async function main() {
           await tap(page, page.getByRole("radio", { name: "Les bénévoles d'un poste", exact: true })); await page.getByLabel(/^Poste(?: \*)?$/).selectOption("Buvette"); await settle(page)
           checks.multipleRegistrationsOneRecipient = true
         })
-        await scene("template-create", async at => {
+        const templateLibrary = page.getByRole("dialog", { name: "Ajouter des modèles" })
+        await scene("template-library", async at => {
           await page.goto(templatesUrl); await settle(page)
+          await at("Cliquez sur Ajouter des modèles")
+          await tap(page, page.getByRole("button", { name: "Ajouter des modèles", exact: true }))
+          await templateLibrary.getByRole("heading", { name: "Recruter et compléter" }).waitFor()
+        })
+        await scene("template-create", async at => {
           if (await db.messageTemplate.count({ where: { organizationId: "default", name: modelName } })) throw new Error("Model already exists; reset scenario")
+          await at("Pour écrire votre propre texte")
+          await tap(page, templateLibrary.getByRole("button", { name: "Fermer", exact: true }))
           await tap(page, page.getByRole("button", { name: "Nouveau modèle", exact: true }))
           await at("Prenons Briefing avant le créneau")
           await writeField(page.getByLabel(/^Nom du modèle(?: \*)?$/), modelName)
+          await at("Pour la catégorie, choisissons Infos pratiques")
+          await page.getByLabel("Catégorie", { exact: true }).selectOption("Infos pratiques")
           await at("L'objet annonce le sujet de l'email")
           await writeField(page.getByLabel(/^Objet(?: \*)?$/), subject)
           await at("Dans le message, une salutation")
@@ -2830,6 +2938,24 @@ async function main() {
           // Keep the message visible through the complete explanation.
         })
         await returnToReport()
+        await scene("share", async at => {
+          const row = section("staffing-underfilled").getByRole("listitem").filter({
+            has: page.getByRole("link", { name: /^Buvette.*18:00.*22:00/ }),
+          })
+          await at("Pour trouver du renfort")
+          await tap(page, row.getByRole("button", { name: /^Partager ce créneau pour/ }))
+          const dialog = page.getByRole("dialog", { name: "Partager ce créneau", exact: true })
+          const publicLink = dialog.getByText(/^https:\/\/default\.benevol\.app\//)
+          await publicLink.waitFor()
+          const url = (await publicLink.innerText()).trim()
+          await at("Cliquez sur Copier le lien")
+          await tap(page, dialog.getByRole("button", { name: "Copier le lien", exact: true }))
+          if (await page.evaluate(() => navigator.clipboard.readText()) !== url) throw new Error("Copied URL differs from the displayed public shift link")
+          await dialog.getByRole("link", { name: /^QR code PNG/ }).waitFor()
+          await dialog.getByRole("checkbox", { name: /^Accepter une inscription même si/ }).waitFor()
+          checks.copiedPublicShiftLink = true
+        })
+        await tap(page, page.getByRole("dialog", { name: "Partager ce créneau", exact: true }).getByRole("button", { name: "Fermer", exact: true }))
         await scene("requests", async at => {
           await section("staffing-full").getByRole("link", { name: /Navette.*08:00.*12:00/ }).scrollIntoViewIfNeeded()
           const held = initial.full.find(s => s.roleName === "Navette" && s.startTime === "08:00")
@@ -2842,8 +2968,8 @@ async function main() {
           if (await page.locator("tbody tr").count() !== 2) throw new Error("Requests link didn't filter list")
           await page.getByRole("row").filter({ hasText: "Lucas Girard" }).waitFor()
           await page.getByRole("row").filter({ hasText: "Marc Duc" }).waitFor()
-          await at("La confirmation et la demande"); await returnToReport()
         })
+        await returnToReport()
         await scene("waiting", async at => {
           await section("staffing-waitlist").scrollIntoViewIfNeeded()
           await section("staffing-waitlist").getByText("3 personnes en attente", { exact: false }).waitFor()
@@ -2896,7 +3022,11 @@ async function main() {
           if (after.totals.missing !== initial.totals.missing - 1 || after.totals.active !== initial.totals.active + 1 || after.emptyRoles.some(r => r.roleName === "Photos")) throw new Error("Report didn't reflect actual assignment")
           checks.finalTotals = after.totals
           checks.photoRoleNoLongerEntirelyEmpty = true
-          await section("staffing-overview").scrollIntoViewIfNeeded()
+          const updatedShift = section("staffing-underfilled").getByRole("listitem").filter({
+            has: page.getByRole("link", { name: /^Photos.*sam\..*10:00.*12:00/ }),
+          })
+          await updatedShift.getByText(/manque 2/).waitFor()
+          await updatedShift.evaluate(row => row.scrollIntoView({ block: "center" }))
         })
         await writeFile(path.join(dir, "staffing-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
       } finally { await db.$disconnect() }

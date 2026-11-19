@@ -10,7 +10,7 @@ aliases: []
 
 # Écrire aux bénévoles
 
-<!-- video: TARGETED_MESSAGES -->
+[Voir le tutoriel sur les messages ciblés](/videos/TARGETED_MESSAGES).
 
 Depuis l'onglet **Messages** de l'événement (**Événements**, puis l'événement, puis **Messages**), section **Écrire aux bénévoles**, ou depuis les inscriptions (le bouton reprend le poste ou le créneau filtré).
 
@@ -52,6 +52,8 @@ Quand le plafond d'envoi a fait attendre une partie des emails, une phrase le di
 **Voir les emails de cet envoi** ouvre les [emails envoyés](parametres-et-suivi-des-emails.md#emails-envoyes) de cet envoi seulement, avec leur état et, pour un échec, sa cause et le bouton **Renvoyer** ; le lien n'est affiché que tant que des emails de l'envoi sont encore dans cette liste (un email parti en sort la nuit suivante, un email en échec après 30 jours). Pour un message, **Voir le message** mène à son texte, dans les messages envoyés. Les destinataires ne sont jamais listés, seulement leur nombre, et ni les adresses ni le texte ne sont gardés avec l'envoi : il est conservé trois ans, puis supprimé, et il l'est aussi avec l'événement. Chaque envoi groupé figure aussi dans le [journal d'activité de l'organisation](journal-d-activite-de-l-organisation.md).
 
 ## Modèles de messages
+
+<!-- video: MESSAGE_TEMPLATES -->
 
 **Paramètres**, puis **Modèles de messages**, ou le lien **gérer les modèles de messages** sous « Écrire aux bénévoles », dans l'onglet **Messages** : enregistrez les messages que vous envoyez souvent (infos pratiques, convocation, remerciements), jusqu'à 100 par organisation, avec un nom, une catégorie, un objet et un texte.
 

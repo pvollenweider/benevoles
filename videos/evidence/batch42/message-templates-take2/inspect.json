@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:25:33.019Z",
+  "videoSha256": "1046f21c5fe4569bdeba9fe5d02e857d7f7b60d5159a8fa35f04ba34bc19957d",
+  "promptSha256": "506eb38346744b0c0a6683d1998befe342a44fd6b6d251e442e4454134dcd47b",
+  "clipSha256": "cf5a7c2eb3797cb8fe7206c4fd8377599bc20a4a5738447cf8281c7c5a4d1d87",
+  "scene": "inspect",
+  "review": {
+    "heardOpening": "Cliquez sur Aperçu pour voir l'email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Cliquez sur Aperçu pour voir l'email tel qu'un bénévole le recevra",
+        "visibleSeconds": 0.8,
+        "visible": "L'aperçu de l'email s'ouvre sous le modèle Alerte météo : pluie avec des données d'exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Les mentions surlignées indiquent les informations à remplacer",
+        "visibleSeconds": 7,
+        "visible": "Les passages surlignés en jaune à compléter sont bien visibles dans le corps du message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.1,
+        "spoken": "Cliquez sur Ajouter à mes modèles",
+        "visibleSeconds": 12.5,
+        "visible": "Un clic est effectué sur le lien Ajouter à mes modèles en regard du modèle de pluie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.6,
+        "spoken": "La mention Déjà dans mes modèles confirme l'ajout",
+        "visibleSeconds": 16,
+        "visible": "La mention « Déjà dans mes modèles » n'apparaît pas : le texte reste « Ajouter à mes modèles »",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À 00:15, la mention « Déjà dans mes modèles » n'apparaît pas après le clic : le libellé reste « Ajouter à mes modèles »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

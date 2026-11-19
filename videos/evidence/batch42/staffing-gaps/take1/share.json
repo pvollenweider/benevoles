@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:00:51.844Z",
+  "videoSha256": "bccc643823866e9fce4258808bcb810b87461a79f21343ebfe3b55fd96c614a7",
+  "promptSha256": "fdc304f58056028753a7feab9f2c59a8385ad101919f58dc57393bf8a9c461a5",
+  "clipSha256": "a3816f2b874dc9b4db4e8b41f98c3f38fbd8040877a1037ae18bd55c11976d1b",
+  "scene": "share",
+  "review": {
+    "heardOpening": "Pour trouver du renfort, ouvrez Partager ce créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "ouvrez Partager ce créneau sur la ligne de la buvette du soir",
+        "visibleSeconds": 0.9,
+        "visible": "Clic sur « Partager ce créneau » sur la ligne Buvette et ouverture de la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Cliquez sur Copier le lien",
+        "visibleSeconds": 5.3,
+        "visible": "Clic sur le bouton « Copier le lien » avec affichage de la mention « Lien copié. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Vous pouvez aussi télécharger le code QR",
+        "visibleSeconds": 12,
+        "visible": "Bouton « QR code PNG » affiché dans la modale de partage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "La case API est utile si les inscriptions de l'événement sont déjà fermées",
+        "visibleSeconds": 14.8,
+        "visible": "Case à cocher « Accepter une inscription même si les inscriptions de l'événement sont fermées » visible",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:15, la voix prononce « La case A-P-I est utile » au lieu de « La case est utile »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, régulière et bien posée, avec une insertion erronée du mot « API » à 00:15."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

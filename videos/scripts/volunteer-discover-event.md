@@ -13,7 +13,7 @@ Comprendre un événement et ses missions avant de choisir un créneau, sur ordi
 3. Ouvrir les pages « Accès et parking » et « Questions fréquentes ».
 4. Lire les journées, postes, capacités et spectacles du planning sur ordinateur.
 5. Identifier les états complet, liste d’attente, sur validation, âge minimum et réservé.
-6. Passer à une largeur de téléphone et faire défiler réellement le planning horizontalement.
+6. Sur téléphone tenu droit, montrer la Liste et son libellé « Affichage des créneaux ». Toucher Frise, indiquer que le téléphone à l’horizontale offre aussi cette vue, puis faire défiler la frise avant de passer au dimanche.
 7. Ouvrir l’invitation d’un membre autorisé à voir le résultat sur un poste réservé.
 
 ## Résultat visible

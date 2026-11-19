@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:44:25.969Z",
+  "videoSha256": "7551a6fedd1d2c65fc343531579edcb81b2377fe043f7408d2e0380aa105d18b",
+  "promptSha256": "0a19b0f6ba2a2e13d97068c778d9e6a037b15772ab183b12a1cf2cdb468f2755",
+  "clipSha256": "d0855f948093db800b7da0191cd3504b634fa3ee296cbedae04357a94724b8f7",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Le bouton d'envoi dans l'aperçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation",
+        "visibleSeconds": 3.8,
+        "visible": "Le clic sur « Envoyer à 5 personnes » dans la modale d'aperçu fait apparaître la pop-up « Confirmer l'envoi »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Relisez le public et le nombre de destinataires avant de valider",
+        "visibleSeconds": 5,
+        "visible": "La fenêtre de confirmation affiche l'intitulé, les 5 personnes et les détails du créneau Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Nous annulons une première fois : aucun message n'est parti",
+        "visibleSeconds": 10.2,
+        "visible": "Clic sur le bouton « Annuler » qui referme la confirmation sans déclencher l'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.4,
+        "spoken": "Reprenons ensuite le parcours et confirmons réellement notre briefing",
+        "visibleSeconds": 14.8,
+        "visible": "Réouverture de l'aperçu puis clic sur « Confirmer l'envoi »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Attendez le résultat plutôt que de relancer l'envoi immédiatement",
+        "visibleSeconds": 16.5,
+        "visible": "La page affiche le bandeau de confirmation « Message envoyé à 5 personnes »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

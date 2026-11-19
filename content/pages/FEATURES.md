@@ -54,7 +54,7 @@ En savoir plus : [s'inscrire](../guide/s-inscrire.md), [la liste d'attente](../g
 
 ## Garder chacun informé
 
-<!-- image: TARGETED_MESSAGES | Les modèles de messages : une bibliothèque de textes prêts à l'emploi, avec l'aperçu de l'email et le prénom du bénévole rempli à l'envoi. -->
+<!-- image: MESSAGE_TEMPLATES | L'aperçu de l'alerte météo pour la pluie, avec les mentions à compléter surlignées. -->
 
 - **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux et ses réponses à vos questions (et les corriger, vous êtes prévenu par email), en prendre d'autres tant que les inscriptions sont ouvertes, les annuler ou les ajouter à son calendrier, par un fichier à importer ou par un abonnement que son agenda met à jour tout seul quand un horaire change ou qu'un créneau est annulé. Un **lien pour toutes ses inscriptions auprès de l'organisation** rassemble ses créneaux à venir de tous vos événements, avec leur état et le même délai d'annulation que chaque événement ; c'est celui que portent l'email de confirmation et les rappels, il peut le renouveler en un clic, et « J'ai perdu mon lien » envoie ce seul lien. Sa carte **Mon calendrier** abonne son agenda à **tous ses créneaux confirmés de l'organisation**, tous événements confondus, et se met à jour toute seule. L'annulation reste possible jusqu'au début du créneau, ou jusqu'au délai que vous fixez (par exemple 2 jours avant) ; ensuite, le bénévole voit qui prévenir.
 - **Des rappels automatiques** deux jours avant, la veille et le jour même, ou les délais que vous fixez pour un événement (jusqu'à trois, en heures ou en jours). Quand un bénévole a plusieurs créneaux le même jour pour le même événement, un seul rappel les regroupe. Le bénévole peut aussi les recevoir en notification sur son téléphone ; sur iPhone, sa page personnelle lui explique comment l'ajouter à l'écran d'accueil, ce qu'iOS demande pour les notifications.
@@ -64,6 +64,8 @@ En savoir plus : [s'inscrire](../guide/s-inscrire.md), [la liste d'attente](../g
 - **Les inscrits sont prévenus** par email si un créneau change d'horaire ou est annulé.
 
 <!-- video: TARGETED_MESSAGES -->
+
+<!-- video: MESSAGE_TEMPLATES -->
 
 En savoir plus : [les rappels](../guide/rappels.md), [écrire aux bénévoles](../guide/ecrire-aux-benevoles.md).
 

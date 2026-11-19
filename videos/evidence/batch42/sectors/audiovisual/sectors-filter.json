@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:56:15.519Z",
+  "videoSha256": "9972cbbd38e0e091a42cda676febfde0d377314112cce9812203cde2b51dc454",
+  "promptSha256": "4da87d62a010d1a21bbd8885cb35c238f22aa87fa8b3b50dd9b0b61333f0fc50",
+  "clipSha256": "3508e50a19eda8a9bf4032aac9e464fddf3878e2344e6a8288f648b5f4b475e4",
+  "scene": "sectors-filter",
+  "review": {
+    "heardOpening": "Une fois les secteurs en place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "Dans Inscriptions, choisissons Parking",
+        "visibleSeconds": 7,
+        "visible": "Le secteur Parking est sélectionné dans le menu déroulant Secteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "La liste, les compteurs et l'export des présences ne portent plus que sur ses postes",
+        "visibleSeconds": 8.5,
+        "visible": "La liste est filtrée sur les postes de parking avec 5 inscriptions actives affichées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Le choix figure dans l'adresse de la page",
+        "visibleSeconds": 14,
+        "visible": "La barre d'adresse du navigateur n'est pas visible dans le cadrage de la vidéo",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:14, l'adresse de la page (URL) mentionnée par la voix n'apparaît pas à l'écran car la barre du navigateur est coupée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

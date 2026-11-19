@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:14:50.398Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "fd6c12468ae4b82b1c8fac0816dc4d404b8416d31c7001d5b083da0603e5b8e4",
+  "clipSha256": "4b60dc77ba9825eb232ff538b4c2d2e57f0712075fe47ff1d427aaf10ab54b8b",
+  "scene": "leaders",
+  "review": {
+    "heardOpening": "Postes sans responsable de secteur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Postes sans responsable de secteur est un autre besoin",
+        "visibleSeconds": 0,
+        "visible": "Section Postes sans responsable de secteur visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Le lien ouvre la gestion des responsables",
+        "visibleSeconds": 9.5,
+        "visible": "Ouverture de la page Paramètres sur la section Responsables de secteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Ceux qui sont déjà nommés pour la buvette et l'accueil restent visibles",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage des responsables nommés pour l'accueil et la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

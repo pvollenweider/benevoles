@@ -1,0 +1,84 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:46:00.408Z",
+  "videoSha256": "a919eba8f27cc70fed4d10b627a17b75e09f483a1df502caa8c7cae42e4b9492",
+  "promptSha256": "71494cc00f44ebfd6f03a271ee673c79e97308e91d446457a477abe2a1e01428",
+  "clipSha256": "bad9ee55acfc492c2dcd2ca90086fb153f1b59bc1d3325786cf792f858c74f23",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Depuis les messages de l'événement, choisissons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel",
+        "visibleSeconds": 1.5,
+        "visible": "Sélection de l'option 'Les bénévoles d'un créneau' et choix du créneau 'Logistique - Installation du matériel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Écrivons un objet clair et une courte demande",
+        "visibleSeconds": 7,
+        "visible": "L'objet est déjà saisi et le texte du message est rédigé dans le champ correspondant",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.5,
+        "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi",
+        "visibleSeconds": 27,
+        "visible": "Ouverture de la modale de confirmation d'envoi puis clic sur 'Confirmer l'envoi'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.5,
+        "spoken": "Ouvrons le vrai email reçu",
+        "visibleSeconds": 33,
+        "visible": "Affichage de l'email reçu destiné à Emma",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 40,
+        "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel",
+        "visibleSeconds": 40.5,
+        "visible": "Retour à l'onglet Inscriptions avec la section Inscription manuelle visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 43.8,
+        "spoken": "Saisissons son prénom, puis son nom",
+        "visibleSeconds": 45,
+        "visible": "Renseignement des champs Prénom ('Zoé') et Nom ('Papadopoulos')",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 50,
+        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la",
+        "visibleSeconds": 51,
+        "visible": "Sélection du créneau de logistique 12h-14h et clic sur le bouton Ajouter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 55.5,
+        "spoken": "Enfin, revenons à la couverture : le poste est rempli",
+        "visibleSeconds": 56.5,
+        "visible": "Affichage de l'onglet Créneaux ('Où manque-t-il du monde ?')",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, naturelle et parfaitement intelligible, débit adapté aux actions démontrées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

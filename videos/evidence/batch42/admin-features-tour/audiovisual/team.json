@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:02.309Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "6cc9c04240f3f77c26e542fe8fd153eb4b929442ceb2dbe8e499cc8b1a2454bb",
+  "clipSha256": "398ebc4b9222ce30247ced39d33edef72c5ddb81b75f8b3dc430295429c73b6a",
+  "scene": "team",
+  "review": {
+    "heardOpening": "Côté équipe, le propriétaire administre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Côté équipe, le propriétaire administre l'organisation et ses accès.",
+        "visibleSeconds": 1.2,
+        "visible": "Section Organisateurs affichée avec le rôle Propriétaire attribué à Élodie Rochat.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Les organisateurs préparent les événements, les membres et les communications.",
+        "visibleSeconds": 4.5,
+        "visible": "Rôles d'organisateurs visibles dans la liste de l'équipe.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Les responsables de secteur reçoivent un lien personnel limité à leur poste",
+        "visibleSeconds": 9,
+        "visible": "Affichage de la page Paramètres de l'événement avec l'onglet Responsables de secteur.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

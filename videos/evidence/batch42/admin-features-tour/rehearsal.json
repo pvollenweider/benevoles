@@ -1,0 +1,371 @@
+{
+  "slug": "admin-features-tour",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-11-19T10:46:57.503Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "04aac36196087830380b672268679e360c121ea1",
+    "sourceTree": "b7fcbe616cbc4fdeb7e4449e9a8fc8c855d6e5c1",
+    "productSourceSha256": "55eb9ac393a3d68acdbfa812aae5f95ec8673f9822502d7e403deadadc8de7bc",
+    "buildId": "yDSsdN_RxsiGKPfTZJMXN",
+    "snapshot": "/private/tmp/benevoles-video-production.Swyk5Ajr",
+    "builtAt": "2026-11-19T10:12:41.385Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "ADMIN_FEATURES_OVERVIEW",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 18725
+    },
+    {
+      "kind": "click",
+      "atMs": 19606
+    },
+    {
+      "kind": "click",
+      "atMs": 20472
+    },
+    {
+      "kind": "click",
+      "atMs": 21287
+    },
+    {
+      "kind": "click",
+      "atMs": 22107
+    },
+    {
+      "kind": "click",
+      "atMs": 22923
+    },
+    {
+      "kind": "click",
+      "atMs": 23738
+    },
+    {
+      "kind": "click",
+      "atMs": 24069
+    },
+    {
+      "kind": "click",
+      "atMs": 25253
+    },
+    {
+      "kind": "click",
+      "atMs": 26909
+    },
+    {
+      "kind": "click",
+      "atMs": 28171
+    },
+    {
+      "kind": "click",
+      "atMs": 36070
+    },
+    {
+      "kind": "click",
+      "atMs": 36903
+    },
+    {
+      "kind": "click",
+      "atMs": 40337
+    },
+    {
+      "kind": "click",
+      "atMs": 41186
+    },
+    {
+      "kind": "click",
+      "atMs": 42869
+    },
+    {
+      "kind": "click",
+      "atMs": 44506
+    },
+    {
+      "kind": "click",
+      "atMs": 45319
+    },
+    {
+      "kind": "click",
+      "atMs": 60570
+    },
+    {
+      "kind": "click",
+      "atMs": 61385
+    },
+    {
+      "kind": "key",
+      "atMs": 61694
+    },
+    {
+      "kind": "key",
+      "atMs": 61792
+    },
+    {
+      "kind": "key",
+      "atMs": 61889
+    },
+    {
+      "kind": "key",
+      "atMs": 61986
+    },
+    {
+      "kind": "key",
+      "atMs": 62084
+    },
+    {
+      "kind": "key",
+      "atMs": 62181
+    },
+    {
+      "kind": "key",
+      "atMs": 62279
+    },
+    {
+      "kind": "key",
+      "atMs": 62565
+    }
+  ],
+  "cues": [
+    {
+      "id": "intro",
+      "startMs": 1,
+      "endMs": 2625
+    },
+    {
+      "id": "organization",
+      "startMs": 5968,
+      "endMs": 5996
+    },
+    {
+      "id": "team",
+      "startMs": 6447,
+      "endMs": 7754
+    },
+    {
+      "id": "lifecycle",
+      "startMs": 11163,
+      "endMs": 12519
+    },
+    {
+      "id": "appearance",
+      "startMs": 12972,
+      "endMs": 13085
+    },
+    {
+      "id": "duplicate",
+      "startMs": 14772,
+      "endMs": 14801
+    },
+    {
+      "id": "shift-methods",
+      "startMs": 18217,
+      "endMs": 27225
+    },
+    {
+      "id": "shift-fields",
+      "startMs": 27678,
+      "endMs": 28618
+    },
+    {
+      "id": "registrations",
+      "startMs": 32065,
+      "endMs": 32101
+    },
+    {
+      "id": "members",
+      "startMs": 33833,
+      "endMs": 33867
+    },
+    {
+      "id": "questions",
+      "startMs": 35566,
+      "endMs": 38151
+    },
+    {
+      "id": "pages",
+      "startMs": 39825,
+      "endMs": 45627
+    },
+    {
+      "id": "messages",
+      "startMs": 49054,
+      "endMs": 51583
+    },
+    {
+      "id": "reminders",
+      "startMs": 53178,
+      "endMs": 53193
+    },
+    {
+      "id": "reports",
+      "startMs": 56587,
+      "endMs": 56649
+    },
+    {
+      "id": "activity",
+      "startMs": 60064,
+      "endMs": 63784
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "team",
+      "phrase": "Les responsables de secteur reçoivent",
+      "startMs": 8719,
+      "endMs": 18000,
+      "cueMs": 6519
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Un événement suit un cycle",
+      "startMs": 0,
+      "endMs": 2000,
+      "cueMs": 11167
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Même publié, il peut rester",
+      "startMs": 7852,
+      "endMs": 12741,
+      "cueMs": 12485
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Les inscriptions peuvent être immédiates",
+      "startMs": 12741,
+      "endMs": 18000,
+      "cueMs": 12485
+    },
+    {
+      "segmentId": "appearance",
+      "phrase": "Le lieu peut recevoir des",
+      "startMs": 6150,
+      "endMs": 8550,
+      "cueMs": 13018
+    },
+    {
+      "segmentId": "duplicate",
+      "phrase": "Vous choisissez ce qui est repris",
+      "startMs": 5488,
+      "endMs": 7537,
+      "cueMs": 14784
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "ajouter un créneau depuis la",
+      "startMs": 3719,
+      "endMs": 11460,
+      "cueMs": 19052
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "ajouter un créneau depuis la",
+      "startMs": 3719,
+      "endMs": 11460,
+      "cueMs": 19929
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "Pour des horaires répétitifs, la",
+      "startMs": 11460,
+      "endMs": 17000,
+      "cueMs": 26419
+    },
+    {
+      "segmentId": "shift-fields",
+      "phrase": "La liste d’attente et l’inscription",
+      "startMs": 13755,
+      "endMs": 18000,
+      "cueMs": 28585
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "taille de t-shirt, régime alimentaire",
+      "startMs": 2339,
+      "endMs": 7761,
+      "cueMs": 35580
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "Une question de suivi peut",
+      "startMs": 7761,
+      "endMs": 12173,
+      "cueMs": 38081
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "Vous décidez si la réponse",
+      "startMs": 12173,
+      "endMs": 16000,
+      "cueMs": 38118
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Donnez un titre et rédigez",
+      "startMs": 5380,
+      "endMs": 8559,
+      "cueMs": 40646
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Puis organisez leur ordre avec",
+      "startMs": 8559,
+      "endMs": 10760,
+      "cueMs": 44810
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "Les modèles réutilisables acceptent des",
+      "startMs": 3852,
+      "endMs": 8057,
+      "cueMs": 49083
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "Vous choisissez un envoi immédiat",
+      "startMs": 8057,
+      "endMs": 11776,
+      "cueMs": 50228
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "La section Messages programmés permet",
+      "startMs": 11776,
+      "endMs": 14255,
+      "cueMs": 51516
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "Des délais propres à l'événement",
+      "startMs": 14255,
+      "endMs": 17000,
+      "cueMs": 51549
+    },
+    {
+      "segmentId": "reports",
+      "phrase": "Les badges se génèrent en",
+      "startMs": 9863,
+      "endMs": 17000,
+      "cueMs": 56619
+    },
+    {
+      "segmentId": "activity",
+      "phrase": "La recherche globale permet ensuite",
+      "startMs": 12843,
+      "endMs": 17000,
+      "cueMs": 60068
+    }
+  ]
+}

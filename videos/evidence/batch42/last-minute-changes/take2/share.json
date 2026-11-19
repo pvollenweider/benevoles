@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:45:21.027Z",
+  "videoSha256": "a919eba8f27cc70fed4d10b627a17b75e09f483a1df502caa8c7cae42e4b9492",
+  "promptSha256": "5ffc8f14dfe0b43a58a26337e90fa8adb5b1347abf8b6bb0d967cda5bb18033b",
+  "clipSha256": "87d0532d55e96fdd7739bf97c452b366c8200d36fadda8a9e6ed8b878a49a43b",
+  "scene": "share",
+  "review": {
+    "heardOpening": "Il manque encore quelqu'un pour installer le matériel demain.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "ouvrez Partager ce créneau",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur le lien Partager ce créneau et affichage de la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Cliquez sur Copier le lien",
+        "visibleSeconds": 8,
+        "visible": "Clic sur le bouton Copier le lien et apparition de la mention Lien copié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "cette case permet de laisser ce créneau accessible",
+        "visibleSeconds": 20,
+        "visible": "Case à cocher Accepter une inscription même si les inscriptions de l'événement sont fermées affichée dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, calme et bienveillante, avec un débit régulier et une diction très claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

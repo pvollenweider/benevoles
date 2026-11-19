@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:55:38.374Z",
+  "videoSha256": "9972cbbd38e0e091a42cda676febfde0d377314112cce9812203cde2b51dc454",
+  "promptSha256": "f9efdb4885a1543212b8fd289c79a2cf88d79ac9f773192fe7e5a33f03d82b03",
+  "clipSha256": "ac470042b55cf9ce34560c5208311cd01a4ad4f5c0cc7b92969c1c25e3268b17",
+  "scene": "sectors-create",
+  "review": {
+    "heardOpening": "Ouvrons Gérer les postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons Gérer les postes.",
+        "visibleSeconds": 0.9,
+        "visible": "Clic sur le bouton et ouverture du panneau Gérer les postes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "La partie Secteurs apparaît en haut du panneau.",
+        "visibleSeconds": 2,
+        "visible": "La section Secteurs est visible en haut du panneau ouvert.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Tapons Parking dans Nouveau secteur, puis Ajouter le secteur.",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie de Parking dans le champ Nouveau secteur et clic sur Ajouter le secteur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "Ajoutons de même Backline.",
+        "visibleSeconds": 11.2,
+        "visible": "Saisie et ajout du secteur Backline dans la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.4,
+        "spoken": "Le bouton et le panneau s'appellent désormais Gérer les secteurs et postes.",
+        "visibleSeconds": 17.8,
+        "visible": "Affichage du nouveau libellé Gérer les secteurs et postes sur le bouton et en titre de panneau.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

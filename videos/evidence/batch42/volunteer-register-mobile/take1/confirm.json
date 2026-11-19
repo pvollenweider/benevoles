@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T13:02:59.068Z",
+  "videoSha256": "a12f35b099bbf1df82b694884a402b0acdc4346e4eaa15a80023dd4922ea1e25",
+  "promptSha256": "b0d2b92b78a4bf34ec5ae16ad9261d8dcd266616966c832ff7abd5c1c046591e",
+  "clipSha256": "b002b1136617bf093fa6d2f991494079e9a4812404ffedd52a13576be6c2921e",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Un dernier coup d'œil au récapitulatif",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un dernier coup d’œil au récapitulatif",
+        "visibleSeconds": 0.5,
+        "visible": "Section 'Tes créneaux' et récapitulatif des informations visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "et c’est parti",
+        "visibleSeconds": 2.5,
+        "visible": "L'écran reste sur le formulaire avant de basculer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "confirme ton inscription",
+        "visibleSeconds": 3.6,
+        "visible": "Page 'Demande d'inscription reçue' affichée directement, sans clic visible sur le bouton de validation",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:03, le clic sur le bouton de confirmation n'est pas affiché : l'écran saute directement au message 'Demande d'inscription reçue'."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et bien rythmée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

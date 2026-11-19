@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:14:24.827Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "cc547c639dbcd4a6513f971af678af548de3186277bc7b1714a9ec9f3884369c",
+  "clipSha256": "63e91392476d3b8f78033f7dee756a54f1b30ca09bbeae346528914528fb1c32",
+  "scene": "needs",
+  "review": {
+    "heardOpening": "Créneaux à compléter va du plus dégarni",
+    "checkpoints": [
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Cliquons sur la buvette du soir",
+        "visibleSeconds": 13.2,
+        "visible": "Clic sur le lien du créneau Buvette sam. 28 nov. 18:00–22:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "la liste des inscriptions s'ouvre déjà filtrée",
+        "visibleSeconds": 14.4,
+        "visible": "Affichage de l'onglet Inscriptions pré-filtré sur le créneau sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Le lien Écrire à ce créneau prépare ensuite un message",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur le bouton Écrire à ce créneau et ouverture de la page Messages avec le créneau pré-sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

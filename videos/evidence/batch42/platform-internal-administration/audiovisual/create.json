@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:42:23.676Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "90ca287e5ccb18dbfa69520f599d64d4fdc7fbeddac855ca1852aaec8e9bbd46",
+  "clipSha256": "62cdcdd276c6eec8a15f3c64d5daa366d5917ecf89114decf5d8657ca5383e3f",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Pour accueillir une nouvelle organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrons le formulaire de création",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Nouvelle organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Renseignons son nom",
+        "visibleSeconds": 4.8,
+        "visible": "Saisie de Formation Opérateur Jetable dans le champ Nom de l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "puis le nom et l'adresse email de son premier organisateur",
+        "visibleSeconds": 7.2,
+        "visible": "Saisie du nom complet Lou Tôtih puis de l'adresse email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Créons l'espace",
+        "visibleSeconds": 13.2,
+        "visible": "Clic sur le bouton Créer l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "Le résultat affiche un lien d'activation valable sept jours",
+        "visibleSeconds": 14.1,
+        "visible": "Écran Organisation créée avec le lien d'invitation et la mention Ce lien est valable 7 jours",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation fluide avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

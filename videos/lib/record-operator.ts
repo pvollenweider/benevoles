@@ -223,10 +223,12 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await scene("health", async at => {
       await at(.03); await go("/super-admin/health")
       await page.getByRole("heading", { name: "Santé du service", exact: true }).waitFor()
-      await at(.12); await page.getByRole("heading", { name: "Service", exact: true }).scrollIntoViewIfNeeded()
-      await at(.24); await page.getByText(/Version .*vérifiée le/).scrollIntoViewIfNeeded()
-      await at(.35); await page.reload(); await settle(page)
-      await at(.50); await page.getByRole("heading", { name: "Tâches planifiées et sauvegardes", exact: true }).scrollIntoViewIfNeeded()
+      await page.getByRole("heading", { name: "Service", exact: true }).scrollIntoViewIfNeeded()
+      await at(.12) /* mid-sentence: the spoken list reaches the server resources */
+      await page.getByRole("heading", { name: "Serveur", exact: true }).evaluate(heading => heading.scrollIntoView({ block: "center" }))
+      await at("Regardons les états visibles"); await page.getByText(/Version .*vérifiée le/).scrollIntoViewIfNeeded()
+      await at("Recharger relance la vérification."); await page.reload(); await settle(page)
+      await at("Dans notre environnement local"); await page.getByRole("heading", { name: "Tâches planifiées et sauvegardes", exact: true }).evaluate(heading => heading.scrollIntoView({ block: "start" }))
       await at(.84); await page.getByRole("heading", { name: "Configuration", exact: true }).scrollIntoViewIfNeeded()
       assert.equal(await db.jobRun.count(), 0)
       checks.realHealthWithoutInventedJobs = true
@@ -269,6 +271,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       const redirect = new URL(unsubscribe.headers().location)
       assert.equal(redirect.pathname, "/product-updates/unsubscribe")
       await session(null); await go(`${redirect.pathname}${redirect.search}`)
+      await at("confirmons, et le choix")
       await tap(page, page.getByRole("button", { name: "Me désabonner", exact: true }))
       await page.waitForURL(/\/product-updates\/unsubscribed\?ok=1/)
       assert.equal((await db.adminUser.findUniqueOrThrow({ where: { email: ownerEmail } })).receiveProductUpdates, false)

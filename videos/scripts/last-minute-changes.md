@@ -77,3 +77,7 @@ Source produit : main `d3f4c4ba81356b673b1952b19c4ffe99531652f5`, dont #1318. Li
 Statut final : **READY**, seconde prise retenue, 395,480 s, révision 6 du 11 novembre 2026. Build `AOuqevq41Wdo1_vo9UIzS`, produit `d3f4c4ba`. La première prise ouvrait un email trop tard : les confirmations sont désormais calées sur la phrase précédente, puis le vrai message s’ouvre sur « Ouvrons le vrai email reçu ». La case de notification est montrée pendant sa phrase.
 
 Le modèle a confondu les lignes du tableau : à 15,5 s de `offer`, avant la fin de la phrase mesurée à 15,829 s, Nicolas est entièrement visible sur Accueil du matin ; Préparation appartient à Sarah. L’image finale et la lecture de la vraie inscription résolvent ce signalement. Aucun défaut produit n’est constaté. [Rapport et preuves](../evidence/batch40/last-minute-changes/review-report.txt).
+
+## Partager le besoin pour demain (lot 42)
+
+Après la couverture, ouvrir « Partager ce créneau » sur Installation du matériel. Copier le lien pour un groupe de discussion et laisser la fenêtre lisible. Le lien ouvre le seul créneau de midi à quatorze heures. La case permet une inscription après la fermeture de l’événement tant qu’il reste une place et que le créneau n’a pas commencé.

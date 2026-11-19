@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:30.176Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "112dc5b2a0c9c646d75be2dff4db9bd6174958f2b1621cc4297ef4ecda6e5a70",
+  "clipSha256": "1e6672ddfd2f389f2e3cc824c296e82c22e75795ecc969040469a192e7e56770",
+  "scene": "shift-fields",
+  "review": {
+    "heardOpening": "Chaque créneau peut préciser le poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.4,
+        "spoken": "le poste, le libellé, la date, les horaires et le nombre de places",
+        "visibleSeconds": 1.1,
+        "visible": "Formulaire Nouveau créneau affichant les champs Poste, Libellé, Date, Début, Fin et Places",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes",
+        "visibleSeconds": 6.8,
+        "visible": "Champs Description, Lieu de rendez-vous, Coordonnées GPS ou lien de carte, Personne de contact, Consigne pratique et Notes internes visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "La liste d’attente et l’inscription sur validation s’activent ici",
+        "visibleSeconds": 13.5,
+        "visible": "Défilement vers le bas affichant les cases à cocher Activer la liste d'attente et Sur validation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec le défilement du formulaire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

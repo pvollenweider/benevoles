@@ -11,7 +11,7 @@
       "Consulte les pages complémentaires comme Accès et parking ou Questions fréquentes.",
       "Lis le planning par journée et par poste : chaque barre indique les places restantes.",
       "Repère les états particuliers : complet avec liste d'attente, sur validation, âge minimum, réservé.",
-      "Sur téléphone, fais défiler le planning horizontalement puis verticalement pour voir les autres jours."
+      "Sur téléphone tenu droit, le planning s'ouvre en Liste. Choisis Frise ou tourne le téléphone pour voir la journée en frise."
     ],
     "remember": [
       "Un lien personnel ne se transfère pas à quelqu'un d'autre.",
@@ -61,7 +61,7 @@
     },
     {
       "id": "mobile",
-      "transcript": "Sur téléphone, la page garde les mêmes informations. Le planning est volontairement plus large que l’écran : le message avec les flèches indique qu’on peut le faire défiler horizontalement. Glisse doucement pour parcourir la journée, puis verticalement pour passer au dimanche. Tu retrouves les heures, les capacités, les spectacles et les états sans version simplifiée cachant des détails.",
+      "transcript": "Sur téléphone tenu droit, le planning s'ouvre en liste. Les horaires et les places libres se lisent de haut en bas. Touche Frise pour retrouver la vue de la journée. Tu peux aussi tourner ton téléphone à l'horizontale. Glisse dans la frise pour voir les autres horaires. Descends ensuite pour retrouver la journée du dimanche.",
       "fallbackDurationMs": 32000
     },
     {

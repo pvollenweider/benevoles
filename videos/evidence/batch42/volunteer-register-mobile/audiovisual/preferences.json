@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T13:06:15.962Z",
+  "videoSha256": "0a32cbb3a91ce8cf89786bd422756088cdcd98715d4d832e266bfea9aab84df3",
+  "promptSha256": "c42f191ec98b2d934f2ee37d903b7fbe167aa2d3abae79e33d10793ccd1e021c",
+  "clipSha256": "1b56fb8e51fe48b85701a4c19911f679d7f0c7654498cba7f9505fff3345f258",
+  "scene": "preferences",
+  "review": {
+    "heardOpening": "Réponds aux quelques questions pratiques",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Réponds aux quelques questions pratiques",
+        "visibleSeconds": 0.5,
+        "visible": "Défilement du formulaire montrant les champs de questions pratiques complémentaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "puis accepte la convention",
+        "visibleSeconds": 2.5,
+        "visible": "Coche de la case 'J'ai lu et j'accepte la convention des bénévoles'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "et l’utilisation de tes données pour cet événement",
+        "visibleSeconds": 3.6,
+        "visible": "Coche de la seconde case autorisant l'association à utiliser les données",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine fluide, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

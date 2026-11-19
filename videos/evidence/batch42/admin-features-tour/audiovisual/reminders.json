@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:59.699Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "1026cc6d63cb97a6a75ee4a2e792d88eb2dc6e50bc58cade78f7026b257a0e47",
+  "clipSha256": "5695dd61c7795512a0f42df1ef86022abfaed893fac23280b6a4c7fd661329a7",
+  "scene": "reminders",
+  "review": {
+    "heardOpening": "Les rappels automatiques peuvent partir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "deux jours avant, la veille et le jour même",
+        "visibleSeconds": 0,
+        "visible": "Options cochables 'Rappel J-2', 'Rappel J-1' et 'Rappel du jour' affichées à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "où arrivent les réponses",
+        "visibleSeconds": 0,
+        "visible": "Champ de configuration 'Adresse de réponse' visible dans la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "si ses admins doivent être prévenus à chaque nouvelle inscription",
+        "visibleSeconds": 0,
+        "visible": "Option 'Prévenir les organisateurs à chaque inscription' affichée avec sa case cochée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et posée, ton naturel et agréable."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

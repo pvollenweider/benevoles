@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:58:46.062Z",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "promptSha256": "527bc44048f4f80755fc106fc5dd9d196e3d6513be3d85d17e8d6afb5fef66ab",
+  "clipSha256": "8f75bd5055082b1d926f37d6a42dea774fdd68bbef9ec327fcb96f1d6ce5a969",
+  "scene": "questions",
+  "review": {
+    "heardOpening": "Le formulaire peut poser quelques questions utiles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "taille de t-shirt, régime alimentaire ou permis de conduire",
+        "visibleSeconds": 1.5,
+        "visible": "Liste des trois questions déjà existantes affichée à l'écran, puis ouverture du formulaire d'ajout",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "de choix unique ou de cases à cocher",
+        "visibleSeconds": 8,
+        "visible": "Sélection du type 'Choix unique' et saisie des options S, M, L, XL",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Une question de suivi peut s'afficher seulement pour certaines réponses",
+        "visibleSeconds": 10.5,
+        "visible": "Champ conditionnel 'Afficher seulement si...' et son aide contextuelle visibles sous les choix",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Vous décidez si la réponse est obligatoire",
+        "visibleSeconds": 14.5,
+        "visible": "Case à cocher 'Réponse obligatoire' visible dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et posée, bien synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

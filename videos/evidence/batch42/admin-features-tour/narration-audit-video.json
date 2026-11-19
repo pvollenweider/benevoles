@@ -1,0 +1,171 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T10:59:28.548Z",
+  "revalidatedAt": "2026-11-19T10:59:28.550Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "6af8a33deb7809bc8679501814667f298e28ad9179dbac63b265e50f34a090ef",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "intro",
+      "audioSha256": "d4132f00e3be9fe0263793f5fc7dd7a37d68e2e09e4961b65a7605bc8fa10a18",
+      "recognized": "Voici une visite complète de l'administration dans l'ordre où vous l'utiliserez vraiment. Préparer votre organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+      "expected": "Voici une visite complète de l’administration, dans l’ordre où vous l’utiliserez vraiment : préparer votre organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "organization",
+      "audioSha256": "daafdb36cc4e5615e0d6b3749d097c6d05561e4bd6c5f3452a1908df246cfca8",
+      "recognized": "Tout commence avec l'identité de l'organisation. L'adresse de votre espace détermine votre sous-domaine sur benevole.app. Vous choisissez aussi le nom affiché, le fuseau horaire, et la charte des bénévoles que chacun devra accepter.",
+      "expected": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine votre sous-domaine sur benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la Charte des bénévoles que chacun devra accepter.",
+      "wordErrorRate": 0.05128205128205128,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "team",
+      "audioSha256": "df1841bd8baf0aec617213e3661872ed32018b22890e22dd21fc4ac819788132",
+      "recognized": "Côté équipe, le propriétaire administre l'organisation et ses accès. Les organisateurs préparent les événements, les membres et les communications. Les responsables de secteur reçoivent un lien personnel limité à leur poste avec les noms et coordonnées des inscrits, sans accès au reste de l'administration.",
+      "expected": "Côté équipe, le propriétaire administre l’organisation et ses accès. Les organisateurs préparent les événements, les membres et les communications. Les responsables de secteur reçoivent un lien personnel limité à leur poste, avec les noms et coordonnées des inscrits, sans accès au reste de l’administration.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "lifecycle",
+      "audioSha256": "5f77ab9ea845c977e4efc5f5c09c1b5b306e042bfa9e021222e59aad8a72e7c4",
+      "recognized": "Un événement suit un cycle clair, brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé. Même publié, il peut rester non répertorié et accessible seulement par son lien. Les inscriptions peuvent être immédiates, fermées ou programmées à une date précise.",
+      "expected": "Un événement suit un cycle clair : brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé. Même publié, il peut rester non répertorié et accessible seulement par son lien. Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "appearance",
+      "audioSha256": "c9e69045cdcfdb681f99e336e747984db841aa041d7d323c728205396e35d3c2",
+      "recognized": "Dans ces paramètres, vous réglez le titre, les dates, les messages et une couleur d'en-tête accessible. Le lieu peut recevoir des coordonnées. Les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les e-mails et leur espace personnel.",
+      "expected": "Dans ses paramètres, vous réglez le titre, les dates, les messages et une couleur d’en-tête accessible. Le lieu peut recevoir des coordonnées : les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.",
+      "wordErrorRate": 0.075,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "duplicate",
+      "audioSha256": "1fe5360c5e52d632334bd9223cb1eb59ce7ce9f939e74898f0bde66e8e02e5ae",
+      "recognized": "Pour repartir d'une édition précédente, dupliquez l'événement et décalez toutes les dates. Vous choisissez ce qui est repris : les créneaux, les paramètres, les pages d'information et les responsables.",
+      "expected": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates. Vous choisissez ce qui est repris : les créneaux, les paramètres, les pages d’information et les responsables.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "shift-methods",
+      "audioSha256": "4f2b25b46eb80cd3bcf9d85200b2f8578482393eb924f2ff82f9e11075d284fc",
+      "recognized": "Pour construire le planning, trois méthodes se complètent : ajouter un créneau depuis la liste, copier un créneau existant ou dessiner directement sa plage sur la frise puis l'élargir. Pour des horaires répétitifs, la création en série prépare plusieurs créneaux d'un coup.",
+      "expected": "Pour construire le planning, trois méthodes se complètent : ajouter un créneau depuis la liste, copier un créneau existant, ou dessiner directement sa plage sur la frise puis l’élargir. Pour des horaires répétitifs, la création en série prépare plusieurs créneaux d’un coup.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "shift-fields",
+      "audioSha256": "16acb936d3ba07faf2389c7fe821a32c5f1fd9562606ea525d00ab7e5245eb9e",
+      "recognized": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et le nombre de places, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum. La liste d'attente et l'inscription sur validation s'activent ici.",
+      "expected": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et le nombre de places, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum. La liste d’attente et l’inscription sur validation s’activent ici.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "registrations",
+      "audioSha256": "90aa19db36ddc06b5da7e25e91df30d00dc56e9acf2bbd816273b6c61b66b5e5",
+      "recognized": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen. Vous pouvez filtrer, ajouter quelqu'un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
+      "expected": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen. Vous pouvez filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "members",
+      "audioSha256": "a8890253e66e37d233a1337ef7fc13b0c10f62d571a4c479d1c51504dbfa12bd",
+      "recognized": "La liste des membres rassemble inscrits et personnes importées avec coordonnées, étiquettes, notes, disponibilités, heures prévues et activités. La fiche d'une personne retrace ses invitations, inscriptions et présences d'un événement à l'autre.",
+      "expected": "La liste des membres rassemble inscrits et personnes importées, avec coordonnées, étiquettes, notes, disponibilités, heures prévues et activité. La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre.",
+      "wordErrorRate": 0.02857142857142857,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "questions",
+      "audioSha256": "358b975904ab2afd66ce50c56c4fa8514bc5a41c2e7d2a660b5637383c252f47",
+      "recognized": "Le formulaire peut poser quelques questions utiles, taille de T-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de nombre, de choix unique ou de case à cocher. Une question de suivi peut s'afficher seulement pour certaines réponses à une question précédente. Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+      "expected": "Le formulaire peut poser quelques questions utiles : taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de nombre, de choix unique ou de cases à cocher. Une question de suivi peut s’afficher seulement pour certaines réponses à une question précédente. Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+      "wordErrorRate": 0.01694915254237288,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pages",
+      "audioSha256": "cd947f2ea81a0022640b857e340ed5fde27f5c64c8e11686a579bf03b9a9d9ec",
+      "recognized": "Vous pouvez aussi créer des pages publiques pour l'accès, le parking, la foire aux questions ou le règlement. Donnez un titre et rédigez le contenu, puis enregistrez la page. Puis organisez leur ordre avec les flèches. Ces pages apparaissent directement avec la page d'inscription.",
+      "expected": "Vous pouvez aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement. Donnez un titre et rédigez le contenu, puis enregistrez la page. Puis organisez leur ordre avec les flèches : ces pages apparaissent directement avec la page d’inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "messages",
+      "audioSha256": "4049f00496784d5a658d71b6680a73369ae038990bbd09f4c45784881890b3e7",
+      "recognized": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d'attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l'événement, les créneaux ou le lien personnel. Vous choisissez un envoi immédiat ou programmé et prévisualisez toujours le résultat avant l'envoi. La section messages programmés permet de suivre les envois à venir. Des délais propres à l'événement peuvent remplacer les rappels habituels.",
+      "expected": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel. Vous choisissez un envoi immédiat ou programmé et prévisualisez toujours le résultat avant l’envoi. La section Messages programmés permet de suivre les envois à venir. Des délais propres à l'événement peuvent remplacer les rappels habituels.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reminders",
+      "audioSha256": "fa6203e46ad8c59b7d831c6c78b5cbbbf236b19058f1199c2a066a0369c63cef",
+      "recognized": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même. L'organisation choisit lesquels activer, où arrivent les réponses et si ses admins doivent être prévenus à chaque nouvelle inscription.",
+      "expected": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même. L’organisation choisit lesquels activer, où arrivent les réponses, et si ses admins doivent être prévenus à chaque nouvelle inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reports",
+      "audioSha256": "f01615901eccb039ea0d43557b53183bb0411bc2930f4a39de11b8ac18305c7f",
+      "recognized": "Pour le terrain, documents à imprimer propose le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphone réservée aux organisateurs. Les badges se génèrent en PDF avec un filtre par poste et une sélection de bénévoles pour la réimpression. Prêts à imprimer et découper.",
+      "expected": "Pour le terrain, Documents à imprimer propose le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, avec un filtre par poste et une sélection de bénévole pour la réimpression, prêts à imprimer et découper.",
+      "wordErrorRate": 0.037037037037037035,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "activity",
+      "audioSha256": "448ad634c9f1f1670d0ec466889f5b88177aeab9d1359f7b656fc58d696091a2",
+      "recognized": "Enfin, le journal d'activité garde la chronologie : création et modifications des créneaux, inscriptions, désinscriptions, invitations et actions des organisateurs. On sait ce qui s'est passé, qui l'a fait et quand. La recherche globale permet ensuite de tout retrouver rapidement.",
+      "expected": "Enfin, le journal d’activité garde la chronologie : création et modification des créneaux, inscriptions, désinscriptions, invitations et actions des organisateurs. On sait ce qui s’est passé, qui l’a fait et quand. La recherche globale permet ensuite de tout retrouver rapidement.",
+      "wordErrorRate": 0.023809523809523808,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

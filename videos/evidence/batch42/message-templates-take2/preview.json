@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T10:25:44.447Z",
+  "videoSha256": "1046f21c5fe4569bdeba9fe5d02e857d7f7b60d5159a8fa35f04ba34bc19957d",
+  "promptSha256": "3e28824991c2e508b16cbfdfa0c7e2745758d16a741daa8376866aafc35329e3",
+  "clipSha256": "af9993b27c25b025570316007ed97a9766fa20745a70ec88b8428870ed50c29e",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Revenez dans Messages et appliquez le modèle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenez dans Messages et appliquez le modèle corrigé.",
+        "visibleSeconds": 0.9,
+        "visible": "Clic sur « Utiliser ce modèle », le sujet et le message sont insérés dans les champs.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Ouvrez l'aperçu de l'email.",
+        "visibleSeconds": 4.6,
+        "visible": "Défilement vers le bas et clic sur « Voir l'aperçu et envoyer », ouverture de la modale « Aperçu de l'email ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Vérifiez l'horaire et l'abri avant de décider de l'envoi.",
+        "visibleSeconds": 5.5,
+        "visible": "Dans la modale d'aperçu, l'horaire (« samedi dès 14 h ») et l'abri (« la halle du village ») sont lisibles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

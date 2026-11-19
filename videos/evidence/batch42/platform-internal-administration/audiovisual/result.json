@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:44:55.721Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "0090acdc90d6ffa3eba4affb0fe87f97421501a10bc3e2ea52de3a527ace3bc7",
+  "clipSha256": "7c18893b541955c610accc4e15b4a1431aff5edcaa1ba849b88058ef3757c890",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Terminons en revenant au périmètre de chaque compte",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme.",
+        "visibleSeconds": 3.2,
+        "visible": "Affichage de la page de connexion 'Espace organisateur' puis accès au tableau de bord sans les menus d'administration globale.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "L'opérateur, lui, choisit son organisation avant d'y travailler.",
+        "visibleSeconds": 7.3,
+        "visible": "Retour à la vue Admin listant les différentes organisations sous le compte Super Admin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes.",
+        "visibleSeconds": 11,
+        "visible": "Tableau des organisations affichant les boutons '+ Nouvelle organisation', ainsi que les statuts et actions 'Réactiver' et 'Désactiver'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement audible, débit régulier et conclusion fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

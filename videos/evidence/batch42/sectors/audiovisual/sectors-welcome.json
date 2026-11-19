@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:55:30.990Z",
+  "videoSha256": "9972cbbd38e0e091a42cda676febfde0d377314112cce9812203cde2b51dc454",
+  "promptSha256": "29aeaedf227592f7bd1c0c97f06166e5be89cadc75e5b069f15e4388bde9d09c",
+  "clipSha256": "aed538d757cc9689898400060ecfc856d071d338b6e819b6193b2678f2956a39",
+  "scene": "sectors-welcome",
+  "review": {
+    "heardOpening": "Quand un événement compte beaucoup de postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver.",
+        "visibleSeconds": 0.5,
+        "visible": "Titre d'introduction superposé : 'Organiser les postes par secteurs - Regrouper les postes sans rien changer pour les bénévoles'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "L'option se choisit pour chaque événement, désactivée par défaut.",
+        "visibleSeconds": 8,
+        "visible": "Page 'Paramètres' de l'événement Festival de Montvert affichée, onglet Informations sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "leur page d'inscription, leurs emails et leur page Mes inscriptions ne changent pas.",
+        "visibleSeconds": 14,
+        "visible": "Écran stable sur les paramètres de l'événement Festival de Montvert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, naturelle, posée et dynamique avec fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

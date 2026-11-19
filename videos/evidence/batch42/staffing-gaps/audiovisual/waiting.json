@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T12:14:58.678Z",
+  "videoSha256": "5b4c561ec473ff41765b5f2ea4f3c5241dc287431bf814aa7842a77dd39cf97f",
+  "promptSha256": "61536220d3ccee2026d48825753cf92ffe96c2964ef53f5604dd1aacaf368d1c",
+  "clipSha256": "5a7729c8fc11ee422f212bb2e70619c42d905bf67b370a0cbd617f67a28990ff",
+  "scene": "waiting",
+  "review": {
+    "heardOpening": "Dans Personnes en liste d'attente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place.",
+        "visibleSeconds": 1,
+        "visible": "Section 'Personnes en liste d'attente' affichée à l'écran avec la ligne Buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément.",
+        "visibleSeconds": 7,
+        "visible": "Indication '4/4 3 personnes en attente' visible pour la buvette du samedi 28 novembre 14:00-18:00.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "En cliquant, vous retrouvez les noms et leurs positions dans la liste.",
+        "visibleSeconds": 13,
+        "visible": "Affichage de la page Inscriptions avec la liste détaillée des trois personnes en attente.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
+        "visibleSeconds": 20,
+        "visible": "Retour à la page du rapport 'Où manque-t-il du monde ?'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

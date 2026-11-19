@@ -988,7 +988,7 @@ Pour chaque vidéo, aperçu puis `make video-publish KUBE_CONTEXT=default ID=…
 
 ## À refilmer : page après une inscription publique sans preuve de l'adresse (2026-11-01)
 
-**Résolu pour VOLUNTEER_REGISTER (lot 41, 16 novembre 2026)** : nouvelle narration entière et nouvelle prise montrant « Demande d’inscription reçue », revue READY puis publication révision 4. Les autres vidéos de cette section conservent leurs écarts jusqu’à leur revue individuelle.
+**Résolu au lot 41 (16 novembre 2026)** pour `VOLUNTEER_REGISTER` (révision 4), `PRIVACY_PERSONAL_LINKS` (révision 6) et `SHIFT_ROSTER_VISIBILITY` (révision 3). Les deux reprises non publiées restent listées ci-dessous.
 
 
 Une inscription publique sans lien d'invitation ni lien personnel affiche
@@ -1007,29 +1007,19 @@ travail (voix et capture) ; révision du catalogue à incrémenter au rendu :
   chapitre et recorder réécrits (la scène du chevauchement montre la page
   neutre puis l'email reçu par Aline ; le nouvel essai de Nicolas montre la
   même page) ; nouvelle voix nécessaire.
-- `VOLUNTEER_REGISTER` : **À refilmer**. Narration de `success`
-  (« ta demande est envoyée ! Regarde tes emails ») et sélecteur du texte de la
-  page mis à jour ; nouvelle voix de ce segment.
-- `PRIVACY_PERSONAL_LINKS`, `SHIFT_ROSTER_VISIBILITY`,
-  `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : narration
-  inchangée, mais l'image de la page de succès d'une inscription publique
-  montre l'ancien titre ; sélecteurs mis à jour (les deux titres acceptés,
-  « Demande d'inscription reçue » exigé pour `PRIVACY_PERSONAL_LINKS`). À
-  refilmer au prochain passage.
+- `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : l'image publiée montre
+  l'ancien titre après une inscription publique. La narration reste juste et
+  le sélecteur de capture accepte le nouveau titre.
 
 ## Double authentification du super admin (constat F6) : outils de capture de l'opérateur
 
-Le super admin donne désormais un code d'application d'authentification après son mot de passe. Aucune vidéo publiée ne montre la connexion de l'opérateur (`platform-internal-administration` ouvre sa session avant l'enregistrement), donc aucune régénération n'est nécessaire pour ce changement. Les outils qui se connectent avec le compte fictif `video.operator.platform@example.org` passent le second facteur avec `videos/lib/operator-second-factor.ts` (secret fixe de démonstration, inscrit par `scripts/seed-video-operator.ts` et chiffré avec la clé locale des vidéos) : `videos/tools/record.ts`, `prepare-operator.ts`, `check-batch25-origin.ts`, `inspect-operator-sessions.ts`, `verify-operator-lifecycle.ts`. **Non vérifié** sur la pile vidéo de l'opérateur (base `benevoles_video_operator`) : à confirmer à la prochaine capture de cette vidéo, après un nouveau seed.
+Le super admin donne désormais un code d'application d'authentification après son mot de passe. Aucune vidéo publiée ne montre la connexion de l'opérateur (`platform-internal-administration` ouvre sa session avant l'enregistrement), donc aucune régénération n'est nécessaire pour ce changement. Les outils qui se connectent avec le compte fictif `video.operator.platform@example.org` passent le second facteur avec `videos/lib/operator-second-factor.ts` (secret fixe de démonstration, inscrit par `scripts/seed-video-operator.ts` et chiffré avec la clé locale des vidéos) : `videos/tools/record.ts`, `prepare-operator.ts`, `check-batch25-origin.ts`, `inspect-operator-sessions.ts`, `verify-operator-lifecycle.ts`. Le second facteur a été vérifié sur la pile opérateur du lot 42.
 
 ## Désabonnement des nouveautés produit par POST (F-07)
 
 Le lien de désabonnement des emails de nouveautés produit n'écrit plus en
 ouvrant : il ouvre une page de confirmation, et le bouton « Me désabonner »
-envoie le POST. `platform-internal-administration`, scène `broadcast`, montre
-l'ancien parcours (désabonnement à l'ouverture du lien). Recorder, script et
-narration mis à jour dans la même PR ; **régénération pas faite dans ce
-travail** (voix et capture). Révision et `updatedAt` du catalogue à incrémenter
-au rendu de la nouvelle version.
+envoie le POST. La reprise opérateur du lot 42 montre la confirmation et le résultat du vrai désabonnement.
 
 ## « Ajouter un besoin » sur Jour J (#1304)
 
@@ -1385,26 +1375,35 @@ Les quinze vidéos des points 1 à 9 ont été traitées : **douze READY publié
 
 ## À refilmer : « Partager ce créneau » sur « Où manque-t-il du monde ? » (#1386, 17 novembre 2026)
 
-Chaque créneau à compléter porte maintenant un troisième lien, **Partager ce créneau**, après « Chercher des bénévoles » et « Voir les disponibilités » ; il ouvre une fenêtre avec le lien public du créneau, « Copier le lien », « QR code PNG » et la case « Accepter une inscription même si les inscriptions de l'événement sont fermées ». Les sélecteurs de capture visent des liens de `staffing-underfilled` et ne cassent pas ; seule l'image change. Vidéos touchées : **STAFFING_GAPS** (manifeste `staffing-gaps`, à compléter d'un segment sur le partage dans un groupe de discussion), **LAST_MINUTE_CHANGES** (`last-minute-changes`, le geste le plus utile la veille : un segment à ajouter), **SECTORS** (`sectors`, image seulement). À reprendre au prochain lot vidéo.
+Chaque créneau à compléter porte maintenant un troisième lien, **Partager ce créneau**, après « Chercher des bénévoles » et « Voir les disponibilités » ; il ouvre une fenêtre avec le lien public du créneau, « Copier le lien », « QR code PNG » et la case « Accepter une inscription même si les inscriptions de l'événement sont fermées ». Les sélecteurs de capture visent des liens de `staffing-underfilled` et ne cassent pas ; seule l'image change. Vidéos touchées : **LAST_MINUTE_CHANGES** (`last-minute-changes`, le geste le plus utile la veille : un segment à ajouter). À reprendre au prochain lot vidéo.
 
 ## À refilmer : planning en liste sur téléphone (#1407, 18 novembre 2026)
 
 Sur la page d'inscription, un téléphone tenu droit ouvre maintenant le planning en **Liste** (la frise reste l'affichage des écrans plus larges), et le choix « Frise / Liste » porte un libellé visible, « Affichage des créneaux », et une icône par bouton.
 
-- **volunteer-register-mobile** : l'image montre la frise et l'ancien choix sans libellé ; la capture sélectionne maintenant le créneau dans la liste (`videos/tools/record.ts`). La narration ne parle pas de la frise : elle reste juste, la vidéo est à refilmer pour l'image.
 - **volunteer-discover-event**, scène « Sur téléphone » : la narration dit que le planning est plus large que l'écran et qu'on le fait défiler ; c'est vrai de la frise, plus de l'affichage d'office. La capture touche maintenant « Frise » avant de faire défiler. Narration à revoir (dire que le téléphone ouvre la liste, et que « Frise » ou le téléphone tourné à l'horizontale donne la journée entière), puis refilmer.
 
-## À refilmer : bibliothèque de modèles de messages (#1414, 19 novembre 2026)
+## Lot 42 — bibliothèque de modèles, 19 novembre 2026
 
-Les **Paramètres › Modèles de messages** proposent maintenant **Ajouter des modèles** (une bibliothèque de 50 textes avec leur aperçu et « Ajouter à mes modèles »), une catégorie par modèle et une limite de 100 ; dans « Écrire aux bénévoles », **Partir d'un modèle** est groupé par catégorie, avec **Rechercher un modèle** à partir de 8 modèles, et une mention `[à compléter]` bloque l'envoi. Aucun libellé utilisé par les captures n'a disparu ; les deux sélecteurs du choix de modèle de `videos/tools/record.ts` acceptent « Partir d'un modèle » ou « Modèle ». Vidéos touchées :
+**MESSAGE_TEMPLATES : READY, publiée, révision 1, 98,40 s, 1280 × 800.** Main vérifié `04aac36196087830380b672268679e360c121ea1`. Répétition suivie de deux prises narrées. La seconde montre les trois mentions mises en évidence, le refus au champ Message, l'enregistrement du modèle corrigé et l'aperçu destiné à un bénévole fictif. Les catégories sont visibles dans la bibliothèque et dans l'éditeur. Le recorder vérifie le groupe « Météo et imprévus » du sélecteur natif au moment du choix. La capture Chromium montre le champ et la sélection effectuée. Le parcours se termine à l'aperçu.
 
-- **targeted-messages** : la scène de création de modèle ne montre ni la bibliothèque ni la catégorie ; narration à compléter d'un segment « partir d'un texte prêt à l'emploi », puis refilmer.
-- **admin-features-tour** : image seulement (l'écran des modèles a changé), narration toujours juste.
+Six chapitres ASR source et final, 20 points de contrôle AV, musique 15,7–18,8 LU sous la voix. Le rapport automatique du chapitre bibliothèque signale « Déjà dans mes modèles » comme absent à tort. Le clic intervient à 31,789 s et l'image du MP4 à 34,8 s montre le libellé sur la bonne carte. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. Le MP4 distant a été mesuré et l'affiche répond HTTP 200. [État du lot](evidence/batch42/STATUS.md), [validation](evidence/batch42/message-templates-take2/validation.json), [rapport AV](evidence/batch42/message-templates-take2/inspect.json), [image après l'ajout](evidence/batch42/message-templates-take2/library-added.jpg).
 
+**TARGETED_MESSAGES : READY, publiée, révision 5, 361,92 s, 1280 × 800.** Le nouveau chapitre présente la bibliothèque et renvoie au tutoriel. Le formulaire de création montre « Infos pratiques ». Répétition complète après remise à zéro ciblée de Mailpit, puis une prise narrée. Treize chapitres ASR source et final, 46 points de contrôle AV, aucun signalement. Cinq emails fictifs reçus, deux corps personnalisés montrés et un seul email pour Léa malgré ses deux inscriptions. Musique 14,2–19,1 LU sous la voix (−34,1 LUFS au minimum quand elle joue seule). Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. Le MP4 distant a été mesuré et l'affiche répond HTTP 200. [Validation](evidence/batch42/targeted-messages/validation.json), [contrôles de la campagne](evidence/batch42/targeted-messages/targeted-message-checks.json), [revue du nouveau chapitre](evidence/batch42/targeted-messages/audiovisual/template-library.json).
 
-## À refilmer : ressources du serveur sur « Santé du service » (#1415, 19 novembre 2026)
+**ADMIN_FEATURES_OVERVIEW : READY, publiée, révision 7, 293,96 s, 1280 × 800.** La visite montre le nouvel écran « Modèles de messages ». Le texte de la narration reste identique. Les WAV d'origine étaient absents du clone. Une nouvelle génération Kore a été contrôlée après suppression du doublon du chapitre sur les créneaux. Une prise narrée après répétition. Seize chapitres ASR source et final, 52 points de contrôle AV, aucun signalement, musique 14,9–19,6 LU sous la voix. Aperçu puis APPLY=1 sur default. Le MP4 distant a été mesuré et l'affiche répond HTTP 200. [Validation](evidence/batch42/admin-features-tour/validation.json), [revue du chapitre Messages](evidence/batch42/admin-features-tour/audiovisual/messages.json), [nouvel écran](evidence/batch42/admin-features-tour/templates.jpg).
 
-La page « Santé du service » gagne une section **Serveur** entre « Service » et « Tâches planifiées et sauvegardes » : mémoire, CPU, retard de la boucle d'événements, durée de marche, taille de la base et connexions ouvertes, ou « non disponible » quand les fichiers cgroup manquent. La narration de **PLATFORM_INTERNAL_ADMINISTRATION** (`platform-internal-administration`) disait « trois ensembles d'informations » ; elle est corrigée en « quatre ensembles » dans le manifeste et le script, avec les ressources du serveur nommées. La vidéo doit être refilmée pour montrer la nouvelle section et sa narration régénérée ; les sélecteurs de capture restent valides.
+**PLATFORM_INTERNAL_ADMINISTRATION : READY, publiée, révision 5, 458,24 s, 1280 × 800.** L'instance séparée sur 43104 utilise un build vérifié avec l'origine publique pour la redirection de désabonnement. Le navigateur passe par la passerelle locale. Précontrôles de même origine et d'origine étrangère, second facteur et véritable POST vérifiés. Deux prises narrées. La seconde montre la section « Serveur », cadre les tâches sur la phrase correspondante et confirme le désabonnement à 46,225 s du chapitre (repère à 45,736 s). Douze chapitres ASR source et final, musique 12,9–18,6 LU sous la voix. La revue du chapitre Identifiant confond l'ouverture du détail avec la navigation suivante. L'image du MP4 à 148,7 s (18,585 s du chapitre) montre déjà le nouvel identifiant dans l'en-tête et le formulaire. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. Le MP4 distant a été mesuré et l'affiche répond HTTP 200. [Validation](evidence/batch42/platform-internal-administration/validation.json), [santé du serveur](evidence/batch42/platform-internal-administration/server-health.jpg), [tâches](evidence/batch42/platform-internal-administration/scheduled-tasks.jpg), [désabonnement](evidence/batch42/platform-internal-administration/unsubscribe-result.jpg), [détail renommé](evidence/batch42/platform-internal-administration/renamed-detail.jpg).
+
+**STAFFING_GAPS : READY, publiée, révision 4, 268,32 s, 1280 × 800.** Le nouveau chapitre ouvre « Partager ce créneau » pour la buvette du samedi soir, vérifie la copie du lien affiché et montre le QR code et l'option après fermeture. La deuxième prise conserve l'écran des demandes jusqu'à la fin du chapitre et cadre le samedi à 1/3, manque 2, après l'ajout de Julien. Dix chapitres ASR source et final, musique 14,5–19,8 LU sous la voix. La revue du partage décrit le clic comme absent. Le repère est à 5,829 s du chapitre et le clic réel à 6,319 s. Les deux images du MP4 montrent le pointeur sur le bouton, puis le changement de « Lien prêt » à « Lien copié ». Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. MP4 distant mesuré et affiche HTTP 200. [Validation](evidence/batch42/staffing-gaps/validation.json), [avant le clic](evidence/batch42/staffing-gaps/shift-share-before-copy.jpg), [lien copié](evidence/batch42/staffing-gaps/shift-share.jpg), [créneau du samedi après ajout](evidence/batch42/staffing-gaps/updated-saturday-shift.jpg).
+
+**LAST_MINUTE_CHANGES : NOT READY après deux prises.** Le nouveau partage, l'ajout de Zoé et les onze courriels fictifs ont été vérifiés. La deuxième prise laisse l'aperçu Jour J lisible de 28,061 à 31,160 s du chapitre. Le champ Places est prérempli à 2 avant sa modification, et le vrai récapitulatif confirme 1 place. L'email de changement d'horaire reste trop bref. Dans « Décaler un horaire », la lecture est annoncée à 18,234 s. Le vrai message apparaît à 20,815 s et le planning revient à 21,895 s, soit 1,080 s de lecture. ASR de la bande entière et validation technique réussies. La révision publiée est conservée. [Validation](evidence/batch42/last-minute-changes/take2/validation.json), [revue du changement d'horaire](evidence/batch42/last-minute-changes/take2/schedule.json), [image du message](evidence/batch42/last-minute-changes/take2/schedule-email.jpg).
+
+**SECTORS : READY, publiée, révision 4, 220,84 s, 1280 × 800.** Le rapport du secteur Parking montre « Partager ce créneau » à 163,2 s. Le texte reste identique, la voix Puck a été régénérée faute de WAV locaux. Une prise après répétition. Onze chapitres ASR source et final, musique 14,9–19,4 LU sous la voix. Deux observations brutes sont conservées. L'image du MP4 montre le lien « Organiser les secteurs dans Créneaux » sur la carte et le bouton « Gérer les postes » sur l'écran suivant. Le recorder vérifie la persistance du filtre Parking à la réouverture, sans afficher la barre du navigateur. Aperçu puis APPLY=1 sur default, quatre fichiers envoyés et transcription identique. MP4 distant mesuré et affiche HTTP 200. [Validation](evidence/batch42/sectors/validation.json), [partage dans Parking](evidence/batch42/sectors/parking-share.jpg), [lien exact avant le clic](evidence/batch42/sectors/enable-link.jpg), [filtre rouvert](evidence/batch42/sectors/reopened-parking-filter.jpg).
+
+**VOLUNTEER_REGISTER : READY, publiée, révision 5, 54,20 s, 390 × 844.** « Liste » est sélectionné au chargement sur téléphone, sous « Affichage des créneaux ». Le choix part de la liste et l'inscription publique mène à « Demande d'inscription reçue ». Le texte narratif reste identique, avec une nouvelle piste Kore. Deux prises après répétition. La deuxième cale le consentement et garde le bouton visible avant la confirmation. Sept chapitres ASR source et final, 21 points de contrôle AV sans signalement, musique 15,4–18,6 LU sous la voix. Aperçu puis APPLY=1, quatre fichiers envoyés et transcription identique. MP4 distant mesuré et affiche HTTP 200. [Validation](evidence/batch42/volunteer-register-mobile/validation.json), [liste par défaut](evidence/batch42/volunteer-register-mobile/default-list.jpg), [demande reçue](evidence/batch42/volunteer-register-mobile/request-received.jpg).
+
+**Reprises du lot 42 passées au lot 43** : `VOLUNTEER_DISCOVER_EVENT` (arrêtée après une répétition complète, la voix n'a pas été générée), `VOLUNTEER_CONFIRMATION_ERRORS` et `REGISTRATION_MONITOR_FOLLOWUP` (pas commencées). `TARGETED_MESSAGES` et `VOLUNTEER_REGISTER` ont été tournées avant le bouton « Mes inscriptions » des emails (#1429) : elles restent listées ci-dessous pour le lot 43.
 
 ## À refilmer : liste avec téléphones par jour (#1431, 19 novembre 2026)
 

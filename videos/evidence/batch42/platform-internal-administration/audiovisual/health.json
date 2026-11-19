@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T11:43:55.828Z",
+  "videoSha256": "0b0bba7a56ba8af4cca01df3b56b62c4fac26b5079e54df0123c0a1794425b5d",
+  "promptSha256": "2e407362b9887c4c2b57fe9a08a6d871332734cf2e176fe0cd463d479c9da047",
+  "clipSha256": "7606cb9869716fdfaadbee6300e05e0dbc4a0f4adfc3de352bb8d312cfc1094a",
+  "scene": "health",
+  "review": {
+    "heardOpening": "La page Santé du service regroupe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La page Santé du service regroupe quatre ensembles d'informations",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Santé du service avec les rubriques de statut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Regardons les états visibles, la date de contrôle et la version.",
+        "visibleSeconds": 10.5,
+        "visible": "En-tête affichant la version 2.8.0, la date de vérification et les badges d'état OK/Inconnu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Recharger relance la vérification.",
+        "visibleSeconds": 14.2,
+        "visible": "Mention visible à l'écran : « Recharger la page relance les contrôles. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Dans notre environnement local, certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement.",
+        "visibleSeconds": 17,
+        "visible": "Défilement vers la section « Tâches planifiées et sauvegardes » montrant les statuts « Inconnu » et « À surveiller »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, fluide et naturelle, avec un rythme posé parfaitement synchronisé avec les visuels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
