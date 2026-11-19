@@ -181,6 +181,30 @@ describe("k8s pod hardening (#1050)", () => {
   })
 })
 
+describe("media server (nginx)", () => {
+  const media = read("k8s/media.yaml")
+
+  it("runs a branch that still gets security fixes: stable 1.30 or later, never the ended 1.27", () => {
+    const tag = media.match(/image: nginx:(\d+)\.(\d+)-alpine\n/)
+    expect(tag).not.toBeNull()
+    const [major, minor] = [Number(tag![1]), Number(tag![2])]
+    expect(major * 1000 + minor).toBeGreaterThanOrEqual(1030)
+  })
+
+  it("does not tell its version, in the Server header or on error pages", () => {
+    expect(media).toMatch(/server \{\n\s+listen 8080;\n(?:\s+#.*\n)*\s+server_tokens off;\n/)
+  })
+
+  it("speaks plain HTTP/1.1 behind Traefik: no HTTP/2, HTTP/3, TLS, proxying or mail in its configuration", () => {
+    // Traefik ends TLS and HTTP/2 and is the only pod let in (NetworkPolicy), so the nginx flaws
+    // that need one of these features are out of reach. Adding one here needs a fresh look.
+    const conf = media.slice(media.indexOf("default.conf: |"), media.indexOf("kind: Deployment"))
+    const directives = conf.split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#"))
+    for (const d of directives) expect(d, d).not.toMatch(/^(http2|http3|quic|ssl_|listen .*(ssl|quic|http2)|proxy_pass|grpc_pass|fastcgi_pass|uwsgi_pass|resolver|mirror|alias|proxy_protocol)\b/)
+    expect(directives.filter((d) => d.startsWith("listen "))).toEqual(["listen 8080;"])
+  })
+})
+
 describe("explicit secret keys for the app (#1050)", () => {
   const app = secretEnv(read("k8s/deployment.yaml"))
   const synced = syncedSecretKeys()
