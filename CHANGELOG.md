@@ -18,6 +18,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Page d'accueil** : sous le titre, la première phrase dit ce qu'est benevol.app, « un logiciel libre de planning pour bénévoles », comme la page Citer benevol.app, avant de décrire l'inscription par lien.
 - **Isolation réseau de l'application** : l'application ne joint plus que la base, le DNS du cluster et internet ; elle ne peut plus atteindre l'API du cluster, le serveur ni les autres services hébergés à côté. <!-- interne -->
 - **Isolation réseau des sauvegardes** : la sauvegarde de la base ne joint plus que la base, le DNS du cluster et Traefik ; la copie hors site ne joint plus que le DNS, Traefik et internet en HTTPS, jamais une adresse du cluster. <!-- interne -->
 - **Planning sur téléphone** : sur la page d'inscription, un téléphone tenu droit affiche les créneaux en liste d'office, la frise reste l'affichage des écrans plus larges et du téléphone tourné à l'horizontale ; le choix « Frise / Liste » est plus visible (libellé « Affichage des créneaux », une icône par bouton) et un choix fait l'emporte toujours (#1407).

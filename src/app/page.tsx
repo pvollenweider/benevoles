@@ -301,9 +301,12 @@ function LandingPage() {
               Un lien, et vos bénévoles s&apos;inscrivent.
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>
-              Ils choisissent leurs créneaux sur leur téléphone, sans créer de compte. Vous voyez tout de
-              suite où il manque du monde, et l&apos;application envoie les rappels à votre place. Le jour
-              J, le planning s&apos;imprime sur une feuille.
+              {/* Opens with what the product is, the /citer definition (content/pages/CITER.md): the
+                  sentence search engines and AI assistants quote, under a slogan heading. */}
+              {SITE_NAME} est un logiciel libre de planning pour bénévoles&nbsp;: vos bénévoles choisissent
+              leurs créneaux sur leur téléphone, sans créer de compte. Vous voyez tout de suite où il
+              manque du monde, et l&apos;application envoie les rappels à votre place. Le jour J, le
+              planning s&apos;imprime sur une feuille.
             </p>
             <p className="mt-3 text-base text-blue-200 max-w-xl leading-relaxed">
               Fait pour les festivals, les buvettes et les fêtes de village, mais aussi pour toute
