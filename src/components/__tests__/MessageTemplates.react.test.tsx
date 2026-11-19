@@ -73,7 +73,7 @@ describe("MessageTemplatesManager", () => {
     expect(frame).not.toHaveAttribute("tabindex")
     expect(frame.getAttribute("srcdoc")).toContain("Hello Léa")
     expect(frame.getAttribute("srcdoc")).toContain("<mark")
-    expect(frame.getAttribute("srcdoc")).toContain("[à compléter : tente, abri, boissons chaudes…]")
+    expect(frame.getAttribute("srcdoc")).toContain("[à compléter : tente, abri…]")
 
     fireEvent.click(within(dialog).getByRole("button", { name: (name) => name.includes("Ajouter à mes modèles") && name.includes(pluie.name) }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce())
