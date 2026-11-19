@@ -103,10 +103,15 @@ describe("the index options", () => {
     const loaded = MiniSearch.loadJSON<DocSearchDocument>(JSON.stringify(built), DOC_INDEX_OPTIONS)
     for (const query of ["rappel", "comment supprimer un membre", "mdp", "creneu"]) {
       const expression = docSearchQuery(query)
-      // The order of a result's matched terms is an implementation detail; ids and scores are not.
+      // The order of a result's matched terms is an implementation detail; ids are not. A score
+      // may lose its last bit through JSON (MiniSearch recomputes it on load), so compare it
+      // approximately: the guides' text changes the index statistics without changing the ranking.
       const results = (search: typeof built) =>
         search.search(expression!, DOC_SEARCH_OPTIONS).map((result) => ({ id: result.id, score: result.score }))
-      expect(results(loaded), query).toEqual(results(built))
+      const expected = results(built)
+      const actual = results(loaded)
+      expect(actual.map((r) => r.id), query).toEqual(expected.map((r) => r.id))
+      for (const [i, result] of actual.entries()) expect(result.score, query).toBeCloseTo(expected[i].score, 9)
     }
   })
 })

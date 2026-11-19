@@ -23,6 +23,7 @@ import { LIVE_STATUSES } from "./registration-capacity"
 import { guardTokenLookup, pageClient } from "./token-page-guard"
 import { tokenUseAllowed } from "./token-rate-limit"
 import { registrationToken } from "./token-vault"
+import { calendarFeedKeyFromEnv, orgCalendarFeedToken, orgCalendarFeedUrls } from "./calendar-feed"
 
 export type OrgPageLoaded =
   /** The connection used up its unknown-link budget. */
@@ -66,14 +67,25 @@ export const loadOrgPage = cache(async (token: string): Promise<OrgPageLoaded> =
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
   })
 
+  const baseUrl = orgBaseUrl(target.organization.slug)
+  // The organisation calendar feed (#1429, lot C): its own read-only address, derived from the
+  // organisation link's current hash and issued only when the app can derive its key. Nothing is
+  // stored; a renewed or cleared link changes the hash and revokes the address with it.
+  const feedKey = calendarFeedKeyFromEnv()
+  const calendarFeed =
+    feedKey && target.orgLinkTokenHash
+      ? orgCalendarFeedUrls(baseUrl, orgCalendarFeedToken(target.id, target.orgLinkTokenHash, feedKey))
+      : null
+
   const data = buildOrgPageData({
     volunteer: { firstName: target.firstName, lastName: target.lastName, email: target.email },
     organization: { name: target.organization.name, slug: target.organization.slug, timeZone: target.organization.timeZone },
     registrations,
     now: new Date(),
     timeZone,
-    orgHomeUrl: orgBaseUrl(target.organization.slug),
+    orgHomeUrl: baseUrl,
     contactEmail: contactEmail(),
+    calendarFeed,
   })
 
   return { state: "ok", data }

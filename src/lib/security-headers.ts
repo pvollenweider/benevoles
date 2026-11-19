@@ -24,6 +24,8 @@ export const REFERRER_POLICY_HEADER = { key: "Referrer-Policy", value: "strict-o
  */
 export const CALENDAR_FEED_HEADER_RULES = [
   { source: "/api/public/registrations/:token/calendar.ics", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
+  // The organisation-wide feed (#1429, lot C) is a secret address too.
+  { source: "/api/public/mes-inscriptions/:token/calendar.ics", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
 ] as const
 
 /**

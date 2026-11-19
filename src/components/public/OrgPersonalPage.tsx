@@ -6,6 +6,8 @@
 import { Fragment, useLayoutEffect, useState } from "react"
 import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
+import CalendarSubscribeCard from "@/components/public/CalendarSubscribeCard"
+import { calendarCard, ORG_CALENDAR_CARD_DESCRIPTION, ORG_CALENDAR_RENEWED_NOTICE } from "@/lib/calendar-card-copy"
 import { orgPageFooterSite } from "@/lib/urls"
 import { fmtRange } from "@/lib/gantt-utils"
 import { dayLabelWithYear, spokenTimeRange } from "@/lib/spoken-time"
@@ -71,6 +73,8 @@ export default function OrgPersonalPage({ token, data }: Props) {
   const [removedNotice, setRemovedNotice] = useState<{ text: string; index: number } | null>(null)
   const [renewing, setRenewing] = useState(false)
   const [renewed, setRenewed] = useState(false)
+  /** Whether the calendar card was displayed when the link was renewed: its feed is now revoked. */
+  const [renewedWithCalendar, setRenewedWithCalendar] = useState(false)
   const [renewMessage, setRenewMessage] = useState<string | null>(null)
   const [renewFailed, setRenewFailed] = useState(false)
   const [focusRequest, setFocusRequest] = useState<{ candidates: FocusCandidate[]; regionId: string } | null>(null)
@@ -87,6 +91,11 @@ export default function OrgPersonalPage({ token, data }: Props) {
   const next = registrations.find((r) => r.status === "active") ?? null
   const all = registrations
   const empty = all.length === 0
+  // « Mon calendrier » (#1429, lot C): one subscription for every confirmed shift of the
+  // organisation, shown only while the link's feed is still the current one.
+  const calendar = !renewed && data.calendarFeed
+    ? calendarCard(registrations, data.calendarFeed, data.calendarFeed.download, { alwaysDownload: true })
+    : null
 
   function openConfirm(reg: OrgPageRegistration) {
     if (cancellingId || renewed) return
@@ -157,6 +166,8 @@ export default function OrgPersonalPage({ token, data }: Props) {
 
   async function renew() {
     if (renewing || renewed) return
+    // Read before the state update: the card and its feed disappear once the link is renewed.
+    const hadCalendar = calendar !== null
     setRenewing(true)
     setRenewMessage(null)
     setRenewFailed(false)
@@ -165,8 +176,10 @@ export default function OrgPersonalPage({ token, data }: Props) {
       const body = await res.json().catch(() => ({}))
       if (res.ok) {
         setRenewed(true)
+        setRenewedWithCalendar(hadCalendar)
         setPendingId(null)
-        setRenewMessage(typeof body.message === "string" ? body.message : "Ton lien a été renouvelé. Un email avec le nouveau lien vient de partir.")
+        const message = typeof body.message === "string" ? body.message : "Ton lien a été renouvelé. Un email avec le nouveau lien vient de partir."
+        setRenewMessage(hadCalendar ? `${message} ${ORG_CALENDAR_RENEWED_NOTICE}` : message)
       } else {
         setRenewFailed(true)
         setRenewMessage(typeof body.error === "string" ? body.error : "Le renouvellement n'a pas abouti. Réessaie plus tard.")
@@ -201,6 +214,7 @@ export default function OrgPersonalPage({ token, data }: Props) {
           {renewed && (
             <p className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
               L&apos;ancien lien ne fonctionne plus. Cette page reste affichée, mais les actions sont désactivées : ouvre l&apos;email qui vient de partir pour retrouver tes inscriptions.
+              {renewedWithCalendar && <>{" "}{ORG_CALENDAR_RENEWED_NOTICE}</>}
             </p>
           )}
 
@@ -221,6 +235,10 @@ export default function OrgPersonalPage({ token, data }: Props) {
               <p className="text-sm text-gray-700 mt-2">Aucun créneau confirmé à venir pour le moment.</p>
             )}
           </section>
+
+          {calendar && (
+            <CalendarSubscribeCard {...calendar} description={ORG_CALENDAR_CARD_DESCRIPTION(data.organization.name)} />
+          )}
 
           {empty ? (
             <section aria-labelledby="org-empty-title" className="bg-white rounded-xl border border-gray-200 p-4">

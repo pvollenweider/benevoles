@@ -7,8 +7,14 @@ import {
   calendarFeedUrls,
   icsRevision,
   icsShiftsFor,
+  icsShiftsForOrg,
+  orgCalendarFeedLinkValid,
+  orgCalendarFeedToken,
+  orgCalendarFeedUrls,
   parseCalendarFeedToken,
+  parseOrgCalendarFeedToken,
 } from "../calendar-feed"
+import { buildIcs } from "../ics"
 
 // Calendar subscription (#961): a read-only token derived from the personal link.
 const key = calendarFeedKey("a".repeat(40))
@@ -71,6 +77,104 @@ describe("calendarFeedUrls", () => {
       webcal: "webcal://org.benevol.app/api/public/registrations/tok/calendar.ics",
     })
     expect(calendarFeedUrls("http://localhost:3000/", "tok").webcal).toBe("webcal://localhost:3000/api/public/registrations/tok/calendar.ics")
+  })
+})
+
+describe("organisation calendar feed token (#1429, lot C)", () => {
+  it("round-trips and is tied to the organisation link's current hash", () => {
+    const token = orgCalendarFeedToken(REG, HASH, key)
+    expect(token).toMatch(new RegExp(`^${REG}-1[0-9a-f]{48}$`))
+    const parsed = parseOrgCalendarFeedToken(token, key)
+    expect(parsed?.volunteerId).toBe(REG)
+    expect(orgCalendarFeedLinkValid(parsed!, HASH, key)).toBe(true)
+    // Calendar apps may keep the .ics suffix on the segment.
+    expect(parseOrgCalendarFeedToken(`${token}.ics`, key)?.volunteerId).toBe(REG)
+  })
+
+  it("is revoked with the organisation link: a renewed hash no longer matches, a cleared one either", () => {
+    const parsed = parseOrgCalendarFeedToken(orgCalendarFeedToken(REG, HASH, key), key)!
+    expect(orgCalendarFeedLinkValid(parsed, "0".repeat(64), key)).toBe(false)
+    expect(orgCalendarFeedLinkValid(parsed, null, key)).toBe(false)
+  })
+
+  it("never accepts a per-registration feed token, nor the reverse", () => {
+    const registrationToken = calendarFeedToken(REG, HASH, key)
+    expect(parseOrgCalendarFeedToken(registrationToken, key)).toBeNull()
+    const orgToken = orgCalendarFeedToken(REG, HASH, key)
+    expect(parseCalendarFeedToken(orgToken, key)).toBeNull()
+    expect(parseOrgCalendarFeedToken(orgToken, otherKey)).toBeNull()
+  })
+
+  it("gives the https, webcal and one-off file forms of the same address", () => {
+    expect(orgCalendarFeedUrls("https://org.benevol.app", "tok")).toEqual({
+      https: "https://org.benevol.app/api/public/mes-inscriptions/tok/calendar.ics",
+      webcal: "webcal://org.benevol.app/api/public/mes-inscriptions/tok/calendar.ics",
+      download: "https://org.benevol.app/api/public/mes-inscriptions/tok/calendar.ics?download=1",
+    })
+  })
+})
+
+describe("icsShiftsForOrg (#1429, lot C)", () => {
+  const orgUpdatedAt = new Date("2026-01-01T00:00:00Z")
+  const event = (id: string, title: string, updatedAt: string) => ({
+    id,
+    title,
+    slug: id,
+    publicStatus: "published",
+    location: "Salle",
+    latitude: 46.2,
+    longitude: 6.1,
+    updatedAt: new Date(updatedAt),
+  })
+  const shift = (over: object = {}) => ({
+    roleName: "Bar",
+    label: "Bar soir",
+    date: new Date("2026-07-04T00:00:00Z"),
+    startTime: "18:00",
+    endTime: "23:00",
+    locationDetails: null,
+    contactName: null,
+    contactPhone: null,
+    instructions: null,
+    latitude: null,
+    longitude: null,
+    updatedAt: new Date("2026-06-01T00:00:00Z"),
+    ...over,
+  })
+
+  it("keeps the UID and SEQUENCE of the per-registration feed for the same shift", () => {
+    const e = event("e1", "Fête", "2026-05-01T00:00:00Z")
+    const s = shift()
+    const registration = { id: "r1", updatedAt: new Date("2026-04-01T00:00:00Z"), shift: s }
+    const perEvent = buildIcs(icsShiftsFor([registration], e, { url: "https://x/fete", orgUpdatedAt }), {
+      timeZone: "Europe/Zurich",
+      host: "org.benevol.app",
+    })
+    const orgWide = buildIcs(icsShiftsForOrg([{ ...registration, event: e }], { urlFor: () => "https://x/fete", orgUpdatedAt }), {
+      timeZone: "Europe/Zurich",
+      host: "org.benevol.app",
+    })
+    const entry = (ics: string) => {
+      const block = ics.split("BEGIN:VEVENT")[1].split("END:VEVENT")[0]
+      return { uid: block.match(/UID:([^\r\n]+)/)![1], sequence: block.match(/SEQUENCE:(\d+)/)![1] }
+    }
+    expect(entry(orgWide)).toEqual(entry(perEvent))
+  })
+
+  it("maps each registration with its own event, across several events", () => {
+    const fete = event("e1", "Fête", "2026-05-01T00:00:00Z")
+    const cafe = event("e2", "Café", "2026-05-02T00:00:00Z")
+    const entries = icsShiftsForOrg(
+      [
+        { id: "r1", shift: shift(), event: fete },
+        { id: "r2", shift: shift({ date: new Date("2026-07-11T00:00:00Z") }), event: cafe },
+      ],
+      { urlFor: (e) => `https://x/${e.slug}`, orgUpdatedAt },
+    )
+    expect(entries.map((e) => [e.registrationId, e.eventTitle, e.url])).toEqual([
+      ["r1", "Fête", "https://x/e1"],
+      ["r2", "Café", "https://x/e2"],
+    ])
   })
 })
 
