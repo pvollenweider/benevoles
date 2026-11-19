@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:05:10.467Z",
+  "videoSha256": "6a69c2365c42baf75d1241e2a6949f3138fbc7e25e2990af76ad72ed91686c5d",
+  "promptSha256": "0f6b80bd355c90589f36c125f7ae034eff28fad89f4dfba6181973ec4e227aa8",
+  "clipSha256": "61ea5c2a542256f5c714872a337e4c1753b2de1d774fd4f3568ce15e82797bb8",
+  "scene": "cancelled",
+  "review": {
+    "heardOpening": "Pour annuler un créneau entier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.6,
+        "spoken": "lisez bien le récapitulatif avant de confirmer",
+        "visibleSeconds": 2.9,
+        "visible": "Ouverture de la fenêtre modale « Supprimer le créneau » affichant les détails et l'impact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Ouvrons le message du créneau confirmé",
+        "visibleSeconds": 15.6,
+        "visible": "Affichage de la notification email adressée à Aline pour le créneau annulé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.6,
+        "spoken": "Ouvrons le message de la demande",
+        "visibleSeconds": 21.8,
+        "visible": "Affichage de l'email adressé à Lucas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Il précise que la place n’est plus réservée",
+        "visibleSeconds": 24.3,
+        "visible": "Le texte du message à Lucas indique uniquement que le créneau a été annulé, sans mentionner que la place n'est plus réservée",
+        "sync": "uncertain",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "Revenons au planning",
+        "visibleSeconds": 27,
+        "visible": "Retour à la vue planning (frise des créneaux)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:24, le message affiché pour Lucas est identique à celui d'Aline et ne contient pas la mention précisant que la place n'est plus réservée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien articulée avec musique d'ambiance discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

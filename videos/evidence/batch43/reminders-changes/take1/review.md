@@ -1,0 +1,1 @@
+La prise narrée a été enregistrée sur le build vérifié de `main` au démarrage (`72ff2332`). La PR #1440 a été fusionnée pendant la capture. À l'assemblage, le contrôle de provenance exigeait le nouveau `main` (`9e0f61d7`) et a rejeté la prise. La capture garde la référence de son build d'origine.

@@ -1,0 +1,23 @@
+Exact reminders-changes fixture mail cleared (10); unrelated messages preserved (40)
+Verified synthetic common fixture: 4 events, 33 members. Reset confined to default training organization; other organizations preserved.
+✓ Demo event « Fête du village de Montvert » (/fete-du-village?org=default): 12 shifts, 24 volunteers
+✓ Reminder fixture: +48h/+24h/+3h local Europe/Zurich; closed confirmed slot; draft/disabled witnesses; requested/waiting exclusions; separate change/cancel shifts; generated 2026-11-19T19:52:47.815Z
+Previous capture preserved: /private/tmp/codex-video-43/videos/output/reminders-changes/previous-capture-2026-11-19T19-52-49-190Z-a5c30d89
+Scene welcome: rehearsal
+Scene manual-message: rehearsal
+Scene manual-send: rehearsal
+Scene organization: rehearsal
+Scene event-switch: rehearsal
+Scene event-delays: rehearsal
+Scene timing: rehearsal
+Error: Scene timing failed
+    at scene (/private/tmp/benevoles-video-production.UFR5BXYx/videos/tools/record.ts:338:13)
+    at async recordReminders (/private/tmp/benevoles-video-production.UFR5BXYx/videos/lib/record-reminders.ts:159:5)
+    at async main (/private/tmp/benevoles-video-production.UFR5BXYx/videos/tools/record.ts:2666:7) {
+  [cause]: Error: Mailbox content differs from demonstrated result
+      at openMail (/private/tmp/benevoles-video-production.UFR5BXYx/videos/lib/record-reminders.ts:31:67)
+      at async <anonymous> (/private/tmp/benevoles-video-production.UFR5BXYx/videos/lib/record-reminders.ts:181:9)
+      at async scene (/private/tmp/benevoles-video-production.UFR5BXYx/videos/tools/record.ts:331:7)
+      at async recordReminders (/private/tmp/benevoles-video-production.UFR5BXYx/videos/lib/record-reminders.ts:159:5)
+      at async main (/private/tmp/benevoles-video-production.UFR5BXYx/videos/tools/record.ts:2666:7)
+}

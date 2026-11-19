@@ -105,3 +105,5 @@ Ce chapitre vient après le commutateur de l’événement et avant les trois é
 Un événement peut avoir ses propres délais. Dans Messages, section Rappels, choisissons Délais propres à cet événement. Préparons un rappel trois jours avant, puis un autre deux heures avant, et enregistrons les rappels. Vous pouvez en définir jusqu'à trois. Ils remplacent les rappels habituels et les choix de l'organisation pour cet événement. La ligne Prochain envoi indique le jour, l'heure et les personnes concernées. Chaque délai part du premier créneau de la journée du bénévole. Revenons aux délais habituels et enregistrons, pour regarder les trois échéances de notre exemple.
 
 La scène `manual-send` est refilmée sur Messages : le nouveau formulaire apparaît, même si le rappel manuel utilise toujours son bouton et sa confirmation. Les vrais corps des emails sont cadrés sans les en-têtes techniques de Mailpit.
+
+Le rappel manuel, le rappel du jour et l’avis de changement montrent le bouton « Mes inscriptions » et la phrase de confidentialité dans le corps du courriel. Les rappels J-2, J-1 et du jour sont ouverts sur trois phrases distinctes pour laisser le temps de lire.
