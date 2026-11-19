@@ -66,13 +66,13 @@ Leur présence confirmée est comptée sur chaque créneau, même si leur nom re
 
 ### Prévenir les bénévoles déjà inscrits
 
-Comme rien ne les prévient, écrivez-leur depuis l'onglet **Messages**, avec **tous les bénévoles inscrits** comme destinataires : ce public ne compte que les places confirmées, celles qui voient l'encadré (voir [Écrire aux bénévoles](ecrire-aux-benevoles.md)). Chaque email contient déjà le bouton **Gérer mes inscriptions**, qui ouvre la page **Mes inscriptions** du bénévole. Envoyez le message une fois la case enregistrée, pas avant. L'email commence par une salutation et se termine par le nom de votre organisation : le message n'en a pas besoin.
+Comme rien ne les prévient, écrivez-leur depuis l'onglet **Messages**, avec **tous les bénévoles inscrits** comme destinataires : ce public ne compte que les places confirmées, celles qui voient l'encadré (voir [Écrire aux bénévoles](ecrire-aux-benevoles.md)). Chaque email contient déjà le bouton **Mes inscriptions**, qui ouvre le lien du bénévole pour toutes ses inscriptions auprès de l'organisation. Envoyez le message une fois la case enregistrée, pas avant. L'email commence par une salutation et se termine par le nom de votre organisation : le message n'en a pas besoin.
 
 Exemple à adapter (objet « Voir qui est inscrit sur les créneaux ») :
 
 > Pour {événement}, vous pouvez maintenant voir qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui ont choisi de s'afficher, et le nombre des autres bénévoles confirmés, sans leur nom. Votre page « Mes inscriptions » le montre pour vos créneaux ; son lien « Voir qui est inscrit sur les autres créneaux » ouvre la page d'inscription, où l'interrupteur « Voir qui est inscrit » le montre pour tous les créneaux.
 >
-> Votre nom n'est pas affiché tant que vous ne l'avez pas choisi depuis votre page « Mes inscriptions ». Pour l'afficher, ouvrez-la avec le bouton « Gérer mes inscriptions » ci-dessous, puis activez « Afficher mon nom aux autres bénévoles » dans l'encadré « Qui est inscrit ». Il sera visible par les bénévoles confirmés de l'événement, même ceux qui ne partagent aucun créneau avec vous, et par les membres que l'organisation invite à l'événement, avant leur inscription, jusqu'à la fin de l'événement. Vous pourrez le masquer à tout moment.
+> Votre nom n'est pas affiché tant que vous ne l'avez pas choisi depuis votre page « Mes inscriptions ». Pour l'afficher, ouvrez-la avec le bouton « Mes inscriptions » ci-dessous, puis activez « Afficher mon nom aux autres bénévoles » dans l'encadré « Qui est inscrit ». Il sera visible par les bénévoles confirmés de l'événement, même ceux qui ne partagent aucun créneau avec vous, et par les membres que l'organisation invite à l'événement, avant leur inscription, jusqu'à la fin de l'événement. Vous pourrez le masquer à tout moment.
 >
 > C'est facultatif : sans rien faire, votre nom reste masqué et votre inscription ne change pas. Votre place confirmée compte simplement dans le nombre affiché sur vos créneaux, sans votre nom.
 

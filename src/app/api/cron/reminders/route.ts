@@ -17,6 +17,7 @@ import { reportError } from "@/lib/report-error"
 import { deliverOutbox, outboxHealth } from "@/lib/notifications/outbox"
 import * as Sentry from "@sentry/nextjs"
 import { registrationToken } from "@/lib/token-vault"
+import { readLegacyReminderRecipient, type LegacyReminderDb } from "@/lib/org-link-email"
 import { orgTimeZone } from "@/lib/time-zone"
 import { reminderCandidateDates, remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
 import { REMINDER_WINDOW_HOURS } from "@/lib/automatic-reminders"
@@ -124,30 +125,54 @@ async function run(req: Request) {
       const ids = group.registrations.map((r) => r.id)
       if (!(await claimReminderGroup(ids, win.field, now))) continue
       // Anything that throws from here, building the email or sending it, gives the group back.
-      const result = await (async () => sendNotification({
-        kind: win.kind,
-        recipient: { email: first.volunteer.email, name: first.volunteer.firstName },
-        volunteerId: first.volunteerId,
-        organizationId: first.event.organizationId,
-        data: {
-          volunteerName: first.volunteer.firstName,
-          eventTitle: first.event.title,
-          eventId: first.eventId,
-          organizationName: first.event.organization.name,
-          orgSlug: first.event.organization.slug,
-          shifts,
-          // Any registration's token of this volunteer+event opens the same personal page,
-          // listing every one of their shifts for the event (src/app/api/public/registrations).
-          editToken: registrationToken.reveal(first),
-          hoursUntil: Math.max(0, Math.round((group.earliestStart.getTime() - now.getTime()) / (3600 * 1000))),
-          // The event's earlier self-cancellation deadline (#946), for the group's first shift.
-          cancelNotice: reminderCancelNotice(first.shift, first.event, orgTimeZone(first.event.organization), now),
-          cancelClosed: hasEarlierDeadline(first.event) && now >= selfCancelDeadline(first.shift, first.event, orgTimeZone(first.event.organization)),
-        },
-      }))().catch(async (e) => {
+      const result = await (async () => {
+        // The reminder's main button is the organisation-wide link (#1429, lot B). The rows were
+        // selected with the address read then; the token and the current address are read in one
+        // transaction, so a token issued now never reaches the old inbox of an address that changed
+        // since. A member without an address has no email to send and no link is issued for them.
+        const recipient = first.volunteer.email?.trim()
+          ? await readLegacyReminderRecipient(prisma as unknown as LegacyReminderDb, {
+              volunteerId: first.volunteerId,
+              organizationId: first.event.organizationId,
+              selectedEmail: first.volunteer.email,
+              organizationName: first.event.organization.name,
+              now,
+            })
+          : null
+        // The address changed after selection: nothing is sent to the old one. The group is given
+        // back below, so a later run writes to the current address.
+        if (!recipient) return null
+        return sendNotification({
+          kind: win.kind,
+          recipient: { email: recipient.email, name: first.volunteer.firstName },
+          volunteerId: first.volunteerId,
+          organizationId: first.event.organizationId,
+          data: {
+            volunteerName: first.volunteer.firstName,
+            eventTitle: first.event.title,
+            eventId: first.eventId,
+            organizationName: first.event.organization.name,
+            orgSlug: first.event.organization.slug,
+            shifts,
+            // Any registration's token of this volunteer+event opens the same personal page,
+            // listing every one of their shifts for the event (src/app/api/public/registrations).
+            editToken: registrationToken.reveal(first),
+            ...(recipient.orgToken ? { orgToken: recipient.orgToken } : {}),
+            hoursUntil: Math.max(0, Math.round((group.earliestStart.getTime() - now.getTime()) / (3600 * 1000))),
+            // The event's earlier self-cancellation deadline (#946), for the group's first shift.
+            cancelNotice: reminderCancelNotice(first.shift, first.event, orgTimeZone(first.event.organization), now),
+            cancelClosed: hasEarlierDeadline(first.event) && now >= selfCancelDeadline(first.shift, first.event, orgTimeZone(first.event.organization)),
+          },
+        })
+      })().catch(async (e) => {
         await releaseReminderGroup(ids, win.field)
         throw e
       })
+      if (result === null) {
+        // An address that changed after selection: the claim goes back for the next run.
+        await releaseReminderGroup(ids, win.field)
+        continue
+      }
       if (result.ok) {
         // Every shift of the group stays marked: a later run never re-sends any of them (#672).
         const hoursLabel =

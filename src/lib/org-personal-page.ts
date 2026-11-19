@@ -21,6 +21,13 @@ import { LIVE_STATUSES } from "./registration-capacity"
 export const ORG_SCOPE_SENTENCE = (organizationName: string) =>
   `Ce lien donne accès à toutes tes inscriptions auprès de ${organizationName} et permet de les modifier. Ne le partage pas.`
 
+/**
+ * The shorter sentence of the general emails (#1429, lot B): one line under the « Mes inscriptions »
+ * button, stating the scope and the privacy rule without repeating the page's own wording.
+ */
+export const ORG_EMAIL_SCOPE_SENTENCE = (organizationName: string) =>
+  `Ce lien ouvre toutes tes inscriptions auprès de ${organizationName}. Ne le partage pas.`
+
 /** The words of a registration's state on the organisation page. Never colour alone. */
 export function orgRegistrationStatusLabel(status: string, waitingPosition?: number | null): string {
   switch (status) {
