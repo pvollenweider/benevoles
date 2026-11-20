@@ -312,6 +312,19 @@ async function addToPlaylist(token: string, playlistId: string, videoId: string)
   if (!res.ok) throw await apiError(res, `Ajout à la playlist ${playlistId} refusé`)
 }
 
+/** Takes every occurrence of a video out of a playlist; returns how many were removed. */
+async function removeFromPlaylist(token: string, playlistId: string, videoId: string): Promise<number> {
+  const query = new URLSearchParams({ part: "id", maxResults: "50", playlistId, videoId })
+  const res = await fetch(`${API}/playlistItems?${query}`, { headers: { Authorization: `Bearer ${token}` } })
+  if (!res.ok) throw await apiError(res, `Lecture de la playlist ${playlistId} refusée`)
+  const { items = [] } = (await res.json()) as { items?: { id: string }[] }
+  for (const { id } of items) {
+    const del = await fetch(`${API}/playlistItems?id=${encodeURIComponent(id)}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } })
+    if (!del.ok) throw await apiError(del, `Retrait de ${videoId} de la playlist ${playlistId} refusé`)
+  }
+  return items.length
+}
+
 function themeTitle(id: string): string {
   return THEMES.find((t) => t.id === id)?.label ?? id
 }
@@ -320,13 +333,14 @@ function describe(item: PlanItem): string {
   if (item.action === "unchanged") return `déjà en ligne : https://youtu.be/${item.videoId}`
   if (item.action === "upload") return "nouvel envoi"
   if (item.action === "replace") {
-    return `nouvel envoi (révision ${item.revision} ou nouveau format), l'ancienne version (${item.previousVideoId}) ${item.previousPrivacy === "private" ? "reste privée" : "passera en non répertoriée"}`
+    return `nouvel envoi (révision ${item.revision} ou nouveau format), l'ancienne version (${item.previousVideoId}) ${item.previousPrivacy === "private" ? "reste privée" : "passera en non répertoriée"}${item.withdraw.length ? " et sera retirée de ses playlists" : ""}`
   }
   const todo = [
     item.captions && "sous-titres",
     item.thumbnail && "vignette",
     item.playlists.length && `playlists (${item.playlists.map(themeTitle).join(" ; ")})`,
     item.status && `visibilité ${item.status.from} → ${item.status.to}, voix de synthèse déclarée`,
+    item.withdraw.length && `retrait des playlists de l'ancienne version (${item.withdraw.map((w) => w.videoId).join(", ")})`,
   ].filter(Boolean)
   return `à compléter sur ${item.videoId} : ${todo.join(", ")}`
 }
@@ -406,7 +420,19 @@ async function main() {
         const videoId = await uploadVideo(token, format === "framed" ? await frameVideo(thumb, mp4, dir) : mp4, youtubeMetadata(manifest, entry))
         const previous = state.videos[item.slug]
         const replaced = item.action === "replace" ? [...(previous?.replaced ?? []), item.previousVideoId!] : previous?.replaced
-        state.videos[item.slug] = { videoId, revision: item.revision, privacy, captions: false, thumbnail: false, synthetic: true, format, playlists: [], uploadedAt: new Date().toISOString(), ...(replaced ? { replaced } : {}) }
+        state.videos[item.slug] = {
+          videoId,
+          revision: item.revision,
+          privacy,
+          captions: false,
+          thumbnail: false,
+          synthetic: true,
+          format,
+          playlists: [],
+          uploadedAt: new Date().toISOString(),
+          ...(replaced ? { replaced } : {}),
+          ...(item.withdraw.length ? { staleInPlaylists: item.withdraw } : {}),
+        }
         await saveState(state)
         console.log(`  envoyée : https://youtu.be/${videoId}`)
         if (item.action === "replace" && item.previousPrivacy !== "private") {
@@ -417,6 +443,21 @@ async function main() {
         }
       }
       const current = state.videos[item.slug]
+      for (const stale of item.withdraw) {
+        for (const theme of stale.themes) {
+          const playlist = state.playlists[theme]
+          await step(async () => {
+            if (playlist && (await removeFromPlaylist(token, playlist.playlistId, stale.videoId))) {
+              console.log(`  ancienne version ${stale.videoId} retirée de « ${playlist.title} »`)
+            }
+            current.staleInPlaylists = (current.staleInPlaylists ?? [])
+              .map((s) => (s.videoId === stale.videoId ? { ...s, themes: s.themes.filter((t) => t !== theme) } : s))
+              .filter((s) => s.themes.length)
+            if (!current.staleInPlaylists.length) delete current.staleInPlaylists
+            await saveState(state)
+          })
+        }
+      }
       if (item.status) {
         await step(async () => {
           await setStatus(token, current.videoId, item.status!.to)

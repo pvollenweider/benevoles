@@ -48,7 +48,12 @@ export type YoutubeVideo = {
   uploadedAt: string
   /** Earlier uploads of the same video, set to unlisted when a new revision replaced them. */
   replaced?: string[]
+  /** Earlier uploads still to withdraw from these theme playlists (kept until done, so a stopped run resumes). */
+  staleInPlaylists?: PlaylistWithdrawal[]
 }
+
+/** An earlier upload to take out of the playlists of these themes. */
+export type PlaylistWithdrawal = { videoId: string; themes: string[] }
 
 /** videos/youtube.json: one playlist per theme, and what was sent per manifest slug. */
 export type YoutubeState = {
@@ -143,6 +148,8 @@ export type PlanItem = {
   /** Themes whose playlist must receive the video. */
   playlists: string[]
   status?: { from: Privacy; to: Privacy }
+  /** Earlier uploads to take out of their theme playlists, so a playlist never shows two versions. */
+  withdraw: PlaylistWithdrawal[]
 }
 
 export type PlanInput = { slug: string; revision: number; thumbnailKey?: string; format?: VideoFormat; themes?: string[] }
@@ -152,16 +159,19 @@ export type PlanInput = { slug: string; revision: number; thumbnailKey?: string;
  * or a new format is a new upload; the earlier one is then set to unlisted, or left private if it
  * never was public (never deleted: links keep working). For a video already sent, whatever is
  * missing is finished without a new upload: captions, thumbnail (also when its content or design
- * changed), theme playlists, and the status (privacy asked, synthetic voice declared). Without an
- * explicit privacy, a video already on YouTube keeps its own.
+ * changed), theme playlists, and the status (privacy asked, synthetic voice declared). A replaced
+ * upload is also taken out of its theme playlists. Without an explicit privacy, a video already on
+ * YouTube keeps its own.
  */
 export function planYoutube(videos: PlanInput[], state: YoutubeState, privacy?: Privacy): PlanItem[] {
   return videos.map(({ slug, revision, thumbnailKey, format = "native", themes = [] }) => {
     const known = state.videos[slug]
     const fresh = { captions: true, thumbnail: true, playlists: [...themes] }
-    if (!known) return { slug, revision, action: "upload", ...fresh }
+    if (!known) return { slug, revision, action: "upload", ...fresh, withdraw: [] }
+    const pending = known.staleInPlaylists ?? []
     if (known.revision !== revision || (known.format ?? "native") !== format) {
-      return { slug, revision, action: "replace", previousVideoId: known.videoId, previousPrivacy: known.privacy, ...fresh }
+      const previous = known.playlists?.length ? [{ videoId: known.videoId, themes: [...known.playlists] }] : []
+      return { slug, revision, action: "replace", previousVideoId: known.videoId, previousPrivacy: known.privacy, ...fresh, withdraw: [...pending, ...previous] }
     }
     const to = privacy ?? known.privacy
     const item: PlanItem = {
@@ -173,8 +183,9 @@ export function planYoutube(videos: PlanInput[], state: YoutubeState, privacy?: 
       thumbnail: !known.thumbnail || (thumbnailKey !== undefined && known.thumbnailKey !== thumbnailKey),
       playlists: themes.filter((t) => !(known.playlists ?? []).includes(t)),
       ...(to !== known.privacy || !known.synthetic ? { status: { from: known.privacy, to } } : {}),
+      withdraw: pending,
     }
-    if (!item.captions && !item.thumbnail && !item.playlists.length && !item.status) item.action = "unchanged"
+    if (!item.captions && !item.thumbnail && !item.playlists.length && !item.status && !item.withdraw.length) item.action = "unchanged"
     return item
   })
 }
