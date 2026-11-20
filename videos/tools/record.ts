@@ -197,11 +197,11 @@ async function fillVisibly(page: Page, field: Locator, value: string, pauseMs = 
 }
 
 async function main() {
-  // The canonical proves the deployment URL: explicit HTTP capture origins for batch 25-2,
-  // public video domain for the other journeys. Visible local links still fail final review.
+  // The canonical proves the deployment URL: explicit HTTP for local captures
+  // that need it, the public video domain for the other journeys.
   const manifest = await loadManifest(reference!)
   const probeHtml = await (await fetch(`${localBaseUrl}${PUBLIC_URL_PROBE_PATH}`)).text()
-  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION", "EVENT_QUESTIONS", "EMAIL_DELIVERY_FAILURES"].includes(manifest.id) && !publicOperator
+  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION", "EVENT_QUESTIONS", "EMAIL_DELIVERY_FAILURES", "REGISTRATION_MONITOR_FOLLOWUP"].includes(manifest.id) && !publicOperator
   if (localOriginCapture ? !probeHtml.includes(`<link rel="canonical" href="${baseUrl}${PUBLIC_URL_PROBE_PATH}"`) : !servedWithPublicUrl(probeHtml)) throw new Error("Capture deployment origin does not match the expected canonical URL")
   const product = await pinProductBuildForCapture(localBaseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
@@ -5802,7 +5802,8 @@ async function main() {
         await at(0.28) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: /Accepter la demande de/ }).first())
         await page.getByRole("dialog").waitFor()
-        await at("Ici, on referme simplement la fenêtre")
+        await at("Ici, refermons la fenêtre")
+        await page.waitForTimeout(650)
         await tap(page, page.getByRole("button", { name: "Annuler" }))
       })
 
@@ -5810,17 +5811,22 @@ async function main() {
       await scene("filters", async (at) => {
         await at("Quand la liste grandit")
         const roleFilter = page.getByLabel("Filtrer par poste")
+        await page.waitForTimeout(450)
+        await tap(page, roleFilter)
+        await roleFilter.press("Escape")
         await roleFilter.selectOption("Buvette")
         const shiftFilter = page.getByRole("combobox", { name: "Filtrer par créneau", exact: true })
+        await at("Précisez le créneau")
         await tap(page, shiftFilter)
         await tap(page, page.getByRole("option").filter({ visible: true }).nth(1))
+        await at("Vous pouvez aussi isoler les demandes")
         await tap(page, shiftFilter)
         await tap(page, page.getByRole("option", { name: "Tous les créneaux", exact: true }).filter({ visible: true }))
         await roleFilter.selectOption("")
         await tap(page, page.getByLabel(/Demandes à traiter/))
         await tap(page, page.getByLabel(/Demandes à traiter/))
         await roleFilter.selectOption("Buvette")
-        await at(0.42) /* mid-sentence */
+        await at("Enfin, utilisez la recherche")
         const registrationSearch = page.locator("#reg-search")
         await fillVisibly(page, registrationSearch, "Camille")
         await at("En quelques secondes, vous isolez")
@@ -5831,7 +5837,7 @@ async function main() {
       await scene("actions", async (at) => {
         const selectCamille = page.getByLabel(/Sélectionner l'inscription de Camille Rochat/).first()
         await tap(page, selectCamille)
-        await at(0.42) /* mid-sentence */
+        await at("Sélectionnez plusieurs lignes")
         await tap(page, page.getByLabel(/Sélectionner l'inscription de Camille Rochat/).nth(1))
         await page.getByRole("group", { name: "Actions sur la sélection" }).scrollIntoViewIfNeeded()
         await at(0.78) /* mid-sentence */
@@ -5886,8 +5892,11 @@ async function main() {
           throw new Error(`Message preview did not open. Alerts: ${alerts.join(" | ") || "none"}. Form: ${formText.slice(0, 800)}`)
         }
         await at("La confirmation finale évite les")
+        const preview = page.getByRole("dialog", { name: "Aperçu de l'email" })
+        await tap(page, preview.getByRole("button", { name: /^Envoyer à / }))
+        await page.getByRole("dialog", { name: "Confirmer l'envoi" }).waitFor()
       })
-      await tap(page, page.getByRole("button", { name: "Retour au message" }))
+      await tap(page, page.getByRole("dialog", { name: "Confirmer l'envoi" }).getByRole("button", { name: "Annuler", exact: true }))
 
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("reminders", async (at) => {

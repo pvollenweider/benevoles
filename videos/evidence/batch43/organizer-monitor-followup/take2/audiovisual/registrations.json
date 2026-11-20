@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:19:47.067Z",
+  "videoSha256": "ee4ebcd102cdbb1d83e6d717294be263e7a2d17d008f1db6670c7c299b801195",
+  "promptSha256": "9dd4a234035ca837124233f13b31c3b9f0270d01aab8fbbdbf26c637c0f76dff",
+  "clipSha256": "49d144c2565aed173135dd2225601f34bf086b42f2d6c9bfdbf0dd5d2764ce07",
+  "scene": "registrations",
+  "review": {
+    "heardOpening": "Dans les inscriptions, chaque ligne rassemble la personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans les inscriptions, chaque ligne rassemble la personne",
+        "visibleSeconds": 0.5,
+        "visible": "Page des Inscriptions affichée avec la liste des personnes inscrites",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "son créneau, son statut et les informations utiles",
+        "visibleSeconds": 3.2,
+        "visible": "Colonnes Bénévole, Créneau, Source et Statut visibles pour chaque ligne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "comme la taille du t-shirt ou le régime alimentaire",
+        "visibleSeconds": 7.4,
+        "visible": "Détails « Taille de t-shirt : M » et « Régime : Végétarien » visibles sous les coordonnées de Camille Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et pédagogique, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

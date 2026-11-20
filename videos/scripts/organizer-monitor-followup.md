@@ -46,9 +46,9 @@ Contrôle des WAV restaurés le 2026-10-16 : la reconnaissance indépendante ret
 - Commencez par regarder la couverture du planning.
 - Vous savez ainsi où concentrer vos efforts.
 - Ouvrez une demande pour vérifier la personne, le créneau et ses réponses, puis acceptez-la ou refusez-la.
-- Quand la liste grandit, filtrez par poste, par créneau ou par statut, puis utilisez la recherche pour retrouver un nom ou une adresse.
+- Quand la liste grandit, filtrez d’abord par poste. Précisez le créneau si nécessaire. Vous pouvez aussi isoler les demandes à traiter. Enfin, utilisez la recherche pour retrouver un nom ou une adresse.
 - En quelques secondes, vous isolez exactement le groupe qui vous intéresse.
-- Vous pouvez agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée.
+- Sélectionnez une inscription pour afficher les actions, comme le renvoi du lien personnel. Sélectionnez plusieurs lignes pour appliquer une action groupée.
 - Pour une relance, choisissez précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé.
 - Vous pouvez partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux.
 - Avant d’envoyer quoi que ce soit, ouvrez l’aperçu : vous contrôlez le rendu exact et le nombre de destinataires.
@@ -68,9 +68,9 @@ Narration finale de référence (génération intégrale si modifiée, même voi
 - `overview` : Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l’événement, vous retrouvez tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.
 - `coverage` : Commencez par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places, et les personnes placées en liste d’attente. Vous savez ainsi où concentrer vos efforts.
 - `registrations` : Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire, restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.
-- `requests` : Les postes sur validation sont clairement signalés. Ouvrez une demande pour vérifier la personne, le créneau et ses réponses, puis acceptez-la ou refusez-la. Ici, on referme simplement la fenêtre : aucune décision n’est prise pendant la démonstration.
-- `filters` : Quand la liste grandit, filtrez par poste, par créneau ou par statut, puis utilisez la recherche pour retrouver un nom ou une adresse. En quelques secondes, vous isolez exactement le groupe qui vous intéresse.
-- `actions` : Vous pouvez agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels : le bénévole peut consulter ou modifier ses choix sans créer de compte.
+- `requests` : Les postes sur validation sont clairement signalés. Ouvrez une demande pour vérifier la personne, le créneau et ses réponses, puis acceptez-la ou refusez-la. Ici, refermons la fenêtre. Aucune décision n’est prise pendant la démonstration.
+- `filters` : Quand la liste grandit, filtrez d’abord par poste. Précisez le créneau si nécessaire. Vous pouvez aussi isoler les demandes à traiter. Enfin, utilisez la recherche pour retrouver un nom ou une adresse. En quelques secondes, vous isolez exactement le groupe qui vous intéresse.
+- `actions` : Sélectionnez une inscription pour afficher les actions, comme le renvoi du lien personnel. Sélectionnez plusieurs lignes pour appliquer une action groupée. Le lien personnel ouvre les inscriptions du bénévole dans votre organisation, sans créer de compte.
 - `audience` : Pour une relance, choisissez précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l’envoi.
 - `message` : Vous pouvez partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d’envoyer quoi que ce soit, ouvrez l’aperçu : vous contrôlez le rendu exact et le nombre de destinataires.
 - `channels` : L’email part à toutes les personnes ciblées. Pour une information urgente, vous pouvez ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée. La confirmation finale évite les envois involontaires.

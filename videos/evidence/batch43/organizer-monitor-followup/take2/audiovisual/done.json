@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:20:41.387Z",
+  "videoSha256": "ee4ebcd102cdbb1d83e6d717294be263e7a2d17d008f1db6670c7c299b801195",
+  "promptSha256": "69e0aef05af8a282ebf85adfa296202c4d699599e7b89fc49c9a9433df43b80b",
+  "clipSha256": "2e673de9adc8830943b489038e58cb70a0814510e09f517e09894c3c4f0047bc",
+  "scene": "done",
+  "review": {
+    "heardOpening": "Le résultat",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat, c’est un suivi simple",
+        "visibleSeconds": 0.5,
+        "visible": "Bandeau central « Un suivi clair jusqu'au jour J - Voir, cibler, préparer » affiché au-dessus de l'interface",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "voir les manques, contacter les bonnes personnes, préparer le terrain",
+        "visibleSeconds": 2.8,
+        "visible": "Le bandeau s'efface pour laisser voir l'onglet Récit détaillant les inscriptions et modifications",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "retrouver l’historique sans jongler entre plusieurs outils",
+        "visibleSeconds": 5.8,
+        "visible": "Fil chronologique complet des actions avec dates, heures et liens « Rejouer » ou « Voir le récit »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Votre planning reste lisible jusqu’au jour de l’événement.",
+        "visibleSeconds": 9,
+        "visible": "Écran stable récapitulant l'ensemble des activités et états de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, au débit fluide et parfaitement audible avec une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

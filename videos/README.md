@@ -750,8 +750,10 @@ respectivement `http://localhost:43102` (`local-production.ts serve-capture`) et
 `src/lib/urls.ts` lit la variable par nom dynamique, y compris depuis le proxy ;
 le port opérateur est donc lu à l’exécution. La configuration de build conserve
 aussi le schéma HTTP pour toute expression publique susceptible d’être intégrée.
-Le recorder contrôle le canonique local pour ces deux captures. Les autres prises
-restent soumises au contrôle du domaine public. Aucun contrôle produit n’est modifié.
+Le recorder contrôle le canonique local pour ces captures. Pour
+`REGISTRATION_MONITOR_FOLLOWUP`, lancer `local-production.ts serve-capture`
+avec `VIDEO_PRODUCT_PORT=43100` pour que le navigateur puisse calculer les
+destinataires et ouvrir l’aperçu du message depuis la même origine HTTP.
 
 Après compilation vérifiée et seed, lancer `check-batch25-origin.ts` (et son
 argument `operator` pour 43104), avec `.env.video.e2e`. Le navigateur fait un

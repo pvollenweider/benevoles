@@ -15,3 +15,8 @@
 - `SHIFT_WAITLIST_OFFER` — READY, publiée, révision 5. [Première prise](shift-waitlist-offer/take1/review.md), courriel et lien d'offre propres au créneau, sept chapitres vérifiés. [Mesure distante](shift-waitlist-offer/take1/published-ffprobe.json) et affiche HTTP 200.
 - `EMAIL_DELIVERY_FAILURES` — READY, publiée, révision 4 après constat d'un ancien bouton dans la révision précédente. [Deuxième prise](email-delivery-failures/take2/review.md), huit chapitres vérifiés. [Mesure distante](email-delivery-failures/take2/published-ffprobe.json) et affiche HTTP 200.
 - `EVENT_REPORTS` — NOT READY après deux prises, révision 3 maintenue. La liste avec téléphones par jour et la page PDF unique de Léa sont visibles. La fiche Buvette reste cadrée trop bas à son annonce et la ligne de Léa défile trop vite dans l’export complet. [Première prise](event-reports/take1/review.md), [deuxième prise](event-reports/take2/review.md).
+- `REGISTRATION_MONITOR_FOLLOWUP` — READY, publiée, révision 6 (main 5 + 1). [Seconde prise](organizer-monitor-followup/take2/review.md) avec les filtres visibles et la confirmation de l'envoi à trois destinataires fictifs. [Mesure publiée](organizer-monitor-followup/take2/published-ffprobe.json), affiche HTTP 200 et sous-titres identiques.
+
+## Suite
+
+Les reprises d'image facultatives de la carte « Retrouver toutes mes inscriptions » restent dans la [liste des refilms après #1429](../../FINAL_REVIEW_EVIDENCE.md#à-refilmer--lien--mes-inscriptions--commun-1429-19-novembre-2026) pour le lot 44. Les vidéos signalées NOT READY et le cas de revue d'`EVENT_QUESTIONS` restent à traiter.

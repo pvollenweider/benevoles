@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:19:59.770Z",
+  "videoSha256": "ee4ebcd102cdbb1d83e6d717294be263e7a2d17d008f1db6670c7c299b801195",
+  "promptSha256": "805e95080bcc6886278e5413d594adf0a179160bd84a4891e6ec701a86a9452c",
+  "clipSha256": "796c55bc95ace4d6f2cb12c7466b8199527a9f54a9bc0eea8e4b2948b36fa0a4",
+  "scene": "actions",
+  "review": {
+    "heardOpening": "Sélectionnez une inscription pour afficher les actions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Sélectionnez une inscription pour afficher les actions",
+        "visibleSeconds": 0.5,
+        "visible": "Une première inscription est cochée et le bandeau d'actions apparaît avec 1 sélectionnée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "comme le renvoi du lien personnel",
+        "visibleSeconds": 2.8,
+        "visible": "L'option Renvoyer le lien est bien visible dans le bandeau d'actions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Sélectionnez plusieurs lignes pour appliquer une action groupée",
+        "visibleSeconds": 5.5,
+        "visible": "Une seconde inscription est cochée, affichant 2 sélectionnées et les boutons d'actions groupées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les sélections à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

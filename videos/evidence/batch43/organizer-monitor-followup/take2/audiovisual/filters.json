@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:20:01.160Z",
+  "videoSha256": "ee4ebcd102cdbb1d83e6d717294be263e7a2d17d008f1db6670c7c299b801195",
+  "promptSha256": "a0ea3c92bbdc857d52c794f65e1d8e31a7eb49a76ff282567840a458ff748759",
+  "clipSha256": "eb6a065ac1f6aae2ce08993bf55deed2b7b2aaac214ac0f66e3453c9180a5d97",
+  "scene": "filters",
+  "review": {
+    "heardOpening": "Quand la liste grandit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "filtrez d’abord par poste",
+        "visibleSeconds": 2.1,
+        "visible": "Sélection du filtre Buvette dans le menu déroulant Tous les postes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.1,
+        "spoken": "Précisez le créneau si nécessaire",
+        "visibleSeconds": 4.6,
+        "visible": "Ouverture de la liste des créneaux et sélection du créneau du samedi 28 novembre 10h-14h",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "isoler les demandes à traiter",
+        "visibleSeconds": 7,
+        "visible": "Cochage de la case à cocher Demandes à traiter (2) et filtrage immédiat de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "utilisez la recherche pour retrouver un nom",
+        "visibleSeconds": 9.8,
+        "visible": "Saisie de Camille dans la barre de recherche et affichage des résultats correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, chaleureuse et parfaitement intelligible, débit fluide et calé sur les actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

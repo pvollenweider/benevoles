@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:14:12.022Z",
+  "videoSha256": "a1ef2c4e7b77fef880628ceaae2283a02669632d7a2e2b3380aa58cd5d1c162e",
+  "promptSha256": "a0ea3c92bbdc857d52c794f65e1d8e31a7eb49a76ff282567840a458ff748759",
+  "clipSha256": "aa725da60a5b51d8abf14e12e00822b1e33089795724654c619fb097a9729c0e",
+  "scene": "filters",
+  "review": {
+    "heardOpening": "Quand la liste grandit, filtrez d'abord par poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "filtrez d’abord par poste",
+        "visibleSeconds": 2.5,
+        "visible": "Le menu des postes n'est pas utilisé ; l'utilisateur clique directement sur le filtre des créneaux",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3.1,
+        "spoken": "Précisez le créneau si nécessaire",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection du créneau « sam. 28 nov. 10h-14h Buvette » dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Vous pouvez aussi isoler les demandes à traiter",
+        "visibleSeconds": 6.7,
+        "visible": "Coche de la case « Demandes à traiter (2) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "utilisez la recherche pour retrouver un nom ou une adresse",
+        "visibleSeconds": 9.8,
+        "visible": "Saisie du prénom « Camille » dans la barre de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:02, la voix invite à filtrer d'abord par poste, mais le champ « Tous les postes » n'est pas manipulé à l'écran, le filtre par créneau étant sélectionné à la place."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec le déroulement des actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

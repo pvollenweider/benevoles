@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:14:24.477Z",
+  "videoSha256": "a1ef2c4e7b77fef880628ceaae2283a02669632d7a2e2b3380aa58cd5d1c162e",
+  "promptSha256": "495a18a16335bf23633c49630f7f6cf8cbbad4240e1dc40ff44bf1fe7d455197",
+  "clipSha256": "63e39eab1877237d00e3a7a8e4a8cc658cd8749b9d495dcd1ebc29349b03b9d9",
+  "scene": "channels",
+  "review": {
+    "heardOpening": "L'email part à toutes les personnes ciblées.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "vous pouvez ajouter une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 0.5,
+        "visible": "Option cochée « Envoyer aussi une notification (téléphone ou ordinateur) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "elle ne touche que les bénévoles qui l’ont activée",
+        "visibleSeconds": 5.4,
+        "visible": "Ouverture de la fenêtre « Aperçu de l'email » après clic sur « Voir l'aperçu et envoyer »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.7,
+        "spoken": "La confirmation finale évite les envois involontaires",
+        "visibleSeconds": 10.5,
+        "visible": "Boîte de dialogue modale « Confirmer l'envoi » affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:14:14.144Z",
+  "videoSha256": "a1ef2c4e7b77fef880628ceaae2283a02669632d7a2e2b3380aa58cd5d1c162e",
+  "promptSha256": "805e95080bcc6886278e5413d594adf0a179160bd84a4891e6ec701a86a9452c",
+  "clipSha256": "f028611293423d2f4633a121f42916fd863fdf2e6add97198244159267182c5b",
+  "scene": "actions",
+  "review": {
+    "heardOpening": "Sélectionnez une inscription pour afficher les actions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Sélectionnez une inscription pour afficher les actions",
+        "visibleSeconds": 0.8,
+        "visible": "Une case d'inscription est cochée et la barre d'actions contextuelles apparaît",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "comme le renvoi du lien personnel",
+        "visibleSeconds": 1,
+        "visible": "Le bouton Renvoyer le lien est visible dans la barre d'actions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Sélectionnez plusieurs lignes pour appliquer une action groupée",
+        "visibleSeconds": 5,
+        "visible": "Une deuxième ligne est cochée et le bandeau affiche 2 sélectionnées avec les actions groupées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Le lien personnel ouvre les inscriptions du bénévole dans votre organisation sans créer de compte",
+        "visibleSeconds": 8,
+        "visible": "Explication conceptuelle sur l'écran des inscriptions du tableau de bord",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, fluide et naturelle, parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

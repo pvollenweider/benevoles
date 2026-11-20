@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:19:43.548Z",
+  "videoSha256": "ee4ebcd102cdbb1d83e6d717294be263e7a2d17d008f1db6670c7c299b801195",
+  "promptSha256": "661d5e515058c0516f910b668dcfe3862e9762ccf616b8642237949f7c044a7e",
+  "clipSha256": "fc57b55874889af5b6654ae3fdaaea1698a2378376b1de8580b79dfdd60dcdb9",
+  "scene": "overview",
+  "review": {
+    "heardOpening": "Une fois le planning publié",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "voici comment suivre les inscriptions et relancer au bon moment",
+        "visibleSeconds": 1,
+        "visible": "Affichage du titre introductif 'Suivre les inscriptions et relancer au bon moment' sur la page de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Depuis l'événement, vous retrouvez tout de suite son état",
+        "visibleSeconds": 4,
+        "visible": "Vue d'ensemble de l'événement 'Fête du village de Montvert' avec les blocs d'état 'Où manque-t-il du monde ?' et 'À traiter'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "les prochaines étapes et les accès utiles pour garder une vue claire",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement de la page vers le bas dévoilant les sections 'Prochaines étapes', 'Jalons' et 'Messages'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, posée et bien articulée, synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
