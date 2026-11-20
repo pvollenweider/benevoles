@@ -74,7 +74,7 @@
       "revision": 2,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
@@ -83,7 +83,8 @@
       "uploadedAt": "2026-11-20T13:29:18.446Z",
       "replaced": [
         "RIKkjebVvYs"
-      ]
+      ],
+      "thumbnailKey": "ccf57fa42e57d005"
     },
     "attendance-check-in": {
       "videoId": "1AN3vR8Z6bw",
@@ -118,14 +119,15 @@
       "revision": 4,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
         "inscriptions-communication",
         "tracabilite-donnees"
       ],
-      "uploadedAt": "2026-11-20T13:29:45.990Z"
+      "uploadedAt": "2026-11-20T13:29:45.990Z",
+      "thumbnailKey": "0c1c5ffd12103ffc"
     },
     "event-program-pages-qr": {
       "videoId": "Ap6jMOp2Tes",
@@ -147,14 +149,15 @@
       "revision": 6,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
         "evenement-cycle-de-vie",
         "inscriptions-communication"
       ],
-      "uploadedAt": "2026-11-20T13:28:53.494Z"
+      "uploadedAt": "2026-11-20T13:28:53.494Z",
+      "thumbnailKey": "7d1b44079b3a061b"
     },
     "front-desk-access": {
       "videoId": "ziXUWFsxC1U",
@@ -175,14 +178,15 @@
       "revision": 7,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
         "inscriptions-communication",
         "jour-j"
       ],
-      "uploadedAt": "2026-11-20T13:29:57.762Z"
+      "uploadedAt": "2026-11-20T13:29:57.762Z",
+      "thumbnailKey": "f23b5574f3fb96d5"
     },
     "members-import": {
       "videoId": "GH9KP0orVh0",
@@ -217,21 +221,22 @@
       "revision": 6,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
         "membres-invitations",
         "inscriptions-communication"
       ],
-      "uploadedAt": "2026-11-20T13:29:34.863Z"
+      "uploadedAt": "2026-11-20T13:29:34.863Z",
+      "thumbnailKey": "1b1e6b3cb5f60fa2"
     },
     "org-email-settings": {
       "videoId": "xaK7rwWWkW8",
       "revision": 6,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
@@ -241,21 +246,23 @@
       "uploadedAt": "2026-11-20T13:28:37.466Z",
       "replaced": [
         "y9mBdLec5zw"
-      ]
+      ],
+      "thumbnailKey": "0d635bba9b92dc35"
     },
     "organizer-monitor-followup": {
       "videoId": "kWnqTUw-oyQ",
       "revision": 6,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
         "inscriptions-communication",
         "jour-j"
       ],
-      "uploadedAt": "2026-11-20T13:29:09.338Z"
+      "uploadedAt": "2026-11-20T13:29:09.338Z",
+      "thumbnailKey": "9f487a600cd986c5"
     },
     "privacy-personal-links": {
       "videoId": "9dELAhOnzr4",
@@ -408,7 +415,7 @@
       "revision": 5,
       "privacy": "public",
       "captions": true,
-      "thumbnail": false,
+      "thumbnail": true,
       "synthetic": true,
       "format": "native",
       "playlists": [
@@ -416,7 +423,8 @@
         "parcours-benevole",
         "inscriptions-communication"
       ],
-      "uploadedAt": "2026-11-20T13:29:00.237Z"
+      "uploadedAt": "2026-11-20T13:29:00.237Z",
+      "thumbnailKey": "860ecfd38767b669"
     },
     "staffing-gaps": {
       "videoId": "xXKA4I1ft9s",
