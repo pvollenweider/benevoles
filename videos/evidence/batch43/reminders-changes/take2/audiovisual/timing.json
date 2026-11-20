@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:04:55.402Z",
+  "videoSha256": "6a69c2365c42baf75d1241e2a6949f3138fbc7e25e2990af76ad72ed91686c5d",
+  "promptSha256": "563646844c7f6368629d04449a42360aa45c4578989301e61d126e2fd6efb08d",
+  "clipSha256": "4660362fc13fa6dbc892754584c8646e40ea19251f464ad0210e56565cf28450",
+  "scene": "timing",
+  "review": {
+    "heardOpening": "Les rappels partent autour de",
+    "checkpoints": [
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Voici le rappel reçu deux jours avant.",
+        "visibleSeconds": 13.8,
+        "visible": "Affichage de l'e-mail de rappel J-2 adressé à Aline",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Voici le rappel reçu la veille.",
+        "visibleSeconds": 21.5,
+        "visible": "Affichage de l'e-mail de rappel de la veille adressé à Nicolas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.5,
+        "spoken": "Voici le rappel du jour même.",
+        "visibleSeconds": 24.5,
+        "visible": "Affichage de l'e-mail de rappel du jour même adressé à Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33.3,
+        "spoken": "La phrase sous le bouton rappelle la confidentialité du lien.",
+        "visibleSeconds": 33.3,
+        "visible": "Texte visible sous le bouton : « Ce lien ouvre toutes tes inscriptions auprès de Fêtes de Montvert. Ne le partage pas. »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions visuelles des trois courriels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

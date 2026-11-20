@@ -1,0 +1,1 @@
+La ligne d'Emma est bien marquée « Envoyé » à 134,8 s. La revue l'a manquée pendant le court retour au tableau. Dans le courriel de Léa, le bouton commun est lisible, mais le cadrage après défilement coupe le corps du message et masque l'adresse corrigée. La seconde prise avance le retour au tableau et cadre séparément l'en-tête puis le bouton.

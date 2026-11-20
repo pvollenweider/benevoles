@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:42:38.156Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
+  "clipSha256": "f378bd2b32cdd60a5f08036020c08264b35262bc65725f462f9cf3b494a9f769",
+  "scene": "journal",
+  "review": {
+    "heardOpening": "Pour comprendre l'imprévu après coup",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.1,
+        "spoken": "ouvrons le journal de l'événement",
+        "visibleSeconds": 2.5,
+        "visible": "L'onglet Journal de l'événement est affiché à l'écran en mode Explorer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Retrouvons le retrait, l'offre et son acceptation, puis le changement d'horaire et l'annulation",
+        "visibleSeconds": 6.8,
+        "visible": "Défilement dans la liste des actions du journal montrant les événements, liens et inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
+        "visibleSeconds": 14.2,
+        "visible": "Clic sur l'onglet Récit puis sélection d'un enchaînement montrant l'enchaînement des conséquences",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

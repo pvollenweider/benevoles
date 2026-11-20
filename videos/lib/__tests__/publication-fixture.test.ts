@@ -59,7 +59,7 @@ function placementEmail(key: string) {
   const mine = PB_PLAN[key].map(shiftOf).sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime))
   return plainMail(renderRegistrationAddedByOrganizer(payload("registration_added_by_organizer", {
     volunteerName: fullNameOf(PR_PEOPLE[key].firstName), eventTitle: PB_EVENT.title, orgSlug: PB_ORG.slug, organizationName: PB_ORG.name,
-    organizerName: fullNameOf(PB_OWNER.firstName), shifts: mine.map((s) => ({ roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime })), editToken: "token",
+    organizerName: fullNameOf(PB_OWNER.firstName), shifts: mine.map((s) => ({ roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime })), editToken: "token", orgToken: "organisation-token",
   })))
 }
 
@@ -112,6 +112,8 @@ describe("assignment publication video fixture (scripts/seed-video-publication.t
     expect(emma.text).toContain(PB_EXPECTED.emailLead(PB_TYPED.emma.firstName, 2))
     expect(emma.text.split("\n").filter((l) => l.startsWith("- Bar des Tilleuls, "))).toHaveLength(2)
     expect(emma.html).toContain(PB_EXPECTED.emailButton)
+    expect(emma.html).toContain("/mes-inscriptions/organisation-token")
+    expect(emma.text).toContain(PB_EXPECTED.emailScope)
     expect(emma.text).toContain(PB_EXPECTED.emailUnwanted)
     const noah = placementEmail(PB_TYPED.noah.key)
     const lines = noah.text.split("\n").filter((l) => l.startsWith("- "))

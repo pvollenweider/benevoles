@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:11:37.261Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "64cdd5f2a0f98415f816342f8fb84ee20ddf5fc9660eba556c2840e827484c2b",
+  "clipSha256": "ca2866063da04e3cc0b21c3483a3e5255c410ee30b23f4bfaee45091cc1dae88",
+  "scene": "test",
+  "review": {
+    "heardOpening": "M'envoyer un email de test envoie un exemple",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "M’envoyer un email de test envoie un exemple à votre propre compte",
+        "visibleSeconds": 0,
+        "visible": "Page des paramètres affichant le bouton M'envoyer un email de test et la notification d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Ouvrons le message reçu dans la boîte locale de démonstration",
+        "visibleSeconds": 6,
+        "visible": "Affichage de l'email de test reçu dans l'interface de messagerie locale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org",
+        "visibleSeconds": 9.5,
+        "visible": "En-têtes de l'email visibles avec From, To et Reply-To benevoles@example.org",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "puis le texte qui rappelle où la réponse arrivera",
+        "visibleSeconds": 16,
+        "visible": "Corps du message affichant la mention Si vous y répondez, la réponse part vers : benevoles@example.org",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

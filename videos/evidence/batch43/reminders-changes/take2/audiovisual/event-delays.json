@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:04:43.109Z",
+  "videoSha256": "6a69c2365c42baf75d1241e2a6949f3138fbc7e25e2990af76ad72ed91686c5d",
+  "promptSha256": "0685e60d87ecce2e7a21003198ca9553e98693feac35f09887bbd44efbeb33c7",
+  "clipSha256": "13ea58a3719e914f96e12196dd3bb27d63a7530ae6ab5f35364eaf36a00b3dae",
+  "scene": "event-delays",
+  "review": {
+    "heardOpening": "Un événement peut avoir ses propres délais.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "choisissons Délais propres à cet événement.",
+        "visibleSeconds": 6.3,
+        "visible": "Sélection du bouton radio Délais propres à cet événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Préparons un rappel trois jours avant",
+        "visibleSeconds": 8.7,
+        "visible": "Saisie de 3 dans le champ Délai pour Rappel 1 avec unité jours",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "puis un autre deux heures avant, et enregistrons les rappels.",
+        "visibleSeconds": 11.9,
+        "visible": "Ajout du deuxième rappel réglé sur 2 heures puis clic sur Enregistrer les rappels",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "La ligne Prochain envoi indique le jour, l'heure et les personnes concernées.",
+        "visibleSeconds": 20.6,
+        "visible": "Affichage de la mention Prochain rappel avec la date, l'heure et le nombre de personnes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.2,
+        "spoken": "Revenons aux délais habituels et enregistrons",
+        "visibleSeconds": 29.5,
+        "visible": "Sélection de l'option Délais habituels et clic sur Enregistrer les rappels",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

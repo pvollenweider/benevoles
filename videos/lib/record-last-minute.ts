@@ -6,6 +6,7 @@ import { promisify } from "node:util"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { registrationToken } from "../../src/lib/token-vault"
+import { ORG_EMAIL_SCOPE_SENTENCE } from "../../src/lib/org-personal-page"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import type { Cue } from "./sentence-timing"
@@ -29,7 +30,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
   }
   const reg = (n: number) => db.registration.findUniqueOrThrow({ where: { id: `video-last-minute-registration-${n}` } })
   const inbox = async (): Promise<Mail[]> => (await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()).messages
-  const openNewMail = async (prior: Set<string>, recipient: string, expected: string[]) => {
+  const findNewMail = async (prior: Set<string>, recipient: string, expected: string[]) => {
     // Off-screen delivery ellipse: make only this fixture’s pending rows due, then use the real cron.
     await promisify(execFile)(process.execPath, ["--import", "tsx", "videos/tools/flush-last-minute-outbox.ts"], { env: process.env })
     let found: Mail | undefined
@@ -41,9 +42,27 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       if (!found) await page.waitForTimeout(250)
     }
     if (!found) throw new Error("Expected newly received actual email missing")
-    await go(`http://localhost:48026/view/${found.ID}`)
-    await page.frameLocator("iframe").getByText(expected[0], { exact: false }).filter({ visible: true }).first().waitFor()
     return found.ID
+  }
+  const showMail = async (id: string, expected: string) => {
+    await go(`http://localhost:48026/view/${id}`)
+    await page.frameLocator("iframe").getByText(expected, { exact: false }).filter({ visible: true }).first().waitFor()
+  }
+  const openNewMail = async (prior: Set<string>, recipient: string, expected: string[]) => {
+    const id = await findNewMail(prior, recipient, expected)
+    await showMail(id, expected[0])
+    return id
+  }
+  const showOrganisationLink = async () => {
+    const body = page.frameLocator("iframe")
+    const link = body.getByRole("link", { name: "Mes inscriptions", exact: true })
+    if (!(await link.getAttribute("href"))?.includes("/mes-inscriptions/")) throw new Error("Missing organisation link")
+    const scope = body.getByText(ORG_EMAIL_SCOPE_SENTENCE("Formation — imprévus"), { exact: true })
+    await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+    for (const field of [link, scope]) {
+      const box = await field.boundingBox()
+      if (!box || box.y < 264 || box.y + box.height > 800) throw new Error("Organisation link or scope is outside the Mailpit crop")
+    }
   }
   const registrations = async () => { await go(`${url}/registrations`) }
   const shifts = async () => { await go(`${url}/shifts`); await tap(page, page.getByRole("button", { name: "Liste", exact: true })) }
@@ -64,6 +83,9 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await at("Revenons dans les inscriptions côté"); await registrations()
       if ((await reg(0)).status !== "cancelled" || (await reg(1)).status !== "offered") throw new Error("Actual withdrawal and offer missing")
       await at("Ouvrons le vrai email reçu"); checks.offerMail = await openNewMail(prior, "video.last-minute.person.1@example.org", ["Accueil du matin"])
+      const offer = page.frameLocator("iframe").getByRole("link", { name: "Confirmer ma participation", exact: true })
+      const offerUrl = await offer.getAttribute("href")
+      if (!offerUrl || !/^\/waitlist\/[^/]+\/confirm$/.test(new URL(offerUrl).pathname)) throw new Error("The offer must keep its own confirmation link")
     })
     await scene("offer", async at => {
       await go(`${base}/my/${registrationToken.reveal(nicolas)}`)
@@ -144,17 +166,22 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await page.getByLabel("Créneau", { exact: true }).selectOption("video-last-minute-shift-1")
       await write(page.getByLabel(/^Objet(?: \*)?$/), "Un coup de main pour la logistique ?")
       await write(page.getByLabel(/^Message(?: \*)?$/), "Il reste une place de 12h à 14h. Connais-tu quelqu'un qui pourrait aider ? Merci !")
-      await at("Vérifions l'aperçu et le destinataire"); await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
+      await at("Ouvrons l'aperçu"); await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
+      await at("Passons à la confirmation")
       await tap(page, page.getByRole("dialog").getByRole("button", { name: /^Envoyer à/ }))
+      await at("Confirmons l'envoi")
       await tap(page, page.getByRole("dialog").getByRole("button", { name: "Confirmer l'envoi", exact: true }))
-      await at("Ouvrons le vrai email reçu."); checks.targetedMail = await openNewMail(prior, "video.last-minute.person.3@example.org", ["Connais-tu quelqu'un"])
+      const targetedMail = await findNewMail(prior, "video.last-minute.person.3@example.org", ["Connais-tu quelqu'un"])
+      await at("Ouvrons le vrai email reçu."); await showMail(targetedMail, "Connais-tu quelqu'un")
+      await at("Le bouton Mes inscriptions rassemble"); await showOrganisationLink()
+      checks.targetedMail = targetedMail
       await at("Ce message ne crée aucune")
-      await at("Revenons aux inscriptions et ouvrons"); await registrations()
+      await at("Ouvrons l'ajout manuel"); await registrations()
       await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
-      await at("Saisissons son prénom")
+      await at("Saisissons le prénom et le nom")
       await write(page.getByLabel(/^Prénom(?: \*)?$/), "Zoé")
       await write(page.getByLabel(/^Nom(?: \*)?$/), surnameOf("Zoé"))
-      await at("Renseignons ensuite la même adresse")
+      await at("Entrez ensuite l'adresse email")
       const email = page.getByLabel("Email", { exact: true })
       await tap(page, email)
       await email.fill("video.last-minute.person.2@example.org")
@@ -206,13 +233,15 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await at("Ouvrons le créneau concerné et")
       await tap(page, page.getByRole("row").filter({ hasText: "Réception du matériel" }).getByRole("button", { name: /^Modifier le créneau / }))
       await at("Décalons les deux heures, puis")
-      await at(0.35) /* final MP4 review locates this clause at 10.9 s of this unchanged 31.49 s chapter */
       await write(page.getByLabel(/^Début(?: \*)?$/), "14:30")
       await write(page.getByLabel(/^Fin(?: \*)?$/), "16:30")
       await at("L'application prévient les personnes déjà"); await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
       await page.getByRole("row").filter({ hasText: "Réception du matériel" }).getByText("14:30–16:30", { exact: true }).waitFor()
-      await at("Lisons l'ancien et le nouvel"); checks.changedMail = await openNewMail(prior, "video.last-minute.person.4@example.org", ["14:00–16:00", "14:30–16:30"])
-      await at("Un email envoyé ne prouve"); await shifts()
+      const changedMail = await findNewMail(prior, "video.last-minute.person.4@example.org", ["14:00–16:00", "14:30–16:30"])
+      await at("Lisons l'ancien et le nouvel"); await showMail(changedMail, "14:00–16:00")
+      await at("Le bouton Mes inscriptions ouvre"); await showOrganisationLink()
+      checks.changedMail = changedMail
+      await at("Revenons au planning"); await shifts()
       await page.getByRole("row").filter({ hasText: "Réception du matériel" }).scrollIntoViewIfNeeded()
     })
     await scene("cancel", async at => {
@@ -234,7 +263,10 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       if ((await reg(5)).status !== "cancelled" || (await reg(6)).status !== "cancelled" || (await reg(5)).checkedInAt?.getTime() !== priorAttendance.getTime()) throw new Error("Actual cancellation did not retain attendance")
       await at("Une demande en attente de"); await go(`${url}/log`)
       await page.locator("#panel-explore > div > div").filter({ hasText: "Caisse" }).first().scrollIntoViewIfNeeded()
-      await at("Si des présences ont déjà"); checks.cancelledMail = await openNewMail(prior, "video.last-minute.person.5@example.org", ["Caisse de la petite scène"])
+      const cancelledMail = await findNewMail(prior, "video.last-minute.person.5@example.org", ["Caisse de la petite scène"])
+      await at("Ouvrons le courrier d'annulation"); await showMail(cancelledMail, "Caisse de la petite scène")
+      await page.frameLocator("iframe").getByRole("link", { name: "Voir les créneaux disponibles", exact: true }).waitFor()
+      checks.cancelledMail = cancelledMail
       await at("Annuler n'est pas simplement fermer"); await registrations()
       checks.cancelledActiveAndRequested = true; checks.priorAttendancePreserved = true; checks.confirmedAndRequestedCaption = true
     })

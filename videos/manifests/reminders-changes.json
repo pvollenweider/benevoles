@@ -36,8 +36,8 @@
     },
     {
       "id": "manual-send",
-      "transcript": "Dans Messages, Envoyer le rappel demande une confirmation. Nous annulons une première fois, puis reprenons et confirmons le véritable envoi. Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
-      "fallbackDurationMs": 47000
+      "transcript": "Dans Messages, Envoyer le rappel demande une confirmation. Nous annulons une première fois. Reprenons le rappel. Confirmons le véritable envoi. Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne. Sous le bouton Mes inscriptions, la phrase précise que le lien couvre l’organisation entière et doit rester privé. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
+      "fallbackDurationMs": 57000
     },
     {
       "id": "organization",
@@ -56,8 +56,8 @@
     },
     {
       "id": "timing",
-      "transcript": "Les rappels partent autour de deux jours avant, autour de la veille, puis entre deux et quatre heures avant le début du créneau. Ce n'est pas une promesse d'envoi à une minute fixe. Les heures sont lues dans le fuseau de l'organisation, Europe Zurich ici. Voici les trois emails réellement reçus pour nos trois échéances : chacun retrouve son horaire local, le point de rendez-vous et les informations utiles à son poste.",
-      "fallbackDurationMs": 47000
+      "transcript": "Les rappels partent autour de deux jours avant, autour de la veille, puis entre deux et quatre heures avant le début du créneau. Ce n'est pas une promesse d'envoi à une minute fixe. Les heures sont lues dans le fuseau de l'organisation, Europe Zurich ici. Voici le rappel reçu deux jours avant. Le bénévole retrouve le nom de son poste, son horaire local et les indications de rendez-vous. Voici le rappel reçu la veille. Il confirme le lieu et l’heure de début. Voici le rappel du jour même. Comme dans les deux autres, le bouton Mes inscriptions ouvre la page commune à toute l’organisation. La phrase sous le bouton rappelle la confidentialité du lien.",
+      "fallbackDurationMs": 57000
     },
     {
       "id": "exclusions",
@@ -66,12 +66,12 @@
     },
     {
       "id": "changed",
-      "transcript": "Si un horaire change, ouvrez le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
-      "fallbackDurationMs": 48000
+      "transcript": "Si un horaire change, ouvrez le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. Le bouton Mes inscriptions ouvre toujours la page commune de l’organisation. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
+      "fallbackDurationMs": 58000
     },
     {
       "id": "cancelled",
-      "transcript": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues. Ouvrons les messages reçus puis revenons au planning. Rappeler, modifier, annuler : ce sont trois situations différentes. Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe : envoyé ne veut pas dire lu.",
+      "transcript": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues. Ouvrons le message du créneau confirmé. Le bénévole peut vérifier quel créneau est annulé. Ouvrons le message de la demande. Il précise que la place n’est plus réservée. Revenons au planning. Rappeler, modifier, annuler : ce sont trois situations différentes. Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe : envoyé ne veut pas dire lu.",
       "fallbackDurationMs": 48000
     }
   ],

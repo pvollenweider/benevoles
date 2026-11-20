@@ -49,7 +49,7 @@ async function metadata(file: string): Promise<AudioMetadata | null> {
 async function settle(page: Page) {
   // Public maps may keep tile requests open; the seven batch 22-7 journeys
   // assert their actual headings and controls after DOM and font readiness.
-  const publicRefresh = ["LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
+  const publicRefresh = ["EMAIL_DELIVERY_FAILURES", "EVENT_QUESTIONS", "LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
   await page.waitForLoadState(publicRefresh ? "domcontentloaded" : "networkidle")
   await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" })
   await page.evaluate(() => document.fonts?.ready)
@@ -197,11 +197,11 @@ async function fillVisibly(page: Page, field: Locator, value: string, pauseMs = 
 }
 
 async function main() {
-  // The canonical proves the deployment URL: explicit HTTP capture origins for batch 25-2,
-  // public video domain for the other journeys. Visible local links still fail final review.
+  // The canonical proves the deployment URL: explicit HTTP for local captures
+  // that need it, the public video domain for the other journeys.
   const manifest = await loadManifest(reference!)
   const probeHtml = await (await fetch(`${localBaseUrl}${PUBLIC_URL_PROBE_PATH}`)).text()
-  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id) && !publicOperator
+  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION", "EVENT_QUESTIONS", "EMAIL_DELIVERY_FAILURES", "REGISTRATION_MONITOR_FOLLOWUP"].includes(manifest.id) && !publicOperator
   if (localOriginCapture ? !probeHtml.includes(`<link rel="canonical" href="${baseUrl}${PUBLIC_URL_PROBE_PATH}"`) : !servedWithPublicUrl(probeHtml)) throw new Error("Capture deployment origin does not match the expected canonical URL")
   const product = await pinProductBuildForCapture(localBaseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
@@ -1747,6 +1747,16 @@ async function main() {
         if (await timeline.getAttribute("aria-pressed") !== "true") throw new Error("Timeline view was not selected")
       })
     } else if (slug === "shift-waitlist-offer") {
+      const waitlistMailApi = "http://localhost:48026/api/v1/messages?limit=1000"
+      type WaitlistMail = { ID: string; Subject: string; To: { Address: string }[] }
+      const readWaitlistInbox = async () => {
+        const response = await page.request.get(waitlistMailApi)
+        if (!response.ok()) throw new Error("Local waitlist mailbox unavailable")
+        return (await response.json() as { messages: WaitlistMail[] }).messages
+      }
+      const priorIds = new Set((await readWaitlistInbox()).map(mail => mail.ID))
+      let offerPath = ""
+      let waitlistMailId = ""
       const waitlistShift = await page.evaluate(async (eventId) => {
         const response = await fetch(`/api/admin/events/${eventId}`)
         if (!response.ok) throw new Error(`Cannot load event: ${response.status}`)
@@ -1808,7 +1818,25 @@ async function main() {
         await at("Une offre est envoyée à la première personne en attente")
         await tap(page, page.getByRole("button", { name: "Oui, annuler" }))
         await page.getByText(/annulée/i).first().waitFor()
-        await at(0.78) /* mid-sentence */
+        let message: WaitlistMail | undefined
+        for (let attempt = 0; attempt < 40 && !message; attempt++) {
+          message = (await readWaitlistInbox()).find(mail =>
+            !priorIds.has(mail.ID) && mail.Subject.includes("Une place s'est libérée") &&
+            mail.To.some(to => to.Address === "camille.rochat@example.org"))
+          if (!message) await page.waitForTimeout(250)
+        }
+        if (!message) throw new Error("Expected a newly delivered event offer for Camille")
+        await at("Ouvrons le courriel reçu par Camille")
+        await page.goto(`http://localhost:48026/view/${encodeURIComponent(message.ID)}`)
+        const body = page.frameLocator("iframe")
+        const offer = body.getByRole("link", { name: "Confirmer ma participation", exact: true })
+        await offer.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+        const box = await offer.boundingBox()
+        const href = await offer.getAttribute("href")
+        if (!box || box.y < 264 || box.y + box.height > 800 || !href) throw new Error("Event offer must be readable within the mail crop")
+        offerPath = new URL(href).pathname
+        if (offerPath !== "/waitlist/demo-waitlist-camille-0001/confirm") throw new Error("Offer link must open Camille’s single waitlist place")
+        waitlistMailId = message.ID
       })
 
       await scene("volunteer", async (at) => {
@@ -1820,7 +1848,10 @@ async function main() {
         await at(0.26) /* mid-sentence */
         await offeredCard.getByText(/Confirme avant/).scrollIntoViewIfNeeded()
         await at("Le lien Prendre la place ouvre")
-        await tap(page, offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }))
+        const offer = offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true })
+        const href = await offer.getAttribute("href")
+        if (!href || new URL(href, baseUrl).pathname !== offerPath) throw new Error("Personal page and email must open the same offer")
+        await tap(page, offer)
         await page.getByRole("button", { name: "Prendre la place", exact: true }).waitFor()
         const unchangedOffer = await (await page.request.get(`${baseUrl}/api/public/registrations/demo-waitlist-camille-0001`)).json()
         if (!unchangedOffer.registrations.some((registration: { status: string; shift: { id: string } }) => registration.status === "offered" && registration.shift.id === waitlistShift.id)) throw new Error("Opening an offer must leave it offered")
@@ -1849,6 +1880,7 @@ async function main() {
         await at(0.62) /* mid-sentence */
         await offeredRow.getByText("Place proposée", { exact: true }).scrollIntoViewIfNeeded()
       })
+      await writeFile(path.join(dir, "waitlist-offer-checks.json"), JSON.stringify({ mailId: waitlistMailId, currentOfferDelivered: true, eventSpecificOfferLinkVerified: true, offeredStateUnchangedByOpening: true }, null, 2) + "\n")
     } else if (slug === "shift-approval") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
       await scene("welcome", async () => {
@@ -2913,12 +2945,28 @@ async function main() {
           const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string; Subject: string; To: { Address: string }[]; Created: string }[] }
           const mails = inbox.messages.filter(m => m.Subject.includes("Ton briefing pour Buvette") && Date.parse(m.Created) >= history.createdAt.getTime() - 1000)
           if (mails.length !== recipients.length || mails.filter(m => m.To.some(t => t.Address === "lea.giroud@example.org")).length !== 1) throw new Error("Actual campaign mail deduplication failed")
-          for (const recipient of recipients.slice(0, 2)) {
-            await at("Dans notre boîte de test, ouvrons les emails")
+          const { ORG_EMAIL_SCOPE_SENTENCE } = await import("../../src/lib/org-personal-page")
+          for (const [index, recipient] of recipients.slice(0, 2).entries()) {
+            if (index === 0) await at("Dans la boîte de test")
+            else await at("Dans le deuxième email")
             const mail = mails.find(m => m.To.some(t => t.Address === recipient.volunteer.email)); if (!mail) throw new Error("Recipient mail missing")
             await openRegistrationTakeMailbox(page, dir, mail.ID, 'subject:"Ton briefing pour Buvette" "Fête du village de Montvert"')
-            const text = await page.frameLocator("iframe").locator("body").innerText()
+            const body = page.frameLocator("iframe")
+            const text = await body.locator("body").innerText()
             if (!text.includes(recipient.volunteer.firstName) || !text.includes("Prends aussi une gourde")) throw new Error("Actual personalized mail missing content")
+            const link = body.getByRole("link", { name: "Mes inscriptions", exact: true })
+            if (!(await link.getAttribute("href"))?.includes("/mes-inscriptions/")) throw new Error("Targeted message is missing the organisation link")
+            const scope = body.getByText(ORG_EMAIL_SCOPE_SENTENCE("Fêtes de Montvert"), { exact: true })
+            await scope.waitFor()
+            if (index === 1) {
+              await at("Le bouton Mes inscriptions")
+              await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+              for (const field of [link, scope]) {
+                const box = await field.boundingBox()
+                if (!box || box.y < 264 || box.y + box.height > 800) throw new Error("Targeted email content is outside the Mailpit crop")
+              }
+              checks.organisationLinkVisibleInEmail = true
+            }
           }
           await at("La section Messages programmés est séparée"); await page.goto(url); await settle(page)
           await page.getByRole("heading", { name: "Messages programmés", exact: true }).scrollIntoViewIfNeeded()
@@ -3433,32 +3481,48 @@ async function main() {
       const originalInvites = await db.memberInvite.findMany({ where: { eventId: featureEventId }, select: { id: true, volunteerId: true, volunteer: { select: { email: true } }, ...linkToken.select } })
       const originalTokens = new Map(originalInvites.map(i => [i.id, linkToken.reveal(i)]))
       await db.$disconnect()
-      const openMail = async (subject: string, email?: string) => {
-        const response = await page.request.get("http://localhost:48026/api/v1/messages")
-        const inbox = await response.json() as { messages: { ID: string; To: { Address: string }[]; Subject: string; Created: string }[] }
-        const mail = inbox.messages.filter(m => m.Subject.includes(subject) && (!email || m.To.some(t => t.Address === email))).sort((a, b) => Date.parse(b.Created) - Date.parse(a.Created))[0]
-        if (!mail) throw new Error("Real reminder email not found")
-        await page.goto(`http://localhost:48026/view/${mail.ID}`); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
+      const annaEmail = "anna.buhler@example.org"
+      const findAnnaMail = async (subject: string) => {
+        for (let attempt = 0; attempt < 32; attempt++) {
+          const response = await page.request.get("http://localhost:48026/api/v1/messages?limit=500")
+          if (!response.ok()) throw new Error("Local reminder mailbox unavailable")
+          const inbox = await response.json() as { messages: { ID: string; To: { Address: string }[]; Subject: string }[] }
+          const matches = inbox.messages.filter(m => m.Subject.includes(subject) && m.To.some(t => t.Address === annaEmail))
+          if (matches.length > 1) throw new Error("Earlier reminder messages for Anna were not cleared")
+          if (matches.length === 1) return matches[0].ID
+          await page.waitForTimeout(250)
+        }
+        throw new Error("Real reminder email for Anna not found")
+      }
+      const openMail = async (id: string, button: string) => {
+        await page.goto(`http://localhost:48026/view/${id}`)
+        const body = page.frameLocator("iframe")
+        const link = body.getByRole("link", { name: button, exact: true })
+        await link.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+        const box = await link.boundingBox()
+        const href = await link.getAttribute("href")
+        if (!box || box.y < 264 || box.y + box.height > 800 || !href) throw new Error("The invitation button must fit in the Mailpit crop")
+        return new URL(href)
       }
       await scene("welcome", async () => { await page.screencast.showChapter(manifest.title, { description: "Un rappel utile, sans pression", duration: 2_300 }) })
       await scene("statuses", async at => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations`); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
         const search = page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
-        await fillVisibly(page, search, "Anna")
+        await at("Anna est en liste d'attente"); await fillVisibly(page, search, "Anna")
         await page.getByRole("row").filter({ hasText: "Anna" }).waitFor()
-        await at(0.26) /* mid-sentence */; await fillVisibly(page, search, "Tom")
-        await at(0.42) /* mid-sentence */; await fillVisibly(page, search, "Lucas")
+        await at("Tom a reçu une offre"); await fillVisibly(page, search, "Tom")
+        await at("Lucas attend la validation"); await fillVisibly(page, search, "Lucas")
         await page.getByRole("row").filter({ hasText: "Lucas" }).getByText("Demande à traiter", { exact: true }).first().waitFor()
         await at("Une autre a déjà une"); await fillVisibly(page, search, "Camille")
       })
       await scene("confirm", async at => {
         await page.goto(adminUrl); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
         const button = page.getByRole("button", { name: /^Relancer .*sans créneau/ })
-        await tap(page, button)
+        await at("Le bouton Relancer les personnes sans créneau"); await tap(page, button)
         await at("Vous pouvez encore annuler.")
         await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Annuler", exact: true }))
-        await at("Pour cette démonstration, nous confirmons"); await tap(page, button)
-        await at("Pour cette démonstration, nous confirmons")
+        await at("Rouvrons le récapitulatif"); await tap(page, button)
+        await at("Confirmons l'envoi réel")
         const response = page.waitForResponse(r => r.url().endsWith("/invitations/remind") && r.request().method() === "POST")
         await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Relancer", exact: true }))
         const result = await response
@@ -3468,23 +3532,22 @@ async function main() {
         await page.getByText(`${sent.queued} relances en cours d'envoi.`, { exact: true }).waitFor()
       })
       await scene("link", async at => {
+        const reminderMail = await findAnnaMail("On a besoin de toi")
         await at("Ouvrons l'email reçu dans")
-        await openMail("On a besoin de toi", "anna.buhler@example.org")
-        const href = await page.frameLocator("iframe").getByRole("link", { name: /Voir les missions/ }).getAttribute("href")
-        if (!href) throw new Error("Reminder has no real invitation link")
-        const token = new URL(href).searchParams.get("token")
-        const annaInvite = originalInvites.filter(invite => invite.volunteer.email === "anna.buhler@example.org")
+        const invitation = await openMail(reminderMail, "Voir les missions et m'inscrire")
+        const token = invitation.searchParams.get("token")
+        const annaInvite = originalInvites.filter(invite => invite.volunteer.email === annaEmail)
         if (annaInvite.length !== 1 || !token || token !== originalTokens.get(annaInvite[0].id)) throw new Error("Reminder link must retain the exact recipient's original invitation token")
         checks.originalInvitationTokenRetained = true
-        await at(0.67) /* mid-sentence */
         const current = await summary()
         if (JSON.stringify(current) !== JSON.stringify(initialSummary)) throw new Error("Reminder changed participation counts")
       })
       await scene("message", async at => {
         await page.goto(adminUrl); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
-        await tap(page, page.getByRole("link", { name: /^Écrire un message .*sans créneau/ }))
+        await at("utilisez Écrire un message"); await tap(page, page.getByRole("link", { name: /^Écrire un message .*sans créneau/ }))
         await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
         if (!await page.getByRole("radio", { name: "Les invités sans créneau confirmé", exact: true }).isChecked()) throw new Error("Wrong prefilled message audience")
+        await at("Nous saisissons un objet clair")
         await typeNaturally(page, page.getByRole("textbox", { name: "Objet", exact: true }), "Un horaire qui te convient")
         await typeNaturally(page, page.getByRole("textbox", { name: "Message", exact: true }), "Tu peux choisir un horaire si tu le souhaites. Merci !")
         await at("Avant d'envoyer, prévisualisez")
@@ -3492,27 +3555,31 @@ async function main() {
         await page.getByRole("dialog", { name: "Aperçu de l'email", exact: true }).waitFor()
       })
       await scene("waitlist", async at => {
-        await at("Vous pouvez rappeler qu'elles n'ont")
+        await at("Revenons au message")
         await tap(page, page.getByRole("dialog").getByRole("button", { name: "Retour au message", exact: true }))
         await page.getByText(/dont .*en liste d'attente/).scrollIntoViewIfNeeded()
         await at("Vous pouvez rappeler qu'elles n'ont")
         await fillVisibly(page, page.getByRole("textbox", { name: "Message", exact: true }), "Tu peux choisir un horaire si tu le souhaites. Si tu es en attente, ta demande reste enregistrée. Merci !")
-        await at("c'est vous qui choisissez le")
+        await at("Vérifions le nouvel aperçu")
         await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
       })
       await scene("send", async at => {
         await at("Une fois le groupe et")
         await tap(page, page.getByRole("dialog", { name: "Aperçu de l'email", exact: true }).getByRole("button", { name: /^Envoyer à/ }))
+        await at("Confirmons avec le bouton")
         const response = page.waitForResponse(r => r.url().endsWith(`/events/${featureEventId}/message`) && r.request().method() === "POST" && !r.request().postDataJSON().dryRun)
         await tap(page, page.getByRole("dialog", { name: "Confirmer l'envoi", exact: true }).getByRole("button", { name: "Confirmer l'envoi", exact: true }))
         const result = await response
         if (!result.ok()) throw new Error("Targeted reminder failed")
         checks.targetedMessage = await result.json()
         await page.getByRole("heading", { name: /^Message envoyé à/ }).waitFor()
+        const targetedMail = await findAnnaMail("Un horaire qui te convient")
         await at("Nous ouvrons le vrai message")
-        await openMail("Un horaire qui te convient")
-        await at(0.38) /* mid-sentence: show the delivered email before the same sentence introduces history */
-        // The same sentence announces the email, then the administrative history.
+        const signup = await openMail(targetedMail, "Choisir mes créneaux")
+        const annaInvite = originalInvites.find(invite => invite.volunteer.email === annaEmail)
+        if (!annaInvite || signup.pathname !== "/fete-du-village" || signup.searchParams.get("token") !== originalTokens.get(annaInvite.id)) throw new Error("The targeted reminder must keep Anna's event invitation link")
+        checks.targetedInvitationLinkRetained = true
+        await at("Passons à l'historique")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
         await page.getByText("Un horaire qui te convient", { exact: true }).first().scrollIntoViewIfNeeded()
         await at("Un email remis au serveur")
@@ -3932,13 +3999,20 @@ async function main() {
             }
             if (!mail) throw new Error("Fresh actual confirmation email required; old mailbox messages cannot substitute")
             await current.goto(`http://localhost:48026/view/${encodeURIComponent(mail.ID)}`); await settle(current)
+            const { ORG_EMAIL_SCOPE_SENTENCE } = await import("../../src/lib/org-personal-page")
             const frame = current.frameLocator("iframe")
-            const anchor = frame.locator('a[href*="/my/"]').first()
-            await anchor.waitFor(); await anchor.scrollIntoViewIfNeeded()
+            const anchor = frame.getByRole("link", { name: "Mes inscriptions", exact: true })
+            const scope = frame.getByText(ORG_EMAIL_SCOPE_SENTENCE(owned.name), { exact: true })
+            await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+            for (const field of [anchor, scope]) {
+              const box = await field.boundingBox()
+              if (!box || box.y < 264 || box.y + box.height > 800) throw new Error("Organisation link and scope must fit inside the mail crop")
+            }
             const rawHref = await anchor.getAttribute("href")
-            if (!rawHref) throw new Error("Real received email lacks its personal link")
+            if (!rawHref) throw new Error("Real confirmation email lacks its organisation link")
             const actual = new URL(rawHref)
-            if (!(actual.hostname === "formation-questions.video.invalid" || actual.hostname === "formation-questions.benevol.app" || actual.origin === baseUrl) || !/^\/my\/[^/]+$/.test(actual.pathname)) throw new Error("Received personal link is outside the fictional organization")
+            const allowedHost = ["formation-questions.video.invalid", "formation-questions.benevol.app"].includes(actual.hostname) || actual.origin === baseUrl
+            if (!allowedHost || !/^\/mes-inscriptions\/[^/]+$/.test(actual.pathname)) throw new Error("Received organisation link is outside the fictional organisation")
             const local = new URL(actual.pathname, baseUrl)
             local.searchParams.set("org", "formation-questions")
             observations.freshEmail = { mailId: mail.ID, exactRecipient: recipient, messageProducedDuringThisTake: true, trainingDomainReplayedLocally: actual.origin !== baseUrl }
@@ -5162,8 +5236,9 @@ async function main() {
         await page.screencast.showChapter("Une équipe autonome et maîtrisée", { description: "Des comptes nominatifs, des droits adaptés", duration: 2_300 })
       })
     } else if (slug === "org-email-settings") {
-      if (localBaseUrl !== "http://localhost:43102" || (baseUrl !== "http://localhost:43102" && baseUrl !== "https://formation-email.benevol.app") || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
+      if (!["http://localhost:43100", "http://localhost:43102"].includes(localBaseUrl) || (baseUrl !== localBaseUrl && baseUrl !== "https://formation-email.benevol.app") || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
       const emailEventId = "video-foundation-email-event-0"
+      const emailChecks: Record<string, unknown> = {}
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Rappels, alertes et réponses", duration: 2_300 })
@@ -5178,11 +5253,11 @@ async function main() {
         if (!box) throw new Error("Reminder controls are not visible")
         const detailStart = Math.round(performance.now() - startedAt)
         detailFrames.push({ startMs: detailStart, endMs: detailStart + 1, x: Math.max(0, Math.min(640, Math.floor(box.x - 25))), y: Math.max(0, Math.min(400, Math.floor(box.y - 35))), width: 640, height: 400 })
-        await at("Décochons puis recochons le premier rappel")
+        await at("Décochons le premier rappel")
         const j2 = page.getByRole("checkbox", { name: /Rappel J-2/ })
-        if (await j2.isChecked()) await tap(page, j2)
-        await at("Décochons puis recochons le premier rappel")
-        await page.waitForTimeout(650)
+        if (!await j2.isChecked()) throw new Error("Fresh fixture must start with the first reminder enabled")
+        await tap(page, j2)
+        await at("Recochons-le")
         await tap(page, j2)
         await at(0.70)
         await page.getByText(/un événement peut en plus couper tous ses rappels/).scrollIntoViewIfNeeded()
@@ -5193,18 +5268,19 @@ async function main() {
         const enabled = page.getByRole("checkbox", { name: "Rappels automatiques", exact: true })
         await enabled.scrollIntoViewIfNeeded()
         if (!await enabled.isChecked()) throw new Error("Fresh email fixture must start with event reminders enabled")
-        await at(0.22) /* mid-sentence: turn off the switch while explaining that it cuts this event's reminders */
+        await at("Décochez la case Rappels automatiques")
         const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
         await tap(page, enabled)
         if (!(await saved).ok()) throw new Error("Event reminder disable was not saved")
         await page.getByText(/^Modifications enregistrées à/).waitFor()
+        await at("Son onglet Messages")
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/message`); await settle(page)
         const actualSummary = page.getByText("Rappels automatiques coupés pour cet événement", { exact: true })
         await actualSummary.waitFor(); await actualSummary.scrollIntoViewIfNeeded()
         await page.waitForTimeout(500)
         const summaryBox = await actualSummary.boundingBox()
         if (!summaryBox || summaryBox.y < 0 || summaryBox.y + summaryBox.height > 800) throw new Error("Actual reminder summary is outside the captured viewport")
-        await at("Son onglet Messages")
+        emailChecks.eventReminderDisabledAndReported = true
       })
 
       await scene("admin-alert", async (at) => {
@@ -5244,7 +5320,7 @@ async function main() {
         await replyTo.fill("")
         await replyTo.pressSequentially("benevoles@example.org", { delay: 115 })
         if (await replyTo.inputValue() !== "benevoles@example.org") throw new Error("Reply address must be fully entered before showing its result")
-        await at(0.72)
+        await at("Cette adresse apparaît aussi")
         await page.getByText(/Cette adresse figure aussi sur la page « Mes inscriptions »/).scrollIntoViewIfNeeded()
       })
 
@@ -5273,11 +5349,17 @@ async function main() {
           await page.waitForTimeout(200)
         }
         if (!mailId) throw new Error("Actual test message missing from isolated SMTP inbox")
-        const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mailId}`)).json() as { Text: string; ReplyTo?: { Address: string }[]; Headers?: Record<string, string[]> }
-        if (!detail.Text.includes("benevoles@example.org")) throw new Error("Test message does not use saved reply-to address")
+        const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mailId}`)).json() as {
+          Text: string; From: { Address: string }; To: { Address: string }[]; ReplyTo: { Address: string }[]
+        }
+        if (detail.To.length !== 1 || detail.To[0].Address !== "video.email.owner@example.org") throw new Error("Test message must only reach the owner")
+        if (!detail.Text.includes("benevoles@example.org") || detail.ReplyTo.length !== 1 || detail.ReplyTo[0].Address !== "benevoles@example.org" || !detail.From.Address) throw new Error("Test message headers or body differ from the saved configuration")
         await at("Ouvrons le message reçu")
         await page.goto(`http://localhost:48026/view/${mailId}`); await settle(page)
-        await page.frameLocator("iframe").locator("body").getByText(/Cet email vérifie l'envoi/).filter({ visible: true }).waitFor()
+        const body = page.frameLocator("iframe").locator("body")
+        await body.getByText(/Cet email vérifie l'envoi/).filter({ visible: true }).waitFor()
+        if (await body.locator('a[href*="/mes-inscriptions/"], a[href*="/my/"]').count()) throw new Error("The owner test must not contain a volunteer's personal link")
+        emailChecks.ownerTest = { mailId, ownerOnly: true, sender: detail.From.Address, replyTo: detail.ReplyTo[0].Address, replyAddressInBody: true, noPersonalLink: true }
         // The assembler frames the real sender/reply-to rows and body together, excluding the client date and technical controls.
       })
 
@@ -5288,6 +5370,7 @@ async function main() {
         await page.getByRole("heading", { name: "Emails envoyés", exact: true }).scrollIntoViewIfNeeded()
         await page.getByRole("row").filter({ hasText: "video.email.owner@example.org" }).first().waitFor()
       })
+      await writeFile(path.join(dir, "email-settings-checks.json"), JSON.stringify(emailChecks, null, 2) + "\n")
     } else if (slug === "organizer-create-publish") {
       let organizerEventId = ""
       let organizerPublicUrl = ""
@@ -5719,7 +5802,8 @@ async function main() {
         await at(0.28) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: /Accepter la demande de/ }).first())
         await page.getByRole("dialog").waitFor()
-        await at("Ici, on referme simplement la fenêtre")
+        await at("Ici, refermons la fenêtre")
+        await page.waitForTimeout(650)
         await tap(page, page.getByRole("button", { name: "Annuler" }))
       })
 
@@ -5727,17 +5811,22 @@ async function main() {
       await scene("filters", async (at) => {
         await at("Quand la liste grandit")
         const roleFilter = page.getByLabel("Filtrer par poste")
+        await page.waitForTimeout(450)
+        await tap(page, roleFilter)
+        await roleFilter.press("Escape")
         await roleFilter.selectOption("Buvette")
         const shiftFilter = page.getByRole("combobox", { name: "Filtrer par créneau", exact: true })
+        await at("Précisez le créneau")
         await tap(page, shiftFilter)
         await tap(page, page.getByRole("option").filter({ visible: true }).nth(1))
+        await at("Vous pouvez aussi isoler les demandes")
         await tap(page, shiftFilter)
         await tap(page, page.getByRole("option", { name: "Tous les créneaux", exact: true }).filter({ visible: true }))
         await roleFilter.selectOption("")
         await tap(page, page.getByLabel(/Demandes à traiter/))
         await tap(page, page.getByLabel(/Demandes à traiter/))
         await roleFilter.selectOption("Buvette")
-        await at(0.42) /* mid-sentence */
+        await at("Enfin, utilisez la recherche")
         const registrationSearch = page.locator("#reg-search")
         await fillVisibly(page, registrationSearch, "Camille")
         await at("En quelques secondes, vous isolez")
@@ -5748,7 +5837,7 @@ async function main() {
       await scene("actions", async (at) => {
         const selectCamille = page.getByLabel(/Sélectionner l'inscription de Camille Rochat/).first()
         await tap(page, selectCamille)
-        await at(0.42) /* mid-sentence */
+        await at("Sélectionnez plusieurs lignes")
         await tap(page, page.getByLabel(/Sélectionner l'inscription de Camille Rochat/).nth(1))
         await page.getByRole("group", { name: "Actions sur la sélection" }).scrollIntoViewIfNeeded()
         await at(0.78) /* mid-sentence */
@@ -5803,8 +5892,11 @@ async function main() {
           throw new Error(`Message preview did not open. Alerts: ${alerts.join(" | ") || "none"}. Form: ${formText.slice(0, 800)}`)
         }
         await at("La confirmation finale évite les")
+        const preview = page.getByRole("dialog", { name: "Aperçu de l'email" })
+        await tap(page, preview.getByRole("button", { name: /^Envoyer à / }))
+        await page.getByRole("dialog", { name: "Confirmer l'envoi" }).waitFor()
       })
-      await tap(page, page.getByRole("button", { name: "Retour au message" }))
+      await tap(page, page.getByRole("dialog", { name: "Confirmer l'envoi" }).getByRole("button", { name: "Annuler", exact: true }))
 
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("reminders", async (at) => {

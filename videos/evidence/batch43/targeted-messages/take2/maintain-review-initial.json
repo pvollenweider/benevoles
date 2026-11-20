@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:28:48.809Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "95ed5c2ec31ba24a7744499fdd6f172f1cf60cedb1dc074daabaec6f63be3cca",
+  "clipSha256": "00efb8a8a8ff168e2e0ee5eb5a755da3e4023a8ddcef61230105c5167ebcc7ff",
+  "scene": "maintain",
+  "review": {
+    "heardOpening": "Les modèles peuvent évoluer avec votre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ouvrez Modifier, ajustez le nom ou le texte et enregistrez.",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur Modifier, modification du nom du modèle puis clic sur Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "La suppression demande une confirmation : vous pouvez encore annuler.",
+        "visibleSeconds": 9,
+        "visible": "Clic sur Supprimer et affichage de la boîte de dialogue avec bouton Annuler",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "gardez le même réflexe : choisir les bonnes personnes",
+        "visibleSeconds": 25.5,
+        "visible": "Affichage tardif de la page Événements > Messages avec le choix des destinataires",
+        "sync": "late",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "Désynchronisation majeure à partir de 00:16 : la voix décrit les étapes d'envoi d'un briefing (choix des personnes, texte, confirmation, résultat) alors que l'écran reste bloqué sur la liste des modèles jusqu'à 00:25, avant de basculer brutalement sans manipulation visible."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un ton bienveillant."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

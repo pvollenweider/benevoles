@@ -45,7 +45,7 @@
     },
     {
       "id": "release",
-      "transcript": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures au maximum, sans dépasser le début du créneau, pour accepter depuis son lien personnel. Une place libérée moins d’une heure avant le début n’est plus proposée.",
+      "transcript": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Ouvrons le courriel reçu par Camille. Le bouton Confirmer ma participation ouvre cette offre précise. Elle dispose de vingt-quatre heures au maximum, sans dépasser le début du créneau, pour répondre. Une place libérée moins d’une heure avant le début n’est plus proposée.",
       "fallbackDurationMs": 24000
     },
     {

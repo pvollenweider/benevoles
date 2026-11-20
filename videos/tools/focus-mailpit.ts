@@ -12,7 +12,7 @@ import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 const exec = promisify(execFile)
 export async function focusMailpit(reference: string) {
   const manifest = await loadManifest(reference)
-  assert(["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id))
+  assert(["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "EVENT_QUESTIONS", "SHIFT_WAITLIST_OFFER", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id))
   const dir = videoDir(manifest.slug), file = path.join(dir, "timeline.json")
   const original = await readFile(file)
   const timeline = JSON.parse(original.toString()) as Timeline
@@ -31,23 +31,41 @@ export async function focusMailpit(reference: string) {
     if (isMailpit && start === null) start = index * 40
     if (!isMailpit && start !== null) { frames.push({ startMs: start, endMs: index * 40 }); start = null }
   }
-  assert(frames.length >= (["TARGETED_MESSAGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "SHIFT_ROSTER_VISIBILITY", "SHIFT_SWAPS"].includes(manifest.id) ? 1 : 2) && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
+  assert(frames.length >= (["TARGETED_MESSAGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "SHIFT_ROSTER_VISIBILITY", "SHIFT_SWAPS", "EVENT_QUESTIONS", "SHIFT_WAITLIST_OFFER"].includes(manifest.id) ? 1 : 2) && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
   const holds: NonNullable<Timeline["mailpitHolds"]> = []
   if (manifest.id === "MEMBERS_REMINDERS") {
     const send = timeline.cues.find(cue => cue.id === "send")!
     const mail = frames.find(frame => frame.startMs >= send.startMs && frame.endMs <= send.endMs)
-    const next = timeline.anchors?.find(anchor => anchor.segmentId === "send" && anchor.phrase === "Un email remis au serveur")
-    assert(mail && next, "Actual delivered-message interval and history sentence anchor required")
-    if (mail.endMs - mail.startMs < 1500 && next.cueMs > mail.endMs) {
-      assert(next.cueMs - mail.endMs < 6000)
-      assert(!timeline.inputEvents?.some(event => event.atMs >= mail.endMs - 40 && event.atMs < next.cueMs), "Never cover a real click or key with a still frame")
-      holds.push({ sourceMs: mail.endMs - 40, startMs: mail.endMs - 40, endMs: Math.round(send.startMs + (send.endMs - send.startMs) * 0.38) })
-    }
+    assert(mail && mail.endMs - mail.startMs >= 5000, "Keep the real targeted reminder visible for at least five seconds")
   }
   await mkdir(path.join(dir, "review"), { recursive: true })
   if (!timeline.mailpitFocusFrames?.length) await writeFile(path.join(dir, "review/timeline-before-mailpit-focus.json"), original)
-  await writeFile(file, JSON.stringify({ ...timeline, mailpitFocusFrames: frames, mailpitHolds: holds, ...(["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? { mailpitBodyOnly: true } : {}) }, null, 2) + "\n")
-  await writeFile(path.join(dir, "review/mailpit-focus-proof.json"), JSON.stringify({ sourceSha256, frames, holds, sampling: "Actual toolbar RGB every frame at 25 fps", crop: ["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? (["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? (["FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION"].includes(manifest.id) ? { x: 320, y: 312, width: 960, height: 488 } : { x: 320, y: 264, width: 960, height: 536 }) : { x: 320, y: 224, width: 960, height: 576 }) : { x: 320, y: 0, width: 960, height: 800 }, note: ["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? "Actual message body cropped below Mailpit headers: its fixed English date and unrelated inbox excluded. No email text or product state changed; raw capture retained. No still holds." : "Only unrelated inbox sidebar excluded. Real email headers/body and raw capture retained. No mailbox message deleted. A short delivered-email shot may hold its last actual frame until the history point in the same spoken sentence, only when no click/key is covered." }, null, 2))
+  const belowHeaders = [
+    "TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS",
+    "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "SHIFT_SWAPS", "SECTOR_LEADERS",
+    "PRIVACY_PERSONAL_LINKS", "MEMBERS_REMINDERS", "EVENT_QUESTIONS", "SHIFT_WAITLIST_OFFER", "SHIFT_ROSTER_VISIBILITY",
+  ]
+  const tallHeaders = ["FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION"]
+  let top = 0
+  if (belowHeaders.includes(manifest.id)) top = 264
+  if (tallHeaders.includes(manifest.id)) top = 312
+  if (manifest.id === "PLATFORM_INTERNAL_ADMINISTRATION") top = 224
+  await writeFile(file, JSON.stringify({
+    ...timeline,
+    mailpitFocusFrames: frames,
+    mailpitHolds: holds,
+    ...(top ? { mailpitBodyOnly: true } : {}),
+  }, null, 2) + "\n")
+  await writeFile(path.join(dir, "review/mailpit-focus-proof.json"), JSON.stringify({
+    sourceSha256,
+    frames,
+    holds,
+    sampling: "Actual toolbar RGB every frame at 25 fps",
+    crop: { x: 320, y: top, width: 960, height: 800 - top },
+    note: top
+      ? "Actual message body cropped below Mailpit headers: its fixed English date and unrelated inbox excluded. No email text or product state changed; raw capture retained. No still holds."
+      : "Only unrelated inbox sidebar excluded. Real email headers/body and raw capture retained. No mailbox message deleted.",
+  }, null, 2))
   console.log(`${manifest.id}: ${frames.length} real Mailpit intervals focused`)
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) focusMailpit(process.argv[2]).catch(error => { console.error(error); process.exitCode = 1 })

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:40:57.277Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "26ca4f2224a98e2e77fd0d618ea9bd8939adb0d290f68ebcef8ad393cf1c809a",
+  "clipSha256": "91f2d14807fb3fa4902e6904a284e3462b5d9f52435d6166799d51d570d18cd4",
+  "scene": "withdrawal",
+  "review": {
+    "heardOpening": "Aline ne peut plus venir à l'accueil.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "elle annule son inscription.",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur « Oui, annuler » dans la fenêtre modale de confirmation d'annulation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Revenons dans les inscriptions côté organisation.",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de la page de gestion des Inscriptions de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "Son inscription n'est plus une confirmation active.",
+        "visibleSeconds": 15,
+        "visible": "La ligne d'Aline Martin apparaît barrée avec la mention « Annulé par elle-même ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23,
+        "spoken": "Ouvrons le vrai email reçu par Nicolas.",
+        "visibleSeconds": 24.5,
+        "visible": "Affichage de l'email adressé à Nicolas indiquant qu'une place s'est libérée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.3,
+        "spoken": "Le bouton Confirmer ma participation concerne cette seule place.",
+        "visibleSeconds": 29,
+        "visible": "Bouton bleu « Confirmer ma participation » visible dans le corps de l'email.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

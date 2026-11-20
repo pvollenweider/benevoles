@@ -1,0 +1,174 @@
+{
+  "checkedAt": "2026-11-19T19:57:06.432Z",
+  "audiovisualValidation": false,
+  "pushReceptionVerified": false,
+  "perEventToggleAvailableInForm": true,
+  "messageAutoSaved": true,
+  "manualReminder": {
+    "sent": 3,
+    "cancelledWithoutEmail": true,
+    "twoShiftsInOneEmail": true,
+    "mailIds": [
+      "0PHYRElepbDgKublnIEXjk",
+      "1UktwjtGwF3UiBSVN9Ja0o",
+      "5zGk0nODyH68ub1uQVxdnK"
+    ]
+  },
+  "organizationSavedOffThenOn": true,
+  "perEventSavedOffThenOn": true,
+  "eventDelays": {
+    "threeDaysAndTwoHoursSaved": true,
+    "previewShown": true,
+    "restoredHabitual": true
+  },
+  "automaticReminders": {
+    "mailIds": [
+      "0n5MuvtktPfFyBIqlk5Qkx",
+      "13wEhKQ36l1xrSW9wtGNq1",
+      "3C7nPwyQ6WP5xDMH5eqR5h"
+    ],
+    "noDuplicate": true,
+    "first": {
+      "runAt": "2026-11-19T19:56:30.497Z",
+      "totals": {
+        "reminder_j2": {
+          "eligible": 1,
+          "groups": 1,
+          "sent": 1,
+          "failed": 0
+        },
+        "reminder_j1": {
+          "eligible": 1,
+          "groups": 1,
+          "sent": 1,
+          "failed": 0
+        },
+        "reminder_dd": {
+          "eligible": 1,
+          "groups": 1,
+          "sent": 1,
+          "failed": 0
+        }
+      },
+      "custom": {
+        "events": 0,
+        "rules": 0,
+        "eligible": 0,
+        "queued": 0,
+        "deferred": 0,
+        "rescheduled": 0,
+        "cancelled": 0,
+        "handled": 0,
+        "failed": 0
+      },
+      "expiredOffers": 0,
+      "expiredConfirmations": {
+        "expired": 0,
+        "shifts": []
+      },
+      "waitlist": {
+        "shifts": 2,
+        "offered": 1
+      },
+      "expiredSwaps": 0,
+      "milestoneOwners": {
+        "eligible": 1,
+        "enqueued": 1
+      },
+      "outbox": {
+        "sent": 2,
+        "retried": 1,
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
+      },
+      "outboxStatus": {
+        "failedLastDay": 0,
+        "recipientFailuresLastDay": 0,
+        "otherFailuresLastDay": 0,
+        "oldestPendingMinutes": null,
+        "staleClaims": 0,
+        "healthy": true,
+        "stuck": false
+      }
+    },
+    "second": {
+      "runAt": "2026-11-19T19:56:30.779Z",
+      "totals": {
+        "reminder_j2": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_j1": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_dd": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        }
+      },
+      "custom": {
+        "events": 0,
+        "rules": 0,
+        "eligible": 0,
+        "queued": 0,
+        "deferred": 0,
+        "rescheduled": 0,
+        "cancelled": 0,
+        "handled": 0,
+        "failed": 0
+      },
+      "expiredOffers": 0,
+      "expiredConfirmations": {
+        "expired": 0,
+        "shifts": []
+      },
+      "waitlist": {
+        "shifts": 1,
+        "offered": 0
+      },
+      "expiredSwaps": 0,
+      "milestoneOwners": {
+        "eligible": 0,
+        "enqueued": 0
+      },
+      "outbox": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
+      },
+      "outboxStatus": {
+        "failedLastDay": 0,
+        "recipientFailuresLastDay": 0,
+        "otherFailuresLastDay": 0,
+        "oldestPendingMinutes": null,
+        "staleClaims": 0,
+        "healthy": true,
+        "stuck": false
+      }
+    }
+  },
+  "excludedWitnesses": 6,
+  "changed": {
+    "notified": 1,
+    "pendingRequestExcluded": true,
+    "mailId": "172LNytmgzfHQL0bpBQg4b"
+  },
+  "cancelled": {
+    "registrations": 2,
+    "includesPendingRequest": true,
+    "mailIds": [
+      "3DJ9eYU0aUvdX8DciiDUDn",
+      "1RyXWQqXy7HCVCcK9XUsxN"
+    ]
+  }
+}

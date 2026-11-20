@@ -1,0 +1,338 @@
+{
+  "slug": "organizer-monitor-followup",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-20T11:19:08.794Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "c22f1f561320aaaf41dc4895786bec55bf1182a4",
+    "sourceTree": "32d4c99600ae3f9e152c5e2def549bdb5abb5120",
+    "productSourceSha256": "5a86d397f191f455906ac91ba9004243af7b3d44d5e6b262100a595ca9b7bdbe",
+    "buildId": "ypzT632HvmE2wKmxN8ZMA",
+    "snapshot": "/private/tmp/benevoles-video-production.zrOWFaez",
+    "builtAt": "2026-11-20T10:04:19.828Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "REGISTRATION_MONITOR_FOLLOWUP",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 53619
+    },
+    {
+      "kind": "click",
+      "atMs": 60168
+    },
+    {
+      "kind": "click",
+      "atMs": 66252
+    },
+    {
+      "kind": "key",
+      "atMs": 66560
+    },
+    {
+      "kind": "click",
+      "atMs": 68768
+    },
+    {
+      "kind": "click",
+      "atMs": 69551
+    },
+    {
+      "kind": "click",
+      "atMs": 70733
+    },
+    {
+      "kind": "click",
+      "atMs": 71533
+    },
+    {
+      "kind": "click",
+      "atMs": 72367
+    },
+    {
+      "kind": "click",
+      "atMs": 73166
+    },
+    {
+      "kind": "click",
+      "atMs": 74000
+    },
+    {
+      "kind": "key",
+      "atMs": 81324
+    },
+    {
+      "kind": "click",
+      "atMs": 81866
+    },
+    {
+      "kind": "click",
+      "atMs": 86784
+    },
+    {
+      "kind": "click",
+      "atMs": 92267
+    },
+    {
+      "kind": "click",
+      "atMs": 103635
+    },
+    {
+      "kind": "click",
+      "atMs": 104683
+    },
+    {
+      "kind": "click",
+      "atMs": 105849
+    },
+    {
+      "kind": "click",
+      "atMs": 107015
+    },
+    {
+      "kind": "click",
+      "atMs": 111299
+    },
+    {
+      "kind": "click",
+      "atMs": 114848
+    },
+    {
+      "kind": "click",
+      "atMs": 120499
+    },
+    {
+      "kind": "click",
+      "atMs": 127315
+    },
+    {
+      "kind": "click",
+      "atMs": 130764
+    },
+    {
+      "kind": "click",
+      "atMs": 133830
+    },
+    {
+      "kind": "click",
+      "atMs": 138797
+    },
+    {
+      "kind": "click",
+      "atMs": 142230
+    }
+  ],
+  "cues": [
+    {
+      "id": "overview",
+      "startMs": 1237,
+      "endMs": 13914
+    },
+    {
+      "id": "coverage",
+      "startMs": 17445,
+      "endMs": 30922
+    },
+    {
+      "id": "registrations",
+      "startMs": 32623,
+      "endMs": 47527
+    },
+    {
+      "id": "requests",
+      "startMs": 49251,
+      "endMs": 63105
+    },
+    {
+      "id": "filters",
+      "startMs": 64878,
+      "endMs": 80866
+    },
+    {
+      "id": "actions",
+      "startMs": 81346,
+      "endMs": 94723
+    },
+    {
+      "id": "audience",
+      "startMs": 98178,
+      "endMs": 112559
+    },
+    {
+      "id": "message",
+      "startMs": 113010,
+      "endMs": 126387
+    },
+    {
+      "id": "channels",
+      "startMs": 127622,
+      "endMs": 141290
+    },
+    {
+      "id": "reminders",
+      "startMs": 143701,
+      "endMs": 154662
+    },
+    {
+      "id": "reports",
+      "startMs": 158095,
+      "endMs": 169402
+    },
+    {
+      "id": "history",
+      "startMs": 171086,
+      "endMs": 186758
+    },
+    {
+      "id": "done",
+      "startMs": 187211,
+      "endMs": 199028
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "coverage",
+      "phrase": "Les capacités et les inscriptions",
+      "startMs": 2865,
+      "endMs": 10233,
+      "cueMs": 20313
+    },
+    {
+      "segmentId": "requests",
+      "phrase": "Ici, refermons la fenêtre",
+      "startMs": 9773,
+      "endMs": 9926,
+      "cueMs": 59025
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Quand la liste grandit",
+      "startMs": 418,
+      "endMs": 3043,
+      "cueMs": 65298
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Précisez le créneau",
+      "startMs": 3405,
+      "endMs": 4901,
+      "cueMs": 68285
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Vous pouvez aussi isoler les demandes",
+      "startMs": 5392,
+      "endMs": 7471,
+      "cueMs": 70271
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Enfin, utilisez la recherche",
+      "startMs": 8227,
+      "endMs": 11949,
+      "cueMs": 73489
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "En quelques secondes, vous isolez",
+      "startMs": 12546,
+      "endMs": 15610,
+      "cueMs": 77426
+    },
+    {
+      "segmentId": "actions",
+      "phrase": "Sélectionnez plusieurs lignes",
+      "startMs": 4946,
+      "endMs": 7728,
+      "cueMs": 86295
+    },
+    {
+      "segmentId": "audience",
+      "phrase": "tous les inscrits, un poste",
+      "startMs": 4971,
+      "endMs": 10982,
+      "cueMs": 103152
+    },
+    {
+      "segmentId": "audience",
+      "phrase": "un créneau",
+      "startMs": 4971,
+      "endMs": 10982,
+      "cueMs": 103950
+    },
+    {
+      "segmentId": "audience",
+      "phrase": "la liste d’attente",
+      "startMs": 4971,
+      "endMs": 10982,
+      "cueMs": 104990
+    },
+    {
+      "segmentId": "audience",
+      "phrase": "ou les invités qui n’ont encore aucun créneau confirmé",
+      "startMs": 4971,
+      "endMs": 10982,
+      "cueMs": 106156
+    },
+    {
+      "segmentId": "message",
+      "phrase": "Avant d’envoyer quoi que ce",
+      "startMs": 7019,
+      "endMs": 9500,
+      "cueMs": 120032
+    },
+    {
+      "segmentId": "message",
+      "phrase": "vous contrôlez le rendu exact",
+      "startMs": 9812,
+      "endMs": 13375,
+      "cueMs": 122825
+    },
+    {
+      "segmentId": "channels",
+      "phrase": "Pour une information urgente, vous",
+      "startMs": 2678,
+      "endMs": 7649,
+      "cueMs": 130303
+    },
+    {
+      "segmentId": "channels",
+      "phrase": "La confirmation finale évite les",
+      "startMs": 10703,
+      "endMs": 13333,
+      "cueMs": 138329
+    },
+    {
+      "segmentId": "reports",
+      "phrase": "Vous générez seulement les documents",
+      "startMs": 8445,
+      "endMs": 11020,
+      "cueMs": 166541
+    },
+    {
+      "segmentId": "history",
+      "phrase": "publication, nouvelle inscription, désinscription, modification",
+      "startMs": 4303,
+      "endMs": 9442,
+      "cueMs": 175390
+    },
+    {
+      "segmentId": "history",
+      "phrase": "Chaque action est datée, avec",
+      "startMs": 9791,
+      "endMs": 12211,
+      "cueMs": 180878
+    }
+  ]
+}

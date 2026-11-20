@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:56:31.885Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
+  "clipSha256": "3b0b9be40bf37bdf35d39514908410d1c1ca54e027652a400b1b286752dd9b86",
+  "scene": "required-validation",
+  "review": {
+    "heardOpening": "Voyons maintenant le formulaire public avec Aline.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Choisissons le premier créneau et continuons.",
+        "visibleSeconds": 3.8,
+        "visible": "Sélection du premier créneau 10h-12h puis clic sur le bouton Continuer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Renseignons son identité et les consentements demandés.",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie du prénom Aline, du nom Mercier, de l'adresse e-mail, puis cochage des cases de consentement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur le bouton Confirmer mon inscription sans renseigner les champs obligatoires.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
+        "visibleSeconds": 15.8,
+        "visible": "Affichage de l'encadré d'alerte orange « Veuillez sélectionner l'une de ces options. » avec focus sur la question obligatoire manquante.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:27:10.297Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "f902ceaad790ef125d23a7bb94d9ac6756a3e2df76ae6d48d562116498ec9af2",
+  "clipSha256": "652dd73d8ee475fc304ba8c1d429d8d75b99ca506d4ecdea3410771f853e8844",
+  "scene": "variables",
+  "review": {
+    "heardOpening": "Les mots entre accolades sont remplacés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Les mots entre accolades sont remplacés pour chaque destinataire.",
+        "visibleSeconds": 1,
+        "visible": "Ouverture du formulaire de modification du modèle avec les variables entre accolades dans le message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "si nous écrivons lieu entre accolades, l'application signale une variable inconnue.",
+        "visibleSeconds": 15,
+        "visible": "Le texte {lieu} est saisi dans l'objet et le message d'erreur rouge « Variable inconnue : {lieu} » s'affiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Corrigeons le texte.",
+        "visibleSeconds": 21.5,
+        "visible": "Le champ Objet est effacé puis corrigé avec « Ton briefing pour {poste} »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.5,
+        "spoken": "si l'audience ne lui donne pas de sens.",
+        "visibleSeconds": 24.8,
+        "visible": "Clic sur Enregistrer et retour à la liste avec le message de confirmation vert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, posée et bien synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

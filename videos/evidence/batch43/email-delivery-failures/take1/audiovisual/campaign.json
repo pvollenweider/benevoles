@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:29:57.980Z",
+  "videoSha256": "857e5ca4985af8cdcce4129b15910f0f8d15482eb661366481704dafc0f4ebe0",
+  "promptSha256": "f260ae6eb456af542624888fe1f6186e29dbd52e426252e2f276899712f70cda",
+  "clipSha256": "cb155617302af8bdc98de651e6eb905c23db9e56566a017d06813ee12855d738",
+  "scene": "campaign",
+  "review": {
+    "heardOpening": "Préparons un autre message pour ces deux personnes.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Ouvrons Messages envoyés sous le formulaire.",
+        "visibleSeconds": 12.5,
+        "visible": "Défilement de la page vers le bas jusqu'à la section Messages envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "un envoyé, un en échec.",
+        "visibleSeconds": 18,
+        "visible": "Mention 'Remise 1 envoyé, 1 en échec' affichée sous l'envoi 'Formation — échec partiel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Voir le texte envoyé permet de relire la consigne originale",
+        "visibleSeconds": 20.5,
+        "visible": "Clic sur 'Voir le texte envoyé' dépliant le texte avec la variable {prénom}",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.5,
+        "spoken": "Cliquons sur Renvoyer l'email en échec",
+        "visibleSeconds": 29.5,
+        "visible": "Clic sur le lien 'Renvoyer l'email en échec'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33,
+        "spoken": "Le bouton devient Remis en file.",
+        "visibleSeconds": 31,
+        "visible": "Affichage du message '1 email remis en file d’envoi' sous le texte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.5,
+        "spoken": "Rechargeons enfin le suivi pour voir les deux remises réussies.",
+        "visibleSeconds": 38.5,
+        "visible": "Après rechargement de la page, affichage de 'Remise 2 envoyés' pour l'envoi concerné",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine posée, articulation nette et rythme bien coordonné avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

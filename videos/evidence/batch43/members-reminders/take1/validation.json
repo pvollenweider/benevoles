@@ -1,0 +1,71 @@
+{
+  "id": "MEMBERS_REMINDERS",
+  "slug": "members-reminders",
+  "validatedAt": "2026-11-19T21:19:28.714Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 212320,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21827,
+      "audioMs": 21826,
+      "driftMs": 1
+    },
+    {
+      "id": "statuses",
+      "visualMs": 25551,
+      "audioMs": 25548,
+      "driftMs": 3
+    },
+    {
+      "id": "confirm",
+      "visualMs": 27374,
+      "audioMs": 27373,
+      "driftMs": 1
+    },
+    {
+      "id": "link",
+      "visualMs": 22915,
+      "audioMs": 22912,
+      "driftMs": 3
+    },
+    {
+      "id": "message",
+      "visualMs": 22357,
+      "audioMs": 22354,
+      "driftMs": 3
+    },
+    {
+      "id": "waitlist",
+      "visualMs": 24248,
+      "audioMs": 24248,
+      "driftMs": 0
+    },
+    {
+      "id": "send",
+      "visualMs": 32094,
+      "audioMs": 32092,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 19527,
+      "audioMs": 19527,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 20,
+  "music": {
+    "voicedWindows": 195,
+    "musicOnlyWindows": 8,
+    "smallestGapLu": 15,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -34.2,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

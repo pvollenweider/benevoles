@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:40:44.282Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "b96b6e8b3dc6fe21c6f2f35765ecfcaf04094e71f44c7b66e850330c47d17b68",
+  "clipSha256": "fbfa7576789117645ca8fb3a526b27e4bdf551f5830fe4f53f77df654a89d3dc",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 3,
+        "visible": "Clic sur 'Ajouter une question' et ouverture du formulaire de saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis saisissons son intitulé.",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie de 'Taille de t-shirt' dans le champ d'intitulé de la question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Dans Type de réponse, choisissons Choix unique",
+        "visibleSeconds": 11,
+        "visible": "Sélection de l'option 'Choix unique' dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Voici S, M, L et XL.",
+        "visibleSeconds": 18,
+        "visible": "Affichage des options S, M, L et XL saisies une par ligne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "cochons Réponse obligatoire.",
+        "visibleSeconds": 27,
+        "visible": "Cochage de la case à cocher 'Réponse obligatoire'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.5,
+        "spoken": "Enregistrons.",
+        "visibleSeconds": 28.5,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30,
+        "spoken": "La question est maintenant dans la liste",
+        "visibleSeconds": 29.5,
+        "visible": "Affichage de la question créée avec ses choix et la mention obligatoire dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, parfaitement synchronisée avec les actions effectuées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:05:10.090Z",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "promptSha256": "88947ccae352435b9bab4ef5c5a66b59587f25fa1654970ae372be381b3d51d2",
+  "clipSha256": "db8a702f0f3d03fffc764ba61291cbdafd9a752712912e495c301afadca16d6c",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Au stand d'accueil, un document clair fait gagner du temps",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.6,
+        "spoken": "Ouvrons Documents",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur l'onglet Documents et chargement de la section correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "la page s’intitule Documents à imprimer",
+        "visibleSeconds": 6,
+        "visible": "Affichage du titre principal « Documents à imprimer »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier",
+        "visibleSeconds": 8,
+        "visible": "Section « À afficher ou à remettre aux bénévoles » bien visible en tête de liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Les documents réservés à l’organisation viennent ensuite",
+        "visibleSeconds": 13.5,
+        "visible": "Défilement vers la section « Pour les organisateurs seulement »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "puis les badges, le résumé de l’événement et l’archive",
+        "visibleSeconds": 17,
+        "visible": "Défilement faisant apparaître successivement les blocs Badges, Résumé de l'événement et Archive",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

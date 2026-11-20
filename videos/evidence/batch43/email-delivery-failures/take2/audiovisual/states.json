@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:39:27.638Z",
+  "videoSha256": "a8ebaa5e0af4cc16f53b2f30ff76d04c16ea3b47c5364ba4fd076e72b2ecf573",
+  "promptSha256": "6d2d19af448268277f89976b40785ee9a444cd76a9f48614b50e8f464218d771",
+  "clipSha256": "31ada7ab9fdb189cbdd9f4d89187e5a8c3cf618a09959d65ed52c475eca1f632",
+  "scene": "states",
+  "review": {
+    "heardOpening": "En attente d'envoi signifie que l'email est dans la file",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "En attente d'envoi signifie que l'email est dans la file : Jules n'a pas encore eu de tentative.",
+        "visibleSeconds": 3,
+        "visible": "Défilement vers le bas révélant la ligne de Jules Berger au statut En attente d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Pour Sarah, Nouvel essai prévu indique un échec temporaire : regardez l'échéance et le nombre d'essais.",
+        "visibleSeconds": 6.2,
+        "visible": "Ligne de Sarah Rochat visible avec le statut 'Nouvel essai prévu' et 'Essai 2 sur 6'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.1,
+        "spoken": "Nicolas est marqué Envoyé : remis au serveur, pas lu par le bénévole.",
+        "visibleSeconds": 13.1,
+        "visible": "Ligne de Nicolas Morel affichée avec le statut vert 'Envoyé'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.3,
+        "spoken": "Emma a atteint six essais après une panne temporaire persistante.",
+        "visibleSeconds": 18.3,
+        "visible": "Ligne d'Emma Favre avec statut 'Échec définitif' et mention d'incident temporaire côté serveur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "Léa a reçu un refus définitif : l'application s'arrête dès le premier essai",
+        "visibleSeconds": 23.5,
+        "visible": "Ligne de Léa Perrin avec statut 'Échec définitif' et détail 'Refus définitif du serveur d'envoi'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.2,
+        "spoken": "Dans cette formation, les délais des essais temporaires ont été accélérés",
+        "visibleSeconds": 27.5,
+        "visible": "Apparition du bandeau d'avertissement 'Démonstration : les délais entre les six essais réels ont été accélérés.' en bas de page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement audible, débit régulier et pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

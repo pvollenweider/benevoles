@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:00:43.250Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "5a4e35f233dac4dea4e8c48186b2bb08c331e8d85fb1cbc5d6bcc46b86990fb3",
+  "clipSha256": "55aa2419b3b201a5a8a34e13e05281a94dc0314efa5ceb379ad32b180c7a51c9",
+  "scene": "create-yesno",
+  "review": {
+    "heardOpening": "Pour le permis de conduire, une réponse simple suffit.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ajoutons une nouvelle question, puis écrivons Permis de conduire.",
+        "visibleSeconds": 4.1,
+        "visible": "Le formulaire Nouvelle question s'ouvre et le titre Permis de conduire est saisi.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Choisissons Oui ou non dans le type de réponse.",
+        "visibleSeconds": 8.1,
+        "visible": "L'option Oui / non est sélectionnée dans le champ Type de réponse.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.8,
+        "spoken": "rendons aussi la réponse obligatoire, puis enregistrons.",
+        "visibleSeconds": 23.9,
+        "visible": "La case Réponse obligatoire est cochée et la question est enregistrée avec le message de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

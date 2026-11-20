@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:24:46.550Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
+  "clipSha256": "f1dd459f8a1be923841c121485ec73d1764bbd9114368a40cb455bb8af3ea070",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un désistement, un horaire qui bouge",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Un désistement, un horaire qui bouge",
+        "visibleSeconds": 0.5,
+        "visible": "Encart d'introduction 'Gérer un imprévu sans perdre le fil' avec le sous-titre 'Vérifier, prévenir, contrôler le résultat'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Le plus important, c'est de vérifier les faits",
+        "visibleSeconds": 11.5,
+        "visible": "Disparition du bandeau d'introduction et affichage de la page d'aperçu 'Fête des imprévus – démonstration'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "visibleSeconds": 16,
+        "visible": "Écran stable de l'événement de démonstration présentant les rubriques 'Où manque-t-il du monde ?' et 'À traiter'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, fluide et expressive, accompagnée d'un fond musical discret et bien mixé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

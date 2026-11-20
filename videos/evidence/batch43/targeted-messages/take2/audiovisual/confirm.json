@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:28:00.477Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "0a19b0f6ba2a2e13d97068c778d9e6a037b15772ab183b12a1cf2cdb468f2755",
+  "clipSha256": "4296e87db3dd2036cc6ac81eff485cf4579f1cf09ae7f7db194921c90c8680d3",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur 'Envoyer à 5 personnes' dans l'aperçu, ouvrant la modale 'Confirmer l'envoi'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Nous annulons une première fois",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur 'Annuler' fermant la fenêtre de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Reprenons ensuite le parcours et confirmons réellement notre briefing",
+        "visibleSeconds": 16.8,
+        "visible": "Réouverture du parcours puis clic sur le bouton bleu 'Confirmer l'envoi'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Attendez le résultat plutôt que de relancer l'envoi immédiatement",
+        "visibleSeconds": 18.2,
+        "visible": "Affichage de la page de confirmation avec la section 'Message envoyé à 5 personnes'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et posée, bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

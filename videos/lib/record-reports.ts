@@ -69,16 +69,16 @@ export async function recordReports(options: { page: Page; base: string; eventId
   await scene("print", async at => {
     // These PNGs are Poppler renders of the real application-generated PDFs.
     // The heading explicitly distinguishes this read-only review from native print UI.
-    const show = async (number: "04" | "05") => {
-      const file = path.join(directory, "documents", "rendered", "individual", `page-${number}.png`)
+    const show = async () => {
+      const file = path.join(directory, "documents", "rendered", "individual", "page-04.png")
       const bytes = await readFile(file)
       if (!bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))) throw new Error("Expected rendered PDF page")
-      await page.setContent(`<html lang="fr"><head><meta charset="utf-8"><style>body{margin:16px;font:18px Arial;background:#eef1f5}h1{font-size:22px}img{display:block;width:740px;max-width:100%;margin:auto;background:white}</style></head><body><h1>Lecture du PDF réel — planning individuel, page ${Number(number)}</h1><p>Aperçu de contrôle, distinct de la boîte d’impression du navigateur.</p><img alt="Page du PDF généré par l’application" src="data:image/png;base64,${bytes.toString("base64")}"></body></html>`)
+      await page.setContent(`<html lang="fr"><head><meta charset="utf-8"><style>body{margin:16px;font:18px Arial;background:#eef1f5}h1{font-size:22px}img{display:block;width:740px;max-width:100%;margin:auto;background:white}</style></head><body><h1>Lecture du PDF réel — planning individuel, page 4</h1><p>Aperçu de contrôle, distinct de la boîte d’impression du navigateur.</p><img alt="Page du PDF généré par l’application" src="data:image/png;base64,${bytes.toString("base64")}"></body></html>`)
       await page.locator("img").evaluate(async img => { await (img as HTMLImageElement).decode(); window.scrollTo(0, 0) })
     }
-    await at("Le navigateur permet d'imprimer ou"); await show("04")
+    await at("Le navigateur permet d'imprimer ou"); await show()
     await at("regardons les contacts, les marges"); await page.locator("img").evaluate(img => { window.scrollTo({ top: img.getBoundingClientRect().height / 2, behavior: "smooth" }) })
-    await at("La dernière passe sur la page suivante"); await show("05")
+    await at("Le dernier créneau apparaît"); await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }))
   })
   // setContent replaces the PDF review document and detaches the browser overlay host.
   // Navigate to a real page before opening the final chapter, so its title is visible.

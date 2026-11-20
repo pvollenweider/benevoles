@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:40:00.065Z",
+  "videoSha256": "a8ebaa5e0af4cc16f53b2f30ff76d04c16ea3b47c5364ba4fd076e72b2ecf573",
+  "promptSha256": "f260ae6eb456af542624888fe1f6186e29dbd52e426252e2f276899712f70cda",
+  "clipSha256": "990ab78dee7b9bb640d964933bb25112eb65b69cd7f2d574552bfbc502d8bcc3",
+  "scene": "campaign",
+  "review": {
+    "heardOpening": "Préparons un autre message pour ces deux personnes.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Ouvrons Messages envoyés sous le formulaire.",
+        "visibleSeconds": 12.5,
+        "visible": "Après validation de l'envoi, affichage de la section Messages envoyés sous le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Voir le texte envoyé permet de relire la consigne originale et sa variable.",
+        "visibleSeconds": 20.6,
+        "visible": "Clic sur « Voir le texte envoyé », déroulant le message avec la variable {prénom}.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "Cliquons sur Renvoyer l'email en échec",
+        "visibleSeconds": 29.1,
+        "visible": "Clic sur le lien « Renvoyer l'email en échec ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.9,
+        "spoken": "Rechargeons enfin le suivi pour voir les deux remises réussies.",
+        "visibleSeconds": 38.6,
+        "visible": "Rafraîchissement de la page affichant la ligne mise à jour : « Remise : 2 envoyés ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement articulée, accompagnant les actions sans coupure ni bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

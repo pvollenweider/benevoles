@@ -12,6 +12,7 @@ import { loadCurrentDeliveryRuntime } from "../tools/prepare-delivery"
 import { verifyProductBuild } from "./product-build"
 import { loadManifest, type AudioMetadata } from "./manifest"
 import type { Cue } from "./sentence-timing"
+import { ORG_EMAIL_SCOPE_SENTENCE } from "../../src/lib/org-personal-page"
 
 export async function validateDeliveryNarration(directory: string) {
   const manifest = await loadManifest("EMAIL_DELIVERY_FAILURES")
@@ -109,9 +110,9 @@ export async function recordDeliveryStates(options: {
       after = await db.notificationOutbox.findUniqueOrThrow({ where: { id: before.id } })
     }
     assert(after.status === "sent" && JSON.stringify(after.payload) === JSON.stringify(before.payload))
-    await at("La ligne passe à Envoyé")
+    await at("Attendons le résultat et rechargeons")
     await go()
-    await rowFor("recoverable").scrollIntoViewIfNeeded()
+    await rowFor("recoverable").evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
     assert((await rowFor("recoverable").innerText()).includes("Envoyé"))
     const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
     const mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorIds.has(item.ID) && item.Subject === "Formation — recoverable — Atelier des emails" && item.To.some(to => to.Address === "video.delivery.recoverable@example.org"))
@@ -187,6 +188,17 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       const mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorIds.has(item.ID) && item.Subject === "Formation — adresse corrigée — Atelier des emails" && item.To.some(to => to.Address === "video.delivery.corrected@example.org"))
       assert(mail, "Actual new corrected-address email required")
       await at("l'adresse corrigée apparaît dans le"); await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page)
+      const body = page.frameLocator("iframe")
+      const button = body.getByRole("link", { name: "Mes inscriptions", exact: true })
+      const scope = body.getByText(ORG_EMAIL_SCOPE_SENTENCE("Formation — suivi des emails"), { exact: true })
+      await at("Le bouton Mes inscriptions ouvre")
+      await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+      assert((await button.getAttribute("href"))?.includes("/mes-inscriptions/"), "The corrected message must carry the organisation link")
+      for (const field of [button, scope]) {
+        const box = await field.boundingBox()
+        assert(box && box.y >= 264 && box.y + box.height <= 800, "The button and scope must fit in the mail crop")
+      }
+      checks.correctedRecipientOrganisationLink = true
       checks.correctedRecipientMailId = mail.ID; checks.correctedRecipientMailIsNew = true; checks.oldPayloadUnchanged = true
     })
     await scene("campaign", async at => {

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:57:43.675Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "a9576a6b270395d1122efe046d278d49779a241beb23da59256b0dadba4f6547",
+  "clipSha256": "9c09562d259791d8c7c9aed479a4f6fa4797feba026fe85184985f35149acc45",
+  "scene": "edit-choices",
+  "review": {
+    "heardOpening": "On peut cependant enrichir la liste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4,
+        "spoken": "Rouvrons la question",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur Modifier pour ouvrir le formulaire de la question Taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "ajoutons XXL, tout en gardant S, M, L et XL",
+        "visibleSeconds": 7,
+        "visible": "Ajout de XXL sous les tailles existantes dans le champ Choix proposés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 10.8,
+        "visible": "Clic sur le bouton Enregistrer en bas du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Le nouveau choix apparaît dans la liste",
+        "visibleSeconds": 12.2,
+        "visible": "Retour à la liste des questions avec mention de S, M, L, XL, XXL",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "la taille L d'Aline reste conservée",
+        "visibleSeconds": 14.5,
+        "visible": "Affichage de la page Inscriptions où la réponse d'Aline Mercier reste bien Taille de t-shirt : L",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

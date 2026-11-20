@@ -85,7 +85,7 @@
     },
     {
       "id": "result",
-      "transcript": "L'application affiche le résultat de l'envoi. Dans notre boîte de test, ouvrons les emails de deux bénévoles : chacun a son prénom, les mêmes consignes et le bon créneau. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. La section Messages programmés est séparée des messages déjà envoyés. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu ; pour une information urgente, prévoyez aussi votre relais sur le terrain.",
+      "transcript": "L'application affiche le résultat de l'envoi. Dans la boîte de test, ouvrons le premier email : il indique le prénom du bénévole, les consignes et le bon créneau. Dans le deuxième email, les consignes restent les mêmes et le prénom change. Le bouton Mes inscriptions ouvre toutes les inscriptions du bénévole auprès de cette organisation. La phrase sous le bouton lui rappelle de garder ce lien pour lui. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. La section Messages programmés est séparée des messages déjà envoyés. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu ; pour une information urgente, prévoyez aussi votre relais sur le terrain.",
       "fallbackDurationMs": 42000
     },
     {
@@ -111,5 +111,6 @@
       "La notification sur téléphone n'atteint que les appareils abonnés et ne remplace pas l'email.",
       "Un envoi réussi ne prouve pas que le message a été lu."
     ]
-  }
+  },
+  "musicGainDb": 0.4
 }

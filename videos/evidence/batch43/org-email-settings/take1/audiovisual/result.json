@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:11:35.632Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "cbf1afe02d49b02f1392c4b71decd3113624096a6e132b6cec368862fae040b9",
+  "clipSha256": "b1474eacc57ca630bf692a2913caeabbc37143c90e09dd9001f48e8c8e1f043a",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Les paramètres sont enregistrés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "le message de test est visible dans la boîte de démonstration",
+        "visibleSeconds": 0,
+        "visible": "Affichage de l'e-mail de test reçu dans l'interface de messagerie de démonstration",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Dans Emails envoyés",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de la page des paramètres avec la section Emails envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Envoyé indique une acceptation par le serveur d’envoi",
+        "visibleSeconds": 6.5,
+        "visible": "Colonne État avec pastilles vertes 'Envoyé' visible dans le tableau d'historique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "utilisez plutôt les messages ciblés de l’événement",
+        "visibleSeconds": 14,
+        "visible": "Écran stable sur les paramètres d'emails accompagnant la recommandation générale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

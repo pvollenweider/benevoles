@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:16:07.175Z",
+  "videoSha256": "c786a1c05cccae337974d33c5886f153f27144a54ab988a295954c5660d11f5c",
+  "promptSha256": "41a9d7f68d35eea1b4b99147ef12a1791d58721a8028b59f3c752df09d48e6b0",
+  "clipSha256": "1bbc3167eed242ff06b9c283b3561c6b5055307782c2fe452c80a57b8de7a155",
+  "scene": "context",
+  "review": {
+    "heardOpening": "Un modèle contenant créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Si nous choisissons ce public, l'erreur explique pourquoi le texte n'est pas prêt à partir.",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage des messages d'avertissement en rouge sous les champs Objet et Message.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Revenons à un seul créneau.",
+        "visibleSeconds": 11.8,
+        "visible": "Sélection de l'option radio « Les bénévoles d'un créneau » et disparition des alertes d'erreur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Pour écrire à tout le monde, vous pouvez aussi adapter le modèle",
+        "visibleSeconds": 14,
+        "visible": "Vue stable sur le formulaire d'envoi configuré pour un créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et parfaitement intelligible, bien calée sur les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

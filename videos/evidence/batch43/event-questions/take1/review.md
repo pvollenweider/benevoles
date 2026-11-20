@@ -1,0 +1,1 @@
+Le courriel de confirmation montre le lien et sa portée pendant près de 25 secondes. La première prise est écartée. Dans « Ajouter un choix », la réponse L apparaît à l'écran environ trois secondes après son annonce. La seconde prise avance le retour aux inscriptions.

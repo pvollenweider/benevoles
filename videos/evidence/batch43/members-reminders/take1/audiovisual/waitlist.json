@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:20:15.897Z",
+  "videoSha256": "8231607c4ca38771494938165a956ad3507125df3b2f63958f4200680e57db05",
+  "promptSha256": "ef2e7a91c663ebe1d87075e8f29b986720a1382be8eb7bfd8126ecfaa2d993b4",
+  "clipSha256": "948cf2e950c4b790743ca39e4d0dc540035ae587a56c3dfe8707455bfe2178ef",
+  "scene": "waitlist",
+  "review": {
+    "heardOpening": "Dans cet aperçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7,
+        "spoken": "Revenons au message.",
+        "visibleSeconds": 7.5,
+        "visible": "Clic sur « Retour au message » et fermeture de la modale d'aperçu pour revenir au formulaire d'envoi.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande",
+        "visibleSeconds": 10.9,
+        "visible": "Le texte du champ Message contient la précision : « Si tu es en attente, ta demande reste enregistrée. Merci ! ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.6,
+        "spoken": "Vérifions le nouvel aperçu.",
+        "visibleSeconds": 22.2,
+        "visible": "Clic sur « Voir l'aperçu et envoyer », ouvrant la fenêtre modale « Aperçu de l'email » avec le texte mis à jour.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

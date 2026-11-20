@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:16:44.232Z",
+  "videoSha256": "c786a1c05cccae337974d33c5886f153f27144a54ab988a295954c5660d11f5c",
+  "promptSha256": "c68530a45b445d38735b9ecdde7397f47356e42b5c34f86bb81ab148ec4ab884",
+  "clipSha256": "81ab8c6bcada148c62f3fe598fcca0da44c181aadc7c2ba49de928c6895e2d78",
+  "scene": "result",
+  "review": {
+    "heardOpening": "L'application affiche le résultat de l'envoi.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'application affiche le résultat de l'envoi.",
+        "visibleSeconds": 0.5,
+        "visible": "L'encadré 'Message envoyé à 5 personnes' est affiché sous l'onglet Messages.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "ouvrons le premier email : il indique le prénom du bénévole, les consignes et le bon créneau.",
+        "visibleSeconds": 5,
+        "visible": "Ouverture de l'email personnalisé pour Théo avec ses consignes et son créneau Buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "Dans le deuxième email, les consignes restent les mêmes et le prénom change.",
+        "visibleSeconds": 10.9,
+        "visible": "Affichage du message destiné à Gabriel avec les mêmes consignes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Le bouton Mes inscriptions ouvre toutes les inscriptions du bénévole",
+        "visibleSeconds": 15,
+        "visible": "L'écran reste bloqué sur le haut de l'email de Gabriel sans faire défiler vers le bas : le bouton 'Mes inscriptions' et la phrase explicative ne sont pas visibles.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "La section Messages programmés est séparée des messages déjà envoyés.",
+        "visibleSeconds": 28.5,
+        "visible": "Retour à l'onglet Messages affichant les blocs 'Messages programmés' et 'Envois groupés'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 32.2,
+        "spoken": "L'historique conserve ensuite le message et son audience.",
+        "visibleSeconds": 33,
+        "visible": "L'historique sous 'Envois groupés' affiche la date, l'auteur, les 5 destinataires et l'état de remise.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 00:15 et 00:23, la voix décrit le bouton 'Mes inscriptions' et la phrase située sous ce bouton, mais l'affichage ne défile pas vers le bas du message, rendant ces éléments invisibles à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et posée, avec un débit régulier et un ton pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

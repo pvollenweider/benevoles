@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:04:22.030Z",
+  "videoSha256": "6a69c2365c42baf75d1241e2a6949f3138fbc7e25e2990af76ad72ed91686c5d",
+  "promptSha256": "8d576cab854a204d8f74660c76022278476c7b2e1f3534477d6e24e739fd383f",
+  "clipSha256": "17fb83d93c09445fe1c588637c6b68150dec5a76d1eecb42ab4bb8a8260bee96",
+  "scene": "organization",
+  "review": {
+    "heardOpening": "Dans Paramètres, puis Emails, vous choisissez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, puis Emails",
+        "visibleSeconds": 0.5,
+        "visible": "La page Paramètres > Emails avec la section Paramètres des emails est affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "J moins deux, J moins un et le rappel du jour",
+        "visibleSeconds": 6.2,
+        "visible": "Les options de cases à cocher Rappel J-2, Rappel J-1 et Rappel du jour sont bien visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.9,
+        "spoken": "Nous coupons celui de la veille",
+        "visibleSeconds": 14.5,
+        "visible": "La case Rappel J-1 n'est pas décochée ; la page défile vers le bas",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 15.7,
+        "spoken": "enregistrons",
+        "visibleSeconds": 16.5,
+        "visible": "Clic sur le bouton Enregistrer et apparition de la mention Paramètres enregistrés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.3,
+        "spoken": "puis le réactivons",
+        "visibleSeconds": 18,
+        "visible": "Aucune réactivation n'est effectuée à l'écran",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Vous trouvez aussi l'adresse de réponse",
+        "visibleSeconds": 19.5,
+        "visible": "Le champ et la section Adresse de réponse sont visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:14 et 00:17, les actions de décocher puis recocher le rappel de la veille (Rappel J-1) ne sont pas réalisées à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

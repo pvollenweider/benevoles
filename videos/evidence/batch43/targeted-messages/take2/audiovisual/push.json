@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T19:27:43.489Z",
+  "videoSha256": "12fab2d250a9d37431e728a93b893cbad6901a366d0bc6e9dd6fce7ffe6ba5e8",
+  "promptSha256": "cbe7d599130b3911542b4b81c1726e71064fcb1a2c68faefb34a1b3cd55e36df",
+  "clipSha256": "8b2669613a4aca7e56b969c7b9581930ac9ee2cc3d3566172e40af60afa5bce1",
+  "scene": "push",
+  "review": {
+    "heardOpening": "Vous pouvez aussi demander une notification",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur.",
+        "visibleSeconds": 0.5,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "La case « Envoyer aussi une notification (téléphone ou ordinateur) » est cochée."
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "L'objet sert de titre, et la première ligne non vide du message sert de texte court.",
+        "visibleSeconds": 13,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Le champ de saisie du message avec son texte d'exemple et les consignes associées sont affichés à l'écran."
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "vérifiez ce qui sera envoyé.",
+        "visibleSeconds": 22.5,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Le bouton bleu « Voir l'aperçu et envoyer » est présent sous les options d'envoi."
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement audible, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

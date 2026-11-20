@@ -50,12 +50,12 @@
     },
     {
       "id": "pb-email",
-      "transcript": "Les emails partent une dizaine de minutes après la publication : un seul par personne, avec toutes ses missions. Voici celui d'Emma : ses deux soirées au Bar des Tilleuls, et le bouton Gérer mes inscriptions.",
+      "transcript": "Les emails partent une dizaine de minutes après la publication : un seul par personne, avec toutes ses missions. Voici celui d'Emma avec ses deux soirées au Bar des Tilleuls. Sous le bouton Mes inscriptions, le texte précise que le lien couvre toute l'organisation. Ce lien est personnel.",
       "fallbackDurationMs": 18020
     },
     {
       "id": "pb-volunteer",
-      "transcript": "Noah a reçu le même email, avec ses deux créneaux. Voici ce qu'il voit en appuyant sur Gérer mes inscriptions. Sa page Mes inscriptions liste Tous mes créneaux. Ici, pas de bouton pour changer de mission : il peut annuler un créneau, ou Écrire à l'organisation.",
+      "transcript": "Noah a reçu le même email, avec ses deux créneaux. Il ouvre le bouton Mes inscriptions. Cette page rassemble tous ses créneaux à venir auprès de l'organisation. Avec Voir l'événement, Noah retrouve le détail de ses missions. Ici, pas de bouton pour changer de mission : il peut annuler un créneau, ou Écrire à l'organisation.",
       "fallbackDurationMs": 22980
     },
     {
@@ -89,8 +89,8 @@
     "steps": [
       "Sur la page Affectations en brouillon, choisissez Publier les affectations, puis confirmez avec Publier.",
       "Lisez Publication faite : le nombre d'affectations publiées et de personnes ; Voir les inscriptions mène à la liste, où chaque mission porte la source Affectation publiée.",
-      "Une dizaine de minutes plus tard, chaque personne avec une adresse email reçoit un seul email avec toutes ses missions et le bouton Gérer mes inscriptions.",
-      "Depuis Mes inscriptions, un bénévole peut annuler un créneau, avec un mot pour l'organisation : quelques minutes plus tard, un email de désistement vous prévient, avec Trouver un remplaçant.",
+      "Une dizaine de minutes plus tard, chaque personne avec une adresse email reçoit un seul email avec toutes ses missions et un bouton « Mes inscriptions » pour l'ensemble de l'organisation.",
+      "Depuis « Mes inscriptions », « Voir l'événement » ouvre le détail où le bénévole peut annuler un créneau avec un mot pour l'organisation : quelques minutes plus tard, un email de désistement vous prévient, avec Trouver un remplaçant.",
       "Avec le lien de ses disponibilités, une personne peut les corriger ; sur Affectations en brouillon, la mission concernée apparaît à revoir, et Voir l'inscription mène à son inscription."
     ],
     "remember": [

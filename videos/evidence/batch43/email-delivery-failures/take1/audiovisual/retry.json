@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:29:44.581Z",
+  "videoSha256": "857e5ca4985af8cdcce4129b15910f0f8d15482eb661366481704dafc0f4ebe0",
+  "promptSha256": "f8feca2621304f490278685b190594ced46301e624016fe82fe41137ea57c58d",
+  "clipSha256": "4193a140dac36a3cd21c23187f620dd0c3f28153ac3382728de6d7386149774d",
+  "scene": "retry",
+  "review": {
+    "heardOpening": "Pour Emma, le refus de notre serveur de test est maintenant levé.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Sur l'échec définitif, Renvoyer remet le même email dans la file.",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur le lien Renvoyer sur la ligne d'Emma Faivre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Attendons le résultat et rechargeons le suivi.",
+        "visibleSeconds": 13.8,
+        "visible": "Rechargement de la page de suivi des emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "La ligne passe à Envoyé avec une heure.",
+        "visibleSeconds": 15,
+        "visible": "La ligne d'Emma Faivre affiche le statut 'Nouvel essai prévu' (jaune/orange) et non 'Envoyé'",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Ouvrons ensuite l'email réellement reçu dans la boîte locale.",
+        "visibleSeconds": 17,
+        "visible": "Affichage du message reçu adressé à Emma (Hello Emma !)",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:14-00:16, la voix annonce que la ligne passe à 'Envoyé avec une heure', mais le tableau rechargé affiche toujours Emma Faivre avec l'état 'Nouvel essai prévu' avant de basculer directement sur le contenu de l'email."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et intelligible tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:42:32.334Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
+  "clipSha256": "d86c498583be80023c2ba3c1bded31b4328d0aa9436567817d0332a82d6e6644",
+  "scene": "retire",
+  "review": {
+    "heardOpening": "Nous n'avons plus besoin de demander la taille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Cliquons sur Retirer, puis lisons la confirmation",
+        "visibleSeconds": 5.7,
+        "visible": "Clic sur le bouton Retirer en face de Taille de t-shirt et ouverture de la fenêtre modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.9,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 14.8,
+        "visible": "Clic sur le bouton de confirmation Retirer dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée.",
+        "visibleSeconds": 17.5,
+        "visible": "Onglet Inscriptions affiché avec la ligne Taille de t-shirt (question retirée) : L pour Aline Mercier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.3,
+        "spoken": "Ouvrons enfin un autre créneau public",
+        "visibleSeconds": 23.8,
+        "visible": "Affichage de la page publique de sélection puis du formulaire d'inscription du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.4,
+        "spoken": "la question n'est plus proposée, les autres le sont toujours.",
+        "visibleSeconds": 25.8,
+        "visible": "Formulaire d'inscription public affichant les autres questions sans la demande de taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

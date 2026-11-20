@@ -46,10 +46,10 @@ async function main() {
   const musicGainDb = manifest.musicGainDb ?? 0
   if (!Number.isFinite(musicGainDb) || Math.abs(musicGainDb) > 3) throw new Error("Music gain must be finite and between -3 and 3 dB; the measured music rule is unchanged")
   const musicMix = { ...MUSIC_MIX, volume: MUSIC_MIX.volume * 10 ** (musicGainDb / 20), gainDb: musicGainDb }
-  if (["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id)) {
+  if (["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "EVENT_QUESTIONS", "SHIFT_WAITLIST_OFFER", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id)) {
     await (await import("./focus-mailpit")).focusMailpit(manifest.id)
   }
-  if (manifest.id === "ORG_EMAIL_SETTINGS") await (await import("./focus-email-settings")).focusEmailSettings()
+  if (["ORG_EMAIL_SETTINGS", "EMAIL_DELIVERY_FAILURES"].includes(manifest.id)) await (await import("./focus-email-settings")).focusEmailSettings(manifest.id)
   if (manifest.id === "ATTENDANCE_CHECK_IN") await (await import("./focus-attendance")).focusAttendance()
   const timeline = await json<Timeline>(path.join(dir, "timeline.json"))
   const { stdout: targetMain } = await exec("git", ["rev-parse", "origin/main"])
@@ -168,15 +168,30 @@ async function main() {
     // English date; other shots keep headers at their original scale.
     // Compose on the existing frame only after proving the intervals are disjoint.
     filters.push(`${videoMap === "0:v:0" ? "[0:v]" : videoMap}split=2[mailpitBase][mailpitSource]`)
-    if (timeline.mailpitBodyOnly && (!["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) || timeline.mailpitHolds?.length)) throw new Error("Body-only Mailpit framing requires an approved capture without holds")
-    if (manifest.id === "ORG_EMAIL_SETTINGS") {
+    if (timeline.mailpitBodyOnly && (!["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "MEMBERS_REMINDERS", "EVENT_QUESTIONS", "SHIFT_WAITLIST_OFFER", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) || timeline.mailpitHolds?.length)) throw new Error("Body-only Mailpit framing requires an approved capture without holds")
+    if (["ORG_EMAIL_SETTINGS", "EMAIL_DELIVERY_FAILURES"].includes(manifest.id)) {
       if (timeline.detailFrames?.some(detail => timeline.mailpitFocusFrames!.some(mail => detail.startMs < mail.endMs && Math.max(detail.endMs, timeline.cues.find(c => c.startMs <= detail.startMs && c.endMs >= detail.startMs)!.endMs) > mail.startMs))) throw new Error("Email and settings detail framing overlap")
-      filters.push("[mailpitSource]split=2[emailHeaderSource][emailBodySource]")
+      let emailSource = "[mailpitSource]"
+      let scrolledOverlay: string | undefined
+      if (manifest.id === "EMAIL_DELIVERY_FAILURES") {
+        const address = timeline.mailpitFocusFrames[1]
+        const scroll = timeline.anchors?.find(anchor => anchor.segmentId === "address" && anchor.phrase === "Le bouton Mes inscriptions ouvre")?.cueMs
+        if (!address || scroll === undefined || scroll < address.startMs + 1000 || scroll >= address.endMs - 1000) throw new Error("Expected a readable header before the corrected-address email scroll")
+        const start = (scroll / 1000).toFixed(3)
+        const end = ((address.endMs - 1) / 1000).toFixed(3)
+        filters.push("[mailpitSource]split=2[emailHeaderBodySource][emailScrolledSource]")
+        filters.push("[emailScrolledSource]crop=960:740:320:60,scale=1000:770,pad=1280:800:140:15:color=0xf8fafc[emailScrolledPane]")
+        scrolledOverlay = `[emailHeaderBodyPane][emailScrolledPane]overlay=0:0:enable='between(t,${start},${end})'[mailpitPane]`
+        emailSource = "[emailHeaderBodySource]"
+      }
+      filters.push(`${emailSource}split=2[emailHeaderSource][emailBodySource]`)
       filters.push("[emailHeaderSource]crop=960:110:320:60,scale=1120:128[emailHeader]")
       filters.push("[emailBodySource]crop=960:536:320:264,scale=1120:626[emailBody]")
-      filters.push("[emailHeader][emailBody]vstack=inputs=2,pad=1280:800:80:23:color=0xf8fafc[mailpitPane]")
+      const emailPane = scrolledOverlay ? "[emailHeaderBodyPane]" : "[mailpitPane]"
+      filters.push(`[emailHeader][emailBody]vstack=inputs=2,pad=1280:800:80:23:color=0xf8fafc${emailPane}`)
+      if (scrolledOverlay) filters.push(scrolledOverlay)
     } else filters.push(timeline.mailpitBodyOnly
-      ? (["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? (["FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION"].includes(manifest.id) ? "[mailpitSource]crop=960:488:320:312,scale=1280:650,pad=1280:800:0:75:color=0xf8fafc[mailpitPane]" : "[mailpitSource]crop=960:536:320:264,scale=1280:714,pad=1280:800:0:43:color=0xf8fafc[mailpitPane]") : "[mailpitSource]crop=960:576:320:224,scale=1280:768,pad=1280:800:0:16:color=0xf8fafc[mailpitPane]")
+      ? (["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "MEMBERS_REMINDERS", "EVENT_QUESTIONS", "SHIFT_WAITLIST_OFFER", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? (["FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION"].includes(manifest.id) ? "[mailpitSource]crop=960:488:320:312,scale=1280:650,pad=1280:800:0:75:color=0xf8fafc[mailpitPane]" : "[mailpitSource]crop=960:536:320:264,scale=1280:714,pad=1280:800:0:43:color=0xf8fafc[mailpitPane]") : "[mailpitSource]crop=960:576:320:224,scale=1280:768,pad=1280:800:0:16:color=0xf8fafc[mailpitPane]")
       : "[mailpitSource]crop=960:800:320:0,pad=1280:800:160:0:color=0xf8fafc[mailpitPane]")
     filters.push(`[mailpitBase][mailpitPane]overlay=0:0:enable='${enabled}'[mailpitFocused]`)
     videoMap = "[mailpitFocused]"

@@ -43,8 +43,17 @@ export async function verifyDeliveryReviewFixture(db: PrismaClient, directory: s
   assert.equal(histories.length, 2)
   assert(histories.every(item => item.eventId === event.id && item.authorId === "video-delivery-organizer" && item.authorName === (identityV2 ? identities.organizer : "Marc Exemple") && item.recipientCount === 2 && ["Formation — adresse corrigée", "Formation — échec partiel"].includes(item.subject)))
   const rows = await db.notificationOutbox.findMany({ where: { organizationId: orgId } })
-  assert.equal(rows.length, 9)
-  assert(rows.every(row => openPayload(row.payload).kind === "targeted_message" && /^video\.delivery\.[a-z-]+@example\.org$/.test(openPayload(row.payload).recipient.email ?? "") && openPayload(row.payload).data.eventTitle === "Atelier des emails"))
+  const payloads = rows.map(row => openPayload(row.payload))
+  assert.equal(payloads.length, 10)
+  const correctedLink = payloads.filter(payload => payload.kind === "org_personal_link")
+  assert.equal(correctedLink.length, 1)
+  assert(correctedLink[0].organizationId === orgId &&
+    correctedLink[0].volunteerId === "video-delivery-member-wrong" &&
+    correctedLink[0].recipient.email === "video.delivery.corrected@example.org" &&
+    correctedLink[0].data.orgSlug === org.slug && correctedLink[0].data.organizationName === org.name)
+  const messages = payloads.filter(payload => payload.kind === "targeted_message")
+  assert.equal(messages.length, 9)
+  assert(messages.every(payload => /^video\.delivery\.[a-z-]+@example\.org$/.test(payload.recipient.email ?? "") && payload.data.eventTitle === event.title))
   const response = await fetch("http://localhost:48026/api/v1/messages?limit=1000", { signal: AbortSignal.timeout(10000) })
   assert(response.ok)
   const inbox = await response.json() as { messages: { ID: string; To: { Address: string }[] }[]; messages_count?: number }

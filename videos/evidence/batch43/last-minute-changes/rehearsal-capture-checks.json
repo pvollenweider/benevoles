@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-11-19T20:11:18.313Z",
+  "audiovisualValidated": false,
+  "humanAgreement": "Demonstration assumption, not recorded consent",
+  "offerMail": "2XTJQasBGb7BHt9N6Bokwl",
+  "offerConfirmed": true,
+  "tomorrowShiftLinkCopied": true,
+  "shiftDeclineVisibleWithoutRemoval": true,
+  "targetedMail": "6xEiEFxWchbS91vvR5E07u",
+  "logisticsFilled": true,
+  "dayOfNeed": {
+    "shiftId": "cmwnzj0ny001q9ba5xk5vpphh",
+    "createdBeforeSend": true,
+    "registeredToday": true,
+    "pushRequested": true,
+    "actualProposedStart": "21:00",
+    "actualProposedEnd": "23:00"
+  },
+  "changedMail": "4iXgTftj3oZvjCyAUXuvbB",
+  "cancelledMail": "3Q0kguVapL2Yovp0VUmAqs",
+  "cancelledActiveAndRequested": true,
+  "priorAttendancePreserved": true,
+  "confirmedAndRequestedCaption": true,
+  "actualCausalStory": true
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:26:03.090Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "e09ff38193e7712dc98f332ee0f9752a292f30c72ca6c53b9bb0f1c7fac17b94",
+  "clipSha256": "43b96449bf026f8951b1200f0180ca572e07039318f53aae95c1f2ff48fab342",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Une mission n'a plus lieu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture de la fenêtre modale de confirmation de suppression du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Vérifions le statut.",
+        "visibleSeconds": 16.5,
+        "visible": "Affichage de l'onglet Journal montrant les deux annulations de statut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.2,
+        "spoken": "Ouvrons le courrier d'annulation.",
+        "visibleSeconds": 21,
+        "visible": "Affichage de l'e-mail d'annulation avec le lien vers les créneaux disponibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 35.2,
+        "spoken": "Annuler n'est pas simplement fermer les nouvelles inscriptions.",
+        "visibleSeconds": 35,
+        "visible": "Affichage de l'onglet Inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

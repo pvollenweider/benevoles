@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:07:42.800Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "87235202abf5027d7c9d7a0cca46d06d5e5477575d9edfe0fd53fd73fa9e2567",
+  "clipSha256": "ec0428fda874685d88d7ede7038629ddcc12c45a1733d1e43b64d56c38e7ffb0",
+  "scene": "pb-withdrawal",
+  "review": {
+    "heardOpening": "De votre côté, quelques minutes plus tard",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "qui se désiste, de quel créneau",
+        "visibleSeconds": 0,
+        "visible": "L'email affiche : « Noah De Jong se désiste de Parking (06/12/2026 · 10:00-13:00) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "son message, et la place qui manque maintenant",
+        "visibleSeconds": 0,
+        "visible": "L'encadré affiche « Absent dimanche matin, désolé. » et « Il manque maintenant 1 place sur ce créneau. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Trouver un remplaçant mène aux membres libres à cet horaire",
+        "visibleSeconds": 0,
+        "visible": "Le bouton bleu « Trouver un remplaçant » est affiché dans le corps de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, fluide et naturelle avec une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

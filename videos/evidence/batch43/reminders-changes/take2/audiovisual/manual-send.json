@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:04:20.573Z",
+  "videoSha256": "6a69c2365c42baf75d1241e2a6949f3138fbc7e25e2990af76ad72ed91686c5d",
+  "promptSha256": "e028064837af544a1cd94735a091af98241579064f1e1ce8144da2e89467b030",
+  "clipSha256": "60434a097fb1d58f4cf4b7690f21e9a75cf24ed28220b72cac65d5f0433a7fa2",
+  "scene": "manual-send",
+  "review": {
+    "heardOpening": "Dans Messages, Envoyer le rappel demande",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Envoyer le rappel demande une confirmation.",
+        "visibleSeconds": 2.1,
+        "visible": "Clic sur le bouton « Envoyer le rappel (3 bénévoles) » et apparition de la boîte modale de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Nous annulons une première fois.",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur « Annuler », la boîte de dialogue se ferme.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Reprenons le rappel. Confirmons le véritable envoi.",
+        "visibleSeconds": 8,
+        "visible": "Réouverture du rappel et clic sur « Envoyer » pour valider l'envoi effectif.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message",
+        "visibleSeconds": 11,
+        "visible": "Affichage de l'e-mail reçu par Léa avec les deux créneaux récapitulés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Sous le bouton Mes inscriptions, la phrase précise que le lien couvre l’organisation entière",
+        "visibleSeconds": 18.5,
+        "visible": "Texte explicatif affiché sous le bouton bleu « Mes inscriptions ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

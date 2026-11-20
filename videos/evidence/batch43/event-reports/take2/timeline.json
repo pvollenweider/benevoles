@@ -1,0 +1,270 @@
+{
+  "slug": "event-reports",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-20T11:03:01.671Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "c22f1f561320aaaf41dc4895786bec55bf1182a4",
+    "sourceTree": "32d4c99600ae3f9e152c5e2def549bdb5abb5120",
+    "productSourceSha256": "5a86d397f191f455906ac91ba9004243af7b3d44d5e6b262100a595ca9b7bdbe",
+    "buildId": "ypzT632HvmE2wKmxN8ZMA",
+    "snapshot": "/private/tmp/benevoles-video-production.zrOWFaez",
+    "builtAt": "2026-11-20T10:04:19.828Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_REPORTS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7011
+    },
+    {
+      "kind": "click",
+      "atMs": 34754
+    },
+    {
+      "kind": "click",
+      "atMs": 44090
+    },
+    {
+      "kind": "click",
+      "atMs": 58892
+    },
+    {
+      "kind": "click",
+      "atMs": 73743
+    },
+    {
+      "kind": "click",
+      "atMs": 90779
+    },
+    {
+      "kind": "click",
+      "atMs": 120121
+    },
+    {
+      "kind": "click",
+      "atMs": 159987
+    },
+    {
+      "kind": "click",
+      "atMs": 190513
+    },
+    {
+      "kind": "click",
+      "atMs": 201830
+    },
+    {
+      "kind": "click",
+      "atMs": 237271
+    },
+    {
+      "kind": "click",
+      "atMs": 242728
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1319,
+      "endMs": 26710
+    },
+    {
+      "id": "complete",
+      "startMs": 28979,
+      "endMs": 55936
+    },
+    {
+      "id": "day",
+      "startMs": 62395,
+      "endMs": 87585
+    },
+    {
+      "id": "role",
+      "startMs": 94328,
+      "endMs": 117184
+    },
+    {
+      "id": "individual",
+      "startMs": 123675,
+      "endMs": 156845
+    },
+    {
+      "id": "attendance",
+      "startMs": 163487,
+      "endMs": 187486
+    },
+    {
+      "id": "contacts",
+      "startMs": 194005,
+      "endMs": 217108
+    },
+    {
+      "id": "answers",
+      "startMs": 220788,
+      "endMs": 249766
+    },
+    {
+      "id": "print",
+      "startMs": 252030,
+      "endMs": 287077
+    },
+    {
+      "id": "result",
+      "startMs": 290663,
+      "endMs": 322448
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ouvrons Documents",
+      "startMs": 5195,
+      "endMs": 6036,
+      "cueMs": 6516
+    },
+    {
+      "segmentId": "welcome",
+      "phrase": "Choisissons ensemble le bon document",
+      "startMs": 18912,
+      "endMs": 25225,
+      "cueMs": 20232
+    },
+    {
+      "segmentId": "complete",
+      "phrase": "Lisons une journée, puis retrouvons",
+      "startMs": 12520,
+      "endMs": 13956,
+      "cueMs": 41502
+    },
+    {
+      "segmentId": "complete",
+      "phrase": "Les effectifs indiquent où il manque du monde",
+      "startMs": 14193,
+      "endMs": 15689,
+      "cueMs": 44395
+    },
+    {
+      "segmentId": "day",
+      "phrase": "Voici la première journée",
+      "startMs": 3225,
+      "endMs": 5345,
+      "cueMs": 65628
+    },
+    {
+      "segmentId": "day",
+      "phrase": "Repérons l'accueil du matin et la buvette",
+      "startMs": 10765,
+      "endMs": 13090,
+      "cueMs": 73166
+    },
+    {
+      "segmentId": "role",
+      "phrase": "La buvette a sa propre",
+      "startMs": 3746,
+      "endMs": 8005,
+      "cueMs": 98078
+    },
+    {
+      "segmentId": "role",
+      "phrase": "Remettre cette feuille à un",
+      "startMs": 11670,
+      "endMs": 15162,
+      "cueMs": 106002
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "Ses contacts sont réunis",
+      "startMs": 4852,
+      "endMs": 9695,
+      "cueMs": 128528
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "Le tableau de chaque journée donne",
+      "startMs": 10090,
+      "endMs": 15425,
+      "cueMs": 133766
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "On retrouve aussi le lieu",
+      "startMs": 16032,
+      "endMs": 21164,
+      "cueMs": 139707
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "Le dernier créneau est à la loge",
+      "startMs": 24335,
+      "endMs": 25881,
+      "cueMs": 148012
+    },
+    {
+      "segmentId": "attendance",
+      "phrase": "En revanche, cocher une case",
+      "startMs": 12355,
+      "endMs": 15293,
+      "cueMs": 175843
+    },
+    {
+      "segmentId": "contacts",
+      "phrase": "Pour notre exemple",
+      "startMs": 7289,
+      "endMs": 11039,
+      "cueMs": 201296
+    },
+    {
+      "segmentId": "answers",
+      "phrase": "Lisons les tailles et les régimes",
+      "startMs": 8996,
+      "endMs": 10754,
+      "cueMs": 229787
+    },
+    {
+      "segmentId": "answers",
+      "phrase": "Vous pouvez télécharger cette synthèse",
+      "startMs": 15980,
+      "endMs": 20997,
+      "cueMs": 236771
+    },
+    {
+      "segmentId": "answers",
+      "phrase": "Regardons ce vrai document",
+      "startMs": 21680,
+      "endMs": 23302,
+      "cueMs": 244406
+    },
+    {
+      "segmentId": "print",
+      "phrase": "Le navigateur permet d'imprimer ou",
+      "startMs": 5643,
+      "endMs": 9696,
+      "cueMs": 257675
+    },
+    {
+      "segmentId": "print",
+      "phrase": "regardons les contacts, les marges",
+      "startMs": 18245,
+      "endMs": 22771,
+      "cueMs": 270277
+    },
+    {
+      "segmentId": "print",
+      "phrase": "Le dernier créneau apparaît",
+      "startMs": 23539,
+      "endMs": 26026,
+      "cueMs": 275572
+    }
+  ]
+}

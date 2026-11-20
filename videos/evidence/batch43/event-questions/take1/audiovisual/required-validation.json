@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:41:29.931Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
+  "clipSha256": "b249c78a738f874da973c1c4ee0012a921625216ccde6eebd0dd0cc6068ad552",
+  "scene": "required-validation",
+  "review": {
+    "heardOpening": "Voyons maintenant le formulaire public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Choisissons le premier créneau et continuons.",
+        "visibleSeconds": 3.8,
+        "visible": "Le créneau 10h-12h est sélectionné puis le bouton Continuer est cliqué",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Renseignons son identité et les consentements demandés.",
+        "visibleSeconds": 7.3,
+        "visible": "Saisie du prénom Aline, nom Mercier, e-mail et validation des cases de consentement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
+        "visibleSeconds": 14.4,
+        "visible": "Clic sur le bouton « Confirmer mon inscription » en laissant les champs obligatoires vides",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
+        "visibleSeconds": 15.8,
+        "visible": "Message d'erreur « Veuillez sélectionner l'une de ces options » et focus sur le champ obligatoire non rempli",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien articulée et synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

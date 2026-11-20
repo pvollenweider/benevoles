@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-20T10:11:50.304Z",
+  "revalidatedAt": "2026-11-20T10:11:50.327Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d6da92c57f7c1cbe67d704dffa240fda0c5c49ad5dd98080c966ca9fd17a8148",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "f1295d1daba120e2af6491fd005bbf08f7805ecf4d7e6146290f9583e494c389",
+      "recognized": "Une capacité protège l'organisation contre le sureffectif mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d'attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu'une place se libère.",
+      "expected": "Une capacité protège l’organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d’attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu’une place se libère.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "setup",
+      "audioSha256": "d43d7348d5481d468be5be24dc7f82ef6e49512271f84d3d18e91d9129868afc",
+      "recognized": "La liste d'attente s'active sur le créneau. Tant que la capacité n'est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l'attente et voit sa position au lieu de recevoir une fausse confirmation.",
+      "expected": "La liste d’attente s’active sur le créneau. Tant que la capacité n’est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l’attente et voit sa position au lieu de recevoir une fausse confirmation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "admin",
+      "audioSha256": "bcd8d1b29caab6570fe0419ee87e612db4ae3d9b6ae6c55cc3cb9016abef8e65",
+      "recognized": "Dans les inscriptions, le statut distingue les personnes confirmées de celles qui attendent une place. L'ordre dépend du moment d'inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes, ni perdre l'historique.",
+      "expected": "Dans les inscriptions, le statut distingue les personnes confirmées de celles qui attendent une place. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "release",
+      "audioSha256": "973d0c91e6376839fc8673e2a6c7ffe355a0fd26b61f77cbe9b206e7d3cea729",
+      "recognized": "Quand une personne confirmée se désinscrit, la place n'est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Ouvrons le courriel reçu par Camille. Le bouton Confirmer ma participation ouvre cette offre précise. Elle dispose de vingt-quatre heures au maximum sans dépasser le début du créneau pour répondre. Une place libérée moins d'une heure avant le début n'est plus proposée.",
+      "expected": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Ouvrons le courriel reçu par Camille. Le bouton Confirmer ma participation ouvre cette offre précise. Elle dispose de vingt-quatre heures au maximum, sans dépasser le début du créneau, pour répondre. Une place libérée moins d’une heure avant le début n’est plus proposée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "volunteer",
+      "audioSha256": "fb1a1c69360e044023f468adc7c9e90a06a40752ae30a4018b011811c7eac8e1",
+      "recognized": "Sur sa page, la personne voit l'offre, son expiration et les actions Prendre la place ou Refuser la place. Le lien Prendre la place ouvre une page qui présente l'offre sans l'accepter. Seul le bouton Prendre la place de cette page confirme le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
+      "expected": "Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place. Le lien Prendre la place ouvre une page qui présente l’offre, sans l’accepter. Seul le bouton Prendre la place de cette page confirme le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "expiry",
+      "audioSha256": "938e3eac64f84da802a79020e46a9dc93c654dc2a030dd5f94a2909b267f5866",
+      "recognized": "Si l'offre expire sans réponse, elle ne bloque pas la place indéfiniment. La promotion passe à la personne suivante. Dans l'administration, on peut suivre l'offre active et la position des personnes encore en attente.",
+      "expected": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. Dans l’administration, on peut suivre l’offre active et la position des personnes encore en attente.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "0c879ef62ed86ccdbfcdec8a1754cf47c08de9049ec85d23a097ad8881b60a21",
+      "recognized": "La liste d'attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifiez la capacité, l'ordre, l'offre en cours et les délais avant de promettre une place à quelqu'un par un autre canal.",
+      "expected": "La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifiez la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-20T11:04:39.341Z",
+  "revalidatedAt": "2026-11-20T11:04:39.342Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "4687b7360a6109e9a0b434081c9dd2ce75d5bf2d568bdd0118135f6cc0e0b19b",
+      "recognized": "Au stand d'accueil, un document clair fait gagner du temps à toute l'équipe. Ouvrons documents. La page s'intitule Documents à imprimer. Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier, les documents réservés à l'organisation viennent ensuite, puis les badges, le résumé de l'événement et l'archive. Choisissons ensemble le bon document, avec plusieurs journées et des personnes sur plusieurs postes.",
+      "expected": "Au stand d’accueil, un document clair fait gagner du temps à toute l’équipe. Ouvrons Documents : la page s’intitule Documents à imprimer. Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier. Les documents réservés à l’organisation viennent ensuite, puis les badges, le résumé de l’événement et l’archive. Choisissons ensemble le bon document, avec plusieurs journées et des personnes sur plusieurs postes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "complete",
+      "audioSha256": "bab21413d7a59d8dcf0ac3dbff7a0b1846a0f9a1682809d4f20e74007ecdc4e9",
+      "recognized": "Pour une vue d'ensemble, descendez dans la partie réservée aux organisateurs et ouvrez export complet. Ce document en couleur réunit le planning, les créneaux et le récapitulatif des bénévoles. Lisons une journée puis retrouvons Léa. Les effectifs indiquent où il manque du monde. Le document décrit le planning enregistré au moment de son ouverture, pas une preuve de présence. Une inscription ne veut pas forcément dire que la personne est arrivée.",
+      "expected": "Pour une vue d’ensemble, descendez dans la partie réservée aux organisateurs et ouvrez Export complet. Ce document en couleur réunit le planning, les créneaux et le récapitulatif des bénévoles. Lisons une journée, puis retrouvons Léa. Les effectifs indiquent où il manque du monde. Le document décrit le planning enregistré au moment de son ouverture, pas une preuve de présence : une inscription ne veut pas forcément dire que la personne est arrivée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "day",
+      "audioSha256": "56a6dbd1cc3eb2084a76838998e03755b11ccbc0948b94c9494b7f2e1ebaccc2",
+      "recognized": "Pour l'accueil, le planning par jour est plus direct. Voici la première journée, puis la suivante. Les postes et les créneaux sont regroupés par date avec le détail des personnes et des places libres. Repérons l'accueil du matin et la buvette. Cette feuille aide à orienter les arrivées sans distribuer un carnet d'adresses. Vérifions le contenu de la feuille, pas seulement son titre. Les coordonnées privées des bénévoles ne doivent pas devenir une affiche publique.",
+      "expected": "Pour l'accueil, le planning par jour est plus direct. Voici la première journée, puis la suivante. Les postes et les créneaux sont regroupés par date, avec le détail des personnes et des places libres. Repérons l'accueil du matin et la buvette. Cette feuille aide à orienter les arrivées sans distribuer un carnet d'adresses. Vérifions le contenu de la feuille, pas seulement son titre : les coordonnées privées des bénévoles ne doivent pas devenir une affiche publique.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "role",
+      "audioSha256": "dcc7f42bd63b67693ada1800835277f50420c5ee6151c36f35dd43b6a7e0ef80",
+      "recognized": "Si vous coordonnez un poste, choisissez le planning par poste. La buvette a sa propre page avec ses horaires, ses bénévoles et son responsable. Regardons aussi les autres postes pour comprendre le découpage. Remettre cette feuille à un relais terrain l'aide à savoir qui arrive et quand. Cela ne crée pas un compte d'administration ni un droit supplémentaire. C'est un document de coordination à remettre à la personne qui en a besoin.",
+      "expected": "Si vous coordonnez un poste, choisissez le planning par poste. La buvette a sa propre page, avec ses horaires, ses bénévoles et son responsable. Regardons aussi les autres postes pour comprendre le découpage. Remettre cette feuille à un relais terrain l'aide à savoir qui arrive et quand. Cela ne crée pas un compte d'administration, ni un droit supplémentaire : c'est un document de coordination, à remettre à la personne qui en a besoin.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "individual",
+      "audioSha256": "a8c347022514af818f97c72f5816914e284c9a78a1897db228795d94abae0e6d",
+      "recognized": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes. Ses contacts sont réunis une seule fois en haut de la page avec le responsable du poste. Le tableau de chaque journée donne l'horaire, le poste et les coéquipiers inscrits sur le même créneau. On retrouve aussi le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés. Ici, son planning tient sur une seule page. Le dernier créneau est à la loge en bas du tableau. Remettez à Léa son propre planning, et pour les homonymes, vérifiez les créneaux avant de distribuer les documents.",
+      "expected": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes. Ses contacts sont réunis une seule fois en haut de la page, avec le responsable du poste. Le tableau de chaque journée donne l'horaire, le poste et les coéquipiers inscrits sur le même créneau. On retrouve aussi le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés. Ici, son planning tient sur une seule page. Le dernier créneau est à la loge, en bas du tableau. Remettez à Léa son propre planning. Et pour les homonymes, vérifiez les créneaux avant de distribuer les documents.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "attendance",
+      "audioSha256": "d96e95ce96893304adf10821fd182d6e85425372b113995606227f1667e7277b",
+      "recognized": "La feuille de présence sert au pointage sur papier. Chaque personne a sa case et des lignes supplémentaires permettent de noter les arrivées imprévues. Voici aussi une présence déjà enregistrée dans l'application représentée sur la feuille. En revanche, cocher une case au stylo ne met pas le site à jour. Si vous utilisez le papier sur le terrain, il faudra ensuite reporter les présences utiles dans l'application. Le planning et l'arrivée sont deux informations différentes.",
+      "expected": "La feuille de présence sert au pointage sur papier. Chaque personne a sa case, et des lignes supplémentaires permettent de noter les arrivées imprévues. Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille. En revanche, cocher une case au stylo ne met pas le site à jour. Si vous utilisez le papier sur le terrain, il faudra ensuite reporter les présences utiles dans l'application. Le planning et l'arrivée sont deux informations différentes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "contacts",
+      "audioSha256": "37f3f7924f24a4de6a940f22f993f87b5548c62160f40f47f607695fc1f40ac6",
+      "recognized": "La liste avec téléphone est réservée à l'organisation. Elle permet de retrouver une personne, son e-mail, son téléphone et ses créneaux. Pour notre exemple, le numéro donné dans l'inscription est différent du numéro de sa fiche. Regardons celui retenu dans le document. Cette liste contient des coordonnées personnelles. Elle ne va pas sur le panneau public du stand et ne se distribue pas à tout le monde. Gardez-la pour les personnes qui doivent réellement contacter l'équipe.",
+      "expected": "La liste avec téléphones est réservée à l'organisation. Elle permet de retrouver une personne, son email, son téléphone et ses créneaux. Pour notre exemple, le numéro donné dans l'inscription est différent du numéro de sa fiche : regardons celui retenu dans le document. Cette liste contient des coordonnées personnelles. Elle ne va pas sur le panneau public du stand et ne se distribue pas à tout le monde. Gardez-la pour les personnes qui doivent réellement contacter l'équipe.",
+      "wordErrorRate": 0.0125,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "answers",
+      "audioSha256": "1e858f8364775d411c9f7fd7445b76ed6e1742628e91deb8463cde40aaab6a70",
+      "recognized": "Pour préparer les t-shirts et les repas, ouvrez Questions aux bénévoles, puis la synthèse des réponses. Chaque personne compte une seule fois, même si elle a plusieurs créneaux. Lisons les tailles et les régimes renseignés. Les confirmés et les personnes en attente sont distingués. Les inscriptions annulées ne comptent pas. Vous pouvez télécharger cette synthèse en CSV pour travailler avec les chiffres ou ouvrir sa version imprimable. Regardons ce vrai document. Les réponses sont regroupées sans distribuer les coordonnées de toute l'équipe.",
+      "expected": "Pour préparer les t-shirts et les repas, ouvrez Questions aux bénévoles, puis la Synthèse des réponses. Chaque personne compte une seule fois, même si elle a plusieurs créneaux. Lisons les tailles et les régimes renseignés. Les confirmés et les personnes en attente sont distingués ; les inscriptions annulées ne comptent pas. Vous pouvez télécharger cette synthèse en CSV pour travailler avec les chiffres, ou ouvrir sa version imprimable. Regardons ce vrai document : les réponses sont regroupées sans distribuer les coordonnées de toute l’équipe.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "print",
+      "audioSha256": "53d235e5064bd4580461f0af3fcb90e3ce82f7610d7aefe3d9101b6e215c4d78",
+      "recognized": "Avant d'imprimer toute la série, vérifiez les pages réellement produites. Le navigateur permet d'imprimer ou d'enregistrer en PDF. Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression. Voici le planning de Léa. Regardons les contacts, les marges, puis le tableau des créneaux plus bas. Le dernier créneau apparaît en bas du tableau. Les cinq sont bien sur la même page. Vérifiez toujours le document final, c'est celui que l'équipe utilisera sur le terrain.",
+      "expected": "Avant d'imprimer toute la série, vérifiez les pages réellement produites. Le navigateur permet d'imprimer ou d'enregistrer en PDF. Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression. Voici le planning de Léa : regardons les contacts, les marges, puis le tableau des créneaux plus bas. Le dernier créneau apparaît en bas du tableau. Les cinq sont bien sur la même page. Vérifiez toujours le document final : c'est celui que l'équipe utilisera sur le terrain.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "befb81e73810e2cb6b4410c593984729eb740bf7df36ab3a81160ea47b4ac709",
+      "recognized": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour un poste, un planning personnel et une liste de contacts réservée à l'organisation. Un fichier enregistré ne se met pas à jour tout seul. Si le planning change, générez une nouvelle version et remplacez les anciennes copies. Pour les coordonnées et les réponses personnelles, conservez seulement ce qui reste utile. Le bon document remis à la bonne personne, c'est souvent le plus simple pour un jour J serein.",
+      "expected": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour un poste, un planning personnel et une liste de contacts réservée à l'organisation. Un fichier enregistré ne se met pas à jour tout seul. Si le planning change, générez une nouvelle version et remplacez les anciennes copies. Pour les coordonnées et les réponses personnelles, conservez seulement ce qui reste utile. Le bon document, remis à la bonne personne : c'est souvent le plus simple pour un jour J serein.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

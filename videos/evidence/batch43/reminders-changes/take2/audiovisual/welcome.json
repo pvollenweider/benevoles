@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:04:03.565Z",
+  "videoSha256": "6a69c2365c42baf75d1241e2a6949f3138fbc7e25e2990af76ad72ed91686c5d",
+  "promptSha256": "55137b0b044b60c29f09d88dfca3f2d106def21ed4b329481f8e13fafacbfcc3",
+  "clipSha256": "f7329245cbdfb0c647013c78bb81142534fa98314ac87248efa9aafb330345b7",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un petit rappel aide les bénévoles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous",
+        "visibleSeconds": 0,
+        "visible": "Cartouche d'introduction « Rappeler le rendez-vous et prévenir quand le planning change » affiché sur la page de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "Ici, nous allons distinguer trois choses : le rappel que vous envoyez vous-même, les rappels automatiques et les messages de changement",
+        "visibleSeconds": 3,
+        "visible": "Page de gestion de l'événement « Atelier des rappels » avec ses onglets (Aperçu, Messages, Paramètres...)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Nous utiliserons un événement de démonstration et sa vraie boîte mail de test",
+        "visibleSeconds": 17.2,
+        "visible": "Écran d'aperçu de l'événement de démonstration « Atelier des rappels »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et engageante, débit adapté à une vidéo explicative."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

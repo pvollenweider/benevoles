@@ -5,6 +5,7 @@ import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { addMinutes } from "../../src/lib/gantt-utils"
+import { ORG_EMAIL_SCOPE_SENTENCE } from "../../src/lib/org-personal-page"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 import type { Cue } from "./sentence-timing"
@@ -33,6 +34,17 @@ export async function recordReminders(options: { page: Page; base: string; event
     // not the first textual match, before allowing the capture to continue.
     await page.frameLocator("iframe").getByText(expected[0], { exact: false }).filter({ visible: true }).first().waitFor()
     await page.waitForTimeout(600) // Let the genuine iframe paint before another navigation can replace the email.
+  }
+  const showOrganisationLink = async () => {
+    const body = page.frameLocator("iframe")
+    const link = body.getByRole("link", { name: "Mes inscriptions", exact: true })
+    if (!(await link.getAttribute("href"))?.includes("/mes-inscriptions/")) throw new Error("Reminder lacks its organisation link")
+    const scope = body.getByText(ORG_EMAIL_SCOPE_SENTENCE("Fêtes de Montvert"), { exact: true })
+    await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+    for (const field of [link, scope]) {
+      const box = await field.boundingBox()
+      if (!box || box.y < 264 || box.y + box.height > 800) throw new Error("Reminder link or scope is outside the Mailpit crop")
+    }
   }
   const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); if (await field.getAttribute("type") === "time") { await field.fill(value); if (await field.inputValue() !== value) throw new Error("Native time not filled exactly") } else await field.pressSequentially(value, { delay: 95 }) }
   const checks: Record<string, unknown> = { audiovisualValidation: false, pushReceptionVerified: false, perEventToggleAvailableInForm: true }
@@ -65,8 +77,8 @@ export async function recordReminders(options: { page: Page; base: string; event
       const dialog = page.getByRole("dialog", { name: "Envoyer le rappel ?" })
       await at("Nous annulons une première fois"); await tap(page, dialog.getByRole("button", { name: "Annuler", exact: true }))
       if ((await inbox()).some(m => !prior.has(m.ID)) || (await db.event.findUniqueOrThrow({ where: { id: eventId } })).reminderSentAt) throw new Error("Cancel sent a reminder")
-      await at(0.25) /* mid-sentence: reprise après annulation, dans la même phrase */; await tap(page, page.getByRole("button", { name: /Envoyer le rappel \(/ }))
-      await at(0.32) /* mid-sentence: confirmer la reprise annoncée */
+      await at("Reprenons le rappel"); await tap(page, page.getByRole("button", { name: /Envoyer le rappel \(/ }))
+      await at("Confirmons le véritable envoi")
       const response = page.waitForResponse(r => r.url().endsWith("/send-reminder") && r.request().method() === "POST")
       await tap(page, dialog.getByRole("button", { name: "Envoyer", exact: true }))
       const sent = await response; const result = await sent.json()
@@ -78,6 +90,7 @@ export async function recordReminders(options: { page: Page; base: string; event
       for (let i = 0; i < 30 && mails.length < 3; i++) { await page.waitForTimeout(500); mails = (await inbox()).filter(m => !prior.has(m.ID)) }
       if (mails.length !== 3 || mails.some(m => m.To.some(t => /request|waiting/.test(t.Address)))) throw new Error("Manual reminder audience incorrect")
       await openMail(mails, "video.reminder.dd@example.org", ["Prends une gourde", ...activeLea.flatMap(r => [r.shift.startTime, r.shift.endTime])])
+      await at("Sous le bouton Mes inscriptions"); await showOrganisationLink()
       checks.manualReminder = { sent: 3, cancelledWithoutEmail: true, twoShiftsInOneEmail: true, mailIds: mails.map(m => m.ID) }
     })
     await scene("organization", async at => {
@@ -156,12 +169,21 @@ export async function recordReminders(options: { page: Page; base: string; event
       if (mails.length !== 3) throw new Error("Expected three actual automatic reminders")
       const second = await run()
       if ((await inbox()).filter(m => !prior.has(m.ID) && m.Subject.includes("Atelier des rappels") && /J-2|Demain|aujourd'hui/i.test(m.Subject)).length !== 3) throw new Error("Duplicate automatic reminder")
-      for (const [index, email] of ["video.reminder.j2@example.org", "video.reminder.j1@example.org", "video.reminder.dd@example.org"].entries()) {
-        await at("Voici les trois emails réellement reçus")
-        const shift = event.registrations.find(r => r.status === "active" && r.volunteer.email === email)!.shift
+      const automaticRecipients = [
+        { email: "video.reminder.j2@example.org", hours: 48, cue: "Voici le rappel reçu deux jours avant" },
+        { email: "video.reminder.j1@example.org", hours: 24, cue: "Voici le rappel reçu la veille" },
+        { email: "video.reminder.dd@example.org", hours: 3, cue: "Voici le rappel du jour même" },
+      ]
+      for (const { email, hours, cue } of automaticRecipients) {
+        await at(cue)
+        const registration = event.registrations.find(r =>
+          r.status === "active" && r.volunteer.email === email && r.shift.label === `Accueil — ${hours} heures`)
+        if (!registration) throw new Error(`Missing confirmed registration for the ${hours}-hour reminder`)
+        const { shift } = registration
         // J-2 includes the range; J-1/day-of templates show the start only.
-        await openMail(mails, email, ["Stand d'information", shift.startTime, ...(index === 0 ? [shift.endTime] : [])])
+        await openMail(mails, email, ["Stand d'information", shift.startTime, ...(hours === 48 ? [shift.endTime] : [])])
       }
+      await at("Comme dans les deux autres"); await showOrganisationLink()
       checks.automaticReminders = { mailIds: mails.map(m => m.ID), noDuplicate: true, first, second }
     })
     await scene("exclusions", async at => {
@@ -182,7 +204,6 @@ export async function recordReminders(options: { page: Page; base: string; event
       const newStart = addMinutes(changed.startTime, 30), newEnd = addMinutes(changed.endTime, 30)
       await tap(page, page.getByRole("row").filter({ hasText: changed.label }).getByRole("button", { name: /^Modifier le créneau / }))
       await at("Nous décalons son début et sa fin")
-      await at(0.16) /* mid-sentence: measured « Nous décalons » onset, after opening the editor */
       await write(page.getByLabel(/^Début(?: \*)?$/), newStart)
       await at("Nous décalons son début et sa fin"); await write(page.getByLabel(/^Fin(?: \*)?$/), newEnd)
       const response = page.waitForResponse(r => r.url().endsWith(`/shifts/${changed.id}`) && r.request().method() === "PATCH")
@@ -194,6 +215,7 @@ export async function recordReminders(options: { page: Page; base: string; event
       for (let i = 0; i < 30; i++) { mails = (await inbox()).filter(m => !prior.has(m.ID)); if (mails.length) break; await page.waitForTimeout(250) }
       if (mails.length !== 1) throw new Error("Expected one received change email")
       await at("Voici l'email réellement reçu"); await openMail(mails, "video.reminder.dd@example.org", [newStart, newEnd, "Préparation"])
+      await at("Le bouton Mes inscriptions ouvre toujours"); await showOrganisationLink()
       await at("Vérifions donc le résultat"); await go(`${eventUrl}/shifts`)
       await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
       await page.getByRole("row").filter({ hasText: changed.label }).getByText(`${newStart}–${newEnd}`, { exact: true }).scrollIntoViewIfNeeded()
@@ -211,13 +233,12 @@ export async function recordReminders(options: { page: Page; base: string; event
       let mails: Mail[] = []
       for (let i = 0; i < 30; i++) { mails = (await inbox()).filter(m => !prior.has(m.ID)); if (mails.length === 2) break; await page.waitForTimeout(250) }
       if (mails.length !== 2) throw new Error("Expected two actual cancellation emails")
-      // The first real receipt illustrates the just-announced cancellation. Hold it
-      // until the sentence that opens the second message; neither email is a flash.
+      await at("Ouvrons le message du créneau confirmé")
       await openMail(mails, "video.reminder.j2@example.org", ["Caisse"])
-      await at("Ouvrons les messages reçus"); await openMail(mails, "video.reminder.request@example.org", ["Caisse"])
+      await at("Ouvrons le message de la demande"); await openMail(mails, "video.reminder.request@example.org", ["Caisse"])
       const after = await db.shift.findUniqueOrThrow({ where: { id: cancelled.id }, include: { registrations: true } })
       if (after.status !== "cancelled" || after.registrations.length !== 2 || after.registrations.some(r => r.status !== "cancelled")) throw new Error("Cancelled shift registrations incorrect")
-      await at("Rappeler, modifier, annuler"); await go(`${eventUrl}/shifts`)
+      await at("Revenons au planning"); await go(`${eventUrl}/shifts`)
       checks.cancelled = { registrations: 2, includesPendingRequest: true, mailIds: mails.map(m => m.ID) }
     })
     await writeFile(path.join(directory, "reminder-capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:05:11.494Z",
+  "videoSha256": "6a69c2365c42baf75d1241e2a6949f3138fbc7e25e2990af76ad72ed91686c5d",
+  "promptSha256": "bf9c7b418cfe01e1e90ead62db8cc39a1491fb19ae5de1706d78bb99d1bddc3d",
+  "clipSha256": "419ddab393bb602be8cd63c71942ee339b1c4d9908481f240e6a4d730413b465",
+  "scene": "changed",
+  "review": {
+    "heardOpening": "Si un horaire change",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrez le créneau concerné.",
+        "visibleSeconds": 1.2,
+        "visible": "Le formulaire 'Modifier le créneau' est affiché à l'écran.",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.3,
+        "spoken": "Nous décalons son début et sa fin, puis enregistrons.",
+        "visibleSeconds": 5,
+        "visible": "Modification de l'heure de début à 21:27 puis clic sur le bouton Enregistrer à 00:07.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Voici l'email réellement reçu avec le nouvel horaire.",
+        "visibleSeconds": 13.7,
+        "visible": "Affichage de l'email de notification 'Hello Léa !' avec le nouvel horaire 21:27–23:27.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.5,
+        "spoken": "Vérifions donc le résultat dans le planning",
+        "visibleSeconds": 26.2,
+        "visible": "Retour à l'affichage des créneaux dans l'application benevol.app.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

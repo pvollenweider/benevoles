@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:00:17.588Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "e8bdb5913b65de0b6e2028e30636256119c5cf2329f3b73e7647aff6b3f991bc",
+  "clipSha256": "30b685cb3324ba98015e5d1035739b4fbb9ddc85009c05644d5fdc1b4e7b1553",
+  "scene": "pb-correct",
+  "review": {
+    "heardOpening": "Emma, elle, n'est plus libre vendredi soir.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Voici ce qu'elle voit avec le lien reçu pour ses disponibilités.",
+        "visibleSeconds": 7.2,
+        "visible": "Affichage de la page 'Mes disponibilités pour Rencontres du Val d'Orsel' après clic sur le lien.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La page le dit : elle peut les corriger, et cela ne modifie ni n'annule ses missions.",
+        "visibleSeconds": 7.5,
+        "visible": "Le texte explicatif 'Tu peux corriger tes disponibilités. Cela ne modifie ni n'annule tes missions.' est visible à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Pour vendredi, elle choisit Pas disponible.",
+        "visibleSeconds": 15,
+        "visible": "L'option 'Pas disponible' n'est jamais sélectionnée ; le bouton radio reste positionné sur 'Disponible à certaines heures'.",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À 00:12-00:15, l'action annoncée ('elle choisit Pas disponible') n'est pas effectuée à l'écran.",
+      "À 00:14, la phrase est coupée nette sur le mot 'Puis' à la fin de l'extrait."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire et naturelle, interrompue abruptement en fin d'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

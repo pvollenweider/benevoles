@@ -1,0 +1,83 @@
+{
+  "id": "EVENT_REPORTS",
+  "slug": "event-reports",
+  "validatedAt": "2026-11-20T10:54:52.302Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 325480,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 25391,
+      "audioMs": 25390,
+      "driftMs": 1
+    },
+    {
+      "id": "complete",
+      "visualMs": 26957,
+      "audioMs": 26954,
+      "driftMs": 3
+    },
+    {
+      "id": "day",
+      "visualMs": 25179,
+      "audioMs": 25176,
+      "driftMs": 3
+    },
+    {
+      "id": "role",
+      "visualMs": 22853,
+      "audioMs": 22851,
+      "driftMs": 2
+    },
+    {
+      "id": "individual",
+      "visualMs": 33171,
+      "audioMs": 33168,
+      "driftMs": 3
+    },
+    {
+      "id": "attendance",
+      "visualMs": 23997,
+      "audioMs": 23996,
+      "driftMs": 1
+    },
+    {
+      "id": "contacts",
+      "visualMs": 23111,
+      "audioMs": 23101,
+      "driftMs": 10
+    },
+    {
+      "id": "answers",
+      "visualMs": 28980,
+      "audioMs": 28978,
+      "driftMs": 2
+    },
+    {
+      "id": "print",
+      "visualMs": 35050,
+      "audioMs": 35044,
+      "driftMs": 6
+    },
+    {
+      "id": "result",
+      "visualMs": 31786,
+      "audioMs": 31783,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 21,
+  "music": {
+    "voicedWindows": 271,
+    "musicOnlyWindows": 22,
+    "smallestGapLu": 15.1,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -34.2,
+    "loudestMusicOnlyLufs": -32.3,
+    "medianVoiceLufs": -16.1
+  },
+  "issues": []
+}

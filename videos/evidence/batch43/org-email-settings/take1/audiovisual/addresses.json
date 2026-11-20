@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:11:05.759Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "ad439d9d1d8033ec4970d8717c4754ea7bab95980cd617641d86f5ab57ac0928",
+  "clipSha256": "f9f52b7f585393d4f45038c3adbbd715bb80394223aca1ea7be3d56cc9abc7cf",
+  "scene": "addresses",
+  "review": {
+    "heardOpening": "Le résumé quotidien des adresses à vérifier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le résumé quotidien des adresses à vérifier",
+        "visibleSeconds": 0,
+        "visible": "Option cochée « Résumé quotidien des adresses à vérifier » visible dans la section Paramètres des emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement",
+        "visibleSeconds": 0,
+        "visible": "Texte explicatif affiché sous l'option décrivant les conditions de déclenchement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "L'équipe reçoit au maximum un résumé par jour",
+        "visibleSeconds": 0,
+        "visible": "Écran stable affichant la configuration des emails",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et parfaitement audible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

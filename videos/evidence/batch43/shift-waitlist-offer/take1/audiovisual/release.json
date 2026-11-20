@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:11:10.646Z",
+  "videoSha256": "d6da92c57f7c1cbe67d704dffa240fda0c5c49ad5dd98080c966ca9fd17a8148",
+  "promptSha256": "a891c86bd8e67b3136dc28b8461a7c004a80b828671778caa156c812c894d5c1",
+  "clipSha256": "96288f5f4ca5f9328e9763d7679e75a2f57e910b4d3971c57a5a3c79a551831b",
+  "scene": "release",
+  "review": {
+    "heardOpening": "Quand une personne confirmée se désinscrit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Quand une personne confirmée se désinscrit",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur Annuler puis confirmation dans la modale d'annulation d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Ouvrons le courriel reçu par Camille.",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de l'e-mail reçu par Camille annonçant la place libérée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Le bouton Confirmer ma participation",
+        "visibleSeconds": 10.5,
+        "visible": "Bouton bleu « Confirmer ma participation » bien visible au centre du message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Elle dispose de vingt-quatre heures au maximum",
+        "visibleSeconds": 14.5,
+        "visible": "Mention sous le bouton précisant la date et l'heure limite d'expiration du lien",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

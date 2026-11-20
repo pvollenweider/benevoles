@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:25:04.417Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "d1c3441fbcb7b39363c5765c03105f1db5be827fcf99c1898445761654f50599",
+  "clipSha256": "e431ea9f8db025f8056e858d1c97ffd792583b27ffeb3be410e5ed93d3e18102",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Une place proposée n'est pas encore",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Ouvrons son lien",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage de la page d'offre 'Une place s'est libérée' avec le bouton 'Prendre la place'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.6,
+        "spoken": "et acceptons la place dans cet exemple.",
+        "visibleSeconds": 7.8,
+        "visible": "Clic sur 'Prendre la place' et confirmation 'Place confirmée !'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "Puis vérifions le statut dans les inscriptions.",
+        "visibleSeconds": 11.5,
+        "visible": "Navigation vers la page 'Inscriptions' de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.2,
+        "spoken": "Maintenant seulement, sa participation est confirmée.",
+        "visibleSeconds": 13.5,
+        "visible": "Visualisation de Nicolas Peeters avec le statut confirmé dans la liste des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, claire et parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,131 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T21:07:38.733Z",
+  "revalidatedAt": "2026-11-19T21:07:38.734Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "pb-welcome",
+      "audioSha256": "a521c0429d4e44cdd1c62a58cceb36e166167b44936bb909c729647f33c5ef7e",
+      "recognized": "Les affectations sont prêtes en brouillon. Voyons ce que change la publication pour vous et pour les bénévoles.",
+      "expected": "Les affectations sont prêtes en brouillon. Voyons ce que change la publication, pour vous et pour les bénévoles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-ready",
+      "audioSha256": "78204fbeb3f511eb87cf5f0ee2d8e97d696d6c6d54f7c7eb096ed45bcd365a81",
+      "recognized": "Aux rencontres du Val d'Orcel, vingt-neuf affectations en brouillon attendent pour onze personnes. Sur le planning ce sont encore des brouillons, aucun bénévole ne les voit.",
+      "expected": "Aux Rencontres du Val d'Orsel, vingt-neuf affectations en brouillon attendent, pour onze personnes. Sur le planning, ce sont encore des brouillons : aucun bénévole ne les voit.",
+      "wordErrorRate": 0.03571428571428571,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-publish",
+      "audioSha256": "198c9090db64f088b0aee6fe390823e71b7c8577c9068ef1c3f922ae0b4a7c52",
+      "recognized": "Cliquons sur Publier les affectations. La confirmation le rappelle, les places sont prises maintenant, et chaque personne reçoit un seul e-mail avec ses missions. Confirmons avec Publier.",
+      "expected": "Cliquons sur Publier les affectations. La confirmation le rappelle : les places sont prises maintenant, et chaque personne reçoit un seul email avec ses missions. Confirmons avec Publier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-done",
+      "audioSha256": "92cc1a6918d87a41563e40b769176a27e058c1c8de743c29c941e5869902ce22",
+      "recognized": "Publication faite. Vingt-neuf affectations publiées pour onze personnes et plus aucun brouillon. Sur le planning, chaque mission est maintenant confirmée.",
+      "expected": "Publication faite : vingt-neuf affectations publiées pour onze personnes, et plus aucun brouillon. Sur le planning, chaque mission est maintenant Confirmée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-registrations",
+      "audioSha256": "17e813cbcd85da27b14a63ceedcbe8b33afd7f5531e3a8d236e6980a99cc74f5",
+      "recognized": "Ouvrons Voir les inscriptions. La liste compte vingt-neuf inscriptions actives, chacune avec la source Affectation publiée.",
+      "expected": "Ouvrons Voir les inscriptions. La liste compte vingt-neuf inscriptions actives, chacune avec la source Affectation publiée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-email",
+      "audioSha256": "85b3c407151e2d71568951a1d599f8ee9c351a774c66b29725e9e14118881f8f",
+      "recognized": "Les e-mails partent une dizaine de minutes après la publication. Un seul par personne avec toutes ses missions. Voici celui d'Emma avec ses deux soirées au Bar des Tilleuls. Sous le bouton Mes inscriptions, le texte précise que le lien couvre toute l'organisation. Ce lien est personnel.",
+      "expected": "Les emails partent une dizaine de minutes après la publication : un seul par personne, avec toutes ses missions. Voici celui d'Emma avec ses deux soirées au Bar des Tilleuls. Sous le bouton Mes inscriptions, le texte précise que le lien couvre toute l'organisation. Ce lien est personnel.",
+      "wordErrorRate": 0.04081632653061224,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-volunteer",
+      "audioSha256": "256fe1819daceba0dfb980b0139349c7e1001e3058889f3ee5a0e9a8b39e8ccf",
+      "recognized": "Noah a reçu le même e-mail avec ses deux créneaux. Il ouvre le bouton Mes inscriptions. Cette page rassemble tous ses créneaux à venir auprès de l'organisation. Avec Voir l'événement, Noah retrouve le détail de ses missions. Ici, pas de bouton pour changer de mission. Il peut annuler un créneau ou écrire à l'organisation.",
+      "expected": "Noah a reçu le même email, avec ses deux créneaux. Il ouvre le bouton Mes inscriptions. Cette page rassemble tous ses créneaux à venir auprès de l'organisation. Avec Voir l'événement, Noah retrouve le détail de ses missions. Ici, pas de bouton pour changer de mission : il peut annuler un créneau, ou Écrire à l'organisation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-cancel",
+      "audioSha256": "f1f013d65b03edea85a559a57d54089078a4afd630fe6696c84e50b8cff80b97",
+      "recognized": "Le parking de dimanche ne lui convient plus, il appuie sur annuler. Il peut laisser un mot pour l'organisation, il écrit son message, puis il confirme avec oui, annuler. Il lui reste son créneau de samedi.",
+      "expected": "Le parking de dimanche ne lui convient plus : il appuie sur Annuler. Il peut laisser un mot pour l'organisation. Il écrit son message, puis il confirme avec Oui, annuler. Il lui reste son créneau de samedi.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-withdrawal",
+      "audioSha256": "c9dd512d2e0287554106f37fcc129b3f37101314678f97ee12feb51a203f02ec",
+      "recognized": "De votre côté, quelques minutes plus tard, un email vous prévient, qui se désiste, de quel créneau, son message et la place qui manque maintenant. Trouver un remplaçant mène aux membres libres à cet horaire.",
+      "expected": "De votre côté, quelques minutes plus tard, un email vous prévient : qui se désiste, de quel créneau, son message, et la place qui manque maintenant. Trouver un remplaçant mène aux membres libres à cet horaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-correct",
+      "audioSha256": "f7bd7b24f42a780e195821ebf6fccc43124ab04126eaf2fd3435df3c585294a4",
+      "recognized": "Emma, elle, n'est plus libre vendredi soir. Voici ce qu'elle voit avec le lien reçu pour ses disponibilités. La page le dit, elle peut les corriger et cela ne modifie ni n'annule ses missions. Pour vendredi, elle choisit pas disponible",
+      "expected": "Emma, elle, n'est plus libre vendredi soir. Voici ce qu'elle voit avec le lien reçu pour ses disponibilités. La page le dit : elle peut les corriger, et cela ne modifie ni n'annule ses missions. Pour vendredi, elle choisit Pas disponible.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-saved",
+      "audioSha256": "a7fde3c17ac19b055f275092eab2f97fad38a226f719e49add7415552bd272ea",
+      "recognized": "puis Enregistrer mes disponibilités. La page confirme, l'organisation est prévenue et ses missions restent les mêmes.",
+      "expected": "Puis Enregistrer mes disponibilités. La page confirme : l'organisation est prévenue, et ses missions restent les mêmes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pb-review",
+      "audioSha256": "b62b60b97c5880d511df3a17f6920c5b2b39ba61ee92f007111a45de0922f29a",
+      "recognized": "Sur Affectation en brouillon, vous voyez une mission à revoir après une correction des disponibilités. Emma, vendredi, au Bar des tilleuls. Personne n'a été déplacé ni désinscrit. Dans sa case, Voir l'inscription mène à son inscription.",
+      "expected": "Sur Affectations en brouillon, vous voyez une mission à revoir après une correction des disponibilités : Emma, vendredi, au Bar des Tilleuls. Personne n'a été déplacé ni désinscrit. Dans sa case, Voir l'inscription mène à son inscription.",
+      "wordErrorRate": 0.02631578947368421,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

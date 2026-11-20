@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:30:03.549Z",
+  "videoSha256": "857e5ca4985af8cdcce4129b15910f0f8d15482eb661366481704dafc0f4ebe0",
+  "promptSha256": "a1058eb09eb4f67cfce3c54df27ee52f9c3e064a595a86acf8b54d5f5ae767b7",
+  "clipSha256": "ba2e51b729ec0980db6d1ae4a3756323c2583b231e1104151c91fd6588bc8989",
+  "scene": "address",
+  "review": {
+    "heardOpening": "Une adresse erronée demande une autre attention",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "puis la fiche de Léa",
+        "visibleSeconds": 6.3,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.4,
+        "spoken": "Corrigeons son email et enregistrons.",
+        "visibleSeconds": 7.5,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Revenons au suivi : l'ancien email en échec garde toujours son ancien destinataire.",
+        "visibleSeconds": 13,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Dans notre événement de formation, Léa et Emma sont inscrites",
+        "visibleSeconds": 26.8,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.5,
+        "spoken": "Choisissons un objet clair, puis écrivons notre consigne.",
+        "visibleSeconds": 29.6,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 38.6,
+        "spoken": "l'aperçu, les deux destinataires et la confirmation.",
+        "visibleSeconds": 41.5,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 47.1,
+        "spoken": "Ouvrons maintenant celui réellement reçu par Léa",
+        "visibleSeconds": 46.9,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 53.6,
+        "spoken": "Le bouton Mes inscriptions ouvre ses inscriptions auprès de l'organisation.",
+        "visibleSeconds": 53.8,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine posée, claire et parfaitement intelligible tout au long de la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

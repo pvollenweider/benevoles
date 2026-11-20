@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:57:42.470Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
+  "clipSha256": "ac769eabdcb9bd829775c4a7df62e68290c594f26e772aaa39c142762a7d3b1e",
+  "scene": "retire",
+  "review": {
+    "heardOpening": "Nous n'avons plus besoin de demander la taille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Cliquons sur Retirer, puis lisons la confirmation",
+        "visibleSeconds": 5,
+        "visible": "Ouverture de la fenêtre modale « Retirer la question « Taille de t-shirt » ? » avec le texte explicatif.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 15.5,
+        "visible": "Clic sur le bouton rouge Retirer et retour à l'écran des paramètres puis bascule vers l'onglet Inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée.",
+        "visibleSeconds": 17.5,
+        "visible": "Dans la liste des inscriptions pour Aline Mercier, affichage de « Taille de t-shirt (question retirée) : L ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Ouvrons enfin un autre créneau public : la question n'est plus proposée",
+        "visibleSeconds": 24.5,
+        "visible": "Affichage du formulaire d'inscription public sur un créneau, où la question sur la taille n'apparaît plus.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et parfaitement synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

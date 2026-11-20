@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:55:40.625Z",
+  "videoSha256": "c2aeece8a06254b320c262b20d8fe0c25507ea488d40baf0d68656beb18c4b62",
+  "promptSha256": "9078715ec40ea6d5edbbddfc2ffb4b78e1de820d4a1a803b6ceb6833710d1d50",
+  "clipSha256": "f6a880622a373574b81dc4ff520e6075b1e00f41333d947e04b3d0e0c8b5270f",
+  "scene": "role",
+  "review": {
+    "heardOpening": "Si vous coordonnez un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "choisissez le planning par poste",
+        "visibleSeconds": 2,
+        "visible": "Clic sur le lien Planning par poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "La buvette a sa propre page, avec ses horaires, ses bénévoles et son responsable",
+        "visibleSeconds": 11.5,
+        "visible": "L'écran précédent reste figé jusqu'à 11.5s avant d'afficher le document montrant les postes",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Regardons aussi les autres postes pour comprendre le découpage",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage du planning découpé par poste avec Loge visible",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Remettre cette feuille à un relais terrain l'aide à savoir qui arrive et quand",
+        "visibleSeconds": 12,
+        "visible": "Aperçu du planning par poste avec les créneaux et bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Retard d'affichage majeur entre 00:04 et 00:11 : la voix décrit la page du poste Buvette alors que l'écran reste bloqué sur la liste des documents à imprimer pendant plus de 7 secondes."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec le script."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

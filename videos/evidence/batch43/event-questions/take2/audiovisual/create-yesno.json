@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:55:58.070Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "5a4e35f233dac4dea4e8c48186b2bb08c331e8d85fb1cbc5d6bcc46b86990fb3",
+  "clipSha256": "b8e2ded00c870ac7a168d34a4abca911790e151367d53dc743b5627d3dc2ca62",
+  "scene": "create-yesno",
+  "review": {
+    "heardOpening": "Pour le permis de conduire, une réponse simple suffit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Ajoutons une nouvelle question",
+        "visibleSeconds": 4.1,
+        "visible": "Le formulaire « Nouvelle question » s'affiche sous la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "puis écrivons Permis de conduire",
+        "visibleSeconds": 6,
+        "visible": "Le texte « Permis de conduire » apparaît dans le champ de la question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Choisissons Oui ou non dans le type de réponse",
+        "visibleSeconds": 9.5,
+        "visible": "Le menu déroulant « Type de réponse » reste sur « ... » et le choix « Oui ou non » n'est jamais montré",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 23.2,
+        "spoken": "rendons aussi la réponse obligatoire, puis enregistrons",
+        "visibleSeconds": 23.4,
+        "visible": "La case « Réponse obligatoire » est cochée puis la question est enregistrée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:07, l'action « Choisissons Oui ou non dans le type de réponse » n'est pas montrée à l'écran : le champ reste vide jusqu'à la validation."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond sonore musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

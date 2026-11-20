@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:56:49.279Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "795ceccfe660e42e3051d4f84ec88887dd18ad7c9f3a16bf60317d7aec3b98db",
+  "clipSha256": "8d0d461c0ef779141a04e7388f63be34022019d279c4f9879fb7064d764152fc",
+  "scene": "email-proof",
+  "review": {
+    "heardOpening": "Aline existait déjà dans la liste des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage du message de confirmation reçu avec le message d'accueil pour Aline",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Le bouton Mes inscriptions ouvre toutes ses inscriptions auprès de l'organisation",
+        "visibleSeconds": 19.5,
+        "visible": "Bouton bleu « Mes inscriptions » bien visible dans le corps du courriel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25,
+        "spoken": "La phrase sous le bouton rappelle que le lien doit rester privé",
+        "visibleSeconds": 25,
+        "visible": "Texte explicatif sous le bouton mentionnant explicitement « Ne le partage pas »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, fluide et naturelle, en cohérence complète avec le déroulement visuel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

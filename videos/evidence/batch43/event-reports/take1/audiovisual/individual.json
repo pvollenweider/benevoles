@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:55:47.305Z",
+  "videoSha256": "c2aeece8a06254b320c262b20d8fe0c25507ea488d40baf0d68656beb18c4b62",
+  "promptSha256": "435f996081c7ae07740ce554f948b7574ef57627b346df047b80b663dbf117a4",
+  "clipSha256": "aca065b53550a00e2055a5ef2b38ad6cfd722c3647beab278ebf90799b33fa75",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Pour Léa, le planning individuel regroupe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.9,
+        "spoken": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes.",
+        "visibleSeconds": 0,
+        "visible": "Fiche de Léa Giroud affichée avec la mention '5 créneaux' et le détail des affectations.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Ses contacts sont réunis une seule fois en haut de la page, avec le responsable du poste.",
+        "visibleSeconds": 5,
+        "visible": "Section Contacts visible sous l'en-tête de Léa Giroud indiquant le contact et la responsable Élodie Perrin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Le tableau de chaque journée donne l'horaire, le poste et les coéquipiers inscrits sur le même créneau.",
+        "visibleSeconds": 10.5,
+        "visible": "Tableau de la journée du Samedi 10 octobre 2026 centré à l'écran avec les colonnes Horaire, Poste et Avec.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.3,
+        "spoken": "Ici, son planning tient sur une seule page.",
+        "visibleSeconds": 16,
+        "visible": "Affichage de la vue 'Lecture du PDF réel — planning de Léa, première feuille' montrant la page entière.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Le dernier créneau est à la loge, en bas du tableau.",
+        "visibleSeconds": 23.5,
+        "visible": "Zoom sur le bas du tableau mettant en évidence la ligne 16:00-18:00 Loge - Accueil des artistes.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

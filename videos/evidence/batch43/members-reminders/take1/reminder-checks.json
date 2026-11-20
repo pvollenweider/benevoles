@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-11-19T21:19:08.287Z",
+  "simpleReminder": {
+    "queued": 3,
+    "sent": 3,
+    "declinedSkipped": 0,
+    "recentlySkipped": 0
+  },
+  "originalInvitationTokenRetained": true,
+  "targetedMessage": {
+    "sent": 3,
+    "audience": "les invités sans créneau confirmé",
+    "pushDevices": 0,
+    "declinedExcluded": 0
+  },
+  "targetedInvitationLinkRetained": true,
+  "participationUnchanged": true
+}

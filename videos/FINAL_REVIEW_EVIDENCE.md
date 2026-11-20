@@ -1373,9 +1373,9 @@ Les quinze vidéos des points 1 à 9 ont été traitées : **douze READY publié
 
 **SHIFT_CREATE_EDIT_DETAIL : READY, publiée, révision 6, 134,76 s.** Troisième vidéo H dans l’ordre initial : nouvelle voix Kore continue, six limites corrigées avant la prise, sept ASR source/final et contrôle de voix conformes. Deux répétitions, une seule prise narrée ; pauses des heures raccourcies avant la prise pour terminer leur saisie pendant leur explication. Sept revues AV / 25 points sans signalement, quatorze images finales inspectées. Minimum (optionnel), aide des paramètres du poste et libellés actuels sont visibles ; le vrai créneau 18h–21h30 est enregistré avec trois places et ses informations pratiques, puis relu. Les écarts historiques de minimum et de libellés de cette vidéo sont résolus. Musique 15,4–19,1 LU sans trou, zéro tutoiement, dix-neuf clics réels sonorisés. Aperçu puis APPLY=1, cinq fichiers envoyés ; vérification distante cinq inchangés et durée publiée synchronisée. [Rapport et preuves](evidence/batch41/phase2/shift-create-edit-detail/review-report.txt). Aucun changement produit ni écoute subjective humaine revendiquée.
 
-## À refilmer : « Partager ce créneau » sur « Où manque-t-il du monde ? » (#1386, 17 novembre 2026)
+## Refilmé au lot 43 : « Partager ce créneau » sur « Où manque-t-il du monde ? » (#1386)
 
-Chaque créneau à compléter porte maintenant un troisième lien, **Partager ce créneau**, après « Chercher des bénévoles » et « Voir les disponibilités » ; il ouvre une fenêtre avec le lien public du créneau, « Copier le lien », « QR code PNG » et la case « Accepter une inscription même si les inscriptions de l'événement sont fermées ». Les sélecteurs de capture visent des liens de `staffing-underfilled` et ne cassent pas ; seule l'image change. Vidéos touchées : **LAST_MINUTE_CHANGES** (`last-minute-changes`, le geste le plus utile la veille : un segment à ajouter). À reprendre au prochain lot vidéo.
+Chaque créneau à compléter porte maintenant un troisième lien, **Partager ce créneau**, après « Chercher des bénévoles » et « Voir les disponibilités » ; il ouvre une fenêtre avec le lien public du créneau, « Copier le lien », « QR code PNG » et la case « Accepter une inscription même si les inscriptions de l'événement sont fermées ». Les sélecteurs de capture visent des liens de `staffing-underfilled` et ne cassent pas ; seule l'image change. Le lot 43 montre l'ouverture du partage et le retour « Lien copié » dans **LAST_MINUTE_CHANGES**, révision 7. [Image du rendu](evidence/batch43/last-minute-changes/take2/shift-share.jpg).
 
 ## À refilmer : planning en liste sur téléphone (#1407, 18 novembre 2026)
 
@@ -1425,18 +1425,12 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 
 **Vidéos montrant un email de confirmation ou de rappel** (bouton et phrase de portée périmés ; capture à refaire, narration à ajuster quand elle cite le bouton ou le lien) :
 
-- **ASSIGNMENT_PUBLICATION** (`assignment-publication`) : l'email de publication des missions montre « Gérer mes inscriptions ».
 - **VOLUNTEER_CONFIRMATION_ERRORS** (`volunteer-confirmation-errors`) : email de confirmation et email « Demande d'inscription non enregistrée », tous deux avec leur lien personnel.
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
 - **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
-- **LAST_MINUTE_CHANGES** (`last-minute-changes`) : email d'offre, email de changement d'horaire et emails d'annulation.
-- **SHIFT_WAITLIST_OFFER** (`shift-waitlist-offer`) : email d'offre de place (lien d'action propre à l'événement, à conserver tel quel).
-- **TARGETED_MESSAGES** (`targeted-messages`) et **MEMBERS_REMINDERS** (`members-reminders`) : emails de message ciblé, dont le bouton de gestion.
-- **ORG_EMAIL_SETTINGS** (`org-email-settings`) : email de test d'un message ciblé.
-- **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
-- **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
+- **TARGETED_MESSAGES** (`targeted-messages`) : email de message ciblé avec bouton de gestion.
 
-**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `ASSIGNMENT_PUBLICATION`, `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (seize vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
+**Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (quinze vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
 
 ## Lot 43 — Retrouver toutes mes inscriptions, 19 novembre 2026
 
@@ -1449,3 +1443,25 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **VOLUNTEER_CONFIRMATION_ERRORS — NOT READY après deux prises.** Les deux courriels ont été refilmés et leur temps de lecture est suffisant. Les consentements ont été recalés sur la deuxième prise. La confirmation suivant la coupure simulée part encore avant sa consigne. La révision publiée reste en place. [Suivi des prises](evidence/batch43/STATUS.md).
 
 **VOLUNTEER_REGISTER — READY, publiée, révision 6, 57,28 s.** Le tutoriel garde la liste au chargement du téléphone et montre le vrai courriel, son bouton « Mes inscriptions » et sa phrase de confidentialité. Le parcours s’arrête à ce message. [Revue et preuves](evidence/batch43/volunteer-register-mobile/review.md).
+
+**TARGETED_MESSAGES — NOT READY après deux prises.** Le cadrage de la seconde montre le bouton commun et la phrase de confidentialité. Le clic « Modifier » du chapitre final devance encore son annonce. La révision 5 du lot 42 reste publiée. [Revue et preuves](evidence/batch43/targeted-messages/take2/review.md).
+
+**REMINDERS_CHANGES — NOT READY après deux prises.** Le contrôle du build a écarté la première prise après la fusion de #1440 pendant la capture. La deuxième montre le lien commun dans les vrais rappels et le courriel de changement avec assez de temps de lecture. La narration finale attribue au courriel de Lucas une précision distincte sur sa demande qui ne figure pas dans le texte reçu. La révision 5 reste publiée. [Revue et preuves](evidence/batch43/reminders-changes/take2/review.md).
+
+**LAST_MINUTE_CHANGES — READY, publiée, révision 7, 465,44 s.** Le vrai courriel de changement est lisible 14,88 s, avec les deux horaires, le bouton commun et sa phrase de confidentialité. Le partage montre « Lien copié ». La seconde prise rétablit les consignes de saisie du nom et sépare les confirmations. Douze chapitres vérifiés, onze courriels fictifs reçus et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/last-minute-changes/take2/review.md).
+
+**ASSIGNMENT_PUBLICATION — READY, publiée, révision 2, 174,44 s.** Le vrai courriel des missions ouvre la page de l'organisation, puis « Voir l'événement » donne accès au détail et à l'annulation avec un mot. La nouvelle carte du lien commun apparaît sur le détail. La seconde prise cale la correction de disponibilité et la transition audio. Douze chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/assignment-publication/take2/review.md).
+
+**MEMBERS_REMINDERS — READY, publiée, révision 6, 212,32 s.** Les deux messages destinés à Anna gardent son lien d'invitation à l'événement, avec « Voir les missions et m'inscrire » et « Choisir mes créneaux ». Le message ciblé est lisible 10,12 s avant l'historique. Huit chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/members-reminders/take1/review.md).
+
+**ORG_EMAIL_SETTINGS — READY, publiée, révision 6, 210,60 s.** Le courriel de test montre l'expéditeur, le propriétaire fictif et l'adresse de réponse enregistrée. Dix chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/org-email-settings/take1/review.md).
+
+**EVENT_QUESTIONS — READY, publiée, révision 6, 533,96 s.** Les seize chapitres passent la validation et la transcription. La revue ciblée maintient une alerte sur la taille L, visible sélectionnée sur le MP4 à 380,2 s. La publication a été autorisée après vérification des images. MP4 mesuré et affiche HTTP 200. [Revue et preuves](evidence/batch43/event-questions/take2/review.md).
+
+**SHIFT_WAITLIST_OFFER — READY, publiée, révision 5, 117,64 s.** Le vrai courriel d'offre reste lisible 14,24 s. Son lien ouvre l'offre du créneau Buvette sans changer son statut. Sept chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/shift-waitlist-offer/take1/review.md).
+
+**EMAIL_DELIVERY_FAILURES — READY, publiée, révision 4, 321,36 s.** Le courriel à l'adresse corrigée montre le destinataire puis le bouton commun et sa phrase. Huit chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/email-delivery-failures/take2/review.md).
+
+**EVENT_REPORTS — NOT READY après deux prises, révision 3 maintenue.** Les colonnes par jour de la liste avec téléphones et le PDF d'une page de Léa sont visibles. Dans la seconde prise, la Buvette reste au bas du cadre quand ses horaires sont annoncés, et la ligne de Léa défile trop vite dans l'export complet. Les dix chapitres ont passé la validation technique et la transcription. [Revue et preuves](evidence/batch43/event-reports/take2/review.md).
+
+**REGISTRATION_MONITOR_FOLLOWUP — READY, publiée, révision 6, 199,48 s.** La demande se ferme au moment annoncé. Le choix du poste, le filtre du créneau et la recherche sont visibles dans l'ordre. L'aperçu du courriel et la confirmation montrent trois destinataires fictifs sans envoi. Treize chapitres validés, affiche distante HTTP 200 et sous-titres identiques. [Revue et preuves](evidence/batch43/organizer-monitor-followup/take2/review.md).

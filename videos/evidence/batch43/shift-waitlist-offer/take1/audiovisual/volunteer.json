@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:11:32.300Z",
+  "videoSha256": "d6da92c57f7c1cbe67d704dffa240fda0c5c49ad5dd98080c966ca9fd17a8148",
+  "promptSha256": "e7e67434446e1cc7d1aa20120b206b6b38e0ef20ef066824ebc6f88967a9ac38",
+  "clipSha256": "78dcc02ccb06d1bf7d1116aaffde7e91e35bed02735e84442e0d5d7cb318245f",
+  "scene": "volunteer",
+  "review": {
+    "heardOpening": "Sur sa page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "la personne voit l'offre, son expiration et les actions Prendre la place ou Refuser la place",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage du créneau proposé avec la date limite d'expiration et les boutons d'action Prendre la place et Refuser la place",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Le lien Prendre la place ouvre une page qui présente l'offre",
+        "visibleSeconds": 8,
+        "visible": "Clic sur Prendre la place et ouverture de la page dédiée « Une place s'est libérée »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Seul le bouton Prendre la place de cette page confirme le créneau",
+        "visibleSeconds": 12,
+        "visible": "Affichage et clic sur le bouton bleu Prendre la place sur la page d'offre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Refuser la place conserve une réponse explicite",
+        "visibleSeconds": 17,
+        "visible": "Retour à la liste des créneaux avec mise en valeur du bouton Refuser la place",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:41:51.790Z",
+  "videoSha256": "c3da8853eb53dc4ff28c6aa7159074d818fbb45c73d835f02b150f5e110687f5",
+  "promptSha256": "9e67d4e43b4d465597b98ef68d13ad9ba25e08c3ee6d1bad9dc345720ea42018",
+  "clipSha256": "6b5002a00181b413d6b4747788c8521adfe0b7f60c3ab08d327b18c0dd0f7015",
+  "scene": "need",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tôt et une paire de mains",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Sur la page Jour J, ouvrons Ajouter un besoin.",
+        "visibleSeconds": 6.8,
+        "visible": "Navigation vers l'onglet Jour J et clic sur le bouton bleu Ajouter un besoin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Indiquons le poste Renfort matériel, le début, la fin et une place.",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie de Renfort matériel, vérification des heures 21:30 à 23:30 et saisie de 1 dans Places.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "Ajouter le créneau enregistre d'abord le besoin.",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur Ajouter le créneau et affichage de l'Étape 2 sur 2 : prévenir.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone.",
+        "visibleSeconds": 20.8,
+        "visible": "Les cases Inscrits aujourd'hui et Envoyer aussi une notification sur le téléphone sont visibles précochées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons.",
+        "visibleSeconds": 24.8,
+        "visible": "Sélection d'Emma Johansson, clic sur Voir l'aperçu et envoyer, puis clic sur Envoyer à 1 personne dans la modale.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.5,
+        "spoken": "L'email propose le créneau ; il n'inscrit personne automatiquement.",
+        "visibleSeconds": 29.5,
+        "visible": "Confirmation Email envoyé à 1 personne affichée sur la page Jour J.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée, bien articulée et parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

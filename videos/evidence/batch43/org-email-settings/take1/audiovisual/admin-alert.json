@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:10:49.699Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "db6c480e161e4233506e437bab427928c8b732a7db4e152ee924a9660032d8d2",
+  "clipSha256": "77380ac971cf51b4f6c41ec90ad9659935de28eef351f0a07b142b93eaee72a8",
+  "scene": "admin-alert",
+  "review": {
+    "heardOpening": "L'option Prévenir les organisateurs à chaque inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Prévenir les organisateurs à chaque inscription",
+        "visibleSeconds": 0.8,
+        "visible": "L'option cochée 'Prévenir les organisateurs à chaque inscription' est bien visible dans la liste des paramètres d'emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "envoie un e-mail à chaque organisateur actif",
+        "visibleSeconds": 4.5,
+        "visible": "La case de l'option est décochée par le curseur de la souris puis réactivée à 00:08",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Elle facilite le suivi d'un petit événement",
+        "visibleSeconds": 9.4,
+        "visible": "L'option reste cochée avec son texte descriptif affiché en dessous",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

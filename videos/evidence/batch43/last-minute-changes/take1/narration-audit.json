@@ -1,0 +1,130 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-19T20:14:47.312Z",
+  "revalidatedAt": "2026-11-19T20:14:47.313Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "c6677670a447a34980d74161fca7e127f8c776bddab394eee430f924a327f9c0",
+      "recognized": "Un désistement, un horaire qui bouge, une mission devenue inutile, les imprévus arrivent, même avec un bon planning. Le plus important, c'est de vérifier les faits, prévenir les bonnes personnes et regarder le résultat. Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un. Les personnes et les messages de démonstration sont fictifs. Chaque changement sera réellement enregistré dans notre environnement de formation.",
+      "expected": "Un désistement, un horaire qui bouge, une mission devenue inutile : les imprévus arrivent, même avec un bon planning. Le plus important, c'est de vérifier les faits, prévenir les bonnes personnes et regarder le résultat. Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un. Les personnes et les messages de démonstration sont fictifs. Chaque changement sera réellement enregistré dans notre environnement de formation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "withdrawal",
+      "audioSha256": "5fb633a7e0a7373822fac7c5d7e08fb09aa00cf57c5860f6286bde7a4527cf69",
+      "recognized": "Aline ne peut plus venir à l'accueil. Depuis son lien personnel, elle annule son inscription. C'est un retrait individuel, le créneau existe toujours. Revenons dans les inscriptions côté organisation. Son inscription n'est plus une confirmation active. Comme une personne attendait cette place, l'application lui propose de la prendre. Ouvrons le vrai email reçu par Nicolas. On y retrouve le créneau et un délai de réponse. Le bouton « Confirmer ma participation » concerne cette seule place. Ne partagez pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.",
+      "expected": "Aline ne peut plus venir à l'accueil. Depuis son lien personnel, elle annule son inscription. C'est un retrait individuel : le créneau existe toujours. Revenons dans les inscriptions côté organisation. Son inscription n'est plus une confirmation active. Comme une personne attendait cette place, l'application lui propose de la prendre. Ouvrons le vrai email reçu par Nicolas. On y retrouve le créneau et un délai de réponse. Le bouton Confirmer ma participation concerne cette seule place. Ne partagez pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "offer",
+      "audioSha256": "85f04e5c974197d903d17c108f657d95205d4ee6befa50e03a44c71ed3308161",
+      "recognized": "Une place proposée n'est pas encore une personne confirmée. Nicolas doit répondre dans le délai de son offre. Ouvrons son lien et acceptons la place dans cet exemple. Puis vérifions le statut dans les inscriptions. Maintenant seulement, sa participation est confirmée. Si une personne ne répond pas ou refuse, ne partez pas du principe qu'elle sera là. Les états de la liste d'attente permettent de distinguer ce qui est proposé de ce qui est vraiment accepté.",
+      "expected": "Une place proposée n'est pas encore une personne confirmée. Nicolas doit répondre dans le délai de son offre. Ouvrons son lien et acceptons la place dans cet exemple. Puis vérifions le statut dans les inscriptions. Maintenant seulement, sa participation est confirmée. Si une personne ne répond pas ou refuse, ne partez pas du principe qu'elle sera là. Les états de la liste d'attente permettent de distinguer ce qui est proposé de ce qui est vraiment accepté.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "coverage",
+      "audioSha256": "ca0eab0b934977257348d017ab9d0069ca12841311bc97fcf1233bde7816a614",
+      "recognized": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture de l'événement. Le poste d'accueil est à nouveau rempli, mais un autre créneau reste en sous-effectif. Lisons le poste, la date, l'horaire et le nombre de places manquantes. Une demande à valider réserve déjà une place sans être une présence confirmée. Un total de personnes inscrites ne suffit donc pas pour comprendre le besoin. Partons du créneau précis et de ses états plutôt que d'envoyer une relance à toute l'organisation.",
+      "expected": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture de l'événement. Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif. Lisons le poste, la date, l'horaire et le nombre de places manquantes. Une demande à valider réserve déjà une place, sans être une présence confirmée. Un total de personnes inscrites ne suffit donc pas pour comprendre le besoin. Partons du créneau précis et de ses états, plutôt que d'envoyer une relance à toute l'organisation.",
+      "wordErrorRate": 0.011494252873563218,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "share",
+      "audioSha256": "b1f46474c41775cb84e8f97fbaa923eac5de515d037f3e018348d75d069393da",
+      "recognized": "Il manque encore quelqu'un pour installer le matériel demain ? Depuis ce créneau, ouvrez Partager ce créneau, cliquez sur Copier le lien et envoyez-le à votre groupe de discussion. Les bénévoles arrivent directement sur la mission de midi à quatorze heures. Si les inscriptions de l'événement sont fermées, cette case permet de laisser ce créneau accessible tant qu'il reste une place et qu'il n'a pas commencé.",
+      "expected": "Il manque encore quelqu'un pour installer le matériel demain. Depuis ce créneau, ouvrez Partager ce créneau. Cliquez sur Copier le lien et envoyez-le à votre groupe de discussion. Les bénévoles arrivent directement sur la mission de midi à quatorze heures. Si les inscriptions de l'événement sont fermées, cette case permet de laisser ce créneau accessible tant qu'il reste une place et qu'il n'a pas commencé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "availability",
+      "audioSha256": "e915800bd1506dc63802d816c49147c7c4594c9da8b1f6f6f07610cd4f68cd38",
+      "recognized": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque. Ce renseignement aide à lui proposer un créneau, il ne l'inscrit pas automatiquement et ne garantit pas qu'elle soit libre ce jour-là. Regardons aussi ses inscriptions pour éviter un chevauchement. Si la mission demande un âge ou une compétence particulière, vérifiez ces conditions et échangez avec la personne. Une disponibilité n'est pas un consentement à être déplacé. Depuis le lien de l'e-mail On cherche encore du monde, Sarah répond : « Je ne peux pas pour ce seul créneau. » Dans Chercher des bénévoles, a répondu non le indique sa réponse sans la retirer de la liste.",
+      "expected": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque. Ce renseignement aide à lui proposer un créneau ; il ne l'inscrit pas automatiquement et ne garantit pas qu'elle soit libre ce jour-là. Regardons aussi ses inscriptions pour éviter un chevauchement. Si la mission demande un âge ou une compétence particulière, vérifiez ces conditions et échangez avec la personne. Une disponibilité n'est pas un consentement à être déplacée. Depuis le lien de l'email On cherche encore du monde, Sarah répond Je ne peux pas pour ce seul créneau. Dans Chercher des bénévoles, A répondu non le indique sa réponse, sans la retirer de la liste.",
+      "wordErrorRate": 0.008403361344537815,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "message",
+      "audioSha256": "cf22d1664c3a64eb5435505f577cd814ce2dbf456c7d4d43f92ced1c702cb98d",
+      "recognized": "Depuis les messages de l'événement, choisissons Les bénévoles d'un créneau, puis Installation du matériel. Emma y est déjà inscrite, ce message lui sera adressé, pas à toute l'organisation. Écrivons un objet clair et une courte demande. Il reste une place de midi à quatorze heures. Connaît-elle quelqu'un qui pourrait aider ? Le poste, l'horaire et la manière de répondre doivent être compréhensibles. Vérifions l'aperçu et le destinataire, puis confirmons l'envoi. Ouvrons le vrai e-mail reçu. Le bouton Mes inscriptions rassemble les inscriptions auprès de cette organisation. La phrase sous le bouton rappelle que le lien reste personnel. Ce message ne crée aucune inscription. Pour la suite de la démonstration, supposons que Zoé a donné son accord. Renseignons ensuite la même adresse e-mail que sur sa fiche membre. Choisissons le créneau de logistique de midi à quatorze heures, puis ajoutons-la. Enfin, revenons à la couverture, le poste est rempli. Nous avons vérifié une nouvelle inscription, pas seulement envoyé une demande d'aide.",
+      "expected": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau, puis Installation du matériel. Emma y est déjà inscrite : ce message lui sera adressé, pas à toute l'organisation. Écrivons un objet clair et une courte demande. Il reste une place de midi à quatorze heures ; connaît-elle quelqu'un qui pourrait aider ? Le poste, l'horaire et la manière de répondre doivent être compréhensibles. Vérifions l'aperçu et le destinataire, puis confirmons l'envoi. Ouvrons le vrai email reçu. Le bouton Mes inscriptions rassemble les inscriptions auprès de cette organisation. La phrase sous le bouton rappelle que le lien reste personnel. Ce message ne crée aucune inscription. Pour la suite de la démonstration, supposons que Zoé a donné son accord. Revenons aux inscriptions et ouvrons l'ajout manuel. Saisissons son prénom, puis son nom. Renseignons ensuite la même adresse email que sur sa fiche membre. Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la. Enfin, revenons à la couverture : le poste est rempli. Nous avons vérifié une nouvelle inscription, pas seulement envoyé une demande d'aide.",
+      "wordErrorRate": 0.07650273224043716,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "need",
+      "audioSha256": "d4f18394fed1aea05ff80bdc6b198b84d92acbeeb482f494fd1604a0ff79fab5",
+      "recognized": "Le matériel arrive plus tôt et une paire de mains supplémentaires serait utile. Sur la page Jour J, ouvrons Ajouter un besoin, indiquons le poste, Renfort matériel, le début, la fin et une place. Ajouter le créneau enregistre d'abord le besoin. L'étape suivante permet de prévenir les bénévoles. Inscrit aujourd'hui est déjà coché, comme la notification sur téléphone. Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons. L'e-mail propose le créneau, il n'inscrit personne automatiquement.",
+      "expected": "Le matériel arrive plus tôt et une paire de mains supplémentaire serait utile. Sur la page Jour J, ouvrons Ajouter un besoin. Indiquons le poste Renfort matériel, le début, la fin et une place. Ajouter le créneau enregistre d'abord le besoin. L'étape suivante permet de prévenir les bénévoles. Inscrits aujourd'hui est déjà coché, comme la notification sur téléphone. Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons. L'email propose le créneau ; il n'inscrit personne automatiquement.",
+      "wordErrorRate": 0.025,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "schedule",
+      "audioSha256": "a81af273253b039be4d85e893a2d4affc7e7f0e65e7e20243aa917badd315d5c",
+      "recognized": "Le matériel arrive plus tard, nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu. L'ancien est barré et le nouveau est mis en évidence. Le bouton Mes inscriptions ouvre la page commune à l'organisation. La phrase sous le bouton rappelle la confidentialité du lien. Revenons au planning et vérifions la nouvelle heure de début. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contactez aussi les personnes directement.",
+      "expected": "Le matériel arrive plus tard : nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu. L'ancien est barré et le nouveau est mis en évidence. Le bouton Mes inscriptions ouvre la page commune à l'organisation. La phrase sous le bouton rappelle la confidentialité du lien. Revenons au planning et vérifions la nouvelle heure de début. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contactez aussi les personnes directement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "cancel",
+      "audioSha256": "defd8b93d2c4e51235d37724bf7020966707872f0bffbb03b23221ba5e41e5b2",
+      "recognized": "Une mission n'a plus lieu. Cette fois, on annule le créneau entier, pas une seule personne. Ouvrons la confirmation et prenons le temps de lire les conséquences. Après confirmation, les inscriptions concernées sont annulées et les personnes sont prévenues. Une demande en attente de validation est aussi concernée. Vérifions le statut. Ouvrons le courrier d'annulation. Il indique le créneau annulé et permet de voir les créneaux disponibles de cet événement. Si des présences ont déjà été enregistrées, elles ne doivent pas être effacées pour arranger le planning. Annuler n'est pas simplement fermer les nouvelles inscriptions.",
+      "expected": "Une mission n'a plus lieu : cette fois, on annule le créneau entier, pas une seule personne. Ouvrons la confirmation et prenons le temps de lire les conséquences. Après confirmation, les inscriptions concernées sont annulées et les personnes sont prévenues. Une demande en attente de validation est aussi concernée. Vérifions le statut. Ouvrons le courrier d'annulation. Il indique le créneau annulé et permet de voir les créneaux disponibles de cet événement. Si des présences ont déjà été enregistrées, elles ne doivent pas être effacées pour arranger le planning. Annuler n'est pas simplement fermer les nouvelles inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "journal",
+      "audioSha256": "32aaaf3065799e57fde6facfc0accd356b0bdbd599e226bbffbfaf8f91abb648",
+      "recognized": "Pour comprendre l'imprévu après coup, ouvrons le journal de l'événement. Retrouvons le retrait, l'offre et son acceptation, puis le changement d'horaire et l'annulation. Le mode récit peut montrer les conséquences reliées à une action. Deux lignes proches dans le temps ne suffisent pas à prouver un lien de cause. Le journal aide l'équipe à se coordonner. Il ne restaure pas un ancien planning, et lire les coordonnées utiles se fait dans les vues prévues, pas en diffusant des captures d'historique.",
+      "expected": "Pour comprendre l'imprévu après coup, ouvrons le journal de l'événement. Retrouvons le retrait, l'offre et son acceptation, puis le changement d'horaire et l'annulation. Le mode Récit peut montrer les conséquences reliées à une action. Deux lignes proches dans le temps ne suffisent pas à prouver un lien de cause. Le journal aide l'équipe à se coordonner ; il ne restaure pas un ancien planning. Et lire les coordonnées utiles se fait dans les vues prévues, pas en diffusant des captures d'historique.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "362fce735c37ca84a7ce74c0ce07425e905385ffd7c9c320281412215e055184",
+      "recognized": "Terminons dans la vue de couverture et les inscriptions à jour. Nicolas a accepté sa place, Zoé est sur le créneau convenu, le nouvel horaire est visible et la mission annulée n'est plus à pourvoir. Nous avons vérifié les résultats, pas seulement cliqué sur des boutons. En cas d'imprévu, un besoin précis, une proposition claire, l'accord des personnes et un dernier contrôle du planning. Cela laisse de la place au changement, sans perdre les bénévoles en route.",
+      "expected": "Terminons dans la vue de couverture et les inscriptions à jour. Nicolas a accepté sa place, Zoé est sur le créneau convenu, le nouvel horaire est visible et la mission annulée n'est plus à pourvoir. Nous avons vérifié les résultats, pas seulement cliqué sur des boutons. En cas d'imprévu : un besoin précis, une proposition claire, l'accord des personnes et un dernier contrôle du planning. Cela laisse de la place aux changements, sans perdre les bénévoles en route.",
+      "wordErrorRate": 0.025,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

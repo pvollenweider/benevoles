@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:00:11.044Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "87235202abf5027d7c9d7a0cca46d06d5e5477575d9edfe0fd53fd73fa9e2567",
+  "clipSha256": "6594748a199514e53d2e22bd9f107973f7a725b88f67d02646c081222e08a9fb",
+  "scene": "pb-withdrawal",
+  "review": {
+    "heardOpening": "De votre côté",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "un email vous prévient : qui se désiste, de quel créneau",
+        "visibleSeconds": 0,
+        "visible": "L'email affiche en en-tête « Noah De Jong se désiste de Parking (06/12/2026 - 10:00-13:00) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "son message, et la place qui manque maintenant",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la mention « Il manque maintenant 1 place » et de l'encadré contenant le message « Absent dimanche matin, désolé »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Trouver un remplaçant mène aux membres libres à cet horaire",
+        "visibleSeconds": 0,
+        "visible": "Bouton d'action bleu « Trouver un remplaçant » bien visible avec le texte explicatif associé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, sans défaut sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

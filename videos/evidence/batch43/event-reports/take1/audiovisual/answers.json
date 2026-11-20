@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:56:01.422Z",
+  "videoSha256": "c2aeece8a06254b320c262b20d8fe0c25507ea488d40baf0d68656beb18c4b62",
+  "promptSha256": "2ad908a465f15e43360f62e9bf7fed6bbf5f01d4826e4f9d14b6179169364b7c",
+  "clipSha256": "1e9bff67ef897f994ce9bcba012405b6515ed0e46c6b58140fc6e65f8e3379d7",
+  "scene": "answers",
+  "review": {
+    "heardOpening": "Pour préparer les t-shirts et les repas",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "ouvrez Questions aux bénévoles, puis la Synthèse des réponses",
+        "visibleSeconds": 1.5,
+        "visible": "La section Questions aux bénévoles et le bloc Synthèse des réponses sont déjà ouverts à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Lisons les tailles et les régimes renseignés",
+        "visibleSeconds": 9,
+        "visible": "Affichage des tableaux détaillant la taille du t-shirt et le régime alimentaire avec les colonnes Confirmés et En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.3,
+        "spoken": "Regardons ce vrai document",
+        "visibleSeconds": 22.8,
+        "visible": "Clic sur Imprimer la synthèse et ouverture du document imprimable Fête des associations - documents terrain",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

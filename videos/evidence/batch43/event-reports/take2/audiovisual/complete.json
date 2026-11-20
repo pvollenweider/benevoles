@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:05:12.166Z",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "promptSha256": "c9dfdd38a9305492ddd68ad7ad4e7abe5b261288400193a1b95742cc63bd7fbe",
+  "clipSha256": "807dd0b8b8bbe2d4698f6840a349ee29c62082876a423478f512c87d4fb69b85",
+  "scene": "complete",
+  "review": {
+    "heardOpening": "Pour une vue d'ensemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "descendez dans la partie réservée aux organisateurs et ouvrez Export complet.",
+        "visibleSeconds": 4.5,
+        "visible": "La section 'Pour les organisateurs seulement' apparaît et le lien 'Export complet' est cliqué.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Ce document en couleur réunit le planning, les créneaux et le récapitulatif des bénévoles.",
+        "visibleSeconds": 7,
+        "visible": "Affichage de la page 'documents terrain' avec le planning graphique coloré.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "puis retrouvons Léa.",
+        "visibleSeconds": 14.8,
+        "visible": "Défilement rapide vers la liste des bénévoles où apparaît 'Léa', immédiatement masquée au profit du récapitulatif.",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Les effectifs indiquent où il manque du monde.",
+        "visibleSeconds": 16.5,
+        "visible": "Tableau 'Récap par poste' affichant les colonnes Places et Inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:15, la recherche de Léa est à peine visible : la liste des bénévoles défile en moins d'une seconde sans temps d'arrêt pour identifier la bénévole."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions principales."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -279,7 +279,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     assert.equal(message.recipient, email)
     const link = new URL(message.actualPersonalLink)
     assert.equal(link.origin, base)
-    assert(/^\/my\/[^/]+$/.test(link.pathname), "Actual local personal link required")
+    assert(/^\/mes-inscriptions\/[^/]+$/.test(link.pathname), "Actual local organisation link required")
     await evidence("email-proof", { actualLocalEmailShown: true, recipientVerified: true, personalLinkVerified: true })
   })
   await scene("admin-read", async at => {
@@ -362,7 +362,8 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     await form.waitFor({ state: "hidden" })
     assert.deepEqual((await read()).questions.find(q => q.id === questionId)?.options, ["S", "M", "L", "XL", "XXL"])
     assertAnswer(await read(), "Taille de t-shirt", "L")
-    await at("Ajouter une possibilité et retirer")
+    await at("Le nouveau choix apparaît")
+    await page.waitForTimeout(650)
     await go(`${admin}/registrations`)
     await page.getByText(/Taille de t-shirt.*L/).first().scrollIntoViewIfNeeded()
     await evidence("edit-choices", { additionalChoicePersisted: true, existingResponseUnchanged: true })

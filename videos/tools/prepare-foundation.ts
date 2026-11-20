@@ -3,6 +3,7 @@
 import assert from "node:assert/strict"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { pgAdapter } from "../../src/lib/prisma-adapter"
+import { DEFAULT_NOTIFICATION_SETTINGS } from "../../src/lib/notification-settings"
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
@@ -27,6 +28,7 @@ async function main() {
         const date = new Date(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`)
         date.setUTCDate(date.getUTCDate() + 7)
         await db.$transaction([
+          db.organization.update({ where: { id }, data: { replyToEmail: null, notificationSettings: DEFAULT_NOTIFICATION_SETTINGS } }),
           db.event.update({ where: { id: eventId }, data: { startDate: date, endDate: date, remindersEnabled: true } }),
           db.shift.updateMany({ where: { eventId }, data: { date } }),
         ])

@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:55:44.629Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "b96b6e8b3dc6fe21c6f2f35765ecfcaf04094e71f44c7b66e850330c47d17b68",
+  "clipSha256": "ed30b22b08252b7339034024990c34fd45fc64c2e2f0418409a96e883384fe17",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 2.7,
+        "visible": "Clic sur le bouton Ajouter une question et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis saisissons son intitulé",
+        "visibleSeconds": 4.4,
+        "visible": "Saisie du texte « Taille de t-shirt » dans le champ de la question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Dans Type de réponse, choisissons Choix unique",
+        "visibleSeconds": 11.2,
+        "visible": "Sélection de « Choix unique » dans le menu déroulant Type de réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Voici S, M, L et XL",
+        "visibleSeconds": 18,
+        "visible": "Saisie des options S, M, L, XL dans la zone Choix proposés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "cochons Réponse obligatoire",
+        "visibleSeconds": 27.2,
+        "visible": "Cochage de la case Réponse obligatoire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.6,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 28.7,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.1,
+        "spoken": "La question est maintenant dans la liste, avec ses choix et son caractère obligatoire",
+        "visibleSeconds": 29.5,
+        "visible": "La question « Taille de t-shirt (obligatoire) » apparaît dans la liste avec les choix S, M, L, XL",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

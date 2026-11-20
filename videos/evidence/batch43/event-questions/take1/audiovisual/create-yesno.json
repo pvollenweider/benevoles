@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:40:57.733Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "5a4e35f233dac4dea4e8c48186b2bb08c331e8d85fb1cbc5d6bcc46b86990fb3",
+  "clipSha256": "38ebdb5b528b97d9d763c6f10a2181699ad1e7271c8b62535b0d751ecf4f6e91",
+  "scene": "create-yesno",
+  "review": {
+    "heardOpening": "Pour le permis de conduire, une réponse simple suffit.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ajoutons une nouvelle question, puis écrivons Permis de conduire.",
+        "visibleSeconds": 4.1,
+        "visible": "Le formulaire de nouvelle question apparaît avec l'intitulé « Permis de conduire » renseigné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Choisissons Oui ou non dans le type de réponse.",
+        "visibleSeconds": 7.5,
+        "visible": "Le menu déroulant Type de réponse affiche « Oui / Non ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.3,
+        "spoken": "rendons aussi la réponse obligatoire, puis enregistrons.",
+        "visibleSeconds": 24.1,
+        "visible": "La case Réponse obligatoire est cochée, le formulaire est enregistré et la question s'ajoute à la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les modifications à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

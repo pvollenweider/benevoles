@@ -1,0 +1,16 @@
+npm run video:publish -- --context "default" --apply  REGISTRATION_MONITOR_FOLLOWUP
+
+> benevoles@2.8.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply REGISTRATION_MONITOR_FOLLOWUP
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (3) :
+  + organizer-monitor-followup/organizer-monitor-followup.mp4
+  + organizer-monitor-followup/organizer-monitor-followup.txt
+  + organizer-monitor-followup/organizer-monitor-followup.vtt
+Inchangés : 0
+Pas encore rendus localement (ignorés) : 2
+  - organizer-monitor-followup/organizer-monitor-followup.jpg
+  - organizer-monitor-followup/organizer-monitor-followup-og.jpg
+Présents seulement sur le serveur (laissés tels quels) : 617
+Envoyé : 3 fichier(s).

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:11:22.021Z",
+  "videoSha256": "d6da92c57f7c1cbe67d704dffa240fda0c5c49ad5dd98080c966ca9fd17a8148",
+  "promptSha256": "d87ae0e82defead865e04ee9b4bea88f935c183458fd7a079f8657f78a5a02e9",
+  "clipSha256": "169efc6b360c808f5cf047ba3dfebbc6525257e6ba55af78dfe189793e634ba9",
+  "scene": "expiry",
+  "review": {
+    "heardOpening": "Si l'offre expire sans réponse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Si l'offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante.",
+        "visibleSeconds": 0.5,
+        "visible": "Page d'e-mail avec l'encadré d'explications sur le fonctionnement de la liste d'attente et l'expiration de l'offre.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Dans l’administration",
+        "visibleSeconds": 6.3,
+        "visible": "Transition vers l'interface d'administration dans l'onglet Inscriptions de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "on peut suivre l’offre active et la position des personnes encore en attente.",
+        "visibleSeconds": 7.5,
+        "visible": "Tableau des inscriptions affichant le statut « Place proposée » ainsi que les bénévoles en liste d'attente.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le changement d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

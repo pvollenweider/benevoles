@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:20:06.214Z",
+  "videoSha256": "8231607c4ca38771494938165a956ad3507125df3b2f63958f4200680e57db05",
+  "promptSha256": "39514f293e0dd4b04a372e007cfb5664d6cdca2bf21d31d3361742a50a19ccd5",
+  "clipSha256": "8339781136e6492c1a64346b2e81eeccfb4c383427d2c0d5db300cf32f316d44",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Le bouton Relancer les personnes sans créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif.",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la fenêtre modale « Relancer 3 membres invités sans créneau confirmé ? »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Vous pouvez encore annuler.",
+        "visibleSeconds": 5.7,
+        "visible": "Clic sur le bouton « Annuler » et fermeture de la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Rouvrons le récapitulatif et relisons le nombre de destinataires.",
+        "visibleSeconds": 7.3,
+        "visible": "Clic sur « Relancer les sans créneau » et réaffichage de la modale avec le compteur de 3 membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Confirmons l'envoi réel.",
+        "visibleSeconds": 12,
+        "visible": "Clic sur le bouton bleu « Relancer » pour lancer l'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Le résultat indique le nombre effectivement envoyé : lisez-le",
+        "visibleSeconds": 20.5,
+        "visible": "Affichage sous les actions de la mention « 3 relances en cours d'envoi »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Alternance fluide entre une voix féminine et une voix masculine, diction claire et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

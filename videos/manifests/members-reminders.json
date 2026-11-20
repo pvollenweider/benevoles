@@ -20,17 +20,17 @@
     },
     {
       "id": "statuses",
-      "transcript": "Sans créneau confirmé ne signifie pas forcément aucune démarche. Dans les inscriptions, une personne peut être en liste d'attente, recevoir une offre ou attendre la validation de l'organisateur. Une autre a déjà une participation confirmée. Vérifiez ces situations avant de relancer. Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
+      "transcript": "Sans créneau confirmé ne signifie pas forcément aucune démarche. Dans les inscriptions, Anna est en liste d'attente. Tom a reçu une offre. Lucas attend la validation de sa demande. Une autre a déjà une participation confirmée : c'est le cas de Camille. Vérifiez ces situations avant de relancer. Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
       "fallbackDurationMs": 37000
     },
     {
       "id": "confirm",
-      "transcript": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Vous pouvez encore annuler. Pour cette démonstration, nous confirmons l'envoi réel. Les membres déjà inscrits ne sont pas relancés. Les fiches inactives et celles sans email ne reçoivent pas ce message non plus. Le résultat indique le nombre effectivement envoyé : lisez-le, plutôt que de vous fier seulement au compteur initial.",
+      "transcript": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Vous pouvez encore annuler. Rouvrons le récapitulatif et relisons le nombre de destinataires. Confirmons l'envoi réel. Les membres déjà inscrits ne sont pas relancés. Les fiches inactives et celles sans email ne reçoivent pas ce message non plus. Le résultat indique le nombre effectivement envoyé : lisez-le, plutôt que de vous fier seulement au compteur initial.",
       "fallbackDurationMs": 39000
     },
     {
       "id": "link",
-      "transcript": "Ouvrons l'email reçu dans la boîte de démonstration. Il propose à nouveau le lien d'invitation. Ce lien est conservé : la relance ne crée pas une deuxième invitation ni une inscription automatique. Une personne en attente peut aussi être dans ce groupe si elle n'a aucun créneau confirmé. C'est pourquoi il est important de comprendre les statuts avant d'envoyer.",
+      "transcript": "Ouvrons l'email reçu dans la boîte de démonstration. Le bouton Voir les missions et m'inscrire renvoie à l'invitation pour cet événement. Ce lien est conservé : la relance ne crée pas une deuxième invitation ni une inscription automatique. Une personne en attente peut aussi être dans ce groupe si elle n'a aucun créneau confirmé. C'est pourquoi il est important de comprendre les statuts avant d'envoyer.",
       "fallbackDurationMs": 35000
     },
     {
@@ -40,12 +40,12 @@
     },
     {
       "id": "waitlist",
-      "transcript": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente. Leur situation mérite une formulation différente. Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente. La relance simple, elle, n'attend pas automatiquement trois jours : c'est vous qui choisissez le bon moment.",
+      "transcript": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente. Leur situation mérite une formulation différente. Revenons au message. Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente. La relance simple, elle, n'attend pas automatiquement trois jours : c'est vous qui choisissez le bon moment. Vérifions le nouvel aperçu.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "send",
-      "transcript": "Une fois le groupe et le texte vérifiés, confirmez l'envoi. Nous ouvrons le vrai message reçu, puis l'historique disponible dans l'administration. Un email remis au serveur n'est pas une preuve de lecture par la personne. L'historique aide à savoir ce qui a été envoyé, sans transformer le suivi des bénévoles en surveillance.",
+      "transcript": "Une fois le groupe et le texte vérifiés, ouvrons la confirmation d'envoi. Confirmons avec le bouton du récapitulatif. Nous ouvrons le vrai message reçu par Anna. Le bouton Choisir mes créneaux conserve son invitation à cet événement. Le texte lui indique que sa demande reste enregistrée. Passons à l'historique disponible dans l'administration. Un email remis au serveur n'est pas une preuve de lecture par la personne. L'historique aide à savoir ce qui a été envoyé, sans transformer le suivi des bénévoles en surveillance.",
       "fallbackDurationMs": 34000
     },
     {

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:59:59.871Z",
+  "videoSha256": "58679152c6fe7349ea75a4c210dafb2147cc5eb6d702bc6873adb1b2389ab1af",
+  "promptSha256": "d1489c98c3fd8a568c92d5f9eb9bc6ee06f802438e2a159f6b74f41ef2b6d4db",
+  "clipSha256": "11e5bbde670230c275322a4963add5313f02085cb6ed12c5da1ea35b567addd2",
+  "scene": "pb-volunteer",
+  "review": {
+    "heardOpening": "Noah a reçu le même email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Il ouvre le bouton Mes inscriptions.",
+        "visibleSeconds": 4.2,
+        "visible": "Clic sur le bouton « Mes inscriptions » qui ouvre la page « Tous tes créneaux à venir ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.7,
+        "spoken": "Cette page rassemble tous ses créneaux à venir auprès de l'organisation.",
+        "visibleSeconds": 6,
+        "visible": "Affichage de la page listant les deux créneaux à venir (samedi 5 et dimanche 6 décembre).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "Avec Voir l'événement, Noah retrouve le détail de ses missions.",
+        "visibleSeconds": 10.8,
+        "visible": "Transition vers la page détaillée des créneaux et missions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.1,
+        "spoken": "il peut annuler un créneau, ou Écrire à l'organisation.",
+        "visibleSeconds": 17.5,
+        "visible": "Présence des boutons « Annuler » en face de chaque créneau et du lien « Écrire à l'organisation ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisation fluide avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

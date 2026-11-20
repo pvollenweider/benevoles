@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:57:02.764Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
+  "clipSha256": "a91b4b578cb9117b804a20727348ed3612f30ae7f50238de1a2b8a150fa340d5",
+  "scene": "summary-export",
+  "review": {
+    "heardOpening": "Pour préparer une commande, téléchargeons la synthèse en CSV.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "téléchargeons la synthèse en CSV",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le lien de téléchargement puis affichage de la synthèse CSV",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux",
+        "visibleSeconds": 5,
+        "visible": "Tableau du fichier CSV affichant les colonnes Question, Réponse et totaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "avec les confirmés et les personnes en attente",
+        "visibleSeconds": 5,
+        "visible": "Colonnes « Confirmés » et « En attente » visibles dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Il ne contient ni noms ni coordonnées",
+        "visibleSeconds": 5,
+        "visible": "Mention « Aucune identité ni coordonnée » sous le titre et absence de données nominatives dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -76,3 +76,7 @@ Conclusion du lot 23-2 : NOT READY après la seconde prise. Le clic Enregistrer 
 ## Contrôle du lot 23-3 — 2026-10-16
 
 NOT READY après deux prises : ancien Enregistrer corrigé, Choix multiple recadré sur ses phrases. Rechargement tardif à 194,82–197,6 s ; repère futur Rechargeons la page préparé sans troisième prise. Alerte M/L contre-vérifiée : L sélectionné à 382,5 s. Référence : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, BUILD_ID `gHYEjPtpdQYUNytuIhMkh`. Preuves locales dans `videos/output/event-questions/review/` et `review-report.txt`.
+
+## Révision du 20 novembre 2026 — lot 43
+
+Montrer le vrai courriel de confirmation d'Aline. Le bouton « Mes inscriptions » et la phrase sous le bouton restent lisibles pendant l'explication. Le lien ouvre les inscriptions de l'organisation.

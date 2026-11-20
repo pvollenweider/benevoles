@@ -1,0 +1,36 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:06:42.515Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "9c421fb7baebc2f7848e1fd319df303d43b53c7196a3a88331aed05de5de16fb",
+  "clipSha256": "d25208508b5ac7895136de2774792c566c4a5aecd8e317788a1690364543fb14",
+  "scene": "pb-welcome",
+  "review": {
+    "heardOpening": "Les affectations sont prêtes en brouillon.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les affectations sont prêtes en brouillon.",
+        "visibleSeconds": 0,
+        "visible": "Cartouche d'introduction puis page affichant la section Affectations en brouillon",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Voyons ce que change la publication",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du bandeau d'introduction, affichage de la section Publier les affectations",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et dynamique, bien synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:39:41.039Z",
+  "videoSha256": "a8ebaa5e0af4cc16f53b2f30ff76d04c16ea3b47c5364ba4fd076e72b2ecf573",
+  "promptSha256": "436549e8473d4612b2172c9b70cb8103b8284bc60fa4504e882dd3d2fb5b22e5",
+  "clipSha256": "faf11adbf1c02a2f7d3a8fbeff304e9cba631888e4778134927080508ba02e19",
+  "scene": "reason",
+  "review": {
+    "heardOpening": "Pour Léa, la cause est indiquée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, la cause est indiquée en français : refus définitif du serveur d'envoi, boîte aux lettres introuvable",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Léa Perrin affichant le statut Échec définitif et le détail du refus du serveur d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Pour Sarah, le problème est temporaire et un nouvel essai est prévu.",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Sarah Rochat affichant le statut Nouvel essai prévu et le détail de l'incident temporaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Envoyé ne prouve ni l'arrivée dans la boîte de réception, ni la lecture.",
+        "visibleSeconds": 0,
+        "visible": "Compteur Envoyé affiché en haut du tableau et statuts d'envoi correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, fluide et bien rythmée, accompagnée d'un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

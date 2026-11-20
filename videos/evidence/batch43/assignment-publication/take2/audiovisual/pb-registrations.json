@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:07:05.999Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "a8924e2a63f345b6361ce1f291b180e217bfb9d0a3bb683e7b6edce62a96de52",
+  "clipSha256": "61b442df78a5c47f015fc66c8c72c84a031575657a1b79db1e4d776eaf984c01",
+  "scene": "pb-registrations",
+  "review": {
+    "heardOpening": "Ouvrons Voir les inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons Voir les inscriptions.",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture de la page Inscriptions affichant la liste des bénévoles inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "La liste compte vingt-neuf inscriptions actives",
+        "visibleSeconds": 1.2,
+        "visible": "Mention « 29 inscriptions actives » affichée sous le sélecteur de filtre.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "chacune avec la source Affectation publiée.",
+        "visibleSeconds": 1.5,
+        "visible": "Colonne Source affichant « Affectation publiée » pour les différentes lignes du tableau.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

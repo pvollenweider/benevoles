@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:14:41.549Z",
+  "videoSha256": "a1ef2c4e7b77fef880628ceaae2283a02669632d7a2e2b3380aa58cd5d1c162e",
+  "promptSha256": "55267fff3420123d1c7bd01d81241b6f7741030057951b6926c92255693b5699",
+  "clipSha256": "a4ac17472fcea039b1d87a477e8c317a970ee417ae581e90a37707a4946f85a2",
+  "scene": "reports",
+  "review": {
+    "heardOpening": "À l'approche du jour J",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "les listes à afficher sur les stands, les plannings individuels",
+        "visibleSeconds": 2,
+        "visible": "Section 'À afficher ou à remettre aux bénévoles' avec Planning par jour, Planning par poste et Planning individuel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "les réponses aux questions et les badges",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement vers le bas affichant 'Synthèse des réponses' et la section 'Badges'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "Vous générez seulement les documents dont votre équipe a besoin",
+        "visibleSeconds": 8.5,
+        "visible": "Options et paramètres de génération des badges et documents affichés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la présentation de l'onglet Documents."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

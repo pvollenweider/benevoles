@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:14:30.341Z",
+  "videoSha256": "a1ef2c4e7b77fef880628ceaae2283a02669632d7a2e2b3380aa58cd5d1c162e",
+  "promptSha256": "244f9ab0963359ff398fe9f7031b281f84d927cfcb54aad15bc3a87b5bf4d74f",
+  "clipSha256": "163553e529bd34e5a886b0dbc751408ca3d15700bb5853cac686d0ac1c5978cd",
+  "scene": "audience",
+  "review": {
+    "heardOpening": "Pour une relance, choisissez précisément les destinataires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "tous les inscrits",
+        "visibleSeconds": 3.4,
+        "visible": "L'option « Tous les bénévoles inscrits » est cochée par défaut avec la mention « 21 personnes recevront ce message ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "un poste",
+        "visibleSeconds": 5.2,
+        "visible": "Le bouton radio « Les bénévoles d'un poste » est sélectionné, affichant le menu déroulant avec le poste « Buvette ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "un créneau",
+        "visibleSeconds": 6.4,
+        "visible": "Le bouton radio « Les bénévoles d'un créneau » est sélectionné avec le créneau « Montage - sam. 28 nov., 07:00-09:00 ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "la liste d’attente",
+        "visibleSeconds": 7.6,
+        "visible": "L'option « Les personnes en liste d'attente » est cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "ou les invités qui n’ont encore aucun créneau confirmé",
+        "visibleSeconds": 8.7,
+        "visible": "L'option « Les invités sans créneau confirmé » est sélectionnée et le décompte « 1 personne recevra ce message » apparaît en dessous.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Le nombre de personnes est recalculé avant l’envoi",
+        "visibleSeconds": 11.5,
+        "visible": "L'indication du nombre de destinataires recalculé est visible au bas des options de destinataires.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien articulée et parfaitement synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

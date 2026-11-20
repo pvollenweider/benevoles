@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T21:06:55.998Z",
+  "videoSha256": "13e0da5acc5945957b232db78caf9641a2c84cc8571f1bba88b8f4e59d5175e2",
+  "promptSha256": "c9786f201898a63a85140f76cc41859a79855ebf0262ca12fcad37568d2556b7",
+  "clipSha256": "4cf18fc02521f3bb81bdb7591080bcf3b3f292b3588ea0f9d69d3da6e93def45",
+  "scene": "pb-done",
+  "review": {
+    "heardOpening": "Publication faite",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Publication faite",
+        "visibleSeconds": 0,
+        "visible": "Encadré vert confirmant 'Publication faite'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "vingt-neuf affectations publiées pour onze personnes, et plus aucun brouillon",
+        "visibleSeconds": 1,
+        "visible": "Détail '29 affectations publiées pour 11 personnes' et mention 'Aucune affectation en brouillon pour l'instant'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Sur le planning, chaque mission est maintenant Confirmée",
+        "visibleSeconds": 7,
+        "visible": "Défilement vers le tableau du planning affichant les statuts 'Confirmée' en vert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec le défilement et les éléments visuels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

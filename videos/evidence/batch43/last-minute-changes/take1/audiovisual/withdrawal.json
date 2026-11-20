@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:24:49.754Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "26ca4f2224a98e2e77fd0d618ea9bd8939adb0d290f68ebcef8ad393cf1c809a",
+  "clipSha256": "700be94a31fec70403ee9c6b270b97b65b181b5ae4ad0254ae7e00043fc3c069",
+  "scene": "withdrawal",
+  "review": {
+    "heardOpening": "Aline ne peut plus venir à l'accueil.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Depuis son lien personnel, elle annule son inscription.",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le bouton Annuler puis confirmation dans la modale avec Oui, annuler.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Revenons dans les inscriptions côté organisation.",
+        "visibleSeconds": 9.8,
+        "visible": "Affichage de la liste des inscriptions dans l'espace organisateur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.2,
+        "spoken": "Ouvrons le vrai email reçu par Nicolas.",
+        "visibleSeconds": 23,
+        "visible": "Affichage de l'email adressé à Nicolas avec l'invitation pour le créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.6,
+        "spoken": "On y retrouve le créneau et un délai de réponse.",
+        "visibleSeconds": 24,
+        "visible": "Présence du créneau vendredi 20 novembre 10:00-12:00 et du texte indiquant l'expiration du lien.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.6,
+        "spoken": "Le bouton Confirmer ma participation concerne cette seule place.",
+        "visibleSeconds": 26.8,
+        "visible": "Bouton bleu Confirmer ma participation visible au centre de l'email.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien articulée et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

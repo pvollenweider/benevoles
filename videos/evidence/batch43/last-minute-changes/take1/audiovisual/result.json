@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:26:30.355Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "8c6a526acf2977743d9f2858505ccde324866dfd9e2f84f8db941ead53260ab9",
+  "clipSha256": "b9ddce76cc9feccb36e04722932b025128002088b0c85c048fb08bf484b1b10e",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Terminons dans la vue de couverture et les inscriptions à jour.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Terminons dans la vue de couverture et les inscriptions à jour.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page des Inscriptions avec la liste des bénévoles inscrits",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Nicolas a accepté sa place,",
+        "visibleSeconds": 6,
+        "visible": "Défilement vers le bas révélant la présence de Nicolas Peeters confirmé sur l'Accueil du matin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Zoé est sur le créneau convenu,",
+        "visibleSeconds": 7,
+        "visible": "Zoé Papadopoulos est visible sur ses créneaux assignés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir.",
+        "visibleSeconds": 14,
+        "visible": "Basculement vers la liste des créneaux puis vers la vue de couverture montrant les créneaux restants",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, bien articulée, ton concluant et bienveillant."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

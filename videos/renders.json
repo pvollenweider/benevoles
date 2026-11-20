@@ -18,7 +18,7 @@
     "poster": true
   },
   "assignment-publication": {
-    "durationMs": 164280,
+    "durationMs": 174440,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -42,7 +42,7 @@
     "poster": true
   },
   "email-delivery-failures": {
-    "durationMs": 295120,
+    "durationMs": 321360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -90,7 +90,7 @@
     "poster": true
   },
   "event-questions": {
-    "durationMs": 539800,
+    "durationMs": 533960,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -126,7 +126,7 @@
     "poster": true
   },
   "last-minute-changes": {
-    "durationMs": 395480,
+    "durationMs": 465440,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -162,7 +162,7 @@
     "poster": true
   },
   "members-reminders": {
-    "durationMs": 199680,
+    "durationMs": 212320,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -174,7 +174,7 @@
     "poster": true
   },
   "org-email-settings": {
-    "durationMs": 202960,
+    "durationMs": 210600,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -210,7 +210,7 @@
     "poster": true
   },
   "organizer-monitor-followup": {
-    "durationMs": 197480,
+    "durationMs": 199480,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -312,7 +312,7 @@
     "poster": true
   },
   "shift-waitlist-offer": {
-    "durationMs": 109760,
+    "durationMs": 117640,
     "width": 1280,
     "height": 800,
     "poster": true

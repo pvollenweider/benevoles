@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:56:34.749Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
+  "clipSha256": "d6e4199d71ca1a54cf1c82bece3890dfb76e4e1fde05c3b78bbbf3ef10a84cce",
+  "scene": "volunteer-form",
+  "review": {
+    "heardOpening": "Répondons maintenant.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Aline choisit M pour son t-shirt",
+        "visibleSeconds": 2.3,
+        "visible": "Sélection de la taille M pour le t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.6,
+        "spoken": "puis Oui pour le permis",
+        "visibleSeconds": 5.1,
+        "visible": "Sélection de l'option Oui pour le permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Pour le matériel, elle coche Vélo et Remorque",
+        "visibleSeconds": 7.8,
+        "visible": "Cochage successif des cases Vélo puis Remorque",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Dans le texte libre, écrivons Entrée nord",
+        "visibleSeconds": 12.4,
+        "visible": "Saisie de « Entrée nord » dans le point de rendez-vous préféré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "le récapitulatif Transmis à l'organisation montre les informations qui seront partagées",
+        "visibleSeconds": 16.5,
+        "visible": "Défilement vers le haut affichant l'encadré latéral « Transmis à l'organisation »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "confirmons réellement l'inscription",
+        "visibleSeconds": 23.8,
+        "visible": "Clic sur le bouton « Confirmer mon inscription » puis affichage de la confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

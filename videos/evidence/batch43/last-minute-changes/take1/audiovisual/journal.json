@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-19T20:26:23.414Z",
+  "videoSha256": "b7cc9cac12bba4517d8b09c98e07c4cf75f79be5936a026cfdef1cda5ef3f525",
+  "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
+  "clipSha256": "0ce83920df5a6a9112e12f72ce7659a76b4edcec771822e2db0561e3dee91fa1",
+  "scene": "journal",
+  "review": {
+    "heardOpening": "Pour comprendre l'imprévu après coup",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "ouvrons le journal de l'événement.",
+        "visibleSeconds": 1,
+        "visible": "L'onglet Journal de l'événement est déjà ouvert et affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Retrouvons le retrait, l'offre, et son acceptation",
+        "visibleSeconds": 6.5,
+        "visible": "Défilement de la liste des événements montrant le refus, le lien envoyé et la confirmation d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Le mode Récit peut montrer les conséquences reliées à une action.",
+        "visibleSeconds": 14.8,
+        "visible": "Clic sur le sous-onglet Récit qui affiche la liste des enchaînements d'actions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.4,
+        "spoken": "Deux lignes proches dans le temps ne suffisent pas à prouver un lien de cause.",
+        "visibleSeconds": 21.5,
+        "visible": "Clic sur l'enchaînement d'Aline Martin affichant le détail du lien de cause à effet",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, fluide et naturelle, en parfait accord avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
