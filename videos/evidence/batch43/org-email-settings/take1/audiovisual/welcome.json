@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:10:39.455Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "6a433a8d3cfc49c42e9c1fd03cc423eafd8d90f2aae40940867bb9dee8276613",
+  "clipSha256": "2be2c0fa71c0005b600b51765836eac698636596609dfd6479f69688fdb040e0",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Dans Paramètres, Emails, le propriétaire choisit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, Emails",
+        "visibleSeconds": 0.5,
+        "visible": "L'écran affiche la page Paramètres > Emails avec un titre d'introduction au premier plan qui s'estompe",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Voyons les rappels, les alertes et l'adresse de réponse",
+        "visibleSeconds": 11.2,
+        "visible": "La page détaille les sections Rappels automatiques, les options d'alertes et l'Adresse de réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "puis vérifions un vrai message de test, sans contacter les bénévoles",
+        "visibleSeconds": 15,
+        "visible": "Écran stable de la configuration des emails présentant l'ensemble des réglages décrits pour la suite",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'introduction à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

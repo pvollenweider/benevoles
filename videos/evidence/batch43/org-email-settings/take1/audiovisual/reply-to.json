@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:11:19.725Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "024fb36f76461a5af971707c3c9cdc4b3667b386639af87818faa9c834a2a6ed",
+  "clipSha256": "76138c702e8a541049c3e00a18ff872fe64e6adf751c59cb999a96a2a7fa29be",
+  "scene": "reply-to",
+  "review": {
+    "heardOpening": "L'adresse de réponse indique où arrive un message",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "L'adresse de réponse indique où arrive un message",
+        "visibleSeconds": 0.8,
+        "visible": "Page 'Paramètres des emails' affichée avec le champ 'Adresse de réponse' visible en bas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "Saisissons benevoles arobase example point org",
+        "visibleSeconds": 6.8,
+        "visible": "Clic et saisie de l'adresse 'benevoles@example.org' dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "Si le champ reste vide, l'adresse par défaut est utilisée",
+        "visibleSeconds": 9.9,
+        "visible": "Champ complété et texte d'aide sous le champ rappelant la règle par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, calme et dynamique, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

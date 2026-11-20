@@ -5197,8 +5197,9 @@ async function main() {
         await page.screencast.showChapter("Une équipe autonome et maîtrisée", { description: "Des comptes nominatifs, des droits adaptés", duration: 2_300 })
       })
     } else if (slug === "org-email-settings") {
-      if (localBaseUrl !== "http://localhost:43102" || (baseUrl !== "http://localhost:43102" && baseUrl !== "https://formation-email.benevol.app") || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
+      if (!["http://localhost:43100", "http://localhost:43102"].includes(localBaseUrl) || (baseUrl !== localBaseUrl && baseUrl !== "https://formation-email.benevol.app") || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
       const emailEventId = "video-foundation-email-event-0"
+      const emailChecks: Record<string, unknown> = {}
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Rappels, alertes et réponses", duration: 2_300 })
@@ -5213,11 +5214,11 @@ async function main() {
         if (!box) throw new Error("Reminder controls are not visible")
         const detailStart = Math.round(performance.now() - startedAt)
         detailFrames.push({ startMs: detailStart, endMs: detailStart + 1, x: Math.max(0, Math.min(640, Math.floor(box.x - 25))), y: Math.max(0, Math.min(400, Math.floor(box.y - 35))), width: 640, height: 400 })
-        await at("Décochons puis recochons le premier rappel")
+        await at("Décochons le premier rappel")
         const j2 = page.getByRole("checkbox", { name: /Rappel J-2/ })
-        if (await j2.isChecked()) await tap(page, j2)
-        await at("Décochons puis recochons le premier rappel")
-        await page.waitForTimeout(650)
+        if (!await j2.isChecked()) throw new Error("Fresh fixture must start with the first reminder enabled")
+        await tap(page, j2)
+        await at("Recochons-le")
         await tap(page, j2)
         await at(0.70)
         await page.getByText(/un événement peut en plus couper tous ses rappels/).scrollIntoViewIfNeeded()
@@ -5228,18 +5229,19 @@ async function main() {
         const enabled = page.getByRole("checkbox", { name: "Rappels automatiques", exact: true })
         await enabled.scrollIntoViewIfNeeded()
         if (!await enabled.isChecked()) throw new Error("Fresh email fixture must start with event reminders enabled")
-        await at(0.22) /* mid-sentence: turn off the switch while explaining that it cuts this event's reminders */
+        await at("Décochez la case Rappels automatiques")
         const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
         await tap(page, enabled)
         if (!(await saved).ok()) throw new Error("Event reminder disable was not saved")
         await page.getByText(/^Modifications enregistrées à/).waitFor()
+        await at("Son onglet Messages")
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/message`); await settle(page)
         const actualSummary = page.getByText("Rappels automatiques coupés pour cet événement", { exact: true })
         await actualSummary.waitFor(); await actualSummary.scrollIntoViewIfNeeded()
         await page.waitForTimeout(500)
         const summaryBox = await actualSummary.boundingBox()
         if (!summaryBox || summaryBox.y < 0 || summaryBox.y + summaryBox.height > 800) throw new Error("Actual reminder summary is outside the captured viewport")
-        await at("Son onglet Messages")
+        emailChecks.eventReminderDisabledAndReported = true
       })
 
       await scene("admin-alert", async (at) => {
@@ -5279,7 +5281,7 @@ async function main() {
         await replyTo.fill("")
         await replyTo.pressSequentially("benevoles@example.org", { delay: 115 })
         if (await replyTo.inputValue() !== "benevoles@example.org") throw new Error("Reply address must be fully entered before showing its result")
-        await at(0.72)
+        await at("Cette adresse apparaît aussi")
         await page.getByText(/Cette adresse figure aussi sur la page « Mes inscriptions »/).scrollIntoViewIfNeeded()
       })
 
@@ -5308,11 +5310,17 @@ async function main() {
           await page.waitForTimeout(200)
         }
         if (!mailId) throw new Error("Actual test message missing from isolated SMTP inbox")
-        const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mailId}`)).json() as { Text: string; ReplyTo?: { Address: string }[]; Headers?: Record<string, string[]> }
-        if (!detail.Text.includes("benevoles@example.org")) throw new Error("Test message does not use saved reply-to address")
+        const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mailId}`)).json() as {
+          Text: string; From: { Address: string }; To: { Address: string }[]; ReplyTo: { Address: string }[]
+        }
+        if (detail.To.length !== 1 || detail.To[0].Address !== "video.email.owner@example.org") throw new Error("Test message must only reach the owner")
+        if (!detail.Text.includes("benevoles@example.org") || detail.ReplyTo.length !== 1 || detail.ReplyTo[0].Address !== "benevoles@example.org" || !detail.From.Address) throw new Error("Test message headers or body differ from the saved configuration")
         await at("Ouvrons le message reçu")
         await page.goto(`http://localhost:48026/view/${mailId}`); await settle(page)
-        await page.frameLocator("iframe").locator("body").getByText(/Cet email vérifie l'envoi/).filter({ visible: true }).waitFor()
+        const body = page.frameLocator("iframe").locator("body")
+        await body.getByText(/Cet email vérifie l'envoi/).filter({ visible: true }).waitFor()
+        if (await body.locator('a[href*="/mes-inscriptions/"], a[href*="/my/"]').count()) throw new Error("The owner test must not contain a volunteer's personal link")
+        emailChecks.ownerTest = { mailId, ownerOnly: true, sender: detail.From.Address, replyTo: detail.ReplyTo[0].Address, replyAddressInBody: true, noPersonalLink: true }
         // The assembler frames the real sender/reply-to rows and body together, excluding the client date and technical controls.
       })
 
@@ -5323,6 +5331,7 @@ async function main() {
         await page.getByRole("heading", { name: "Emails envoyés", exact: true }).scrollIntoViewIfNeeded()
         await page.getByRole("row").filter({ hasText: "video.email.owner@example.org" }).first().waitFor()
       })
+      await writeFile(path.join(dir, "email-settings-checks.json"), JSON.stringify(emailChecks, null, 2) + "\n")
     } else if (slug === "organizer-create-publish") {
       let organizerEventId = ""
       let organizerPublicUrl = ""

@@ -54,3 +54,7 @@ Bilan final du lot 22-6 (2026-10-16) : WAITING TTS ; BUILD_ID `mmgd3Xkj4ODeijoEl
 Dans les paramètres d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent. Le fuseau de l'organisation reste utilisé.
 
 Nouvelle narration entière avec une seule voix, puis refilmage : les anciennes paroles ne suffisent pas à expliquer les délais propres à un événement.
+
+## Révision du 19 novembre 2026 — lot 43
+
+Envoyer le vrai message de test au compte fictif du propriétaire. Cadrer l'expéditeur, le destinataire et l'adresse de réponse avec le texte de l'email. Le contrôle vérifie le destinataire et l'absence de lien personnel de bénévole dans ce message administratif. Dans l'historique, expliquer la définition d'« Envoyé ».

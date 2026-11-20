@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:10:39.031Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "f422390f7c64b78924ed24a280d3de3143fef66ae18af8e67e202d3522ef04b1",
+  "clipSha256": "75ae9a391f4a582c5e83f3c7bbf572d2092997750aca14d4dfe27afc30884b47",
+  "scene": "reminders",
+  "review": {
+    "heardOpening": "Vous pourrez activer le rappel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Vous pourrez activer le rappel à deux jours",
+        "visibleSeconds": 0,
+        "visible": "Options Rappel J-2, Rappel J-1 et Rappel du jour visibles et cochées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Décochons le premier rappel",
+        "visibleSeconds": 7.5,
+        "visible": "La case Rappel J-2 est décochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Recochons-le pour le garder",
+        "visibleSeconds": 9.5,
+        "visible": "La case Rappel J-2 est de nouveau cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "chaque rappel regroupe ses créneaux dans un seul email",
+        "visibleSeconds": 15.5,
+        "visible": "Écran stable Paramètres des emails illustrant la section des rappels automatiques",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et dynamique, parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -36,12 +36,12 @@
     },
     {
       "id": "reminders",
-      "transcript": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même, deux à quatre heures avant le premier créneau de la journée. Décochons puis recochons le premier rappel. Pour une personne sur plusieurs créneaux du même événement le même jour, chaque rappel regroupe ses créneaux dans un seul email, pas un email par créneau.",
+      "transcript": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même, deux à quatre heures avant le premier créneau de la journée. Décochons le premier rappel. Recochons-le pour le garder. Pour une personne sur plusieurs créneaux du même événement le même jour, chaque rappel regroupe ses créneaux dans un seul email, pas un email par créneau.",
       "fallbackDurationMs": 31000
     },
     {
       "id": "event-reminders",
-      "transcript": "Dans les paramètres d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent. Le fuseau de l'organisation reste utilisé.",
+      "transcript": "Ouvrons les paramètres de notre événement. Décochez la case Rappels automatiques pour couper les rappels de cet événement. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent. Le fuseau de l'organisation reste utilisé.",
       "fallbackDurationMs": 26000
     },
     {
@@ -61,7 +61,7 @@
     },
     {
       "id": "reply-to",
-      "transcript": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page Mes inscriptions des bénévoles.",
+      "transcript": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi dans le détail des inscriptions de l'événement, pour écrire à l'organisation.",
       "fallbackDurationMs": 22000
     },
     {
@@ -71,7 +71,7 @@
     },
     {
       "id": "test",
-      "transcript": "M’envoyer un email de test envoie un exemple à votre propre compte, pas aux bénévoles. Ouvrons le message reçu dans la boîte locale de démonstration. Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org, puis le contenu du message. Dans cette formation, les emails restent sur notre serveur local et ne partent pas sur Internet.",
+      "transcript": "M’envoyer un email de test envoie un exemple à votre propre compte, pas aux bénévoles. Ouvrons le message reçu dans la boîte locale de démonstration. Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org, puis le texte qui rappelle où la réponse arrivera. C'est un exemple destiné au compte organisateur. Dans cette formation, les emails restent sur notre serveur local et ne partent pas sur Internet.",
       "fallbackDurationMs": 31000
     },
     {

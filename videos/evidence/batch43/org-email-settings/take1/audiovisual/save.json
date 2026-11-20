@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:11:21.665Z",
+  "videoSha256": "6a1fdd8da16e276e7d6b98a2cd40127de5439e117ace4072b7a606bb5f2841ec",
+  "promptSha256": "aac36ef3efa0084e16e58b2566581193404caa70088fcb70dcd9134051ea583d",
+  "clipSha256": "b552b58d7126b8ecceee599099f152b8f8388e846339e97414151311ccd48292",
+  "scene": "save",
+  "review": {
+    "heardOpening": "Enregistrez les paramètres avant de les tester",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Enregistrez les paramètres avant de les tester",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Le message Paramètres enregistrés confirme que vos choix sont conservés",
+        "visibleSeconds": 1,
+        "visible": "Affichage du message « Paramètres enregistrés. » sous le bouton",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Modifier les cases sans enregistrer ne change pas les prochains envois",
+        "visibleSeconds": 7.5,
+        "visible": "Vue d'ensemble des cases à cocher de configuration",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.3,
+        "spoken": "Le test utilise lui aussi la dernière configuration enregistrée",
+        "visibleSeconds": 11.3,
+        "visible": "Bouton « Envoyer un email de test » visible à côté du bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, en parfait accord avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

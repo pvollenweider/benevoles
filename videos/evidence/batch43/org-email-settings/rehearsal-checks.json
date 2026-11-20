@@ -1,0 +1,11 @@
+{
+  "eventReminderDisabledAndReported": true,
+  "ownerTest": {
+    "mailId": "5PS8PNNMznv60t2eUCarbB",
+    "ownerOnly": true,
+    "sender": "notifications@benevol.app",
+    "replyTo": "benevoles@example.org",
+    "replyAddressInBody": true,
+    "noPersonalLink": true
+  }
+}

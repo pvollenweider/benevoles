@@ -1,0 +1,312 @@
+{
+  "slug": "org-email-settings",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-11-19T21:26:51.877Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "9ca74264e2234bfaac258a925a2217601f6a3c76",
+    "sourceTree": "4d73cefda7c17693667bb88014ff82b65cc7e152",
+    "productSourceSha256": "6ea67eb42724d2eaff73fae841761cbeb01be6bc718e65f9219151922ab1082c",
+    "buildId": "bBtzxaQImIpvM7hmmnv_I",
+    "snapshot": "/private/tmp/benevoles-video-production.1tSPRbtI",
+    "builtAt": "2026-11-19T20:46:45.655Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-email",
+    "scenario": "ORG_EMAIL_SETTINGS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6466
+    },
+    {
+      "kind": "click",
+      "atMs": 7264
+    },
+    {
+      "kind": "click",
+      "atMs": 9831
+    },
+    {
+      "kind": "click",
+      "atMs": 14549
+    },
+    {
+      "kind": "click",
+      "atMs": 15347
+    },
+    {
+      "kind": "click",
+      "atMs": 16631
+    },
+    {
+      "kind": "click",
+      "atMs": 17415
+    },
+    {
+      "kind": "click",
+      "atMs": 18680
+    },
+    {
+      "kind": "click",
+      "atMs": 19498
+    },
+    {
+      "kind": "click",
+      "atMs": 22497
+    },
+    {
+      "kind": "key",
+      "atMs": 22806
+    },
+    {
+      "kind": "key",
+      "atMs": 22810
+    },
+    {
+      "kind": "key",
+      "atMs": 22929
+    },
+    {
+      "kind": "key",
+      "atMs": 23047
+    },
+    {
+      "kind": "key",
+      "atMs": 23166
+    },
+    {
+      "kind": "key",
+      "atMs": 23284
+    },
+    {
+      "kind": "key",
+      "atMs": 23402
+    },
+    {
+      "kind": "key",
+      "atMs": 23520
+    },
+    {
+      "kind": "key",
+      "atMs": 23638
+    },
+    {
+      "kind": "key",
+      "atMs": 23757
+    },
+    {
+      "kind": "key",
+      "atMs": 23873
+    },
+    {
+      "kind": "key",
+      "atMs": 23992
+    },
+    {
+      "kind": "key",
+      "atMs": 24111
+    },
+    {
+      "kind": "key",
+      "atMs": 24229
+    },
+    {
+      "kind": "key",
+      "atMs": 24348
+    },
+    {
+      "kind": "key",
+      "atMs": 24467
+    },
+    {
+      "kind": "key",
+      "atMs": 24585
+    },
+    {
+      "kind": "key",
+      "atMs": 24703
+    },
+    {
+      "kind": "key",
+      "atMs": 24821
+    },
+    {
+      "kind": "key",
+      "atMs": 24939
+    },
+    {
+      "kind": "key",
+      "atMs": 25058
+    },
+    {
+      "kind": "key",
+      "atMs": 25177
+    },
+    {
+      "kind": "click",
+      "atMs": 26231
+    },
+    {
+      "kind": "click",
+      "atMs": 29281
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1140,
+      "endMs": 3767
+    },
+    {
+      "id": "reminders",
+      "startMs": 5930,
+      "endMs": 7597
+    },
+    {
+      "id": "event-reminders",
+      "startMs": 8050,
+      "endMs": 12438
+    },
+    {
+      "id": "admin-alert",
+      "startMs": 12891,
+      "endMs": 15653
+    },
+    {
+      "id": "withdrawal",
+      "startMs": 16104,
+      "endMs": 17720
+    },
+    {
+      "id": "addresses",
+      "startMs": 18172,
+      "endMs": 19803
+    },
+    {
+      "id": "reply-to",
+      "startMs": 21973,
+      "endMs": 25313
+    },
+    {
+      "id": "save",
+      "startMs": 25765,
+      "endMs": 26563
+    },
+    {
+      "id": "test",
+      "startMs": 28729,
+      "endMs": 30866
+    },
+    {
+      "id": "result",
+      "startMs": 31319,
+      "endMs": 32580
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "reminders",
+      "phrase": "Décochons le premier rappel",
+      "startMs": 11709,
+      "endMs": 14385,
+      "cueMs": 5968
+    },
+    {
+      "segmentId": "reminders",
+      "phrase": "Recochons-le",
+      "startMs": 14385,
+      "endMs": 16950,
+      "cueMs": 6771
+    },
+    {
+      "segmentId": "event-reminders",
+      "phrase": "Décochez la case Rappels automatiques",
+      "startMs": 2898,
+      "endMs": 8291,
+      "cueMs": 9330
+    },
+    {
+      "segmentId": "event-reminders",
+      "phrase": "Son onglet Messages",
+      "startMs": 8291,
+      "endMs": 11833,
+      "cueMs": 10680
+    },
+    {
+      "segmentId": "withdrawal",
+      "phrase": "Décocher cette option coupe aussi",
+      "startMs": 18944,
+      "endMs": 24010,
+      "cueMs": 16131
+    },
+    {
+      "segmentId": "reply-to",
+      "phrase": "Saisissons benevoles arobase example point org",
+      "startMs": 7192,
+      "endMs": 10662,
+      "cueMs": 22013
+    },
+    {
+      "segmentId": "reply-to",
+      "phrase": "Cette adresse apparaît aussi",
+      "startMs": 14554,
+      "endMs": 22000,
+      "cueMs": 25297
+    },
+    {
+      "segmentId": "save",
+      "phrase": "Enregistrez les paramètres avant de les tester",
+      "startMs": 0,
+      "endMs": 3687,
+      "cueMs": 25766
+    },
+    {
+      "segmentId": "save",
+      "phrase": "Le message Paramètres enregistrés",
+      "startMs": 3687,
+      "endMs": 9401,
+      "cueMs": 26538
+    },
+    {
+      "segmentId": "test",
+      "phrase": "M’envoyer un email de test",
+      "startMs": 0,
+      "endMs": 6059,
+      "cueMs": 28778
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Ouvrons le message reçu",
+      "startMs": 6059,
+      "endMs": 10626,
+      "cueMs": 29608
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Dans Emails envoyés",
+      "startMs": 8008,
+      "endMs": 18487,
+      "cueMs": 31320
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 5967,
+      "endMs": 5968,
+      "x": 140,
+      "y": 223,
+      "width": 640,
+      "height": 400
+    }
+  ]
+}
