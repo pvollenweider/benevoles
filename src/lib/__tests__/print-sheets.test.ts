@@ -1,10 +1,12 @@
 import { describe, it, expect } from "vitest"
 import { answerSummary } from "../question-answer-summary"
 import { EMERGENCY_NOTE } from "../shift-info"
-import { ATTENDANCE_SPARE_LINES, emailWithBreaks, ganttOf, isSheetView, mergeTouchingShifts, phoneDays, renderSheet, SHEET_VIEWS, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
+import { ATTENDANCE_SPARE_LINES, emailWithBreaks, ganttOf, isSheetView, mergeTouchingShifts, phoneDays, renderSheet, roleTimelineAddsInfo, SHEET_VIEWS, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
 
 const alice = { firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 1", comment: null, checkedIn: true }
 const bob = { firstName: "Bob <B>", lastName: "Durand", email: null, phone: null, comment: "vient tard", checkedIn: false }
+/** The individual sheet's time range: a visual dash, read « à » by screen readers. */
+const range = (start: string, end: string) => `${start}<span aria-hidden="true">–</span><span class="sr-only"> à </span>${end}`
 const shift = (over: Partial<SheetShift> & { id: string }): SheetShift => ({
   roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrations: [], ...over,
 })
@@ -69,14 +71,16 @@ describe("print sheets", () => {
     expect(html).toContain("size: A4 landscape")
   })
 
-  it("role: one page per role with its Gantt and leader", () => {
+  it("role: one page per role, its leader and its detail tables; no timeline for a single lane", () => {
     const html = renderSheet("role", data)
     expect(html).toContain("<h2>Bar</h2>")
     expect(html).toContain("Responsable : <strong>Léa</strong> (lea@x.ch)")
     expect(html).toContain("<h2>Accueil</h2>")
     expect(html).toContain("Pas de responsable de secteur désigné.")
     expect((html.match(/class="block page/g) ?? []).length).toBe(2)
-    expect((html.match(/class="gantt-table"/g) ?? []).length).toBe(3) // Bar: two days, Accueil: one
+    // A single shift per role and per day: the timeline would only repeat the detail table (#1444).
+    expect(html).not.toContain('class="gantt-table"')
+    expect((html.match(/<table class="detail">/g) ?? []).length).toBe(3) // Bar: two days, Accueil: one
   })
 
   it("phones: organizers-only notice, one column per event day and a volunteer row header", () => {
@@ -108,19 +112,25 @@ describe("print sheets", () => {
     expect(s1).toContain("vient tard")
   })
 
-  it("individual: one page per volunteer with their day's Gantt, shifts and practical info", () => {
+  it("individual: one page per volunteer, contacts once, then a table per day", () => {
     const html = renderSheet("individual", data)
     expect(html).toContain("<h2>Alice Martin</h2>")
     expect(html).toContain("2 créneaux")
+    expect(html).toContain("<h3>Contacts</h3>")
     expect(html).toContain("Lieu : Entrée B")
     expect(html).toContain("Contact pour ce créneau : Léa")
     expect(html).toContain("À savoir : Gilet fourni")
     expect(html).toContain("<h2>Bob &lt;B&gt; Durand</h2>")
-    expect((html.match(/class="gantt-table"/g) ?? []).length).toBe(2) // one day each
+    // The timeline and the per-shift cards are gone (#1444): one table per day carries the rows.
+    expect(html).not.toContain('class="gantt-table"')
+    expect(html).not.toContain('class="card"')
+    expect((html.match(/class="detail individual-table"/g) ?? []).length).toBe(2) // one day each
+    expect(html).toContain("<caption>Samedi 4 juillet 2026</caption>")
+    expect(html).toContain('>Horaire</th><th scope="col">Poste</th><th scope="col">Avec</th>')
   })
 
-  // Day-of contact (#560): on the individual sheet for a shift without a contact, the emergency note once per volunteer.
-  it("individual: the day-of contact for a shift without contact, with the emergency note once", () => {
+  // Day-of contact (#560): on the individual sheet once per volunteer, with the emergency note once.
+  it("individual: the day-of contact once, with the emergency note once", () => {
     const day = { dayContactName: "Coordination", dayContactPhone: "079 111 11 11" }
     const html = renderSheet("individual", {
       ...data,
@@ -135,17 +145,21 @@ describe("print sheets", () => {
     const [, bobPage, alicePage] = html.split("<h2>")
     expect(alicePage).toContain("Alice Martin")
     expect(alicePage).toContain("Contact pour ce créneau : Léa")
-    expect(alicePage).toContain("Contact le jour J : Coordination, 079 111 11 11")
+    expect(alicePage.split("Contact le jour J : Coordination, 079 111 11 11").length - 1).toBe(1)
     expect(alicePage.split(EMERGENCY_NOTE).length - 1).toBe(1)
-    // Inside the first card with the day-of contact, so it is printed with it.
-    const firstDayCard = alicePage.split('<div class="card">').find((c) => c.includes("Contact le jour J"))!
-    expect(firstDayCard).toContain(`<p class="note">${EMERGENCY_NOTE}</p>`)
+    // The shift's own contact, which differs from the day-of contact of the other shifts, stays
+    // next to its own row instead of being dropped.
+    const ownContactRow = alicePage.split("<tr>").find((row) => row.includes("Contact pour ce créneau : Léa"))!
+    expect(ownContactRow).toContain(range("10:00", "12:00"))
     expect(bobPage).not.toContain("urgence")
   })
 
-  it("individual: names the role's sector leaders, without their email (#560)", () => {
-    const html = renderSheet("individual", { ...data, shifts: [shift({ id: "a", registrations: [alice], sectorLeaderNames: ["Léa"] })] })
-    expect(html).toContain("Responsable du poste : Léa")
+  it("individual: names each role's sector leaders once, without their email (#560)", () => {
+    const html = renderSheet("individual", { ...data, shifts: [
+      shift({ id: "a", registrations: [alice], sectorLeaderNames: ["Léa"] }),
+      shift({ id: "b", startTime: "14:00", endTime: "16:00", registrations: [alice], sectorLeaderNames: ["Léa"] }),
+    ] })
+    expect(html.split("Responsable du poste : Léa").length - 1).toBe(1)
     expect(html).not.toContain("lea@x.ch")
   })
 
@@ -188,6 +202,183 @@ describe("print sheets", () => {
     expect(renderSheet("answers", { ...data, answers: { confirmedCount: 0, waitingCount: 0, questions: [] } })).toContain("Aucune question posée aux bénévoles")
     const q = { id: "q", label: "Q", type: "text", rows: [] }
     expect(renderSheet("answers", { ...data, answers: { confirmedCount: 0, waitingCount: 2, questions: [q] } })).toContain("Aucun bénévole confirmé pour l'instant. 2 en attente")
+  })
+})
+
+/** One volunteer's page from the whole individual sheet, without the pages of the others. */
+function pageOf(html: string, name: string): string {
+  return html.split(`<h2>${name}</h2>`)[1].split("<h2>")[0]
+}
+
+describe("role sheet timeline (#1444)", () => {
+  const roleSheet = (shifts: Partial<SheetShift>[], over: Partial<SheetData> = {}) =>
+    renderSheet("role", {
+      ...data,
+      ...over,
+      shifts: shifts.map((s, i) => shift({ id: `r${i}`, roleName: "Bar", label: "Bar", ...s })),
+    })
+
+  it("decides from an overlap or a second label, never from a single lane", () => {
+    expect(roleTimelineAddsInfo([])).toBe(false)
+    expect(roleTimelineAddsInfo([{ startTime: "09:00", endTime: "11:00", roleName: "Bar", label: "Bar" }])).toBe(false)
+    expect(roleTimelineAddsInfo([
+      { startTime: "09:00", endTime: "11:00", roleName: "Bar", label: "Bar" },
+      { startTime: "11:00", endTime: "14:00", roleName: "Bar", label: "Bar" },
+    ])).toBe(false)
+    expect(roleTimelineAddsInfo([
+      { startTime: "09:00", endTime: "12:00", roleName: "Bar", label: "Bar" },
+      { startTime: "10:00", endTime: "11:00", roleName: "Bar", label: "Bar" },
+    ])).toBe(true)
+    expect(roleTimelineAddsInfo([
+      { startTime: "09:00", endTime: "11:00", roleName: "Bar", label: "Bar · service" },
+      { startTime: "11:00", endTime: "13:00", roleName: "Bar", label: "Bar · caisse" },
+    ])).toBe(true)
+  })
+
+  it("single lane: no timeline, only the detail table", () => {
+    const html = roleSheet([
+      { startTime: "09:00", endTime: "11:00", registrations: [alice] },
+      { startTime: "11:00", endTime: "14:00", registrations: [bob] },
+    ])
+    expect(html).not.toContain('class="gantt-table"')
+    expect(html).toContain('<table class="detail">')
+    expect(html).toContain("09:00–11:00")
+    expect(html).toContain("11:00–14:00")
+  })
+
+  it("overlapping shifts: the timeline stays", () => {
+    const html = roleSheet([
+      { startTime: "09:00", endTime: "12:00", registrations: [alice] },
+      { startTime: "10:00", endTime: "11:00", registrations: [bob] },
+    ])
+    expect(html).toContain('class="gantt-table"')
+  })
+
+  it("two labels: the timeline stays", () => {
+    const html = roleSheet([
+      { label: "Bar · service", startTime: "09:00", endTime: "11:00", registrations: [alice] },
+      { label: "Bar · caisse", startTime: "11:00", endTime: "13:00", registrations: [bob] },
+    ])
+    expect(html).toContain('class="gantt-table"')
+  })
+
+  it("dense day: the day sheet's overview and 6-hour bands, never one 48-column timeline", () => {
+    const hhmm = (mins: number) => `${String(Math.floor(mins / 60)).padStart(2, "0")}:${String(mins % 60).padStart(2, "0")}`
+    // 48 half-hour shifts over 12 hours, in two labelled lanes: the old single timeline had 48
+    // fifteen-minute columns, far too narrow for names.
+    const dense = Array.from({ length: 24 }, (_, i) => [
+      { startTime: hhmm(6 * 60 + i * 30), endTime: hhmm(6 * 60 + (i + 1) * 30), label: "Bar · service", capacity: 3 },
+      { startTime: hhmm(6 * 60 + i * 30), endTime: hhmm(6 * 60 + (i + 1) * 30), label: "Bar · caisse", capacity: 3 },
+    ]).flat()
+    const html = roleSheet(dense)
+    expect(html).toContain('class="overview-table"')
+    expect((html.match(/<div class="band-table">/g) ?? []).length).toBe(2)
+    expect(html).toContain('class="legend"')
+    // The whole timeline would have been one table with 48 slots; the bands split it.
+    expect(html).not.toContain('col span="48"')
+    expect(html).toContain('<table class="detail">')
+  })
+
+  it("drops « Créneau » when every label repeats the role, keeps it when a label differs", () => {
+    const repeated = roleSheet([
+      { label: "Bar", startTime: "09:00", endTime: "11:00" },
+      { label: "", startTime: "11:00", endTime: "13:00" },
+    ])
+    expect(repeated).not.toContain('class="w-role">Créneau</th>')
+    const own = roleSheet([{ label: "Bar · soir", startTime: "09:00", endTime: "11:00" }])
+    expect(own).toContain('class="w-role">Créneau</th>')
+    expect(own).toContain("<td>Bar · soir</td>")
+  })
+})
+
+describe("individual sheet without timeline or cards (#1444)", () => {
+  const carol = { id: "carol", firstName: "Carol", lastName: "Zimmer", email: "carol@x.ch", phone: null }
+
+  it("shows no timeline and no card", () => {
+    const html = renderSheet("individual", data)
+    expect(html).not.toContain('class="gantt-table"')
+    expect(html).not.toContain('class="card"')
+    expect(html).toContain('<table class="detail individual-table">')
+    // A row is never split across two printed pages.
+    expect(html).toMatch(/\.individual-table tr \{[^}]*page-break-inside: avoid;[^}]*break-inside: avoid/)
+  })
+
+  it("shows the day-of contact and the emergency note once across five shifts", () => {
+    const day = { dayContactName: "Coordination", dayContactPhone: "079 111 11 11" }
+    const shifts = [8, 10, 12, 14, 16].map((hour, i) => shift({
+      id: `five-${i}`, startTime: `${String(hour).padStart(2, "0")}:00`, endTime: `${String(hour + 2).padStart(2, "0")}:00`,
+      registrations: [alice], ...day,
+    }))
+    const html = renderSheet("individual", { ...data, shifts })
+    const page = pageOf(html, "Alice Martin")
+    expect(page.split("Contact le jour J : Coordination, 079 111 11 11").length - 1).toBe(1)
+    expect(page.split(EMERGENCY_NOTE).length - 1).toBe(1)
+  })
+
+  it("names each role's leader once", () => {
+    const html = renderSheet("individual", { ...data, shifts: [
+      shift({ id: "a", roleName: "Bar", label: "Bar", registrations: [alice], sectorLeaderNames: ["Léa"] }),
+      shift({ id: "b", roleName: "Accueil", label: "Accueil", startTime: "14:00", endTime: "16:00", registrations: [alice], sectorLeaderNames: ["Marc"] }),
+    ] })
+    const page = pageOf(html, "Alice Martin")
+    expect(page.split("Responsable du poste : Léa").length - 1).toBe(1)
+    expect(page.split("Responsable du poste : Marc").length - 1).toBe(1)
+  })
+
+  it("merges touching shifts into one row and lists the co-volunteers of both, excluding the volunteer", () => {
+    const html = renderSheet("individual", { ...data, shifts: [
+      shift({ id: "a", startTime: "14:00", endTime: "16:00", registrations: [alice, bob] }),
+      shift({ id: "b", startTime: "16:00", endTime: "18:00", registrations: [alice, carol] }),
+    ] })
+    const page = pageOf(html, "Alice Martin")
+    expect(page.split(range("14:00", "18:00")).length - 1).toBe(1)
+    expect((page.match(/<td class="with-cell">/g) ?? []).length).toBe(1)
+    const withCell = page.split('<td class="with-cell">')[1].split("</td>")[0]
+    expect(withCell).toContain("Bob &lt;B&gt; Durand")
+    expect(withCell).toContain("Carol Zimmer")
+    expect(withCell).not.toContain("Alice")
+  })
+
+  it("marks a shift ending after midnight like the phone list", () => {
+    const html = renderSheet("individual", { ...data, shifts: [
+      shift({ id: "night", startTime: "22:00", endTime: "02:00", registrations: [alice] }),
+    ] })
+    const page = pageOf(html, "Alice Martin")
+    expect(page).toContain(range("22:00", "02:00"))
+    expect(page).toContain('<span class="next-day" aria-hidden="true">(fin le lendemain)</span>')
+    expect(page).toContain('<span class="sr-only"> le lendemain</span>')
+  })
+
+  it("keeps a shift-specific line next to its own shift when it differs within a role", () => {
+    const html = renderSheet("individual", { ...data, shifts: [
+      shift({ id: "a", startTime: "10:00", endTime: "12:00", registrations: [alice], locationDetails: "Entrée B" }),
+      shift({ id: "b", startTime: "14:00", endTime: "16:00", registrations: [alice], locationDetails: "Entrée C" }),
+    ] })
+    const rows = pageOf(html, "Alice Martin").split("<tr>")
+    expect(rows.find((row) => row.includes(range("10:00", "12:00")))).toContain("Lieu : Entrée B")
+    expect(rows.find((row) => row.includes(range("14:00", "16:00")))).toContain("Lieu : Entrée C")
+  })
+
+  it("normalises whitespace in the displayed names, including the « Avec » column", () => {
+    const michel = { id: "m", firstName: "Michel  ", lastName: " ANDRÉ ", email: "michel@x.ch", phone: null }
+    const html = renderSheet("individual", { ...data, shifts: [
+      shift({ id: "a", registrations: [alice, michel] }),
+    ] })
+    expect(html).toContain("<h2>Michel ANDRÉ</h2>")
+    expect(pageOf(html, "Alice Martin")).toContain("Michel ANDRÉ")
+    expect(html).not.toContain("Michel  ")
+  })
+
+  it("normalises whitespace in the timeline's short names", () => {
+    const firstLea = { id: "l1", firstName: "Léa  ", lastName: " Martin", email: "l1@x.ch", phone: null }
+    const secondLea = { id: "l2", firstName: "Léa", lastName: "Roy", email: "l2@x.ch", phone: null }
+    const html = renderSheet("role", { ...data, shifts: [
+      shift({ id: "a", roleName: "Bar", label: "Bar · service", startTime: "10:00", endTime: "12:00", registrations: [firstLea] }),
+      shift({ id: "b", roleName: "Bar", label: "Bar · caisse", startTime: "11:00", endTime: "13:00", registrations: [secondLea] }),
+    ] })
+    expect(html).toContain("Léa M.")
+    expect(html).toContain("Léa R.")
+    expect(html).not.toContain("Léa  ")
   })
 })
 

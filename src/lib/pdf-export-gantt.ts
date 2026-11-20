@@ -8,7 +8,7 @@
  * pulls in next-auth (via requireOrgSession), which fails to resolve in vitest's plain node
  * environment.
  */
-import { clockTime, ganttColumnWidths, toMin, toMinEnd } from "@/lib/gantt-utils"
+import { clockTime, ganttColumnWidths, normalizeName, toMin, toMinEnd } from "@/lib/gantt-utils"
 import { dayAxis, dayBands, shouldSplitDay } from "@/lib/day-sheet-bands"
 import { placesInWords } from "@/lib/staffing"
 import { groupedRoleOrder, groupRolesBySector, type SectorGroup, type SectorLike } from "@/lib/sectors"
@@ -57,8 +57,8 @@ function esc(s: string) {
 
 /**
  * Returns {gantt, recap} HTML fragments for one day. The full export keeps the dense-day rule on
- * (the default); the per-role and per-volunteer sheets pass `dense: false` to keep their single,
- * narrow timeline, which is built from their own shifts only.
+ * (the default); the printable sheets pass `dense: false` to keep their own single, narrow
+ * timeline (the per-role sheet, when it prints one), which is built from their own shifts only.
  */
 export function buildDayParts(
   date: Date,
@@ -121,15 +121,18 @@ export function buildDayParts(
     if (!uniqueVols.has(key)) uniqueVols.set(key, reg.volunteer)
   }
   const firstNameCount = new Map<string, number>()
-  for (const v of uniqueVols.values())
-    firstNameCount.set(v.firstName, (firstNameCount.get(v.firstName) ?? 0) + 1)
-  const smartName = (v: VolData) =>
-    (firstNameCount.get(v.firstName) ?? 0) > 1
-      ? `${v.firstName} ${v.lastName.charAt(0).toUpperCase()}.`
-      : v.firstName
+  for (const v of uniqueVols.values()) {
+    const first = normalizeName(v.firstName)
+    firstNameCount.set(first, (firstNameCount.get(first) ?? 0) + 1)
+  }
+  const smartName = (v: VolData) => {
+    const first = normalizeName(v.firstName)
+    const last = normalizeName(v.lastName)
+    return (firstNameCount.get(first) ?? 0) > 1 ? `${first} ${last.charAt(0).toUpperCase()}.` : first
+  }
   const smartVolsList = (regs: RegData[]): string =>
     [...regs]
-      .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
+      .sort((a, b) => normalizeName(a.volunteer.firstName).localeCompare(normalizeName(b.volunteer.firstName), "fr"))
       .map((r) => esc(smartName(r.volunteer)))
       .join("<br>") || "—"
 
@@ -299,7 +302,7 @@ export function buildDayParts(
       ${colgroup}
       <thead>
         <tr>
-          <th scope="col" class="th-role">Rôle</th>
+          <th scope="col" class="th-role">Poste</th>
           ${hasAnyLabel ? `<th scope="col" class="th-label">Libellé</th>` : ""}
           ${slotHeaders}
         </tr>
@@ -445,7 +448,7 @@ export function buildDayParts(
       ${colgroup}
       <thead>
         <tr>
-          <th scope="col" class="th-role">Rôle</th>
+          <th scope="col" class="th-role">Poste</th>
           ${hasAnyLabel ? `<th scope="col" class="th-label">Libellé</th>` : ""}
           ${slotHeaders}
         </tr>
@@ -490,13 +493,13 @@ export function buildDayParts(
     ? sectorGroups.map((g) => `<tbody class="sector-group">${sectorHeaderRow(g, recapColumns)}${g.roles.map((r) => recapByRole.get(r) ?? "").join("")}</tbody>`).join("")
     : `<tbody>${roleOrder.map((r) => recapByRole.get(r) ?? "").join("")}</tbody>`
 
-  const waitlistHeader = showWaitlist ? `<th class="waitlist-th">File d'attente</th>` : ""
+  const waitlistHeader = showWaitlist ? `<th scope="col" class="waitlist-th">File d'attente</th>` : ""
   const recapHtml = `
     <table class="recap-table">
       <thead>
         <tr>
-          <th>Poste</th>${hasAnyLabel ? `<th>Libellé</th>` : ""}<th class="center">Début</th><th class="center">Fin</th>
-          <th class="center">Places</th><th class="center">Inscrits</th><th>Bénévoles</th>
+          <th scope="col">Poste</th>${hasAnyLabel ? `<th scope="col">Libellé</th>` : ""}<th scope="col" class="center">Début</th><th scope="col" class="center">Fin</th>
+          <th scope="col" class="center">Places</th><th scope="col" class="center">Inscrits</th><th scope="col">Bénévoles</th>
           ${waitlistHeader}
         </tr>
       </thead>

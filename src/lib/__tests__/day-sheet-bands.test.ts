@@ -216,7 +216,7 @@ describe("split day sheet (#1431)", () => {
   it("keeps table rows and headings out of page-break hazards", () => {
     const html = renderSheet("day", sheet(denseDay()))
     expect(html).toContain(".gantt-table tr { page-break-inside: avoid; break-inside: avoid; }")
-    expect(html).toContain(".section-head, .legend, .band-caption { break-after: avoid; }")
+    expect(html).toContain(".section-head, .legend, .band-caption, h3, .individual-table caption { break-after: avoid; }")
   })
 
   it("omits the detail table only on a split day", () => {

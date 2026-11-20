@@ -3,6 +3,20 @@
 
 export type GanttShow = { name: string; date: string; startTime: string; endTime: string }
 
+/**
+ * A name as it must print: each part trimmed, inner whitespace runs collapsed. Stored data keeps
+ * the volunteer's own spacing; only the displayed name is normalised (#1444), so a first name with
+ * a trailing space or a last name typed with two spaces never renders « Michel  ANDRÉ ».
+ */
+export function normalizeName(value: string | null | undefined): string {
+  return (value ?? "").trim().replace(/\s+/g, " ")
+}
+
+/** « Prénom Nom », normalised, or the part that exists. */
+export function personName(person: { firstName?: string | null; lastName?: string | null }): string {
+  return [normalizeName(person.firstName), normalizeName(person.lastName)].filter(Boolean).join(" ")
+}
+
 export function toMin(t: string): number {
   const [h, m] = t.split(":").map(Number)
   return h * 60 + m

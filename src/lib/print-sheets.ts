@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { printLogoHtml, type OrgLogo } from "./org-logo"
-import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
+import { emergencyNoteFor, readBeforePages, shiftInfoLines, shiftInfoText, type ShiftInfo, type ShiftInfoLine } from "./shift-info"
 import { buildDayParts, ganttColumnWidths, type ShiftRow } from "./pdf-export-gantt"
-import { clockTime, toMin, toMinEnd } from "./gantt-utils"
+import { clockTime, normalizeName, personName, toMin, toMinEnd } from "./gantt-utils"
 import { dayAxis, dayBands, shouldSplitDay, type DayBand } from "./day-sheet-bands"
 import { conditionLine, scopeLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 import { effectiveMinimum, placesInWords, shiftStaffingState, staffingStateText } from "./staffing"
@@ -14,15 +14,16 @@ import { PRINT_BUTTON_SCRIPT_TAG } from "./inline-scripts"
  * Printable sheets (#400): paper still matters on site. Six views of one event, each a plain
  * HTML page designed for black-and-white printing: schedule per day, schedule per role, individual
  * schedule per volunteer, attendance sheet, list with phone numbers, summary of the answers to the
- * custom questions (#686). The two schedules and the
- * individual sheet reuse the Gantt of the full export (the product's signature), restyled in
- * monochrome. Pure: the route only loads the data and calls renderSheet.
+ * custom questions (#686). The two schedules reuse the Gantt of the full export (the product's
+ * signature), restyled in monochrome; the role sheet only prints it when it adds information
+ * (#1444), and the individual sheet shows contacts once then a table per day. Pure: the route only
+ * loads the data and calls renderSheet.
  */
 
 export const SHEET_VIEWS = [
   { id: "day", name: "Planning par jour", description: "Pour chaque jour, la frise des postes avec les prénoms dans les créneaux, puis le détail avec les places libres.", audience: "volunteers" },
-  { id: "role", name: "Planning par poste", description: "Une page par poste : sa frise, ses bénévoles, son responsable. À donner à chaque responsable.", audience: "volunteers" },
-  { id: "individual", name: "Planning individuel", description: "Une page par bénévole : sa journée en frise, puis ses créneaux avec lieu, contact et consignes. À remettre à l'arrivée.", audience: "volunteers" },
+  { id: "role", name: "Planning par poste", description: "Une page par poste : ses créneaux, ses bénévoles, son responsable. À donner à chaque responsable.", audience: "volunteers" },
+  { id: "individual", name: "Planning individuel", description: "Une page par bénévole : ses contacts, puis ses créneaux de chaque jour avec ses coéquipiers. À remettre à l'arrivée.", audience: "volunteers" },
   { id: "attendance", name: "Feuille de présence", description: "Par créneau, une case à cocher par bénévole et des lignes vides pour les arrivées imprévues.", audience: "organizers" },
   { id: "phones", name: "Liste avec téléphones", description: "Tous les bénévoles par ordre alphabétique, une colonne par jour, avec téléphone, email et créneaux.", audience: "organizers" },
   { id: "answers", name: "Synthèse des réponses", description: "Par question posée aux bénévoles, le nombre de réponses des confirmés et des personnes en attente, sans nom ni coordonnées. Pour passer commande (t-shirts, repas).", audience: "organizers" },
@@ -79,15 +80,19 @@ const fmtDayShort = (iso: string) =>
 const fmtDayLong = (iso: string) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })
 const fmtRange = (s: string, e: string) => `${s}–${e}`
-const fullName = (v: SheetVolunteer) => `${v.firstName} ${v.lastName}`.trim()
+const fullName = (v: SheetVolunteer) => personName(v)
 const shiftName = (s: SheetShift) => (s.label && s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName)
 const plural = (n: number, w: string) => `${n} ${n > 1 ? (w.endsWith("eau") ? `${w}x` : `${w}s`) : w}`
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
+/** Identity across shifts: an id when present, else the email, else the name. */
+const volunteerKey = (v: SheetVolunteer) =>
+  v.id ? `id:${v.id}` : (v.email ?? "").toLowerCase() || `${normalizeName(v.firstName)}|${normalizeName(v.lastName)}`.toLowerCase()
+
 const byDateTime = (a: SheetShift, b: SheetShift) =>
   a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime) || a.roleName.localeCompare(b.roleName, "fr")
 const byName = (a: SheetVolunteer, b: SheetVolunteer) =>
-  a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr")
+  normalizeName(a.lastName).localeCompare(normalizeName(b.lastName), "fr") || normalizeName(a.firstName).localeCompare(normalizeName(b.firstName), "fr")
 
 function groupBy<T, K extends string>(items: T[], key: (t: T) => K): [K, T[]][] {
   const map = new Map<K, T[]>()
@@ -100,7 +105,7 @@ export function volunteersOf(shifts: SheetShift[]): { volunteer: SheetVolunteer;
   const map = new Map<string, { volunteer: SheetVolunteer; shifts: SheetShift[] }>()
   for (const s of [...shifts].sort(byDateTime)) {
     for (const v of s.registrations) {
-      const key = v.id ? `id:${v.id}` : (v.email ?? "").toLowerCase() || `${v.firstName}|${v.lastName}`.toLowerCase()
+      const key = volunteerKey(v)
       const entry = map.get(key)
       if (entry) {
         entry.shifts.push(s)
@@ -116,16 +121,19 @@ export function volunteersOf(shifts: SheetShift[]): { volunteer: SheetVolunteer;
 /** One line of a phone-sheet day cell: a shift, or several touching shifts of the same role. */
 export type MergedShift = { date: string; startTime: string; endTime: string; roleName: string; label: string }
 
+/** A merged line plus the people registered on any of its shifts, once each. */
+export type MergedShiftWithVolunteers = MergedShift & { registrations: SheetVolunteer[]; shiftIds: string[] }
+
 /**
  * Merge the shifts that touch (the end of one is the start of the next) on the same day and on
  * the same role (role name and label), keeping chronological order. A gap, a different role or
  * another day starts a new line. A shift crossing midnight keeps its own date: 22:00–02:00 is one
  * line in its day's column, never moved to the next day.
  */
-export function mergeTouchingShifts(shifts: SheetShift[]): MergedShift[] {
+function mergeTouchingShiftGroups(shifts: SheetShift[]): (MergedShift & { shifts: SheetShift[] })[] {
   const sorted = [...shifts].sort((a, b) =>
     a.date.localeCompare(b.date) || toMin(a.startTime) - toMin(b.startTime) || a.endTime.localeCompare(b.endTime))
-  const merged: MergedShift[] = []
+  const merged: (MergedShift & { shifts: SheetShift[] })[] = []
   for (const s of sorted) {
     const last = merged.at(-1)
     const touches = last
@@ -133,10 +141,29 @@ export function mergeTouchingShifts(shifts: SheetShift[]): MergedShift[] {
       && last.roleName === s.roleName
       && last.label === s.label
       && toMinEnd(last.endTime, last.startTime) === toMin(s.startTime)
-    if (touches) last.endTime = s.endTime
-    else merged.push({ date: s.date, startTime: s.startTime, endTime: s.endTime, roleName: s.roleName, label: s.label })
+    if (touches) {
+      last.endTime = s.endTime
+      last.shifts.push(s)
+    } else merged.push({ date: s.date, startTime: s.startTime, endTime: s.endTime, roleName: s.roleName, label: s.label, shifts: [s] })
   }
   return merged
+}
+
+/** The phone list's lines: the merged shifts, without the source shifts. */
+export function mergeTouchingShifts(shifts: SheetShift[]): MergedShift[] {
+  return mergeTouchingShiftGroups(shifts).map(({ date, startTime, endTime, roleName, label }) => ({ date, startTime, endTime, roleName, label }))
+}
+
+/**
+ * The individual sheet's lines (#1444): the same merge, with the registrations of all the merged
+ * shifts, so a row can list the co-volunteers of a merged 14:00–18:00 shift without losing any.
+ */
+export function mergeTouchingShiftsWithVolunteers(shifts: SheetShift[]): MergedShiftWithVolunteers[] {
+  return mergeTouchingShiftGroups(shifts).map(({ shifts: group, ...line }) => {
+    const people = new Map<string, SheetVolunteer>()
+    for (const s of group) for (const v of s.registrations) if (!people.has(volunteerKey(v))) people.set(volunteerKey(v), v)
+    return { ...line, registrations: [...people.values()], shiftIds: group.map((s) => s.id) }
+  })
 }
 
 /** The event's days that have at least one shift, chronological, with short and spoken headers. */
@@ -165,8 +192,8 @@ const toRow = (s: SheetShift): ShiftRow => ({
 
 /**
  * The Gantt of one day for the given shifts, without the builder's own day title (the sheet has
- * one). The per-role and per-volunteer sheets keep this single timeline: the day sheet's dense
- * split has its own renderer above, and the full export gets the split straight from buildDayParts.
+ * one). The per-role sheet keeps this single timeline when it adds information (#1444); a dense
+ * day there uses bandedDay, and the full export gets its split straight from buildDayParts.
  */
 export function ganttOf(shifts: SheetShift[]): string {
   if (shifts.length === 0) return ""
@@ -181,6 +208,33 @@ export function staffingLine(shifts: SheetShift[]): string {
   const missing = Math.max(0, capacity - filled)
   const figures = `<span aria-hidden="true">${filled}/${capacity} inscrits</span><span class="sr-only">${placesInWords(filled, capacity)}</span>`
   return `${plural(shifts.length, "créneau")} · ${figures} · ${missing ? `<strong>${plural(missing, "place")} à pourvoir</strong>` : "complet"}`
+}
+
+type TimelineCandidate = { startTime: string; endTime: string; label?: string | null; roleName?: string | null }
+
+/** A displayed label: empty when it only repeats the role name, as in the detail table's column. */
+const ownLabel = (s: TimelineCandidate) => {
+  const label = (s.label ?? "").trim()
+  if (!label) return ""
+  if (s.roleName && label === s.roleName) return ""
+  return label
+}
+
+/**
+ * Whether a poste's timeline carries information on one day (#1444). A single lane of shifts that
+ * all share one label only repeats the detail table underneath: the page then shows the table
+ * alone. The timeline earns its place when at least two shifts overlap (several lanes) or when the
+ * shifts carry more than one distinct label — the only two things the table cannot say at a glance.
+ */
+export function roleTimelineAddsInfo(shifts: TimelineCandidate[]): boolean {
+  if (shifts.length < 2) return false
+  const ranges = shifts.map((s) => ({ start: toMin(s.startTime), end: toMinEnd(s.endTime, s.startTime) }))
+  for (let i = 0; i < ranges.length; i++) {
+    for (let j = i + 1; j < ranges.length; j++) {
+      if (ranges[i].start < ranges[j].end && ranges[j].start < ranges[i].end) return true
+    }
+  }
+  return new Set(shifts.map(ownLabel)).size > 1
 }
 
 // ── Dense day: overview strip and 6-hour bands (#1431) ──────────────────────
@@ -218,8 +272,14 @@ function smartNameOf(shifts: SheetShift[]): (v: SheetVolunteer) => string {
     if (!unique.has(key)) unique.set(key, v)
   }
   const counts = new Map<string, number>()
-  for (const v of unique.values()) counts.set(v.firstName, (counts.get(v.firstName) ?? 0) + 1)
-  return (v) => ((counts.get(v.firstName) ?? 0) > 1 ? `${v.firstName} ${v.lastName.charAt(0).toUpperCase()}.` : v.firstName)
+  for (const v of unique.values()) {
+    const first = normalizeName(v.firstName)
+    counts.set(first, (counts.get(first) ?? 0) + 1)
+  }
+  return (v) => {
+    const first = normalizeName(v.firstName)
+    return (counts.get(first) ?? 0) > 1 ? `${first} ${normalizeName(v.lastName).charAt(0).toUpperCase()}.` : first
+  }
 }
 
 /** Black-and-white fill state: white complete, light hatch with free places, dense hatch nobody. */
@@ -343,7 +403,7 @@ function timelineTable(o: TimelineOptions): string {
           ${colgroup}
           <thead>
             <tr>
-              <th scope="col" class="th-role">Rôle</th>
+              <th scope="col" class="th-role">Poste</th>
               ${o.hasLabel ? `<th scope="col" class="th-label">Libellé</th>` : ""}
               ${slotHeaders}
             </tr>
@@ -415,15 +475,18 @@ export function minimumLegend(shifts: SheetShift[]): string {
   return `<p class="meta">Effectif : inscrits sur les places. « Sous le minimum (2) » : moins de personnes que le minimum avec lequel le créneau peut tourner ; « minimum atteint » : le créneau peut tourner, sans être complet.</p>`
 }
 
-function detailTable(shifts: SheetShift[], caption: string, second: string, secondOf: (s: SheetShift) => string): string {
+/** A second column of the detail table: its header and the text of a shift. */
+type DetailColumn = { title: string; of: (s: SheetShift) => string }
+
+function detailTable(shifts: SheetShift[], caption: string, second?: DetailColumn | null): string {
   return `
       <table class="detail">
         <caption class="sr-only">${caption}</caption>
-        <thead><tr><th scope="col" class="w-time">Horaire</th><th scope="col" class="w-role">${second}</th><th scope="col">Bénévoles</th><th scope="col" class="num">Effectif</th></tr></thead>
+        <thead><tr><th scope="col" class="w-time">Horaire</th>${second ? `<th scope="col" class="w-role">${second.title}</th>` : ""}<th scope="col">Bénévoles</th><th scope="col" class="num">Effectif</th></tr></thead>
         <tbody>
           ${shifts.map((s) => `<tr>
             <td class="nowrap mono">${esc(fmtRange(s.startTime, s.endTime))}</td>
-            <td>${esc(secondOf(s))}</td>
+            ${second ? `<td>${esc(second.of(s))}</td>` : ""}
             <td>${namesCell(s)}</td>
             <td class="num mono">${effectifCell(s)}</td>
           </tr>`).join("")}
@@ -440,7 +503,7 @@ function dayView(d: SheetData): string {
     const body = shouldSplitDay(shifts)
       ? bandedDay(shifts, date)
       : `${ganttOf(shifts)}
-      ${detailTable(shifts, `Détail des créneaux du ${esc(fmtDay(date))}`, "Poste", shiftName)}`
+      ${detailTable(shifts, `Détail des créneaux du ${esc(fmtDay(date))}`, { title: "Poste", of: shiftName })}`
     return `
     <section class="block${i > 0 ? " page-before" : ""}">
       ${sectionHead(esc(cap(fmtDay(date))), staffingLine(shifts))}
@@ -458,33 +521,163 @@ function roleView(d: SheetData): string {
     <section class="block page${i > 0 ? " page-before" : ""}">
       ${sectionHead(esc(role), staffingLine(shifts))}
       <p class="meta">${leaders.length ? `Responsable${leaders.length > 1 ? "s" : ""} : ${leaders.map((l) => `<strong>${esc(l.name)}</strong>` + (l.email ? ` (${esc(l.email)})` : "")).join(", ")}` : "Pas de responsable de secteur désigné."}</p>
-      ${groupBy(shifts, (s) => s.date).map(([date, dayShifts]) => `
+      ${groupBy(shifts, (s) => s.date).map(([date, dayShifts]) => {
+        // A single lane of identical labels adds nothing to the detail table (#1444): no timeline
+        // then. When it stays, a dense day uses the day sheet's overview and 6-hour bands.
+        const timeline = roleTimelineAddsInfo(dayShifts)
+          ? (shouldSplitDay(dayShifts) ? bandedDay(dayShifts, date) : ganttOf(dayShifts))
+          : ""
+        // « Créneau » repeats the role name unless a shift carries a label of its own.
+        const ownLabels = dayShifts.some((s) => ownLabel(s) !== "")
+        return `
       <h3>${esc(cap(fmtDay(date)))}</h3>
-      ${ganttOf(dayShifts)}
-      ${detailTable(dayShifts, `${esc(role)} : détail des créneaux du ${esc(fmtDay(date))}`, "Créneau", (s) => (s.label && s.label !== role ? s.label : role))}`).join("")}
+      ${timeline}
+      ${detailTable(dayShifts, `${esc(role)} : détail des créneaux du ${esc(fmtDay(date))}`, ownLabels ? { title: "Créneau", of: (s) => ownLabel(s) || role } : null)}`
+      }).join("")}
     </section>`
   }).join("")
+}
+
+type InfoKind = ShiftInfoLine["kind"] | "readBefore"
+type InfoLine = { kind: InfoKind; text: string }
+
+/** Every line the individual cards used to show, with its kind, exactly as shiftInfoText renders it. */
+function infoLinesOf(s: SheetShift): InfoLine[] {
+  const texts = shiftInfoText(s)
+  const lines = shiftInfoLines(s)
+  return [
+    ...lines.map((l, i) => ({ kind: l.kind, text: texts[i] })),
+    ...readBeforePages(s).map((_, i) => ({ kind: "readBefore" as const, text: texts[lines.length + i] })),
+  ]
+}
+
+function unique<T>(items: T[]): T[] {
+  return [...new Set(items)]
+}
+
+/** The texts every list contains, in the first list's order. */
+function sharedTexts(linesPerShift: string[][]): string[] {
+  if (linesPerShift.length === 0) return []
+  return unique(linesPerShift[0]).filter((text) => linesPerShift.every((lines) => lines.includes(text)))
+}
+
+/**
+ * Where each practical line goes on the individual sheet (#1444). Contacts are shown once at the
+ * top; a line common to every shift of a poste is shown once for that poste; a line that differs
+ * between shifts of the same poste stays next to its shift, so nothing the old cards said is lost.
+ */
+type VolunteerInfoLines = {
+  dayContacts: string[]
+  contacts: string[]
+  info: string[]
+  roleContacts: Map<string, string[]>
+  roleInfo: Map<string, string[]>
+  leaders: Map<string, string[]>
+  shiftLines: Map<string, string[]>
+}
+
+function volunteerInfoLines(shifts: SheetShift[]): VolunteerInfoLines {
+  const perShift = shifts.map(infoLinesOf)
+  const roles = [...new Set(shifts.map((s) => s.roleName))]
+  const indexesFor = (role: string) => shifts.flatMap((s, i) => (s.roleName === role ? [i] : []))
+
+  const contactsOf = perShift.map((ls) => unique(ls.filter((l) => l.kind === "contact").map((l) => l.text)))
+  const infoOf = perShift.map((ls) => unique(ls.filter((l) => l.kind !== "contact" && l.kind !== "dayContact" && l.kind !== "leader").map((l) => l.text)))
+  const dayContacts = unique(perShift.flatMap((ls) => ls.filter((l) => l.kind === "dayContact").map((l) => l.text)))
+
+  const contacts = sharedTexts(contactsOf)
+  const info = sharedTexts(infoOf)
+  const roleContacts = new Map<string, string[]>()
+  const roleInfo = new Map<string, string[]>()
+  const leaders = new Map<string, string[]>()
+  const shiftLines = new Map<string, string[]>()
+  for (const role of roles) {
+    const idxs = indexesFor(role)
+    const roleContactShare = sharedTexts(idxs.map((i) => contactsOf[i])).filter((t) => !contacts.includes(t))
+    const roleInfoShare = sharedTexts(idxs.map((i) => infoOf[i])).filter((t) => !info.includes(t))
+    roleContacts.set(role, roleContactShare)
+    roleInfo.set(role, roleInfoShare)
+    leaders.set(role, unique(idxs.flatMap((i) => perShift[i].filter((l) => l.kind === "leader").map((l) => l.text))))
+    for (const i of idxs) {
+      shiftLines.set(shifts[i].id, unique([...contactsOf[i], ...infoOf[i]])
+        .filter((t) => !contacts.includes(t) && !info.includes(t) && !roleContactShare.includes(t) && !roleInfoShare.includes(t)))
+    }
+  }
+  return { dayContacts, contacts, info, roleContacts, roleInfo, leaders, shiftLines }
+}
+
+/** « (Buvette) » after a line shared by one of several postes, so the reader knows which one. */
+const roleSuffix = (role: string, roleCount: number) =>
+  roleCount > 1 ? ` <span class="contact-role">(${esc(role)})</span>` : ""
+
+function individualContacts(info: VolunteerInfoLines, roleCount: number, note: string | null): string {
+  const items = [
+    ...info.dayContacts.map((text) => `<li>${esc(text)}</li>`),
+    ...info.contacts.map((text) => `<li>${esc(text)}</li>`),
+    ...[...info.roleContacts].flatMap(([role, lines]) => lines.map((text) => `<li>${esc(text)}${roleSuffix(role, roleCount)}</li>`)),
+    ...[...info.leaders].flatMap(([role, lines]) => lines.map((text) => `<li>${esc(text)}${roleSuffix(role, roleCount)}</li>`)),
+  ]
+  if (items.length === 0 && !note) return ""
+  return `<h3>Contacts</h3>
+      ${items.length ? `<ul class="contact-list">${items.join("")}</ul>` : ""}
+      ${note ? `<p class="contact-note">${esc(note)}</p>` : ""}`
+}
+
+function individualInfo(info: VolunteerInfoLines): string {
+  const roleLines = [...info.roleInfo].filter(([, lines]) => lines.length > 0)
+  if (info.info.length === 0 && roleLines.length === 0) return ""
+  return `<h3>Informations</h3>
+      ${info.info.map((text) => `<p class="role-info">${esc(text)}</p>`).join("")}
+      ${roleLines.map(([role, lines]) => `<p class="role-info"><strong>${esc(role)}</strong> : ${lines.map(esc).join("<br>")}</p>`).join("")}`
+}
+
+/** A merged line's time, with the phone list's « fin le lendemain » note past midnight. */
+function individualTimeCell(s: MergedShift): string {
+  const nextDay = toMinEnd(s.endTime, s.startTime) >= 1440
+  return `<span class="nowrap mono">${esc(clockTime(s.startTime))}<span aria-hidden="true">–</span><span class="sr-only"> à </span>${esc(clockTime(s.endTime))}</span>${nextDay ? ` <span class="next-day" aria-hidden="true">(fin le lendemain)</span><span class="sr-only"> le lendemain</span>` : ""}`
+}
+
+function individualDayTable(date: string, dayShifts: SheetShift[], info: VolunteerInfoLines, volunteer: SheetVolunteer): string {
+  const merged = mergeTouchingShiftsWithVolunteers(dayShifts)
+  const rows = merged.map((m) => {
+    const otherNames = m.registrations
+      .filter((v) => volunteerKey(v) !== volunteerKey(volunteer))
+      .sort(byName)
+      .map((v) => esc(fullName(v)))
+    const extra = unique(m.shiftIds.flatMap((id) => info.shiftLines.get(id) ?? []))
+    return `<tr>
+            <td>${individualTimeCell(m)}</td>
+            <td>${esc(mergedShiftName(m))}${extra.map((line) => `<span class="sr-only">. </span><span class="shift-extra">${esc(line)}</span>`).join("")}</td>
+            <td class="with-cell">${otherNames.length ? otherNames.join(", ") : `<span aria-hidden="true">—</span><span class="sr-only">personne d'autre</span>`}</td>
+          </tr>`
+  }).join("")
+  return `
+      <table class="detail individual-table">
+        <caption>${esc(cap(fmtDay(date)))}</caption>
+        <thead><tr><th scope="col" class="w-time">Horaire</th><th scope="col">Poste</th><th scope="col">Avec</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`
 }
 
 function individualView(d: SheetData): string {
   const rows = volunteersOf(d.shifts)
   if (rows.length === 0) return `<p class="meta">Aucun bénévole inscrit.</p>`
   return rows.map(({ volunteer: v, shifts }, i) => {
-    // The emergency note (#560) once per volunteer, inside the first card showing the day-of
-    // contact: a card is never split across pages, so the note stays with the contact.
-    const noteFor = shifts.find((s) => emergencyNoteFor([s]))
+    const info = volunteerInfoLines(shifts)
+    const note = emergencyNoteFor(shifts)
+    const roleCount = new Set(shifts.map((s) => s.roleName)).size
+    const contacts = individualContacts(info, roleCount, note)
+    const infoBlock = individualInfo(info)
+    // Once a Contacts or Informations heading precedes them, the day tables get their own heading
+    // so heading navigation does not file the schedule under the previous one.
+    const slotsHeading = contacts.trim() || infoBlock.trim() ? `<h3>Créneaux</h3>` : ""
     return `
     <section class="block page${i > 0 ? " page-before" : ""}">
       ${sectionHead(esc(fullName(v)), `${plural(shifts.length, "créneau")} · ${esc(d.eventTitle)}`)}
-      ${groupBy(shifts, (s) => s.date).map(([date, dayShifts]) => `
-      <h3>${esc(cap(fmtDay(date)))}</h3>
-      ${ganttOf(dayShifts)}
-      ${dayShifts.map((s) => `
-      <div class="card">
-        <h4 class="card-title"><span class="mono">${esc(fmtRange(s.startTime, s.endTime))}</span> : ${esc(shiftName(s))}</h4>
-        ${shiftInfoText(s).map((l) => `<p>${esc(l)}</p>`).join("")}
-        ${s === noteFor ? `<p class="note">${esc(EMERGENCY_NOTE)}</p>` : ""}
-      </div>`).join("")}`).join("")}
+      ${contacts}
+      ${infoBlock}
+      ${slotsHeading}
+      ${groupBy(shifts, (s) => s.date).map(([date, dayShifts]) => individualDayTable(date, dayShifts, info, v)).join("")}
     </section>`
   }).join("")
 }
@@ -506,7 +699,7 @@ function attendanceView(d: SheetData): string {
           <tbody>
             ${people.map((v) => `<tr>
               <td class="box"><span class="checkbox" aria-hidden="true">${v.checkedIn ? "☑" : "☐"}</span><span class="sr-only">${v.checkedIn ? "présent" : "à cocher"}</span></td>
-              <td><strong>${esc(v.lastName)}</strong></td><td>${esc(v.firstName)}</td><td class="nowrap mono">${esc(v.phone)}</td><td></td><td>${esc(v.comment)}</td>
+              <td><strong>${esc(normalizeName(v.lastName))}</strong></td><td>${esc(normalizeName(v.firstName))}</td><td class="nowrap mono">${esc(v.phone)}</td><td></td><td>${esc(v.comment)}</td>
             </tr>`).join("")}
             ${Array.from({ length: blanks }, () => `<tr class="blank"><td class="box"><span class="checkbox" aria-hidden="true">☐</span><span class="sr-only">ligne vide</span></td><td></td><td></td><td></td><td></td><td></td></tr>`).join("")}
           </tbody>
@@ -541,7 +734,7 @@ function phonesView(d: SheetData): string {
           const byDay = new Map(groupBy(mergeTouchingShifts(shifts), (s) => s.date))
           return `<tr>
             <th scope="row" class="vol-cell">
-              <span class="vol-name">${esc(`${v.lastName} ${v.firstName}`.trim())}</span>
+              <span class="vol-name">${esc([normalizeName(v.lastName), normalizeName(v.firstName)].filter(Boolean).join(" "))}</span>
               ${v.phone ? `<span class="vol-phone mono">${esc(v.phone)}</span>` : ""}
               ${v.email ? `<span class="vol-email">${emailWithBreaks(v.email)}</span>` : ""}
             </th>
@@ -676,11 +869,18 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .answers .caption-note { display: block; font-weight: 400; font-size: 12px; color: var(--ink-2); }
     .block.follow-up { margin-left: 1.5em; }
 
-    /* ── Cards (individual sheet) ────────────────────────────────────────── */
-    .card { border: 1px solid var(--rule); padding: 6px 10px; margin: 6px 0; page-break-inside: avoid; break-inside: avoid; }
-    .card-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
-    .card p { font-size: 12px; }
-    .card .note { font-weight: 700; border-left: 3px solid var(--ink); padding-left: 6px; margin-top: 4px; }
+    /* ── Individual sheet: contacts once, then one table per day ─────────── */
+    .contact-list { margin: 0 0 8px; padding-left: 1.1em; font-size: 12px; }
+    .contact-list li { margin: 1px 0; }
+    .contact-role { color: var(--ink-2); }
+    .contact-note { font-weight: 700; border-left: 3px solid var(--ink); padding-left: 6px; margin: 4px 0 10px; font-size: 12px; }
+    .role-info { font-size: 12px; margin: 0 0 4px; }
+    .individual-table { margin-top: 2px; }
+    .individual-table tr { page-break-inside: avoid; break-inside: avoid; }
+    .individual-table caption { text-align: left; font-weight: 700; font-size: 13px; padding: 4px 0; caption-side: top; }
+    .individual-table .shift-extra { display: block; font-size: 11px; color: var(--ink-2); margin-top: 1px; }
+    .individual-table .next-day { white-space: nowrap; }
+    .individual-table .with-cell { overflow-wrap: anywhere; }
 
     /* ── Gantt (shared markup with the full export), monochrome and ink-sparing: white bars with a
           thick outline instead of solid fills, bold header text instead of a band ─────────── */
@@ -726,7 +926,8 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .overview-table .shift-cell + .shift-cell { border-left: 1px solid var(--ink) !important; }
     .gantt-table .shift-cell[data-fill="free"] { background: repeating-linear-gradient(135deg,#fff 0 3px,#d9d9d9 3px 5px); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .gantt-table .shift-cell[data-fill="empty"] { background: repeating-linear-gradient(135deg,#fff 0 2px,#9a9a9a 2px 4px); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .section-head, .legend, .band-caption { break-after: avoid; }
+    .section-head, .legend, .band-caption, h3, .individual-table caption { break-after: avoid; }
+    table.individual-table { page-break-inside: avoid; break-inside: avoid; }
     .gantt-table tr { page-break-inside: avoid; break-inside: avoid; }
 
     .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; white-space: nowrap; }

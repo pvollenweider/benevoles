@@ -55,7 +55,8 @@ async function main() {
         const sections = output.locator("section.block")
         if (await sections.count() !== 80) throw new Error("Expected one individual section per person")
         const lea = sections.filter({ has: output.getByRole("heading", { name: "Léa Giroud", exact: true }) })
-        if (await lea.locator(".card").count() !== 5) throw new Error("Individual sheet omitted a shift")
+        if (await lea.locator("table.individual-table tbody tr").count() !== 5) throw new Error("Individual sheet omitted a shift")
+        if (await lea.locator(".card, .gantt-table").count() !== 0) throw new Error("Individual sheet still shows a timeline or cards")
         await lea.getByText("Prends une gourde.", { exact: false }).first().waitFor()
       }
       if (report.id === "attendance") {
