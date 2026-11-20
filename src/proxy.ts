@@ -21,7 +21,8 @@ import { isAuthEndpoint } from "@/lib/auth-endpoints"
 import { SECOND_FACTOR_PATH, secondFactorUrl } from "@/lib/second-factor-session"
 import { isFrontDeskRole } from "@/lib/permissions"
 import { frontDeskRedirect } from "@/lib/front-desk-pages"
-import { markdownRequestTarget } from "@/lib/markdown-request"
+import { markdownAnswer } from "@/lib/markdown-request"
+import { loadLlmsSources } from "@/lib/llms-sources"
 import { markdownPathForPage } from "@/lib/doc-pages"
 import { absoluteUrl } from "@/lib/seo-metadata"
 
@@ -114,14 +115,15 @@ function handle(req: NextAuthRequest): Response {
   const refused = checkAdminMutation({ method: req.method, pathname, headers: req.headers, configuredAppUrl: configuredAppUrl(), nodeEnv: process.env.NODE_ENV })
   if (refused) return NextResponse.json({ error: refused.error }, { status: refused.status })
 
-  // --- The Markdown variant of a public page (llmstxt.org): `/x.md` is rewritten to the internal
-  // route on the apex site; an organization's host, staging and an unknown host get the site's 404
-  // (src/lib/markdown-request.ts). After the origin check and before the auth guards and the 404
-  // lookups: a path with a dot is never an event slug nor an admin page, so no other route can
-  // claim it. ---
-  const markdownTarget = markdownRequestTarget(pathname, host, requestHeaders.has(ORG_HEADER))
-  if (markdownTarget) {
-    const response = NextResponse.rewrite(new URL(markdownTarget, req.url), { request: { headers: requestHeaders } })
+  // --- The Markdown variant of a public page (llmstxt.org): the proxy answers `/x.md` itself on
+  // the apex site, and with the site's 404 on an organization's host, staging, an unknown host or
+  // a page without one (src/lib/markdown-request.ts). After the origin check and before the auth
+  // guards and the 404 lookups: a path with a dot is never an event slug nor an admin page. ---
+  const markdown = markdownAnswer({ pathname, method: req.method, host, hasOrg: requestHeaders.has(ORG_HEADER) }, () => loadLlmsSources(true))
+  if (markdown) {
+    const response = markdown.status === 200
+      ? new NextResponse(req.method === "HEAD" ? null : markdown.body, { status: 200, headers: markdown.headers })
+      : NextResponse.rewrite(new URL(NOT_FOUND_ROUTE, req.url), { request: { headers: requestHeaders } })
     for (const { key, value } of pageHeaders) response.headers.set(key, value)
     return response
   }
