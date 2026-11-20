@@ -117,7 +117,7 @@ describe("planYoutube", () => {
   const one = (input: PlanInput, videos: YoutubeState["videos"], privacy?: Privacy) => planYoutube([input], state(videos), privacy)[0]
 
   it("uploads a video never sent, with everything to add", () => {
-    expect(one({ slug: "a", revision: 1, themes: ["jour-j"] }, {})).toEqual({ slug: "a", revision: 1, action: "upload", captions: true, thumbnail: true, playlists: ["jour-j"] })
+    expect(one({ slug: "a", revision: 1, themes: ["jour-j"] }, {})).toEqual({ slug: "a", revision: 1, action: "upload", captions: true, thumbnail: true, playlists: ["jour-j"], withdraw: [] })
   })
 
   it("leaves a video alone when nothing is missing", () => {
@@ -148,6 +148,25 @@ describe("planYoutube", () => {
   it("updates the status when the privacy changes or the synthetic voice is not declared yet", () => {
     expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: ok }, "public")).toMatchObject({ action: "update", status: { from: "private", to: "public" } })
     expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: { ...ok, synthetic: undefined } })).toMatchObject({ status: { from: "private", to: "private" } })
+  })
+
+  it("withdraws the replaced upload from the playlists that held it", () => {
+    expect(one({ slug: "a", revision: 4, themes: ["jour-j", "planning-creneaux"] }, { a: ok })).toMatchObject({
+      action: "replace",
+      playlists: ["jour-j", "planning-creneaux"],
+      withdraw: [{ videoId: "abc", themes: ["jour-j"] }],
+    })
+    expect(one({ slug: "a", revision: 4, themes: ["jour-j"] }, { a: { ...ok, playlists: [] } })).toMatchObject({ action: "replace", withdraw: [] })
+  })
+
+  it("keeps a withdrawal left unfinished, and does not call the video unchanged until it is done", () => {
+    const stale = [{ videoId: "old", themes: ["jour-j"] }]
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: { ...ok, staleInPlaylists: stale } })).toMatchObject({ action: "update", withdraw: stale })
+    expect(one({ slug: "a", revision: 4, themes: ["jour-j"] }, { a: { ...ok, staleInPlaylists: stale } })).toMatchObject({
+      action: "replace",
+      withdraw: [...stale, { videoId: "abc", themes: ["jour-j"] }],
+    })
+    expect(one({ slug: "a", revision: 3, themes: ["jour-j"] }, { a: ok })).toMatchObject({ action: "unchanged", withdraw: [] })
   })
 
   it("keeps the current privacy of a video already sent when none is asked", () => {

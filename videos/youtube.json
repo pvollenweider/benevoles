@@ -70,18 +70,21 @@
       "thumbnailKey": "8a7e6c7c4ccfc94a"
     },
     "assignment-publication": {
-      "videoId": "RIKkjebVvYs",
-      "revision": 1,
+      "videoId": "02F8zavLaDA",
+      "revision": 2,
       "privacy": "public",
       "captions": true,
       "thumbnail": true,
       "synthetic": true,
-      "thumbnailKey": "ccf57fa42e57d005",
       "format": "native",
       "playlists": [
         "planning-creneaux"
       ],
-      "uploadedAt": "2026-11-18T10:38:56.224Z"
+      "uploadedAt": "2026-11-20T13:29:18.446Z",
+      "replaced": [
+        "RIKkjebVvYs"
+      ],
+      "thumbnailKey": "ccf57fa42e57d005"
     },
     "attendance-check-in": {
       "videoId": "1AN3vR8Z6bw",
@@ -111,6 +114,21 @@
       "uploadedAt": "2026-11-18T09:31:31.600Z",
       "thumbnailKey": "44b2cbf94df25b27"
     },
+    "email-delivery-failures": {
+      "videoId": "91YCkupaMu0",
+      "revision": 4,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "inscriptions-communication",
+        "tracabilite-donnees"
+      ],
+      "uploadedAt": "2026-11-20T13:29:45.990Z",
+      "thumbnailKey": "0c1c5ffd12103ffc"
+    },
     "event-program-pages-qr": {
       "videoId": "Ap6jMOp2Tes",
       "revision": 5,
@@ -126,6 +144,21 @@
       "uploadedAt": "2026-11-18T09:30:13.961Z",
       "thumbnailKey": "a9a116d4646c486b"
     },
+    "event-questions": {
+      "videoId": "mO8oz31xIQk",
+      "revision": 6,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "evenement-cycle-de-vie",
+        "inscriptions-communication"
+      ],
+      "uploadedAt": "2026-11-20T13:28:53.494Z",
+      "thumbnailKey": "7d1b44079b3a061b"
+    },
     "front-desk-access": {
       "videoId": "ziXUWFsxC1U",
       "revision": 1,
@@ -139,6 +172,21 @@
         "jour-j"
       ],
       "uploadedAt": "2026-11-18T10:38:56.219Z"
+    },
+    "last-minute-changes": {
+      "videoId": "xJaumyFQ9G0",
+      "revision": 7,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "inscriptions-communication",
+        "jour-j"
+      ],
+      "uploadedAt": "2026-11-20T13:29:57.762Z",
+      "thumbnailKey": "f23b5574f3fb96d5"
     },
     "members-import": {
       "videoId": "GH9KP0orVh0",
@@ -168,9 +216,24 @@
       ],
       "uploadedAt": "2026-11-18T10:38:56.225Z"
     },
+    "members-reminders": {
+      "videoId": "ng9FbzQN9Eo",
+      "revision": 6,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "membres-invitations",
+        "inscriptions-communication"
+      ],
+      "uploadedAt": "2026-11-20T13:29:34.863Z",
+      "thumbnailKey": "1b1e6b3cb5f60fa2"
+    },
     "org-email-settings": {
-      "videoId": "y9mBdLec5zw",
-      "revision": 5,
+      "videoId": "xaK7rwWWkW8",
+      "revision": 6,
       "privacy": "public",
       "captions": true,
       "thumbnail": true,
@@ -180,8 +243,26 @@
         "organisation-equipe",
         "inscriptions-communication"
       ],
-      "uploadedAt": "2026-11-18T09:30:01.779Z",
+      "uploadedAt": "2026-11-20T13:28:37.466Z",
+      "replaced": [
+        "y9mBdLec5zw"
+      ],
       "thumbnailKey": "0d635bba9b92dc35"
+    },
+    "organizer-monitor-followup": {
+      "videoId": "kWnqTUw-oyQ",
+      "revision": 6,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "inscriptions-communication",
+        "jour-j"
+      ],
+      "uploadedAt": "2026-11-20T13:29:09.338Z",
+      "thumbnailKey": "9f487a600cd986c5"
     },
     "privacy-personal-links": {
       "videoId": "9dELAhOnzr4",
@@ -328,6 +409,22 @@
       ],
       "uploadedAt": "2026-11-18T09:30:43.466Z",
       "thumbnailKey": "dd22115169f4e261"
+    },
+    "shift-waitlist-offer": {
+      "videoId": "eAAlo7H338Y",
+      "revision": 5,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "planning-creneaux",
+        "parcours-benevole",
+        "inscriptions-communication"
+      ],
+      "uploadedAt": "2026-11-20T13:29:00.237Z",
+      "thumbnailKey": "860ecfd38767b669"
     },
     "staffing-gaps": {
       "videoId": "xXKA4I1ft9s",
