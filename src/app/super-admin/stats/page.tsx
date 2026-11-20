@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata } from "next"
+import type { ReactNode } from "react"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
@@ -9,25 +11,39 @@ import { loadPlatformUsage, loadSignupFacts, loadSignupSources } from "@/lib/usa
 import { signupSourceRows } from "@/lib/signup-source"
 import { signupIndicatorRows } from "@/lib/signup-indicators"
 import { observePastEvents } from "@/lib/past-event-retention-data"
-import { pastEventRetentionMode } from "@/lib/past-event-retention"
+import { PAST_EVENT_RETENTION_YEARS, pastEventRetentionMode } from "@/lib/past-event-retention"
 import { loadOperatorActivity, type NextEventRow, type OperatorActivity } from "@/lib/operator-activity-data"
-import { busiestHourSentence, eventDatesLabel } from "@/lib/operator-activity"
+import { busiestHourSentence, eventDatesLabel, UPCOMING_SITUATION_LABELS } from "@/lib/operator-activity"
 import OperatorActivitySection from "@/components/super-admin/OperatorActivitySection"
 import PastEventRetentionTable from "@/components/super-admin/PastEventRetentionTable"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Statistiques" }
 
+/** Anchor links of the in-page summary, in reading order. Each target is the section's heading id. */
+const SECTIONS = [
+  { id: "stats-events", label: "Événements" },
+  { id: "stats-activity", label: "Activité des inscriptions" },
+  { id: "stats-event-size", label: "Taille des événements" },
+  { id: "stats-next-events", label: "Les 10 prochains événements" },
+  { id: "stats-cumulative", label: "Depuis le début" },
+  { id: "stats-current", label: "En ce moment" },
+  { id: "stats-signup", label: "Inscription en libre-service" },
+  { id: "stats-signup-source", label: "Comment les espaces nous ont connus" },
+  { id: "stats-past-events", label: `Événements terminés depuis plus de ${PAST_EVENT_RETENTION_YEARS} ans` },
+] as const
+
 /**
- * Platform usage for the super admin (#805): « Depuis le début », counters that a deletion never
- * lowers (a deleted organisation's counts included), beside « En ce moment », what the database
- * holds now. Counts, plus organisation and event names in the two event lists; no volunteer data.
- * Each table is named by its caption only (the section carries no aria-labelledby: the name would
- * be announced twice).
+ * Platform usage for the super admin (#805): « Charge actuelle » (what weighs on the platform now)
+ * then « Croissance et inscription » (what the counters say over time). Each section keeps one
+ * short sentence; the secondary caveats live in a native « Comment ces chiffres sont calculés »
+ * disclosure, so the page reads without nine intros of equal weight.
  *
  * #1415 adds the operator's load view: events happening now or soon, the registration rhythm
  * against the previous period, the busiest hour, the outbox and the bubble chart of the events that
- * weigh on the platform. Computed on page load, no live refresh.
+ * weigh on the platform. Computed on page load, no live refresh. The bubble chart has no side
+ * table: one summary and a small « Par situation » table, then a single merged list of the 10 next
+ * events.
  */
 export default async function StatsPage() {
   const session = await auth()
@@ -48,61 +64,140 @@ export default async function StatsPage() {
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Statistiques</h1>
         <p className="text-sm text-gray-700 mt-1">
-          L&apos;utilisation de la plateforme, toutes organisations confondues. Les chiffres « depuis le début » ne baissent jamais : une suppression, même d&apos;une organisation entière, ne les diminue pas. Ils ont été initialisés le jour de leur mise en place à partir de ce que contenait la base ; ce qui avait été supprimé avant n&apos;y figure pas.
+          L&apos;utilisation de la plateforme, toutes organisations confondues.
         </p>
       </div>
 
-      <UsageTable
-        id="stats-events"
-        title="Événements"
-        intro="Événements publiés seulement : les brouillons et les archivés ne comptent pas, les événements non listés (publiés) comptent. Les jours suivent Europe/Zurich, le fuseau des événements."
-        rows={[
-          { key: "events_now", label: "En cours aujourd'hui", value: operator.counts.now },
-          { key: "events_within7", label: "Qui commencent dans les 7 jours", value: operator.counts.startingWithin7 },
-          { key: "events_within30", label: "Qui commencent dans les 30 jours (7 jours compris)", value: operator.counts.startingWithin30 },
-          { key: "registrations_open", label: "Inscriptions ouvertes maintenant", value: operator.counts.registrationsOpenNow },
-          { key: "openings_within7", label: "Ouvertures d'inscriptions prévues dans les 7 jours", value: operator.counts.registrationOpeningsNext7Days },
-        ]}
-      />
+      <nav aria-label="Sections de la page" className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
+        <p className="text-xs font-medium text-gray-700">Sur cette page</p>
+        <ul className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+          {SECTIONS.map((section) => (
+            <li key={section.id}>
+              <a
+                href={`#${section.id}`}
+                className="inline-flex min-h-6 items-center rounded text-sm text-blue-700 underline underline-offset-2 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                {section.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-      <ActivityPanel activity={operator.activity} />
+      <section aria-labelledby="stats-load">
+        <h2 id="stats-load" className="text-lg font-semibold text-gray-900">Charge actuelle</h2>
+        <div className="mt-3 space-y-8">
+          <EventCounts counts={operator.counts} />
 
-      <section className="space-y-2" aria-labelledby="stats-event-size">
-        <h2 id="stats-event-size" className="text-lg font-semibold text-gray-900">Taille des événements</h2>
-        <p id="stats-event-size-intro" className="text-sm text-gray-700">
-          Les événements en cours ou qui commencent dans les 30 jours : une bulle par événement, selon sa date de début (horizontal), ses inscriptions (vertical) et ses créneaux (surface). Le tableau qui suit donne les mêmes valeurs, toujours accessibles.
-        </p>
-        <OperatorActivitySection data={operator.bubble} />
+          <ActivityPanel activity={operator.activity} />
+
+          <section className="space-y-2" aria-labelledby="stats-event-size">
+            <h3 id="stats-event-size" className="text-sm font-semibold text-gray-900">Taille des événements</h3>
+            <p id="stats-event-size-intro" className="text-sm text-gray-700">
+              Une bulle par événement en cours ou qui commence dans les 30 jours.
+            </p>
+            <CalculationDetails topic="Taille des événements">
+              Une bulle par événement, selon sa date de début (horizontal), ses inscriptions (vertical) et ses créneaux (surface). Le résumé et le tableau « Par situation » donnent les mêmes totaux, toujours accessibles.
+            </CalculationDetails>
+            <OperatorActivitySection data={operator.bubble} />
+          </section>
+
+          <NextEventsTable rows={operator.nextEvents} />
+        </div>
       </section>
 
-      <NextEventsTable rows={operator.nextEvents} />
-
-      <UsageTable id="stats-cumulative" title="Depuis le début" rows={cumulative} />
-      <UsageTable id="stats-current" title="En ce moment" rows={current} />
-      <UsageTable
-        id="stats-signup"
-        title="Inscription en libre-service"
-        intro="Ce qui dit si la validation à la main reste nécessaire. Les décisions comptent sur 12 mois (le journal de l'opérateur les garde un an) ; un envoi reporté plusieurs fois compte à chaque fois."
-        rows={signup}
-      />
-      <UsageTable
-        id="stats-signup-source"
-        title="Comment les espaces nous ont connus"
-        intro="La réponse facultative à « Comment avez-vous connu le site ? » du formulaire de demande d'espace, pour les espaces créés par l'inscription en libre-service et encore présents. « Sans réponse » compte aussi les espaces créés avant que la question existe."
-        rows={signupSourceRows(signupSources)}
-      />
-      <PastEventRetentionTable rows={pastEvents} mode={pastEventRetentionMode()} />
+      <section aria-labelledby="stats-growth">
+        <h2 id="stats-growth" className="text-lg font-semibold text-gray-900">Croissance et inscription</h2>
+        <div className="mt-3 space-y-8">
+          <UsageTable
+            id="stats-cumulative"
+            title="Depuis le début"
+            intro="Ce qui a été créé depuis le début, y compris ce qui a été supprimé depuis."
+            details="Ces chiffres ne baissent jamais : une suppression, même d'une organisation entière, ne les diminue pas. Ils ont été initialisés le jour de leur mise en place à partir de ce que contenait la base ; ce qui avait été supprimé avant n'y figure pas."
+            rows={cumulative}
+          />
+          <UsageTable
+            id="stats-current"
+            title="En ce moment"
+            intro="Ce que la base contient maintenant."
+            rows={current}
+          />
+          <UsageTable
+            id="stats-signup"
+            title="Inscription en libre-service"
+            intro="Ce qui dit si la validation à la main reste nécessaire."
+            details="Les décisions comptent sur 12 mois (le journal de l'opérateur les garde un an) ; un envoi reporté plusieurs fois compte à chaque fois."
+            rows={signup}
+          />
+          <UsageTable
+            id="stats-signup-source"
+            title="Comment les espaces nous ont connus"
+            intro="La réponse facultative à « Comment avez-vous connu le site ? » du formulaire de demande d'espace."
+            details="Pour les espaces créés par l'inscription en libre-service et encore présents. « Sans réponse » compte aussi les espaces créés avant que la question existe."
+            rows={signupSourceRows(signupSources)}
+          />
+          <PastEventRetentionTable rows={pastEvents} mode={pastEventRetentionMode()} />
+        </div>
+      </section>
     </div>
+  )
+}
+
+/** Native disclosure for the calculation detail: closed by default, all text still in the DOM. */
+function CalculationDetails({ topic, children }: { topic: string; children: ReactNode }) {
+  return (
+    <details className="text-sm text-gray-700">
+      <summary className="w-fit cursor-pointer rounded font-medium text-gray-700 underline underline-offset-2 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        Comment ces chiffres sont calculés<span className="sr-only"> : {topic}</span>
+      </summary>
+      <p className="mt-1 max-w-prose">{children}</p>
+    </details>
+  )
+}
+
+/** The five event counts, as a compact label/figure grid rather than a two-column table. */
+function EventCounts({ counts }: { counts: OperatorActivity["counts"] }) {
+  const rows = [
+    { key: "events_now", label: "En cours aujourd'hui", value: counts.now },
+    { key: "events_within7", label: "Qui commencent dans les 7 jours", value: counts.startingWithin7 },
+    { key: "events_within30", label: "Qui commencent dans les 30 jours (7 jours compris)", value: counts.startingWithin30 },
+    { key: "registrations_open", label: "Inscriptions ouvertes maintenant", value: counts.registrationsOpenNow },
+    { key: "openings_within7", label: "Ouvertures d'inscriptions prévues dans les 7 jours", value: counts.registrationOpeningsNext7Days },
+  ]
+  return (
+    <section className="space-y-2" aria-labelledby="stats-events">
+      <h3 id="stats-events" className="text-sm font-semibold text-gray-900">Événements</h3>
+      <p id="stats-events-intro" className="text-sm text-gray-700">
+        Événements publiés seulement, jours lus à l&apos;heure de Zurich.
+      </p>
+      <CalculationDetails topic="Événements">
+        Les brouillons et les archivés ne comptent pas ; les événements non listés (publiés) comptent. Les jours suivent Europe/Zurich, le fuseau des événements.
+      </CalculationDetails>
+      <dl
+        aria-describedby="stats-events-intro"
+        className="grid gap-x-6 gap-y-4 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {rows.map((row) => (
+          <div key={row.key}>
+            <dt className="text-gray-700">{row.label}</dt>
+            <dd className="font-semibold tabular-nums text-gray-900">{formatCount(row.value)}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
   )
 }
 
 function ActivityPanel({ activity }: { activity: OperatorActivity["activity"] }) {
   return (
     <section className="space-y-2" aria-labelledby="stats-activity">
-      <h2 id="stats-activity" className="text-lg font-semibold text-gray-900">Activité des inscriptions</h2>
+      <h3 id="stats-activity" className="text-sm font-semibold text-gray-900">Activité des inscriptions</h3>
       <p id="stats-activity-intro" className="text-sm text-gray-700">
-        Chaque période est comparée à la précédente, de même durée. Toutes les inscriptions enregistrées comptent, quel que soit leur statut actuel. L&apos;heure la plus chargée est lue à l&apos;heure de Zurich.
+        Chaque période est comparée à la précédente, de même durée.
       </p>
+      <CalculationDetails topic="Activité des inscriptions">
+        Toutes les inscriptions enregistrées comptent, quel que soit leur statut actuel. L&apos;heure la plus chargée est lue à l&apos;heure de Zurich.
+      </CalculationDetails>
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
         <table className="w-full text-sm" aria-describedby="stats-activity-intro">
           <caption className="sr-only">Activité des inscriptions et comparaison avec la période précédente</caption>
@@ -137,10 +232,13 @@ function ActivityPanel({ activity }: { activity: OperatorActivity["activity"] })
 function NextEventsTable({ rows }: { rows: NextEventRow[] }) {
   return (
     <section className="space-y-2">
-      <h2 id="stats-next-events" className="text-lg font-semibold text-gray-900">Les 10 prochains événements</h2>
+      <h3 id="stats-next-events" className="text-sm font-semibold text-gray-900">Les 10 prochains événements</h3>
       <p id="stats-next-events-intro" className="text-sm text-gray-700">
-        Événements publiés dont le dernier jour est aujourd&apos;hui ou plus tard, par date de début. Le remplissage est le rapport entre les inscriptions confirmées et les places des créneaux non annulés. Aucune donnée sur les bénévoles.
+        Événements publiés dont le dernier jour est aujourd&apos;hui ou plus tard, par date de début.
       </p>
+      <CalculationDetails topic="Les 10 prochains événements">
+        Le remplissage est le rapport entre les inscriptions confirmées et les places des créneaux non annulés. La situation suit les jours de Zurich. Aucune donnée sur les bénévoles.
+      </CalculationDetails>
       <div
         role="region"
         aria-labelledby="stats-next-events"
@@ -148,13 +246,12 @@ function NextEventsTable({ rows }: { rows: NextEventRow[] }) {
         className="bg-white border border-gray-200 rounded-2xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
       >
         <table className="w-full text-sm" aria-describedby="stats-next-events-intro">
-          <caption className="sr-only">Les 10 prochains événements, avec leurs dates, postes, créneaux, inscriptions et taux de remplissage</caption>
+          <caption className="sr-only">Les 10 prochains événements, avec leur organisation, leurs dates, leur situation, leurs créneaux, leurs inscriptions et leur taux de remplissage</caption>
           <thead className="bg-gray-50 text-left text-gray-700">
             <tr>
-              <th scope="col" className="px-4 py-2 font-medium">Organisation</th>
               <th scope="col" className="px-4 py-2 font-medium">Événement</th>
               <th scope="col" className="px-4 py-2 font-medium">Dates</th>
-              <th scope="col" className="px-4 py-2 font-medium text-right">Postes</th>
+              <th scope="col" className="px-4 py-2 font-medium">Situation</th>
               <th scope="col" className="px-4 py-2 font-medium text-right">Créneaux</th>
               <th scope="col" className="px-4 py-2 font-medium text-right">Inscriptions</th>
               <th scope="col" className="px-4 py-2 font-medium text-right">Remplissage</th>
@@ -163,15 +260,23 @@ function NextEventsTable({ rows }: { rows: NextEventRow[] }) {
           <tbody className="divide-y divide-gray-100">
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-2 text-gray-700">Aucun événement publié à venir.</td>
+                <td colSpan={6} className="px-4 py-2 text-gray-700">Aucun événement publié à venir.</td>
               </tr>
             ) : (
               rows.map((row) => (
                 <tr key={row.id}>
-                  <td className="px-4 py-2 break-words text-gray-700">{row.organizationName}</td>
-                  <th scope="row" className="px-4 py-2 text-left font-medium break-words text-gray-900">{row.title}</th>
+                  <th scope="row" className="px-4 py-2 text-left font-normal">
+                    <span className="block font-medium break-words text-gray-900">{row.title}</span>
+                    <Link
+                      href={`/super-admin/organizations/${row.organizationSlug}`}
+                      className="mt-0.5 block w-fit text-xs break-words text-gray-600 underline underline-offset-2 rounded hover:text-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    >
+                      {row.organizationName}
+                      <span className="sr-only"> (fiche de l&apos;organisation)</span>
+                    </Link>
+                  </th>
                   <td className="px-4 py-2 text-gray-700">{eventDatesLabel(row.startDate, row.endDate)}</td>
-                  <td className="px-4 py-2 text-right tabular-nums text-gray-900">{row.roles}</td>
+                  <td className="px-4 py-2 text-gray-700">{UPCOMING_SITUATION_LABELS[row.situation]}</td>
                   <td className="px-4 py-2 text-right tabular-nums text-gray-900">{row.shifts}</td>
                   <td className="px-4 py-2 text-right tabular-nums text-gray-900">{row.registrations}</td>
                   <td className="px-4 py-2 text-right tabular-nums text-gray-900">
@@ -192,11 +297,12 @@ function NextEventsTable({ rows }: { rows: NextEventRow[] }) {
   )
 }
 
-function UsageTable({ id, title, intro, rows }: { id: string; title: string; intro?: string; rows: (UsageRow | { key: string; label: string; value: string | number })[] }) {
+function UsageTable({ id, title, intro, details, rows }: { id: string; title: string; intro?: string; details?: ReactNode; rows: (UsageRow | { key: string; label: string; value: string | number })[] }) {
   return (
-    <section className="space-y-2">
-      <h2 id={id} className="text-lg font-semibold text-gray-900">{title}</h2>
+    <section className="space-y-2" aria-labelledby={id}>
+      <h3 id={id} className="text-sm font-semibold text-gray-900">{title}</h3>
       {intro && <p id={`${id}-intro`} className="text-sm text-gray-700">{intro}</p>}
+      {details && <CalculationDetails topic={title}>{details}</CalculationDetails>}
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
         <table className="w-full text-sm" aria-describedby={intro ? `${id}-intro` : undefined}>
           <caption className="sr-only">{title}</caption>

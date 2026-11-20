@@ -29,6 +29,7 @@ vi.mock("@/lib/org-inactivity-data", () => ({ loadOrganizationInactivity: vi.fn(
 vi.mock("@/lib/send-batches-data", () => ({ loadSendBatches: vi.fn(async () => []) }))
 
 import { ORG_ACCOUNT_ROLE_WHERE, OWNER_ROLE } from "@/lib/permissions"
+import { ORG_ACTIVITY_FILTER } from "@/lib/org-list-activity"
 import OrgDetail from "@/components/super-admin/OrgDetail"
 import SuperAdminOrgsPage from "@/app/super-admin/organizations/page"
 import OrgDetailPage from "@/app/super-admin/organizations/[slug]/page"
@@ -70,6 +71,32 @@ describe("the super-admin organisation list counts administrators only", () => {
     const tree = await SuperAdminOrgsPage({ searchParams: Promise.resolve({ filtre: "auto-a-relire" }) })
     expect(db.orgFindMany.mock.calls[0][0].where).toEqual({ autoApprovedAt: { not: null }, autoApprovalReviewedAt: null })
     expect(find(tree, "OrgsManager")?.props.filter).toBe(true)
+  })
+
+  it("reads published events only for the activity, while « Événements » keeps counting them all", async () => {
+    await SuperAdminOrgsPage({ searchParams: Promise.resolve({}) })
+    const args = db.orgFindMany.mock.calls[0][0]
+    expect(args.select.events).toEqual({ where: { publicStatus: "published" }, select: { startDate: true, endDate: true } })
+    // The count column is untouched: every event, whatever its status (#1078).
+    expect(args.select._count.select.events).toBe(true)
+  })
+
+  it("keeps spaces with an event ongoing or within 30 days, combined with the sort", async () => {
+    const iso = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString()
+    db.orgFindMany.mockResolvedValueOnce([
+      { ...orgRow(), events: [{ startDate: new Date(iso(-1)), endDate: new Date(iso(1)) }] },
+      { ...orgRow(), id: "org-loin", slug: "loin", events: [{ startDate: new Date(iso(40)), endDate: new Date(iso(40)) }] },
+      { ...orgRow(), id: "org-passe", slug: "passe", events: [{ startDate: new Date(iso(-30)), endDate: new Date(iso(-29)) }] },
+    ])
+
+    const tree = await SuperAdminOrgsPage({ searchParams: Promise.resolve({ filtre: ORG_ACTIVITY_FILTER, tri: "nom-desc" }) })
+    const manager = find(tree, "OrgsManager")
+    expect(manager?.props.activityFilter).toBe(true)
+    expect(manager?.props.initialSort).toEqual({ col: "nom", dir: "desc" })
+    const orgs = manager?.props.initialOrgs as { slug: string; activityLabel: string; activityTone: string }[]
+    expect(orgs.map((o) => o.slug)).toEqual(["fete"])
+    expect(orgs[0].activityLabel).toBe("En cours")
+    expect(orgs[0].activityTone).toBe("ongoing")
   })
 
   it("filters _count.admins with ORG_ACCOUNT_ROLE_WHERE and leaves the owner relation filtered", async () => {

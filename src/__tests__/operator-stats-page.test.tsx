@@ -53,9 +53,9 @@ import type { OperatorActivity } from "@/lib/operator-activity-data"
 import StatsPage from "@/app/super-admin/stats/page"
 import HealthPage from "@/app/super-admin/health/page"
 
-// The operator statistics page (#1415): super-admin only, the visible summary, the canvas as a
-// role="img" named by the encoding sentence, the table always present beside it, and the Chart.js instance
-// destroyed on unmount.
+// The operator statistics page (#1415, reworked for readability): two h2 groups, an in-page nav,
+// short intros with a native calculation disclosure, one merged 10-next-events table, and a
+// bubble chart whose accessible alternative is the summary plus a « Par situation » table.
 
 const day = (iso: string) => new Date(`${iso}T00:00:00Z`)
 
@@ -96,7 +96,9 @@ const operator: OperatorActivity = {
     outboxWaiting: 3,
   },
   nextEvents: [
-    { id: "event-1", organizationName: "Fête", title: "Fête du village", startDate: day("2026-07-10"), endDate: day("2026-07-10"), roles: 2, shifts: 4, registrations: 5, capacity: 10, fillPercent: 50 },
+    { id: "event-1", organizationName: "Fête", organizationSlug: "fete", title: "Fête du village", startDate: day("2026-07-10"), endDate: day("2026-07-10"), situation: "now", roles: 2, shifts: 4, registrations: 5, capacity: 10, fillPercent: 50 },
+    { id: "event-2", organizationName: "Lac", organizationSlug: "lac", title: "Festival du lac", startDate: day("2026-07-13"), endDate: day("2026-07-14"), situation: "soon7", roles: 3, shifts: 6, registrations: 40, capacity: 60, fillPercent: 67 },
+    { id: "event-3", organizationName: "Lac", organizationSlug: "lac", title: "Grande fête", startDate: day("2026-09-15"), endDate: day("2026-09-15"), situation: "later", roles: 1, shifts: 2, registrations: 1, capacity: 4, fillPercent: 25 },
   ],
   bubble,
 }
@@ -134,17 +136,74 @@ describe("the operator statistics page", () => {
     expect(mocks.loadOperatorActivity).not.toHaveBeenCalled()
   })
 
-  it("renders the summary, the canvas as an image and the same events in a table", async () => {
+  it("groups the sections under two h2 headings and links each one from the in-page nav", async () => {
+    const tree = await StatsPage()
+    render(tree)
+
+    expect(screen.getByRole("heading", { level: 1, name: "Statistiques" })).toHaveAttribute("id", "page-heading")
+    expect(screen.getAllByRole("heading").map((heading) => Number(heading.tagName.slice(1)))).toEqual([1, 2, 3, 3, 3, 4, 3, 2, 3, 3, 3, 3, 3])
+    expect(screen.getByRole("heading", { level: 2, name: "Charge actuelle" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 2, name: "Croissance et inscription" })).toBeInTheDocument()
+
+    const nav = screen.getByRole("navigation", { name: "Sections de la page" })
+    const links = within(nav).getAllByRole("link")
+    expect(links.map((link) => link.getAttribute("href"))).toEqual([
+      "#stats-events",
+      "#stats-activity",
+      "#stats-event-size",
+      "#stats-next-events",
+      "#stats-cumulative",
+      "#stats-current",
+      "#stats-signup",
+      "#stats-signup-source",
+      "#stats-past-events",
+    ])
+    for (const link of links) {
+      expect(document.getElementById(link.getAttribute("href")!.slice(1))).toBeInTheDocument()
+    }
+  })
+
+  it("renders the five event counts as a definition list and keeps the caveats in a native disclosure", async () => {
+    const tree = await StatsPage()
+    render(tree)
+
+    expect(screen.queryByRole("table", { name: "Événements" })).toBeNull()
+    const definitions = screen.getByText("En cours aujourd'hui").closest("dl")!
+    const dt = within(definitions).getByText("En cours aujourd'hui")
+    expect(dt.tagName).toBe("DT")
+    expect(dt.nextElementSibling?.tagName).toBe("DD")
+    expect(dt.nextElementSibling).toHaveTextContent("1")
+
+    const summaries = screen.getAllByText(/^Comment ces chiffres sont calculés/)
+    expect(summaries.length).toBeGreaterThan(5)
+    expect(summaries.every((summary) => summary.tagName === "SUMMARY")).toBe(true)
+    // Each disclosure names its section for screen readers, so the controls list tells them apart.
+    expect(summaries.some((summary) => summary.textContent === "Comment ces chiffres sont calculés : Activité des inscriptions")).toBe(true)
+    expect(new Set(summaries.map((summary) => summary.textContent)).size).toBe(summaries.length)
+    // The counter caveat is kept, inside its disclosure rather than in the page intro.
+    expect(screen.getByText(/ne baissent jamais/).closest("details")).toBeInTheDocument()
+    expect(screen.getByText(/Les décisions comptent sur 12 mois/).closest("details")).toBeInTheDocument()
+  })
+
+  it("replaces the per-event bubble table with the summary and a « Par situation » totals table", async () => {
     const tree = await StatsPage()
     const { unmount } = render(tree)
 
     expect(screen.getByRole("heading", { name: "Taille des événements" })).toBeInTheDocument()
     expect(screen.getByText(bubble.summary)).toBeInTheDocument()
-    expect(screen.getByText("Les mêmes événements en tableau")).toBeInTheDocument()
-    const bubbleTable = screen.getByRole("table", { name: /Événements en cours ou qui commencent dans les 30 jours/ })
-    expect(within(bubbleTable).getByRole("rowheader", { name: /Fête du village/ })).toBeInTheDocument()
-    expect(within(bubbleTable).getByRole("rowheader", { name: /Festival du lac/ })).toBeInTheDocument()
-    expect(within(bubbleTable).getByText("▲")).toHaveAttribute("aria-hidden", "true")
+    expect(screen.queryByText("Les mêmes événements en tableau")).toBeNull()
+    expect(screen.queryByRole("table", { name: /Événements en cours ou qui commencent dans les 30 jours/ })).toBeNull()
+
+    const totals = screen.getByRole("table", { name: "Nombre d'événements, de créneaux et d'inscriptions par situation" })
+    const rows = within(totals).getAllByRole("rowheader")
+    expect(rows.map((row) => row.textContent)).toEqual(["●En cours", "▲Début dans les 7 jours", "■Début dans 8 à 30 jours"])
+    expect(within(rows[0]).getByText("●")).toHaveAttribute("aria-hidden", "true")
+    const firstValues = within(rows[0].closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)
+    expect(firstValues).toEqual(["1", "2", "5"])
+    const secondValues = within(rows[1].closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)
+    expect(secondValues).toEqual(["1", "6", "40"])
+    const thirdValues = within(rows[2].closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)
+    expect(thirdValues).toEqual(["0", "0", "0"])
 
     // Named by the encoding (a hidden paragraph, not read twice); the visible summary follows as text.
     const canvas = screen.getByRole("img", { name: "Graphique à bulles : date de début en horizontal, inscriptions en vertical, surface selon le nombre de créneaux." })
@@ -153,7 +212,6 @@ describe("the operator statistics page", () => {
     expect(canvas).not.toHaveAttribute("aria-describedby")
     expect(document.getElementById("operator-bubble-encoding")).toHaveAttribute("aria-hidden", "true")
     expect(screen.getByText("Une bulle par événement ; sa surface suit le nombre de créneaux.")).toBeInTheDocument()
-    expect(screen.getByText(bubble.summary)).toBeInTheDocument()
 
     await waitFor(() => expect(mocks.chartInstances).toHaveLength(1))
     const config = mocks.chartInstances[0] as { data: { datasets: { label: string }[] }; options: { animation: unknown } }
@@ -165,31 +223,32 @@ describe("the operator statistics page", () => {
     expect(mocks.chartDestroy).toHaveBeenCalledTimes(1)
   })
 
-  it("orders the table rows by start date and shows the start date with the shifts count", async () => {
-    // The query returns the later event first; the table still reads by start date.
-    mocks.loadOperatorActivity.mockResolvedValueOnce({
-      ...operator,
-      bubble: bubbleChartData(
-        [
-          event({ id: "event-2", title: "Festival du lac", organizationName: "Lac", startDate: day("2026-07-13"), endDate: day("2026-07-14"), shifts: 6, registrations: 40, roles: 3 }),
-          event({ id: "event-1", title: "Fête du village" }),
-        ],
-        now,
-      ),
-    })
+  it("renders one merged event table with the organisation link, the situation and no postes column", async () => {
     const tree = await StatsPage()
     render(tree)
 
-    const bubbleTable = screen.getByRole("table", { name: /Événements en cours ou qui commencent dans les 30 jours/ })
-    const rows = within(bubbleTable).getAllByRole("rowheader")
-    expect(rows[0]).toHaveTextContent("Fête du village")
-    expect(rows[1]).toHaveTextContent("Festival du lac")
-    const firstRow = rows[0].closest("tr")!
-    expect(within(firstRow).getByText("10 juillet 2026")).toBeInTheDocument()
-    expect(within(firstRow).getByText("2")).toBeInTheDocument()
-    const secondRow = rows[1].closest("tr")!
-    expect(within(secondRow).getByText("13–14 juillet 2026")).toBeInTheDocument()
-    expect(within(secondRow).getByText("6")).toBeInTheDocument()
+    const table = screen.getByRole("table", { name: /Les 10 prochains événements, avec leur organisation/ })
+    expect(within(table).getAllByRole("columnheader").map((header) => header.textContent)).toEqual([
+      "Événement",
+      "Dates",
+      "Situation",
+      "Créneaux",
+      "Inscriptions",
+      "Remplissage",
+    ])
+
+    const first = within(table).getByRole("rowheader", { name: /Fête du village/ }).closest("tr")!
+    expect(within(first).getByRole("link", { name: /Fête/ })).toHaveAttribute("href", "/super-admin/organizations/fete")
+    expect(within(first).getByText("10 juillet 2026")).toBeInTheDocument()
+    expect(within(first).getByText("En cours")).toBeInTheDocument()
+    expect(within(first).getByText("50 %")).toBeInTheDocument()
+
+    const soon = within(table).getByRole("rowheader", { name: /Festival du lac/ }).closest("tr")!
+    expect(within(soon).getByText("Début dans les 7 jours")).toBeInTheDocument()
+    expect(within(soon).getByText("13–14 juillet 2026")).toBeInTheDocument()
+
+    const later = within(table).getByRole("rowheader", { name: /Grande fête/ }).closest("tr")!
+    expect(within(later).getByText("Début dans plus de 30 jours")).toBeInTheDocument()
   })
 
   it("moves the busiest hour and the waiting emails out of the comparison table into a definition list", async () => {
@@ -226,14 +285,16 @@ describe("the operator statistics page", () => {
     expect(screen.getByText("non calculable, aucune place")).toHaveClass("sr-only")
   })
 
-  it("renders no chart at all when there is no event, only the summary and the table", async () => {
+  it("renders no chart at all when there is no event, only the summary and the totals table", async () => {
     mocks.loadOperatorActivity.mockResolvedValueOnce({ ...operator, bubble: bubbleChartData([], now) })
     const tree = await StatsPage()
     render(tree)
 
     expect(screen.queryByRole("img")).not.toBeInTheDocument()
     expect(screen.getByText("Aucun événement en cours ou dans les 30 jours.", { selector: "p" })).toBeInTheDocument()
-    expect(screen.getByRole("table", { name: /Événements en cours ou qui commencent dans les 30 jours/ })).toBeInTheDocument()
+    const totals = screen.getByRole("table", { name: "Nombre d'événements, de créneaux et d'inscriptions par situation" })
+    expect(within(totals).getAllByRole("rowheader")).toHaveLength(3)
+    expect(within(totals).getAllByRole("cell").every((cell) => cell.textContent === "0")).toBe(true)
   })
 })
 

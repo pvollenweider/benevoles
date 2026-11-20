@@ -15,9 +15,9 @@ import type { BubbleChartData } from "@/lib/operator-activity"
  *
  * The canvas is not accessible by itself: it carries role="img" and is named by a hidden sentence
  * describing the encoding (aria-labelledby); the visible summary that follows it is read once, as
- * ordinary text. The table rendered beside it is the accessible alternative and source
- * of truth. When the chunk cannot be loaded, the same table remains and a sentence replaces the
- * canvas. The chart is destroyed on unmount and resized by Chart.js with its container.
+ * ordinary text. The summary and the « Par situation » table below it are the accessible
+ * alternative. When the chunk cannot be loaded, they remain and a sentence replaces the canvas.
+ * The chart is destroyed on unmount and resized by Chart.js with its container.
  */
 
 let chartJs: Promise<typeof import("chart.js")> | null = null
@@ -55,7 +55,7 @@ export default function OperatorBubbleChart({ data, labelId }: { data: BubbleCha
   }, [data])
 
   if (data.empty) return null
-  if (failed) return <p className="text-sm text-gray-700">Le graphique n&apos;a pas pu être chargé ; le tableau donne les mêmes valeurs.</p>
+  if (failed) return <p className="text-sm text-gray-700">Le graphique n&apos;a pas pu être chargé ; le résumé et le tableau « Par situation » restent affichés.</p>
 
   return (
     <div className="relative h-64 w-full sm:h-80">

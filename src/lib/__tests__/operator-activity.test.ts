@@ -7,6 +7,7 @@ import {
   addDays,
   BUBBLE_CATEGORY_LABELS,
   BUBBLE_CATEGORY_SYMBOLS,
+  bubbleCategoryTotals,
   bubbleChartData,
   bubbleDateTickLabel,
   bubbleRadius,
@@ -23,6 +24,8 @@ import {
   hourBucketLabel,
   registrationOpeningSoon,
   registrationsOpenNow,
+  UPCOMING_SITUATION_LABELS,
+  upcomingSituation,
   type ActivityCounts,
   type BubbleEventFacts,
   type EventWindowFacts,
@@ -85,6 +88,19 @@ describe("event windows in the Zurich day", () => {
     )
     expect(counts).toEqual({ now: 1, startingWithin7: 1, startingWithin30: 2 })
     expect(addDays("2026-07-31", 1)).toBe("2026-08-01")
+  })
+
+  it("labels the situation of the next events, including « Plus tard » beyond 30 days", () => {
+    expect(upcomingSituation(event(), now)).toBe("now")
+    expect(upcomingSituation(event({ startDate: day("2026-07-13"), endDate: day("2026-07-13") }), now)).toBe("soon7")
+    expect(upcomingSituation(event({ startDate: day("2026-07-20"), endDate: day("2026-07-20") }), now)).toBe("soon30")
+    expect(upcomingSituation(event({ startDate: day("2026-08-19"), endDate: day("2026-08-19") }), now)).toBe("later")
+    expect(UPCOMING_SITUATION_LABELS).toEqual({
+      now: "En cours",
+      soon7: "Début dans les 7 jours",
+      soon30: "Début dans 8 à 30 jours",
+      later: "Début dans plus de 30 jours",
+    })
   })
 })
 
@@ -246,7 +262,8 @@ describe("bubble chart data", () => {
     expect(data.summary).toContain("« Festival géant »")
     expect(data.summary).toContain("l'axe des inscriptions est plafonné à 10 ; « Festival géant » le dépasse (2000)")
     expect(data.summary).not.toContain("l'axe des créneaux est plafonné")
-    expect(data.summary).toContain("le tableau donne les valeurs réelles")
+    // The per-event table is gone: the cap sentence carries the real value, no dangling pointer.
+    expect(data.summary).not.toContain("le tableau donne les valeurs réelles")
     // The labels name the exclusive 8–30-day bucket, and each category has its own shape symbol.
     expect(BUBBLE_CATEGORY_LABELS.within30).toBe("Début dans 8 à 30 jours")
     expect(BUBBLE_CATEGORY_SYMBOLS).toEqual({ now: "●", within7: "▲", within30: "■" })
@@ -288,5 +305,44 @@ describe("bubble chart data", () => {
     expect(fillRate(25, 100)).toBe(25)
     expect(fillRate(0, 0)).toBeNull()
     expect(fillRate(120, 100)).toBe(100)
+  })
+})
+
+describe("bubbleCategoryTotals", () => {
+  const now = at("2026-07-10T09:00:00Z")
+  const bubbleEvent = (over: Partial<BubbleEventFacts> = {}): BubbleEventFacts => ({
+    id: "e1",
+    title: "Fête du village",
+    organizationName: "Fête",
+    publicStatus: "published",
+    isListed: true,
+    startDate: day("2026-07-10"),
+    endDate: day("2026-07-10"),
+    shifts: 2,
+    registrations: 5,
+    roles: 1,
+    ...over,
+  })
+
+  it("sums events, créneaux and inscriptions per category, in chart order", () => {
+    const { points } = bubbleChartData([
+      bubbleEvent({ id: "now-1" }),
+      bubbleEvent({ id: "now-2", shifts: 1, registrations: 0 }),
+      bubbleEvent({ id: "week", startDate: day("2026-07-13"), endDate: day("2026-07-13"), shifts: 6, registrations: 40 }),
+      bubbleEvent({ id: "month", startDate: day("2026-07-20"), endDate: day("2026-07-20"), shifts: 3, registrations: 10 }),
+    ], now)
+    expect(bubbleCategoryTotals(points)).toEqual([
+      { category: "now", events: 2, shifts: 3, registrations: 5 },
+      { category: "within7", events: 1, shifts: 6, registrations: 40 },
+      { category: "within30", events: 1, shifts: 3, registrations: 10 },
+    ])
+  })
+
+  it("keeps the three categories with zeros when there is no event", () => {
+    expect(bubbleCategoryTotals([])).toEqual([
+      { category: "now", events: 0, shifts: 0, registrations: 0 },
+      { category: "within7", events: 0, shifts: 0, registrations: 0 },
+      { category: "within30", events: 0, shifts: 0, registrations: 0 },
+    ])
   })
 })
