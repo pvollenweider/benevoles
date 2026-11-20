@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { AUDIENCE_INDEX_PATH, AUDIENCE_PAGES, DOC_GUIDES, PUBLIC_PAGES, linkSourcesToRoutes, pageAvailable, splitTitle, type PublicPage } from "@/lib/doc-pages"
+import { markdownPathFor } from "@/lib/markdown-paths"
 import { DOC_GROUPS, docUnitAudience, sortDocUnits, type DocUnit } from "@/lib/doc-units"
 import { parseFeaturesPage } from "@/lib/features-page"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
@@ -65,12 +66,116 @@ function introduction(markdown: string): string {
 }
 
 /**
- * A source's Markdown as plain, self-contained text: HTML comments (video references) removed,
- * links between sources made site links, then absolute, so each one works out of context.
+ * One section of /llms-full.txt: a page's title, its route, its optional date and its portable
+ * text. The builders below are the only place a page's text is made portable, so /llms-full.txt
+ * and that page's `.md` variant cannot drift (src/lib/markdown-pages.ts).
  */
-export function portableMarkdown(markdown: string, base: string): string {
+export type LlmsSection = {
+  title: string
+  /** The page's route, e.g. `/doc/admin`. */
+  path: string
+  body: string
+  /** A date to show under the address, already formatted (`6 octobre 2026`). */
+  dated?: string
+  /** The label of that date; « Dernière mise à jour » by default. */
+  dateLabel?: string
+}
+
+/** One section as /llms-full.txt writes it: title, address, date, then the text. */
+export function llmsSectionText(section: LlmsSection, base: string): string {
+  return [
+    `# ${section.title}`,
+    "",
+    `Adresse : ${absoluteUrl(base, section.path)}`,
+    ...(section.dated ? ["", `${section.dateLabel ?? "Dernière mise à jour"} : ${section.dated}`] : []),
+    "",
+    section.body,
+  ].join("\n")
+}
+
+/**
+ * The section of a public page: its own title and text when it has a Markdown source, its title
+ * and summary when it hasn't (/doc, /blog, the privacy policy, the terms, the operator page).
+ */
+export function publicPageSection(page: PublicPage, source: string | undefined, base: string): LlmsSection {
+  const parsed = source === undefined ? null : splitTitle(source)
+  return {
+    title: parsed?.title ?? page.title,
+    path: page.path,
+    body: parsed?.body ? portableMarkdown(parsed.body, base, page.path) : page.summary,
+  }
+}
+
+/** A practical guide's section (/ressources/<slug>), dated the day it was last checked. */
+export function ressourceSection(guide: Ressource, base: string): LlmsSection {
+  const path = `/ressources/${guide.slug}`
+  return { title: guide.title, path, body: portableMarkdown(guide.body, base, path), dated: formatReleaseDate(guide.updated) }
+}
+
+/** A blog post's section (/blog/<slug>), dated the day it was sent. */
+export function blogPostSection(post: BlogPost, base: string): LlmsSection {
+  const path = blogPostPath(post)
+  return { title: post.title, path, body: portableMarkdown(post.body, base, path), dated: formatReleaseDate(post.date), dateLabel: "Publié le" }
+}
+
+/** A documentation unit's section (/doc/<slug>), with its audience and its freshness date when known. */
+export function docUnitSection(unit: DocUnit, base: string): LlmsSection {
+  const path = `/doc/${unit.slug}`
+  const dated = unit.freshness?.updated ?? unit.freshness?.added
+  return {
+    title: unit.title,
+    path,
+    body: portableMarkdown(`Pour : ${docUnitAudience(unit)}.\n\n${unit.body}`, base, path),
+    ...(dated ? { dated: formatReleaseDate(dated) } : {}),
+  }
+}
+
+/** The released versions of /nouveautes as /llms-full.txt writes them, each under its anchored heading. */
+export function releasesMarkdown(releases: readonly ChangelogRelease[], base: string, repositoryUrl: string): string {
+  return releases
+    .map((release) =>
+      [
+        `## Version ${release.version} — ${formatReleaseDate(release.date)}`,
+        "",
+        `Adresse : ${absoluteUrl(base, `/nouveautes#${release.version}`)}`,
+        "",
+        repositoryLinks(portableMarkdown(releaseMarkdown(release), base, "/nouveautes"), repositoryUrl),
+      ].join("\n"),
+    )
+    .join("\n\n")
+}
+
+/** /nouveautes' section: its summary, then the released versions (nothing for an unreleased one). */
+export function newsSection(news: PublicPage, releasesText: string): LlmsSection {
+  return { title: news.title, path: news.path, body: [news.summary, releasesText].filter(Boolean).join("\n\n") }
+}
+
+/** The home's section: the FAQ it shows (FAQ-ACCUEIL.md); the rest of the page is layout and media. */
+export function homeSection(faq: string, base: string): LlmsSection {
+  const parsed = splitTitle(faq)
+  return { title: parsed.title ?? "Questions fréquentes", path: "/", body: portableMarkdown(parsed.body, base, "/") }
+}
+
+/**
+ * A page's own Markdown variant: the same section as /llms-full.txt, with one first line under
+ * the title saying which HTML page it is the Markdown version of.
+ */
+export function markdownPageText(section: LlmsSection, base: string): string {
+  const [title, , ...rest] = llmsSectionText(section, base).split("\n")
+  return [title, "", `> Version Markdown de ${absoluteUrl(base, section.path)}`, "", ...rest].join("\n") + "\n"
+}
+
+/**
+ * A source's Markdown as plain, self-contained text: HTML comments (video references) removed,
+ * links between sources made site links, then absolute, so each one works out of context. A bare
+ * fragment (`](#comment-ca-marche)`, a table of contents) is anchored on the page that carries the
+ * source (`pagePath`), since the text can be read outside that page (/llms.txt, /llms-full.txt, a
+ * `.md` variant).
+ */
+export function portableMarkdown(markdown: string, base: string, pagePath: string): string {
   const root = base.replace(/\/+$/, "")
   return linkSourcesToRoutes(localizeInstanceText(markdown).replace(/^[ \t]*<!--[\s\S]*?-->[ \t]*\n?/gm, ""))
+    .replace(/\]\(#([^)\s]*)\)/g, (_match, id: string) => `](${pagePath}#${id})`)
     .replace(/\]\(\/(?!\/)/g, `](${root}/`)
     .replace(/\n{3,}/g, "\n\n")
     .trim()
@@ -106,6 +211,10 @@ export const LEGAL_PATHS = ["/legal/privacy", "/legal/terms", "/legal/sous-trait
 /** /llms.txt: what benevol.app is, then every public page by theme, each with its one-line summary. */
 export function llmsTxt(s: LlmsSources): string {
   const url = (path: string) => absoluteUrl(s.base, path)
+  // A page with a Markdown variant is linked to it (`/fonctionnalites.md`); a page without one
+  // (/blog, /doc, the privacy policy, the terms, the operator page) keeps its HTML address.
+  const markdownUrl = (path: string) => url(markdownPathFor(path)!)
+  const pageUrl = (page: PublicPage) => (page.source ? markdownUrl(page.path) : url(page.path))
   const features = PUBLIC_PAGES.find((p) => p.path === "/fonctionnalites")!
   const docIndex = PUBLIC_PAGES.find((p) => p.path === "/doc")!
   const news = PUBLIC_PAGES.find((p) => p.path === "/nouveautes")!
@@ -119,47 +228,48 @@ export function llmsTxt(s: LlmsSources): string {
   // The identity block comes first, before the feature list (#1323): the exact name and the
   // paragraphs to quote, never their directives. Another instance has no such page and no block (#760).
   if (identity) out.push(identity, "")
-  out.push(portableMarkdown(introduction(s.features), s.base), "")
+  out.push(portableMarkdown(introduction(s.features), s.base, features.path), "")
 
   out.push("## Présentation", "")
-  out.push(link("Accueil", url("/"), "la présentation du service, ses questions fréquentes et comment commencer."))
-  out.push(link(features.title, url(features.path), features.summary))
+  out.push(link("Accueil", markdownUrl("/"), "la présentation du service, ses questions fréquentes et comment commencer."))
+  out.push(link(features.title, pageUrl(features), features.summary))
+  // A section anchor only exists on the HTML page: a `.md` variant has no anchors.
   for (const section of markdownSections(s.features)) out.push(`  ${link(section.title, url(`${features.path}#${section.id}`))}`)
-  if (pageAvailable(planning)) out.push(link(planning.title, url(planning.path), planning.summary))
+  if (pageAvailable(planning)) out.push(link(planning.title, pageUrl(planning), planning.summary))
   // The audience pages under their index (#872), then the price (#950): the hosted service's pages.
   const audienceIndex = PUBLIC_PAGES.find((p) => p.path === AUDIENCE_INDEX_PATH)!
   if (pageAvailable(audienceIndex)) {
-    out.push(link(audienceIndex.title, url(audienceIndex.path), audienceIndex.summary))
-    for (const page of AUDIENCE_PAGES.filter((p) => pageAvailable(p))) out.push(`  ${link(page.title, url(page.path), page.summary)}`)
+    out.push(link(audienceIndex.title, pageUrl(audienceIndex), audienceIndex.summary))
+    for (const page of AUDIENCE_PAGES.filter((p) => pageAvailable(p))) out.push(`  ${link(page.title, pageUrl(page), page.summary)}`)
   }
   const pricing = PUBLIC_PAGES.find((p) => p.path === "/tarifs")!
-  if (pageAvailable(pricing)) out.push(link(pricing.title, url(pricing.path), pricing.summary))
+  if (pageAvailable(pricing)) out.push(link(pricing.title, pageUrl(pricing), pricing.summary))
   // The practical pages of the hosted service (#871): spreadsheet and chat group, or a tool?
   for (const path of RESOURCE_PATHS) {
     const page = PUBLIC_PAGES.find((p) => p.path === path)
-    if (page && pageAvailable(page)) out.push(link(page.title, url(page.path), page.summary))
+    if (page && pageAvailable(page)) out.push(link(page.title, pageUrl(page), page.summary))
   }
-  out.push(link(news.title, url(news.path), news.summary))
-  out.push(link(blog.title, url(blog.path), blog.summary))
+  out.push(link(news.title, pageUrl(news), news.summary))
+  out.push(link(blog.title, pageUrl(blog), blog.summary))
   out.push("")
 
   out.push("## Guides", "")
-  for (const guide of DOC_GUIDES) out.push(link(guide.title, url(guide.path), guide.summary))
-  out.push(link(docIndex.title, url(docIndex.path), "toutes les fiches, par thème."))
+  for (const guide of DOC_GUIDES) out.push(link(guide.title, pageUrl(guide), guide.summary))
+  out.push(link(docIndex.title, pageUrl(docIndex), "toutes les fiches, par thème."))
   out.push("")
 
   for (const group of DOC_GROUPS) {
     const inGroup = units.filter((u) => u.group === group.id)
     if (inGroup.length === 0) continue
     out.push(`## Documentation : ${group.title}`, "")
-    for (const u of inGroup) out.push(link(u.title, url(`/doc/${u.slug}`), `${u.summary} Pour : ${docUnitAudience(u)}.`))
+    for (const u of inGroup) out.push(link(u.title, markdownUrl(`/doc/${u.slug}`), `${u.summary} Pour : ${docUnitAudience(u)}.`))
     out.push("")
   }
 
   out.push("## Informations légales", "")
   for (const path of LEGAL_PATHS) {
     const page = PUBLIC_PAGES.find((p) => p.path === path)
-    if (page && pageAvailable(page)) out.push(link(page.title, url(page.path), page.summary))
+    if (page && pageAvailable(page)) out.push(link(page.title, pageUrl(page), page.summary))
   }
   out.push("")
 
@@ -177,27 +287,15 @@ export function llmsTxt(s: LlmsSources): string {
  * its title and summary.
  */
 export function llmsFullTxt(s: LlmsSources): string {
-  const url = (path: string) => absoluteUrl(s.base, path)
   const markdown = new Map((s.pages ?? []).map((p) => [p.path, p.markdown]))
   const citer = PUBLIC_PAGES.find((p) => p.path === "/citer")!
   const identity = pageAvailable(citer) ? identityMarkdown(s.citer) : ""
   const parts: string[] = [[`# ${SITE_NAME} : documentation complète`, "", `> ${s.summary}`, ...(identity ? ["", identity] : [])].join("\n")]
-
-  const section = (title: string, path: string, body: string, dated?: string, dateLabel = "Dernière mise à jour") =>
-    [`# ${title}`, "", `Adresse : ${url(path)}`, ...(dated ? ["", `${dateLabel} : ${dated}`] : []), "", body].join("\n")
-  const page = (p: PublicPage, body?: string) => {
-    const source = body ?? markdown.get(p.path)
-    const parsed = source === undefined ? null : splitTitle(source)
-    parts.push(section(parsed?.title ?? p.title, p.path, parsed?.body ? portableMarkdown(parsed.body, s.base) : p.summary))
-  }
-  const resource = (r: Ressource) =>
-    parts.push(section(r.title, `/ressources/${r.slug}`, portableMarkdown(r.body, s.base), formatReleaseDate(r.updated)))
-  const post = (p: BlogPost) =>
-    parts.push(section(p.title, blogPostPath(p), portableMarkdown(p.body, s.base), formatReleaseDate(p.date), "Publié le"))
+  const push = (section: LlmsSection) => parts.push(llmsSectionText(section, s.base))
+  const page = (p: PublicPage, body?: string) => push(publicPageSection(p, body ?? markdown.get(p.path), s.base))
 
   // The home's own text is its FAQ (FAQ-ACCUEIL.md); the rest of the page is layout and media.
-  const faq = splitTitle(s.faq ?? "")
-  parts.push(section(faq.title ?? "Questions fréquentes", "/", portableMarkdown(faq.body, s.base)))
+  push(homeSection(s.faq ?? "", s.base))
 
   // The order of /llms.txt: the presentation pages, then the practical guides, the news and the
   // blog, before the documentation and the legal pages.
@@ -216,29 +314,22 @@ export function llmsFullTxt(s: LlmsSources): string {
     const p = PUBLIC_PAGES.find((candidate) => candidate.path === path)
     if (!p || !pageAvailable(p)) continue
     page(p)
-    if (path === "/ressources") (s.ressources ?? []).forEach(resource)
+    if (path === "/ressources") (s.ressources ?? []).forEach((guide) => push(ressourceSection(guide, s.base)))
   }
 
   const news = PUBLIC_PAGES.find((p) => p.path === "/nouveautes")!
-  const releases = (s.releases ?? []).map((r) =>
-    [`## Version ${r.version} — ${formatReleaseDate(r.date)}`, "", `Adresse : ${url(`/nouveautes#${r.version}`)}`, "", repositoryLinks(portableMarkdown(releaseMarkdown(r), s.base), s.repositoryUrl)].join("\n"),
-  )
-  if (pageAvailable(news)) parts.push(section(news.title, news.path, [news.summary, ...releases].join("\n\n")))
+  if (pageAvailable(news)) push(newsSection(news, releasesMarkdown(s.releases ?? [], s.base, s.repositoryUrl)))
 
   const blog = PUBLIC_PAGES.find((p) => p.path === "/blog")!
   if (pageAvailable(blog)) {
     page(blog)
-    for (const p of s.posts ?? []) post(p)
+    for (const p of s.posts ?? []) push(blogPostSection(p, s.base))
   }
 
   for (const guide of DOC_GUIDES) if (pageAvailable(guide)) page(guide)
   const docIndex = PUBLIC_PAGES.find((p) => p.path === "/doc")!
   page(docIndex)
-  for (const u of sortDocUnits(s.units)) {
-    const dated = u.freshness?.updated ?? u.freshness?.added
-    const body = portableMarkdown(`Pour : ${docUnitAudience(u)}.\n\n${u.body}`, s.base)
-    parts.push(section(u.title, `/doc/${u.slug}`, body, dated ? formatReleaseDate(dated) : undefined))
-  }
+  for (const u of sortDocUnits(s.units)) push(docUnitSection(u, s.base))
 
   for (const path of LEGAL_PATHS) {
     const p = PUBLIC_PAGES.find((candidate) => candidate.path === path)

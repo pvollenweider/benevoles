@@ -3,6 +3,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { identityMarkdown, llmsFullTxt, llmsTxt, markdownSections, portableMarkdown, LEGAL_PATHS, RESOURCE_PATHS } from "../llms-txt"
 import { AUDIENCE_PAGES, PUBLIC_PAGES, pageAvailable, splitTitle } from "../doc-pages"
+import { htmlPathForMarkdown, markdownPathFor } from "../markdown-paths"
 import { DOC_GROUPS, loadDocUnits } from "../doc-units"
 import { headingIdsOf, renderPublicSource } from "../public-content"
 import { blogPostPath, loadBlogPosts } from "../blog"
@@ -45,7 +46,11 @@ function excerpt(markdown: string): string {
 function listedContentPaths(): Set<string> {
   const txt = llmsTxt(sources())
   const sections = txt.slice(txt.indexOf("\n## Présentation"))
-  return new Set([...sections.matchAll(new RegExp(`^ {0,2}- \\[[^\\]]+\\]\\(${BASE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^)#\\s]+)\\)`, "gm"))].map((m) => m[1]))
+  return new Set(
+    [...sections.matchAll(new RegExp(`^ {0,2}- \\[[^\\]]+\\]\\(${BASE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^)#\\s]+)\\)`, "gm"))]
+      // /llms.txt links a page with a Markdown variant to its `.md`; /llms-full.txt names the HTML address.
+      .map((m) => htmlPathForMarkdown(m[1]) ?? m[1]),
+  )
 }
 
 describe("llmsTxt", () => {
@@ -58,11 +63,29 @@ describe("llmsTxt", () => {
   })
 
   it("links every public page and every unit by its absolute URL, with its summary", () => {
-    // The pages this instance shows (#760): the tests run as the hosted service.
-    for (const p of PUBLIC_PAGES.filter((page) => pageAvailable(page))) expect(txt, p.path).toContain(`](${BASE}${p.path})`)
+    // The pages this instance shows (#760): the tests run as the hosted service. A page with a
+    // Markdown source is linked to its `.md` variant (src/lib/markdown-pages.ts); one without a
+    // source keeps its HTML address.
+    for (const p of PUBLIC_PAGES.filter((page) => pageAvailable(page))) {
+      const expected = p.source ? `${BASE}${markdownPathFor(p.path)}` : `${BASE}${p.path}`
+      expect(txt, p.path).toContain(`](${expected})`)
+    }
     expect(txt).not.toContain(`](${BASE}/legal/exploitant)`)
-    for (const u of loadDocUnits()) expect(txt, u.slug).toContain(`- [${u.title}](${BASE}/doc/${u.slug}): ${u.summary}`)
+    for (const u of loadDocUnits()) expect(txt, u.slug).toContain(`- [${u.title}](${BASE}/doc/${u.slug}.md): ${u.summary}`)
     expect(txt).toContain(`](${BASE}/llms-full.txt)`)
+  })
+
+  it("links the pages that have one to their .md URL, and the others to their HTML URL", () => {
+    expect(txt).toContain(`](${BASE}/index.html.md)`)
+    expect(txt).toContain(`](${BASE}/fonctionnalites.md)`)
+    expect(txt).toContain(`](${BASE}/nouveautes.md)`)
+    expect(txt).toContain(`](${BASE}/doc/admin.md)`)
+    expect(txt).toContain("- [Documentation](" + BASE + "/doc):")
+    expect(txt).toContain("- [Blog](" + BASE + "/blog):")
+    expect(txt).toContain("- [Politique de confidentialité](" + BASE + "/legal/privacy):")
+    expect(txt).not.toContain(`](${BASE}/doc.md)`)
+    expect(txt).not.toContain(`](${BASE}/blog.md)`)
+    expect(txt).not.toContain(`](${BASE}/legal/privacy.md)`)
   })
 
   it("groups the units by theme, in the documentation's order", () => {
@@ -81,8 +104,9 @@ describe("llmsTxt", () => {
     }
   })
 
-  it("keeps nothing internal: no relative link, no Markdown file, no HTML comment", () => {
-    expect(txt).not.toMatch(/\]\(\/|\.md\)|<!--/)
+  it("keeps nothing internal: no relative link, no source file, no HTML comment", () => {
+    expect(txt).not.toMatch(/\]\(\/|<!--|\]\((?:\.\.?\/|content\/)/)
+    expect(txt).not.toContain("<!--")
   })
 
   // #1323: the identity block comes first, before the feature list, built from CITER.md.
@@ -211,6 +235,13 @@ describe("llmsFullTxt", () => {
 describe("portableMarkdown", () => {
   it("drops video references, turns links between sources into absolute site links", () => {
     const md = "Intro [a](content/guide/rappels.md#b) et [c](/doc/admin).\n\n<!-- video: ORG_FIRST_STEPS -->\n\n\nFin [d](https://example.org)."
-    expect(portableMarkdown(md, `${BASE}/`)).toBe(`Intro [a](${BASE}/doc/rappels#b) et [c](${BASE}/doc/admin).\n\nFin [d](https://example.org).`)
+    expect(portableMarkdown(md, `${BASE}/`, "/doc/rappels")).toBe(`Intro [a](${BASE}/doc/rappels#b) et [c](${BASE}/doc/admin).\n\nFin [d](https://example.org).`)
+  })
+
+  // Regression: a table of contents link outside its page (llms.txt, a .md variant) resolved nowhere.
+  it("anchors a bare fragment on the page that carries the source", () => {
+    const md = "- [Voir comment ça marche](#comment-ca-marche)\n\nUne réponse."
+    expect(portableMarkdown(md, BASE, "/fonctionnalites")).toBe(`- [Voir comment ça marche](${BASE}/fonctionnalites#comment-ca-marche)\n\nUne réponse.`)
+    expect(portableMarkdown("[Accueil](#comment-ca-marche)", BASE, "/")).toBe(`[Accueil](${BASE}/#comment-ca-marche)`)
   })
 })

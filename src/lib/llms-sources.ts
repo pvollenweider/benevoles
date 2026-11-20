@@ -42,6 +42,8 @@ export async function llmsSources(full = false): Promise<LlmsSources | null> {
   }
 }
 
-export function markdownResponse(text: string): Response {
-  return new Response(text, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } })
+export function markdownResponse(text: string, headers: Record<string, string> = {}): Response {
+  return new Response(text, {
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600", ...headers },
+  })
 }

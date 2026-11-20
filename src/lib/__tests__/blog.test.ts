@@ -159,12 +159,15 @@ describe("blogAtomFeed", () => {
 describe("metadata, structured data and sitemap", () => {
   const p = fake("neuf", "2026-10-12", { title: "🎬 benevol.app 9.0 : tout neuf", version: "9.0" })
 
-  it("gives a post its canonical on www, an article published that day, the site's card and the feed", () => {
+  it("gives a post its canonical on www, an article published that day, the site's card, the feed and its Markdown variant", () => {
     const m = blogPostMetadata(p, "https://www.benevol.app")
     expect(m.title).toEqual({ absolute: "benevol.app 9.0 : tout neuf | benevol.app" })
     expect(m.description).toBe(p.summary)
     expect(m.alternates?.canonical).toBe("https://www.benevol.app/blog/neuf")
-    expect(m.alternates?.types).toEqual({ "application/atom+xml": [{ url: "https://www.benevol.app/blog/feed.xml", title: "Le blog de benevol.app" }] })
+    expect(m.alternates?.types).toEqual({
+      "application/atom+xml": [{ url: "https://www.benevol.app/blog/feed.xml", title: "Le blog de benevol.app" }],
+      "text/markdown": "https://www.benevol.app/blog/neuf.md",
+    })
     expect(m.openGraph).toMatchObject({ type: "article", publishedTime: "2026-10-12T00:00:00.000Z", url: "https://www.benevol.app/blog/neuf", images: [expect.objectContaining({ url: "https://www.benevol.app/og-image.png", width: 1200, height: 630 })] })
     expect(m.robots).toMatchObject({ index: true, follow: true })
     expect(blogPostMetadata({ ...p, image: "/blog-img/neuf.png" }, "https://www.benevol.app").openGraph).toMatchObject({ images: [expect.objectContaining({ url: "https://www.benevol.app/blog-img/neuf.png" })] })

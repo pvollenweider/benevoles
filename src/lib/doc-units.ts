@@ -6,6 +6,7 @@ import path from "node:path"
 import type { Metadata } from "next"
 import { z } from "zod"
 import { splitTitle } from "@/lib/doc-pages"
+import { withMarkdownAlternate } from "@/lib/markdown-paths"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { findVideoReferences } from "@/lib/doc-video-references"
 import { DOC_SLUG_RE } from "@/lib/doc-href"
@@ -397,19 +398,24 @@ export function relatedDocUnits(unit: DocUnit, units: readonly DocUnit[]): DocUn
 
 /**
  * Metadata of a unit's page: its title and summary, an absolute canonical on the apex host, Open
- * Graph as an article of its group with its own social card, the large Twitter card, indexable.
+ * Graph as an article of its group with its own social card, the large Twitter card, indexable,
+ * and the unit's Markdown variant (`/doc/<slug>.md`).
  */
 export function docUnitMetadata(unit: DocUnit, base: string, modifiedTime?: Date | null): Metadata {
-  return seoMetadata({
+  return withMarkdownAlternate(
+    seoMetadata({
+      base,
+      path: `/doc/${unit.slug}`,
+      title: docUnitMetaTitle(unit),
+      description: unit.summary,
+      type: "article",
+      imageAlt: `${unit.title}, documentation de ${SITE_NAME}`,
+      section: docGroup(unit.group).title,
+      modifiedTime,
+    }),
     base,
-    path: `/doc/${unit.slug}`,
-    title: docUnitMetaTitle(unit),
-    description: unit.summary,
-    type: "article",
-    imageAlt: `${unit.title}, documentation de ${SITE_NAME}`,
-    section: docGroup(unit.group).title,
-    modifiedTime,
-  })
+    `/doc/${unit.slug}`,
+  )
 }
 
 // ---------------------------------------------------------------------------------------------
