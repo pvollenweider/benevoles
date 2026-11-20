@@ -6,7 +6,7 @@
  * (#1415). Server only: the pure rules, formatting and chart data are in
  * src/lib/operator-activity.ts, never imported with Prisma by a client component.
  *
- * Aggregate queries only: two bounded event lists (the 30-day bubble window and the 10 next
+ * Aggregate queries only: two bounded event lists (the 30-day event window and the 10 next
  * events), one groupBy on postes and one on registrations for their ids, plus counts and two SQL
  * aggregates over the registration table. No loop over every event and no volunteer data.
  */
@@ -17,7 +17,6 @@ import { APP_TIME_ZONE } from "./time-zone"
 import {
   activityRows,
   addDays,
-  bubbleChartData,
   civilDate,
   eventWindowCounts,
   fillRate,
@@ -25,8 +24,6 @@ import {
   upcomingSituation,
   type ActivityCounts,
   type ActivityRow,
-  type BubbleChartData,
-  type BubbleEventFacts,
   type EventWindowCounts,
   type HourBucket,
   type UpcomingSituation,
@@ -64,7 +61,6 @@ export type OperatorActivity = {
     outboxWaiting: number
   }
   nextEvents: NextEventRow[]
-  bubble: BubbleChartData
 }
 
 const EVENT_SELECT = {
@@ -76,16 +72,6 @@ const EVENT_SELECT = {
   endDate: true,
   organization: { select: { name: true, slug: true } },
 } as const
-
-type EventRow = {
-  id: string
-  title: string
-  publicStatus: string
-  isListed: boolean
-  startDate: Date
-  endDate: Date
-  organization: { name: string; slug: string }
-}
 
 type ShiftStats = { shifts: number; roles: number; capacity: number }
 const NO_SHIFTS: ShiftStats = { shifts: 0, roles: 0, capacity: 0 }
@@ -179,21 +165,6 @@ function shiftStatsById(groups: readonly { eventId: string; roleName: string; _c
   return stats
 }
 
-function eventFacts(event: EventRow, shifts: ShiftStats, registrations: number): BubbleEventFacts {
-  return {
-    id: event.id,
-    title: event.title,
-    organizationName: event.organization.name,
-    publicStatus: event.publicStatus,
-    isListed: event.isListed,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    shifts: shifts.shifts,
-    registrations,
-    roles: shifts.roles,
-  }
-}
-
 /** Everything the statistics page shows about events and registrations, computed on page load. */
 export async function loadOperatorActivity(now: Date = new Date()): Promise<OperatorActivity> {
   const today = civilDate(now, APP_TIME_ZONE)
@@ -201,7 +172,7 @@ export async function loadOperatorActivity(now: Date = new Date()): Promise<Oper
   const horizon30 = new Date(`${addDays(today, 30)}T00:00:00.000Z`)
   const in7Days = new Date(now.getTime() + 7 * DAY_MS)
 
-  const [bubbleEvents, nextEvents, registrationsOpenNow, registrationOpeningsNext7Days, outboxWaiting, rhythm] = await Promise.all([
+  const [windowEvents, nextEvents, registrationsOpenNow, registrationOpeningsNext7Days, outboxWaiting, rhythm] = await Promise.all([
     // Happening now or starting within 30 days. A published event that started earlier is included
     // when its last day is today or later (startDate <= horizon30 is then always true).
     prisma.event.findMany({
@@ -220,7 +191,7 @@ export async function loadOperatorActivity(now: Date = new Date()): Promise<Oper
     loadRegistrationActivity(now),
   ])
 
-  const ids = [...new Set([...bubbleEvents, ...nextEvents].map((event) => event.id))]
+  const ids = nextEvents.map((event) => event.id)
   const [shiftGroups, registrationGroups] = await Promise.all([
     prisma.shift.groupBy({
       by: ["eventId", "roleName"],
@@ -238,12 +209,7 @@ export async function loadOperatorActivity(now: Date = new Date()): Promise<Oper
   const shiftsByEvent = shiftStatsById(shiftGroups)
   const registrationsByEvent = new Map(registrationGroups.map((group) => [group.eventId, group._count._all]))
 
-  const bubble = bubbleChartData(
-    bubbleEvents.map((event) => eventFacts(event, shiftsByEvent.get(event.id) ?? NO_SHIFTS, registrationsByEvent.get(event.id) ?? 0)),
-    now,
-    APP_TIME_ZONE,
-  )
-  const counts = eventWindowCounts(bubbleEvents, now, APP_TIME_ZONE)
+  const counts = eventWindowCounts(windowEvents, now, APP_TIME_ZONE)
 
   const nextRows: NextEventRow[] = nextEvents.map((event) => {
     const shifts = shiftsByEvent.get(event.id) ?? NO_SHIFTS
@@ -274,6 +240,5 @@ export async function loadOperatorActivity(now: Date = new Date()): Promise<Oper
       outboxWaiting,
     },
     nextEvents: nextRows,
-    bubble,
   }
 }

@@ -6,19 +6,17 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { cleanup, render, screen, waitFor, within } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react"
 
 const mocks = vi.hoisted(() => ({
   auth: vi.fn(),
   loadOperatorActivity: vi.fn(),
+  loadOperatorLoad: vi.fn(),
   loadPlatformUsage: vi.fn(),
   loadSignupFacts: vi.fn(),
   loadSignupSources: vi.fn(),
   observePastEvents: vi.fn(),
   loadHealth: vi.fn(),
-  chartRegister: vi.fn(),
-  chartDestroy: vi.fn(),
-  chartInstances: [] as unknown[],
 }))
 
 vi.mock("@/auth", () => ({ auth: mocks.auth }))
@@ -36,51 +34,21 @@ vi.mock("@/lib/past-event-retention", async (importOriginal) => {
   return { ...actual, pastEventRetentionMode: vi.fn(() => "observe") }
 })
 vi.mock("@/lib/operator-activity-data", () => ({ loadOperatorActivity: mocks.loadOperatorActivity }))
+vi.mock("@/lib/operator-load-data", () => ({ loadOperatorLoad: mocks.loadOperatorLoad }))
 vi.mock("@/lib/health-data", () => ({ loadHealth: mocks.loadHealth }))
-vi.mock("chart.js", () => {
-  class Chart {
-    static register = mocks.chartRegister
-    destroy = mocks.chartDestroy
-    constructor(_canvas: unknown, config: unknown) {
-      mocks.chartInstances.push(config)
-    }
-  }
-  return { Chart, BubbleController: {}, PointElement: {}, LinearScale: {}, Tooltip: {}, Legend: {} }
-})
 
-import { bubbleChartData, type BubbleEventFacts } from "@/lib/operator-activity"
 import type { OperatorActivity } from "@/lib/operator-activity-data"
+import type { OperatorLoadData } from "@/lib/operator-load"
 import StatsPage from "@/app/super-admin/stats/page"
 import HealthPage from "@/app/super-admin/health/page"
 
 // The operator statistics page (#1415, reworked for readability): two h2 groups, an in-page nav,
-// short intros with a native calculation disclosure, one merged 10-next-events table, and a
-// bubble chart whose accessible alternative is the summary plus a « Par situation » table.
+// short intros with a native calculation disclosure, « Charge par jour » and one merged
+// 10-next-events table.
 
 const day = (iso: string) => new Date(`${iso}T00:00:00Z`)
 
-const event = (over: Partial<BubbleEventFacts> = {}): BubbleEventFacts => ({
-  id: "event-1",
-  title: "Fête du village",
-  organizationName: "Fête",
-  publicStatus: "published",
-  isListed: true,
-  startDate: day("2026-07-10"),
-  endDate: day("2026-07-10"),
-  shifts: 2,
-  registrations: 5,
-  roles: 1,
-  ...over,
-})
-
 const now = new Date("2026-07-10T09:00:00Z")
-const bubble = bubbleChartData(
-  [
-    event({ id: "event-1", title: "Fête du village" }),
-    event({ id: "event-2", title: "Festival du lac", organizationName: "Lac", startDate: day("2026-07-13"), endDate: day("2026-07-14"), shifts: 6, registrations: 40, roles: 3 }),
-  ],
-  now,
-)
 
 const operator: OperatorActivity = {
   generatedAt: now,
@@ -100,14 +68,25 @@ const operator: OperatorActivity = {
     { id: "event-2", organizationName: "Lac", organizationSlug: "lac", title: "Festival du lac", startDate: day("2026-07-13"), endDate: day("2026-07-14"), situation: "soon7", roles: 3, shifts: 6, registrations: 40, capacity: 60, fillPercent: 67 },
     { id: "event-3", organizationName: "Lac", organizationSlug: "lac", title: "Grande fête", startDate: day("2026-09-15"), endDate: day("2026-09-15"), situation: "later", roles: 1, shifts: 2, registrations: 1, capacity: 4, fillPercent: 25 },
   ],
-  bubble,
+}
+
+const operatorLoad: OperatorLoadData = {
+  today: "2026-07-10",
+  events: [
+    { id: "event-1", title: "Fête du village", organizationName: "Fête", organizationSlug: "fete", startDate: "2026-07-10", endDate: "2026-07-10", archived: false, shifts: 2, capacity: 10, registrations: 5 },
+    { id: "event-2", title: "Festival du lac", organizationName: "Lac", organizationSlug: "lac", startDate: "2026-07-13", endDate: "2026-07-14", archived: false, shifts: 6, capacity: 60, registrations: 40 },
+  ],
+  days: [
+    { day: "2026-07-10", eventId: "event-1", shifts: 2, capacity: 10, registrations: 5 },
+    { day: "2026-07-13", eventId: "event-2", shifts: 6, capacity: 60, registrations: 40 },
+  ],
 }
 
 beforeEach(() => {
   vi.clearAllMocks()
-  mocks.chartInstances.length = 0
   mocks.auth.mockResolvedValue({ user: { id: "sa-1", role: "super_admin", organizationId: null } })
   mocks.loadOperatorActivity.mockResolvedValue(operator)
+  mocks.loadOperatorLoad.mockResolvedValue(operatorLoad)
   mocks.loadPlatformUsage.mockResolvedValue({ cumulative: [], current: [] })
   mocks.loadSignupFacts.mockResolvedValue({})
   mocks.loadSignupSources.mockResolvedValue([])
@@ -150,7 +129,7 @@ describe("the operator statistics page", () => {
     expect(links.map((link) => link.getAttribute("href"))).toEqual([
       "#stats-events",
       "#stats-activity",
-      "#stats-event-size",
+      "#stats-event-load",
       "#stats-next-events",
       "#stats-cumulative",
       "#stats-current",
@@ -185,42 +164,39 @@ describe("the operator statistics page", () => {
     expect(screen.getByText(/Les décisions comptent sur 12 mois/).closest("details")).toBeInTheDocument()
   })
 
-  it("replaces the per-event bubble table with the summary and a « Par situation » totals table", async () => {
+  it("renders « Charge par jour » with today selected and switches to a weekly range", async () => {
     const tree = await StatsPage()
-    const { unmount } = render(tree)
+    const { container } = render(tree)
 
-    expect(screen.getByRole("heading", { name: "Taille des événements" })).toBeInTheDocument()
-    expect(screen.getByText(bubble.summary)).toBeInTheDocument()
-    expect(screen.queryByText("Les mêmes événements en tableau")).toBeNull()
-    expect(screen.queryByRole("table", { name: /Événements en cours ou qui commencent dans les 30 jours/ })).toBeNull()
+    expect(screen.getByRole("heading", { name: "Charge par jour" })).toBeInTheDocument()
+    const group = screen.getByRole("group", { name: "Période affichée" })
+    expect(within(group).getByRole("button", { name: "Un mois" })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.queryByRole("img")).toBeNull()
+    expect(container.querySelector('svg[viewBox="0 0 900 340"]')).toHaveAttribute("aria-hidden", "true")
+    expect(screen.getByRole("group", { name: /^Périodes :/ })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /^vendredi 10 juillet \(aujourd'hui\) : 2 créneaux, 1 événement, 5 inscrits/ })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByRole("heading", { level: 4, name: "vendredi 10 juillet (aujourd'hui) : 1 événement, 2 créneaux, 5 inscrits" })).toBeInTheDocument()
 
-    const totals = screen.getByRole("table", { name: "Nombre d'événements, de créneaux et d'inscriptions par situation" })
-    const rows = within(totals).getAllByRole("rowheader")
-    expect(rows.map((row) => row.textContent)).toEqual(["●En cours", "▲Début dans les 7 jours", "■Début dans 8 à 30 jours"])
-    expect(within(rows[0]).getByText("●")).toHaveAttribute("aria-hidden", "true")
-    const firstValues = within(rows[0].closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)
-    expect(firstValues).toEqual(["1", "2", "5"])
-    const secondValues = within(rows[1].closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)
-    expect(secondValues).toEqual(["1", "6", "40"])
-    const thirdValues = within(rows[2].closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)
-    expect(thirdValues).toEqual(["0", "0", "0"])
+    fireEvent.click(within(group).getByRole("button", { name: "Un an" }))
+    expect(within(group).getByRole("button", { name: "Un an" })).toHaveAttribute("aria-pressed", "true")
+    expect(within(group).getByRole("button", { name: "Un mois" })).toHaveAttribute("aria-pressed", "false")
+    expect(screen.getByText("Créneaux par semaine")).toBeInTheDocument()
+    expect(screen.getByText("Un an : 104 semaines")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 4, name: /^Semaine du 10 juil. au 16 juil. 2026 \(semaine en cours\)/ })).toBeInTheDocument()
+  })
 
-    // Named by the encoding (a hidden paragraph, not read twice); the visible summary follows as text.
-    const canvas = screen.getByRole("img", { name: "Graphique à bulles : date de début en horizontal, inscriptions en vertical, surface selon le nombre de créneaux." })
-    expect(canvas.tagName).toBe("CANVAS")
-    expect(canvas).toHaveAttribute("aria-labelledby", "operator-bubble-encoding")
-    expect(canvas).not.toHaveAttribute("aria-describedby")
-    expect(document.getElementById("operator-bubble-encoding")).toHaveAttribute("aria-hidden", "true")
-    expect(screen.getByText("Une bulle par événement ; sa surface suit le nombre de créneaux.")).toBeInTheDocument()
+  it("shows an event's detail and returns to the selected period", async () => {
+    const tree = await StatsPage()
+    render(tree)
 
-    await waitFor(() => expect(mocks.chartInstances).toHaveLength(1))
-    const config = mocks.chartInstances[0] as { data: { datasets: { label: string }[] }; options: { animation: unknown } }
-    expect(config.data.datasets.map((dataset) => dataset.label)).toEqual(["En cours", "Début dans les 7 jours", "Début dans 8 à 30 jours"])
-    expect(config.options.animation).toBe(false)
-    expect(mocks.chartRegister).toHaveBeenCalled()
+    fireEvent.click(screen.getByRole("button", { name: "Fête du village" }))
+    expect(screen.getByRole("heading", { level: 4, name: "Fête du village" })).toHaveFocus()
+    expect(screen.getByText(/sur tout l'événement : 2 créneaux, 5 inscrits sur 10 places \(50 %\)/)).toBeInTheDocument()
+    const days = screen.getByRole("table", { name: /Ses jours sur la période affichée \(un mois de part et d'autre\)/ })
+    expect(within(days).getAllByRole("rowheader").map((header) => header.textContent)).toEqual(["vendredi 10 juillet"])
 
-    unmount()
-    expect(mocks.chartDestroy).toHaveBeenCalledTimes(1)
+    fireEvent.click(screen.getByRole("button", { name: "Revenir au vendredi 10 juillet" }))
+    expect(screen.getByRole("heading", { level: 4, name: /^vendredi 10 juillet \(aujourd'hui\)/ })).toBeInTheDocument()
   })
 
   it("renders one merged event table with the organisation link, the situation and no postes column", async () => {
@@ -285,16 +261,14 @@ describe("the operator statistics page", () => {
     expect(screen.getByText("non calculable, aucune place")).toHaveClass("sr-only")
   })
 
-  it("renders no chart at all when there is no event, only the summary and the totals table", async () => {
-    mocks.loadOperatorActivity.mockResolvedValueOnce({ ...operator, bubble: bubbleChartData([], now) })
+  it("keeps the chart and a zero detail when the window holds no event", async () => {
+    mocks.loadOperatorLoad.mockResolvedValueOnce({ today: "2026-07-10", events: [], days: [] })
     const tree = await StatsPage()
     render(tree)
 
-    expect(screen.queryByRole("img")).not.toBeInTheDocument()
-    expect(screen.getByText("Aucun événement en cours ou dans les 30 jours.", { selector: "p" })).toBeInTheDocument()
-    const totals = screen.getByRole("table", { name: "Nombre d'événements, de créneaux et d'inscriptions par situation" })
-    expect(within(totals).getAllByRole("rowheader")).toHaveLength(3)
-    expect(within(totals).getAllByRole("cell").every((cell) => cell.textContent === "0")).toBe(true)
+    expect(screen.getByRole("group", { name: /^Périodes :/ })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 4, name: "vendredi 10 juillet (aujourd'hui) : 0 événement, 0 créneau, 0 inscrit" })).toBeInTheDocument()
+    expect(screen.getByText("Aucun créneau sur cette période.")).toBeInTheDocument()
   })
 })
 
