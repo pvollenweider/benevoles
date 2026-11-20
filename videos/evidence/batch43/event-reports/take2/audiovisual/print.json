@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:05:45.273Z",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "promptSha256": "84c3aa8239cd3422bd623d0e1bee95721290b5dd9a50ab8a5ca57a8d889d5b99",
+  "clipSha256": "b5edf68d801830be07cb06833de5c232d9fd93bb7f9d70619e69d26348609dcb",
+  "scene": "print",
+  "review": {
+    "heardOpening": "Avant d'imprimer toute la série",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Avant d'imprimer toute la série, vérifiez les pages réellement produites.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page de synthèse des réponses avant impression",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression.",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de l'écran « Lecture du PDF réel — planning individuel, page 4 »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Voici le planning de Léa : regardons les contacts, les marges, puis le tableau des créneaux plus bas.",
+        "visibleSeconds": 17,
+        "visible": "Défilement vers le bas révélant le tableau complet des créneaux pour Léa Giroud",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "Le dernier créneau apparaît en bas du tableau. Les cinq sont bien sur la même page.",
+        "visibleSeconds": 24,
+        "visible": "Les cinq créneaux dont le dernier (16:00-18:00) sont visibles sur la même page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien articulée et parfaitement synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

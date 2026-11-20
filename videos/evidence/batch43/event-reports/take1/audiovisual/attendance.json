@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:55:41.577Z",
+  "videoSha256": "c2aeece8a06254b320c262b20d8fe0c25507ea488d40baf0d68656beb18c4b62",
+  "promptSha256": "6f553a03293e5beed7140f46c2c1c8df7ec60c62bd86460cd62a6dc75111b7c0",
+  "clipSha256": "cf06963347ae19e1d290fb96056cdaff3ff106e68841d1e617ccee4e6c3fdfa4",
+  "scene": "attendance",
+  "review": {
+    "heardOpening": "La feuille de présence sert au pointage sur papier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La feuille de présence sert au pointage sur papier.",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la feuille de présence imprimable intitulée « Fête des associations – documents terrain » avec un tableau de créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Chaque personne a sa case, et des lignes supplémentaires permettent de noter les arrivées imprévues.",
+        "visibleSeconds": 3.2,
+        "visible": "Cases à cocher devant chaque nom et lignes vierges au bas du tableau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille.",
+        "visibleSeconds": 8,
+        "visible": "La première ligne (Léa Giraud) comporte une case déjà cochée dans la colonne Présent.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Si vous utilisez le papier sur le terrain, il faudra ensuite reporter les présences utiles dans l'application.",
+        "visibleSeconds": 17.5,
+        "visible": "Défilement vers la suite de la feuille montrant le créneau suivant avec ses lignes de pointage.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les explications visuelles du document."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

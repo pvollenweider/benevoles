@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:55:13.454Z",
+  "videoSha256": "c2aeece8a06254b320c262b20d8fe0c25507ea488d40baf0d68656beb18c4b62",
+  "promptSha256": "7929a8509657d0bf39f8029958e38d1a97cfb68771416f7d57809d141b6b20a9",
+  "clipSha256": "6fe66cc703a4b6e4324457f70f9668aa08fe791ab6c509f2f162c370038f7c9f",
+  "scene": "day",
+  "review": {
+    "heardOpening": "Pour l'accueil, le planning par jour est plus direct.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Voici la première journée, puis la suivante.",
+        "visibleSeconds": 4.6,
+        "visible": "Défilement de la page affichant la journée suivante du dimanche 11 octobre 2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Les postes et les créneaux sont regroupés par date, avec le détail des personnes et des places libres.",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage des tableaux détaillant les postes, créneaux horaires, noms des bénévoles et places à pourvoir",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "Repérons l'accueil du matin et la buvette.",
+        "visibleSeconds": 11.2,
+        "visible": "Mise en évidence animée successivement sur Accueil du matin puis sur Buvette du matin",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les animations visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

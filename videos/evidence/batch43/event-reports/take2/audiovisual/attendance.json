@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:05:25.823Z",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "promptSha256": "6f553a03293e5beed7140f46c2c1c8df7ec60c62bd86460cd62a6dc75111b7c0",
+  "clipSha256": "36248c567297352b58fdfb499248781841a209ac5a0b793a7ae6304f5761f895",
+  "scene": "attendance",
+  "review": {
+    "heardOpening": "La feuille de présence sert au pointage sur papier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Chaque personne a sa case, et des lignes supplémentaires permettent de noter les arrivées imprévues.",
+        "visibleSeconds": 3.4,
+        "visible": "Tableau affichant une case à cocher en regard de chaque bénévole ainsi que des lignes vierges en bas de tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille.",
+        "visibleSeconds": 8,
+        "visible": "La case Présent est déjà cochée pour la première ligne (Léa Giraud)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "il faudra ensuite reporter les présences utiles dans l'application.",
+        "visibleSeconds": 17.5,
+        "visible": "Défilement vers la suite de la feuille de présence (créneau Retour du matériel)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

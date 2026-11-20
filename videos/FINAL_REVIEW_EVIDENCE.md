@@ -1462,3 +1462,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **SHIFT_WAITLIST_OFFER — READY, publiée, révision 5, 117,64 s.** Le vrai courriel d'offre reste lisible 14,24 s. Son lien ouvre l'offre du créneau Buvette sans changer son statut. Sept chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/shift-waitlist-offer/take1/review.md).
 
 **EMAIL_DELIVERY_FAILURES — READY, publiée, révision 4, 321,36 s.** Le courriel à l'adresse corrigée montre le destinataire puis le bouton commun et sa phrase. Huit chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/email-delivery-failures/take2/review.md).
+
+**EVENT_REPORTS — NOT READY après deux prises, révision 3 maintenue.** Les colonnes par jour de la liste avec téléphones et le PDF d'une page de Léa sont visibles. Dans la seconde prise, la Buvette reste au bas du cadre quand ses horaires sont annoncés, et la ligne de Léa défile trop vite dans l'export complet. Les dix chapitres ont passé la validation technique et la transcription. [Revue et preuves](evidence/batch43/event-reports/take2/review.md).

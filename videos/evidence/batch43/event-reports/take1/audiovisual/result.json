@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:56:16.089Z",
+  "videoSha256": "c2aeece8a06254b320c262b20d8fe0c25507ea488d40baf0d68656beb18c4b62",
+  "promptSha256": "e00985a8b590da6e92e9901c82716311f48b215aba0fe9e4c15b090d950d624e",
+  "clipSha256": "487bf3362ce89ea45d321768a74dcc4e7f6421adb8c7db50e36d7d9e05c5e2be",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Nous avons maintenant une feuille adaptée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "une feuille adaptée à l'accueil",
+        "visibleSeconds": 1,
+        "visible": "Rubrique Documents avec 'Planning par jour' affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "une autre pour un poste",
+        "visibleSeconds": 3.4,
+        "visible": "Lien 'Planning par poste' visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "un planning personnel",
+        "visibleSeconds": 5,
+        "visible": "Lien 'Planning individuel' visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "une liste de contacts réservée à l'organisation",
+        "visibleSeconds": 7,
+        "visible": "Défilement vers la section 'Pour les organisateurs seulement' avec 'Liste avec téléphones'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, posée et bien articulée, adaptée à une conclusion de module."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

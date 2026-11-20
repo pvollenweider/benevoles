@@ -33,6 +33,7 @@ export async function recordReportDocuments(options: { page: Page; base: string;
     const leaName = page.getByText("Léa", { exact: true }).last()
     await leaName.scrollIntoViewIfNeeded(); await tap(page, leaName)
     await at("Les effectifs indiquent où il manque du monde")
+    await page.waitForTimeout(1_200)
     await page.getByRole("heading", { name: "Récap par poste", exact: true }).scrollIntoViewIfNeeded()
   })
   // Opening the real popup and navigating can exceed the first spoken sentence.
@@ -50,9 +51,10 @@ export async function recordReportDocuments(options: { page: Page; base: string;
     const morning = page.getByText("Accueil du matin", { exact: true }).first()
     await morning.scrollIntoViewIfNeeded(); await tap(page, morning)
   })
+  await open("Planning par poste", "sheets/role")
   await scene("role", async at => {
-    await at("Si vous coordonnez un poste"); await open("Planning par poste", "sheets/role")
-    await at("La buvette a sa propre"); await page.getByRole("heading", { name: "Buvette", exact: true }).scrollIntoViewIfNeeded()
+    await at("La buvette a sa propre")
+    await page.getByRole("heading", { name: "Buvette", exact: true }).evaluate(heading => heading.scrollIntoView({ block: "start" }))
     await at("Remettre cette feuille à un"); await page.getByRole("heading", { name: "Loge", exact: true }).scrollIntoViewIfNeeded()
   })
   // The narration starts with Léa's name: prepare the actual document before that cue,
@@ -67,7 +69,8 @@ export async function recordReportDocuments(options: { page: Page; base: string;
     await at("Ses contacts sont réunis"); await lea.getByRole("heading", { name: "Contacts", exact: true }).scrollIntoViewIfNeeded()
     await at("Le tableau de chaque journée donne"); await lea.locator("table.individual-table").first().scrollIntoViewIfNeeded()
     await at("On retrouve aussi le lieu"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-04.png"), "planning de Léa, première feuille")
-    await at("passons à la suivante pour lire le dernier poste"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-05.png"), "planning de Léa, feuille suivante")
+    await at("Le dernier créneau est à la loge"); await page.locator("img").scrollIntoViewIfNeeded()
+    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }))
   })
   await open("Feuille de présence", "sheets/attendance")
   await scene("attendance", async at => {
@@ -79,11 +82,21 @@ export async function recordReportDocuments(options: { page: Page; base: string;
   // Prepare the named document before its opening claim, in the chapter transition.
   await open("Liste avec téléphones", "sheets/phones")
   await scene("contacts", async at => {
-    await at("Cette liste contient des coordonnées")
-    const number = page.getByText("+41 79 000 99 99", { exact: true }).first()
+    const table = page.locator(".phones-table")
+    const columns = table.locator("thead th")
+    if (await columns.count() < 3) throw new Error("Expected separate columns for the event days")
+    await table.locator("thead").scrollIntoViewIfNeeded()
+    await at("Pour notre exemple")
+    const row = table.locator("tbody tr").filter({ has: page.getByText("+41 79 000 99 99", { exact: true }) })
+    if (await row.locator(".day-cell .shift-time").count() < 2) throw new Error("Expected several shifts in the day columns")
+    const number = row.locator(".vol-phone")
     await number.scrollIntoViewIfNeeded(); await tap(page, number)
     // A video-only reading cue, not a new application feature or a changed document.
-    await number.evaluate(el => { (el as HTMLElement).style.outline = "3px solid #2563eb"; (el as HTMLElement).style.outlineOffset = "3px" })
-    if (!(await page.locator("body").innerText()).includes("video.documents.000@example.org")) throw new Error("Contact email missing")
+    await number.evaluate(el => {
+      el.style.width = "fit-content"
+      el.style.backgroundColor = "#dbeafe"
+      el.style.fontWeight = "700"
+    })
+    if (!(await row.locator(".vol-email").textContent())?.includes("video.documents.000@example.org")) throw new Error("Contact email missing")
   })
 }

@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:05:29.212Z",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "promptSha256": "9078715ec40ea6d5edbbddfc2ffb4b78e1de820d4a1a803b6ceb6833710d1d50",
+  "clipSha256": "05457077fce5d47622bc7d219102b88a641854e2b93f73327bcef5655e94d86e",
+  "scene": "role",
+  "review": {
+    "heardOpening": "Si vous coordonnez un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "choisissez le planning par poste",
+        "visibleSeconds": 0,
+        "visible": "Affichage du document intitulé 'Planning par poste - Fêtes de Montvert'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "La buvette a sa propre page, avec ses horaires, ses bénévoles et son responsable",
+        "visibleSeconds": 11.5,
+        "visible": "Le contenu détaillé de la buvette n'apparaît à l'écran qu'après le défilement à 11,5 secondes",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Regardons aussi les autres postes pour comprendre le découpage",
+        "visibleSeconds": 11.5,
+        "visible": "Défilement vers le bas révélant le planning de la Buvette et du poste Loge",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Remettre cette feuille à un relais terrain l'aide à savoir qui arrive et quand",
+        "visibleSeconds": 12,
+        "visible": "Affichage du tableau détaillé avec créneaux, horaires, bénévoles et effectifs",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:04, la voix décrit le détail de la page de la buvette, mais le document reste statique sur la section Accueil et ne défile vers la Buvette et la Loge qu'à 00:11."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, articulée et intelligible, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

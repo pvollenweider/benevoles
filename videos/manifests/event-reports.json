@@ -46,7 +46,7 @@
     },
     {
       "id": "individual",
-      "transcript": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes. Ses contacts sont réunis une seule fois en haut de la page, avec le responsable du poste. Le tableau de chaque journée donne l'horaire, le poste et les coéquipiers inscrits sur le même créneau. On retrouve aussi le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés. Ici, son planning tient sur deux pages : passons à la suivante pour lire le dernier poste. Remettez-lui les deux pages de son planning, pas toutes celles de l'équipe. Et pour les homonymes, vérifiez les créneaux avant de distribuer les documents.",
+      "transcript": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes. Ses contacts sont réunis une seule fois en haut de la page, avec le responsable du poste. Le tableau de chaque journée donne l'horaire, le poste et les coéquipiers inscrits sur le même créneau. On retrouve aussi le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés. Ici, son planning tient sur une seule page. Le dernier créneau est à la loge, en bas du tableau. Remettez à Léa son propre planning. Et pour les homonymes, vérifiez les créneaux avant de distribuer les documents.",
       "fallbackDurationMs": 52000
     },
     {
@@ -66,7 +66,7 @@
     },
     {
       "id": "print",
-      "transcript": "Avant d'imprimer toute la série, vérifiez les pages réellement produites. Le navigateur permet d'imprimer ou d'enregistrer en PDF. Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression. Voici le planning de Léa : regardons les contacts, les marges, puis le tableau des créneaux plus bas. La dernière passe sur la page suivante. Pensez à remettre les deux pages ensemble. Vérifiez toujours le document final : c'est celui que l'équipe utilisera sur le terrain.",
+      "transcript": "Avant d'imprimer toute la série, vérifiez les pages réellement produites. Le navigateur permet d'imprimer ou d'enregistrer en PDF. Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression. Voici le planning de Léa : regardons les contacts, les marges, puis le tableau des créneaux plus bas. Le dernier créneau apparaît en bas du tableau. Les cinq sont bien sur la même page. Vérifiez toujours le document final : c'est celui que l'équipe utilisera sur le terrain.",
       "fallbackDurationMs": 46000
     },
     {
@@ -81,7 +81,7 @@
       "Ouvrez Documents : les feuilles à afficher ou à remettre aux bénévoles arrivent en premier, les documents réservés à l'organisation ensuite.",
       "Pour une vue d'ensemble des créneaux et des effectifs, ouvrez « Export complet » dans la partie réservée aux organisateurs.",
       "Imprimez le planning par jour pour l'accueil et le planning par poste pour un relais sur le terrain.",
-      "Générez le planning individuel d'un bénévole : ses contacts en haut, puis ses créneaux par jour avec les coéquipiers, et remettez-lui toutes ses pages.",
+      "Générez le planning individuel d'un bénévole : ses contacts en haut, puis ses créneaux par jour avec les coéquipiers, et remettez-lui son planning.",
       "Utilisez la feuille de présence pour pointer sur papier, puis reportez les présences dans l'application.",
       "Pour les t-shirts et les repas, ouvrez « Questions aux bénévoles », puis la synthèse des réponses.",
       "Avant d'imprimer la série, vérifiez le document final ou enregistrez-le en PDF."

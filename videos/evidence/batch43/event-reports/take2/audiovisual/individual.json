@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:05:24.931Z",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "promptSha256": "435f996081c7ae07740ce554f948b7574ef57627b346df047b80b663dbf117a4",
+  "clipSha256": "68fdff37af8cc429bdb522236f59259a4d5c53b94225a9348981929b4cda54a0",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Pour Léa, le planning individuel regroupe ses cinq créneaux",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes.",
+        "visibleSeconds": 0.5,
+        "visible": "Fiche de Léa Giroud affichée avec la mention '5 créneaux' en haut à droite.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Ses contacts sont réunis une seule fois en haut de la page, avec le responsable du poste.",
+        "visibleSeconds": 5.5,
+        "visible": "Section 'Contacts' visible sous le nom de Léa Giroud avec le contact pour ce créneau et le responsable du poste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Le tableau de chaque journée donne l'horaire, le poste et les coéquipiers inscrits sur le même créneau.",
+        "visibleSeconds": 11,
+        "visible": "Tableau sous 'Samedi 10 octobre 2026' affichant les colonnes 'Horaire', 'Poste' et 'Avec'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "Le dernier créneau est à la loge, en bas du tableau.",
+        "visibleSeconds": 24.5,
+        "visible": "Dernière ligne du tableau visible : '16:00-18:00 | Loge - Accueil des artistes'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, fluide et bien synchronisée avec le défilement et le cadrage du document."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

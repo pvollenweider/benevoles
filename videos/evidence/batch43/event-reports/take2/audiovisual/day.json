@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T11:05:07.736Z",
+  "videoSha256": "ea4b8515ed23531a9791bfe3264e9604ab467e733cd30c5c3783bcc907d42ed9",
+  "promptSha256": "7929a8509657d0bf39f8029958e38d1a97cfb68771416f7d57809d141b6b20a9",
+  "clipSha256": "27b540c2c435a7e8549b0a2ae89245c83e6abbb9a994bad6d0801e36554e4982",
+  "scene": "day",
+  "review": {
+    "heardOpening": "Pour l'accueil, le planning par jour est plus direct.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Voici la première journée, puis la suivante.",
+        "visibleSeconds": 4.5,
+        "visible": "Défilement vers le bas affichant la journée suivante du dimanche 11 octobre 2026.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Repérons l'accueil du matin et la buvette.",
+        "visibleSeconds": 11.2,
+        "visible": "Retour en haut du document et mise en évidence au curseur de la ligne Accueil du matin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "les coordonnées privées des bénévoles ne doivent pas devenir une affiche publique.",
+        "visibleSeconds": 20.5,
+        "visible": "Le tableau affiche uniquement les prénoms et initiales des bénévoles sans coordonnées personnelles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les mouvements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

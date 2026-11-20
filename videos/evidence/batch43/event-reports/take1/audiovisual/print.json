@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:56:02.704Z",
+  "videoSha256": "c2aeece8a06254b320c262b20d8fe0c25507ea488d40baf0d68656beb18c4b62",
+  "promptSha256": "84c3aa8239cd3422bd623d0e1bee95721290b5dd9a50ab8a5ca57a8d889d5b99",
+  "clipSha256": "649993faa6d2c2638aa89c6e14b48beaffe8085550500b8d4ef7ced31611e8cb",
+  "scene": "print",
+  "review": {
+    "heardOpening": "Avant d'imprimer toute la série",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "Le navigateur permet d'imprimer ou d'enregistrer en PDF. Ici, nous lisons un aperçu du vrai fichier A4",
+        "visibleSeconds": 5.6,
+        "visible": "Affichage de la page de Léa Giroud avec le titre « Lecture du PDF réel — planning individuel, page 4 »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Voici le planning de Léa : regardons les contacts, les marges, puis le tableau des créneaux plus bas.",
+        "visibleSeconds": 17.5,
+        "visible": "Légère descente dans la page montrant les détails des créneaux et contacts de Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "Le dernier créneau apparaît en bas du tableau. Les cinq sont bien sur la même page.",
+        "visibleSeconds": 24,
+        "visible": "Les cinq créneaux horaires jusqu'à 16:00-18:00 sont visibles sur la page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
