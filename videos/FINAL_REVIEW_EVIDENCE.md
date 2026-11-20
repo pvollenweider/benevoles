@@ -1411,6 +1411,10 @@ Six chapitres ASR source et final, 20 points de contrôle AV, musique 15,7–18,
 
 La **liste avec téléphones** est maintenant un tableau en paysage : une ligne par bénévole (nom, téléphone, email) et une colonne par jour de l'événement, avec les créneaux qui se suivent sur le même poste réunis. La narration d'**EVENT_REPORTS** (`event-reports`) reste juste — retrouver une personne, son email, son téléphone et ses créneaux — mais l'image du chapitre Contacts est périmée. Aucun sélecteur de capture ne vise la mise en page ; la vidéo est à refilmer au prochain lot. Le planning par jour et l'export complet ne changent que sur une journée dense, absente du jeu de tournage.
 
+## À refilmer : plannings par poste et individuel (#1444, 19 novembre 2026)
+
+**EVENT_REPORTS** (`event-reports`) est **à refilmer** : le planning par poste n'affiche plus de frise quand elle ne dirait rien de plus que son tableau (et découpe une journée dense en tranches de 6 h), et le planning individuel n'a plus de frise ni de cartes par créneau — les contacts sont réunis une fois en haut, puis un tableau par journée donne l'horaire, le poste et les coéquipiers. La narration des chapitres « planning individuel » et « vérifier avant d'imprimer », le bloc `viewer` et les repères du recorder sont mis à jour dans la même PR ; aucune capture n'est régénérée ici (voix et capture longues). Révision du catalogue à incrémenter au rendu.
+
 ## À refilmer : lien « Mes inscriptions » commun (#1429, 19 novembre 2026)
 
 L'email de confirmation, les rappels et les autres emails de gestion portent maintenant un seul bouton **Mes inscriptions** vers le lien personnel de l'organisation (`/mes-inscriptions/<token>`), avec la phrase « Ce lien ouvre toutes tes inscriptions auprès de [organisation]. Ne le partage pas. » ; les emails d'action propres à un événement (place proposée, échange, disponibilités, demande à valider, invitation) gardent leur lien, et les anciens liens d'événement continuent de fonctionner. Aucune capture n'est régénérée dans ce lot.
