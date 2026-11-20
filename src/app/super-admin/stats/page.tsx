@@ -13,8 +13,9 @@ import { signupIndicatorRows } from "@/lib/signup-indicators"
 import { observePastEvents } from "@/lib/past-event-retention-data"
 import { PAST_EVENT_RETENTION_YEARS, pastEventRetentionMode } from "@/lib/past-event-retention"
 import { loadOperatorActivity, type NextEventRow, type OperatorActivity } from "@/lib/operator-activity-data"
+import { loadOperatorLoad } from "@/lib/operator-load-data"
 import { busiestHourSentence, eventDatesLabel, UPCOMING_SITUATION_LABELS } from "@/lib/operator-activity"
-import OperatorActivitySection from "@/components/super-admin/OperatorActivitySection"
+import OperatorLoadChart from "@/components/super-admin/OperatorLoadChart"
 import PastEventRetentionTable from "@/components/super-admin/PastEventRetentionTable"
 
 export const dynamic = "force-dynamic"
@@ -24,7 +25,7 @@ export const metadata: Metadata = { title: "Statistiques" }
 const SECTIONS = [
   { id: "stats-events", label: "Événements" },
   { id: "stats-activity", label: "Activité des inscriptions" },
-  { id: "stats-event-size", label: "Taille des événements" },
+  { id: "stats-event-load", label: "Charge par jour" },
   { id: "stats-next-events", label: "Les 10 prochains événements" },
   { id: "stats-cumulative", label: "Depuis le début" },
   { id: "stats-current", label: "En ce moment" },
@@ -40,22 +41,22 @@ const SECTIONS = [
  * disclosure, so the page reads without nine intros of equal weight.
  *
  * #1415 adds the operator's load view: events happening now or soon, the registration rhythm
- * against the previous period, the busiest hour, the outbox and the bubble chart of the events that
- * weigh on the platform. Computed on page load, no live refresh. The bubble chart has no side
- * table: one summary and a small « Par situation » table, then a single merged list of the 10 next
- * events.
+ * against the previous period, the busiest hour, the outbox and « Charge par jour », the stacked
+ * shift bars and event line over a range centred on today. Computed on page load, no live refresh.
+ * The chart carries its own period/event detail, then a single merged list of the 10 next events.
  */
 export default async function StatsPage() {
   const session = await auth()
   if (!session?.user) redirect("/admin/login")
   if (session.user.role !== "super_admin") redirect("/admin/login")
 
-  const [{ cumulative, current }, signupFacts, signupSources, pastEvents, operator] = await Promise.all([
+  const [{ cumulative, current }, signupFacts, signupSources, pastEvents, operator, operatorLoad] = await Promise.all([
     loadPlatformUsage(),
     loadSignupFacts(),
     loadSignupSources(),
     observePastEvents(),
     loadOperatorActivity(),
+    loadOperatorLoad(),
   ])
   const signup = signupIndicatorRows(signupFacts)
 
@@ -91,15 +92,15 @@ export default async function StatsPage() {
 
           <ActivityPanel activity={operator.activity} />
 
-          <section className="space-y-2" aria-labelledby="stats-event-size">
-            <h3 id="stats-event-size" className="text-sm font-semibold text-gray-900">Taille des événements</h3>
-            <p id="stats-event-size-intro" className="text-sm text-gray-700">
-              Une bulle par événement en cours ou qui commence dans les 30 jours.
+          <section className="space-y-2" aria-labelledby="stats-event-load">
+            <h3 id="stats-event-load" className="text-sm font-semibold text-gray-900">Charge par jour</h3>
+            <p id="stats-event-load-intro" className="text-sm text-gray-700">
+              Les barres donnent les créneaux (axe de gauche, les cinq plus gros événements de la période en couleur), la courbe le nombre d&apos;événements avec au moins un créneau (axe de droite), et le passé grisé compte aussi les événements archivés.
             </p>
-            <CalculationDetails topic="Taille des événements">
-              Une bulle par événement, selon sa date de début (horizontal), ses inscriptions (vertical) et ses créneaux (surface). Le résumé et le tableau « Par situation » donnent les mêmes totaux, toujours accessibles.
+            <CalculationDetails topic="Charge par jour">
+              Événements publiés et archivés (les brouillons sont exclus, les événements non listés publiés comptent), créneaux non annulés, inscriptions actives sur ces créneaux, jours lus à l&apos;heure de Zurich. Un événement compte sur une période dès qu&apos;il y a au moins un créneau ; les cinq plus gros de la période affichée sont en couleur, les autres en gris. Une semaine et un mois sont découpés par jour, 6 mois et un an par semaine, avec une semaine qui commence aujourd&apos;hui.
             </CalculationDetails>
-            <OperatorActivitySection data={operator.bubble} />
+            <OperatorLoadChart data={operatorLoad} />
           </section>
 
           <NextEventsTable rows={operator.nextEvents} />

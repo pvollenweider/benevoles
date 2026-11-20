@@ -72,13 +72,13 @@ describe("loadOperatorActivity", () => {
     const activity = await loadOperatorActivity(now)
 
     expect(db.eventFindMany).toHaveBeenCalledTimes(2)
-    const bubbleQuery = db.eventFindMany.mock.calls[0][0]
-    expect(bubbleQuery.where).toEqual({
+    const windowQuery = db.eventFindMany.mock.calls[0][0]
+    expect(windowQuery.where).toEqual({
       publicStatus: "published",
       endDate: { gte: day("2026-07-10") },
       startDate: { lte: day("2026-08-09") },
     })
-    expect(bubbleQuery.where).not.toHaveProperty("isListed") // unlisted events are published
+    expect(windowQuery.where).not.toHaveProperty("isListed") // unlisted events are published
     expect(db.eventFindMany.mock.calls[1][0]).toMatchObject({ orderBy: [{ startDate: "asc" }, { id: "asc" }], take: 10 })
 
     expect(db.shiftGroupBy).toHaveBeenCalledTimes(1)
@@ -95,8 +95,6 @@ describe("loadOperatorActivity", () => {
     })
 
     expect(activity.counts).toEqual({ now: 2, startingWithin7: 1, startingWithin30: 1, registrationsOpenNow: 2, registrationOpeningsNext7Days: 1 })
-    expect(activity.bubble.points.map((point) => point.id)).toEqual(["today", "unlisted", "soon"])
-    expect(activity.bubble.points.find((point) => point.id === "unlisted")).toMatchObject({ registrations: 2, shifts: 1, roles: 1 })
     expect(activity.nextEvents.find((row) => row.id === "today")).toMatchObject({
       organizationName: "Fête",
       organizationSlug: "fete",
