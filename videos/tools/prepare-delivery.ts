@@ -15,7 +15,7 @@ import { videoAdminEmail } from "../lib/public-hosts"
 import { seedVideoDeliveryClassroom } from "../../scripts/seed-video-delivery-classroom"
 
 /** Resolve worker, aliases and generated Prisma from the actual verified main snapshot. */
-export async function loadCurrentDeliveryRuntime(base: "http://localhost:43102" | "http://localhost:43106") {
+export async function loadCurrentDeliveryRuntime(base: "http://localhost:43100" | "http://localhost:43102" | "http://localhost:43106") {
   assert.equal(process.env.NODE_ENV, "production", "Never reuse a development root Prisma singleton")
   const product = await verifyProductBuild(base)
   const canonicalSnapshot = await realpath(product.snapshot)
@@ -58,12 +58,12 @@ export async function loadCurrentDeliveryRuntime(base: "http://localhost:43102" 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
-  assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
-  await verifyProductBuild("http://localhost:43102")
+  const base = process.env.VIDEO_BASE_URL
+  assert(base === "http://localhost:43100" || base === "http://localhost:43102")
   // These settings apply only to this tool's process, never to the running app.
   Object.assign(process.env, { SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
   const identityV2 = await readPrivateIdentityVersion("delivery")
-  const runtime = await loadCurrentDeliveryRuntime("http://localhost:43102")
+  const runtime = await loadCurrentDeliveryRuntime(base)
   const { db, enqueueNotifications, deliverOutbox, openPayload, outboxErrorSentence } = runtime
   const fixture = await controlledSmtp().catch(async error => { await db.$disconnect(); await runtime.unregister(); throw error })
   const orgId = "video-delivery", orgName = "Formation — suivi des emails", slug = "formation-livraisons"
@@ -90,6 +90,12 @@ async function main() {
     const oldRows = await db.notificationOutbox.findMany({ where: { organizationId: orgId }, select: { id: true, payload: true, dedupeKey: true, targetedMessageId: true } })
     for (const row of oldRows) {
       const payload = openPayload(row.payload)
+      const addressCorrection = row.dedupeKey === null && row.targetedMessageId === null &&
+        payload.kind === "org_personal_link" && payload.organizationId === orgId &&
+        payload.volunteerId === "video-delivery-member-wrong" &&
+        payload.recipient.email === "video.delivery.corrected@example.org" &&
+        payload.data.orgSlug === slug && payload.data.organizationName === orgName
+      if (addressCorrection) continue
       const prepared = row.dedupeKey?.startsWith("video-delivery-preparation:") && row.targetedMessageId === null
       const campaign = row.targetedMessageId && campaignIds.has(row.targetedMessageId) && row.dedupeKey?.startsWith("message:") && expectedCampaignText[String(payload.data.subject)]?.includes(String(payload.data.message))
       // Campaign bodies are personalized by the route, so check the original

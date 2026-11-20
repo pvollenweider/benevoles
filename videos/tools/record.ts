@@ -49,7 +49,7 @@ async function metadata(file: string): Promise<AudioMetadata | null> {
 async function settle(page: Page) {
   // Public maps may keep tile requests open; the seven batch 22-7 journeys
   // assert their actual headings and controls after DOM and font readiness.
-  const publicRefresh = ["EVENT_QUESTIONS", "LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
+  const publicRefresh = ["EMAIL_DELIVERY_FAILURES", "EVENT_QUESTIONS", "LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
   await page.waitForLoadState(publicRefresh ? "domcontentloaded" : "networkidle")
   await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" })
   await page.evaluate(() => document.fonts?.ready)
@@ -201,7 +201,7 @@ async function main() {
   // public video domain for the other journeys. Visible local links still fail final review.
   const manifest = await loadManifest(reference!)
   const probeHtml = await (await fetch(`${localBaseUrl}${PUBLIC_URL_PROBE_PATH}`)).text()
-  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION", "EVENT_QUESTIONS"].includes(manifest.id) && !publicOperator
+  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION", "EVENT_QUESTIONS", "EMAIL_DELIVERY_FAILURES"].includes(manifest.id) && !publicOperator
   if (localOriginCapture ? !probeHtml.includes(`<link rel="canonical" href="${baseUrl}${PUBLIC_URL_PROBE_PATH}"`) : !servedWithPublicUrl(probeHtml)) throw new Error("Capture deployment origin does not match the expected canonical URL")
   const product = await pinProductBuildForCapture(localBaseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)

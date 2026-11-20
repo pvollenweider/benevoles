@@ -166,3 +166,7 @@ Reprise du 2026-10-16, deuxième et dernière prise : connexion réelle de Marc 
 Contrôle des sous-titres : « avec une heure » est conservé littéralement ; ce repère de date/heure ne devient plus la durée « 1 h ». Correction du formateur et test de régression, mêmes bornes de cues et même MP4. Aucun changement de narration.
 
 Bilan final du lot 22-6 (2026-10-16) : READY ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Durée 295.12 s, musique 14.1–19.4 LU sous la voix, zéro tutoiement du spectateur dans le VTT final. Voir le rapport et les preuves du rendu local.
+
+## Révision du 20 novembre 2026 — lot 43
+
+Le message reçu à l'adresse corrigée montre « Mes inscriptions » et la phrase de confidentialité. Le cadrage conserve le destinataire corrigé et le texte du message. Le renvoi d'Emma conserve son contenu d'origine.

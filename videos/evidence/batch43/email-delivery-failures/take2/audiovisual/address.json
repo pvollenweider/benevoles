@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:39:55.458Z",
+  "videoSha256": "a8ebaa5e0af4cc16f53b2f30ff76d04c16ea3b47c5364ba4fd076e72b2ecf573",
+  "promptSha256": "a1058eb09eb4f67cfce3c54df27ee52f9c3e064a595a86acf8b54d5f5ae767b7",
+  "clipSha256": "a23b418d7c3ef41d875657d06887dc916c2680fac3d18717ae9fe221b4c81cc3",
+  "scene": "address",
+  "review": {
+    "heardOpening": "Une adresse erronée demande une autre attention",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.4,
+        "spoken": "puis la fiche de Léa",
+        "visibleSeconds": 6.3,
+        "visible": "Clic sur Modifier sur la ligne de Léa Perrin et ouverture de la boîte modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.7,
+        "spoken": "Corrigeons son email et enregistrons",
+        "visibleSeconds": 11.8,
+        "visible": "Saisie de la nouvelle adresse email puis clic sur Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Revenons au suivi",
+        "visibleSeconds": 12.9,
+        "visible": "Retour sur l'écran Paramètres > Emails avec la liste des envois",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.7,
+        "spoken": "Dans notre événement de formation",
+        "visibleSeconds": 26.8,
+        "visible": "Affichage de l'onglet Messages de l'Atelier des emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.3,
+        "spoken": "Choisissons un objet clair",
+        "visibleSeconds": 30.5,
+        "visible": "Saisie de l'objet du message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 37.5,
+        "spoken": "Prenons le temps de vérifier l'aperçu",
+        "visibleSeconds": 41.8,
+        "visible": "Ouverture de la fenêtre modale Aperçu de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 47.3,
+        "spoken": "Ouvrons maintenant celui réellement reçu par Léa",
+        "visibleSeconds": 47.4,
+        "visible": "Affichage du courriel reçu avec l'en-tête et l'adresse corrigée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique claire et posée, bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

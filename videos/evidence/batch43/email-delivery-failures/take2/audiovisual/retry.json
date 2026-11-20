@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:39:43.195Z",
+  "videoSha256": "a8ebaa5e0af4cc16f53b2f30ff76d04c16ea3b47c5364ba4fd076e72b2ecf573",
+  "promptSha256": "f8feca2621304f490278685b190594ced46301e624016fe82fe41137ea57c58d",
+  "clipSha256": "ed4ce985325284298065cc9bf99b6a83edafbcd0340416f4e595b3700c9a4eb3",
+  "scene": "retry",
+  "review": {
+    "heardOpening": "Pour Emma, le refus de notre serveur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Sur l'échec définitif, Renvoyer remet le même email dans la file.",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur le lien Renvoyer sur la ligne d'Emma Favre, le statut bascule en attente d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Attendons le résultat et rechargeons le suivi.",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur le lien de navigation pour recharger la vue du suivi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.3,
+        "spoken": "La ligne passe à Envoyé avec une heure.",
+        "visibleSeconds": 13.5,
+        "visible": "La ligne d'Emma Favre affiche le badge vert Envoyé et le détail Parti à 20 nov., 11:34",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Ouvrons ensuite l'email réellement reçu dans la boîte locale.",
+        "visibleSeconds": 17,
+        "visible": "Affichage du contenu de l'email reçu pour Emma",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

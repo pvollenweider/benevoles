@@ -1,0 +1,71 @@
+{
+  "id": "EMAIL_DELIVERY_FAILURES",
+  "slug": "email-delivery-failures",
+  "validatedAt": "2026-11-20T10:28:55.904Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 321280,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 41667,
+      "audioMs": 41655,
+      "driftMs": 12
+    },
+    {
+      "id": "states",
+      "visualMs": 39599,
+      "audioMs": 39596,
+      "driftMs": 3
+    },
+    {
+      "id": "reason",
+      "visualMs": 28080,
+      "audioMs": 28078,
+      "driftMs": 2
+    },
+    {
+      "id": "retry",
+      "visualMs": 26789,
+      "audioMs": 26784,
+      "driftMs": 5
+    },
+    {
+      "id": "address",
+      "visualMs": 65588,
+      "audioMs": 65584,
+      "driftMs": 4
+    },
+    {
+      "id": "campaign",
+      "visualMs": 45838,
+      "audioMs": 45837,
+      "driftMs": 1
+    },
+    {
+      "id": "retention",
+      "visualMs": 27467,
+      "audioMs": 27465,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 27207,
+      "audioMs": 27201,
+      "driftMs": 6
+    }
+  ],
+  "anchorsChecked": 17,
+  "music": {
+    "voicedWindows": 295,
+    "musicOnlyWindows": 5,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.8,
+    "medianVoiceLufs": -16.6
+  },
+  "issues": []
+}

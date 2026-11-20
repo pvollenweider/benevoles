@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:29:39.437Z",
+  "videoSha256": "857e5ca4985af8cdcce4129b15910f0f8d15482eb661366481704dafc0f4ebe0",
+  "promptSha256": "436549e8473d4612b2172c9b70cb8103b8284bc60fa4504e882dd3d2fb5b22e5",
+  "clipSha256": "a1ba3e0a8a49475124d5bcda653ffc05f0f108958a7917fb6ce3f9742dfbbaac",
+  "scene": "reason",
+  "review": {
+    "heardOpening": "Pour Léa, la cause est indiquée en français",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, la cause est indiquée en français : refus définitif du serveur d'envoi",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Léa Perrin affichant le statut Échec définitif et l'explication en français dans les détails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Pour Sarah, le problème est temporaire et un nouvel essai est prévu",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Sarah Rochat avec badge Nouvel essai prévu et mention de l'incident temporaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Envoyé ne prouve ni l'arrivée dans la boîte de réception, ni la lecture",
+        "visibleSeconds": 0,
+        "visible": "Statut Envoyé visible dans le tableau pour Nicolas Moret ainsi que dans la carte récapitulative",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et posée, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

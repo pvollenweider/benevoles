@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:40:15.372Z",
+  "videoSha256": "a8ebaa5e0af4cc16f53b2f30ff76d04c16ea3b47c5364ba4fd076e72b2ecf573",
+  "promptSha256": "32920474a3be6ad5933f1653a032f706a5a1542a075437fccdb38f1908fd2b4e",
+  "clipSha256": "c799d6b556b19d7ae891e703cbd9afe2c74a644ae295c6bdd90d3fc1311f3b9a",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le bon réflexe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "lire l'état et le détail",
+        "visibleSeconds": 2.1,
+        "visible": "Les colonnes État et Détail sont bien visibles dans le tableau des emails envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Réessayer le même email après une panne, ou préparer un nouvel envoi",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage des indicateurs de statut (Échec définitif, Nouvel essai prévu, En attente d'envoi, Envoyé)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "Notre boîte de test confirme la réception de ces exemples",
+        "visibleSeconds": 15.3,
+        "visible": "La liste des messages envoyés aux adresses de test avec le statut Envoyé reste affichée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et pédagogique, accompagnant une conclusion sur écran récapitulatif stable."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

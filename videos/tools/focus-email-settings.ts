@@ -9,8 +9,8 @@ import { createHash } from "node:crypto"
 import path from "node:path"
 import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 const exec = promisify(execFile)
-export async function focusEmailSettings() {
-  const m = await loadManifest("ORG_EMAIL_SETTINGS"), dir = videoDir(m.slug), file = path.join(dir, "timeline.json")
+export async function focusEmailSettings(id = "ORG_EMAIL_SETTINGS") {
+  const m = await loadManifest(id), dir = videoDir(m.slug), file = path.join(dir, "timeline.json")
   const raw = await readFile(file), t = JSON.parse(raw.toString()) as Timeline
   assert(t.capturePurpose === "narration-timed" && m.viewport.width === 1280 && m.viewport.height === 800)
   const source = path.join(dir, t.video), sourceSha256 = createHash("sha256").update(await readFile(source)).digest("hex")
@@ -21,9 +21,13 @@ export async function focusEmailSettings() {
     if (mail && start === null) start = i * 40
     if (!mail && start !== null) { runs.push({ startMs: start, endMs: i * 40 }); start = null }
   }
-  assert.equal(runs.length, 1, "One actual test email interval required")
-  const test = t.cues.find(c => c.id === "test")!
-  assert(runs[0].startMs >= test.startMs && runs[0].endMs > test.startMs + 1000)
+  const chapters = id === "EMAIL_DELIVERY_FAILURES" ? ["retry", "address"] : ["test"]
+  assert.equal(runs.length, chapters.length, "Expected one actual delivered email per chapter")
+  for (const [index, chapter] of chapters.entries()) {
+    const cue = t.cues.find(c => c.id === chapter)!
+    const run = runs[index]
+    assert(run.startMs >= cue.startMs && run.startMs < cue.endMs && run.endMs - run.startMs >= 1000)
+  }
   assert(!t.detailFrames?.some(f => f.startMs < runs[0].endMs && f.endMs > runs[0].startMs), "Email framing cannot cover a detail shot")
   assert(createHash("sha256").update(await readFile(source)).digest("hex") === sourceSha256)
   await mkdir(path.join(dir, "review"), { recursive: true })

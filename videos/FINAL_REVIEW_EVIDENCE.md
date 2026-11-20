@@ -1429,7 +1429,6 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
 - **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
 - **TARGETED_MESSAGES** (`targeted-messages`) : email de message ciblé avec bouton de gestion.
-- **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
 - **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
 
 **Vidéos visitant la page `/my` (image seulement ; une carte « Retrouver toutes mes inscriptions » y a été ajoutée, aucune narration ne la cite)** : `EVENT_PROGRAM_PAGES_QR`, `PRIVACY_PERSONAL_LINKS`, `SHIFT_APPROVAL`, `SHIFT_NIGHT_DST`, `SHIFT_ROSTER_VISIBILITY`, `SHIFT_SWAPS`, `SHIFT_WAITLIST_OFFER`, `VOLUNTEER_CALENDAR`, `VOLUNTEER_CHOOSE_SHIFTS`, `VOLUNTEER_PHONE_NOTIFICATIONS`, `VOLUNTEER_SESSION_AVAILABILITY`, `WORKLOAD_PROTECTION`, `LAST_MINUTE_CHANGES`, `MEMBERS_DUPLICATES_MERGE`, `VOLUNTEER_CONFIRMATION_ERRORS`. À reprendre au prochain lot vidéo, en même temps que la nouvelle carte (quinze vidéos, sans compter les vidéos d'administration qui ne font que citer la page).
@@ -1461,3 +1460,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **EVENT_QUESTIONS — publication suspendue, révision 5 maintenue.** Les seize chapitres de la deuxième prise passent la validation et la transcription. La revue automatique garde une alerte sur la sélection de L, visible sur le MP4 à 380,2 s. Le contrôle d'autorisation a bloqué la publication. [Revue et preuves](evidence/batch43/event-questions/take2/review.md).
 
 **SHIFT_WAITLIST_OFFER — READY, publiée, révision 5, 117,64 s.** Le vrai courriel d'offre reste lisible 14,24 s. Son lien ouvre l'offre du créneau Buvette sans changer son statut. Sept chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/shift-waitlist-offer/take1/review.md).
+
+**EMAIL_DELIVERY_FAILURES — READY, publiée, révision 4, 321,36 s.** Le courriel à l'adresse corrigée montre le destinataire puis le bouton commun et sa phrase. Huit chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/email-delivery-failures/take2/review.md).
