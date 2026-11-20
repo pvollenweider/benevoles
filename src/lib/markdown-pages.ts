@@ -25,7 +25,7 @@ import { cleanSitePath } from "@/lib/markdown-paths"
  * Only what /llms-full.txt already exposes has a variant: a page with a Markdown source (the home's
  * FAQ included), each documentation unit, each blog post, each practical guide and /nouveautes
  * (the released CHANGELOG sections). A draft, unlisted or otherwise non-public page, and any path
- * the site doesn't serve as HTML today, has none: the route answers 404.
+ * the site doesn't serve as HTML today, has none: the proxy answers 404.
  */
 
 export { htmlPathForMarkdown, markdownPathFor } from "@/lib/markdown-paths"

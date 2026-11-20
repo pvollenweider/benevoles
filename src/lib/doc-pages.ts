@@ -484,7 +484,7 @@ export type MarkdownPageLookups = {
  * The `.md` path of a page whose HTML response may announce its Markdown variant (`Link` header in
  * the proxy), or null. A public page with a source, the home, a documentation unit, a blog post or
  * a practical guide. The lookups tell a unit from a former slug (which redirects) and a post or
- * guide from an unknown one. Pure, but for those lookups; the route itself checks the path again
+ * guide from an unknown one. Pure, but for those lookups; the proxy checks the path again when it serves it
  * (src/lib/markdown-pages.ts).
  */
 export function markdownPathForPage(pathname: string, lookups: MarkdownPageLookups = {}): string | null {

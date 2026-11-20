@@ -61,6 +61,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Pages en Markdown** : les adresses en `.md` répondaient « Page introuvable » en production ; le Markdown est désormais servi directement, sans passer par une route interne. <!-- interne -->
 - **`/llms.txt` et `/llms-full.txt`** : un lien vers une section de la page d'origine (« Voir comment ça marche ») pointe désormais vers cette section en ligne, au lieu d'une ancre qui ne menait nulle part hors de la page.
 - **Page de chargement interrompu** : après une connexion interrompue, souvent pendant une mise à jour du service, la page se recharge d'elle-même ou propose « Recharger la page » au lieu d'un écran d'erreur en anglais.
 - **Mise à jour sans coupure** : lors d'un déploiement, l'ancien pod attend quelques secondes avant de s'arrêter, le temps que le routeur cesse de lui envoyer des requêtes. <!-- interne -->

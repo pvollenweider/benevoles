@@ -7,9 +7,9 @@ import { absoluteUrl } from "@/lib/seo-metadata"
 /**
  * The address of a page's Markdown variant (llmstxt.org): the HTML page's path followed by `.md`,
  * the home under `/index.html.md`. Pure, and the only place that knows the mapping: metadata
- * (alternates.types), the proxy's rewrite, the Markdown route and /llms.txt all read it.
+ * (alternates.types), the proxy that serves the variant and /llms.txt all read it.
  *
- * `htmlPathForMarkdown` is the inverse; anything that is not a `.md` path is null, so the route
+ * `htmlPathForMarkdown` is the inverse; anything that is not a `.md` path is null, so the proxy
  * answers 404 for it. Both ignore a query or a fragment and a trailing slash, and refuse `.`/`..`
  * segments, so a caller never builds a path outside the site.
  */
