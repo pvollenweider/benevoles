@@ -12,7 +12,8 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import SortTh from "@/components/admin/members/SortTh"
 import { ORG_SORT_LABELS, ORG_STATE_LABELS, orgSortKey, orgState, type OrgSortCol } from "@/lib/super-admin-tables"
-import { nextSort, sortAnnouncement, sortRows, urlWithSort, type SortState } from "@/lib/table-sort"
+import { nextSort, sortAnnouncement, sortParam, sortRows, urlWithSort, type SortState } from "@/lib/table-sort"
+import { ORG_ACTIVITY_FILTER_HREF, type EventActivityTone } from "@/lib/org-list-activity"
 import LimitHitsList from "@/components/super-admin/LimitHitsList"
 import { LIMIT_HITS_ANCHOR, LIMIT_HITS_DAYS, TRUNCATED_SENTENCE, type OrgLimitHits } from "@/lib/limit-hits-view"
 
@@ -36,8 +37,10 @@ type Org = {
   createdAt: string
   /** « 9 oct. 2026 », formatted by the page. */
   createdLabel: string
-  /** « Événement à venir le 12 nov. » (#1078), and its sort key; both computed by the page. */
+  /** « À venir le 12 nov. » (#1078), and its sort key; both computed by the page. */
   activityLabel: string
+  /** Pill tone of that label (ongoing, soon, later); past and none stay plain text. */
+  activityTone: EventActivityTone
   activityRank: number
   /** « Propriétaire jamais activé (lien expiré le 3 nov.) »; null when an owner account is active. */
   ownerLabel: string | null
@@ -52,6 +55,8 @@ type Props = {
   initialSort?: SortState<OrgSortCol>
   /** From `?filtre=auto-a-relire`: only the automatic validations not reread yet (#1371). */
   filter?: boolean
+  /** From `?filtre=activite-proche`: only spaces with an event ongoing or within 30 days (#1415). */
+  activityFilter?: boolean
   /** Sending limits reached in the last days (#1100), grouped by organisation; empty: no block. */
   limitHits?: OrgLimitHits[]
   /** « Heures de Zurich. », the zone of the block's times. */
@@ -67,13 +72,26 @@ const STATE_TONE: Record<ReturnType<typeof orgState>, string> = {
   suspended: "text-red-700",
 }
 
-export default function OrgsManager({ initialOrgs, initialSort = { col: null, dir: "asc" }, filter = false, limitHits = [], limitHitsZone = "", limitHitsTruncated = false }: Props) {
+/** DESIGN.md status pairs: green ongoing, amber within 7 days, neutral later. Past and none get no pill. */
+const ACTIVITY_TONE: Record<EventActivityTone, string | null> = {
+  ongoing: "bg-green-100 text-green-800",
+  soon: "bg-amber-100 text-amber-800",
+  later: "bg-gray-100 text-gray-700",
+  past: null,
+  none: null,
+}
+
+export default function OrgsManager({ initialOrgs, initialSort = { col: null, dir: "asc" }, filter = false, activityFilter = false, limitHits = [], limitHitsZone = "", limitHitsTruncated = false }: Props) {
   const hitOrgIds = new Set(limitHits.map((g) => g.key))
   const router = useRouter()
   const [sort, setSort] = useState(initialSort)
   const [sortStatus, setSortStatus] = useState("")
   const captionId = useId()
   const orgs = sortRows(initialOrgs, sort, orgSortKey)
+  // The filter link keeps the sort chosen in the URL, so switching filter never resets the table.
+  const sortQuery = sortParam(sort)
+  const activityFilterHref = sortQuery ? `${ORG_ACTIVITY_FILTER_HREF}&tri=${sortQuery}` : ORG_ACTIVITY_FILTER_HREF
+  const allOrgsHref = sortQuery ? `/super-admin/organizations?tri=${sortQuery}` : "/super-admin/organizations"
 
   function toggleSort(col: OrgSortCol) {
     const next = nextSort(sort, col)
@@ -145,6 +163,21 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
         </p>
       )}
 
+      {activityFilter ? (
+        <p className="text-sm text-gray-700">
+          Seuls les espaces avec un événement en cours ou dans les 30 jours sont affichés.{" "}
+          <Link href={allOrgsHref} className="inline-flex min-h-6 items-center px-1 text-blue-700 underline underline-offset-2 hover:text-blue-800 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Voir tous les espaces
+          </Link>
+        </p>
+      ) : (
+        <p className="text-sm text-gray-700">
+          <Link href={activityFilterHref} className="inline-flex min-h-6 items-center px-1 text-blue-700 underline underline-offset-2 hover:text-blue-800 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Afficher seulement les espaces avec un événement en cours ou dans les 30 jours
+          </Link>
+        </p>
+      )}
+
       {limitHits.length > 0 && (
         <section aria-labelledby="send-limit-hits-heading" className="bg-white border border-gray-200 rounded-xl p-4">
           <h2 id="send-limit-hits-heading" className="text-base font-semibold text-gray-900">Plafonds d&apos;envoi atteints</h2>
@@ -158,13 +191,17 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
       {limitHits.length > 0 && <h2 className="sr-only">Liste des organisations</h2>}
       {orgs.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
-          {filter ? "Aucun espace à relire." : "Aucune organisation. Créez-en une pour commencer."}
+          {filter
+            ? "Aucun espace à relire."
+            : activityFilter
+              ? "Aucun espace avec un événement en cours ou dans les 30 jours."
+              : "Aucune organisation. Créez-en une pour commencer."}
         </div>
       ) : (
         // Focusable region so a keyboard user can scroll the table sideways on a narrow screen.
         <div tabIndex={0} role="region" aria-labelledby={captionId} className="bg-white border border-gray-200 rounded-xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table className="w-full text-sm">
-            <caption id={captionId} className="sr-only">Organisations, triables par colonne</caption>
+            <caption id={captionId} className="sr-only">{activityFilter ? "Organisations avec un événement en cours ou dans les 30 jours, triables par colonne" : "Organisations, triables par colonne"}</caption>
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
                 <SortTh col="nom" label="Nom" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
@@ -216,7 +253,15 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
                       </>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-xs min-w-[7.5rem] text-gray-700">{org.activityLabel}</td>
+                  <td className="px-4 py-3 text-xs min-w-[7.5rem]">
+                    {ACTIVITY_TONE[org.activityTone] ? (
+                      <span className={`inline-block rounded-lg px-2 py-0.5 font-medium ${ACTIVITY_TONE[org.activityTone]}`}>
+                        {org.activityLabel}
+                      </span>
+                    ) : (
+                      <span className="text-gray-700">{org.activityLabel}</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-gray-500 font-mono text-xs">{org.slug}</td>
                   <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{org.createdLabel}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.events}</td>

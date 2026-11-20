@@ -27,6 +27,7 @@ const orgRow = (over: Record<string, unknown> = {}) => ({
   createdAt: "2026-11-16T09:00:00.000Z",
   createdLabel: "16 nov. 2026",
   activityLabel: "Aucun événement",
+  activityTone: "none" as const,
   activityRank: 0,
   ownerLabel: null,
   ownerAlert: false,

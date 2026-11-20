@@ -23,7 +23,7 @@ export default function PastEventRetentionTable({ rows, mode = "observe" }: { ro
   const totals = pastEventTotals(rows)
   return (
     <section className="space-y-2">
-      <h2 id="stats-past-events" className="text-lg font-semibold text-gray-900">Événements terminés depuis plus de {PAST_EVENT_RETENTION_YEARS} ans</h2>
+      <h3 id="stats-past-events" className="text-sm font-semibold text-gray-900">Événements terminés depuis plus de {PAST_EVENT_RETENTION_YEARS} ans</h3>
       <p id="stats-past-events-intro" className="text-sm text-gray-700">
         {/* The summary says the schedule (or that nothing is changed): not repeated here. */}
         {mode === "enforce"

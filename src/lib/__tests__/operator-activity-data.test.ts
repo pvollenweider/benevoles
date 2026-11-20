@@ -38,7 +38,7 @@ const event = (id: string, title: string, over: Record<string, unknown> = {}) =>
   isListed: true,
   startDate: day("2026-07-10"),
   endDate: day("2026-07-10"),
-  organization: { name: "Fête" },
+  organization: { name: "Fête", slug: "fete" },
   ...over,
 })
 
@@ -99,12 +99,16 @@ describe("loadOperatorActivity", () => {
     expect(activity.bubble.points.find((point) => point.id === "unlisted")).toMatchObject({ registrations: 2, shifts: 1, roles: 1 })
     expect(activity.nextEvents.find((row) => row.id === "today")).toMatchObject({
       organizationName: "Fête",
+      organizationSlug: "fete",
+      // An event whose days include today is « En cours » in the merged table.
+      situation: "now",
       roles: 2,
       shifts: 3,
       registrations: 5,
       capacity: 15,
       fillPercent: 33,
     })
+    expect(activity.nextEvents.find((row) => row.id === "soon")).toMatchObject({ situation: "soon7" })
     expect(activity.activity).toMatchObject({ outboxWaiting: 3, busiestHour: { hour: "2026-07-09T18", count: 12 } })
     expect(activity.activity.rows.map((row) => row.current)).toEqual([1, 10, 50])
   })
