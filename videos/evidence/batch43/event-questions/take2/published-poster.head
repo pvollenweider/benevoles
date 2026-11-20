@@ -1,0 +1,11 @@
+HTTP/2 200
+accept-ranges: bytes
+cache-control: public, max-age=86400
+content-type: image/jpeg
+date: Fri, 20 Nov 2026 12:31:12 GMT
+etag: "6b0019e0-184ef"
+last-modified: Fri, 20 Nov 2026 09:58:56 GMT
+server: nginx
+vary: Origin
+x-content-type-options: nosniff
+content-length: 99567
