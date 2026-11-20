@@ -17,6 +17,8 @@
 - `EVENT_REPORTS` — NOT READY après deux prises, révision 3 maintenue. La liste avec téléphones par jour et la page PDF unique de Léa sont visibles. La fiche Buvette reste cadrée trop bas à son annonce et la ligne de Léa défile trop vite dans l’export complet. [Première prise](event-reports/take1/review.md), [deuxième prise](event-reports/take2/review.md).
 - `REGISTRATION_MONITOR_FOLLOWUP` — READY, publiée, révision 6 (main 5 + 1). [Seconde prise](organizer-monitor-followup/take2/review.md) avec les filtres visibles et la confirmation de l'envoi à trois destinataires fictifs. [Mesure publiée](organizer-monitor-followup/take2/published-ffprobe.json), affiche HTTP 200 et sous-titres identiques.
 
+- `VOLUNTEER_DISCOVER_EVENT` — READY, déjà publiée en révision 4 et intégrée à main par #1439. La liste au chargement, le passage à la frise et le défilement sont couverts. [Validation du lot 42](../batch42/volunteer-discover-event/take1/validation.json).
+
 ## Suite
 
 Les reprises d'image facultatives de la carte « Retrouver toutes mes inscriptions » restent dans la [liste des refilms après #1429](../../FINAL_REVIEW_EVIDENCE.md#à-refilmer--lien--mes-inscriptions--commun-1429-19-novembre-2026) pour le lot 44. Les vidéos signalées NOT READY et le cas de revue d'`EVENT_QUESTIONS` restent à traiter.
