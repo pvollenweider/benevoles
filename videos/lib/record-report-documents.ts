@@ -59,11 +59,14 @@ export async function recordReportDocuments(options: { page: Page; base: string;
   // keeping its real opening click visible in the short transition between chapters.
   await open("Planning individuel", "sheets/individual")
   const lea = page.locator("section.block").filter({ has: page.getByRole("heading", { name: "Léa Giroud", exact: true }) })
-  if (await lea.locator(".card").count() !== 5) throw new Error("Incomplete individual planning")
+  // No timeline and no per-shift card since #1444: one row per shift in the day's table.
+  if (await lea.locator("table.individual-table tbody tr").count() !== 5) throw new Error("Incomplete individual planning")
+  if (await lea.locator(".card, .gantt-table").count() !== 0) throw new Error("Individual planning still shows a timeline or cards")
   await lea.getByRole("heading", { name: "Léa Giroud", exact: true }).scrollIntoViewIfNeeded()
   await scene("individual", async at => {
-    await at("Sa frise montre aussi les"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-04.png"), "planning de Léa, première feuille")
-    await at("On retrouve ensuite le lieu"); await page.locator("img").evaluate(img => { window.scrollTo({ top: img.getBoundingClientRect().height * 0.57, behavior: "smooth" }) })
+    await at("Ses contacts sont réunis"); await lea.getByRole("heading", { name: "Contacts", exact: true }).scrollIntoViewIfNeeded()
+    await at("Le tableau de chaque journée donne"); await lea.locator("table.individual-table").first().scrollIntoViewIfNeeded()
+    await at("On retrouve aussi le lieu"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-04.png"), "planning de Léa, première feuille")
     await at("passons à la suivante pour lire le dernier poste"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-05.png"), "planning de Léa, feuille suivante")
   })
   await open("Feuille de présence", "sheets/attendance")

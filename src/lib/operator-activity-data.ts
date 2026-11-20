@@ -22,12 +22,14 @@ import {
   eventWindowCounts,
   fillRate,
   busiestHour,
+  upcomingSituation,
   type ActivityCounts,
   type ActivityRow,
   type BubbleChartData,
   type BubbleEventFacts,
   type EventWindowCounts,
   type HourBucket,
+  type UpcomingSituation,
 } from "./operator-activity"
 
 const DAY_MS = 86_400_000
@@ -35,9 +37,13 @@ const DAY_MS = 86_400_000
 export type NextEventRow = {
   id: string
   organizationName: string
+  /** Super-admin page of the organisation, linked under the event title. */
+  organizationSlug: string
   title: string
   startDate: Date
   endDate: Date
+  /** Window category of the event (now / 7 days / 30 days / plus tard). */
+  situation: UpcomingSituation
   roles: number
   shifts: number
   registrations: number
@@ -68,7 +74,7 @@ const EVENT_SELECT = {
   isListed: true,
   startDate: true,
   endDate: true,
-  organization: { select: { name: true } },
+  organization: { select: { name: true, slug: true } },
 } as const
 
 type EventRow = {
@@ -78,7 +84,7 @@ type EventRow = {
   isListed: boolean
   startDate: Date
   endDate: Date
-  organization: { name: string }
+  organization: { name: string; slug: string }
 }
 
 type ShiftStats = { shifts: number; roles: number; capacity: number }
@@ -245,9 +251,11 @@ export async function loadOperatorActivity(now: Date = new Date()): Promise<Oper
     return {
       id: event.id,
       organizationName: event.organization.name,
+      organizationSlug: event.organization.slug,
       title: event.title,
       startDate: event.startDate,
       endDate: event.endDate,
+      situation: upcomingSituation(event, now, APP_TIME_ZONE),
       roles: shifts.roles,
       shifts: shifts.shifts,
       registrations,

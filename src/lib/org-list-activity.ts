@@ -6,8 +6,9 @@
  * has an event in progress or coming, only past events, or none; and whether its owner ever took
  * it over. Pure and Prisma-free.
  *
- * Events count whatever their status (draft, published, archived), as for the periodic check of
- * inactivity (src/lib/org-inactivity-data.ts) and the « Événements » column. Event dates are
+ * Activity counts **published** events only, with the same rule as the operator statistics page:
+ * drafts and archived events are excluded, unlisted published events are included. The list's
+ * « Événements » count, next to it, still counts every event whatever its status. Event dates are
  * calendar days (`startDate`/`endDate` at midnight UTC), compared with today in the organisation's
  * time zone.
  */
@@ -46,6 +47,39 @@ export function eventActivityRank(a: EventActivity, today: string): number {
   }
 }
 
+/** Colour tone of the « Activité » pill; the text always carries the meaning. */
+export type EventActivityTone = "ongoing" | "soon" | "later" | "past" | "none"
+
+/** An upcoming event is « soon » when it starts within this many days (7-day badge). */
+export const EVENT_ACTIVITY_SOON_DAYS = 7
+
+/** Ongoing, within 7 days, later, past or none; the last two never get a pill. */
+export function eventActivityTone(a: EventActivity, today: string): EventActivityTone {
+  switch (a.kind) {
+    case "ongoing": return "ongoing"
+    case "past": return "past"
+    case "none": return "none"
+    case "upcoming": return dayNumber(a.startDate) - dayNumber(today) <= EVENT_ACTIVITY_SOON_DAYS ? "soon" : "later"
+  }
+}
+
+/** The URL filter of the organisations list: spaces with an event in progress or within 30 days. */
+export const ORG_ACTIVITY_FILTER = "activite-proche"
+export const ORG_ACTIVITY_FILTER_HREF = `/super-admin/organizations?filtre=${ORG_ACTIVITY_FILTER}`
+/** The filter keeps an ongoing event or an upcoming one starting within this many days. */
+export const ORG_ACTIVITY_FILTER_DAYS = 30
+
+/**
+ * Whether the organisation's activity keeps it in the filter: an event in progress now, or one
+ * starting within `days` days (30 by default, the window of the statistics page). Past events
+ * never do, even recent ones.
+ */
+export function hasEventWithinDays(a: EventActivity, today: string, days: number = ORG_ACTIVITY_FILTER_DAYS): boolean {
+  if (a.kind === "ongoing") return true
+  if (a.kind !== "upcoming") return false
+  return dayNumber(a.startDate) - dayNumber(today) <= days
+}
+
 /** « 12 nov. », with the year when it is not this year's. */
 function dayLabel(ymd: string, todayYmd: string): string {
   return new Date(`${ymd}T00:00:00Z`).toLocaleDateString("fr-FR", {
@@ -56,11 +90,18 @@ function dayLabel(ymd: string, todayYmd: string): string {
   })
 }
 
+/** Short, read under the « Activité » column header: « En cours », « Dans 3 jours, le 23 nov. », « À venir le 10 déc. ». */
 export function eventActivityLabel(a: EventActivity, today: string): string {
   switch (a.kind) {
-    case "ongoing": return "Événement en cours"
-    case "upcoming": return `Événement à venir le ${dayLabel(a.startDate, today)}`
-    case "past": return `Dernier événement le ${dayLabel(a.endDate, today)}`
+    case "ongoing": return "En cours"
+    case "upcoming": {
+      // Within the 7-day pill, the delay is said in words too: colour never carries it alone.
+      const days = dayNumber(a.startDate) - dayNumber(today)
+      if (days === 1) return `Demain, le ${dayLabel(a.startDate, today)}`
+      if (days <= EVENT_ACTIVITY_SOON_DAYS) return `Dans ${days} jours, le ${dayLabel(a.startDate, today)}`
+      return `À venir le ${dayLabel(a.startDate, today)}`
+    }
+    case "past": return `Dernier le ${dayLabel(a.endDate, today)}`
     case "none": return "Aucun événement"
   }
 }

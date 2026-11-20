@@ -14,11 +14,11 @@ Révision du 6 octobre 2026 pour main `09380114c1f111feed1b610c7379682924c2c627`
 2. Retrouver Export complet dans la partie organisateurs. Lire les effectifs, sans les présenter comme une preuve d'arrivée.
 3. Ouvrir Planning par jour : lire les deux journées et les places libres. Vérifier l'absence de coordonnées privées dans les documents à afficher.
 4. Lire les horaires de la Buvette dans Planning par poste. Ce document n'accorde aucun droit d'administration.
-5. Montrer Léa sur cinq créneaux et trois postes : lieux, consignes et contact. Afficher les deux pages réellement générées de sa fiche.
+5. Montrer Léa sur cinq créneaux et trois postes : ses contacts réunis en haut de la page, puis le tableau de chaque journée avec l'horaire, le poste et les coéquipiers. Afficher les deux pages réellement générées de sa fiche.
 6. Ouvrir la feuille de présence : marques déjà enregistrées et espaces de pointage papier. Une coche au stylo ne met pas l'application à jour.
 7. Ouvrir la liste avec téléphones. Vérifier le téléphone d'inscription retenu pour Léa ; limiter sa diffusion aux personnes qui doivent contacter l'équipe.
 8. Depuis Questions aux bénévoles, montrer la Synthèse des réponses : t-shirts, régimes, une personne comptée une seule fois malgré plusieurs créneaux, colonnes Confirmés/En attente. Télécharger le vrai CSV, vérifier ses chiffres et ouvrir la version imprimable. Ne plus enseigner la déduplication manuelle comme unique solution.
-9. Relire les pages PDF produites par main : marges, consignes, continuation sur la page suivante. La lecture du PDF n'est pas une simulation de la boîte d'impression native.
+9. Relire les pages PDF produites par main : contacts, marges, tableau des créneaux et continuation sur la page suivante. La lecture du PDF n'est pas une simulation de la boîte d'impression native.
 10. Revenir à Documents : refaire les documents après un changement et remplacer les anciennes copies.
 
 ## Données et validations
@@ -49,3 +49,7 @@ Batch 23-2 final: NOT READY. Contacts opening names the telephone list while the
 ## Contrôle du lot 23-3 — 2026-10-16
 
 READY : vraie liste avec téléphones ouverte avant le chapitre Contacts, visible dès 200,003 s. Dix chapitres et documents PDF réels revus. Référence : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, BUILD_ID `gHYEjPtpdQYUNytuIhMkh`. Preuves locales dans `videos/output/event-reports/review/` et `review-report.txt`.
+
+## Révision #1444 — plannings par poste et individuel
+
+Le planning par poste ne montre plus de frise quand elle ne dirait rien de plus que son tableau, et découpe une journée dense en tranches de 6 heures. Le planning individuel n'a plus de frise ni de cartes par créneau : les contacts sont réunis une fois en haut, puis un tableau par journée donne l'horaire, le poste et les coéquipiers. Narration et repères de capture mis à jour ; la vidéo reste **à refilmer** (voir `videos/FINAL_REVIEW_EVIDENCE.md`).

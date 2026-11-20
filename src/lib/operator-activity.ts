@@ -101,6 +101,28 @@ export function eventWindowCounts(events: readonly EventWindowFacts[], now: Date
   return counts
 }
 
+/** The situation shown in the 10-next-events table: the window category, or « plus tard ». */
+export type UpcomingSituation = "now" | "soon7" | "soon30" | "later"
+
+export const UPCOMING_SITUATION_LABELS: Record<UpcomingSituation, string> = {
+  now: "En cours",
+  // Same words as the chart's legend and the « Par situation » table (BUBBLE_CATEGORY_LABELS).
+  soon7: "Début dans les 7 jours",
+  soon30: "Début dans 8 à 30 jours",
+  later: "Début dans plus de 30 jours",
+}
+
+/**
+ * Where a published event of the 10-next-events list stands. The list only contains events ending
+ * today or later, so a past or unpublished category is never reached there; anything past the
+ * 30-day window reads « Plus tard ».
+ */
+export function upcomingSituation(event: EventWindowFacts, now: Date, timeZone: string = APP_TIME_ZONE): UpcomingSituation {
+  const category = eventWindowCategory(event, now, timeZone)
+  if (category === "now" || category === "soon7" || category === "soon30") return category
+  return "later"
+}
+
 // ── Registration windows ─────────────────────────────────────────────────────────────────────
 
 export type RegistrationWindowFacts = {
@@ -337,8 +359,8 @@ export function bubbleRadius(shifts: number, maxShifts: number): number {
 /**
  * A capped linear axis rather than a log scale: a published event may have 0 créneau or 0
  * inscription, which a logarithmic axis cannot place. When one event dwarfs the others (at least
- * 4× the second value and 10 units above it), its coordinate is clamped to the cap and the table
- * keeps the real values; the summary says so.
+ * 4× the second value and 10 units above it), its coordinate is clamped to the cap and the summary
+ * names it with its real value.
  */
 export function chartAxisCap(values: readonly number[]): number | null {
   const sorted = values.filter((v) => Number.isFinite(v) && v >= 0).sort((a, b) => b - a)
@@ -364,7 +386,7 @@ function bubbleSummary(points: readonly BubblePoint[], axis: BubbleAxis): string
   const count = `${points.length} événement${points.length > 1 ? "s" : ""}`
   const weight = `${biggest.shifts} créneau${biggest.shifts > 1 ? "x" : ""}, ${registrations(biggest.registrations)}, ${biggest.roles} poste${biggest.roles > 1 ? "s" : ""}`
   const cap = axis.yMax === null ? null : capSentence(points, axis.yMax)
-  const capText = cap === null ? "" : ` ; ${cap} ; le tableau donne les valeurs réelles`
+  const capText = cap === null ? "" : ` ; ${cap}`
   return `${count} ; le plus gros : « ${biggest.title} » (${weight})${capText}.`
 }
 
@@ -428,6 +450,35 @@ export function bubbleChartData(events: readonly BubbleEventFacts[], now: Date, 
 
   const axis: BubbleAxis = { xMin, xMax, yMax, capped: yMax !== null }
   return { points, axis, today, summary: bubbleSummary(points, axis), empty: points.length === 0 }
+}
+
+export type BubbleCategoryTotal = {
+  category: BubbleCategory
+  events: number
+  /** Sum of the points' created shifts (never negative). */
+  shifts: number
+  /** Sum of the points' active registrations (never negative). */
+  registrations: number
+}
+
+/**
+ * The small « Par situation » table below the chart: one row per category, in chart order, with a
+ * category that has no event kept at zero. Replaces the former per-event table, which duplicated
+ * the 10-next-events list at the cost of a ~22rem column.
+ */
+export function bubbleCategoryTotals(points: readonly BubblePoint[]): BubbleCategoryTotal[] {
+  const totals: Record<BubbleCategory, BubbleCategoryTotal> = {
+    now: { category: "now", events: 0, shifts: 0, registrations: 0 },
+    within7: { category: "within7", events: 0, shifts: 0, registrations: 0 },
+    within30: { category: "within30", events: 0, shifts: 0, registrations: 0 },
+  }
+  for (const point of points) {
+    const total = totals[point.category]
+    total.events += 1
+    total.shifts += Math.max(0, point.shifts)
+    total.registrations += Math.max(0, point.registrations)
+  }
+  return [totals.now, totals.within7, totals.within30]
 }
 
 // ── Formatting ──────────────────────────────────────────────────────────────────────────────

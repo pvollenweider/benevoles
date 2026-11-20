@@ -44,7 +44,7 @@ describe("operator bubble chart import failure", () => {
       />,
     )
 
-    expect(await screen.findByText("Le graphique n'a pas pu être chargé ; le tableau donne les mêmes valeurs.")).toBeInTheDocument()
+    expect(await screen.findByText("Le graphique n'a pas pu être chargé ; le résumé et le tableau « Par situation » restent affichés.")).toBeInTheDocument()
     expect(screen.queryByRole("img")).not.toBeInTheDocument()
   })
 })

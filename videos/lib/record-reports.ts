@@ -77,7 +77,7 @@ export async function recordReports(options: { page: Page; base: string; eventId
       await page.locator("img").evaluate(async img => { await (img as HTMLImageElement).decode(); window.scrollTo(0, 0) })
     }
     await at("Le navigateur permet d'imprimer ou"); await show("04")
-    await at("regardons la frise, les marges"); await page.locator("img").evaluate(img => { window.scrollTo({ top: img.getBoundingClientRect().height / 2, behavior: "smooth" }) })
+    await at("regardons les contacts, les marges"); await page.locator("img").evaluate(img => { window.scrollTo({ top: img.getBoundingClientRect().height / 2, behavior: "smooth" }) })
     await at("La dernière passe sur la page suivante"); await show("05")
   })
   // setContent replaces the PDF review document and detaches the browser overlay host.
