@@ -12,7 +12,7 @@ import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 const exec = promisify(execFile)
 export async function focusMailpit(reference: string) {
   const manifest = await loadManifest(reference)
-  assert(["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id))
+  assert(["TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS", "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "EVENT_QUESTIONS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id))
   const dir = videoDir(manifest.slug), file = path.join(dir, "timeline.json")
   const original = await readFile(file)
   const timeline = JSON.parse(original.toString()) as Timeline
@@ -31,7 +31,7 @@ export async function focusMailpit(reference: string) {
     if (isMailpit && start === null) start = index * 40
     if (!isMailpit && start !== null) { frames.push({ startMs: start, endMs: index * 40 }); start = null }
   }
-  assert(frames.length >= (["TARGETED_MESSAGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "SHIFT_ROSTER_VISIBILITY", "SHIFT_SWAPS"].includes(manifest.id) ? 1 : 2) && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
+  assert(frames.length >= (["TARGETED_MESSAGES", "FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "SHIFT_ROSTER_VISIBILITY", "SHIFT_SWAPS", "EVENT_QUESTIONS"].includes(manifest.id) ? 1 : 2) && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
   const holds: NonNullable<Timeline["mailpitHolds"]> = []
   if (manifest.id === "MEMBERS_REMINDERS") {
     const send = timeline.cues.find(cue => cue.id === "send")!
@@ -43,7 +43,7 @@ export async function focusMailpit(reference: string) {
   const belowHeaders = [
     "TARGETED_MESSAGES", "VOLUNTEER_ORG_REGISTRATIONS", "VOLUNTEER_CONFIRMATION_ERRORS",
     "REMINDERS_CHANGES", "LAST_MINUTE_CHANGES", "SHIFT_SWAPS", "SECTOR_LEADERS",
-    "PRIVACY_PERSONAL_LINKS", "MEMBERS_REMINDERS", "SHIFT_ROSTER_VISIBILITY",
+    "PRIVACY_PERSONAL_LINKS", "MEMBERS_REMINDERS", "EVENT_QUESTIONS", "SHIFT_ROSTER_VISIBILITY",
   ]
   const tallHeaders = ["FRONT_DESK_ACCESS", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION"]
   let top = 0

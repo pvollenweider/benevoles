@@ -1,0 +1,119 @@
+{
+  "id": "EVENT_QUESTIONS",
+  "slug": "event-questions",
+  "validatedAt": "2026-11-20T09:39:44.915Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 533920,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 31714,
+      "audioMs": 31712,
+      "driftMs": 2
+    },
+    {
+      "id": "create-single",
+      "visualMs": 34768,
+      "audioMs": 34760,
+      "driftMs": 8
+    },
+    {
+      "id": "create-yesno",
+      "visualMs": 33958,
+      "audioMs": 33958,
+      "driftMs": 0
+    },
+    {
+      "id": "create-multiple",
+      "visualMs": 29919,
+      "audioMs": 29917,
+      "driftMs": 2
+    },
+    {
+      "id": "create-text",
+      "visualMs": 28474,
+      "audioMs": 28473,
+      "driftMs": 1
+    },
+    {
+      "id": "order",
+      "visualMs": 25512,
+      "audioMs": 25510,
+      "driftMs": 2
+    },
+    {
+      "id": "required-validation",
+      "visualMs": 29858,
+      "audioMs": 29857,
+      "driftMs": 1
+    },
+    {
+      "id": "volunteer-form",
+      "visualMs": 33780,
+      "audioMs": 33779,
+      "driftMs": 1
+    },
+    {
+      "id": "email-proof",
+      "visualMs": 36435,
+      "audioMs": 36431,
+      "driftMs": 4
+    },
+    {
+      "id": "admin-read",
+      "visualMs": 28522,
+      "audioMs": 28518,
+      "driftMs": 4
+    },
+    {
+      "id": "summary-export",
+      "visualMs": 26692,
+      "audioMs": 26687,
+      "driftMs": 5
+    },
+    {
+      "id": "invited-update",
+      "visualMs": 31506,
+      "audioMs": 31499,
+      "driftMs": 7
+    },
+    {
+      "id": "unverified-update",
+      "visualMs": 34014,
+      "audioMs": 34008,
+      "driftMs": 6
+    },
+    {
+      "id": "answered-lock",
+      "visualMs": 29879,
+      "audioMs": 29878,
+      "driftMs": 1
+    },
+    {
+      "id": "edit-choices",
+      "visualMs": 24828,
+      "audioMs": 24823,
+      "driftMs": 5
+    },
+    {
+      "id": "retire",
+      "visualMs": 35993,
+      "audioMs": 35990,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 40,
+  "music": {
+    "voicedWindows": 480,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 13.3,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -32.9,
+    "loudestMusicOnlyLufs": -32.5,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

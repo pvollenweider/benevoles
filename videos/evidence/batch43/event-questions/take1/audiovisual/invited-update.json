@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:42:02.449Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
+  "clipSha256": "e2e60dcee2a36e99bfaeb14caf9ee489cda3541e216f6f9e0353ebe5a813ff92",
+  "scene": "invited-update",
+  "review": {
+    "heardOpening": "Aline se réinscrit maintenant depuis son véritable lien d'invitation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau.",
+        "visibleSeconds": 1.5,
+        "visible": "Sélection du deuxième créneau 12h-14h puis validation avec le bouton Continuer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "Choisissons L au lieu de M.",
+        "visibleSeconds": 10,
+        "visible": "Sélection de la taille L dans le formulaire à la place de M.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Conservons Oui pour le permis, puis laissons le matériel et le rendez-vous vides.",
+        "visibleSeconds": 13.8,
+        "visible": "Le permis reste sur Oui et les champs facultatifs suivants demeurent non renseignés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 18.2,
+        "visible": "Clic sur le bouton Confirmer mon inscription menant à l'écran Inscription confirmée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

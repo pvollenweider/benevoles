@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:41:09.599Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "b2b9c2ae71eb60d4ea7f95f2aca66d0bada0016809cff476c4a776288de72c1e",
+  "clipSha256": "f0138eaaead3cf6bc448e6c87b46a808e5ada5774f48bd8719696eb516a6d91b",
+  "scene": "order",
+  "review": {
+    "heardOpening": "L'ordre compte aussi pour rendre le formulaire agréable.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Plaçons le permis avant la taille du t-shirt avec Monter, sur la ligne du permis.",
+        "visibleSeconds": 5.5,
+        "visible": "Le curseur clique sur le lien Monter sur la ligne Permis de conduire (obligatoire).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "La question remonte d'une position.",
+        "visibleSeconds": 6.2,
+        "visible": "Permis de conduire passe en première position et un message de confirmation vert apparaît.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Rechargeons la page : le nouvel ordre est conservé.",
+        "visibleSeconds": 14.8,
+        "visible": "La page est actualisée avec un bandeau de confirmation en bas, le permis restant en première position.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, bien articulée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

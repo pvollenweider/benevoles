@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:41:58.405Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
+  "clipSha256": "0bf89244ca93e580aa74382cf174f015baba5b45232ab17284828d8b89883dd7",
+  "scene": "summary-export",
+  "review": {
+    "heardOpening": "Pour préparer une commande",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "téléchargeons la synthèse en CSV",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur le lien Télécharger la synthèse (CSV) puis affichage du fichier CSV",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux, avec les confirmés et les personnes en attente",
+        "visibleSeconds": 4.8,
+        "visible": "Tableau de synthèse affichant les colonnes Question, Réponse, Confirmés et En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Il ne contient ni noms ni coordonnées",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage des données agrégées sans mentions nominatives ni coordonnées personnelles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

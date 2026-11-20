@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:56:48.644Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "7a43ffa810bd2e72968a60d2731da2a1a7ccacc342149321f861aa2731a3fb1f",
+  "clipSha256": "3aeed6fecc2dce8bb11f0c98eb7525204afe4b1bdd21456714a4444c49dc8455",
+  "scene": "admin-read",
+  "review": {
+    "heardOpening": "Revenons côté organisation, dans les inscriptions.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Revenons côté organisation, dans les inscriptions.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page Inscriptions avec la liste des bénévoles inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel.",
+        "visibleSeconds": 3,
+        "visible": "Fiche d'Aline Mercier avec les réponses aux questions (Permis, Taille de t-shirt M, Matériel de transport).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Ouvrons ensuite Questions :",
+        "visibleSeconds": 8.8,
+        "visible": "Navigation vers l'onglet Paramètres puis sous-onglet Questions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "la Synthèse des réponses compte les choix.",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage du tableau Synthèse des réponses avec le décompte par option.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, accompagnée d'un léger fond musical harmonieux."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

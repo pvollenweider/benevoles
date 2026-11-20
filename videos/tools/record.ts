@@ -49,7 +49,7 @@ async function metadata(file: string): Promise<AudioMetadata | null> {
 async function settle(page: Page) {
   // Public maps may keep tile requests open; the seven batch 22-7 journeys
   // assert their actual headings and controls after DOM and font readiness.
-  const publicRefresh = ["LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
+  const publicRefresh = ["EVENT_QUESTIONS", "LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "VOLUNTEER_EVENT_AVAILABILITY", "ASSIGNMENT_PUBLICATION", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
   await page.waitForLoadState(publicRefresh ? "domcontentloaded" : "networkidle")
   await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" })
   await page.evaluate(() => document.fonts?.ready)
@@ -201,7 +201,7 @@ async function main() {
   // public video domain for the other journeys. Visible local links still fail final review.
   const manifest = await loadManifest(reference!)
   const probeHtml = await (await fetch(`${localBaseUrl}${PUBLIC_URL_PROBE_PATH}`)).text()
-  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id) && !publicOperator
+  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION", "EVENT_QUESTIONS"].includes(manifest.id) && !publicOperator
   if (localOriginCapture ? !probeHtml.includes(`<link rel="canonical" href="${baseUrl}${PUBLIC_URL_PROBE_PATH}"`) : !servedWithPublicUrl(probeHtml)) throw new Error("Capture deployment origin does not match the expected canonical URL")
   const product = await pinProductBuildForCapture(localBaseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
@@ -3967,13 +3967,20 @@ async function main() {
             }
             if (!mail) throw new Error("Fresh actual confirmation email required; old mailbox messages cannot substitute")
             await current.goto(`http://localhost:48026/view/${encodeURIComponent(mail.ID)}`); await settle(current)
+            const { ORG_EMAIL_SCOPE_SENTENCE } = await import("../../src/lib/org-personal-page")
             const frame = current.frameLocator("iframe")
-            const anchor = frame.locator('a[href*="/my/"]').first()
-            await anchor.waitFor(); await anchor.scrollIntoViewIfNeeded()
+            const anchor = frame.getByRole("link", { name: "Mes inscriptions", exact: true })
+            const scope = frame.getByText(ORG_EMAIL_SCOPE_SENTENCE(owned.name), { exact: true })
+            await scope.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+            for (const field of [anchor, scope]) {
+              const box = await field.boundingBox()
+              if (!box || box.y < 264 || box.y + box.height > 800) throw new Error("Organisation link and scope must fit inside the mail crop")
+            }
             const rawHref = await anchor.getAttribute("href")
-            if (!rawHref) throw new Error("Real received email lacks its personal link")
+            if (!rawHref) throw new Error("Real confirmation email lacks its organisation link")
             const actual = new URL(rawHref)
-            if (!(actual.hostname === "formation-questions.video.invalid" || actual.hostname === "formation-questions.benevol.app" || actual.origin === baseUrl) || !/^\/my\/[^/]+$/.test(actual.pathname)) throw new Error("Received personal link is outside the fictional organization")
+            const allowedHost = ["formation-questions.video.invalid", "formation-questions.benevol.app"].includes(actual.hostname) || actual.origin === baseUrl
+            if (!allowedHost || !/^\/mes-inscriptions\/[^/]+$/.test(actual.pathname)) throw new Error("Received organisation link is outside the fictional organisation")
             const local = new URL(actual.pathname, baseUrl)
             local.searchParams.set("org", "formation-questions")
             observations.freshEmail = { mailId: mail.ID, exactRecipient: recipient, messageProducedDuringThisTake: true, trainingDomainReplayedLocally: actual.origin !== baseUrl }

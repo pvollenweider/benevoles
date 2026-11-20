@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:55:59.715Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "e2c7bfa4f9f0b27797ca77054c17e6cfa95a670b031c063f1f11201c8043514f",
+  "clipSha256": "9d0d6066768678907f82aaae0a9a0e44ffb605e49b89ec4e5706675012dc3997",
+  "scene": "create-multiple",
+  "review": {
+    "heardOpening": "Passons au matériel de transport",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "Créons la question",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur « Ajouter une question » et ouverture du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "puis choisissons Choix multiple",
+        "visibleSeconds": 4.8,
+        "visible": "Sélection de l'option « Choix multiple » dans le menu déroulant Type de réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Saisissons Vélo, Remorque et Voiture, toujours un choix par ligne",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie successive des options Vélo, Remorque et Voiture dans le champ Choix proposés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.3,
+        "spoken": "Laissons Réponse obligatoire décochée",
+        "visibleSeconds": 16.5,
+        "visible": "La case à cocher Réponse obligatoire reste décochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "Enregistrons et vérifions les trois choix dans la liste",
+        "visibleSeconds": 22.5,
+        "visible": "Clic sur le bouton Enregistrer puis affichage de la question « Matériel de transport » avec les trois choix dans le tableau récapitulatif",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique claire et fluide, synchronisation exemplaire avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

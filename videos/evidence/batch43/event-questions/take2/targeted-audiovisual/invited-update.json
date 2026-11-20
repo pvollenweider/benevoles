@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:01:07.041Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
+  "clipSha256": "43801204231337851e9085bc117115ddb4361a7ccd553264c070c0a899ccd779",
+  "scene": "invited-update",
+  "review": {
+    "heardOpening": "Aline se réinscrit maintenant depuis son véritable lien",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau.",
+        "visibleSeconds": 1.5,
+        "visible": "Sélection du créneau 12h-14h puis validation pour accéder au formulaire d'inscription.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Choisissons L au lieu de M.",
+        "visibleSeconds": 11.5,
+        "visible": "L'option M reste sélectionnée pour la taille de t-shirt, L n'est pas cochée (le focus se déplace sur le champ du point de rendez-vous).",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Conservons Oui pour le permis, puis laissons le matériel et le rendez-vous vides.",
+        "visibleSeconds": 14,
+        "visible": "Le permis reste à Oui et les champs facultatifs demeurent décochés et vides.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur le bouton « Confirmer mon inscription » et apparition de l'écran « Inscription confirmée ! ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:10, l'action annoncée « Choisissons L au lieu de M » n'est pas réalisée : la taille M reste cochée et L n'est jamais sélectionnée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'une légère musique de fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

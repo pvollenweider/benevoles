@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:57:14.072Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
+  "clipSha256": "055692484f49f848d2be6c0fb513b389b24ab59edacb7f50a81e903d2c3024ab",
+  "scene": "invited-update",
+  "review": {
+    "heardOpening": "Aline se réinscrit maintenant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau.",
+        "visibleSeconds": 1.2,
+        "visible": "Sélection du créneau 12h-14h sur le planning puis clic sur Continuer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Choisissons L au lieu de M.",
+        "visibleSeconds": 11,
+        "visible": "L'option L n'est jamais sélectionnée : le curseur clique dans le champ texte du point de rendez-vous sans modifier la taille de t-shirt.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Conservons Oui pour le permis, puis laissons le matériel et le rendez-vous vides.",
+        "visibleSeconds": 14,
+        "visible": "L'option Oui reste cochée, le matériel de transport et le point de rendez-vous sont laissés vides.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur le bouton « Confirmer mon inscription » après avoir coché la case de consentement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "La nouvelle taille remplace l'ancienne.",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de la page de confirmation « Inscription confirmée ! ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:10, la voix demande de choisir la taille L au lieu de M, mais aucune case de taille n'est cochée à l'écran, le curseur se contentant de cliquer dans le champ du point de rendez-vous."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

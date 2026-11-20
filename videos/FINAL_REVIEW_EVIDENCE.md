@@ -1458,3 +1458,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **MEMBERS_REMINDERS — READY, publiée, révision 6, 212,32 s.** Les deux messages destinés à Anna gardent son lien d'invitation à l'événement, avec « Voir les missions et m'inscrire » et « Choisir mes créneaux ». Le message ciblé est lisible 10,12 s avant l'historique. Huit chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/members-reminders/take1/review.md).
 
 **ORG_EMAIL_SETTINGS — READY, publiée, révision 6, 210,60 s.** Le courriel de test montre l'expéditeur, le propriétaire fictif et l'adresse de réponse enregistrée. Dix chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/org-email-settings/take1/review.md).
+
+**EVENT_QUESTIONS — publication suspendue, révision 5 maintenue.** Les seize chapitres de la deuxième prise passent la validation et la transcription. La revue automatique garde une alerte sur la sélection de L, visible sur le MP4 à 380,2 s. Le contrôle d'autorisation a bloqué la publication. [Revue et preuves](evidence/batch43/event-questions/take2/review.md).

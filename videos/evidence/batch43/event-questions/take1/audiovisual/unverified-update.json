@@ -1,0 +1,48 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:42:14.847Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
+  "clipSha256": "8c0a73440c72867bbaa379577c9b6867d4f1bd9c05b292db89b7e4a905c05ed2",
+  "scene": "unverified-update",
+  "review": {
+    "heardOpening": "Comparons avec une inscription depuis le simple formulaire public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "Comparons avec une inscription depuis le simple formulaire public",
+        "visibleSeconds": 2.5,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Saisissons la même adresse pour un troisième créneau",
+        "visibleSeconds": 7,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "mais choisissons S",
+        "visibleSeconds": 10.3,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "L'inscription peut être créée",
+        "visibleSeconds": 13.8,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement audible, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

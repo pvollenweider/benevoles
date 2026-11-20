@@ -92,7 +92,7 @@
     },
     {
       "id": "email-proof",
-      "transcript": "Aline existait déjà dans la liste des membres. Sur le formulaire public, taper son adresse ne suffit pas à prouver qui est devant l'écran. Son lien personnel n'est donc pas affiché directement : il lui est envoyé par email. Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test. C'est une vraie notification produite par l'application, avec son lien personnel. La boîte de test prouve cette réception locale, pas la lecture par une personne, ni une livraison dans une boîte extérieure.",
+      "transcript": "Aline existait déjà dans la liste des membres. Sur le formulaire public, taper son adresse ne suffit pas à prouver qui est devant l'écran. Son lien personnel n'est donc pas affiché directement : il lui est envoyé par email. Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test. Le bouton Mes inscriptions ouvre toutes ses inscriptions auprès de l'organisation. La phrase sous le bouton rappelle que le lien doit rester privé. La boîte de test prouve cette réception locale, pas la lecture par une personne, ni une livraison dans une boîte extérieure.",
       "fallbackDurationMs": 42000
     },
     {
@@ -131,6 +131,6 @@
       "fallbackDurationMs": 52000
     }
   ],
-  "musicGainDb": 0.1,
+  "musicGainDb": 0.4,
   "narrationStaticNormalization": true
 }

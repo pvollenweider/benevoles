@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:42:31.821Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "a9576a6b270395d1122efe046d278d49779a241beb23da59256b0dadba4f6547",
+  "clipSha256": "c642500fbd7799530862b9ad472c70dbedf37b47228cd1a93a34b572102a02fd",
+  "scene": "edit-choices",
+  "review": {
+    "heardOpening": "On peut cependant enrichir la liste sans perdre ce qui existe.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Rouvrons la question et ajoutons XXL",
+        "visibleSeconds": 4.8,
+        "visible": "Ouverture du formulaire de modification et saisie de XXL sous XL",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Enregistrons.",
+        "visibleSeconds": 10.6,
+        "visible": "Clic sur le bouton Enregistrer en bas du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Le nouveau choix apparaît dans la liste",
+        "visibleSeconds": 12.5,
+        "visible": "Affichage de la question avec la liste mise à jour 'S, M, L, XL, XXL'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.4,
+        "spoken": "la taille L d'Aline reste conservée.",
+        "visibleSeconds": 17.2,
+        "visible": "Affichage de la page Inscriptions où la réponse 'Taille de t-shirt : L' d'Aline Mercier est conservée",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:14, l'annonce de la conservation de la taille L d'Aline est faite alors que la page des inscriptions avec la fiche d'Aline Mercier n'apparaît qu'à 00:17."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et dynamique, parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

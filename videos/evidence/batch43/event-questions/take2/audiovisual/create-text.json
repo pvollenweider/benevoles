@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:56:12.785Z",
+  "videoSha256": "f3343b1b67d40c0749f4f6540e9e51324634b9dfc0e9f9fcad8e9ac2b6d8fd03",
+  "promptSha256": "34169567692a6415ece42f544b387430b3dba8a0d6541960ef52ba8b14b2349d",
+  "clipSha256": "5de4a0b0ce8aeb354c2099f2573eb4f84949006fb6e6af874caf12257b9148a9",
+  "scene": "create-text",
+  "review": {
+    "heardOpening": "Pour une préférence de rendez-vous, laissons un peu de liberté",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Ajoutons Point de rendez-vous préféré",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur « Ajouter une question » puis saisie de « Point de rendez-vous préféré » dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "Conservons Texte court",
+        "visibleSeconds": 8.5,
+        "visible": "Le champ Type de réponse conserve la valeur par défaut « Texte court »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 20.8,
+        "visible": "Clic sur Enregistrer et affichage du message de confirmation avec la liste actualisée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Nous avons maintenant nos quatre exemples de questions",
+        "visibleSeconds": 22,
+        "visible": "Affichage de la liste récapitulative contenant 4 questions (Questions 4/5)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique claire et fluide, synchronisation précise avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

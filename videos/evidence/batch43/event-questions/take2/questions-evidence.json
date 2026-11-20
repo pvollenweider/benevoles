@@ -1,0 +1,88 @@
+{
+  "recordedAt": "2026-11-20T09:54:11.575Z",
+  "product": {
+    "commit": "d129cdecbea2d6470ba3825583969aae59f05768",
+    "sourceTree": "e47e57270d58aa9a03dd7c0f20de61919c07bc76",
+    "productSourceSha256": "f2bf69c6ba5d52d35c5dd6ff81aca419321f877012133831d320ea0857f9e2dd",
+    "buildId": "AflSq1YBhl69qv_Xlrkgg",
+    "snapshot": "/private/tmp/benevoles-video-production.ibjZszQX",
+    "builtAt": "2026-11-20T09:15:46.282Z"
+  },
+  "welcome": {
+    "ownedEmptyEvent": true,
+    "noSensitiveExample": true
+  },
+  "create-single": {
+    "savedType": "single",
+    "required": true,
+    "optionsCount": 4
+  },
+  "create-yesno": {
+    "savedType": "yesno",
+    "required": true,
+    "optionsCount": 0
+  },
+  "create-multiple": {
+    "savedType": "multiple",
+    "required": false,
+    "optionsCount": 3
+  },
+  "create-text": {
+    "savedType": "text",
+    "required": false,
+    "optionsCount": 0
+  },
+  "order": {
+    "orderPersistedAfterReload": true,
+    "actualFirstQuestionVisibleAfterReload": true
+  },
+  "required-validation": {
+    "realNativeRequiredValidation": true,
+    "nativeFrenchMessageVerified": "Veuillez sélectionner l'une de ces options.",
+    "customReactErrorsNotTriggered": true,
+    "noRegistrationRequest": true,
+    "noRegistrationCreated": true
+  },
+  "volunteer-form": {
+    "actualSignup": true,
+    "accessLinkOnlyByEmail": true,
+    "fourAnswersStored": true
+  },
+  "freshEmail": {
+    "mailId": "4Wkiz699fgLSJEbKvt7LXr",
+    "exactRecipient": "video.questions.aline@example.org",
+    "messageProducedDuringThisTake": true,
+    "trainingDomainReplayedLocally": false
+  },
+  "email-proof": {
+    "actualLocalEmailShown": true,
+    "recipientVerified": true,
+    "personalLinkVerified": true
+  },
+  "admin-read": {
+    "actualAnswersAndSummary": true
+  },
+  "summary-export": {
+    "actualCsvDownloaded": true,
+    "noMemberEmail": true
+  },
+  "invited-update": {
+    "verifiedInvitationReplacedAnswer": true,
+    "emptyOptionalAnswersErased": true
+  },
+  "unverified-update": {
+    "anonymousEmailCouldNotOverwriteExistingAnswer": true
+  },
+  "answered-lock": {
+    "typeReallyDisabled": true,
+    "usedChoiceRemovalReallyRejected": true
+  },
+  "edit-choices": {
+    "additionalChoicePersisted": true,
+    "existingResponseUnchanged": true
+  },
+  "retire": {
+    "actuallyRemovedFromActiveQuestions": true,
+    "storedAnswerRetained": true
+  }
+}

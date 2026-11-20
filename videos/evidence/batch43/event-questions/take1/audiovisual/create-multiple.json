@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T09:40:54.943Z",
+  "videoSha256": "e06e8cf49eb9b943f4498e38fb960fe1d24d60feef01876e1faec54b8f9503c5",
+  "promptSha256": "e2c7bfa4f9f0b27797ca77054c17e6cfa95a670b031c063f1f11201c8043514f",
+  "clipSha256": "b06990ed4da0fcbb71e65a403974c3bfe2a1bc90970a84b250c5a614f17aa9d3",
+  "scene": "create-multiple",
+  "review": {
+    "heardOpening": "Passons au matériel de transport",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Créons la question, puis choisissons Choix multiple.",
+        "visibleSeconds": 3.8,
+        "visible": "Ouverture du formulaire de création, saisie de l'intitulé et sélection du type Choix multiple.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Saisissons Vélo, Remorque et Voiture, toujours un choix par ligne.",
+        "visibleSeconds": 6.5,
+        "visible": "Saisie des options Vélo, Remorque et Voiture dans le champ Choix proposés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.4,
+        "spoken": "Laissons Réponse obligatoire décochée.",
+        "visibleSeconds": 17.5,
+        "visible": "La case Réponse obligatoire reste décochée à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "Enregistrons et vérifions les trois choix dans la liste.",
+        "visibleSeconds": 23,
+        "visible": "Clic sur Enregistrer et apparition de la question Matériel de transport avec ses trois options dans la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
