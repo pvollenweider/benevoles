@@ -8,6 +8,7 @@ import { z } from "zod"
 import { publicPageMetadata } from "@/lib/doc-pages"
 import { parseFrontMatter } from "@/lib/doc-units"
 import { OG_IMAGE_ALT } from "@/lib/landing-seo"
+import { withMarkdownAlternate } from "@/lib/markdown-paths"
 import { SITE_NAME, absoluteUrl, seoMetadata } from "@/lib/seo-metadata"
 import { parseCalendarDate } from "@/lib/freshness"
 import { META_DESCRIPTION_MAX, META_DESCRIPTION_MIN, auditedLength } from "@/lib/meta-length"
@@ -211,7 +212,7 @@ export function blogIndexMetadata(base: string): Metadata {
 /**
  * A post's metadata: its title without its emoji (the <title> tag, the link previews), its summary
  * as the description, an absolute canonical on the apex host, an article published the day it was
- * sent, its own image or the site's card, and the feed.
+ * sent, its own image or the site's card, the feed, and the post's Markdown variant.
  */
 export function blogPostMetadata(post: BlogPost, base: string): Metadata {
   const title = plainBlogTitle(post.title)
@@ -226,7 +227,7 @@ export function blogPostMetadata(post: BlogPost, base: string): Metadata {
     imagePath: post.image ?? "/og-image.png",
     imageAlt: post.image ? title : OG_IMAGE_ALT,
   })
-  return { ...m, alternates: { ...m.alternates, types: blogFeedAlternate(base) } }
+  return withMarkdownAlternate({ ...m, alternates: { ...m.alternates, types: blogFeedAlternate(base) } }, base, blogPostPath(post))
 }
 
 // ---------------------------------------------------------------------------------------------

@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Pages en Markdown** : chaque page publique existe aussi en Markdown à son adresse suivie de `.md`, annoncée dans la page et dans `/llms.txt`.
 - **Vidéos** : un tutoriel montre comment ajouter un texte de la bibliothèque de modèles, le compléter et vérifier l'aperçu avant l'envoi.
 - **Vidéos** : « Retrouver toutes mes inscriptions » montre comment récupérer le lien personnel, gérer les créneaux de plusieurs événements, s'abonner au calendrier et renouveler le lien. Le tour de la page « Mes inscriptions », l'inscription depuis un téléphone, les changements de dernière minute, la publication des affectations, la relance des invités, les réglages des emails, l'offre de place en liste d'attente, les échecs d'envoi, le suivi des inscriptions et les questions aux bénévoles ont été actualisés.
 - **Toutes tes inscriptions en un lien** : un bénévole peut recevoir un lien personnel qui rassemble ses créneaux à venir de tous les événements d'une organisation, avec la date et l'heure mises en avant, le poste et l'état en toutes lettres, l'annulation dans les mêmes délais que chaque événement et un accès à la page de l'événement. Le lien se renouvelle en un clic (l'ancien cesse aussitôt de fonctionner, le nouveau part par email), « J'ai perdu mon lien » envoie ce seul lien, et l'ancienne page d'un événement propose « Retrouver toutes mes inscriptions » par email. Il est renouvelé avec les autres liens quand l'adresse est corrigée, qu'une fiche est fusionnée ou effacée. (#1429)
@@ -60,6 +61,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **`/llms.txt` et `/llms-full.txt`** : un lien vers une section de la page d'origine (« Voir comment ça marche ») pointe désormais vers cette section en ligne, au lieu d'une ancre qui ne menait nulle part hors de la page.
 - **Page de chargement interrompu** : après une connexion interrompue, souvent pendant une mise à jour du service, la page se recharge d'elle-même ou propose « Recharger la page » au lieu d'un écran d'erreur en anglais.
 - **Mise à jour sans coupure** : lors d'un déploiement, l'ancien pod attend quelques secondes avant de s'arrêter, le temps que le routeur cesse de lui envoyer des requêtes. <!-- interne -->
 - **Bibliothèque de modèles de messages** : textes relus une seconde fois ; « Poste à compléter » ne demande plus de transférer l'email (il contient le lien personnel du bénévole) mais d'envoyer le lien de la page d'inscription, et les faits propres à l'événement (météo, horaires, abri, matériel fourni, démarches après une annulation, droits sur les photos) sont à compléter au lieu d'être affirmés.

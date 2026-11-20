@@ -3,6 +3,7 @@
 
 import type { Metadata } from "next"
 import { CONTACT_EMAIL, REPOSITORY_URL, faqPageNode, jsonLdGraph, organizationNode, softwareApplicationNode, softwareSourceCodeNode, websiteNode, type FaqItem } from "@/lib/structured-data"
+import { withMarkdownAlternate } from "@/lib/markdown-paths"
 import { INDEXABLE, OG_LOCALE, SITE_NAME, SOCIAL_IMAGE } from "@/lib/seo-metadata"
 
 export { CONTACT_EMAIL, REPOSITORY_URL }
@@ -28,11 +29,11 @@ export const OG_IMAGE_ALT = "benevol.app : le planning des bénévoles, inscript
  */
 export const LANDING_FAQ_SOURCE = "content/pages/FAQ-ACCUEIL.md"
 
-/** Metadata of the apex home: canonical, Open Graph and Twitter card, fully indexable. */
+/** Metadata of the apex home: canonical, Open Graph and Twitter card, fully indexable, with its Markdown variant (`/index.html.md`). */
 export function landingMetadata(base: string): Metadata {
   const url = `${base.replace(/\/+$/, "")}/`
   const image = { url: "/og-image.png", ...SOCIAL_IMAGE, alt: OG_IMAGE_ALT }
-  return {
+  const metadata: Metadata = {
     title: { absolute: LANDING_TITLE },
     description: LANDING_DESCRIPTION,
     applicationName: SITE_NAME,
@@ -50,6 +51,7 @@ export function landingMetadata(base: string): Metadata {
     robots: INDEXABLE,
     category: "software",
   }
+  return withMarkdownAlternate(metadata, base, "/")
 }
 
 /**

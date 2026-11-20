@@ -1,9 +1,11 @@
 import { describe, it, expect } from "vitest"
+import { blogPostMetadata, blogPostPath, loadBlogPosts } from "../blog"
 import { CONTENT_VIEWPORT, absoluteUrl, pageTitle, seoMetadata, socialImagePath } from "../seo-metadata"
 import { PUBLIC_PAGES, publicPageMetadata } from "../doc-pages"
 import { docUnitMetadata, loadDocUnits } from "../doc-units"
 import { docUnitJsonLd, publicPageJsonLd } from "../structured-data"
 import { landingJsonLd, landingMetadata } from "../landing-seo"
+import { loadRessources, ressourceMetadata } from "../ressources"
 
 const BASE = "https://www.benevol.app"
 
@@ -88,5 +90,35 @@ describe("CONTENT_VIEWPORT", () => {
       { media: "(prefers-color-scheme: light)", color: "#ffffff" },
       { media: "(prefers-color-scheme: dark)", color: "#111827" },
     ])
+  })
+})
+
+describe("Markdown variant", () => {
+  it("is announced by a covered page, the home, a unit, a post and a guide, without losing the canonical", () => {
+    const page = publicPageMetadata("/fonctionnalites", BASE)
+    expect(page.alternates?.types?.["text/markdown"]).toBe(`${BASE}/fonctionnalites.md`)
+    expect(page.alternates?.canonical).toBe(`${BASE}/fonctionnalites`)
+
+    expect(landingMetadata(BASE).alternates?.types?.["text/markdown"]).toBe(`${BASE}/index.html.md`)
+
+    const unit = loadDocUnits()[0]
+    const unitMetadata = docUnitMetadata(unit, BASE)
+    expect(unitMetadata.alternates?.types?.["text/markdown"]).toBe(`${BASE}/doc/${unit.slug}.md`)
+    expect(unitMetadata.alternates?.canonical).toBe(`${BASE}/doc/${unit.slug}`)
+
+    const post = loadBlogPosts()[0]
+    const postMetadata = blogPostMetadata(post, BASE)
+    expect(postMetadata.alternates?.types?.["text/markdown"]).toBe(`${BASE}${blogPostPath(post)}.md`)
+    expect(postMetadata.alternates?.types?.["application/atom+xml"]).toBeTruthy()
+    expect(postMetadata.alternates?.canonical).toBe(`${BASE}${blogPostPath(post)}`)
+
+    const guide = loadRessources()[0]
+    const guideMetadata = ressourceMetadata(guide, BASE)
+    expect(guideMetadata.alternates?.types?.["text/markdown"]).toBe(`${BASE}/ressources/${guide.slug}.md`)
+    expect(guideMetadata.alternates?.canonical).toBe(`${BASE}/ressources/${guide.slug}`)
+  })
+
+  it("is absent from a page without a Markdown source", () => {
+    expect(publicPageMetadata("/legal/privacy", BASE).alternates?.types).toBeUndefined()
   })
 })

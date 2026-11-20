@@ -43,7 +43,11 @@ describe("the route tables of src/lib/server-not-found.ts", () => {
   })
 
   it("list every folder with a parameter as its second segment, and the event segment is the only top-level parameter", () => {
-    const dynamicChildren = new Set(routes.filter((r) => !r.includes(".") && /^\/[^/[]+\/\[[^/]+\]$/.test(r)).map((r) => r.split("/")[1]))
+    // A catch-all (`[...path]`, the Markdown route) is a parameter too, although its brackets
+    // contain dots: the old `!r.includes(".")` test would mistake it for a file route.
+    const isDynamicChild = (r: string) =>
+      /^\/[^/[]+\/\[[^/]+\]$/.test(r) && r.split("/").filter(Boolean).every((segment) => segment.startsWith("[") || !segment.includes("."))
+    const dynamicChildren = new Set(routes.filter(isDynamicChild).map((r) => r.split("/")[1]))
     expect([...DYNAMIC_CHILD_FOLDERS].sort()).toEqual([...dynamicChildren].sort())
     const topLevelParams = fs.readdirSync(APP, { withFileTypes: true }).filter((d) => d.isDirectory() && d.name.startsWith("[")).map((d) => d.name)
     expect(topLevelParams).toEqual(["[eventSlug]"])
