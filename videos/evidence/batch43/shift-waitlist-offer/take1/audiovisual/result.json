@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:11:41.359Z",
+  "videoSha256": "d6da92c57f7c1cbe67d704dffa240fda0c5c49ad5dd98080c966ca9fd17a8148",
+  "promptSha256": "30781252e01f52c7c320602c2f99bbae7095f6c8dd36356a89a1a63e6a86aa99",
+  "clipSha256": "96cf287b769784e30c32ad927571134970c2e6e48acb534b8ebf9452a287b9ba",
+  "scene": "result",
+  "review": {
+    "heardOpening": "La liste d'attente est utile pour les missions demandées",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La liste d'attente est utile pour les missions demandées",
+        "visibleSeconds": 0.8,
+        "visible": "Page Inscriptions affichant '3 en liste d'attente, 2 demandes à traiter'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.7,
+        "spoken": "Vérifiez la capacité, l'ordre, l'offre en cours",
+        "visibleSeconds": 6.3,
+        "visible": "Défilement de la liste vers le bas affichant les statuts 'Place proposée' et 'Liste d'attente position 2 / 3'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "avant de promettre une place à quelqu'un par un autre canal",
+        "visibleSeconds": 8.8,
+        "visible": "Vue complète des bénévoles en attente et des propositions en cours",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, bien synchronisée avec le défilement de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

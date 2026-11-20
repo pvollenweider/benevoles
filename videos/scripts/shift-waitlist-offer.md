@@ -39,3 +39,7 @@ Narration complète régénérée en une passe Kore, sans balises de pause. La d
 La première nouvelle génération paraphrase l’ouverture du chapitre `admin`, constatée par deux ASR indépendants ; son master entier et les diagnostics sont conservés. La narration écrite reste inchangée. Nouvelle génération complète avec la même voix Kore et une consigne de lecture exacte, sans assemblage de phrases issues de générations différentes.
 
 La seconde génération complète échoue encore au contrôle de l’ouverture de `admin`. Cette ouverture est reformulée pour décrire précisément la colonne de l’écran actuel : « Dans les inscriptions, le statut distingue les personnes confirmées de celles qui attendent une place. » La suite ne change pas. Troisième master entièrement nouveau, même voix Kore ; les mots indésirables ne sont pas repris et aucun son des deux générations précédentes n’est monté.
+
+## Révision du 20 novembre 2026 — lot 43
+
+Montrer le courriel d'offre réellement reçu après le désistement. « Confirmer ma participation » ouvre l'offre du créneau Buvette. Le lien « Prendre la place » de la page personnelle mène à la même offre. Vérifier que le statut reste « proposée » après ouverture.

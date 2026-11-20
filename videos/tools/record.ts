@@ -1747,6 +1747,16 @@ async function main() {
         if (await timeline.getAttribute("aria-pressed") !== "true") throw new Error("Timeline view was not selected")
       })
     } else if (slug === "shift-waitlist-offer") {
+      const waitlistMailApi = "http://localhost:48026/api/v1/messages?limit=1000"
+      type WaitlistMail = { ID: string; Subject: string; To: { Address: string }[] }
+      const readWaitlistInbox = async () => {
+        const response = await page.request.get(waitlistMailApi)
+        if (!response.ok()) throw new Error("Local waitlist mailbox unavailable")
+        return (await response.json() as { messages: WaitlistMail[] }).messages
+      }
+      const priorIds = new Set((await readWaitlistInbox()).map(mail => mail.ID))
+      let offerPath = ""
+      let waitlistMailId = ""
       const waitlistShift = await page.evaluate(async (eventId) => {
         const response = await fetch(`/api/admin/events/${eventId}`)
         if (!response.ok) throw new Error(`Cannot load event: ${response.status}`)
@@ -1808,7 +1818,25 @@ async function main() {
         await at("Une offre est envoyée à la première personne en attente")
         await tap(page, page.getByRole("button", { name: "Oui, annuler" }))
         await page.getByText(/annulée/i).first().waitFor()
-        await at(0.78) /* mid-sentence */
+        let message: WaitlistMail | undefined
+        for (let attempt = 0; attempt < 40 && !message; attempt++) {
+          message = (await readWaitlistInbox()).find(mail =>
+            !priorIds.has(mail.ID) && mail.Subject.includes("Une place s'est libérée") &&
+            mail.To.some(to => to.Address === "camille.rochat@example.org"))
+          if (!message) await page.waitForTimeout(250)
+        }
+        if (!message) throw new Error("Expected a newly delivered event offer for Camille")
+        await at("Ouvrons le courriel reçu par Camille")
+        await page.goto(`http://localhost:48026/view/${encodeURIComponent(message.ID)}`)
+        const body = page.frameLocator("iframe")
+        const offer = body.getByRole("link", { name: "Confirmer ma participation", exact: true })
+        await offer.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+        const box = await offer.boundingBox()
+        const href = await offer.getAttribute("href")
+        if (!box || box.y < 264 || box.y + box.height > 800 || !href) throw new Error("Event offer must be readable within the mail crop")
+        offerPath = new URL(href).pathname
+        if (offerPath !== "/waitlist/demo-waitlist-camille-0001/confirm") throw new Error("Offer link must open Camille’s single waitlist place")
+        waitlistMailId = message.ID
       })
 
       await scene("volunteer", async (at) => {
@@ -1820,7 +1848,10 @@ async function main() {
         await at(0.26) /* mid-sentence */
         await offeredCard.getByText(/Confirme avant/).scrollIntoViewIfNeeded()
         await at("Le lien Prendre la place ouvre")
-        await tap(page, offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }))
+        const offer = offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true })
+        const href = await offer.getAttribute("href")
+        if (!href || new URL(href, baseUrl).pathname !== offerPath) throw new Error("Personal page and email must open the same offer")
+        await tap(page, offer)
         await page.getByRole("button", { name: "Prendre la place", exact: true }).waitFor()
         const unchangedOffer = await (await page.request.get(`${baseUrl}/api/public/registrations/demo-waitlist-camille-0001`)).json()
         if (!unchangedOffer.registrations.some((registration: { status: string; shift: { id: string } }) => registration.status === "offered" && registration.shift.id === waitlistShift.id)) throw new Error("Opening an offer must leave it offered")
@@ -1849,6 +1880,7 @@ async function main() {
         await at(0.62) /* mid-sentence */
         await offeredRow.getByText("Place proposée", { exact: true }).scrollIntoViewIfNeeded()
       })
+      await writeFile(path.join(dir, "waitlist-offer-checks.json"), JSON.stringify({ mailId: waitlistMailId, currentOfferDelivered: true, eventSpecificOfferLinkVerified: true, offeredStateUnchangedByOpening: true }, null, 2) + "\n")
     } else if (slug === "shift-approval") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
       await scene("welcome", async () => {

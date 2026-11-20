@@ -1428,7 +1428,6 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 - **VOLUNTEER_CONFIRMATION_ERRORS** (`volunteer-confirmation-errors`) : email de confirmation et email « Demande d'inscription non enregistrée », tous deux avec leur lien personnel.
 - **PRIVACY_PERSONAL_LINKS** (`privacy-personal-links`) : email réel, ouverture du lien personnel, renvoi et lien invalide.
 - **REMINDERS_CHANGES** (`reminders-changes`) : rappel manuel, rappels J-2/J-1/jour J et email de changement d'horaire.
-- **SHIFT_WAITLIST_OFFER** (`shift-waitlist-offer`) : email d'offre de place (lien d'action propre à l'événement, à conserver tel quel).
 - **TARGETED_MESSAGES** (`targeted-messages`) : email de message ciblé avec bouton de gestion.
 - **EMAIL_DELIVERY_FAILURES** (`email-delivery-failures`) : emails de suivi des envois, sans lien personnel à changer mais à vérifier au même passage.
 - **EVENT_QUESTIONS** (`event-questions`) : email de demande non enregistrée avec lien personnel.
@@ -1460,3 +1459,5 @@ L'email de confirmation, les rappels et les autres emails de gestion portent mai
 **ORG_EMAIL_SETTINGS — READY, publiée, révision 6, 210,60 s.** Le courriel de test montre l'expéditeur, le propriétaire fictif et l'adresse de réponse enregistrée. Dix chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/org-email-settings/take1/review.md).
 
 **EVENT_QUESTIONS — publication suspendue, révision 5 maintenue.** Les seize chapitres de la deuxième prise passent la validation et la transcription. La revue automatique garde une alerte sur la sélection de L, visible sur le MP4 à 380,2 s. Le contrôle d'autorisation a bloqué la publication. [Revue et preuves](evidence/batch43/event-questions/take2/review.md).
+
+**SHIFT_WAITLIST_OFFER — READY, publiée, révision 5, 117,64 s.** Le vrai courriel d'offre reste lisible 14,24 s. Son lien ouvre l'offre du créneau Buvette sans changer son statut. Sept chapitres vérifiés et affiche distante HTTP 200. [Revue et preuves](evidence/batch43/shift-waitlist-offer/take1/review.md).

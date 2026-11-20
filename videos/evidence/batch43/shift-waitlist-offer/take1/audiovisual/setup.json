@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-20T10:10:57.161Z",
+  "videoSha256": "d6da92c57f7c1cbe67d704dffa240fda0c5c49ad5dd98080c966ca9fd17a8148",
+  "promptSha256": "aeffff877fda377c5c3a3f85ce9575067d888a4298ac46e262755ac1d5104779",
+  "clipSha256": "f5274f6e87d5d19b9480f4f71c90d9ec699dcb51eda7f5f25bd2fa1cb1cd5ba6",
+  "scene": "setup",
+  "review": {
+    "heardOpening": "La liste d'attente s'active sur le créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "La liste d'attente s'active sur le créneau.",
+        "visibleSeconds": 0,
+        "visible": "Option « Activer la liste d'attente » visible dans le formulaire de paramétrage du créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "Tant que la capacité n'est pas atteinte, les inscriptions sont confirmées normalement.",
+        "visibleSeconds": 2,
+        "visible": "Haut du formulaire « Modifier le créneau » affichant le champ Places défini à 4.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "Une fois le créneau complet, le prochain bénévole rejoint l'attente",
+        "visibleSeconds": 6.5,
+        "visible": "Tableau récapitulatif montrant un créneau Accueil avec 3/3 places et le statut Complet.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

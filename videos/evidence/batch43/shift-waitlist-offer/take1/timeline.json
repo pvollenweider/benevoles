@@ -1,0 +1,179 @@
+{
+  "slug": "shift-waitlist-offer",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-20T10:09:54.587Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "c22f1f561320aaaf41dc4895786bec55bf1182a4",
+    "sourceTree": "32d4c99600ae3f9e152c5e2def549bdb5abb5120",
+    "productSourceSha256": "5a86d397f191f455906ac91ba9004243af7b3d44d5e6b262100a595ca9b7bdbe",
+    "buildId": "ypzT632HvmE2wKmxN8ZMA",
+    "snapshot": "/private/tmp/benevoles-video-production.zrOWFaez",
+    "builtAt": "2026-11-20T10:04:19.828Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_WAITLIST_OFFER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 16898
+    },
+    {
+      "kind": "click",
+      "atMs": 17762
+    },
+    {
+      "kind": "click",
+      "atMs": 48705
+    },
+    {
+      "kind": "click",
+      "atMs": 52305
+    },
+    {
+      "kind": "click",
+      "atMs": 76723
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1253,
+      "endMs": 15794
+    },
+    {
+      "id": "setup",
+      "startMs": 18111,
+      "endMs": 31454
+    },
+    {
+      "id": "admin",
+      "startMs": 31906,
+      "endMs": 44251
+    },
+    {
+      "id": "release",
+      "startMs": 46495,
+      "endMs": 68520
+    },
+    {
+      "id": "volunteer",
+      "startMs": 68980,
+      "endMs": 89372
+    },
+    {
+      "id": "expiry",
+      "startMs": 89826,
+      "endMs": 100812
+    },
+    {
+      "id": "result",
+      "startMs": 101264,
+      "endMs": 113250
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "setup",
+      "phrase": "La liste d’attente s’active sur le créneau",
+      "startMs": 329,
+      "endMs": 2025,
+      "cueMs": 18440
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "Tant que la capacité n’est pas atteinte",
+      "startMs": 2439,
+      "endMs": 6197,
+      "cueMs": 20552
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "Une fois le créneau complet",
+      "startMs": 6571,
+      "endMs": 13022,
+      "cueMs": 24683
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "On peut ainsi répondre à",
+      "startMs": 7581,
+      "endMs": 12102,
+      "cueMs": 39489
+    },
+    {
+      "segmentId": "release",
+      "phrase": "Quand une personne confirmée se désinscrit",
+      "startMs": 332,
+      "endMs": 5028,
+      "cueMs": 48188
+    },
+    {
+      "segmentId": "release",
+      "phrase": "Une offre est envoyée à la première personne en attente",
+      "startMs": 5153,
+      "endMs": 7654,
+      "cueMs": 51655
+    },
+    {
+      "segmentId": "release",
+      "phrase": "Ouvrons le courriel reçu par Camille",
+      "startMs": 8148,
+      "endMs": 9701,
+      "cueMs": 54644
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Le lien Prendre la place ouvre",
+      "startMs": 7184,
+      "endMs": 11512,
+      "cueMs": 76168
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Seul le bouton Prendre la place",
+      "startMs": 11966,
+      "endMs": 14920,
+      "cueMs": 80947
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Refuser la place conserve une réponse explicite",
+      "startMs": 15337,
+      "endMs": 20138,
+      "cueMs": 84318
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "la promotion passe à la",
+      "startMs": 3736,
+      "endMs": 5693,
+      "cueMs": 93564
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "Dans l’administration, on peut suivre l’offre active",
+      "startMs": 6365,
+      "endMs": 10622,
+      "cueMs": 96192
+    }
+  ],
+  "mailpitFocusFrames": [
+    {
+      "startMs": 54880,
+      "endMs": 69120
+    }
+  ],
+  "mailpitHolds": [],
+  "mailpitBodyOnly": true
+}
