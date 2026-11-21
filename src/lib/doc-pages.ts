@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata, MetadataRoute } from "next"
+import { cleanSitePath, markdownPathFor, withMarkdownAlternate } from "@/lib/markdown-paths"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { HOSTED_SERVICE_URL, isHostedService } from "@/lib/site"
 
@@ -449,11 +450,13 @@ export function publicPage(path: string): PublicPage {
 /**
  * Metadata of a public content page: its own title and description, an absolute canonical on
  * the apex host (the same page also answers on organisation subdomains), Open Graph and Twitter
- * with its own social card, indexable (src/lib/seo-metadata.ts).
+ * with its own social card, indexable (src/lib/seo-metadata.ts), and the page's Markdown variant
+ * when it has one (a source file; the home, units, posts and guides add theirs where they are
+ * built).
  */
 export function publicPageMetadata(path: string, base: string): Metadata {
   const page = publicPage(path)
-  return seoMetadata({
+  const metadata = seoMetadata({
     base,
     path: page.path,
     title: page.metaTitle,
@@ -461,6 +464,42 @@ export function publicPageMetadata(path: string, base: string): Metadata {
     type: "website",
     imageAlt: `${page.title}, ${SITE_NAME}`,
   })
+  return page.source && pageAvailable(page) ? withMarkdownAlternate(metadata, base, page.path) : metadata
+}
+
+/**
+ * The lookups the proxy already needs for its server-rendered 404 (src/lib/server-not-found.ts),
+ * reused to announce a Markdown variant in the response (`Link` header, src/proxy.ts).
+ */
+export type MarkdownPageLookups = {
+  /** `/doc/<slug>` is a documentation unit (not a former slug that redirects). */
+  docUnitExists?: (slug: string) => boolean
+  /** `/blog/<slug>` is a post. */
+  blogPostExists?: (slug: string) => boolean
+  /** `/ressources/<slug>` is a practical guide. */
+  ressourceExists?: (slug: string) => boolean
+}
+
+/**
+ * The `.md` path of a page whose HTML response may announce its Markdown variant (`Link` header in
+ * the proxy), or null. A public page with a source, the home, a documentation unit, a blog post or
+ * a practical guide. The lookups tell a unit from a former slug (which redirects) and a post or
+ * guide from an unknown one. Pure, but for those lookups; the proxy checks the path again when it serves it
+ * (src/lib/markdown-pages.ts).
+ */
+export function markdownPathForPage(pathname: string, lookups: MarkdownPageLookups = {}): string | null {
+  const path = cleanSitePath(pathname)
+  if (path === null) return null
+  if (path === "/") return markdownPathFor(path)
+  const page = PUBLIC_PAGES.find((candidate) => candidate.path === path)
+  if (page) return page.source && pageAvailable(page) ? markdownPathFor(path) : null
+  const segments = path.split("/").filter(Boolean)
+  if (segments.length !== 2 || segments.some((segment) => segment.includes("."))) return null
+  const [folder, slug] = segments
+  if (folder === "doc") return lookups.docUnitExists?.(slug) ? markdownPathFor(path) : null
+  if (folder === "blog") return lookups.blogPostExists?.(slug) ? markdownPathFor(path) : null
+  if (folder === "ressources") return lookups.ressourceExists?.(slug) ? markdownPathFor(path) : null
+  return null
 }
 
 /**

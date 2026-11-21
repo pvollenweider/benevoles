@@ -22,6 +22,14 @@ export async function llmsSources(full = false): Promise<LlmsSources | null> {
   const h = await headers()
   const hostname = (h.get("host") ?? "").split(":")[0]
   if (h.get("x-org-slug") || !isKnownHost(hostname) || hostname.startsWith("staging.")) return null
+  return loadLlmsSources(full)
+}
+
+/**
+ * The same sources without the host check, for a caller that has made it itself: the proxy, which
+ * serves each page's Markdown variant (src/lib/markdown-request.ts).
+ */
+export function loadLlmsSources(full = false): LlmsSources {
   const read = (file: string) => fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), file), "utf-8")
   // /llms.txt needs the presentation only; /llms-full.txt loads every page's text.
   const pages: LlmsPageSource[] = full
@@ -42,6 +50,8 @@ export async function llmsSources(full = false): Promise<LlmsSources | null> {
   }
 }
 
-export function markdownResponse(text: string): Response {
-  return new Response(text, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } })
+export function markdownResponse(text: string, headers: Record<string, string> = {}): Response {
+  return new Response(text, {
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600", ...headers },
+  })
 }

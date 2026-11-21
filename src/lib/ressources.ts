@@ -7,6 +7,7 @@ import type { Metadata } from "next"
 import { z } from "zod"
 import { parseFrontMatter } from "@/lib/doc-units"
 import { OG_IMAGE_ALT } from "@/lib/landing-seo"
+import { withMarkdownAlternate } from "@/lib/markdown-paths"
 import { seoMetadata } from "@/lib/seo-metadata"
 import { parseCalendarDate } from "@/lib/freshness"
 import { META_DESCRIPTION_MAX, META_DESCRIPTION_MIN, auditedLength } from "@/lib/meta-length"
@@ -144,17 +145,21 @@ export function latestUpdate(guides: readonly Pick<Ressource, "updated">[]): str
   return guides.reduce<string | null>((latest, g) => (latest === null || g.updated > latest ? g.updated : latest), null)
 }
 
-/** A guide's metadata: an article modified the day it was last checked, on the apex host. */
+/** A guide's metadata: an article modified the day it was last checked, on the apex host, with its Markdown variant. */
 export function ressourceMetadata(guide: Ressource, base: string): Metadata {
-  return seoMetadata({
+  return withMarkdownAlternate(
+    seoMetadata({
+      base,
+      path: ressourcePath(guide),
+      title: guide.title,
+      description: guide.summary,
+      type: "article",
+      section: "Ressources",
+      modifiedTime: parseCalendarDate(guide.updated),
+      imagePath: "/og-image.png",
+      imageAlt: OG_IMAGE_ALT,
+    }),
     base,
-    path: ressourcePath(guide),
-    title: guide.title,
-    description: guide.summary,
-    type: "article",
-    section: "Ressources",
-    modifiedTime: parseCalendarDate(guide.updated),
-    imagePath: "/og-image.png",
-    imageAlt: OG_IMAGE_ALT,
-  })
+    ressourcePath(guide),
+  )
 }

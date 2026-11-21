@@ -7,7 +7,7 @@ import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server
 import type { NextAuthRequest } from "next-auth"
 import { ORG_HEADER, withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
-import { apexBaseUrl, configuredAppUrl } from "@/lib/urls"
+import { apexBaseUrl, configuredAppUrl, isKnownHost } from "@/lib/urls"
 import { checkAdminMutation } from "@/lib/request-origin"
 import { createNonce, pageSecurityHeaders } from "@/lib/security-headers"
 import { isServerNotFound, NOT_FOUND_ROUTE } from "@/lib/server-not-found"
@@ -21,6 +21,10 @@ import { isAuthEndpoint } from "@/lib/auth-endpoints"
 import { SECOND_FACTOR_PATH, secondFactorUrl } from "@/lib/second-factor-session"
 import { isFrontDeskRole } from "@/lib/permissions"
 import { frontDeskRedirect } from "@/lib/front-desk-pages"
+import { markdownAnswer } from "@/lib/markdown-request"
+import { loadLlmsSources } from "@/lib/llms-sources"
+import { markdownPathForPage } from "@/lib/doc-pages"
+import { absoluteUrl } from "@/lib/seo-metadata"
 
 const { auth } = NextAuth(authConfig)
 
@@ -32,6 +36,18 @@ function docSlugExists(slug: string): boolean {
   } catch (error) {
     reportError("proxy-not-found-doc")(error)
     return true
+  }
+}
+
+// A former slug of a unit redirects to it; only a current slug has a Markdown variant (the
+// response's Link header, below), so this lookup is stricter than the 404 one.
+function docUnitExists(slug: string): boolean {
+  try {
+    const found = resolveDocSlug(slug, loadDocUnits())
+    return found !== null && "unit" in found
+  } catch (error) {
+    reportError("proxy-markdown-doc")(error)
+    return false
   }
 }
 
@@ -70,18 +86,47 @@ function handle(req: NextAuthRequest): Response {
   // --- Bare domain to the www site (#759): one address per page for search engines. 308 keeps
   // the method and body of a POST. ---
   const host = req.headers.get("host") ?? ""
+  const hostname = host.split(":")[0]
   const apexTarget = apexRedirectUrl(host, `${pathname}${req.nextUrl.search}`, apexBaseUrl())
   if (apexTarget) return NextResponse.redirect(apexTarget, 308)
 
   // --- The apex site's own pages on an organization's host to the www site (#933): the docs,
   // videos, legal and features pages answered on every organization's host too. ---
-  const orgHostTarget = orgHostApexRedirectUrl(host, `${pathname}${req.nextUrl.search}`, apexBaseUrl())
+  // A `.md` request is handled below instead: on an organization's host, staging or an unknown
+  // host it answers 404 like /llms.txt, and the apex has its own route.
+  const orgHostTarget = pathname.endsWith(".md") ? null : orgHostApexRedirectUrl(host, `${pathname}${req.nextUrl.search}`, apexBaseUrl())
   if (orgHostTarget) return NextResponse.redirect(orgHostTarget, 308)
+
+  // --- Organization header ---
+  // [orgSlug].benevol.app (or ?org= without an org subdomain) → x-org-slug for pages and API
+  // routes; a value sent by the client is always dropped first (#541).
+  const requestHeaders = withOrgHeader(req.headers, host, req.nextUrl.searchParams.get("org"))
+  // The admin page's own address, for the super admin's switch to an event's organization
+  // (auth-guard.ts, superAdminEventOrgSwitch); never the client's value.
+  requestHeaders.delete(REQUEST_PATH_HEADER)
+
+  // --- Script and framing policy (src/lib/security-headers.ts): a fresh nonce per request, on the
+  // forwarded request too, where Next.js reads it for its own scripts (any client value replaced). ---
+  const pageHeaders = pageSecurityHeaders(pathname, req.nextUrl.searchParams, { nonce: createNonce(), dev: process.env.NODE_ENV === "development" })
+  for (const { key, value } of pageHeaders) if (key === "Content-Security-Policy") requestHeaders.set(key, value)
 
   // --- Cross-site request forgery (#1048): a state-changing call to the admin APIs must come from
   // one of this site's own pages and carry JSON (policy in src/lib/request-origin.ts). ---
   const refused = checkAdminMutation({ method: req.method, pathname, headers: req.headers, configuredAppUrl: configuredAppUrl(), nodeEnv: process.env.NODE_ENV })
   if (refused) return NextResponse.json({ error: refused.error }, { status: refused.status })
+
+  // --- The Markdown variant of a public page (llmstxt.org): the proxy answers `/x.md` itself on
+  // the apex site, and with the site's 404 on an organization's host, staging, an unknown host or
+  // a page without one (src/lib/markdown-request.ts). After the origin check and before the auth
+  // guards and the 404 lookups: a path with a dot is never an event slug nor an admin page. ---
+  const markdown = markdownAnswer({ pathname, method: req.method, host, hasOrg: requestHeaders.has(ORG_HEADER) }, () => loadLlmsSources(true))
+  if (markdown) {
+    const response = markdown.status === 200
+      ? new NextResponse(req.method === "HEAD" ? null : markdown.body, { status: 200, headers: markdown.headers })
+      : NextResponse.rewrite(new URL(NOT_FOUND_ROUTE, req.url), { request: { headers: requestHeaders } })
+    for (const { key, value } of pageHeaders) response.headers.set(key, value)
+    return response
+  }
 
   // --- Auth guards ---
   const isSuperAdminPath = pathname.startsWith("/super-admin")
@@ -89,6 +134,7 @@ function handle(req: NextAuthRequest): Response {
   const isLoginPage = pathname === "/admin/login"
   const isPublicAdminPage = pathname === "/admin/accept-invite" || pathname === "/admin/reset-password" || pathname === "/admin/forgot-password"
     || pathname === "/admin/reactivate" || pathname === "/admin/reactivate/confirm" || pathname === "/admin/keep"
+  if (isAdminPath) requestHeaders.set(REQUEST_PATH_HEADER, `${pathname}${req.nextUrl.search}`)
 
   // --- Second factor (pentest F6): a super admin signed in with the password only reaches the
   // two-factor page and nothing else of the admin, before any role check (the role is masked in
@@ -126,20 +172,6 @@ function handle(req: NextAuthRequest): Response {
     return Response.redirect(loginUrl)
   }
 
-  // --- Organization header ---
-  // [orgSlug].benevol.app (or ?org= without an org subdomain) → x-org-slug for pages and API
-  // routes; a value sent by the client is always dropped first (#541).
-  const requestHeaders = withOrgHeader(req.headers, host, req.nextUrl.searchParams.get("org"))
-  // The admin page's own address, for the super admin's switch to an event's organization
-  // (auth-guard.ts, superAdminEventOrgSwitch); never the client's value.
-  requestHeaders.delete(REQUEST_PATH_HEADER)
-  if (isAdminPath) requestHeaders.set(REQUEST_PATH_HEADER, `${pathname}${req.nextUrl.search}`)
-
-  // --- Script and framing policy (src/lib/security-headers.ts): a fresh nonce per request, on the
-  // forwarded request too, where Next.js reads it for its own scripts (any client value replaced). ---
-  const pageHeaders = pageSecurityHeaders(pathname, req.nextUrl.searchParams, { nonce: createNonce(), dev: process.env.NODE_ENV === "development" })
-  for (const { key, value } of pageHeaders) if (key === "Content-Security-Policy") requestHeaders.set(key, value)
-
   // --- A 404 rendered on the server (#935): what is known missing here is answered by the
   // not-found page itself, whose HTML carries the page; `notFound()` during a page's render only
   // sends an empty document that the browser fills in. See src/lib/server-not-found.ts. ---
@@ -149,6 +181,12 @@ function handle(req: NextAuthRequest): Response {
     : NextResponse.next({ request: { headers: requestHeaders } })
   // Framing (#948) refused everywhere but the embeddable sign-up; scripts by nonce and hash only.
   for (const { key, value } of pageHeaders) response.headers.set(key, value)
+  // The Markdown variant of a covered HTML page, announced in the response as in its metadata.
+  // A page without one, a 404, an organization's host, staging and an unknown host send no header.
+  if (!notFound && (req.method === "GET" || req.method === "HEAD") && !requestHeaders.has(ORG_HEADER) && isKnownHost(hostname) && !hostname.startsWith("staging.")) {
+    const markdownPath = markdownPathForPage(pathname, { docUnitExists, blogPostExists, ressourceExists })
+    if (markdownPath) response.headers.append("Link", `<${absoluteUrl(apexBaseUrl(), markdownPath)}>; rel="alternate"; type="text/markdown"`)
+  }
   return response
 }
 

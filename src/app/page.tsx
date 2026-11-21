@@ -20,6 +20,7 @@ import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } f
 import LandingStartGuides from "@/components/public/LandingStartGuides"
 import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 import { isHostedService } from "@/lib/site"
+import { withMarkdownAlternate } from "@/lib/markdown-paths"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { isSignupOpen } from "@/lib/signup-switch"
 import { env } from "@/lib/env"
@@ -218,16 +219,20 @@ const BENEFITS = [
   },
 ]
 
-/** The home of an instance that is not the hosted service (#760): its marketing describes that service. */
+/** The home of an instance that is not the hosted service (#760): its marketing describes that service, with the home's Markdown variant. */
 function instanceHomeMetadata(base: string): Metadata {
-  return seoMetadata({
+  return withMarkdownAlternate(
+    seoMetadata({
+      base,
+      path: "/",
+      title: "Planning et inscriptions des bénévoles",
+      description: `${SITE_NAME} : le planning des bénévoles, les inscriptions en ligne par créneau, les rappels et le jour J, pour les associations de cette instance.`,
+      type: "website",
+      imageAlt: SITE_NAME,
+    }),
     base,
-    path: "/",
-    title: "Planning et inscriptions des bénévoles",
-    description: `${SITE_NAME} : le planning des bénévoles, les inscriptions en ligne par créneau, les rappels et le jour J, pour les associations de cette instance.`,
-    type: "website",
-    imageAlt: SITE_NAME,
-  })
+    "/",
+  )
 }
 
 async function InstanceHome() {
