@@ -553,6 +553,9 @@ npm run video:regress -- --dir "$TUTOCAST_BASELINE" --slug event-reports
 npm run video:regress -- --dir "$TUTOCAST_BASELINE" --accept --note "changement voulu : ..."
 ```
 
+`add` refuse un ensemble dont l'audio de narration ne correspond pas à son audit et à ses
+enregistrements de génération, avant d'avoir copié quoi que ce soit.
+
 `--accept` refuse un run invalide et exige une note : le golden devient la référence des
 comparaisons suivantes, on ne l'accepte donc que lorsqu'on a compris et voulu la différence.
 `--slug` limite la boucle à une vidéo, `--keep` conserve le dossier temporaire de travail pour

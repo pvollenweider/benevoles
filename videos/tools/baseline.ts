@@ -11,14 +11,18 @@
  *   npm run video:baseline -- verify --dir <baseline>
  *
  * `add` refuses to replace a video whose golden run was accepted unless `--replace` is given, and
- * every command that changes the folder ends with `writeInventory`, so `inventory.json` always
- * describes what is on disk. Nothing from a baseline folder is ever written to Git.
+ * refuses a source set whose narration audio does not match its audit and generation records,
+ * before copying anything. Every command that changes the folder ends with `writeInventory`, so
+ * `inventory.json` always describes what is on disk. Nothing from a baseline folder is ever
+ * written to Git.
  */
 import { execFile } from "node:child_process"
+import { createHash } from "node:crypto"
 import { existsSync } from "node:fs"
 import { copyFile, lstat, mkdir, readFile, readdir, rm } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
+import { setConsistencyIssues, type SetUnderCheck } from "../lib/baseline-consistency"
 import {
   assertUnchanged,
   hashTree,
@@ -100,6 +104,18 @@ async function copyInto(source: string, destination: string): Promise<void> {
   await copyFile(source, destination)
 }
 
+async function readSourceJson<T>(file: string, slug: string): Promise<T> {
+  try {
+    return JSON.parse(await readFile(file, "utf8")) as T
+  } catch (error) {
+    throw new Error(`${slug}: cannot read ${file}: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
+function sha256(bytes: Buffer): string {
+  return createHash("sha256").update(bytes).digest("hex")
+}
+
 type ResolvedCopy = { source: string; destination: string }
 
 type AddPlan = {
@@ -142,6 +158,7 @@ async function planAdd(
 ): Promise<AddPlanResult> {
   const catalog = await loadCatalog()
   const plans: AddPlan[] = []
+  const consistency: string[] = []
   for (const slug of slugs) {
     const catalogVideo = catalog.videos.find((video) => video.manifest === slug)
     if (!catalogVideo) throw new Error(`Unknown video slug "${slug}": no catalog entry has that manifest.`)
@@ -184,7 +201,31 @@ async function planAdd(
       await requireSourceFile(source, slug)
       copies.push({ source, destination: path.join(dir, ...relative.split("/")) })
     }
+
+    // Every source exists now: prove that this set can be assembled before the baseline is touched.
+    const sourceManifest = await readSourceJson<SetUnderCheck["manifest"]>(path.join(videosRoot, "manifests", `${slug}.json`), slug)
+    const audio = await readSourceJson<SetUnderCheck["audio"]>(path.join(sourceDir, "audio-metadata.json"), slug)
+    const audit = await readSourceJson<SetUnderCheck["audit"]>(path.join(sourceDir, "narration-audit.json"), slug)
+    const audioSha256: Record<string, string> = {}
+    for (const segment of Object.values(audio.segments)) {
+      if (typeof segment?.file !== "string" || !segment.file.startsWith("audio/")) continue
+      const name = segment.file.slice("audio/".length)
+      if (unsafeFileName(name)) continue
+      try {
+        audioSha256[segment.file] = sha256(await readFile(path.join(sourceDir, "audio", name)))
+      } catch {
+        // Absent from disk: `setConsistencyIssues` reports the missing checksum.
+      }
+    }
+    for (const issue of setConsistencyIssues({ manifest: sourceManifest, timeline, audio, audit, audioSha256 })) {
+      consistency.push(`${slug}: ${issue}`)
+    }
+
     plans.push({ slug, id: catalogVideo.id, productCommit: timeline.product.commit, copies })
+  }
+
+  if (consistency.length) {
+    throw new Error(`Source set not coherent; nothing was copied. Every problem found:\n${consistency.join("\n")}`)
   }
 
   const catalogCopy = { source: path.join(videosRoot, "catalog.json"), destination: path.join(dir, "videos", "catalog.json") }
