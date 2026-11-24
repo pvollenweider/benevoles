@@ -6,6 +6,7 @@ import {
   buildRunFacts,
   firstDifferingLine,
   inventoryMetadata,
+  missingFrames,
   parseFrameRate,
   parseProbeOutput,
   validationIssuesFromRun,
@@ -68,6 +69,28 @@ describe("parseProbeOutput", () => {
     expect(() => parseProbeOutput(JSON.stringify({ format: { duration: "10" } }))).toThrow(/ffprobe/)
     expect(() => parseProbeOutput(JSON.stringify({ streams: [{ r_frame_rate: "25/1" }], format: { duration: "10" } }))).toThrow(/ffprobe/)
     expect(() => parseProbeOutput(JSON.stringify({ streams: [{ width: 1, height: 2, r_frame_rate: "25/1" }] }))).toThrow(/ffprobe/)
+  })
+})
+
+describe("missingFrames", () => {
+  it("returns no missing time when every frame is present and non-empty", () => {
+    expect(missingFrames([0, 1_500, 3_000], { 0: 10, 1_500: 20, 3_000: 30 })).toEqual([])
+  })
+
+  it("returns a sampled time with no frame file", () => {
+    expect(missingFrames([0, 1_500, 3_000], { 0: 10, 3_000: 30 })).toEqual([1_500])
+  })
+
+  it("returns a sampled time whose frame file is empty", () => {
+    expect(missingFrames([0, 1_500], { 0: 10, 1_500: 0 })).toEqual([1_500])
+  })
+
+  it("returns no time for an empty sample list", () => {
+    expect(missingFrames([], {})).toEqual([])
+  })
+
+  it("keeps the sample order and reports every missing time", () => {
+    expect(missingFrames([3_000, 0, 1_500], { 1_500: 7 })).toEqual([3_000, 0])
   })
 })
 

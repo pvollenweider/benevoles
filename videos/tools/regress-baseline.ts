@@ -14,7 +14,7 @@
  */
 import { execFile } from "node:child_process"
 import { existsSync } from "node:fs"
-import { copyFile, mkdir, mkdtemp, readdir, readFile, rm, stat, writeFile } from "node:fs/promises"
+import { copyFile, mkdir, mkdtemp, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { promisify } from "node:util"
@@ -33,6 +33,7 @@ import { compareRuns, failing, type Finding, type RunFacts } from "../lib/regres
 import {
   buildRunFacts,
   inventoryMetadata,
+  missingFrames,
   parseProbeOutput,
   validationIssuesFromRun,
   valueSummary,
@@ -228,8 +229,9 @@ async function collectRun(options: CollectOptions): Promise<CollectedRun> {
 
   const framesDir = path.join(work, "regression-frames")
   await mkdir(framesDir, { recursive: true })
-  const frames: { atMs: number; ssim: number }[] = []
-  for (const atMs of frameSampleTimes(timelineAfter)) {
+  const sampleTimes = frameSampleTimes(timelineAfter)
+  const frameSizes: Record<number, number> = {}
+  for (const atMs of sampleTimes) {
     const png = path.join(framesDir, `${atMs}.png`)
     const seconds = (atMs / 1_000).toFixed(3)
     const extracted = await run("ffmpeg", [
@@ -240,6 +242,19 @@ async function collectRun(options: CollectOptions): Promise<CollectedRun> {
       printTail(`extraction à ${atMs} ms`, extracted)
       throw new Error(`Extraction de l'image à ${atMs} ms impossible pour ${slug}.`)
     }
+    // FFmpeg 8.1.1 exits 0 without writing anything when `-ss` is past the end of the video.
+    frameSizes[atMs] = await stat(png).then((stats) => stats.size).catch(() => 0)
+  }
+  const missing = missingFrames(sampleTimes, frameSizes)
+  if (missing.length) {
+    throw new Error(
+      `${slug} : aucune image extraite aux temps ${missing.join(", ")} ms ; ffmpeg a réussi sans écrire de fichier (vidéo plus courte que la timeline ?).`,
+    )
+  }
+
+  const frames: { atMs: number; ssim: number }[] = []
+  for (const atMs of sampleTimes) {
+    const png = path.join(framesDir, `${atMs}.png`)
     let ssim = 1
     if (!accept) {
       const goldenPng = path.join(dir, "golden", slug, "frames", `${atMs}.png`)
@@ -265,7 +280,11 @@ async function collectRun(options: CollectOptions): Promise<CollectedRun> {
   return { facts, framesDir, vttPath, txtPath }
 }
 
-/** Replaces `golden/<slug>/` with this valid run and rewrites the inventory. */
+/**
+ * Builds the new golden in a staging directory beside the final one, then swaps it in. A failure
+ * while staging removes the staging directory: the previous golden and the inventory stay exactly
+ * as they were, so a later run can still repair the baseline.
+ */
 async function acceptGolden(
   dir: string,
   slug: string,
@@ -274,15 +293,24 @@ async function acceptGolden(
   inventory: BaselineInventory,
 ): Promise<BaselineInventory> {
   const goldenDir = path.join(dir, "golden", slug)
-  await rm(goldenDir, { recursive: true, force: true })
-  await mkdir(path.join(goldenDir, "frames"), { recursive: true })
-  await copyFile(run.vttPath, path.join(goldenDir, `${slug}.vtt`))
-  await copyFile(run.txtPath, path.join(goldenDir, `${slug}.txt`))
-  for (const frame of run.facts.frames) {
-    await copyFile(path.join(run.framesDir, `${frame.atMs}.png`), path.join(goldenDir, "frames", `${frame.atMs}.png`))
+  const stagingDir = path.join(dir, "golden", `.${slug}.new`)
+  await rm(stagingDir, { recursive: true, force: true })
+  try {
+    const stagingFrames = path.join(stagingDir, "frames")
+    await mkdir(stagingFrames, { recursive: true })
+    await copyFile(run.vttPath, path.join(stagingDir, `${slug}.vtt`))
+    await copyFile(run.txtPath, path.join(stagingDir, `${slug}.txt`))
+    for (const frame of run.facts.frames) {
+      await copyFile(path.join(run.framesDir, `${frame.atMs}.png`), path.join(stagingFrames, `${frame.atMs}.png`))
+    }
+    const facts: RunFacts = { ...run.facts, frames: run.facts.frames.map(({ atMs }) => ({ atMs, ssim: 1 })) }
+    await writeFile(path.join(stagingDir, "facts.json"), `${JSON.stringify(facts, null, 2)}\n`, "utf8")
+    await rm(goldenDir, { recursive: true, force: true })
+    await rename(stagingDir, goldenDir)
+  } catch (error) {
+    await rm(stagingDir, { recursive: true, force: true }).catch(() => {})
+    throw error
   }
-  const facts: RunFacts = { ...run.facts, frames: run.facts.frames.map(({ atMs }) => ({ atMs, ssim: 1 })) }
-  await writeFile(path.join(goldenDir, "facts.json"), `${JSON.stringify(facts, null, 2)}\n`, "utf8")
 
   inventory.videos[slug] = { ...inventory.videos[slug], golden: { acceptedAt: new Date().toISOString(), note } }
   return writeInventory(dir, inventoryMetadata(inventory))
@@ -394,13 +422,20 @@ async function main(): Promise<void> {
   const requestedSlug = option("--slug")
 
   const inventory = await readBaseline(dir)
+  const available = Object.keys(inventory.videos).sort()
+  // `hashTree` walks golden/, including a staging directory left by an interrupted acceptance:
+  // remove it before the inventory check so the baseline can still be repaired.
+  if (accept) {
+    for (const slug of requestedSlug ? [requestedSlug] : available) {
+      await rm(path.join(dir, "golden", `.${slug}.new`), { recursive: true, force: true })
+    }
+  }
   const issues = inventoryIssues(inventory, await hashTree(dir))
   if (issues.length) {
     for (const issue of issues) console.error(issue)
     throw new Error(`${dir} : ${issues.length} problème(s), le dossier ne correspond plus à inventory.json ; rien n'a été assemblé.`)
   }
 
-  const available = Object.keys(inventory.videos).sort()
   if (requestedSlug && !inventory.videos[requestedSlug]) {
     throw new Error(`${requestedSlug} n'est pas une vidéo de la baseline ${dir}.`)
   }

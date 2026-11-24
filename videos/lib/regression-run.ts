@@ -105,6 +105,16 @@ export function parseProbeOutput(stdout: string): ProbeFacts {
   }
 }
 
+/**
+ * The sample times whose frame file is absent or empty, in sample order. `present` maps a sample
+ * time to the byte size of the PNG written for it; a time missing from the map has no file. FFmpeg
+ * 8.1.1 exits 0 and writes nothing when `-ss` lies past the end of the video, so a regression that
+ * shortens the capture must fail here instead of producing a partial golden.
+ */
+export function missingFrames(atMs: number[], present: Record<number, number>): number[] {
+  return atMs.filter((time) => !(present[time] > 0))
+}
+
 function intervals(values: Interval[] | undefined): Interval[] {
   return (values ?? []).map(({ startMs, endMs }) => ({ startMs, endMs }))
 }
