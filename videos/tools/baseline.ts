@@ -30,6 +30,7 @@ import {
   readBaseline,
   unsafeFileName,
   videoInputFiles,
+  withBaselineLock,
   writeInventory,
   type BaselineInventory,
 } from "../lib/baseline-inventory"
@@ -240,16 +241,14 @@ async function planAdd(
   return { plans, catalog: catalogCopy, music }
 }
 
-async function add(): Promise<void> {
-  const dir = required("--dir")
-  const from = required("--from")
-  const musicSource = required("--music")
-  const slugs = required("--slugs")
-    .split(",")
-    .map((slug) => slug.trim())
-    .filter(Boolean)
-  if (!slugs.length) throw new Error(`--slugs is empty\n\n${USAGE}`)
-  const replace = args.includes("--replace")
+/** Adds the requested videos; the caller creates the folder and holds its lock for the whole call. */
+async function addLocked(
+  dir: string,
+  from: string,
+  musicSource: string,
+  slugs: string[],
+  replace: boolean,
+): Promise<void> {
   const existing = existsSync(path.join(dir, "inventory.json")) ? await readBaseline(dir) : null
   const { plans, catalog, music } = await planAdd(dir, from, slugs, musicSource, replace, existing)
 
@@ -304,13 +303,31 @@ async function add(): Promise<void> {
   console.log("Un ensemble n'est confirmé que par son premier run golden accepté : npm run video:regress -- --accept --note \"<raison>\".")
 }
 
+async function add(): Promise<void> {
+  const dir = required("--dir")
+  const from = required("--from")
+  const musicSource = required("--music")
+  const slugs = required("--slugs")
+    .split(",")
+    .map((slug) => slug.trim())
+    .filter(Boolean)
+  if (!slugs.length) throw new Error(`--slugs is empty\n\n${USAGE}`)
+  const replace = args.includes("--replace")
+  // `add` may be the command that creates the folder: create it before the lock so the lock file
+  // has a home.
+  await mkdir(dir, { recursive: true })
+  await withBaselineLock(dir, "video:baseline add", () => addLocked(dir, from, musicSource, slugs, replace))
+}
+
 async function setBackup(): Promise<void> {
   const dir = required("--dir")
   const location = required("--location")
-  const inventory = await readBaseline(dir)
-  await assertUnchanged(dir, inventory)
-  const written = await writeInventory(dir, { ...metadata(inventory), backup: location })
-  console.log(`${dir} : deuxième copie déclarée dans ${location} ; ${Object.keys(written.files).length} fichier(s) inventorié(s).`)
+  await withBaselineLock(dir, "video:baseline set-backup", async () => {
+    const inventory = await readBaseline(dir)
+    await assertUnchanged(dir, inventory)
+    const written = await writeInventory(dir, { ...metadata(inventory), backup: location })
+    console.log(`${dir} : deuxième copie déclarée dans ${location} ; ${Object.keys(written.files).length} fichier(s) inventorié(s).`)
+  })
 }
 
 async function verify(): Promise<void> {

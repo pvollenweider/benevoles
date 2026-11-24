@@ -12,7 +12,7 @@
  */
 import { createHash } from "node:crypto"
 import { createReadStream } from "node:fs"
-import { lstat, mkdir, readdir, readFile, writeFile } from "node:fs/promises"
+import { lstat, mkdir, open, readdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 export type FileFact = { sha256: string; bytes: number }
@@ -115,6 +115,130 @@ export async function readBaseline(dir: string): Promise<BaselineInventory> {
     const code = (error as NodeJS.ErrnoException).code
     if (code === "ENOENT" || code === "ENOTDIR") throw new Error(missingBaselineMessage(dir))
     throw error
+  }
+}
+
+/** The content of a baseline lock file: who holds the folder and since when. */
+export type BaselineLock = { pid: number; command: string; startedAt: string }
+
+/** The lock file of a baseline folder; it lives outside the roots `hashTree` walks. */
+const LOCK_FILE = ".lock"
+
+/**
+ * What to do with a lock file found before a command. A missing file is free; a stale one (no
+ * process, or unreadable content) can be removed and taken; a live holder means the command must
+ * wait instead of colliding with it.
+ */
+export function lockDecision(
+  existing: BaselineLock | "unreadable" | null,
+  alive: boolean,
+): "take" | "take-stale" | "refuse" {
+  if (existing === null) return "take"
+  if (existing === "unreadable") return "take-stale"
+  return alive ? "refuse" : "take-stale"
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+/** Reads a lock file; `null` when absent and `"unreadable"` when it does not carry the expected fields. */
+async function readLock(file: string): Promise<BaselineLock | "unreadable" | null> {
+  let text: string
+  try {
+    text = await readFile(file, "utf8")
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null
+    return "unreadable"
+  }
+  try {
+    const value: unknown = JSON.parse(text)
+    if (
+      isRecord(value)
+      && typeof value.pid === "number" && Number.isSafeInteger(value.pid) && value.pid > 0
+      && typeof value.command === "string"
+      && typeof value.startedAt === "string"
+    ) {
+      return { pid: value.pid, command: value.command, startedAt: value.startedAt }
+    }
+  } catch {
+    // Not JSON: the lock is unreadable and treated as stale below.
+  }
+  return "unreadable"
+}
+
+/** True when a process with this pid exists (`EPERM` means it exists but belongs to someone else). */
+function isProcessAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch (error) {
+    return (error as NodeJS.ErrnoException).code === "EPERM"
+  }
+}
+
+/** Creates the lock file exclusively and writes its one JSON line. */
+async function createLockFile(file: string, command: string): Promise<void> {
+  const handle = await open(file, "wx")
+  try {
+    await handle.writeFile(`${JSON.stringify({ pid: process.pid, command, startedAt: new Date().toISOString() })}\n`, "utf8")
+  } catch (error) {
+    await handle.close().catch(() => {})
+    await rm(file, { force: true }).catch(() => {})
+    throw error
+  }
+  await handle.close()
+}
+
+/**
+ * Takes the lock of a baseline folder, or returns false when the folder does not exist (nothing to
+ * protect; the caller's own missing-baseline message follows). A live holder is refused with the
+ * folder, its pid, its command and its start time; a stale or unreadable lock is announced, removed
+ * and taken over.
+ */
+async function acquireLock(dir: string, file: string, command: string): Promise<boolean> {
+  for (let attempt = 0; attempt < 10; attempt++) {
+    try {
+      await createLockFile(file, command)
+      return true
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code
+      if (code === "ENOENT") return false
+      if (code !== "EEXIST") throw error
+      const existing = await readLock(file)
+      const alive = existing !== null && existing !== "unreadable" && isProcessAlive(existing.pid)
+      const decision = lockDecision(existing, alive)
+      if (decision === "refuse") {
+        const lock = existing as BaselineLock
+        throw new Error(
+          `Baseline ${dir} is locked by process ${lock.pid} (${lock.command}, started ${lock.startedAt}); wait for it to finish or check that process before retrying.`,
+        )
+      }
+      // The file vanished between the failed exclusive open and the read: just try again.
+      if (decision === "take" || existing === null) continue
+      const stale = existing === "unreadable"
+        ? "unreadable lock file"
+        : `stale lock of process ${existing.pid} (${existing.command}, started ${existing.startedAt})`
+      console.log(`${dir} : ${stale} removed, taking the lock.`)
+      await rm(file, { force: true })
+    }
+  }
+  throw new Error(`Could not take the baseline lock ${file}: too many concurrent attempts.`)
+}
+
+/**
+ * Runs `body` as the only command on the baseline folder `dir`, with `<dir>/.lock` held for the
+ * whole call and always released, including when `body` throws. The folder must already exist for
+ * `add`, which creates it first; a missing folder simply has no lock to take.
+ */
+export async function withBaselineLock<T>(dir: string, command: string, body: () => Promise<T>): Promise<T> {
+  const file = path.join(dir, LOCK_FILE)
+  const locked = await acquireLock(dir, file, command)
+  if (!locked) return body()
+  try {
+    return await body()
+  } finally {
+    await rm(file, { force: true })
   }
 }
 

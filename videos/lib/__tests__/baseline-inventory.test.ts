@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { createHash } from "node:crypto"
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
@@ -11,9 +11,11 @@ import {
   baselineReadme,
   hashTree,
   inventoryIssues,
+  lockDecision,
   readBaseline,
   unsafeFileName,
   videoInputFiles,
+  withBaselineLock,
   writeInventory,
   type BaselineInventory,
   type FileFact,
@@ -141,6 +143,93 @@ describe("hashTree", () => {
       "README.md": { sha256: sha256("restore"), bytes: 7 },
       "videos/output/a/timeline.json": { sha256: sha256('{"cues":[]}'), bytes: 11 },
     })
+  })
+})
+
+describe("lockDecision", () => {
+  const lock = { pid: 42, command: "video:baseline add", startedAt: "2026-11-24T12:00:00.000Z" }
+
+  it("takes the lock when there is no file", () => {
+    expect(lockDecision(null, false)).toBe("take")
+    expect(lockDecision(null, true)).toBe("take")
+  })
+
+  it("takes an unreadable file as a stale lock", () => {
+    expect(lockDecision("unreadable", false)).toBe("take-stale")
+    expect(lockDecision("unreadable", true)).toBe("take-stale")
+  })
+
+  it("takes the lock of a process that no longer exists as stale", () => {
+    expect(lockDecision(lock, false)).toBe("take-stale")
+  })
+
+  it("refuses the lock of a live process", () => {
+    expect(lockDecision(lock, true)).toBe("refuse")
+  })
+})
+
+describe("withBaselineLock", () => {
+  function lockFile(directory: string): string {
+    return path.join(directory, ".lock")
+  }
+
+  it("holds the lock while the body runs and releases it afterwards", async () => {
+    const directory = await temporaryDirectory()
+    let held = false
+    await withBaselineLock(directory, "video:baseline add", async () => {
+      const lock = JSON.parse(await readFile(lockFile(directory), "utf8")) as { pid: number; command: string; startedAt: string }
+      expect(lock.pid).toBe(process.pid)
+      expect(lock.command).toBe("video:baseline add")
+      expect(Number.isNaN(Date.parse(lock.startedAt))).toBe(false)
+      held = true
+    })
+
+    expect(held).toBe(true)
+    await expect(stat(lockFile(directory))).rejects.toMatchObject({ code: "ENOENT" })
+  })
+
+  it("releases the lock when the body throws", async () => {
+    const directory = await temporaryDirectory()
+
+    await expect(withBaselineLock(directory, "video:baseline add", async () => {
+      throw new Error("body failed")
+    })).rejects.toThrow("body failed")
+
+    await expect(stat(lockFile(directory))).rejects.toMatchObject({ code: "ENOENT" })
+  })
+
+  it("refuses a second command while the lock is held, naming the pid and the command", async () => {
+    const directory = await temporaryDirectory()
+
+    await withBaselineLock(directory, "video:baseline add", async () => {
+      const error = await withBaselineLock(directory, "video:baseline set-backup", async () => {})
+        .then(() => null, (reason: unknown) => reason as Error)
+      expect(error).toBeInstanceOf(Error)
+      expect(error!.message).toContain(directory)
+      expect(error!.message).toContain(String(process.pid))
+      expect(error!.message).toContain("video:baseline add")
+    })
+
+    await expect(stat(lockFile(directory))).rejects.toMatchObject({ code: "ENOENT" })
+  })
+
+  it("replaces the lock of a process that no longer exists and runs the body", async () => {
+    const directory = await temporaryDirectory()
+    await writeFile(lockFile(directory), `${JSON.stringify({
+      pid: 2_147_483_646,
+      command: "video:regress compare",
+      startedAt: "2026-11-24T12:00:00.000Z",
+    })}\n`, "utf8")
+
+    let ran = false
+    await withBaselineLock(directory, "video:baseline add", async () => {
+      const lock = JSON.parse(await readFile(lockFile(directory), "utf8")) as { pid: number }
+      expect(lock.pid).toBe(process.pid)
+      ran = true
+    })
+
+    expect(ran).toBe(true)
+    await expect(stat(lockFile(directory))).rejects.toMatchObject({ code: "ENOENT" })
   })
 })
 

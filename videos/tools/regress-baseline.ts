@@ -24,6 +24,7 @@ import {
   readBaseline,
   unsafeFileName,
   videoInputFiles,
+  withBaselineLock,
   writeInventory,
   type BaselineInventory,
 } from "../lib/baseline-inventory"
@@ -461,16 +462,14 @@ async function recoverGolden(
   }
 }
 
-async function main(): Promise<void> {
-  const dir = path.resolve(required("--dir"))
-  const accept = args.includes("--accept")
-  const keep = args.includes("--keep")
-  const note = option("--note")
-  if (accept && !note?.trim()) {
-    throw new Error(`--accept exige --note "<raison>" : un golden n'est accepté que pour un changement voulu.\n\n${USAGE}`)
-  }
-  const requestedSlug = option("--slug")
-
+/** Runs the requested videos; the caller holds the baseline lock for the whole call. */
+async function regress(
+  dir: string,
+  accept: boolean,
+  keep: boolean,
+  note: string | undefined,
+  requestedSlug: string | undefined,
+): Promise<void> {
   const inventory = await readBaseline(dir)
   const available = Object.keys(inventory.videos).sort()
   // The slug becomes part of a path under golden/: validate it against the inventory before the
@@ -504,6 +503,22 @@ async function main(): Promise<void> {
     if (!result.ok) failed = true
   }
   if (failed) process.exitCode = 1
+}
+
+async function main(): Promise<void> {
+  const dir = path.resolve(required("--dir"))
+  const accept = args.includes("--accept")
+  const keep = args.includes("--keep")
+  const note = option("--note")
+  if (accept && !note?.trim()) {
+    throw new Error(`--accept exige --note "<raison>" : un golden n'est accepté que pour un changement voulu.\n\n${USAGE}`)
+  }
+  const requestedSlug = option("--slug")
+
+  // One command at a time per baseline folder: the lock is taken before `readBaseline`, so a compare
+  // can never see an acceptance's staging and aside directories and "recover" them.
+  await withBaselineLock(dir, accept ? "video:regress --accept" : "video:regress compare", () =>
+    regress(dir, accept, keep, note, requestedSlug))
 }
 
 main().catch((error) => {
