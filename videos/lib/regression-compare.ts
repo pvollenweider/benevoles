@@ -43,6 +43,15 @@ export const failing = (findings: Finding[]) => findings.filter((finding) => fin
 /** Decimal values from JSON and FFmpeg are binary floats: a gap written as the tolerance itself must stay inside it. */
 const FLOAT_EPSILON = 1e-9
 
+/**
+ * A comparable value must be a real number. FFmpeg prints `0/0` for some streams and `-inf` for
+ * silence, so a NaN or infinite value is not a measurement and can never be inside a tolerance:
+ * `Math.abs(NaN - x) > tolerance` is false, which used to hide the finding.
+ */
+function isFiniteNumber(value: number): boolean {
+  return Number.isFinite(value)
+}
+
 function beyondTolerance(observed: number, expected: number, tolerance: number): boolean {
   return Math.abs(observed - expected) > tolerance + FLOAT_EPSILON
 }
@@ -75,6 +84,16 @@ export function compareRuns(golden: RunFacts, actual: RunFacts): Finding[] {
   const tolerance = (field: string, expected: unknown, observed: unknown) => {
     findings.push({ class: "tolerance", field, golden: expected, actual: observed })
   }
+  const toleranceNumber = (field: string, expected: number, observed: number, allowed: number) => {
+    if (!isFiniteNumber(expected) || !isFiniteNumber(observed) || beyondTolerance(observed, expected, allowed)) {
+      tolerance(field, expected, observed)
+    }
+  }
+
+  // A frame rate is needed to judge the duration: an unusable one is a strict failure even when
+  // both runs carry the same invalid value, and the duration below cannot be judged either.
+  const frameRateUsable = isFiniteNumber(golden.frameRate) && golden.frameRate > 0
+    && isFiniteNumber(actual.frameRate) && actual.frameRate > 0
 
   // Strict: text, structure and the list of sampled moments.
   strict("vtt", golden.vtt, actual.vtt)
@@ -91,7 +110,8 @@ export function compareRuns(golden: RunFacts, actual: RunFacts): Finding[] {
   strict("framing.mailpitBodyOnly", golden.framing.mailpitBodyOnly, actual.framing.mailpitBodyOnly)
   strict("size.width", golden.size.width, actual.size.width)
   strict("size.height", golden.size.height, actual.size.height)
-  strict("frameRate", golden.frameRate, actual.frameRate)
+  if (frameRateUsable) strict("frameRate", golden.frameRate, actual.frameRate)
+  else findings.push({ class: "strict", field: "frameRate", golden: golden.frameRate, actual: actual.frameRate })
   strict("frames[].atMs", golden.frames.map((frame) => frame.atMs), actual.frames.map((frame) => frame.atMs))
 
   // Strict: the set of loudness segments is structure, even when their gains move within tolerance.
@@ -112,26 +132,24 @@ export function compareRuns(golden: RunFacts, actual: RunFacts): Finding[] {
   }
 
   // Tolerance: one frame of duration at the golden frame rate, loudness, frames, still pictures.
-  const durationToleranceMs = (TOLERANCES.durationFrames * 1_000) / golden.frameRate
-  if (beyondTolerance(actual.durationMs, golden.durationMs, durationToleranceMs)) {
+  if (!frameRateUsable || !isFiniteNumber(golden.durationMs) || !isFiniteNumber(actual.durationMs)) {
+    tolerance("durationMs", golden.durationMs, actual.durationMs)
+  } else if (beyondTolerance(actual.durationMs, golden.durationMs, (TOLERANCES.durationFrames * 1_000) / golden.frameRate)) {
     tolerance("durationMs", golden.durationMs, actual.durationMs)
   }
-  if (beyondTolerance(actual.loudness.smallestGapLu, golden.loudness.smallestGapLu, TOLERANCES.loudnessLu)) {
-    tolerance("loudness.smallestGapLu", golden.loudness.smallestGapLu, actual.loudness.smallestGapLu)
-  }
-  if (beyondTolerance(actual.loudness.largestGapLu, golden.loudness.largestGapLu, TOLERANCES.loudnessLu)) {
-    tolerance("loudness.largestGapLu", golden.loudness.largestGapLu, actual.loudness.largestGapLu)
-  }
+  toleranceNumber("loudness.smallestGapLu", golden.loudness.smallestGapLu, actual.loudness.smallestGapLu, TOLERANCES.loudnessLu)
+  toleranceNumber("loudness.largestGapLu", golden.loudness.largestGapLu, actual.loudness.largestGapLu, TOLERANCES.loudnessLu)
   for (const key of segmentKeys) {
     if (!inGolden(key) || !inActual(key)) continue
-    if (beyondTolerance(actualSegments[key], goldenSegments[key], TOLERANCES.segmentGainDb)) {
-      tolerance(`loudness.segmentGainsDb.${key}`, goldenSegments[key], actualSegments[key])
-    }
+    toleranceNumber(`loudness.segmentGainsDb.${key}`, goldenSegments[key], actualSegments[key], TOLERANCES.segmentGainDb)
   }
   for (const frame of actual.frames) {
-    if (frame.ssim >= TOLERANCES.ssimMin) continue
     const goldenFrame = golden.frames.find((candidate) => candidate.atMs === frame.atMs)
-    tolerance(`frames[${frame.atMs}].ssim`, goldenFrame?.ssim ?? null, frame.ssim)
+    // A sampled moment absent from the golden is a structural difference, already strict above.
+    if (goldenFrame === undefined) continue
+    if (!isFiniteNumber(goldenFrame.ssim) || !isFiniteNumber(frame.ssim) || frame.ssim < TOLERANCES.ssimMin) {
+      tolerance(`frames[${frame.atMs}].ssim`, goldenFrame.ssim, frame.ssim)
+    }
   }
   const newBlack = newStretches(golden.black, actual.black, TOLERANCES.stretchMs)
   if (newBlack.length) tolerance("black", golden.black, newBlack)

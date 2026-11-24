@@ -124,6 +124,73 @@ describe("compareRuns", () => {
     ])
   })
 
+  it("reports a non-finite actual quietness gap", () => {
+    const golden = facts()
+    const actual = facts({ loudness: { ...golden.loudness, smallestGapLu: Number.NaN } })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "tolerance", field: "loudness.smallestGapLu", golden: 3.5, actual: Number.NaN },
+    ])
+  })
+
+  it("reports a non-finite actual segment gain", () => {
+    const golden = facts()
+    const actual = facts({ loudness: { ...golden.loudness, segmentGainsDb: { intro: Number.NaN, outro: 0.4 } } })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "tolerance", field: "loudness.segmentGainsDb.intro", golden: 1.2, actual: Number.NaN },
+    ])
+  })
+
+  it("reports a non-finite actual duration", () => {
+    const golden = facts()
+    const actual = facts({ durationMs: Number.NaN })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "tolerance", field: "durationMs", golden: golden.durationMs, actual: Number.NaN },
+    ])
+  })
+
+  it("reports two non-finite durations instead of treating them as equal", () => {
+    const golden = facts({ durationMs: Number.NaN })
+    const actual = facts({ durationMs: Number.NaN })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "tolerance", field: "durationMs", golden: Number.NaN, actual: Number.NaN },
+    ])
+  })
+
+  it("refuses an unusable frame rate even when both runs share it", () => {
+    const golden = facts({ frameRate: 0 })
+    const actual = facts({ frameRate: 0, durationMs: golden.durationMs + 5_000 })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "strict", field: "frameRate", golden: 0, actual: 0 },
+      { class: "tolerance", field: "durationMs", golden: golden.durationMs, actual: golden.durationMs + 5_000 },
+    ])
+  })
+
+  it("refuses two NaN frame rates and judges no duration", () => {
+    const golden = facts({ frameRate: Number.NaN })
+    const actual = facts({ frameRate: Number.NaN })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "strict", field: "frameRate", golden: Number.NaN, actual: Number.NaN },
+      { class: "tolerance", field: "durationMs", golden: golden.durationMs, actual: golden.durationMs },
+    ])
+  })
+
+  it("refuses an infinite frame rate and judges no duration", () => {
+    const golden = facts()
+    const actual = facts({ frameRate: Number.POSITIVE_INFINITY })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "strict", field: "frameRate", golden: 25, actual: Number.POSITIVE_INFINITY },
+      { class: "tolerance", field: "durationMs", golden: golden.durationMs, actual: golden.durationMs },
+    ])
+  })
+
+  it("reports a non-finite golden SSIM", () => {
+    const golden = facts({ frames: [{ atMs: 1_500, ssim: Number.NaN }, { atMs: 2_500, ssim: 1 }] })
+    const actual = facts()
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "tolerance", field: "frames[1500].ssim", golden: Number.NaN, actual: 1 },
+    ])
+  })
+
   it("accepts a still stretch already in the golden, within the tolerance", () => {
     const golden = facts()
     expect(compareRuns(golden, facts({ frozen: [{ startMs: 5_100, endMs: 9_100 }] }))).toEqual([])
