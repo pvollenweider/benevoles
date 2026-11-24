@@ -1,0 +1,230 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+/**
+ * Inventory of a baseline folder: SHA-256 and size of every file it keeps, the versions of the
+ * tools that wrote it, the product commit of each reference video and its golden acceptance.
+ *
+ * The inventory is only written through `writeInventory`, which writes the README first, then the
+ * checksums of what is on disk, then `inventory.json`, and refuses to leave an inconsistent folder
+ * behind. `hashTree` deliberately walks only the documented roots of a baseline, so the source
+ * material kept beside them (`batch43-output/`) is never reported as an unlisted file.
+ */
+import { createHash } from "node:crypto"
+import { createReadStream } from "node:fs"
+import { lstat, mkdir, readdir, readFile, writeFile } from "node:fs/promises"
+import path from "node:path"
+
+export type FileFact = { sha256: string; bytes: number }
+
+export type BaselineInventory = {
+  version: 1
+  createdAt: string
+  engineCommit: string
+  tools: { node: string; ffmpeg: string; ffprobe: string; platform: string }
+  music: string
+  backup?: string
+  videos: Record<string, { id: string; productCommit: string; golden?: { acceptedAt: string; note: string } }>
+  files: Record<string, FileFact>
+}
+
+const INVENTORY_FILE = "inventory.json"
+/** Roots of a baseline that hold its own material; a directory beside them is source material. */
+const HASHED_ROOTS = ["README.md", "music", "videos", "golden"] as const
+
+function posix(relative: string): string {
+  return relative.split(path.sep).join("/")
+}
+
+function missingBaselineMessage(dir: string): string {
+  return `${dir}: no baseline inventory found (inventory.json is missing). See ${path.join(dir, "README.md")} for what this folder holds and how to restore it from its backup copy.`
+}
+
+function hashFile(file: string): Promise<FileFact> {
+  return new Promise((resolve, reject) => {
+    const hash = createHash("sha256")
+    let bytes = 0
+    createReadStream(file)
+      .on("data", (chunk: Buffer) => {
+        bytes += chunk.length
+        hash.update(chunk)
+      })
+      .on("error", reject)
+      .on("end", () => resolve({ sha256: hash.digest("hex"), bytes }))
+  })
+}
+
+/** Files a narrated video needs in the baseline, relative to the baseline folder, POSIX paths. */
+export function videoInputFiles(slug: string, timeline: { video: string }, audioFileNames: string[]): string[] {
+  const dir = `videos/output/${slug}`
+  return [
+    `videos/manifests/${slug}.json`,
+    `${dir}/timeline.json`,
+    `${dir}/audio-metadata.json`,
+    `${dir}/narration-audit.json`,
+    `${dir}/${timeline.video}`,
+    ...audioFileNames.map((name) => `${dir}/audio/${name}`),
+  ]
+}
+
+/** One line per difference between the inventory and the disk, sorted by file. */
+export function inventoryIssues(inventory: BaselineInventory, onDisk: Record<string, FileFact>): string[] {
+  const issues: string[] = []
+  for (const [file, expected] of Object.entries(inventory.files)) {
+    const actual = onDisk[file]
+    if (!actual) issues.push(`missing: ${file}`)
+    else if (actual.sha256 !== expected.sha256) issues.push(`changed: ${file}`)
+  }
+  for (const file of Object.keys(onDisk)) {
+    if (file === INVENTORY_FILE) continue
+    if (!(file in inventory.files)) issues.push(`unlisted: ${file}`)
+  }
+  return issues.sort()
+}
+
+/** Reads the inventory of a baseline folder, with the Review Focus 1 message when there is none. */
+export async function readBaseline(dir: string): Promise<BaselineInventory> {
+  try {
+    return JSON.parse(await readFile(path.join(dir, INVENTORY_FILE), "utf8")) as BaselineInventory
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code
+    if (code === "ENOENT" || code === "ENOTDIR") throw new Error(missingBaselineMessage(dir))
+    throw error
+  }
+}
+
+/**
+ * SHA-256 and size of every file under `README.md`, `music/`, `videos/` and `golden/` of `dir`.
+ * Missing roots are simply empty; symlinks and special files are not followed or listed.
+ */
+export async function hashTree(dir: string): Promise<Record<string, FileFact>> {
+  const files: Record<string, FileFact> = {}
+  const walk = async (relative: string): Promise<void> => {
+    const absolute = path.join(dir, relative)
+    let stats
+    try {
+      stats = await lstat(absolute)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") return
+      throw error
+    }
+    if (stats.isFile()) {
+      files[posix(relative)] = await hashFile(absolute)
+      return
+    }
+    if (!stats.isDirectory()) return
+    const entries = await readdir(absolute, { withFileTypes: true })
+    for (const entry of entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))) {
+      if (entry.isDirectory()) await walk(path.join(relative, entry.name))
+      else if (entry.isFile()) files[posix(path.join(relative, entry.name))] = await hashFile(path.join(absolute, entry.name))
+    }
+  }
+  for (const root of HASHED_ROOTS) await walk(root)
+  return files
+}
+
+/** The whole README.md of a baseline, a pure function of the inventory. */
+export function baselineReadme(inventory: BaselineInventory): string {
+  const videos = Object.entries(inventory.videos).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+  const videoLines = videos.length
+    ? videos.map(([slug, video]) => {
+        const golden = video.golden ? `, golden accepté le ${video.golden.acceptedAt} — note : ${video.golden.note}` : ""
+        return `- \`${slug}\` (\`${video.id}\`), commit produit \`${video.productCommit}\`${golden}`
+      })
+    : ["- (aucune vidéo pour l'instant)"]
+  const backupLines = inventory.backup
+    ? [
+        `La deuxième copie de ce dossier se trouve dans \`${inventory.backup}\`.`,
+        "Pour restaurer, recopier son contenu par-dessus ce dossier (sans rien supprimer), puis vérifier :",
+        "",
+        "```bash",
+        `rsync -a "${inventory.backup}/" "$TUTOCAST_BASELINE/"`,
+        "```",
+      ]
+    : [
+        "Aucune deuxième copie n'est déclarée. En choisir une, hors Git et sur un autre disque :",
+        "",
+        "```bash",
+        'npm run video:baseline -- set-backup --dir "$TUTOCAST_BASELINE" --location <chemin-de-la-copie>',
+        "```",
+      ]
+  return [
+    "# Baseline des vidéos de référence",
+    "",
+    "Ce dossier garde la matière première de quelques vidéos de référence : la capture brute, la timeline,",
+    "la narration générée et ses enregistrements d'audit, la musique et le résultat accepté de la boucle de",
+    "régression. Il permet de réassembler ces vidéos plus tard et de comparer le résultat, sans dépendre du",
+    "serveur de médias ni des fichiers rendus, qui ne sont jamais versionnés dans Git.",
+    "",
+    "Ce dossier vit **hors de Git** : aucun fichier de capture, d'audio, de vidéo ou d'image n'est commité.",
+    "Ne pas modifier ses fichiers à la main ; `inventory.json` est réécrit à chaque commande qui change le",
+    "dossier, et `README.md` est régénéré à partir de lui.",
+    "",
+    "## Contenu",
+    "",
+    "- `inventory.json` : empreinte SHA-256 et taille de chaque fichier, versions des outils, commits ;",
+    "- `README.md` : ce fichier, régénéré à chaque écriture de l'inventaire ;",
+    "- `music/` : la musique de fond utilisée par l'assemblage ;",
+    "- `videos/catalog.json` et `videos/manifests/` : le catalogue et les manifestes des vidéos de référence ;",
+    "- `videos/output/<slug>/` : capture, `timeline.json`, `audio-metadata.json`, `narration-audit.json` et `audio/` ;",
+    "- `golden/<slug>/` : le résultat accepté de la boucle de régression (écrit plus tard par le runner).",
+    "",
+    "## Inventaire",
+    "",
+    `- Créé le : ${inventory.createdAt}`,
+    `- Commit du moteur : \`${inventory.engineCommit}\``,
+    `- Node : ${inventory.tools.node}`,
+    `- ffmpeg : ${inventory.tools.ffmpeg}`,
+    `- ffprobe : ${inventory.tools.ffprobe}`,
+    `- Plateforme : ${inventory.tools.platform}`,
+    `- Musique : \`${inventory.music}\``,
+    "",
+    "## Vidéos",
+    "",
+    ...videoLines,
+    "",
+    "## Deuxième copie et restauration",
+    "",
+    ...backupLines,
+    "",
+    "Sans deuxième copie, un disque perdu emporte la seule trace de ces captures : la copie de secours est",
+    "la vraie garantie de durabilité de cette baseline.",
+    "",
+    "## Vérification",
+    "",
+    "`inventory.json` décrit tous les fichiers du dossier, sauf lui-même. Toute différence est signalée par",
+    "`missing:`, `changed:` ou `unlisted:`, et la commande sort en erreur :",
+    "",
+    "```bash",
+    'npm run video:baseline -- verify --dir "$TUTOCAST_BASELINE"',
+    "```",
+    "",
+    "## Ajouter une vidéo",
+    "",
+    "```bash",
+    'npm run video:baseline -- add --dir "$TUTOCAST_BASELINE" --from "$TUTOCAST_BASELINE/batch43-output" --slugs <slug> --music "$VIDEO_MUSIC_PATH"',
+    "```",
+    "",
+    "`add` recopie la capture, la timeline, les enregistrements de narration, l'audio et la musique, puis",
+    "réécrit cet inventaire. `--replace` est requis pour remplacer une vidéo dont un golden a été accepté.",
+    "",
+  ].join("\n")
+}
+
+/**
+ * Writes `README.md`, then the checksums of the folder, then `inventory.json`, and refuses to return
+ * an inventory that does not describe what is on disk. This is the only writer of the inventory.
+ */
+export async function writeInventory(dir: string, inventory: Omit<BaselineInventory, "files">): Promise<BaselineInventory> {
+  await mkdir(dir, { recursive: true })
+  const base: BaselineInventory = { ...inventory, files: {} }
+  await writeFile(path.join(dir, "README.md"), baselineReadme(base), "utf8")
+  const files = await hashTree(dir)
+  const written: BaselineInventory = { ...inventory, files }
+  await writeFile(path.join(dir, INVENTORY_FILE), `${JSON.stringify(written, null, 2)}\n`, "utf8")
+  const issues = inventoryIssues(written, await hashTree(dir))
+  if (issues.length) {
+    throw new Error(`Inventory written to ${path.join(dir, INVENTORY_FILE)} does not describe the folder:\n${issues.join("\n")}`)
+  }
+  return written
+}
