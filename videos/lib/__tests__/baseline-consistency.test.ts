@@ -53,6 +53,7 @@ function coherent(): SetUnderCheck {
       },
     },
     audit: {
+      promptVersion: 2,
       segments: [
         { id: "intro", expected: "Bonjour, bienvenue.", audioSha256: "intro-sha", needsReview: false },
         { id: "outro", expected: "Merci et à bientôt.", audioSha256: "outro-sha", needsReview: false },
@@ -92,6 +93,18 @@ describe("setConsistencyIssues", () => {
     const set = coherent()
     set.timeline.cues = [{ id: "outro" }, { id: "intro" }]
     expect(setConsistencyIssues(set)).toEqual(["timeline: cue ids differ from the manifest segment ids"])
+  })
+
+  it("reports a narration audit made with an older prompt version", () => {
+    const set = coherent()
+    set.audit.promptVersion = 1
+    expect(setConsistencyIssues(set)).toEqual(["narration-audit: promptVersion is 1, 2 is required"])
+  })
+
+  it("reports a narration audit without a prompt version", () => {
+    const set = coherent()
+    delete set.audit.promptVersion
+    expect(setConsistencyIssues(set)).toEqual(["narration-audit: promptVersion is missing, 2 is required"])
   })
 
   it("reports a narration generation proof that does not match the manifest", () => {

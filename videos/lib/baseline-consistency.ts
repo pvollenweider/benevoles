@@ -15,7 +15,7 @@ export type SetUnderCheck = {
   manifest: { id: string; slug: string; continuousNarration?: boolean; continuousPauseTags?: boolean; voice: string; voiceStyle: string; segments: { id: string; transcript: string }[] }
   timeline: { slug: string; capturePurpose?: string; product?: { commit?: string }; cues: { id: string }[] }
   audio: { model: string; voice: string; segments: Record<string, { file: string; generationSha256?: string }>; sentenceRevision?: unknown }
-  audit: { segments: { id: string; expected: string; audioSha256: string; needsReview: boolean }[] }
+  audit: { promptVersion?: number; segments: { id: string; expected: string; audioSha256: string; needsReview: boolean }[] }
   /** Key: the `file` value of `audio.segments` (for example "audio/intro.wav"); absent key = file missing. */
   audioSha256: Record<string, string>
 }
@@ -46,6 +46,10 @@ export function setConsistencyIssues(set: SetUnderCheck): string[] {
   const segmentIds = manifest.segments.map((segment) => segment.id)
   if (cueIds.length !== segmentIds.length || cueIds.some((id, index) => id !== segmentIds[index])) {
     issues.push("timeline: cue ids differ from the manifest segment ids")
+  }
+  if (audit.promptVersion !== 2) {
+    const version = audit.promptVersion === undefined ? "missing" : String(audit.promptVersion)
+    issues.push(`narration-audit: promptVersion is ${version}, 2 is required`)
   }
 
   try {

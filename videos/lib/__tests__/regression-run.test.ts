@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest"
 import {
   buildRunFacts,
   firstDifferingLine,
+  goldenRecovery,
   inventoryMetadata,
   missingFrames,
   parseFrameRate,
@@ -91,6 +92,28 @@ describe("missingFrames", () => {
 
   it("keeps the sample order and reports every missing time", () => {
     expect(missingFrames([3_000, 0, 1_500], { 1_500: 7 })).toEqual([3_000, 0])
+  })
+})
+
+describe("goldenRecovery", () => {
+  it("does nothing when no golden directory is left", () => {
+    expect(goldenRecovery({ current: false, staged: false, aside: false })).toEqual([])
+  })
+
+  it("removes a leftover staging directory", () => {
+    expect(goldenRecovery({ current: false, staged: true, aside: false })).toEqual(["remove-staged"])
+  })
+
+  it("restores a previous golden moved aside without a current one", () => {
+    expect(goldenRecovery({ current: false, staged: false, aside: true })).toEqual(["restore-aside"])
+  })
+
+  it("removes a previous golden moved aside when the current one is in place", () => {
+    expect(goldenRecovery({ current: true, staged: false, aside: true })).toEqual(["remove-aside"])
+  })
+
+  it("removes the staging directory before restoring the previous golden", () => {
+    expect(goldenRecovery({ current: false, staged: true, aside: true })).toEqual(["remove-staged", "restore-aside"])
   })
 })
 

@@ -115,6 +115,22 @@ export function missingFrames(atMs: number[], present: Record<number, number>): 
   return atMs.filter((time) => !(present[time] > 0))
 }
 
+/** A repair of the golden directories left by an interrupted acceptance, in the order to run it. */
+export type GoldenRecoveryAction = "remove-staged" | "restore-aside" | "remove-aside"
+
+/**
+ * What to do at the start of an acceptance with the golden directories left by an interrupted
+ * swap. An unfinished staging directory always goes first. A previous golden moved aside is put
+ * back when the current one is absent (the swap never completed), and removed when the current one
+ * is in place (the swap completed but the cleanup did not).
+ */
+export function goldenRecovery(present: { current: boolean; staged: boolean; aside: boolean }): GoldenRecoveryAction[] {
+  const actions: GoldenRecoveryAction[] = []
+  if (present.staged) actions.push("remove-staged")
+  if (present.aside) actions.push(present.current ? "remove-aside" : "restore-aside")
+  return actions
+}
+
 function intervals(values: Interval[] | undefined): Interval[] {
   return (values ?? []).map(({ startMs, endMs }) => ({ startMs, endMs }))
 }

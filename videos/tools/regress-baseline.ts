@@ -32,6 +32,7 @@ import { frameSampleTimes, parseBlackdetect, parseFreezedetect, parseSsimAll } f
 import { compareRuns, failing, type Finding, type RunFacts } from "../lib/regression-compare"
 import {
   buildRunFacts,
+  goldenRecovery,
   inventoryMetadata,
   missingFrames,
   parseProbeOutput,
@@ -281,9 +282,9 @@ async function collectRun(options: CollectOptions): Promise<CollectedRun> {
 }
 
 /**
- * Builds the new golden in a staging directory beside the final one, then swaps it in. A failure
- * while staging removes the staging directory: the previous golden and the inventory stay exactly
- * as they were, so a later run can still repair the baseline.
+ * Builds the new golden in a staging directory beside the final one, then swaps it in. The previous
+ * golden is moved aside, not removed, until the new one is in place: a failed rename restores it,
+ * so both runs are never lost. A failure while staging only removes the staging directory.
  */
 async function acceptGolden(
   dir: string,
@@ -294,6 +295,7 @@ async function acceptGolden(
 ): Promise<BaselineInventory> {
   const goldenDir = path.join(dir, "golden", slug)
   const stagingDir = path.join(dir, "golden", `.${slug}.new`)
+  const asideDir = path.join(dir, "golden", `.${slug}.old`)
   await rm(stagingDir, { recursive: true, force: true })
   try {
     const stagingFrames = path.join(stagingDir, "frames")
@@ -305,12 +307,23 @@ async function acceptGolden(
     }
     const facts: RunFacts = { ...run.facts, frames: run.facts.frames.map(({ atMs }) => ({ atMs, ssim: 1 })) }
     await writeFile(path.join(stagingDir, "facts.json"), `${JSON.stringify(facts, null, 2)}\n`, "utf8")
-    await rm(goldenDir, { recursive: true, force: true })
-    await rename(stagingDir, goldenDir)
   } catch (error) {
     await rm(stagingDir, { recursive: true, force: true }).catch(() => {})
     throw error
   }
+
+  const hadGolden = existsSync(goldenDir)
+  try {
+    if (hadGolden) await rename(goldenDir, asideDir)
+    await rename(stagingDir, goldenDir)
+  } catch (error) {
+    // Restore the previous golden only when it was actually moved aside: a failure to move it
+    // leaves it at its place and only the staging directory has to go.
+    if (hadGolden && existsSync(asideDir) && !existsSync(goldenDir)) await rename(asideDir, goldenDir)
+    await rm(stagingDir, { recursive: true, force: true }).catch(() => {})
+    throw error
+  }
+  if (hadGolden) await rm(asideDir, { recursive: true, force: true })
 
   inventory.videos[slug] = { ...inventory.videos[slug], golden: { acceptedAt: new Date().toISOString(), note } }
   return writeInventory(dir, inventoryMetadata(inventory))
@@ -411,6 +424,22 @@ async function processVideo(options: VideoOptions, inventory: BaselineInventory,
   }
 }
 
+/**
+ * Repairs the golden directories left by an interrupted acceptance, before the inventory check:
+ * `hashTree` walks `golden/` and would otherwise report them as unlisted files.
+ */
+async function recoverGolden(dir: string, slug: string): Promise<void> {
+  const goldenDir = path.join(dir, "golden", slug)
+  const stagingDir = path.join(dir, "golden", `.${slug}.new`)
+  const asideDir = path.join(dir, "golden", `.${slug}.old`)
+  const present = { current: existsSync(goldenDir), staged: existsSync(stagingDir), aside: existsSync(asideDir) }
+  for (const action of goldenRecovery(present)) {
+    if (action === "remove-staged") await rm(stagingDir, { recursive: true, force: true })
+    else if (action === "restore-aside") await rename(asideDir, goldenDir)
+    else await rm(asideDir, { recursive: true, force: true })
+  }
+}
+
 async function main(): Promise<void> {
   const dir = path.resolve(required("--dir"))
   const accept = args.includes("--accept")
@@ -423,23 +452,22 @@ async function main(): Promise<void> {
 
   const inventory = await readBaseline(dir)
   const available = Object.keys(inventory.videos).sort()
-  // `hashTree` walks golden/, including a staging directory left by an interrupted acceptance:
-  // remove it before the inventory check so the baseline can still be repaired.
+  // The slug becomes part of a path under golden/: validate it against the inventory before the
+  // first write or removal, in both modes, so a value with a separator or ".." never reaches one.
+  if (requestedSlug && !available.includes(requestedSlug)) {
+    throw new Error(`${requestedSlug} n'est pas une vidéo de la baseline ${dir}.`)
+  }
+  const slugs = requestedSlug ? [requestedSlug] : available
+  // `hashTree` walks golden/, including the directories left by an interrupted acceptance: repair
+  // them before the inventory check so the baseline can still be repaired.
   if (accept) {
-    for (const slug of requestedSlug ? [requestedSlug] : available) {
-      await rm(path.join(dir, "golden", `.${slug}.new`), { recursive: true, force: true })
-    }
+    for (const slug of slugs) await recoverGolden(dir, slug)
   }
   const issues = inventoryIssues(inventory, await hashTree(dir))
   if (issues.length) {
     for (const issue of issues) console.error(issue)
     throw new Error(`${dir} : ${issues.length} problème(s), le dossier ne correspond plus à inventory.json ; rien n'a été assemblé.`)
   }
-
-  if (requestedSlug && !inventory.videos[requestedSlug]) {
-    throw new Error(`${requestedSlug} n'est pas une vidéo de la baseline ${dir}.`)
-  }
-  const slugs = requestedSlug ? [requestedSlug] : available
   if (!slugs.length) {
     throw new Error(`La baseline ${dir} ne contient aucune vidéo ; ajouter d'abord avec npm run video:baseline -- add.`)
   }
