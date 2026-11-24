@@ -18,11 +18,17 @@ const FROZEN_SHA256 = {
 } as const
 
 /**
- * Live wording of a check the extraction reworded, keyed by its frozen message.
- * Empty at the baseline. Rewording a check during the extraction adds an entry here, in the
- * same commit, with a comment saying why; the frozen copy is never edited.
+ * An entry rewrites the part of a frozen message that was deliberately reworded in the live
+ * code. It is added in the same commit as the rewording, and never touches the frozen files.
  */
-const REWORDED: Record<string, string> = {}
+type Rewording = { frozen: string | RegExp; live: string; why: string }
+
+/**
+ * Ordered rewritings applied to a frozen `failedCheck` before comparing it with the live one.
+ * Empty at the baseline. Rewording a check during the extraction adds an entry here, in the
+ * same commit, with a reason; the frozen copy is never edited.
+ */
+const REWORDED: Rewording[] = []
 
 type NarrationManifest = Parameters<typeof liveAssertNarrationGeneration>[0]
 type NarrationRecord = Parameters<typeof liveAssertNarrationGeneration>[1]
@@ -38,7 +44,40 @@ function verdict(assertGeneration: typeof liveAssertNarrationGeneration, manifes
   }
 }
 
+/**
+ * Applies every rewording in order and keeps everything the entries do not match, so the
+ * actual and expected values Node appends to a failed `assert.equal` stay compared.
+ */
+function reword(message: string, entries: Rewording[]): string {
+  return entries.reduce((current, entry) => typeof entry.frozen === "string"
+    ? current.split(entry.frozen).join(entry.live)
+    : current.replace(entry.frozen, entry.live), message)
+}
+
 const sha256 = (source: string) => createHash("sha256").update(source).digest("hex")
+
+describe("reword", () => {
+  it("replaces a frozen fragment with its live wording and keeps the appended values", () => {
+    const message = "welcome: generation proof missing, mixed, or outdated for the current script\n\n'aaa' !== 'bbb'\n"
+    expect(reword(message, [{ frozen: "generation proof missing, mixed, or outdated", live: "generation proof is stale", why: "test" }]))
+      .toBe("welcome: generation proof is stale for the current script\n\n'aaa' !== 'bbb'\n")
+  })
+
+  it("uses a regular expression as given, including capture replacements", () => {
+    expect(reword("intro: old wording", [{ frozen: /^(\w+): old wording$/m, live: "$1: new wording", why: "test" }]))
+      .toBe("intro: new wording")
+  })
+
+  it("returns the message unchanged with no entry", () => {
+    const message = "welcome: generation proof missing, mixed, or outdated\n\n'aaa' !== 'bbb'\n"
+    expect(reword(message, [])).toBe(message)
+  })
+
+  it("returns the message unchanged when no entry matches", () => {
+    const message = "welcome: generation proof missing, mixed, or outdated\n\n'aaa' !== 'bbb'\n"
+    expect(reword(message, [{ frozen: "some other wording", live: "irrelevant", why: "test" }])).toBe(message)
+  })
+})
 
 describe("the frozen narration oracle", () => {
   for (const name of ["narration-generation", "sentence-timing"] as const) {
@@ -67,7 +106,7 @@ it("gives every catalog video the same verdict and cache key as the frozen oracl
       const frozen = verdict(frozenAssertNarrationGeneration, manifest, audio)
       const expected: Verdict = frozen.ok
         ? frozen
-        : { ok: false, failedCheck: REWORDED[frozen.failedCheck] ?? frozen.failedCheck }
+        : { ok: false, failedCheck: reword(frozen.failedCheck, REWORDED) }
       expect.soft(live, `${entry.id} (${entry.manifest}): on-disk record`).toEqual(expected)
       comparedOnDisk++
       if (live.ok) passingOnDisk++
