@@ -301,6 +301,7 @@ async function add(): Promise<void> {
   console.log(`${plans.length} vidéo(s) ajoutée(s) à ${dir} ; ${Object.keys(written.files).length} fichier(s) inventorié(s).`)
   for (const plan of plans) console.log(`  + ${plan.slug} (${plan.id}), commit produit ${plan.productCommit}`)
   if (!written.backup) console.log("Aucune deuxième copie déclarée : voir README.md, commande set-backup.")
+  console.log("Un ensemble n'est confirmé que par son premier run golden accepté : npm run video:regress -- --accept --note \"<raison>\".")
 }
 
 async function setBackup(): Promise<void> {

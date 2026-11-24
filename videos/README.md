@@ -554,7 +554,8 @@ npm run video:regress -- --dir "$TUTOCAST_BASELINE" --accept --note "changement 
 ```
 
 `add` refuse un ensemble dont l'audio de narration ne correspond pas à son audit et à ses
-enregistrements de génération, avant d'avoir copié quoi que ce soit.
+enregistrements de génération, avant d'avoir copié quoi que ce soit ; un ensemble n'est confirmé que
+par son premier golden accepté (`video:regress --accept`).
 
 `--accept` refuse un run invalide et exige une note : le golden devient la référence des
 comparaisons suivantes, on ne l'accepte donc que lorsqu'on a compris et voulu la différence.

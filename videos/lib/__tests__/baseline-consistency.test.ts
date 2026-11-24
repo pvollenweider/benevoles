@@ -41,7 +41,12 @@ function coherent(): SetUnderCheck {
     timeline: {
       slug: manifest.slug,
       capturePurpose: "narration-timed",
-      product: { commit: "89a884c8d58c22dda6800481e1238bdc4e219dff" },
+      product: {
+        commit: "89a884c8d58c22dda6800481e1238bdc4e219dff",
+        buildId: "build-2026-11-24",
+        productSourceSha256: "a".repeat(64),
+      },
+      inputEvents: [{ kind: "click", atMs: 1_000 }],
       cues: [{ id: "intro" }, { id: "outro" }],
     },
     audio: {
@@ -85,8 +90,53 @@ describe("setConsistencyIssues", () => {
 
   it("reports a missing product commit", () => {
     const set = coherent()
-    delete set.timeline.product
+    delete set.timeline.product!.commit
     expect(setConsistencyIssues(set)).toEqual(["timeline: product.commit missing"])
+  })
+
+  it("reports a missing product build id", () => {
+    const set = coherent()
+    delete set.timeline.product!.buildId
+    expect(setConsistencyIssues(set)).toEqual(["timeline: product.buildId missing"])
+  })
+
+  it("reports a missing product source checksum", () => {
+    const set = coherent()
+    delete set.timeline.product!.productSourceSha256
+    expect(setConsistencyIssues(set)).toEqual(["timeline: product.productSourceSha256 missing"])
+  })
+
+  it("accepts music gains within the assembler bounds and an absent gain", () => {
+    for (const gain of [3, -3, 0]) {
+      const set = coherent()
+      set.manifest.musicGainDb = gain
+      expect(setConsistencyIssues(set), `gain ${gain}`).toEqual([])
+    }
+    expect(setConsistencyIssues(coherent())).toEqual([])
+  })
+
+  it("reports a music gain above the assembler bounds", () => {
+    const set = coherent()
+    set.manifest.musicGainDb = 3.1
+    expect(setConsistencyIssues(set)).toEqual(["manifest: musicGainDb must be finite and between -3 and 3"])
+  })
+
+  it("reports a non-finite music gain", () => {
+    const set = coherent()
+    set.manifest.musicGainDb = Number.NaN
+    expect(setConsistencyIssues(set)).toEqual(["manifest: musicGainDb must be finite and between -3 and 3"])
+  })
+
+  it("reports a timeline without recorded interactions", () => {
+    const set = coherent()
+    set.timeline.inputEvents = []
+    expect(setConsistencyIssues(set)).toEqual(["timeline: no recorded interaction (inputEvents empty)"])
+  })
+
+  it("reports a timeline whose recorded interactions are missing", () => {
+    const set = coherent()
+    delete set.timeline.inputEvents
+    expect(setConsistencyIssues(set)).toEqual(["timeline: no recorded interaction (inputEvents empty)"])
   })
 
   it("reports cue ids that are not the manifest segment ids in order", () => {

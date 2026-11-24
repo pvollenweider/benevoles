@@ -12,8 +12,14 @@
 import { assertNarrationGeneration } from "./narration-generation"
 
 export type SetUnderCheck = {
-  manifest: { id: string; slug: string; continuousNarration?: boolean; continuousPauseTags?: boolean; voice: string; voiceStyle: string; segments: { id: string; transcript: string }[] }
-  timeline: { slug: string; capturePurpose?: string; product?: { commit?: string }; cues: { id: string }[] }
+  manifest: { id: string; slug: string; continuousNarration?: boolean; continuousPauseTags?: boolean; voice: string; voiceStyle: string; musicGainDb?: number; segments: { id: string; transcript: string }[] }
+  timeline: {
+    slug: string
+    capturePurpose?: string
+    product?: { commit?: string; buildId?: string; productSourceSha256?: string }
+    inputEvents?: unknown[]
+    cues: { id: string }[]
+  }
   audio: { model: string; voice: string; segments: Record<string, { file: string; generationSha256?: string }>; sentenceRevision?: unknown }
   audit: { promptVersion?: number; segments: { id: string; expected: string; audioSha256: string; needsReview: boolean }[] }
   /** Key: the `file` value of `audio.segments` (for example "audio/intro.wav"); absent key = file missing. */
@@ -42,10 +48,20 @@ export function setConsistencyIssues(set: SetUnderCheck): string[] {
     issues.push(`timeline: capturePurpose is ${purpose}, not "narration-timed"`)
   }
   if (!timeline.product?.commit) issues.push("timeline: product.commit missing")
+  // The assembler also refuses a capture without a build id or a source checksum (assemble.ts:56).
+  if (!timeline.product?.buildId) issues.push("timeline: product.buildId missing")
+  if (!timeline.product?.productSourceSha256) issues.push("timeline: product.productSourceSha256 missing")
   const cueIds = timeline.cues.map((cue) => cue.id)
   const segmentIds = manifest.segments.map((segment) => segment.id)
   if (cueIds.length !== segmentIds.length || cueIds.some((id, index) => id !== segmentIds[index])) {
     issues.push("timeline: cue ids differ from the manifest segment ids")
+  }
+  // assemble.ts:47 and :96 refuse these two inputs as well; both are visible from the files alone.
+  if (manifest.musicGainDb !== undefined && (!Number.isFinite(manifest.musicGainDb) || Math.abs(manifest.musicGainDb) > 3)) {
+    issues.push("manifest: musicGainDb must be finite and between -3 and 3")
+  }
+  if (!Array.isArray(timeline.inputEvents) || timeline.inputEvents.length === 0) {
+    issues.push("timeline: no recorded interaction (inputEvents empty)")
   }
   if (audit.promptVersion !== 2) {
     const version = audit.promptVersion === undefined ? "missing" : String(audit.promptVersion)
