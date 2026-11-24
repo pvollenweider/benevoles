@@ -7,6 +7,7 @@ import { tmpdir } from "node:os"
 import path from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
 import {
+  assertUnchanged,
   baselineReadme,
   hashTree,
   inventoryIssues,
@@ -129,6 +130,66 @@ describe("hashTree", () => {
       "README.md": { sha256: sha256("restore"), bytes: 7 },
       "videos/output/a/timeline.json": { sha256: sha256('{"cues":[]}'), bytes: 11 },
     })
+  })
+})
+
+describe("assertUnchanged", () => {
+  const changedPrefix = "Baseline changed since its inventory was written; restore it or investigate before modifying it:"
+
+  async function writtenBaseline(): Promise<{ directory: string; inventory: BaselineInventory }> {
+    const directory = await temporaryDirectory()
+    await mkdir(path.join(directory, "videos", "output", "a"), { recursive: true })
+    await mkdir(path.join(directory, "music"), { recursive: true })
+    await writeFile(path.join(directory, "music", "track.mp3"), "music")
+    await writeFile(path.join(directory, "videos", "output", "a", "timeline.json"), '{"cues":[]}')
+    return { directory, inventory: await writeInventory(directory, inventory()) }
+  }
+
+  function rejection(promise: Promise<void>): Promise<Error> {
+    return promise.then(
+      () => {
+        throw new Error("expected the call to reject")
+      },
+      (reason: unknown) => reason as Error,
+    )
+  }
+
+  it("resolves on an intact folder", async () => {
+    const { directory, inventory: written } = await writtenBaseline()
+    await expect(assertUnchanged(directory, written)).resolves.toBeUndefined()
+  })
+
+  it("rejects when a listed file changed, naming it and the path to restore", async () => {
+    const { directory, inventory: written } = await writtenBaseline()
+    await writeFile(path.join(directory, "videos", "output", "a", "timeline.json"), '{"cues":[1]}')
+
+    const error = await rejection(assertUnchanged(directory, written))
+
+    expect(error.message.startsWith(changedPrefix)).toBe(true)
+    expect(error.message).toContain("changed: videos/output/a/timeline.json")
+  })
+
+  it("resolves when the changed file lies under a replaced directory", async () => {
+    const { directory, inventory: written } = await writtenBaseline()
+    await writeFile(path.join(directory, "videos", "output", "a", "timeline.json"), '{"cues":[1]}')
+
+    await expect(assertUnchanged(directory, written, ["videos/output/a/"])).resolves.toBeUndefined()
+  })
+
+  it("resolves when the changed file equals a replaced file", async () => {
+    const { directory, inventory: written } = await writtenBaseline()
+    await writeFile(path.join(directory, "README.md"), "edited")
+
+    await expect(assertUnchanged(directory, written, ["README.md"])).resolves.toBeUndefined()
+  })
+
+  it("rejects when a file outside the replaced paths is missing", async () => {
+    const { directory, inventory: written } = await writtenBaseline()
+    await rm(path.join(directory, "music", "track.mp3"))
+
+    const error = await rejection(assertUnchanged(directory, written, ["videos/output/a/", "README.md"]))
+
+    expect(error.message).toContain("missing: music/track.mp3")
   })
 })
 

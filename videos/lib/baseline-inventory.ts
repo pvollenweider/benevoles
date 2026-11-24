@@ -31,6 +31,8 @@ export type BaselineInventory = {
 const INVENTORY_FILE = "inventory.json"
 /** Roots of a baseline that hold its own material; a directory beside them is source material. */
 const HASHED_ROOTS = ["README.md", "music", "videos", "golden"] as const
+/** Prefix of the error raised when a command is about to modify a folder that no longer matches its inventory. */
+const CHANGED_PREFIX = "Baseline changed since its inventory was written; restore it or investigate before modifying it:"
 
 function posix(relative: string): string {
   return relative.split(path.sep).join("/")
@@ -80,6 +82,24 @@ export function inventoryIssues(inventory: BaselineInventory, onDisk: Record<str
     if (!(file in inventory.files)) issues.push(`unlisted: ${file}`)
   }
   return issues.sort()
+}
+
+/** The path an `inventoryIssues` line names, after its `missing:`, `changed:` or `unlisted:` prefix. */
+function issuePath(issue: string): string {
+  return issue.slice(issue.indexOf(": ") + 2)
+}
+
+/**
+ * Refuses to let a command change a folder that no longer matches its inventory, except for the paths
+ * the command is about to replace. `replacing` holds relative POSIX paths: an entry ending in `/` also
+ * covers everything below it, a file entry covers that exact file. Throws one line per remaining issue.
+ */
+export async function assertUnchanged(dir: string, inventory: BaselineInventory, replacing: string[] = []): Promise<void> {
+  const issues = inventoryIssues(inventory, await hashTree(dir)).filter((issue) => {
+    const file = issuePath(issue)
+    return !replacing.some((entry) => file === entry || (entry.endsWith("/") && file.startsWith(entry)))
+  })
+  if (issues.length) throw new Error(`${CHANGED_PREFIX}\n${issues.join("\n")}`)
 }
 
 /** Reads the inventory of a baseline folder, with the Review Focus 1 message when there is none. */

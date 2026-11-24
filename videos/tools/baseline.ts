@@ -20,6 +20,7 @@ import { copyFile, mkdir, readFile, readdir, rm } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
 import {
+  assertUnchanged,
   hashTree,
   inventoryIssues,
   readBaseline,
@@ -161,6 +162,31 @@ async function add(): Promise<void> {
   const music = `music/${musicName}`
   const musicDestination = path.join(dir, "music", musicName)
 
+  if (existing) {
+    // Everything this run is about to rewrite, so a changed file elsewhere still refuses the command.
+    const replacing = [
+      ...plans.flatMap((plan) => [
+        `videos/output/${plan.slug}/`,
+        `videos/manifests/${plan.slug}.json`,
+        `golden/${plan.slug}/`,
+      ]),
+      "videos/catalog.json",
+      "README.md",
+      existing.music,
+    ]
+    await assertUnchanged(dir, existing, replacing)
+  }
+
+  // Remove what this run replaces before copying anything, so stale files from an earlier add (an old
+  // audio name, a renamed capture) cannot survive and be hashed as legitimate by the new inventory.
+  for (const plan of plans) {
+    await rm(path.join(dir, "videos", "output", plan.slug), { recursive: true, force: true })
+    if (replace) await rm(path.join(dir, "golden", plan.slug), { recursive: true, force: true })
+  }
+  if (existing?.music && existing.music !== music) {
+    await rm(path.join(dir, ...existing.music.split("/")), { force: true })
+  }
+
   for (const plan of plans) {
     const outputPrefix = `videos/output/${plan.slug}/`
     for (const relative of videoInputFiles(plan.slug, plan.timeline, plan.audioNames)) {
@@ -172,11 +198,6 @@ async function add(): Promise<void> {
   }
   await copyInto(path.join(videosRoot, "catalog.json"), path.join(dir, "videos", "catalog.json"))
   if (path.resolve(musicSource) !== path.resolve(musicDestination)) await copyInto(musicSource, musicDestination)
-  // The golden run described the replaced inputs: it can no longer be trusted, and keeping it would
-  // leave files that the new inventory does not list.
-  for (const plan of plans) {
-    if (replace) await rm(path.join(dir, "golden", plan.slug), { recursive: true, force: true })
-  }
 
   const videos = { ...(existing?.videos ?? {}) }
   for (const plan of plans) videos[plan.slug] = { id: plan.id, productCommit: plan.productCommit }
@@ -199,6 +220,7 @@ async function setBackup(): Promise<void> {
   const dir = required("--dir")
   const location = required("--location")
   const inventory = await readBaseline(dir)
+  await assertUnchanged(dir, inventory)
   const written = await writeInventory(dir, { ...metadata(inventory), backup: location })
   console.log(`${dir} : deuxième copie déclarée dans ${location} ; ${Object.keys(written.files).length} fichier(s) inventorié(s).`)
 }
