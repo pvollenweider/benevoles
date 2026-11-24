@@ -105,6 +105,42 @@ describe("imports of a core file", () => {
   })
 })
 
+describe("core files of every extension", () => {
+  const options: BoundaryOptions = { coreRoot: CORE_ROOT, allowedPackages: [], forbiddenTokens: [] }
+
+  it("checks imports in an .mjs file", () => {
+    const violations = boundaryViolations([{ path: `${CORE_ROOT}/b.mjs`, source: 'import x from "../lib/manifest"' }], options)
+    expect(violations).toHaveLength(1)
+    expect(violations[0]).toMatchObject({
+      path: `${CORE_ROOT}/b.mjs`,
+      line: 1,
+      kind: "import",
+      detail: "../lib/manifest",
+    })
+  })
+
+  it("reads forbidden tokens in a .json file and finds no import", () => {
+    const violations = boundaryViolations(
+      [{ path: `${CORE_ROOT}/b.json`, source: '{"port": 43100}' }],
+      { ...options, forbiddenTokens: forbiddenTokens([]) },
+    )
+    expect(violations).toHaveLength(1)
+    expect(violations[0]).toMatchObject({ path: `${CORE_ROOT}/b.json`, line: 1, kind: "token" })
+  })
+
+  it("does not read an import written as text in a .json file", () => {
+    expect(boundaryViolations([{ path: `${CORE_ROOT}/b.json`, source: 'import x from "../lib/a"' }], options)).toEqual([])
+  })
+})
+
+describe("a source the guard cannot parse", () => {
+  it("refuses the file and still reports the imports it recovered", () => {
+    const violations = check('import { from "../lib/manifest"')
+    expect(violations).toContainEqual({ path: `${CORE_ROOT}/b.ts`, line: 1, kind: "import", detail: "unparseable" })
+    expect(violations).toContainEqual({ path: `${CORE_ROOT}/b.ts`, line: 1, kind: "import", detail: "../lib/manifest" })
+  })
+})
+
 describe("forbidden tokens of a core file", () => {
   it("refuses a product port number in a comment, on its own line", () => {
     const violations = check("const a = 1\nconst b = 2\n// served on port 43100", { forbiddenTokens: forbiddenTokens([]) })
@@ -127,13 +163,16 @@ describe("the real core tree", () => {
   const root = path.resolve(__dirname, "../../..")
   const coreDirectory = path.join(root, CORE_ROOT)
 
-  it("reads every TypeScript file and the declared dependencies", () => {
-    const files = readdirSync(coreDirectory, { recursive: true })
-      .filter((entry): entry is string => typeof entry === "string" && entry.endsWith(".ts"))
-      .map(entry => ({
-        path: `${CORE_ROOT}/${entry.split(path.sep).join("/")}`,
-        source: readFileSync(path.join(coreDirectory, entry), "utf8"),
+  it("reads every file of the core except the README", () => {
+    const files = readdirSync(coreDirectory, { recursive: true, withFileTypes: true })
+      .filter(entry => entry.isFile())
+      .map(entry => path.relative(coreDirectory, path.join(entry.parentPath, entry.name)).split(path.sep).join("/"))
+      .filter(relative => relative !== "README.md")
+      .map(relative => ({
+        path: `${CORE_ROOT}/${relative}`,
+        source: readFileSync(path.join(coreDirectory, relative), "utf8"),
       }))
+    expect(files.map(file => file.path)).toContain(`${CORE_ROOT}/dependencies.json`)
     const catalog = JSON.parse(readFileSync(path.join(root, "videos/catalog.json"), "utf8")) as { videos: { id: string }[] }
     const allowedPackages = JSON.parse(readFileSync(path.join(coreDirectory, "dependencies.json"), "utf8")) as string[]
     expect(boundaryViolations(files, {

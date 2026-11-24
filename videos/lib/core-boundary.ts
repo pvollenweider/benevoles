@@ -9,6 +9,9 @@ export type BoundaryFile = { path: string; source: string }
 export type BoundaryViolation = { path: string; line: number; kind: "import" | "token"; detail: string }
 export type BoundaryOptions = { coreRoot: string; allowedPackages: string[]; forbiddenTokens: RegExp[] }
 
+/** The extensions parsed for imports; every other file is only searched for forbidden tokens. */
+const PARSED_EXTENSIONS = new Set([".ts", ".tsx", ".mts", ".cts", ".js", ".mjs", ".cjs"])
+
 /**
  * What the generic engine must never name: the product, its mail catcher, its media host, its
  * locale and time zone, the ports of its local stack, and the ids of its known videos. The first
@@ -106,12 +109,28 @@ function tokenViolations(file: BoundaryFile, sourceFile: ts.SourceFile, tokens: 
   return violations
 }
 
+/**
+ * A file the parser could not fully read is refused: an import lost in error recovery must not
+ * pass. The parser reports its syntax errors in the non-public `parseDiagnostics` property.
+ */
+type ParsedSourceFile = ts.SourceFile & { parseDiagnostics?: readonly ts.Diagnostic[] }
+
+function unparseableViolations(file: BoundaryFile, sourceFile: ts.SourceFile): BoundaryViolation[] {
+  const first = (sourceFile as ParsedSourceFile).parseDiagnostics?.[0]
+  if (!first) return []
+  const line = first.start === undefined ? 1 : sourceFile.getLineAndCharacterOfPosition(first.start).line + 1
+  return [{ path: file.path, line, kind: "import", detail: "unparseable" }]
+}
+
 export function boundaryViolations(files: BoundaryFile[], options: BoundaryOptions): BoundaryViolation[] {
   return files.flatMap(file => {
-    const sourceFile = ts.createSourceFile(file.path, file.source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
+    const sourceFile = ts.createSourceFile(file.path, file.source, ts.ScriptTarget.Latest, true)
+    const violations = tokenViolations(file, sourceFile, options.forbiddenTokens)
+    if (!PARSED_EXTENSIONS.has(path.posix.extname(file.path).toLowerCase())) return violations
     return [
+      ...unparseableViolations(file, sourceFile),
       ...importViolations(file, sourceFile, options),
-      ...tokenViolations(file, sourceFile, options.forbiddenTokens),
+      ...violations,
     ]
   })
 }
