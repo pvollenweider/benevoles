@@ -525,6 +525,43 @@ make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1           # aperçu
 make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1 APPLY=1   # envoi
 ```
 
+## Baseline et boucle de régression
+
+Quelques vidéos de référence gardent, hors de Git, la matière première d'un réassemblage : la
+capture brute, la timeline, les enregistrements de narration, l'audio, la musique et le résultat
+accepté de la boucle. Ce dossier vit dans `$TUTOCAST_BASELINE`, jamais dans le dépôt : aucune
+capture, aucun audio, aucune vidéo et aucune image n'est commité.
+
+Il sert de filet de sécurité : après une modification du pipeline, la boucle réassemble ces vidéos
+avec `assemble.ts` et `validate.ts` inchangés, puis compare le résultat au golden accepté (textes,
+structure, durée, niveaux, images). Une différence stricte, ou au-delà d'une tolérance, fait échouer
+la boucle ; les valeurs qui dépendent de l'encodeur sont seulement signalées.
+
+```bash
+# ajouter une capture et son audio, puis vérifier l'inventaire
+npm run video:baseline -- add --dir "$TUTOCAST_BASELINE" --from "$TUTOCAST_BASELINE/batch43-output" --slugs <slug> --music "$VIDEO_MUSIC_PATH"
+npm run video:baseline -- verify --dir "$TUTOCAST_BASELINE"
+
+# déclarer la deuxième copie, sur un autre disque
+npm run video:baseline -- set-backup --dir "$TUTOCAST_BASELINE" --location <copie-de-secours>
+
+# réassembler et comparer toutes les vidéos, ou une seule
+npm run video:regress -- --dir "$TUTOCAST_BASELINE"
+npm run video:regress -- --dir "$TUTOCAST_BASELINE" --slug event-reports
+
+# accepter un nouveau golden, uniquement pour un changement voulu
+npm run video:regress -- --dir "$TUTOCAST_BASELINE" --accept --note "changement voulu : ..."
+```
+
+`--accept` refuse un run invalide et exige une note : le golden devient la référence des
+comparaisons suivantes, on ne l'accepte donc que lorsqu'on a compris et voulu la différence.
+`--slug` limite la boucle à une vidéo, `--keep` conserve le dossier temporaire de travail pour
+l'inspecter.
+
+La boucle ne remplace pas le rendu complet : une vidéo refilmée ou une narration régénérée suit
+toujours le parcours habituel (capture, assemblage, validation, publication), puis son golden est
+accepté avec la note qui explique le nouveau rendu.
+
 ## Chaîne YouTube (@benevolapp)
 
 La chaîne sert à être trouvé (YouTube, Google, assistants d'IA) ; le site garde son propre
