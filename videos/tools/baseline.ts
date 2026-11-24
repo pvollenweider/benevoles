@@ -16,7 +16,7 @@
  */
 import { execFile } from "node:child_process"
 import { existsSync } from "node:fs"
-import { copyFile, mkdir, readFile, readdir, rm } from "node:fs/promises"
+import { copyFile, lstat, mkdir, readFile, readdir, rm } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
 import {
@@ -24,6 +24,7 @@ import {
   hashTree,
   inventoryIssues,
   readBaseline,
+  unsafeFileName,
   videoInputFiles,
   writeInventory,
   type BaselineInventory,
@@ -99,17 +100,46 @@ async function copyInto(source: string, destination: string): Promise<void> {
   await copyFile(source, destination)
 }
 
+type ResolvedCopy = { source: string; destination: string }
+
 type AddPlan = {
   slug: string
   id: string
   productCommit: string
-  sourceDir: string
-  timeline: Timeline
-  audioNames: string[]
+  copies: ResolvedCopy[]
 }
 
-/** Reads and validates everything first, so a refused `add` has not touched the baseline yet. */
-async function planAdd(from: string, slugs: string[], replace: boolean, existing: BaselineInventory | null): Promise<AddPlan[]> {
+type AddPlanResult = {
+  plans: AddPlan[]
+  catalog: ResolvedCopy
+  music: ResolvedCopy & { replacing: boolean; relative: string }
+}
+
+/** Refuses a source before any mutation when it is missing or is not a regular file. */
+async function requireSourceFile(source: string, label: string): Promise<void> {
+  let stats
+  try {
+    stats = await lstat(source)
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") throw new Error(`${label}: missing source file ${source}`)
+    throw new Error(`${label}: cannot read source file ${source}: ${error instanceof Error ? error.message : String(error)}`)
+  }
+  if (!stats.isFile()) throw new Error(`${label}: source is not a regular file ${source}`)
+}
+
+/**
+ * Reads and validates everything first, so a refused `add` has not touched the baseline. The result
+ * carries every resolved source and destination, so the copy loop never rebuilds a path and a
+ * failure cannot leave a slug's previous files removed.
+ */
+async function planAdd(
+  dir: string,
+  from: string,
+  slugs: string[],
+  musicSource: string,
+  replace: boolean,
+  existing: BaselineInventory | null,
+): Promise<AddPlanResult> {
   const catalog = await loadCatalog()
   const plans: AddPlan[] = []
   for (const slug of slugs) {
@@ -129,6 +159,9 @@ async function planAdd(from: string, slugs: string[], replace: boolean, existing
     if (timeline.capturePurpose !== "narration-timed") throw new Error(`${timelineFile}: capturePurpose must be "narration-timed"`)
     if (!timeline.product?.commit) throw new Error(`${timelineFile}: product.commit is required`)
     if (!timeline.video) throw new Error(`${timelineFile}: video is required`)
+    if (unsafeFileName(timeline.video)) {
+      throw new Error(`${slug}: timeline.video must be a plain file name, got "${timeline.video}".`)
+    }
     let audioNames: string[]
     try {
       const entries = await readdir(path.join(sourceDir, "audio"), { withFileTypes: true })
@@ -139,9 +172,31 @@ async function planAdd(from: string, slugs: string[], replace: boolean, existing
     } catch (error) {
       throw new Error(`Cannot read ${path.join(sourceDir, "audio")}: ${error instanceof Error ? error.message : String(error)}`)
     }
-    plans.push({ slug, id: catalogVideo.id, productCommit: timeline.product.commit, sourceDir, timeline, audioNames })
+    const outputPrefix = `videos/output/${slug}/`
+    const manifest = `videos/manifests/${slug}.json`
+    const copies: ResolvedCopy[] = []
+    for (const relative of videoInputFiles(slug, timeline, audioNames)) {
+      if (relative !== manifest && !relative.startsWith(outputPrefix)) {
+        throw new Error(`${slug}: unexpected input path ${relative}`)
+      }
+      const source =
+        relative === manifest ? path.join(videosRoot, "manifests", `${slug}.json`) : path.join(sourceDir, relative.slice(outputPrefix.length))
+      await requireSourceFile(source, slug)
+      copies.push({ source, destination: path.join(dir, ...relative.split("/")) })
+    }
+    plans.push({ slug, id: catalogVideo.id, productCommit: timeline.product.commit, copies })
   }
-  return plans
+
+  const catalogCopy = { source: path.join(videosRoot, "catalog.json"), destination: path.join(dir, "videos", "catalog.json") }
+  await requireSourceFile(catalogCopy.source, "catalog")
+  const music: ResolvedCopy & { replacing: boolean; relative: string } = {
+    source: musicSource,
+    destination: path.join(dir, "music", path.basename(musicSource)),
+    replacing: path.resolve(musicSource) !== path.resolve(dir, "music", path.basename(musicSource)),
+    relative: `music/${path.basename(musicSource)}`,
+  }
+  await requireSourceFile(music.source, "music")
+  return { plans, catalog: catalogCopy, music }
 }
 
 async function add(): Promise<void> {
@@ -153,14 +208,9 @@ async function add(): Promise<void> {
     .map((slug) => slug.trim())
     .filter(Boolean)
   if (!slugs.length) throw new Error(`--slugs is empty\n\n${USAGE}`)
-  if (!existsSync(musicSource)) throw new Error(`Music file not found: ${musicSource}`)
   const replace = args.includes("--replace")
   const existing = existsSync(path.join(dir, "inventory.json")) ? await readBaseline(dir) : null
-  const plans = await planAdd(from, slugs, replace, existing)
-
-  const musicName = path.basename(musicSource)
-  const music = `music/${musicName}`
-  const musicDestination = path.join(dir, "music", musicName)
+  const { plans, catalog, music } = await planAdd(dir, from, slugs, musicSource, replace, existing)
 
   if (existing) {
     // Everything this run is about to rewrite, so a changed file elsewhere still refuses the command.
@@ -172,32 +222,28 @@ async function add(): Promise<void> {
       ]),
       "videos/catalog.json",
       "README.md",
-      existing.music,
+      // Only a track this run overwrites may hide a changed music file from the check.
+      ...(music.replacing ? [existing.music] : []),
     ]
     await assertUnchanged(dir, existing, replacing)
   }
 
-  // Remove what this run replaces before copying anything, so stale files from an earlier add (an old
-  // audio name, a renamed capture) cannot survive and be hashed as legitimate by the new inventory.
+  // Every source is known to exist now, so remove what this run replaces before copying anything:
+  // stale files from an earlier add (an old audio name, a renamed capture) must not survive and be
+  // hashed as legitimate by the new inventory.
   for (const plan of plans) {
     await rm(path.join(dir, "videos", "output", plan.slug), { recursive: true, force: true })
     if (replace) await rm(path.join(dir, "golden", plan.slug), { recursive: true, force: true })
   }
-  if (existing?.music && existing.music !== music) {
+  if (existing?.music && existing.music !== music.relative) {
     await rm(path.join(dir, ...existing.music.split("/")), { force: true })
   }
 
   for (const plan of plans) {
-    const outputPrefix = `videos/output/${plan.slug}/`
-    for (const relative of videoInputFiles(plan.slug, plan.timeline, plan.audioNames)) {
-      if (!relative.startsWith(outputPrefix)) continue
-      const inner = relative.slice(outputPrefix.length)
-      await copyInto(path.join(plan.sourceDir, inner), path.join(dir, ...relative.split("/")))
-    }
-    await copyInto(path.join(videosRoot, "manifests", `${plan.slug}.json`), path.join(dir, "videos", "manifests", `${plan.slug}.json`))
+    for (const copy of plan.copies) await copyInto(copy.source, copy.destination)
   }
-  await copyInto(path.join(videosRoot, "catalog.json"), path.join(dir, "videos", "catalog.json"))
-  if (path.resolve(musicSource) !== path.resolve(musicDestination)) await copyInto(musicSource, musicDestination)
+  await copyInto(catalog.source, catalog.destination)
+  if (music.replacing) await copyInto(music.source, music.destination)
 
   const videos = { ...(existing?.videos ?? {}) }
   for (const plan of plans) videos[plan.slug] = { id: plan.id, productCommit: plan.productCommit }
@@ -206,7 +252,7 @@ async function add(): Promise<void> {
     createdAt: existing?.createdAt ?? new Date().toISOString(),
     engineCommit: await engineCommit(),
     tools: await toolVersions(),
-    music,
+    music: music.relative,
     ...(existing?.backup ? { backup: existing.backup } : {}),
     videos,
   })

@@ -12,6 +12,7 @@ import {
   hashTree,
   inventoryIssues,
   readBaseline,
+  unsafeFileName,
   videoInputFiles,
   writeInventory,
   type BaselineInventory,
@@ -66,6 +67,16 @@ describe("videoInputFiles", () => {
       "videos/output/a/capture.webm",
       "videos/output/a/audio/x.wav",
     ])
+  })
+})
+
+describe("unsafeFileName", () => {
+  it("rejects an empty, absolute or traversing name", () => {
+    for (const name of ["", "/x", "a/b", "a\\b", "..", "../x"]) expect(unsafeFileName(name), name).toBe(true)
+  })
+
+  it("accepts a plain file name, dots inside the stem included", () => {
+    for (const name of ["capture.webm", "capture.v2.webm"]) expect(unsafeFileName(name), name).toBe(false)
   })
 })
 

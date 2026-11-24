@@ -56,6 +56,11 @@ function hashFile(file: string): Promise<FileFact> {
   })
 }
 
+/** True when `name` is not a plain file name: empty, absolute, or with a separator or `..`. */
+export function unsafeFileName(name: string): boolean {
+  return name === "" || path.isAbsolute(name) || name.includes("/") || name.includes("\\") || name.includes("..")
+}
+
 /** Files a narrated video needs in the baseline, relative to the baseline folder, POSIX paths. */
 export function videoInputFiles(slug: string, timeline: { video: string }, audioFileNames: string[]): string[] {
   const dir = `videos/output/${slug}`
