@@ -145,12 +145,19 @@ export function goldenMatchesInventory(
  * the inventory describes wins: the current one is kept and the aside one removed, or — if the
  * process died between the swap and the inventory write — the unlisted current one is dropped and
  * the listed aside one restored.
+ *
+ * Without an aside, a current golden the inventory does not describe is an uncommitted first
+ * acceptance: the process died between the swap and the inventory write, so the run is dropped and
+ * the video is back to "no golden, run with --accept". When the inventory lists at least one file of
+ * that golden, the disk no longer matches a committed run: that is damage, left to the inventory
+ * check to report.
  */
 export function goldenRecovery(present: {
   current: boolean
   staged: boolean
   aside: boolean
   currentMatchesInventory: boolean
+  inventoryListsGolden: boolean
 }): GoldenRecoveryAction[] {
   const actions: GoldenRecoveryAction[] = []
   if (present.staged) actions.push("remove-staged")
@@ -158,8 +165,24 @@ export function goldenRecovery(present: {
     if (!present.current) actions.push("restore-aside")
     else if (present.currentMatchesInventory) actions.push("remove-aside")
     else actions.push("drop-current", "restore-aside")
+  } else if (present.current && !present.currentMatchesInventory && !present.inventoryListsGolden) {
+    actions.push("drop-current")
   }
   return actions
+}
+
+/** One French line saying which repair was made, naming the video, for the runner to print. */
+export function recoveryMessage(slug: string, action: GoldenRecoveryAction): string {
+  if (action === "remove-staged") {
+    return `${slug} : dossier de travail d'une acceptation interrompue supprimé (golden/.${slug}.new).`
+  }
+  if (action === "restore-aside") {
+    return `${slug} : golden précédent restauré (golden/.${slug}.old remis en place).`
+  }
+  if (action === "remove-aside") {
+    return `${slug} : golden précédent mis de côté supprimé (le golden en place correspond à l'inventaire).`
+  }
+  return `${slug} : golden supprimé ; ce run n'avait jamais été enregistré dans l'inventaire.`
 }
 
 function intervals(values: Interval[] | undefined): Interval[] {

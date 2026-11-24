@@ -37,6 +37,7 @@ import {
   inventoryMetadata,
   missingFrames,
   parseProbeOutput,
+  recoveryMessage,
   validationIssuesFromRun,
   valueSummary,
   type AudioLevelsFacts,
@@ -432,7 +433,8 @@ async function processVideo(options: VideoOptions, inventory: BaselineInventory,
  * Repairs the golden directories left by an interrupted acceptance, before the inventory check:
  * `hashTree` walks `golden/` and would otherwise report them as unlisted files. When both the
  * current and the aside run exist, the inventory says which one is committed: the copy it describes
- * survives, the other one goes.
+ * survives, the other one goes. Without an aside, a first golden the inventory does not list is an
+ * uncommitted acceptance and is dropped. Each repair prints one line saying what was done.
  */
 async function recoverGolden(
   dir: string,
@@ -448,12 +450,14 @@ async function recoverGolden(
     staged: existsSync(stagingDir),
     aside: existsSync(asideDir),
     currentMatchesInventory: goldenMatchesInventory(slug, listed, onDisk),
+    inventoryListsGolden: Object.keys(listed).some((file) => file.startsWith(`golden/${slug}/`)),
   }
   for (const action of goldenRecovery(present)) {
     if (action === "remove-staged") await rm(stagingDir, { recursive: true, force: true })
     else if (action === "drop-current") await rm(goldenDir, { recursive: true, force: true })
     else if (action === "restore-aside") await rename(asideDir, goldenDir)
     else await rm(asideDir, { recursive: true, force: true })
+    console.log(recoveryMessage(slug, action))
   }
 }
 

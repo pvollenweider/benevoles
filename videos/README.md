@@ -560,7 +560,8 @@ par son premier golden accepté (`video:regress --accept`).
 `--accept` refuse un run invalide et exige une note : le golden devient la référence des
 comparaisons suivantes, on ne l'accepte donc que lorsqu'on a compris et voulu la différence.
 `--slug` limite la boucle à une vidéo, `--keep` conserve le dossier temporaire de travail pour
-l'inspecter.
+l'inspecter. Une acceptation interrompue est réparée au run suivant, qui imprime en une ligne ce
+qu'il a réparé.
 
 La boucle ne remplace pas le rendu complet : une vidéo refilmée ou une narration régénérée suit
 toujours le parcours habituel (capture, assemblage, validation, publication), puis son golden est

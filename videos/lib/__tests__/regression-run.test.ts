@@ -11,6 +11,7 @@ import {
   missingFrames,
   parseFrameRate,
   parseProbeOutput,
+  recoveryMessage,
   validationIssuesFromRun,
   valueSummary,
   type RunSources,
@@ -98,33 +99,74 @@ describe("missingFrames", () => {
 
 describe("goldenRecovery", () => {
   it("does nothing when no golden directory is left", () => {
-    expect(goldenRecovery({ current: false, staged: false, aside: false, currentMatchesInventory: true })).toEqual([])
+    expect(goldenRecovery({ current: false, staged: false, aside: false, currentMatchesInventory: true, inventoryListsGolden: true })).toEqual([])
   })
 
   it("removes a leftover staging directory", () => {
-    expect(goldenRecovery({ current: false, staged: true, aside: false, currentMatchesInventory: true })).toEqual(["remove-staged"])
+    expect(goldenRecovery({ current: false, staged: true, aside: false, currentMatchesInventory: true, inventoryListsGolden: true }))
+      .toEqual(["remove-staged"])
   })
 
   it("restores a previous golden moved aside without a current one", () => {
-    expect(goldenRecovery({ current: false, staged: false, aside: true, currentMatchesInventory: true })).toEqual(["restore-aside"])
+    expect(goldenRecovery({ current: false, staged: false, aside: true, currentMatchesInventory: true, inventoryListsGolden: true }))
+      .toEqual(["restore-aside"])
   })
 
   it("removes a previous golden moved aside when the current one is in place", () => {
-    expect(goldenRecovery({ current: true, staged: false, aside: true, currentMatchesInventory: true })).toEqual(["remove-aside"])
+    expect(goldenRecovery({ current: true, staged: false, aside: true, currentMatchesInventory: true, inventoryListsGolden: true }))
+      .toEqual(["remove-aside"])
   })
 
   it("removes the staging directory before restoring the previous golden", () => {
-    expect(goldenRecovery({ current: false, staged: true, aside: true, currentMatchesInventory: true })).toEqual(["remove-staged", "restore-aside"])
+    expect(goldenRecovery({ current: false, staged: true, aside: true, currentMatchesInventory: true, inventoryListsGolden: true }))
+      .toEqual(["remove-staged", "restore-aside"])
   })
 
   it("drops a current golden the inventory does not describe before restoring the one it does", () => {
-    expect(goldenRecovery({ current: true, staged: false, aside: true, currentMatchesInventory: false }))
+    expect(goldenRecovery({ current: true, staged: false, aside: true, currentMatchesInventory: false, inventoryListsGolden: true }))
       .toEqual(["drop-current", "restore-aside"])
   })
 
   it("removes the staging directory, then drops the unlisted current golden before restoring the listed one", () => {
-    expect(goldenRecovery({ current: true, staged: true, aside: true, currentMatchesInventory: false }))
+    expect(goldenRecovery({ current: true, staged: true, aside: true, currentMatchesInventory: false, inventoryListsGolden: true }))
       .toEqual(["remove-staged", "drop-current", "restore-aside"])
+  })
+
+  it("drops an uncommitted first golden the inventory does not list", () => {
+    expect(goldenRecovery({ current: true, staged: false, aside: false, currentMatchesInventory: false, inventoryListsGolden: false }))
+      .toEqual(["drop-current"])
+  })
+
+  it("removes the staging directory, then drops an uncommitted first golden the inventory does not list", () => {
+    expect(goldenRecovery({ current: true, staged: true, aside: false, currentMatchesInventory: false, inventoryListsGolden: false }))
+      .toEqual(["remove-staged", "drop-current"])
+  })
+
+  it("leaves a listed golden the disk no longer matches to the inventory check", () => {
+    expect(goldenRecovery({ current: true, staged: false, aside: false, currentMatchesInventory: false, inventoryListsGolden: true }))
+      .toEqual([])
+  })
+
+  it("leaves a listed golden that matches the inventory alone", () => {
+    expect(goldenRecovery({ current: true, staged: false, aside: false, currentMatchesInventory: true, inventoryListsGolden: true }))
+      .toEqual([])
+  })
+})
+
+describe("recoveryMessage", () => {
+  const actions = ["remove-staged", "restore-aside", "remove-aside", "drop-current"] as const
+
+  it("names the slug in every line", () => {
+    for (const action of actions) expect(recoveryMessage("beta-access", action), action).toContain("beta-access")
+  })
+
+  it("gives a different line for each action", () => {
+    const lines = actions.map((action) => recoveryMessage("beta-access", action))
+    expect(new Set(lines).size).toBe(actions.length)
+  })
+
+  it("says a dropped run was never recorded in the inventory", () => {
+    expect(recoveryMessage("beta-access", "drop-current")).toContain("inventaire")
   })
 })
 
