@@ -239,15 +239,27 @@ export function baselineReadme(inventory: BaselineInventory): string {
 /**
  * Writes `README.md`, then the checksums of the folder, then `inventory.json`, and refuses to return
  * an inventory that does not describe what is on disk. This is the only writer of the inventory.
+ * `ignore` names paths that are not part of the baseline material (a previous golden kept aside by an
+ * interrupted swap): they are neither inventoried nor reported as unlisted.
  */
-export async function writeInventory(dir: string, inventory: Omit<BaselineInventory, "files">): Promise<BaselineInventory> {
+export async function writeInventory(
+  dir: string,
+  inventory: Omit<BaselineInventory, "files">,
+  ignore: string[] = [],
+): Promise<BaselineInventory> {
   await mkdir(dir, { recursive: true })
   const base: BaselineInventory = { ...inventory, files: {} }
   await writeFile(path.join(dir, "README.md"), baselineReadme(base), "utf8")
-  const files = await hashTree(dir)
-  const written: BaselineInventory = { ...inventory, files }
+  const hash = async (): Promise<Record<string, FileFact>> => {
+    const files = await hashTree(dir)
+    if (!ignore.length) return files
+    return Object.fromEntries(
+      Object.entries(files).filter(([file]) => !ignore.some((entry) => file === entry || file.startsWith(entry.endsWith("/") ? entry : `${entry}/`))),
+    )
+  }
+  const written: BaselineInventory = { ...inventory, files: await hash() }
   await writeFile(path.join(dir, INVENTORY_FILE), `${JSON.stringify(written, null, 2)}\n`, "utf8")
-  const issues = inventoryIssues(written, await hashTree(dir))
+  const issues = inventoryIssues(written, await hash())
   if (issues.length) {
     throw new Error(`Inventory written to ${path.join(dir, INVENTORY_FILE)} does not describe the folder:\n${issues.join("\n")}`)
   }

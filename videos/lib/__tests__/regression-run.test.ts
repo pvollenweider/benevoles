@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest"
 import {
   buildRunFacts,
   firstDifferingLine,
+  goldenMatchesInventory,
   goldenRecovery,
   inventoryMetadata,
   missingFrames,
@@ -97,23 +98,73 @@ describe("missingFrames", () => {
 
 describe("goldenRecovery", () => {
   it("does nothing when no golden directory is left", () => {
-    expect(goldenRecovery({ current: false, staged: false, aside: false })).toEqual([])
+    expect(goldenRecovery({ current: false, staged: false, aside: false, currentMatchesInventory: true })).toEqual([])
   })
 
   it("removes a leftover staging directory", () => {
-    expect(goldenRecovery({ current: false, staged: true, aside: false })).toEqual(["remove-staged"])
+    expect(goldenRecovery({ current: false, staged: true, aside: false, currentMatchesInventory: true })).toEqual(["remove-staged"])
   })
 
   it("restores a previous golden moved aside without a current one", () => {
-    expect(goldenRecovery({ current: false, staged: false, aside: true })).toEqual(["restore-aside"])
+    expect(goldenRecovery({ current: false, staged: false, aside: true, currentMatchesInventory: true })).toEqual(["restore-aside"])
   })
 
   it("removes a previous golden moved aside when the current one is in place", () => {
-    expect(goldenRecovery({ current: true, staged: false, aside: true })).toEqual(["remove-aside"])
+    expect(goldenRecovery({ current: true, staged: false, aside: true, currentMatchesInventory: true })).toEqual(["remove-aside"])
   })
 
   it("removes the staging directory before restoring the previous golden", () => {
-    expect(goldenRecovery({ current: false, staged: true, aside: true })).toEqual(["remove-staged", "restore-aside"])
+    expect(goldenRecovery({ current: false, staged: true, aside: true, currentMatchesInventory: true })).toEqual(["remove-staged", "restore-aside"])
+  })
+
+  it("drops a current golden the inventory does not describe before restoring the one it does", () => {
+    expect(goldenRecovery({ current: true, staged: false, aside: true, currentMatchesInventory: false }))
+      .toEqual(["drop-current", "restore-aside"])
+  })
+
+  it("removes the staging directory, then drops the unlisted current golden before restoring the listed one", () => {
+    expect(goldenRecovery({ current: true, staged: true, aside: true, currentMatchesInventory: false }))
+      .toEqual(["remove-staged", "drop-current", "restore-aside"])
+  })
+})
+
+describe("goldenMatchesInventory", () => {
+  const slug = "beta-access"
+  const listed = {
+    "golden/beta-access/facts.json": { sha256: "facts" },
+    "golden/beta-access/beta-access.txt": { sha256: "txt" },
+  }
+  const onDisk = {
+    "golden/beta-access/facts.json": { sha256: "facts" },
+    "golden/beta-access/beta-access.txt": { sha256: "txt" },
+  }
+
+  it("matches identical listed and on-disk files of the slug", () => {
+    expect(goldenMatchesInventory(slug, listed, onDisk)).toBe(true)
+  })
+
+  it("refuses a file whose checksum differs", () => {
+    expect(goldenMatchesInventory(slug, listed, { ...onDisk, "golden/beta-access/facts.json": { sha256: "other" } })).toBe(false)
+  })
+
+  it("refuses a file on disk that the inventory does not list", () => {
+    expect(goldenMatchesInventory(slug, listed, { ...onDisk, "golden/beta-access/frames/0.png": { sha256: "frame" } })).toBe(false)
+  })
+
+  it("refuses a listed file that is absent from disk", () => {
+    const withoutTxt: Record<string, { sha256: string }> = { ...onDisk }
+    delete withoutTxt["golden/beta-access/beta-access.txt"]
+    expect(goldenMatchesInventory(slug, listed, withoutTxt)).toBe(false)
+  })
+
+  it("ignores the files of another slug", () => {
+    expect(goldenMatchesInventory(slug, { ...listed, "golden/other/facts.json": { sha256: "other" } }, onDisk)).toBe(true)
+    expect(goldenMatchesInventory(slug, listed, { ...onDisk, "golden/other/facts.json": { sha256: "other" } })).toBe(true)
+    expect(goldenMatchesInventory(slug, listed, { ...onDisk, "golden/beta-access-2/facts.json": { sha256: "other" } })).toBe(true)
+  })
+
+  it("does not match when neither side has a file for the slug", () => {
+    expect(goldenMatchesInventory(slug, {}, {})).toBe(false)
   })
 })
 

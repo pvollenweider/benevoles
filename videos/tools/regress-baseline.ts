@@ -32,6 +32,7 @@ import { frameSampleTimes, parseBlackdetect, parseFreezedetect, parseSsimAll } f
 import { compareRuns, failing, type Finding, type RunFacts } from "../lib/regression-compare"
 import {
   buildRunFacts,
+  goldenMatchesInventory,
   goldenRecovery,
   inventoryMetadata,
   missingFrames,
@@ -323,10 +324,13 @@ async function acceptGolden(
     await rm(stagingDir, { recursive: true, force: true }).catch(() => {})
     throw error
   }
-  if (hadGolden) await rm(asideDir, { recursive: true, force: true })
 
   inventory.videos[slug] = { ...inventory.videos[slug], golden: { acceptedAt: new Date().toISOString(), note } }
-  return writeInventory(dir, inventoryMetadata(inventory))
+  // The previous run stays beside the new one until the inventory describes the new one: the aside
+  // directory is excluded from the inventory, then removed only once `writeInventory` has succeeded.
+  const written = await writeInventory(dir, inventoryMetadata(inventory), [`golden/.${slug}.old`])
+  if (hadGolden) await rm(asideDir, { recursive: true, force: true })
+  return written
 }
 
 function printFindings(findings: Finding[]): void {
@@ -426,15 +430,28 @@ async function processVideo(options: VideoOptions, inventory: BaselineInventory,
 
 /**
  * Repairs the golden directories left by an interrupted acceptance, before the inventory check:
- * `hashTree` walks `golden/` and would otherwise report them as unlisted files.
+ * `hashTree` walks `golden/` and would otherwise report them as unlisted files. When both the
+ * current and the aside run exist, the inventory says which one is committed: the copy it describes
+ * survives, the other one goes.
  */
-async function recoverGolden(dir: string, slug: string): Promise<void> {
+async function recoverGolden(
+  dir: string,
+  slug: string,
+  listed: Record<string, { sha256: string }>,
+  onDisk: Record<string, { sha256: string }>,
+): Promise<void> {
   const goldenDir = path.join(dir, "golden", slug)
   const stagingDir = path.join(dir, "golden", `.${slug}.new`)
   const asideDir = path.join(dir, "golden", `.${slug}.old`)
-  const present = { current: existsSync(goldenDir), staged: existsSync(stagingDir), aside: existsSync(asideDir) }
+  const present = {
+    current: existsSync(goldenDir),
+    staged: existsSync(stagingDir),
+    aside: existsSync(asideDir),
+    currentMatchesInventory: goldenMatchesInventory(slug, listed, onDisk),
+  }
   for (const action of goldenRecovery(present)) {
     if (action === "remove-staged") await rm(stagingDir, { recursive: true, force: true })
+    else if (action === "drop-current") await rm(goldenDir, { recursive: true, force: true })
     else if (action === "restore-aside") await rename(asideDir, goldenDir)
     else await rm(asideDir, { recursive: true, force: true })
   }
@@ -459,10 +476,11 @@ async function main(): Promise<void> {
   }
   const slugs = requestedSlug ? [requestedSlug] : available
   // `hashTree` walks golden/, including the directories left by an interrupted acceptance: repair
-  // them before the inventory check so the baseline can still be repaired.
-  if (accept) {
-    for (const slug of slugs) await recoverGolden(dir, slug)
-  }
+  // them before the inventory check, in both modes and for every video, not only the ones in scope,
+  // so a compare run after a crash repairs the folder instead of reporting a stray file. The
+  // inventory says which copy is committed when a current and an aside run both exist.
+  const onDisk = await hashTree(dir)
+  for (const slug of available) await recoverGolden(dir, slug, inventory.files, onDisk)
   const issues = inventoryIssues(inventory, await hashTree(dir))
   if (issues.length) {
     for (const issue of issues) console.error(issue)

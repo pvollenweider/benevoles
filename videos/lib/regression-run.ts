@@ -3,8 +3,9 @@
 
 /**
  * Pure helpers of the regression runner: turn the JSON files and the FFmpeg/FFprobe output of a
- * run into `RunFacts`, check that a validation report agrees with its exit code, and choose what
- * to print for a finding.
+ * run into `RunFacts`, check that a validation report agrees with its exit code, choose what to
+ * print for a finding, and decide how to repair a golden directory left by an interrupted
+ * acceptance.
  *
  * The runner itself (`videos/tools/regress-baseline.ts`) only orchestrates child processes and
  * copies: everything that can be decided from strings and objects lives here, under test.
@@ -116,18 +117,48 @@ export function missingFrames(atMs: number[], present: Record<number, number>): 
 }
 
 /** A repair of the golden directories left by an interrupted acceptance, in the order to run it. */
-export type GoldenRecoveryAction = "remove-staged" | "restore-aside" | "remove-aside"
+export type GoldenRecoveryAction = "remove-staged" | "restore-aside" | "remove-aside" | "drop-current"
 
 /**
- * What to do at the start of an acceptance with the golden directories left by an interrupted
- * swap. An unfinished staging directory always goes first. A previous golden moved aside is put
- * back when the current one is absent (the swap never completed), and removed when the current one
- * is in place (the swap completed but the cleanup did not).
+ * True when the files of `golden/<slug>/` match the inventory exactly: every file on disk has the
+ * listed checksum and the inventory lists no other file of that slug. Files of other slugs are
+ * ignored, and an absent golden matches nothing (both sides empty is false), so a missing folder is
+ * never treated as an accepted run.
  */
-export function goldenRecovery(present: { current: boolean; staged: boolean; aside: boolean }): GoldenRecoveryAction[] {
+export function goldenMatchesInventory(
+  slug: string,
+  listed: Record<string, { sha256: string }>,
+  onDisk: Record<string, { sha256: string }>,
+): boolean {
+  const prefix = `golden/${slug}/`
+  const listedFiles = Object.entries(listed).filter(([file]) => file.startsWith(prefix))
+  const onDiskFiles = new Map(Object.entries(onDisk).filter(([file]) => file.startsWith(prefix)))
+  if (listedFiles.length === 0) return false
+  if (listedFiles.length !== onDiskFiles.size) return false
+  return listedFiles.every(([file, fact]) => onDiskFiles.get(file)?.sha256 === fact.sha256)
+}
+
+/**
+ * What to do at the start of a command with the golden directories left by an interrupted
+ * acceptance. An unfinished staging directory always goes first. A previous golden moved aside is
+ * put back when the current one is absent (the swap never completed). When both are present, the one
+ * the inventory describes wins: the current one is kept and the aside one removed, or — if the
+ * process died between the swap and the inventory write — the unlisted current one is dropped and
+ * the listed aside one restored.
+ */
+export function goldenRecovery(present: {
+  current: boolean
+  staged: boolean
+  aside: boolean
+  currentMatchesInventory: boolean
+}): GoldenRecoveryAction[] {
   const actions: GoldenRecoveryAction[] = []
   if (present.staged) actions.push("remove-staged")
-  if (present.aside) actions.push(present.current ? "remove-aside" : "restore-aside")
+  if (present.aside) {
+    if (!present.current) actions.push("restore-aside")
+    else if (present.currentMatchesInventory) actions.push("remove-aside")
+    else actions.push("drop-current", "restore-aside")
+  }
   return actions
 }
 

@@ -220,6 +220,19 @@ describe("writeInventory", () => {
     expect(second.files["golden/a/frame.png"]).toEqual({ sha256: sha256("frame"), bytes: 5 })
     expect((await readBaseline(directory)).files).toEqual(second.files)
   })
+
+  it("leaves an ignored recovery directory out of the inventory", async () => {
+    const directory = await temporaryDirectory()
+    const first = await writeInventory(directory, inventory())
+    await mkdir(path.join(directory, "golden", ".a.old"), { recursive: true })
+    await writeFile(path.join(directory, "golden", ".a.old", "frame.png"), "old")
+
+    const second = await writeInventory(directory, first, ["golden/.a.old"])
+
+    expect(second.files).not.toHaveProperty("golden/.a.old/frame.png")
+    await rm(path.join(directory, "golden", ".a.old"), { recursive: true })
+    expect(inventoryIssues(second, await hashTree(directory))).toEqual([])
+  })
 })
 
 describe("baselineReadme", () => {
