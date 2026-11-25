@@ -431,7 +431,7 @@ async function processVideo(options: VideoOptions, inventory: BaselineInventory,
       if (collected.facts.black.length) {
         const stretches = collected.facts.black.map(({ startMs, endMs }) =>
           `- de ${(startMs / 1_000).toFixed(2)} s à ${(endMs / 1_000).toFixed(2)} s`)
-        throw new Error(`${slug} : blackdetect a relevé ${collected.facts.black.length} passage(s) noir(s) ; un golden ne doit pas contenir de passage noir, rien n'a été écrit :\n${stretches.join("\n")}`)
+        throw new Error(`${slug} : blackdetect a relevé ${collected.facts.black.length} passage(s) noir(s) ; un golden ne doit pas contenir de passage noir, rien n'a été écrit :\n${stretches.join("\n")}\nRegarder la capture à ces instants ; une image réellement noire impose de refaire la capture, rien n'est accepté.`)
       }
       const written = await acceptGolden(dir, slug, collected, note, inventory)
       console.log(`Golden accepté pour ${slug} (note : ${note}).`)

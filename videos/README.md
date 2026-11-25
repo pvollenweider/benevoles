@@ -539,11 +539,11 @@ la boucle ; les valeurs qui dépendent de l'encodeur sont seulement signalées.
 
 ```bash
 # ajouter une capture et son audio, puis vérifier l'inventaire
-npm run video:baseline -- add --dir "$TUTOCAST_BASELINE" --from "<output folder of a render that keeps its captures>" --slugs <slug> --music "$VIDEO_MUSIC_PATH"
+npm run video:baseline -- add --dir "$TUTOCAST_BASELINE" --from "<output folder of a render that keeps its captures>" --slugs "<slug>" --music "$VIDEO_MUSIC_PATH"
 npm run video:baseline -- verify --dir "$TUTOCAST_BASELINE"
 
 # déclarer la deuxième copie, sur un autre disque
-npm run video:baseline -- set-backup --dir "$TUTOCAST_BASELINE" --location <copie-de-secours>
+npm run video:baseline -- set-backup --dir "$TUTOCAST_BASELINE" --location "<copie-de-secours>"
 
 # réassembler et comparer toutes les vidéos, ou une seule
 npm run video:regress -- --dir "$TUTOCAST_BASELINE"
@@ -571,7 +571,8 @@ Depuis la deuxième copie (`<second copy>`) vers la baseline (`<baseline>`), rem
 le même contenu, puis vérifier :
 
 ```bash
-rsync -a --delete "<second copy>/README.md" "<second copy>/inventory.json" "<second copy>/music/" "<second copy>/videos/" "<second copy>/golden/" "<baseline>/"
+# deuxième copie -> baseline (restauration)
+rsync -a --delete "<second copy>/README.md" "<second copy>/inventory.json" "<second copy>/music" "<second copy>/videos" "<second copy>/golden" "<baseline>/"
 npm run video:baseline -- verify --dir "<baseline>"
 ```
 
@@ -579,7 +580,8 @@ Le même transfert, dans l'autre sens, garde la deuxième copie à jour : le lan
 et chaque `--accept`, puis `verify` sur la copie.
 
 ```bash
-rsync -a --delete "<baseline>/README.md" "<baseline>/inventory.json" "<baseline>/music/" "<baseline>/videos/" "<baseline>/golden/" "<second copy>/"
+# baseline -> deuxième copie (après chaque add et chaque --accept)
+rsync -a --delete "<baseline>/README.md" "<baseline>/inventory.json" "<baseline>/music" "<baseline>/videos" "<baseline>/golden" "<second copy>/"
 npm run video:baseline -- verify --dir "<second copy>"
 ```
 

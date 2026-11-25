@@ -293,7 +293,7 @@ export function baselineReadme(inventory: BaselineInventory): string {
     : ["- (aucune vidéo pour l'instant)"]
   const secondCopy = inventory.backup ?? "<second copy>"
   const baseline = "<baseline>"
-  const baselineFiles = ["README.md", "inventory.json", "music/", "videos/", "golden/"]
+  const baselineFiles = ["README.md", "inventory.json", "music", "videos", "golden"]
   const quoted = (root: string) => baselineFiles.map((file) => `"${root}/${file}"`).join(" ")
   const backupLines = [
     ...(inventory.backup
@@ -302,7 +302,7 @@ export function baselineReadme(inventory: BaselineInventory): string {
           "Aucune deuxième copie n'est déclarée. En choisir une, hors Git et sur un autre disque :",
           "",
           "```bash",
-          `npm run video:baseline -- set-backup --dir "${baseline}" --location <second copy>`,
+          `npm run video:baseline -- set-backup --dir "${baseline}" --location "<second copy>"`,
           "```",
         ]),
     "",
@@ -311,6 +311,7 @@ export function baselineReadme(inventory: BaselineInventory): string {
     `Depuis la deuxième copie (\`${secondCopy}\`) vers la baseline (\`${baseline}\`), remplacer son contenu par le même contenu, puis vérifier :`,
     "",
     "```bash",
+    "# deuxième copie -> baseline (restauration)",
     `rsync -a --delete ${quoted(secondCopy)} "${baseline}/"`,
     `npm run video:baseline -- verify --dir "${baseline}"`,
     "```",
@@ -320,6 +321,7 @@ export function baselineReadme(inventory: BaselineInventory): string {
     "Le même transfert, dans l'autre sens, après chaque `add` et chaque `--accept`, puis `verify` sur la deuxième copie :",
     "",
     "```bash",
+    "# baseline -> deuxième copie (après chaque add et chaque --accept)",
     `rsync -a --delete ${quoted(baseline)} "${secondCopy}/"`,
     `npm run video:baseline -- verify --dir "${secondCopy}"`,
     "```",
@@ -382,7 +384,7 @@ export function baselineReadme(inventory: BaselineInventory): string {
     "## Ajouter une vidéo",
     "",
     "```bash",
-    'npm run video:baseline -- add --dir "<baseline>" --from "<output folder of a render that keeps its captures>" --slugs <slug> --music "$VIDEO_MUSIC_PATH"',
+    'npm run video:baseline -- add --dir "<baseline>" --from "<output folder of a render that keeps its captures>" --slugs "<slug>" --music "$VIDEO_MUSIC_PATH"',
     "```",
     "",
     "`add` recopie la capture, la timeline, les enregistrements de narration, l'audio et la musique, puis",
@@ -417,8 +419,13 @@ export async function writeInventory(
   // temporary name is outside the roots `hashTree` walks, so it is never inventoried.
   const inventoryFile = path.join(dir, INVENTORY_FILE)
   const temporaryFile = `${inventoryFile}.tmp`
-  await writeFile(temporaryFile, `${JSON.stringify(written, null, 2)}\n`, "utf8")
-  await rename(temporaryFile, inventoryFile)
+  try {
+    await writeFile(temporaryFile, `${JSON.stringify(written, null, 2)}\n`, "utf8")
+    await rename(temporaryFile, inventoryFile)
+  } catch (error) {
+    await rm(temporaryFile, { force: true }).catch(() => {})
+    throw error
+  }
   const issues = inventoryIssues(written, await hash())
   if (issues.length) {
     throw new Error(`Inventory written to ${inventoryFile} does not describe the folder:\n${issues.join("\n")}`)

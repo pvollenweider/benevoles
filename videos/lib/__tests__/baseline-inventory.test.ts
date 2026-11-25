@@ -324,6 +324,14 @@ describe("writeInventory", () => {
     expect((await readBaseline(directory)).files).toEqual(second.files)
   })
 
+  it("removes inventory.json.tmp when the rename fails", async () => {
+    const directory = await temporaryDirectory()
+    await mkdir(path.join(directory, "inventory.json"))
+
+    await expect(writeInventory(directory, inventory())).rejects.toThrow()
+    await expect(stat(path.join(directory, "inventory.json.tmp"))).rejects.toMatchObject({ code: "ENOENT" })
+  })
+
   it("leaves an ignored recovery directory out of the inventory", async () => {
     const directory = await temporaryDirectory()
     const first = await writeInventory(directory, inventory())
@@ -386,7 +394,47 @@ describe("baselineReadme", () => {
   it("says how to declare a second copy when none is known", () => {
     const readme = baselineReadme(inventory({ videos: { "event-reports": { id: "EVENT_REPORTS", productCommit: "e8ed666a" } } }))
     expect(readme).toContain("set-backup")
-    expect(readme).toContain("<second copy>")
+    expect(readme).toContain('--location "<second copy>"')
+    expect(readme).not.toMatch(/--location <second copy>/)
     expect(readme).not.toContain("undefined")
+  })
+
+  it("prints the exact restore and copy-back commands, without a trailing slash on a source", () => {
+    const backup = "/Volumes/backup/tutocast-baseline"
+    const readme = baselineReadme(inventory({ backup }))
+    const commands = readme.split("\n").filter((line) => line.startsWith("rsync -a --delete"))
+
+    expect(commands).toEqual([
+      `rsync -a --delete "${backup}/README.md" "${backup}/inventory.json" "${backup}/music" "${backup}/videos" "${backup}/golden" "<baseline>/"`,
+      `rsync -a --delete "<baseline>/README.md" "<baseline>/inventory.json" "<baseline>/music" "<baseline>/videos" "<baseline>/golden" "${backup}/"`,
+    ])
+
+    for (const command of commands) {
+      const arguments_ = (command.match(/"[^"]*"|\S+/g) ?? []).map((argument) => argument.slice(1, -1))
+      const sources = arguments_.slice(3, 8)
+      const destination = arguments_[8]
+      expect(sources).toHaveLength(5)
+      for (const source of sources) expect(source.endsWith("/"), source).toBe(false)
+      expect(destination.endsWith("/"), destination).toBe(true)
+    }
+  })
+
+  it("opens each transfer block with its direction comment", () => {
+    const readme = baselineReadme(inventory({ backup: "/Volumes/backup/tutocast-baseline" }))
+
+    const block = (heading: string, nextHeading: string): string[] => {
+      const section = readme.slice(readme.indexOf(heading), readme.indexOf(nextHeading))
+      const lines = section.split("\n")
+      const start = lines.indexOf("```bash")
+      return lines.slice(start + 1, lines.indexOf("```", start + 1))
+    }
+
+    const restore = block("### Restaurer", "### Garder la deuxième copie à jour")
+    expect(restore[0]).toBe("# deuxième copie -> baseline (restauration)")
+    expect(restore[1]).toMatch(/^rsync -a --delete /)
+
+    const copyBack = block("### Garder la deuxième copie à jour", "### Réparer")
+    expect(copyBack[0]).toBe("# baseline -> deuxième copie (après chaque add et chaque --accept)")
+    expect(copyBack[1]).toMatch(/^rsync -a --delete /)
   })
 })
