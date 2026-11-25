@@ -8,11 +8,12 @@
  * The inventory is only written through `writeInventory`, which writes the README first, then the
  * checksums of what is on disk, then `inventory.json`, and refuses to leave an inconsistent folder
  * behind. `hashTree` deliberately walks only the documented roots of a baseline, so the source
- * material kept beside them (`batch43-output/`) is never reported as an unlisted file.
+ * material kept beside them (`<output folder of a render that keeps its captures>`) is never reported
+ * as an unlisted file.
  */
 import { createHash } from "node:crypto"
 import { createReadStream } from "node:fs"
-import { lstat, mkdir, open, readdir, readFile, rm, writeFile } from "node:fs/promises"
+import { lstat, mkdir, open, readdir, readFile, rename, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 export type FileFact = { sha256: string; bytes: number }
@@ -109,12 +110,21 @@ export async function assertUnchanged(dir: string, inventory: BaselineInventory,
 
 /** Reads the inventory of a baseline folder, with the Review Focus 1 message when there is none. */
 export async function readBaseline(dir: string): Promise<BaselineInventory> {
+  const file = path.join(dir, INVENTORY_FILE)
+  let text: string
   try {
-    return JSON.parse(await readFile(path.join(dir, INVENTORY_FILE), "utf8")) as BaselineInventory
+    text = await readFile(file, "utf8")
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code
     if (code === "ENOENT" || code === "ENOTDIR") throw new Error(missingBaselineMessage(dir))
     throw error
+  }
+  try {
+    return JSON.parse(text) as BaselineInventory
+  } catch (error) {
+    throw new Error(
+      `${dir}: inventory.json is not valid JSON (${error instanceof Error ? error.message : String(error)}). See ${path.join(dir, "README.md")} for what this folder holds and how to restore it from its backup copy.`,
+    )
   }
 }
 
@@ -211,7 +221,7 @@ async function acquireLock(dir: string, file: string, command: string): Promise<
       if (decision === "refuse") {
         const lock = existing as BaselineLock
         throw new Error(
-          `Baseline ${dir} is locked by process ${lock.pid} (${lock.command}, started ${lock.startedAt}); wait for it to finish or check that process before retrying.`,
+          `Baseline ${dir} is locked by process ${lock.pid} (${lock.command}, started ${lock.startedAt}); wait for it to finish or check that process before retrying. If no command is running, ${file} can be deleted by hand.`,
         )
       }
       // The file vanished between the failed exclusive open and the read: just try again.
@@ -281,22 +291,43 @@ export function baselineReadme(inventory: BaselineInventory): string {
         return `- \`${slug}\` (\`${video.id}\`), commit produit \`${video.productCommit}\`${golden}`
       })
     : ["- (aucune vidéo pour l'instant)"]
-  const backupLines = inventory.backup
-    ? [
-        `La deuxième copie de ce dossier se trouve dans \`${inventory.backup}\`.`,
-        "Pour restaurer, recopier son contenu par-dessus ce dossier (sans rien supprimer), puis vérifier :",
-        "",
-        "```bash",
-        `rsync -a "${inventory.backup}/" "$TUTOCAST_BASELINE/"`,
-        "```",
-      ]
-    : [
-        "Aucune deuxième copie n'est déclarée. En choisir une, hors Git et sur un autre disque :",
-        "",
-        "```bash",
-        'npm run video:baseline -- set-backup --dir "$TUTOCAST_BASELINE" --location <chemin-de-la-copie>',
-        "```",
-      ]
+  const secondCopy = inventory.backup ?? "<second copy>"
+  const baseline = "<baseline>"
+  const baselineFiles = ["README.md", "inventory.json", "music/", "videos/", "golden/"]
+  const quoted = (root: string) => baselineFiles.map((file) => `"${root}/${file}"`).join(" ")
+  const backupLines = [
+    ...(inventory.backup
+      ? [`La deuxième copie de ce dossier se trouve dans \`${inventory.backup}\`.`]
+      : [
+          "Aucune deuxième copie n'est déclarée. En choisir une, hors Git et sur un autre disque :",
+          "",
+          "```bash",
+          `npm run video:baseline -- set-backup --dir "${baseline}" --location <second copy>`,
+          "```",
+        ]),
+    "",
+    "### Restaurer",
+    "",
+    `Depuis la deuxième copie (\`${secondCopy}\`) vers la baseline (\`${baseline}\`), remplacer son contenu par le même contenu, puis vérifier :`,
+    "",
+    "```bash",
+    `rsync -a --delete ${quoted(secondCopy)} "${baseline}/"`,
+    `npm run video:baseline -- verify --dir "${baseline}"`,
+    "```",
+    "",
+    "### Garder la deuxième copie à jour",
+    "",
+    "Le même transfert, dans l'autre sens, après chaque `add` et chaque `--accept`, puis `verify` sur la deuxième copie :",
+    "",
+    "```bash",
+    `rsync -a --delete ${quoted(baseline)} "${secondCopy}/"`,
+    `npm run video:baseline -- verify --dir "${secondCopy}"`,
+    "```",
+    "",
+    "### Réparer",
+    "",
+    "Quand une commande refuse le dossier, le restaurer depuis la deuxième copie. Sans deuxième copie, supprimer `golden/<slug>/` et accepter de nouveau. Un `.lock` laissé derrière peut être supprimé à la main quand aucune commande ne tourne.",
+  ]
   return [
     "# Baseline des vidéos de référence",
     "",
@@ -345,13 +376,13 @@ export function baselineReadme(inventory: BaselineInventory): string {
     "`missing:`, `changed:` ou `unlisted:`, et la commande sort en erreur :",
     "",
     "```bash",
-    'npm run video:baseline -- verify --dir "$TUTOCAST_BASELINE"',
+    'npm run video:baseline -- verify --dir "<baseline>"',
     "```",
     "",
     "## Ajouter une vidéo",
     "",
     "```bash",
-    'npm run video:baseline -- add --dir "$TUTOCAST_BASELINE" --from "$TUTOCAST_BASELINE/batch43-output" --slugs <slug> --music "$VIDEO_MUSIC_PATH"',
+    'npm run video:baseline -- add --dir "<baseline>" --from "<output folder of a render that keeps its captures>" --slugs <slug> --music "$VIDEO_MUSIC_PATH"',
     "```",
     "",
     "`add` recopie la capture, la timeline, les enregistrements de narration, l'audio et la musique, puis",
@@ -382,10 +413,15 @@ export async function writeInventory(
     )
   }
   const written: BaselineInventory = { ...inventory, files: await hash() }
-  await writeFile(path.join(dir, INVENTORY_FILE), `${JSON.stringify(written, null, 2)}\n`, "utf8")
+  // Write beside the inventory, then rename over it: a reader never sees a half-written file. The
+  // temporary name is outside the roots `hashTree` walks, so it is never inventoried.
+  const inventoryFile = path.join(dir, INVENTORY_FILE)
+  const temporaryFile = `${inventoryFile}.tmp`
+  await writeFile(temporaryFile, `${JSON.stringify(written, null, 2)}\n`, "utf8")
+  await rename(temporaryFile, inventoryFile)
   const issues = inventoryIssues(written, await hash())
   if (issues.length) {
-    throw new Error(`Inventory written to ${path.join(dir, INVENTORY_FILE)} does not describe the folder:\n${issues.join("\n")}`)
+    throw new Error(`Inventory written to ${inventoryFile} does not describe the folder:\n${issues.join("\n")}`)
   }
   return written
 }

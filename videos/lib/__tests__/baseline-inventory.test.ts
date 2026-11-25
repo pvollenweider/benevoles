@@ -127,6 +127,18 @@ describe("readBaseline", () => {
     expect(error!.message).toContain(directory)
     expect(error!.message).toContain("README.md")
   })
+
+  it("refuses an inventory.json that is not JSON, naming the folder and its README.md", async () => {
+    const directory = await temporaryDirectory()
+    await writeFile(path.join(directory, "inventory.json"), '{ "version": 1,')
+    const error = await readBaseline(directory).then(
+      () => null,
+      (reason: unknown) => reason as Error,
+    )
+    expect(error).toBeInstanceOf(Error)
+    expect(error!.message).toContain(directory)
+    expect(error!.message).toContain("README.md")
+  })
 })
 
 describe("hashTree", () => {
@@ -208,6 +220,7 @@ describe("withBaselineLock", () => {
       expect(error!.message).toContain(directory)
       expect(error!.message).toContain(String(process.pid))
       expect(error!.message).toContain("video:baseline add")
+      expect(error!.message).toContain(".lock")
     })
 
     await expect(stat(lockFile(directory))).rejects.toMatchObject({ code: "ENOENT" })
@@ -300,6 +313,7 @@ describe("writeInventory", () => {
 
     expect(inventoryIssues(first, await hashTree(directory))).toEqual([])
     expect(Object.keys(first.files)).toEqual(["README.md"])
+    await expect(stat(path.join(directory, "inventory.json.tmp"))).rejects.toMatchObject({ code: "ENOENT" })
 
     await mkdir(path.join(directory, "golden", "a"), { recursive: true })
     await writeFile(path.join(directory, "golden", "a", "frame.png"), "frame")
@@ -349,9 +363,30 @@ describe("baselineReadme", () => {
     expect(readme).toContain("first golden")
   })
 
+  it("documents the restore, the copy back and the repair", () => {
+    const readme = baselineReadme(inventory({ backup: "/Volumes/backup/tutocast-baseline" }))
+
+    expect(readme).toContain("rsync -a --delete")
+    expect(readme).toContain("<baseline>")
+    expect(readme).toContain("/Volumes/backup/tutocast-baseline")
+    expect(readme).toContain("README.md")
+    expect(readme).toContain("inventory.json")
+    expect(readme).toContain("music/")
+    expect(readme).toContain("videos/")
+    expect(readme).toContain("golden/")
+    expect(readme).toContain("après chaque `add` et chaque `--accept`")
+    expect(readme).toContain("## Réparer")
+    expect(readme).toContain(".lock")
+
+    const restoreAt = readme.indexOf("rsync -a --delete")
+    const verifyAt = readme.indexOf('npm run video:baseline -- verify --dir "<baseline>"')
+    expect(verifyAt).toBeGreaterThan(restoreAt)
+  })
+
   it("says how to declare a second copy when none is known", () => {
     const readme = baselineReadme(inventory({ videos: { "event-reports": { id: "EVENT_REPORTS", productCommit: "e8ed666a" } } }))
     expect(readme).toContain("set-backup")
+    expect(readme).toContain("<second copy>")
     expect(readme).not.toContain("undefined")
   })
 })

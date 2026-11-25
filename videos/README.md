@@ -539,7 +539,7 @@ la boucle ; les valeurs qui dépendent de l'encodeur sont seulement signalées.
 
 ```bash
 # ajouter une capture et son audio, puis vérifier l'inventaire
-npm run video:baseline -- add --dir "$TUTOCAST_BASELINE" --from "$TUTOCAST_BASELINE/batch43-output" --slugs <slug> --music "$VIDEO_MUSIC_PATH"
+npm run video:baseline -- add --dir "$TUTOCAST_BASELINE" --from "<output folder of a render that keeps its captures>" --slugs <slug> --music "$VIDEO_MUSIC_PATH"
 npm run video:baseline -- verify --dir "$TUTOCAST_BASELINE"
 
 # déclarer la deuxième copie, sur un autre disque
@@ -559,11 +559,33 @@ par son premier golden accepté (`video:regress --accept`). Une seule commande �
 un dossier de baseline : le verrou `.lock` le garantit, et un verrou laissé par un processus disparu
 est repris.
 
-`--accept` refuse un run invalide et exige une note : le golden devient la référence des
-comparaisons suivantes, on ne l'accepte donc que lorsqu'on a compris et voulu la différence.
-`--slug` limite la boucle à une vidéo, `--keep` conserve le dossier temporaire de travail pour
-l'inspecter. Une acceptation interrompue est réparée au run suivant, qui imprime en une ligne ce
+`--accept` refuse un run invalide ou un passage noir, et exige une note : le golden devient la
+référence des comparaisons suivantes, on ne l'accepte donc que lorsqu'on a compris et voulu la
+différence. `--slug` limite la boucle à une vidéo, `--keep` conserve le dossier temporaire de travail
+pour l'inspecter. Une acceptation interrompue est réparée au run suivant, qui imprime en une ligne ce
 qu'il a réparé.
+
+### Restaurer, recopier et réparer
+
+Depuis la deuxième copie (`<second copy>`) vers la baseline (`<baseline>`), remplacer son contenu par
+le même contenu, puis vérifier :
+
+```bash
+rsync -a --delete "<second copy>/README.md" "<second copy>/inventory.json" "<second copy>/music/" "<second copy>/videos/" "<second copy>/golden/" "<baseline>/"
+npm run video:baseline -- verify --dir "<baseline>"
+```
+
+Le même transfert, dans l'autre sens, garde la deuxième copie à jour : le lancer après chaque `add`
+et chaque `--accept`, puis `verify` sur la copie.
+
+```bash
+rsync -a --delete "<baseline>/README.md" "<baseline>/inventory.json" "<baseline>/music/" "<baseline>/videos/" "<baseline>/golden/" "<second copy>/"
+npm run video:baseline -- verify --dir "<second copy>"
+```
+
+Quand une commande refuse le dossier, le restaurer depuis la deuxième copie. Sans deuxième copie,
+supprimer `golden/<slug>/` et accepter de nouveau. Un `.lock` laissé derrière peut être supprimé à la
+main quand aucune commande ne tourne.
 
 La boucle ne remplace pas le rendu complet : une vidéo refilmée ou une narration régénérée suit
 toujours le parcours habituel (capture, assemblage, validation, publication), puis son golden est
