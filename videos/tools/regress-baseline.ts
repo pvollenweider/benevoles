@@ -262,7 +262,10 @@ async function collectRun(options: CollectOptions): Promise<CollectedRun> {
     let ssim = 1
     if (!accept) {
       const goldenPng = path.join(dir, "golden", slug, "frames", `${atMs}.png`)
-      if (existsSync(goldenPng)) ssim = await measureSsim(png, goldenPng)
+      if (!existsSync(goldenPng)) {
+        throw new Error(`${slug} : aucune image golden pour ${atMs} ms (${goldenPng}) ; le golden ne couvre pas un temps échantillonné.`)
+      }
+      ssim = await measureSsim(png, goldenPng)
     }
     frames.push({ atMs, ssim })
   }
@@ -406,11 +409,28 @@ async function processVideo(options: VideoOptions, inventory: BaselineInventory,
       throw error
     }
 
+    const goldenFile = path.join(dir, "golden", slug, "facts.json")
+    if (!accept) {
+      // An accepted golden is an inventory fact, not a directory that happens to exist: a golden
+      // directory that was never accepted must never become the reference.
+      if (!video.golden) {
+        throw new Error(`${slug} n'a pas encore de golden ; lancer avec --accept --note "<raison>" pour l'accepter.`)
+      }
+      if (!existsSync(goldenFile)) {
+        throw new Error(`${slug} : l'inventaire décrit un golden mais ${goldenFile} est absent ; relancer avec --accept --note "<raison>" pour le réaccepter.`)
+      }
+    }
+
     const collected = await collectRun({ dir, slug, work, validationIssues, accept })
 
     if (accept) {
       if (validationIssues.length) {
         throw new Error(`${slug} : validation a relevé ${validationIssues.length} problème(s) ; un golden doit être un run valide, rien n'a été écrit :\n- ${validationIssues.join("\n- ")}`)
+      }
+      if (collected.facts.black.length) {
+        const stretches = collected.facts.black.map(({ startMs, endMs }) =>
+          `- de ${(startMs / 1_000).toFixed(2)} s à ${(endMs / 1_000).toFixed(2)} s`)
+        throw new Error(`${slug} : blackdetect a relevé ${collected.facts.black.length} passage(s) noir(s) ; un golden ne doit pas contenir de passage noir, rien n'a été écrit :\n${stretches.join("\n")}`)
       }
       const written = await acceptGolden(dir, slug, collected, note, inventory)
       console.log(`Golden accepté pour ${slug} (note : ${note}).`)
@@ -418,10 +438,6 @@ async function processVideo(options: VideoOptions, inventory: BaselineInventory,
       return { ok: true, inventory: written }
     }
 
-    const goldenFile = path.join(dir, "golden", slug, "facts.json")
-    if (!existsSync(goldenFile)) {
-      throw new Error(`${slug} n'a pas encore de golden ; lancer avec --accept --note "<raison>" pour l'accepter.`)
-    }
     const golden = await readJson<RunFacts>(goldenFile)
     return { ok: printComparison(slug, golden, collected.facts) }
   } finally {

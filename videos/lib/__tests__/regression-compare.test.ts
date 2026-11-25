@@ -196,13 +196,31 @@ describe("compareRuns", () => {
     expect(compareRuns(golden, facts({ frozen: [{ startMs: 5_100, endMs: 9_100 }] }))).toEqual([])
   })
 
-  it("reports black and frozen stretches absent from the golden", () => {
+  it("reports a black stretch absent from the golden", () => {
     const golden = facts()
     const withBlack = facts({ black: [{ startMs: 12_000, endMs: 14_000 }] })
-    const withFreeze = facts({ frozen: [...golden.frozen, { startMs: 20_000, endMs: 24_000 }] })
     expect(compareRuns(golden, withBlack)).toEqual([
       { class: "tolerance", field: "black", golden: [], actual: [{ startMs: 12_000, endMs: 14_000 }] },
     ])
+  })
+
+  it("reports a black stretch that is also in the golden", () => {
+    const stretch = { startMs: 12_000, endMs: 14_000 }
+    const golden = facts({ black: [stretch] })
+    const actual = facts({ black: [{ startMs: 12_100, endMs: 14_100 }] })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "tolerance", field: "black", golden: [stretch], actual: [{ startMs: 12_100, endMs: 14_100 }] },
+    ])
+  })
+
+  it("reports no black finding when the run has none, even when the golden has one", () => {
+    const golden = facts({ black: [{ startMs: 12_000, endMs: 14_000 }] })
+    expect(compareRuns(golden, facts({ black: [] }))).toEqual([])
+  })
+
+  it("reports a frozen stretch absent from the golden", () => {
+    const golden = facts()
+    const withFreeze = facts({ frozen: [...golden.frozen, { startMs: 20_000, endMs: 24_000 }] })
     expect(compareRuns(golden, withFreeze)).toEqual([
       { class: "tolerance", field: "frozen", golden: golden.frozen, actual: [{ startMs: 20_000, endMs: 24_000 }] },
     ])

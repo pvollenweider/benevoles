@@ -251,6 +251,10 @@ async function addLocked(
 ): Promise<void> {
   const existing = existsSync(path.join(dir, "inventory.json")) ? await readBaseline(dir) : null
   const { plans, catalog, music } = await planAdd(dir, from, slugs, musicSource, replace, existing)
+  // Read what this run records before removing anything: a failing tool version must not leave the
+  // baseline half replaced.
+  const engine = await engineCommit()
+  const tools = await toolVersions()
 
   if (existing) {
     // Everything this run is about to rewrite, so a changed file elsewhere still refuses the command.
@@ -273,7 +277,9 @@ async function addLocked(
   // hashed as legitimate by the new inventory.
   for (const plan of plans) {
     await rm(path.join(dir, "videos", "output", plan.slug), { recursive: true, force: true })
-    if (replace) await rm(path.join(dir, "golden", plan.slug), { recursive: true, force: true })
+    // A golden directory is only a reference when the inventory records its acceptance: `add`
+    // always drops it, so a run that was never accepted cannot survive a replaced capture.
+    await rm(path.join(dir, "golden", plan.slug), { recursive: true, force: true })
   }
   if (existing?.music && existing.music !== music.relative) {
     await rm(path.join(dir, ...existing.music.split("/")), { force: true })
@@ -290,8 +296,8 @@ async function addLocked(
   const written = await writeInventory(dir, {
     version: 1,
     createdAt: existing?.createdAt ?? new Date().toISOString(),
-    engineCommit: await engineCommit(),
-    tools: await toolVersions(),
+    engineCommit: engine,
+    tools,
     music: music.relative,
     ...(existing?.backup ? { backup: existing.backup } : {}),
     videos,
@@ -325,8 +331,9 @@ async function setBackup(): Promise<void> {
   await withBaselineLock(dir, "video:baseline set-backup", async () => {
     const inventory = await readBaseline(dir)
     await assertUnchanged(dir, inventory)
-    const written = await writeInventory(dir, { ...metadata(inventory), backup: location })
-    console.log(`${dir} : deuxième copie déclarée dans ${location} ; ${Object.keys(written.files).length} fichier(s) inventorié(s).`)
+    const resolved = path.resolve(location)
+    const written = await writeInventory(dir, { ...metadata(inventory), backup: resolved })
+    console.log(`${dir} : deuxième copie déclarée dans ${resolved} ; ${Object.keys(written.files).length} fichier(s) inventorié(s).`)
   })
 }
 

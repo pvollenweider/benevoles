@@ -24,8 +24,7 @@ const FREEZE_WITHOUT_END_SAMPLE = [
   FREEZE_WITHOUT_END,
 ].join("\n")
 
-// Real stderr blocks of ffmpeg 8.1.1 from /private/tmp/benevoles-dsh/ffmpeg-samples.txt, including
-// the configuration lines FFmpeg prints before the filter output.
+// Real stderr lines captured with ffmpeg 8.1.1 on test clips.
 const BLACKDETECT_SAMPLE = [
   "  blackdetect:default -> Stream #0:0 (wrapped_avframe)",
   "[Parsed_blackdetect_1 @ 0x7731019a40] black_start:0 black_end:2 black_duration:2",

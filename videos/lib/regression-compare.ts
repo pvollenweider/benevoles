@@ -5,9 +5,10 @@
  * Comparison of a re-assembled reference video with its golden run, by class.
  *
  * Strict facts are structure and text: any difference fails. Tolerance facts move a little between
- * two correct assemblies (duration, loudness, frame SSIM, a still or black stretch absent from the
- * golden) and are compared with the tolerances below. Informative facts depend on the encoder and
- * are reported, never failing. The runner prints them and decides with `failing`.
+ * two correct assemblies (duration, loudness, frame SSIM, a still stretch absent from the golden)
+ * and are compared with the tolerances below. A black stretch is always a tolerance finding: a
+ * golden may never contain one. Informative facts depend on the encoder and are reported, never
+ * failing. The runner prints them and decides with `failing`.
  *
  * This module is pure: it compares two `RunFacts` and never runs FFmpeg or reads a file.
  */
@@ -151,8 +152,9 @@ export function compareRuns(golden: RunFacts, actual: RunFacts): Finding[] {
       tolerance(`frames[${frame.atMs}].ssim`, goldenFrame.ssim, frame.ssim)
     }
   }
-  const newBlack = newStretches(golden.black, actual.black, TOLERANCES.stretchMs)
-  if (newBlack.length) tolerance("black", golden.black, newBlack)
+  // A golden must never contain a black stretch, so every stretch of the run is a finding, even
+  // when the golden happens to carry the same one.
+  if (actual.black.length) tolerance("black", golden.black, actual.black)
   const newFrozen = newStretches(golden.frozen, actual.frozen, TOLERANCES.stretchMs)
   if (newFrozen.length) tolerance("frozen", golden.frozen, newFrozen)
 
