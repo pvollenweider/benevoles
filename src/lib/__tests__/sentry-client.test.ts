@@ -4,7 +4,7 @@ import path from "node:path"
 import type { ErrorEvent } from "@sentry/nextjs"
 import { isStaffPath, pathnameOf, replayAllowedFor, tracesSampleRateFor, urlCarriesSecret, STAFF_TRACES_SAMPLE_RATE } from "../sentry-client-policy"
 import { browserSentryAllowedOn, createSentryLoader, type SentryClientModule } from "../sentry-client-loader"
-import { beforeSendClient, isInjectedEvalRefusal, isStacklessDomEventRejection, isStacklessNetworkRejection } from "../sentry-scrub"
+import { beforeSendClient, isInjectedEvalRefusal, isInterruptedPageStream, isStacklessDomEventRejection, isStacklessNetworkRejection } from "../sentry-scrub"
 
 // Deferred browser Sentry (#773).
 
@@ -269,6 +269,43 @@ describe("stackless network failures (Safari « Load failed » after a deploy)",
     expect(isStacklessNetworkRejection(rejection({ type: "Error" }))).toBe(false)
     expect(isStacklessNetworkRejection(rejection({ value: "Load failed: /api/admin/events" }))).toBe(false)
     expect(isStacklessNetworkRejection({ type: undefined } as ErrorEvent)).toBe(false)
+  })
+})
+
+describe("interrupted page stream (« Connection closed. »)", () => {
+  const exception = (overrides: Record<string, unknown> = {}) => ({
+    type: "Error",
+    value: "Connection closed.",
+    mechanism: { type: "generic", handled: true },
+    stacktrace: { frames: [{ filename: "app:///_next/static/chunks/x.js", function: "r", lineno: 1, colno: 1 }, { filename: "app:///_next/static/chunks/x.js", function: "r", lineno: 2, colno: 2 }] },
+    ...overrides,
+  })
+  const event = (...values: Record<string, unknown>[]): ErrorEvent => ({ type: undefined, exception: { values } }) as ErrorEvent
+
+  it("drops the React Server Components client's interrupted stream", () => {
+    const e = event(exception())
+    expect(isInterruptedPageStream(e)).toBe(true)
+    expect(beforeSendClient(e)).toBeNull()
+  })
+
+  it("keeps a message that only mentions the words, or another error type", () => {
+    for (const value of ["Connection closed", "Connection closed. Retrying", "WebSocket Connection closed."]) {
+      const e = event(exception({ value }))
+      expect(isInterruptedPageStream(e), value).toBe(false)
+      expect(beforeSendClient(e), value).toBe(e)
+    }
+    const typed = event(exception({ type: "TypeError" }))
+    expect(isInterruptedPageStream(typed)).toBe(false)
+    expect(beforeSendClient(typed)).toBe(typed)
+  })
+
+  it("keeps it when one exception among several is not the exact message, or when there is none", () => {
+    const mixed = event(exception(), exception({ value: "boom" }))
+    expect(isInterruptedPageStream(mixed)).toBe(false)
+    expect(beforeSendClient(mixed)).toBe(mixed)
+    const none = { type: undefined } as ErrorEvent
+    expect(isInterruptedPageStream(none)).toBe(false)
+    expect(beforeSendClient(none)).toBe(none)
   })
 })
 

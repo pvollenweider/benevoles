@@ -62,6 +62,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Suivi des erreurs du navigateur** : la fin prématurée du flux d'une page (« Connection closed. », connexion coupée, onglet fermé ou navigation interrompue) n'est plus envoyée à Sentry ; elle ne dit rien de l'application. <!-- interne -->
 - **Pages en Markdown** : les adresses en `.md` répondaient « Page introuvable » en production ; le Markdown est désormais servi directement, sans passer par une route interne. <!-- interne -->
 - **`/llms.txt` et `/llms-full.txt`** : un lien vers une section de la page d'origine (« Voir comment ça marche ») pointe désormais vers cette section en ligne, au lieu d'une ancre qui ne menait nulle part hors de la page.
 - **Page de chargement interrompu** : après une connexion interrompue, souvent pendant une mise à jour du service, la page se recharge d'elle-même ou propose « Recharger la page » au lieu d'un écran d'erreur en anglais.

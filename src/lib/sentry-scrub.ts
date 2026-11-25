@@ -231,8 +231,24 @@ export function isInjectedEvalRefusal(event: Event): boolean {
   )
 }
 
+/**
+ * « Connection closed. » raised by the React Server Components client when the stream of a page
+ * ends before all its data arrived: the connection dropped, the laptop went to sleep, the tab was
+ * closed or the navigation was interrupted. The server-side equivalents are already ignored
+ * (sentry.server.config.ts, « The destination stream closed early » and « aborted »). Unlike the
+ * network rejections above, the event does carry a stack, but the stack says nothing about the
+ * app's own code. Only the exact value, with type `Error`, is dropped, and only when every
+ * exception matches; another message that merely contains the words (a WebSocket, a retry),
+ * another type, and an event without exception stay visible.
+ */
+export function isInterruptedPageStream(event: Event): boolean {
+  const exceptions = event.exception?.values ?? []
+  if (exceptions.length === 0) return false
+  return exceptions.every((ex) => ex.type === "Error" && ex.value === "Connection closed.")
+}
+
 /** Client `beforeSend`: drops browser noise that `ignoreErrors` cannot express, then scrubs. */
 export function beforeSendClient<T extends Event>(event: T): T | null {
-  if (isStacklessDomEventRejection(event) || isStacklessNetworkRejection(event) || isInjectedEvalRefusal(event)) return null
+  if (isStacklessDomEventRejection(event) || isStacklessNetworkRejection(event) || isInjectedEvalRefusal(event) || isInterruptedPageStream(event)) return null
   return scrubEvent(event)
 }
