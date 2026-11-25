@@ -29,7 +29,7 @@ import {
   type BaselineInventory,
 } from "../lib/baseline-inventory"
 import type { Timeline } from "../lib/manifest"
-import { frameSampleTimes, parseBlackdetect, parseFreezedetect, parseSsimAll } from "../lib/picture-checks"
+import { parseBlackdetect, parseFreezedetect, parseSsimAll } from "../lib/picture-checks"
 import { compareRuns, failing, type Finding, type RunFacts } from "../lib/regression-compare"
 import {
   buildRunFacts,
@@ -39,6 +39,7 @@ import {
   missingFrames,
   parseProbeOutput,
   recoveryMessage,
+  sampleTimesForTimeline,
   validationIssuesFromRun,
   valueSummary,
   type AudioLevelsFacts,
@@ -233,7 +234,7 @@ async function collectRun(options: CollectOptions): Promise<CollectedRun> {
 
   const framesDir = path.join(work, "regression-frames")
   await mkdir(framesDir, { recursive: true })
-  const sampleTimes = frameSampleTimes(timelineAfter)
+  const sampleTimes = sampleTimesForTimeline(timelineAfter)
   const frameSizes: Record<number, number> = {}
   for (const atMs of sampleTimes) {
     const png = path.join(framesDir, `${atMs}.png`)

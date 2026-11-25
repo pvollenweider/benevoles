@@ -11,8 +11,8 @@
  * copies: everything that can be decided from strings and objects lives here, under test.
  */
 import type { BaselineInventory } from "./baseline-inventory"
-import type { Interval } from "./picture-checks"
-import type { RunFacts } from "./regression-compare"
+import { frameSampleTimes, type Interval } from "./picture-checks"
+import type { DetailFrame, PortraitFrame, RunFacts } from "./regression-compare"
 
 /** Width, height, frame rate and duration read from the assembled MP4 by `ffprobe`. */
 export type ProbeFacts = { width: number; height: number; frameRate: number; durationMs: number }
@@ -33,10 +33,11 @@ export type AudioLevelsFacts = {
   narration: { segmentGainsDb: Record<string, number> }
 }
 
-/** The framing part of the timeline as it is after the run. */
+/** The framing part of the timeline as it is after the run, with the timeline's field names. */
 export type TimelineFraming = {
-  portraitFrames?: Interval[]
-  detailFrames?: Interval[]
+  cues?: Interval[]
+  portraitFrames?: PortraitFrame[]
+  detailFrames?: DetailFrame[]
   mailpitFocusFrames?: Interval[]
   mailpitBodyOnly?: boolean
 }
@@ -189,9 +190,23 @@ function intervals(values: Interval[] | undefined): Interval[] {
   return (values ?? []).map(({ startMs, endMs }) => ({ startMs, endMs }))
 }
 
+/**
+ * The sample times of a timeline after the run. This is the only place that maps the timeline's
+ * Mailpit-specific framing field to the generic `focusFrames` of the comparison.
+ */
+export function sampleTimesForTimeline(timeline: TimelineFraming): number[] {
+  return frameSampleTimes({
+    cues: timeline.cues ?? [],
+    portraitFrames: timeline.portraitFrames,
+    detailFrames: timeline.detailFrames,
+    focusFrames: timeline.mailpitFocusFrames,
+  })
+}
+
 /** Shapes the JSON files and measurements of a run into the facts `compareRuns` compares. */
 export function buildRunFacts(source: RunSources): RunFacts {
   return {
+    version: 1,
     tools: source.tools,
     vtt: source.vtt,
     txt: source.txt,
@@ -204,10 +219,10 @@ export function buildRunFacts(source: RunSources): RunFacts {
       effectsSha256: source.audioMix.effectsSha256,
     },
     framing: {
-      portraitFrames: intervals(source.timeline.portraitFrames),
-      detailFrames: intervals(source.timeline.detailFrames),
-      mailpitFocusFrames: intervals(source.timeline.mailpitFocusFrames),
-      mailpitBodyOnly: source.timeline.mailpitBodyOnly ?? false,
+      portraitFrames: (source.timeline.portraitFrames ?? []).map(({ startMs, endMs, width, height }) => ({ startMs, endMs, width, height })),
+      detailFrames: (source.timeline.detailFrames ?? []).map(({ startMs, endMs, x, y, width, height }) => ({ startMs, endMs, x, y, width, height })),
+      focusFrames: intervals(source.timeline.mailpitFocusFrames),
+      focusBodyOnly: source.timeline.mailpitBodyOnly ?? false,
     },
     size: { width: source.probe.width, height: source.probe.height },
     frameRate: source.probe.frameRate,

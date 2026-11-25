@@ -7,16 +7,17 @@ import { compareRuns, failing, TOLERANCES, type RunFacts } from "../regression-c
 /** A complete run, valid and equal to itself; each test changes one fact. */
 function facts(overrides: Partial<RunFacts> = {}): RunFacts {
   return {
+    version: 1,
     tools: { node: "v26.9.0", ffmpeg: "ffmpeg version 8.1.1 Copyright (c) 2000-2026 the FFmpeg developers" },
     vtt: "WEBVTT\n\n00:00:00.500 --> 00:00:02.500\nUne réception.\n",
     txt: "Une réception.\n",
     validationIssues: [],
     mix: { effectsPreset: "normal", music: "music/track.mp3", clicks: 12, keys: 4, effectsSha256: "6b1f" },
     framing: {
-      portraitFrames: [{ startMs: 1_000, endMs: 3_000 }],
-      detailFrames: [{ startMs: 4_000, endMs: 5_000 }],
-      mailpitFocusFrames: [{ startMs: 6_000, endMs: 7_000 }],
-      mailpitBodyOnly: false,
+      portraitFrames: [{ startMs: 1_000, endMs: 3_000, width: 390, height: 800 }],
+      detailFrames: [{ startMs: 4_000, endMs: 5_000, x: 10, y: 20, width: 300, height: 200 }],
+      focusFrames: [{ startMs: 6_000, endMs: 7_000 }],
+      focusBodyOnly: false,
     },
     size: { width: 1_280, height: 800 },
     frameRate: 25,
@@ -48,14 +49,34 @@ describe("compareRuns", () => {
     expect(compareRuns(golden, facts({ mix: { ...golden.mix, clicks: 13 } }))).toEqual([
       { class: "strict", field: "mix.clicks", golden: 12, actual: 13 },
     ])
-    expect(compareRuns(golden, facts({ framing: { ...golden.framing, mailpitFocusFrames: [] } }))).toEqual([
-      { class: "strict", field: "framing.mailpitFocusFrames", golden: golden.framing.mailpitFocusFrames, actual: [] },
+    expect(compareRuns(golden, facts({ framing: { ...golden.framing, focusFrames: [] } }))).toEqual([
+      { class: "strict", field: "framing.focusFrames", golden: golden.framing.focusFrames, actual: [] },
     ])
     expect(compareRuns(golden, facts({ size: { width: 1_280, height: 802 } }))).toEqual([
       { class: "strict", field: "size.height", golden: 800, actual: 802 },
     ])
     expect(compareRuns(golden, facts({ frameRate: 30 }))).toEqual([
       { class: "strict", field: "frameRate", golden: 25, actual: 30 },
+    ])
+  })
+
+  it("reports a changed width of a portrait frame as one strict finding", () => {
+    const golden = facts()
+    const actual = facts({
+      framing: {
+        ...golden.framing,
+        portraitFrames: [{ ...golden.framing.portraitFrames[0], width: 392 }],
+      },
+    })
+    expect(compareRuns(golden, actual)).toEqual([
+      { class: "strict", field: "framing.portraitFrames", golden: golden.framing.portraitFrames, actual: actual.framing.portraitFrames },
+    ])
+  })
+
+  it("reports a golden of another version as one strict finding", () => {
+    const golden = facts({ version: 2 })
+    expect(compareRuns(golden, facts())).toEqual([
+      { class: "strict", field: "version", golden: 2, actual: 1 },
     ])
   })
 

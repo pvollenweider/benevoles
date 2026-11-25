@@ -12,6 +12,7 @@ import {
   parseFrameRate,
   parseProbeOutput,
   recoveryMessage,
+  sampleTimesForTimeline,
   validationIssuesFromRun,
   valueSummary,
   type RunSources,
@@ -231,7 +232,12 @@ describe("buildRunFacts", () => {
       summary: { smallestGapLu: 13.5, largestGapLu: 19.25 },
       narration: { segmentGainsDb: { intro: 1.2, outro: 0.4 } },
     },
-    timeline: { portraitFrames: [{ startMs: 1_000, endMs: 3_000 }], mailpitBodyOnly: true },
+    timeline: {
+      portraitFrames: [{ startMs: 1_000, endMs: 3_000, width: 390, height: 800 }],
+      detailFrames: [{ startMs: 3_500, endMs: 4_500, x: 10, y: 20, width: 300, height: 200 }],
+      mailpitFocusFrames: [{ startMs: 5_000, endMs: 6_000 }],
+      mailpitBodyOnly: true,
+    },
     probe: { width: 1_280, height: 800, frameRate: 25, durationMs: 329_840 },
     videoBytes: 12_345_678,
     black: [{ startMs: 4_000, endMs: 5_000 }],
@@ -241,6 +247,7 @@ describe("buildRunFacts", () => {
 
   it("assembles the facts the comparison expects", () => {
     expect(buildRunFacts(source)).toEqual({
+      version: 1,
       tools: source.tools,
       vtt: source.vtt,
       txt: source.txt,
@@ -252,7 +259,12 @@ describe("buildRunFacts", () => {
         keys: 4,
         effectsSha256: "6b1f",
       },
-      framing: { portraitFrames: [{ startMs: 1_000, endMs: 3_000 }], detailFrames: [], mailpitFocusFrames: [], mailpitBodyOnly: true },
+      framing: {
+        portraitFrames: [{ startMs: 1_000, endMs: 3_000, width: 390, height: 800 }],
+        detailFrames: [{ startMs: 3_500, endMs: 4_500, x: 10, y: 20, width: 300, height: 200 }],
+        focusFrames: [{ startMs: 5_000, endMs: 6_000 }],
+        focusBodyOnly: true,
+      },
       size: { width: 1_280, height: 800 },
       frameRate: 25,
       durationMs: 329_840,
@@ -267,13 +279,22 @@ describe("buildRunFacts", () => {
 
   it("turns every missing framing field into its empty default", () => {
     const facts = buildRunFacts({ ...source, timeline: {} })
-    expect(facts.framing).toEqual({ portraitFrames: [], detailFrames: [], mailpitFocusFrames: [], mailpitBodyOnly: false })
+    expect(facts.framing).toEqual({ portraitFrames: [], detailFrames: [], focusFrames: [], focusBodyOnly: false })
   })
 
-  it("keeps only the interval bounds of a framing", () => {
+  it("keeps the geometry of portrait and detail frames", () => {
     const portraitFrames = [{ startMs: 1_000, endMs: 3_000, width: 390, height: 800 }]
-    const facts = buildRunFacts({ ...source, timeline: { portraitFrames } })
-    expect(facts.framing.portraitFrames).toEqual([{ startMs: 1_000, endMs: 3_000 }])
+    const detailFrames = [{ startMs: 3_500, endMs: 4_500, x: 10, y: 20, width: 300, height: 200 }]
+    const facts = buildRunFacts({ ...source, timeline: { portraitFrames, detailFrames } })
+    expect(facts.framing.portraitFrames).toEqual(portraitFrames)
+    expect(facts.framing.detailFrames).toEqual(detailFrames)
+  })
+
+  it("maps the timeline's focus frames to the generic sampling frames", () => {
+    expect(sampleTimesForTimeline({
+      cues: [{ startMs: 2_000, endMs: 4_000 }],
+      mailpitFocusFrames: [{ startMs: 6_000, endMs: 7_000 }],
+    })).toEqual([3_000, 6_500])
   })
 
   it("drops the values written by the assembler that the comparison does not use", () => {

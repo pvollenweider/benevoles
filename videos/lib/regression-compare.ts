@@ -16,14 +16,22 @@ import { newStretches, type Interval } from "./picture-checks"
 
 export const TOLERANCES = { durationFrames: 1, loudnessLu: 0.5, segmentGainDb: 0.1, ssimMin: 0.98, stretchMs: 200 } as const
 
+/** A phone frame of the capture, with the size it is shown at. */
+export type PortraitFrame = { startMs: number; endMs: number; width: number; height: number }
+
+/** A detail frame of the capture, with the crop rectangle it is cut from. */
+export type DetailFrame = { startMs: number; endMs: number; x: number; y: number; width: number; height: number }
+
 /** Everything a run of the video pipeline states about one video, as compared by the regression loop. */
 export type RunFacts = {
+  /** Format of this file; a golden of another version is a strict failure. */
+  version: number
   tools: { node: string; ffmpeg: string }
   vtt: string
   txt: string
   validationIssues: string[]
   mix: { effectsPreset: string; music: string; clicks: number; keys: number; effectsSha256: string }
-  framing: { portraitFrames: Interval[]; detailFrames: Interval[]; mailpitFocusFrames: Interval[]; mailpitBodyOnly: boolean }
+  framing: { portraitFrames: PortraitFrame[]; detailFrames: DetailFrame[]; focusFrames: Interval[]; focusBodyOnly: boolean }
   size: { width: number; height: number }
   frameRate: number
   durationMs: number
@@ -97,6 +105,7 @@ export function compareRuns(golden: RunFacts, actual: RunFacts): Finding[] {
     && isFiniteNumber(actual.frameRate) && actual.frameRate > 0
 
   // Strict: text, structure and the list of sampled moments.
+  strict("version", golden.version, actual.version)
   strict("vtt", golden.vtt, actual.vtt)
   strict("txt", golden.txt, actual.txt)
   strict("validationIssues", [], actual.validationIssues)
@@ -107,8 +116,8 @@ export function compareRuns(golden: RunFacts, actual: RunFacts): Finding[] {
   strict("mix.effectsSha256", golden.mix.effectsSha256, actual.mix.effectsSha256)
   strict("framing.portraitFrames", golden.framing.portraitFrames, actual.framing.portraitFrames)
   strict("framing.detailFrames", golden.framing.detailFrames, actual.framing.detailFrames)
-  strict("framing.mailpitFocusFrames", golden.framing.mailpitFocusFrames, actual.framing.mailpitFocusFrames)
-  strict("framing.mailpitBodyOnly", golden.framing.mailpitBodyOnly, actual.framing.mailpitBodyOnly)
+  strict("framing.focusFrames", golden.framing.focusFrames, actual.framing.focusFrames)
+  strict("framing.focusBodyOnly", golden.framing.focusBodyOnly, actual.framing.focusBodyOnly)
   strict("size.width", golden.size.width, actual.size.width)
   strict("size.height", golden.size.height, actual.size.height)
   if (frameRateUsable) strict("frameRate", golden.frameRate, actual.frameRate)

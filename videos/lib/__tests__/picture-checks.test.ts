@@ -82,7 +82,7 @@ describe("picture checks", () => {
   })
 
   it("samples the middle of every cue and framing interval, sorted and deduplicated", () => {
-    expect(frameSampleTimes({ cues: [{ startMs: 0, endMs: 1_000 }, { startMs: 1_000, endMs: 3_000 }], mailpitFocusFrames: [{ startMs: 1_200, endMs: 1_800 }] })).toEqual([500, 1_500, 2_000])
+    expect(frameSampleTimes({ cues: [{ startMs: 0, endMs: 1_000 }, { startMs: 1_000, endMs: 3_000 }], focusFrames: [{ startMs: 1_200, endMs: 1_800 }] })).toEqual([500, 1_500, 2_000])
   })
 
   it("samples every kind of framing interval, once each", () => {
@@ -90,7 +90,7 @@ describe("picture checks", () => {
       cues: [{ startMs: 2_000, endMs: 4_000 }, { startMs: 4_000, endMs: 6_000 }],
       portraitFrames: [{ startMs: 0, endMs: 1_000 }],
       detailFrames: [{ startMs: 0, endMs: 1_000 }],
-      mailpitFocusFrames: [{ startMs: 6_000, endMs: 7_000 }],
+      focusFrames: [{ startMs: 6_000, endMs: 7_000 }],
     })).toEqual([500, 3_000, 5_000, 6_500])
   })
 

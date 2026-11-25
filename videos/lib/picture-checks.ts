@@ -92,19 +92,20 @@ export type TimelineFrames = {
   cues: Interval[]
   portraitFrames?: Interval[]
   detailFrames?: Interval[]
-  mailpitFocusFrames?: Interval[]
+  focusFrames?: Interval[]
 }
 
 /**
  * The middle of every cue and of every framing interval, in milliseconds: one sample per scene
- * and at least one inside each phone frame, detail frame and mail focus. Sorted, without duplicates.
+ * and at least one inside each phone frame, detail frame and focus frame. Sorted, without duplicate
+ * times. The caller maps the timeline's own field names to `focusFrames`.
  */
 export function frameSampleTimes(timeline: TimelineFrames): number[] {
   const intervals = [
     ...timeline.cues,
     ...(timeline.portraitFrames ?? []),
     ...(timeline.detailFrames ?? []),
-    ...(timeline.mailpitFocusFrames ?? []),
+    ...(timeline.focusFrames ?? []),
   ]
   const times = intervals.map(({ startMs, endMs }) => Math.round((startMs + endMs) / 2))
   return [...new Set(times)].sort((left, right) => left - right)
