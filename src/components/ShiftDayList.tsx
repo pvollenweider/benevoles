@@ -7,6 +7,7 @@ import { fmt, toMin } from "@/lib/gantt-utils"
 import { shiftListText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { RosterSummary } from "@/components/public/RosterName"
+import { shiftListRowLook } from "@/lib/shift-list-look"
 
 type Show = { name: string; startTime: string; endTime: string }
 
@@ -16,6 +17,10 @@ type Show = { name: string; startTime: string; endTime: string }
  * button whose visible text is its whole accessible name (WCAG 2.5.3). The rules of what can be
  * selected are the timeline's (`shiftViewState`, src/lib/public-timeline.ts). A shift that can't
  * be chosen stays in the tab order (aria-disabled), so it can be found and read.
+ *
+ * A shift that can be chosen (selected and held included) is a card with a 6 px left border in
+ * the poste's colour (`shiftListRowLook`, src/lib/shift-list-look.ts). One that cannot is quiet:
+ * no frame, no ground, grey text, the state on the title's line when it fits and under it when not.
  *
  * `roster` (#1068): « Voir qui est inscrit » is on, by shift id. A line under each shift with other
  * confirmed volunteers says who (« Sur ce créneau : Aline M. et 2 autres bénévoles. »), read with
@@ -57,35 +62,39 @@ export default function ShiftDayList({
     .sort((a, b) => toMin(a.startTime) - toMin(b.startTime) || (a.displayOrder ?? 0) - (b.displayOrder ?? 0) || a.label.localeCompare(b.label, "fr"))
   if (visible.length === 0) return null
 
+  // The view, text and look of every row; the previous row decides the 4 px gap between two quiet
+  // rows (8 px everywhere else).
+  const rows = visible.map((shift) => {
+    const view = shiftViewState({
+      shift,
+      held: held?.get(shift.id),
+      selected: selected.has(shift.id),
+      conflict: conflicts?.has(shift.id) ?? false,
+      reserved: !!reservedShiftIds?.has(shift.id),
+      locked,
+    })
+    const textOpts = { locked: locked && !view.selected, limitReached: view.selected ? undefined : limitReachedRoles?.get(shift.roleName) }
+    const text = shiftListText(shift, view, textOpts)
+    const look = shiftListRowLook({ view, roleName: shift.roleName, colorKey: shift.colorKey, limitReached: textOpts.limitReached })
+    const rosterEntry = roster?.get(shift.id)
+    const rosterId = rosterEntry && (rosterEntry.names.length > 0 || rosterEntry.othersCount > 0) ? `roster-list-${shift.id}` : undefined
+    const reasonId = view.clickable ? undefined : view.reserved ? reservedMessageId : locked ? lockedMessageId : undefined
+    return { shift, view, text, look, rosterEntry, rosterId, reasonId }
+  })
+
   return (
-    <ul aria-label={`Créneaux du ${dayLabel}`} className="mb-5 space-y-2">
+    <ul aria-label={`Créneaux du ${dayLabel}`} className="mb-5">
       {shows.map((show, i) => (
-        <li key={`show-${i}`} className="rounded-xl bg-indigo-50 px-4 py-2 text-sm text-indigo-950 break-words">
+        <li key={`show-${i}`} className={`rounded-xl bg-indigo-50 px-4 py-2 text-sm text-indigo-950 break-words ${i > 0 ? "mt-2" : ""}`}>
           Spectacle : {show.name}, {fmt(show.startTime)}–{fmt(show.endTime)}
         </li>
       ))}
-      {visible.map((shift) => {
-        const view = shiftViewState({
-          shift,
-          held: held?.get(shift.id),
-          selected: selected.has(shift.id),
-          conflict: conflicts?.has(shift.id) ?? false,
-          reserved: !!reservedShiftIds?.has(shift.id),
-          locked,
-        })
-        const text = shiftListText(shift, view, { locked: locked && !view.selected, limitReached: view.selected ? undefined : limitReachedRoles?.get(shift.roleName) })
-        const tone = view.held
-          ? "border-green-700 bg-green-50"
-          : view.selected
-            ? "border-blue-700 bg-blue-50"
-            : view.clickable
-              ? "border-gray-300 bg-white hover:bg-gray-50"
-              : "border-gray-200 bg-gray-50"
-        const rosterEntry = roster?.get(shift.id)
-        const rosterId = rosterEntry && (rosterEntry.names.length > 0 || rosterEntry.othersCount > 0) ? `roster-list-${shift.id}` : undefined
-        const reasonId = view.clickable ? undefined : view.reserved ? reservedMessageId : locked ? lockedMessageId : undefined
+      {rows.map(({ shift, view, text, look, rosterEntry, rosterId, reasonId }, i) => {
+        const gap = i > 0
+          ? (rows[i - 1].look.kind === "quiet" && look.kind === "quiet" ? "mt-1" : "mt-2")
+          : shows.length > 0 ? "mt-2" : ""
         return (
-          <li key={shift.id}>
+          <li key={shift.id} className={gap || undefined}>
             <button
               type="button"
               data-shift-id={shift.id}
@@ -93,12 +102,14 @@ export default function ShiftDayList({
               aria-disabled={view.clickable ? undefined : true}
               aria-describedby={[rosterId, reasonId].filter(Boolean).join(" ") || undefined}
               onClick={() => { if (view.clickable) onToggle(shift.id, shift.status) }}
-              className={`w-full min-h-11 rounded-xl border-2 px-4 py-2 text-left break-words forced-colors:aria-pressed:border-[Highlight] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${tone} ${view.clickable ? "cursor-pointer" : "cursor-default"}`}
+              className={look.button}
             >
-              <span className="block text-base font-medium text-gray-900">{text.title}</span>
-              {/* Spaces between the lines: the accessible name reads them apart. */}
+              <span className={look.title}>{text.title}{look.kind === "quiet" ? " " : null}</span>
+              {/* Spaces between the lines: the accessible name reads them apart. On a quiet row the
+                  button is a flex container, where a whitespace-only text node has no box: the
+                  spaces its name needs are inside the spans instead, without changing the layout. */}
               {" "}
-              <span className="mt-0.5 flex items-center gap-1 text-sm text-gray-800">
+              <span className={look.statusLine}>
                 {view.held ? (
                   // Held: a check in a circle, as on the timeline; selected: a plain check.
                   <svg aria-hidden="true" className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -109,9 +120,9 @@ export default function ShiftDayList({
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 ) : null}
-                <span>{text.status}</span>
+                <span>{text.status}{look.kind === "quiet" ? " " : null}</span>
               </span>
-              {text.details && <>{" "}<span className="mt-0.5 block text-sm text-gray-700">{text.details}</span></>}
+              {text.details && <>{" "}<span className={look.details}>{text.details}</span></>}
             </button>
             {rosterId && (
               <p id={rosterId} className="mt-1 px-1 text-sm text-gray-700 break-words">
