@@ -773,7 +773,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         <fieldset id="event-public-shift-view" aria-describedby="event-public-shift-view-hint">
           <legend className="text-sm font-medium text-gray-700 mb-1">Affichage des créneaux par défaut</legend>
           <p id="event-public-shift-view-hint" className="text-xs text-gray-600 mb-2">
-            Automatique : la frise quand elle reste lisible sur l&apos;écran, sinon la liste ; toujours la liste pour des permanences répétées. Frise : sur un téléphone, il faut parfois la faire défiler sur le côté. Chaque visiteur peut changer d&apos;affichage, et son choix est gardé.
+            Automatique : la frise sur un grand écran, et sur un téléphone quand elle y reste lisible ; sinon la liste. Toujours la liste pour des permanences sur 28 jours ou plus. Frise : sur un téléphone, il faut parfois la faire défiler sur le côté. Chaque visiteur peut changer d&apos;affichage, et son choix est gardé.
           </p>
           <div className="space-y-1">
             {SHIFT_VIEW_SETTINGS.map((setting) => (
