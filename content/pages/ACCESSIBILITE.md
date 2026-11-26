@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 5 octobre 2026, mise à jour le 18 novembre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 5 octobre 2026, mise à jour le 26 novembre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -33,7 +33,7 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 
 ## Limites connues
 
-- Sur un téléphone tenu droit, le **planning** d'une journée s'affiche par défaut en liste, heure par heure, sans défilement horizontal ; sur un écran plus large en frise, ce qui comprend la plupart des téléphones tournés à l'horizontale tant qu'aucun créneau n'est choisi. La frise demande de faire défiler latéralement sur un petit écran. Le choix « Frise » ou « Liste », au-dessus du planning, est mémorisé sur l'appareil.
+- Sur un téléphone tenu droit, le **planning** d'une journée s'affiche par défaut en liste, heure par heure, sans défilement horizontal, quand la frise ne serait pas lisible sur l'écran ; quand elle l'est, la frise s'affiche d'office. Sur un écran plus large, c'est la frise. L'organisation peut choisir pour son événement « Automatique », « Frise » ou « Liste » ; le défaut « Frise » peut demander de faire défiler la frise latéralement sur un téléphone, une limite connue. Le choix « Frise » ou « Liste », au-dessus du planning, est mémorisé sur l'appareil et l'emporte sur ces défauts.
 - Le **planning**, les **feuilles** et les **badges** à imprimer sont des pages HTML, analysées par les tests automatiques comme le reste du site : ce sont elles, ouvertes dans le navigateur, la version accessible de ces documents. Un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait. Les présences s'exportent aussi en CSV.
 - Sur une **frise** très resserrée, une barre trop étroite n'affiche que son heure de début, alors que son nom pour les lecteurs d'écran et la commande vocale dit toute la plage horaire (« 07h–09h ») : dire l'heure de début suffit à l'atteindre à la voix.
 - Sur la page **Mes inscriptions**, la partie **Échanger un créneau** ne se met pas à jour toute seule quand l'autre personne répond ou que l'organisation valide : il faut recharger la page. Chaque action dit son résultat, et l'email reçu le confirme.
