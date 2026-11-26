@@ -74,7 +74,7 @@ Cette liste est volontairement courte. La présentation publique, par besoins, e
 
 | Planning bénévole (ordinateur) | Planning bénévole (mobile) | Tableau de bord |
 |---|---|---|
-| ![Planning public d'un événement : les postes en lignes, les créneaux en barres colorées par jour, avec places restantes, liste d'attente, « Sur validation » et poste réservé](public/doc-img/public-timeline.png) | ![Planning public sur mobile, les créneaux du jour en barres colorées](public/doc-img/public-timeline-mobile.png) | ![Tableau de bord de l'administration : « Ce qui demande votre attention », du plus urgent au moins urgent](public/doc-img/admin-dashboard.png) |
+| ![Planning public d'un événement : les postes en lignes, les créneaux en barres colorées par jour, avec places restantes, liste d'attente, « Sur validation » et poste réservé](public/doc-img/public-timeline.png) | ![Planning public sur mobile, les créneaux du jour en barres colorées](public/doc-img/public-timeline-phone.png) | ![Tableau de bord de l'administration : « Ce qui demande votre attention », du plus urgent au moins urgent](public/doc-img/admin-dashboard.png) |
 
 > Les captures de la documentation (`public/doc-img/`) viennent de l'événement de démonstration (`scripts/seed-demo.ts`) et se régénèrent avec `npm run screenshots` sur une stack locale, jamais en production. La procédure est dans l'en-tête de `scripts/screenshots.mjs`, les variables (`BASE_URL`, `DEMO_ORG`, `ONLY`, `PUBLIC_ONLY`) dans [docs/configuration.md](docs/configuration.md#scripts-et-tests).
 

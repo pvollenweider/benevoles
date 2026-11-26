@@ -8,7 +8,7 @@ C'est gratuit, open source et hébergé en France.
 - [Demander un espace](/inscription)
 - [Créer son premier événement](../guide/creer-son-premier-evenement.md)
 
-![La page d'inscription sur un téléphone : la Fête du village de Montvert, ses postes (Montage, Accueil, Buvette, Navette, Sécurité) sur une frise horaire, avec les places prises et les créneaux complets.](/doc-img/public-timeline-mobile.png)
+![La page d'inscription sur un téléphone : la Fête du village de Montvert, ses postes (Montage, Accueil, Buvette, Navette, Sécurité) sur une frise horaire, avec les places prises et les créneaux complets.](/doc-img/public-timeline-phone.png)
 
 ## Une édition type
 
