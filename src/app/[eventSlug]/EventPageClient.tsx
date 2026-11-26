@@ -1207,7 +1207,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 not tied to the group. */}
             {!preview && !embed && fromWidth !== null && fromWidth > 0 && shiftView !== "frise" && (
               <div className="event-shift-rotate-narrow">
-                <p className={`text-sm text-gray-700 ${rotateHint ? "" : "invisible"}`}>Tourne le téléphone pour voir la journée en frise.</p>
+                <p className={`text-sm text-gray-700 ${rotateHint ? "" : "invisible"}`}>Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».</p>
               </div>
             )}
             {/* The guide's page on reading the schedule (#1096); in a sentence, not beside the switches. */}

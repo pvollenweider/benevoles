@@ -157,12 +157,12 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
     vi.stubGlobal("screen", { width: 390, height: 844 })
 
     render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
-    const sentence = await screen.findByText("Tourne le téléphone pour voir la journée en frise.")
+    const sentence = await screen.findByText("Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».")
     expect(sentence).not.toHaveClass("invisible")
 
     // Turned sideways: the sentence stops holding, but keeps its place for the list.
     act(() => { portrait = false; listeners.forEach((l) => l()) })
-    expect(screen.getByText("Tourne le téléphone pour voir la journée en frise.")).toHaveClass("invisible")
+    expect(screen.getByText("Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».")).toHaveClass("invisible")
   })
 
   it("computes the automatic breakpoint from the event's shifts, capped at 640 px", () => {
@@ -228,7 +228,7 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
   it("reserves the rotate sentence's line in the server HTML, hidden from the accessibility tree", () => {
     const html = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
     expect(html).toContain("event-shift-rotate-narrow")
-    expect(html).toContain("Tourne le téléphone pour voir la journée en frise.")
+    expect(html).toContain("Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».")
     expect(html).toContain("invisible")
     // The line is shown by CSS only below the event's threshold, on a touch device held upright:
     // a narrow desktop window (fine pointer) or a phone turned sideways keeps no blank line.
@@ -240,7 +240,7 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
   it("renders no reserved line once « Frise » is chosen", () => {
     render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
     fireEvent.click(screen.getByRole("button", { name: "Frise" }))
-    expect(screen.queryByText("Tourne le téléphone pour voir la journée en frise.")).not.toBeInTheDocument()
+    expect(screen.queryByText("Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».")).not.toBeInTheDocument()
     expect(document.querySelector(".event-shift-rotate-narrow")).toBeNull()
   })
 
@@ -248,7 +248,7 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
     const long = { ...event, startDate: "2030-06-01T00:00:00.000Z", endDate: "2030-10-31T00:00:00.000Z" }
     for (const e of [{ ...event, publicShiftView: "frise" as const }, { ...event, publicShiftView: "liste" as const }, long]) {
       const html = renderToString(<EventPageClient orgSlug="org" eventSlug="x" initialEvent={e} />)
-      expect(html).not.toContain("Tourne le téléphone pour voir la journée en frise.")
+      expect(html).not.toContain("Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».")
       expect(html).not.toContain("event-shift-rotate-narrow")
     }
   })
