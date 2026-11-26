@@ -3,7 +3,8 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, cleanup, fireEvent, within, act } from "@testing-library/react"
+import { render, screen, cleanup, fireEvent, within, act, waitFor } from "@testing-library/react"
+import { hydrateRoot, type Root } from "react-dom/client"
 import { renderToString } from "react-dom/server"
 
 vi.mock("next/navigation", () => ({
@@ -12,7 +13,7 @@ vi.mock("next/navigation", () => ({
 }))
 
 import EventPageClient, { type EventData } from "@/app/[eventSlug]/EventPageClient"
-import { SHIFT_VIEW_KEY } from "@/lib/shift-view"
+import { SHIFT_VIEW_HINT_KEY, SHIFT_VIEW_KEY } from "@/lib/shift-view"
 
 // #808: « Frise » / « Liste », the choice kept on the device. #1407: with no choice, the list on a
 // phone and the timeline from `sm` up; jsdom has no matchMedia, which counts as a wide screen.
@@ -27,7 +28,7 @@ const event = {
 } satisfies EventData
 
 describe("EventPageClient — Frise / Liste (#808)", () => {
-  afterEach(() => { cleanup(); localStorage.clear(); Reflect.deleteProperty(window, "matchMedia"); vi.unstubAllGlobals() })
+  afterEach(() => { cleanup(); localStorage.clear(); Reflect.deleteProperty(window, "matchMedia"); vi.unstubAllGlobals(); vi.restoreAllMocks() })
 
   it("renders both views in the server HTML, CSS showing the one for the screen", () => {
     const html = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
@@ -165,13 +166,176 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
   })
 
   it("computes the automatic breakpoint from the event's shifts, capped at 640 px", () => {
-    // 10–11 and 13–14: span 240 min, shortest 60 min -> 148 + 256 = 404 px.
+    // 10–11 and 13–14: span 240 min, shortest 60 min -> 150 + 256 = 406 px.
     const narrow = { ...event, shifts: [shift("a", { startTime: "10:00", endTime: "11:00" }), shift("b", { startTime: "13:00", endTime: "14:00" })] }
     const narrowHtml = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={narrow} />)
-    expect(narrowHtml).toContain("@media (min-width:404px)")
-    // 08:00–08:30 and 20:00–20:30: span 720 min, shortest 30 min -> far above 640: capped there.
+    expect(narrowHtml).toContain("@media (min-width:406px)")
+    // 08:00–08:30 and 20:00–20:30 are 30 min shifts: no width makes them readable (60 px at most),
+    // so the day is never the default and the 640 px cap applies.
     const wide = { ...event, shifts: [shift("a", { startTime: "08:00", endTime: "08:30" }), shift("b", { startTime: "20:00", endTime: "20:30" })] }
     const wideHtml = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={wide} />)
     expect(wideHtml).toContain("@media (min-width:640px)")
   })
+  // ── The measured column (#1407): a sentence that follows the real card width ──────────────
+  it("measures the remounted column again after a round trip to the sign-up form", () => {
+    let columnWidth = 200
+    const observers: { cb: () => void; els: Set<Element>; disconnected: boolean }[] = []
+    class FakeResizeObserver {
+      els = new Set<Element>()
+      disconnected = false
+      constructor(public cb: () => void) { observers.push(this) }
+      observe(el: Element) { this.els.add(el) }
+      unobserve(el: Element) { this.els.delete(el) }
+      disconnect() { this.disconnected = true; this.els.clear() }
+    }
+    vi.stubGlobal("ResizeObserver", FakeResizeObserver)
+    const proto = window.HTMLElement.prototype
+    const original = Object.getOwnPropertyDescriptor(proto, "clientWidth")
+    Object.defineProperty(proto, "clientWidth", {
+      configurable: true,
+      get(this: HTMLElement) { return this.classList?.contains("space-y-6") ? columnWidth : 0 },
+    })
+    try {
+      // A saved « Frise » shows the timeline; its card is 200 px wide, under its 260 px min-width.
+      localStorage.setItem(SHIFT_VIEW_KEY, "frise")
+      const { container } = render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+      expect(screen.getByText(/Fais défiler pour voir toutes les plages/)).toBeInTheDocument()
+
+      // Pick a shift, open the form: the measured column unmounts.
+      const region = screen.getByRole("region", { name: /Planning du/ })
+      fireEvent.click(within(region).getAllByRole("button")[0])
+      fireEvent.click(screen.getAllByRole("button", { name: /^Continuer/ })[0])
+      expect(container.querySelector(".space-y-6")).toBeNull()
+      // The detached column reports a zero width (a browser may do so on removal). The observer
+      // created once for the old node keeps it and never measures the column mounted again.
+      columnWidth = 0
+      for (const o of observers) if (!o.disconnected) o.cb()
+      columnWidth = 200
+
+      fireEvent.click(screen.getByRole("button", { name: /Retour/ }))
+      expect(screen.getByText(/Fais défiler pour voir toutes les plages/)).toBeInTheDocument()
+    } finally {
+      if (original) Object.defineProperty(proto, "clientWidth", original)
+      else Reflect.deleteProperty(proto, "clientWidth")
+      vi.unstubAllGlobals()
+    }
+  })
+
+  // ── The one-time hint (#1407, part C) ─────────────────────────────────────────────────────
+  const listeEvent = { ...event, publicShiftView: "liste" as const }
+  const flushFrame = () => act(async () => { await new Promise((resolve) => setTimeout(resolve, 30)) })
+
+  it("reserves the rotate sentence's line in the server HTML, hidden from the accessibility tree", () => {
+    const html = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+    expect(html).toContain("event-shift-rotate-narrow")
+    expect(html).toContain("Tourne le téléphone pour voir la journée en frise.")
+    expect(html).toContain("invisible")
+  })
+
+  it("renders no rotate sentence when the threshold is not a positive number", () => {
+    const long = { ...event, startDate: "2030-06-01T00:00:00.000Z", endDate: "2030-10-31T00:00:00.000Z" }
+    for (const e of [{ ...event, publicShiftView: "frise" as const }, { ...event, publicShiftView: "liste" as const }, long]) {
+      const html = renderToString(<EventPageClient orgSlug="org" eventSlug="x" initialEvent={e} />)
+      expect(html).not.toContain("Tourne le téléphone pour voir la journée en frise.")
+      expect(html).not.toContain("event-shift-rotate-narrow")
+    }
+  })
+
+  it("never plays the hint in the admin preview", async () => {
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} preview={{ eventId: "evt-1", adminEventUrl: "/admin/events/evt-1" }} />)
+    await flushFrame()
+    expect(screen.getByRole("button", { name: "Frise" })).not.toHaveClass("shift-view-hint")
+    expect(localStorage.getItem(SHIFT_VIEW_HINT_KEY)).toBeNull()
+  })
+
+  it("never plays the hint in the embed", async () => {
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} embed />)
+    await flushFrame()
+    expect(screen.getByRole("button", { name: "Frise" })).not.toHaveClass("shift-view-hint")
+    expect(localStorage.getItem(SHIFT_VIEW_HINT_KEY)).toBeNull()
+  })
+
+
+  it("writes the flag when the hint starts, not before the animation frame", async () => {
+    let frame: FrameRequestCallback | null = null
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => { frame = cb; return 1 })
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    const frise = screen.getByRole("button", { name: "Frise" })
+    await waitFor(() => expect(frame).not.toBeNull())
+    // Scheduled, not started: nothing played, nothing written.
+    expect(frise).not.toHaveClass("shift-view-hint")
+    expect(localStorage.getItem(SHIFT_VIEW_HINT_KEY)).toBeNull()
+    act(() => frame?.(0))
+    expect(frise).toHaveClass("shift-view-hint")
+    expect(localStorage.getItem(SHIFT_VIEW_HINT_KEY)).toBe("1")
+  })
+
+  it("plays the hint once, writes the flag only when it starts, and never again", async () => {
+    const first = render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    const frise = screen.getByRole("button", { name: "Frise" })
+    await waitFor(() => expect(frise).toHaveClass("shift-view-hint"))
+    expect(localStorage.getItem(SHIFT_VIEW_HINT_KEY)).toBe("1")
+    first.unmount()
+
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    await flushFrame()
+    expect(screen.getByRole("button", { name: "Frise" })).not.toHaveClass("shift-view-hint")
+  })
+
+  it("writes no flag under reduced motion", async () => {
+    Object.defineProperty(window, "matchMedia", { configurable: true, value: (query: string) => ({
+      matches: query === "(prefers-reduced-motion: reduce)",
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }) })
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    await flushFrame()
+    expect(screen.getByRole("button", { name: "Frise" })).not.toHaveClass("shift-view-hint")
+    expect(localStorage.getItem(SHIFT_VIEW_HINT_KEY)).toBeNull()
+  })
+
+  it("removes the hint on a pointerdown inside the group", async () => {
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    const frise = screen.getByRole("button", { name: "Frise" })
+    await waitFor(() => expect(frise).toHaveClass("shift-view-hint"))
+    fireEvent.pointerDown(frise)
+    expect(frise).not.toHaveClass("shift-view-hint")
+  })
+
+  it("removes the hint on a focus inside the group", async () => {
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    const frise = screen.getByRole("button", { name: "Frise" })
+    await waitFor(() => expect(frise).toHaveClass("shift-view-hint"))
+    act(() => frise.focus())
+    expect(frise).not.toHaveClass("shift-view-hint")
+  })
+
+  it("removes the hint when a view is chosen", async () => {
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    const frise = screen.getByRole("button", { name: "Frise" })
+    await waitFor(() => expect(frise).toHaveClass("shift-view-hint"))
+    fireEvent.click(screen.getByRole("button", { name: "Liste" }))
+    expect(frise).not.toHaveClass("shift-view-hint")
+  })
+
+  // ── Hydration (#1407): the server HTML and the first client render agree ──────────────────
+  it.each([
+    ["a positive threshold", event],
+    ["the setting « Frise »", { ...event, publicShiftView: "frise" as const }],
+    ["the setting « Liste »", { ...event, publicShiftView: "liste" as const }],
+  ])("hydrates the server HTML for %s without a hydration warning", async (_label, initialEvent) => {
+    const container = document.createElement("div")
+    document.body.appendChild(container)
+    container.innerHTML = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={initialEvent} />)
+    const errors: string[] = []
+    const spy = vi.spyOn(console, "error").mockImplementation((...args: unknown[]) => { errors.push(args.map(String).join(" ")) })
+    let root: Root | undefined
+    act(() => { root = hydrateRoot(container, <EventPageClient orgSlug="org" eventSlug="fete" initialEvent={initialEvent} />) })
+    await act(async () => {})
+    spy.mockRestore()
+    act(() => root?.unmount())
+    container.remove()
+    expect(errors.filter((e) => /hydrat|did not match/i.test(e))).toEqual([])
+  })
+
 })

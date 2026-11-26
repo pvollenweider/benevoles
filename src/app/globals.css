@@ -242,13 +242,14 @@ html:has([data-theme-scope].dark) {
   .shift-view-hint .shift-view-bars path:nth-child(2) { animation-delay: 120ms; }
   .shift-view-hint .shift-view-bars path:nth-child(3) { animation-delay: 240ms; }
 
-  /* A pseudo-element, never an outline: neutral gray-400, unlike the blue-600 focus ring. */
+  /* A pseudo-element, never an outline: neutral gray-400, unlike the blue-600 focus ring. The ring
+     follows the button's own corners: « Frise » is rounded on its left side only. */
   .shift-view-hint::after {
     content: "";
     position: absolute;
     inset: 0;
     border: 2px solid #9ca3af;
-    border-radius: 11px;
+    border-radius: 11px 0 0 11px;
     pointer-events: none;
     opacity: 0;
     animation: shift-view-ring 900ms ease-out 2;

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useLayoutEffect, useRef, useState, useMemo, type RefObject } from "react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
 import type { OrgLogo } from "@/lib/org-logo"
@@ -287,26 +287,36 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const shiftView = shownShiftView(chosenShiftView ?? keptShiftView, savedShiftView, wideScreen, fromWidth)
   const chooseShiftView = (view: ShiftView) => {
     setChosenShiftView(view)
+    // A choice ends the hint for good: the class never stays on the button once a view is chosen.
+    setHintActive(false)
     if (!preview) saveShiftView(view)
   }
   // The one-time hint on « Frise » (part C): only while the list is shown, with no choice made and
   // only once on this device. Decoration only: it changes no text and is never announced.
   const [hintActive, setHintActive] = useState(false)
   useEffect(() => {
-    if (!hydrated || preview || embed || shiftView !== "liste") {
-      const reset = setTimeout(() => setHintActive(false), 0)
-      return () => clearTimeout(reset)
-    }
+    if (!hydrated || preview || embed || shiftView !== "liste") return
     if (chosenShiftView || savedShiftView || readShiftViewHintPlayed()) return
-    saveShiftViewHintPlayed()
-    // One frame later: a decoration, never a render-time side effect.
-    const start = requestAnimationFrame(() => setHintActive(true))
+    // Nothing plays under reduced motion: no animation, and no flag written either.
+    if (typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    // One frame later: a decoration, never a render-time side effect. The flag is written once the
+    // hint really starts, not before the frame that starts it.
+    const start = requestAnimationFrame(() => {
+      setHintActive(true)
+      saveShiftViewHintPlayed()
+    })
     // Finite even if the animation ends differently: a fixed count and a total under 5 s.
     const stop = setTimeout(() => setHintActive(false), 3600)
-    return () => { cancelAnimationFrame(start); clearTimeout(stop) }
+    // Always clear on cleanup: the class can never stay on the button.
+    return () => {
+      cancelAnimationFrame(start)
+      clearTimeout(stop)
+      setHintActive(false)
+    }
   }, [hydrated, preview, embed, shiftView, chosenShiftView, savedShiftView])
   // « Tourne le téléphone… » (part D): a touch device held upright whose screen could show the
-  // timeline. Nothing is rendered for it on the server.
+  // timeline. Its line is reserved from the server HTML on, so the list does not jump down a line
+  // once hydration shows it.
   const coarsePointer = useMediaQuery("(pointer: coarse)")
   const portrait = useMediaQuery("(orientation: portrait)")
   const screenLongSide = useScreenLongSide()
@@ -320,16 +330,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     portrait,
     screenLongSide,
   })
-  // Once shown, the sentence keeps its box (made invisible) when the condition stops, so the list
-  // does not move under the finger. Nothing is rendered on the server.
-  const [rotateHintShown, setRotateHintShown] = useState(false)
-  useEffect(() => {
-    if (!rotateHint || preview || embed) return
-    const show = setTimeout(() => setRotateHintShown(true), 0)
-    return () => clearTimeout(show)
-  }, [rotateHint, preview, embed])
   // Measured once the timeline column exists: a sentence that says the chart scrolls would be
-  // false on a wide screen where it fits. Nothing in the server HTML for it.
+  // false on a wide screen where it fits.
   const [timelineColumnRef, timelineColumnWidth] = useElementWidth<HTMLDivElement>(!!event)
 
   // Long events (#866): one month at a time, chosen by the visitor; null = the first month shown.
@@ -1194,11 +1196,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               </Switch>
             )}
             </div>
-            {/* Turning the phone is the other way to the timeline (part D): once shown, its box
-                stays (invisible) when the condition stops, so the list does not move under the
-                finger. Not a live region, not tied to the group, never in the server HTML. */}
-            {!preview && !embed && rotateHintShown && (
-              <p className={`text-sm text-gray-700 ${rotateHint ? "" : "invisible"}`}>Tourne le téléphone pour voir la journée en frise.</p>
+            {/* Turning the phone is the other way to the timeline (part D). Its line is reserved
+                from the server HTML on, inside a wrapper the event's media query shows only below
+                the threshold (like the list): nothing moves when hydration shows it. `invisible`
+                keeps it out of the accessibility tree until the condition holds, and keeps its
+                place when the condition stops, so the list does not move under the finger. Not a
+                live region, not tied to the group. */}
+            {!preview && !embed && fromWidth !== null && fromWidth > 0 && (
+              <div className="event-shift-rotate-narrow">
+                <p className={`text-sm text-gray-700 ${rotateHint ? "" : "invisible"}`}>Tourne le téléphone pour voir la journée en frise.</p>
+              </div>
             )}
             {/* The guide's page on reading the schedule (#1096); in a sentence, not beside the switches. */}
             <p className="text-sm text-gray-700">Comment lire le planning et choisir tes créneaux : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.chooseShifts)} about="la lecture du planning" /></p>
@@ -1773,11 +1780,12 @@ function shiftViewBreakpointCss(from: number): string {
     ".event-shift-look-wide{color:#374151}",
     ".event-shift-look-narrow{background-color:#111827;color:#fff}",
     "@media (hover:hover){.event-shift-look-wide:hover{background-color:#f9fafb}.event-shift-look-narrow:hover{background-color:#111827}}",
-    // From the breakpoint up: the list wrapper goes, the timeline wrapper takes over, and the
-    // pressed look swaps.
+    // From the breakpoint up: the list wrapper goes, the timeline wrapper takes over, the pressed
+    // look swaps, and the rotate sentence's reserved line goes with the list.
     `@media (min-width:${from}px){`,
     ".event-shift-view-narrow{display:none}",
     ".event-shift-view-wide{display:block}",
+    ".event-shift-rotate-narrow{display:none}",
     ".event-shift-look-wide{background-color:#111827;color:#fff}",
     ".event-shift-look-narrow{background-color:transparent;color:#374151}",
     ".event-shift-look-wide:hover{background-color:#111827}",
@@ -1809,26 +1817,38 @@ function useScreenLongSide(): number | null {
 }
 
 /**
- * The client width of an element, measured after hydration. `null` until it is known: a caller
- * that must not render before measuring keeps it out of the server HTML.
+ * The client width of the element a callback ref is given, measured after hydration. `null` until
+ * it is known: a caller that must not render before measuring keeps it out of the server HTML.
+ * A callback ref, not an observer created once: the measured column is unmounted on the sign-up
+ * form and mounted again on the way back, so the observer must follow the node it is given and
+ * disconnect from the old one.
  */
-function useElementWidth<T extends HTMLElement>(enabled: boolean): [RefObject<T | null>, number | null] {
-  const ref = useRef<T | null>(null)
+function useElementWidth<T extends HTMLElement>(enabled: boolean): [(node: T | null) => void, number | null] {
   const [width, setWidth] = useState<number | null>(null)
-  useEffect(() => {
-    if (!enabled) return
-    const el = ref.current
-    if (!el) return
-    const read = () => setWidth(el.clientWidth > 0 ? el.clientWidth : null)
+  const disconnect = useRef<(() => void) | null>(null)
+  const ref = useCallback((node: T | null) => {
+    disconnect.current?.()
+    disconnect.current = null
+    if (!node) {
+      setWidth(null)
+      return
+    }
+    const read = () => setWidth(node.clientWidth > 0 ? node.clientWidth : null)
     read()
     if (typeof ResizeObserver === "undefined") {
       window.addEventListener("resize", read)
-      return () => window.removeEventListener("resize", read)
+      disconnect.current = () => window.removeEventListener("resize", read)
+      return
     }
     const observer = new ResizeObserver(read)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [enabled])
+    observer.observe(node)
+    disconnect.current = () => observer.disconnect()
+  }, [])
+  // Unmounted: never keep observing a detached node.
+  useEffect(() => () => {
+    disconnect.current?.()
+    disconnect.current = null
+  }, [])
   return [ref, enabled ? width : null]
 }
 
