@@ -65,10 +65,37 @@ async function settle(page) {
   await page.waitForTimeout(500)
 }
 
-/** Screenshot of the viewport, of the full page, or of one element. */
-async function save(page, name, { target, fullPage = false, clip } = {}) {
+/**
+ * A phone drawn around a capture of its screen, so a reader sees at once that the picture is a
+ * phone and which way it is held. Plain shapes, no brand: a dark rounded body, the screen, a
+ * camera dot on the short side. Transparent outside the body, for the light and dark doc themes.
+ */
+const PHONE = { side: 14, end: 40, radius: 38, body: "#22262c", edge: "#3b424b", dot: "#0c0e11" }
+async function framePhone(browser, screen, { width, height }, file) {
+  const turned = width > height
+  const [padX, padY] = turned ? [PHONE.end, PHONE.side] : [PHONE.side, PHONE.end]
+  const dot = turned ? `left:${PHONE.end / 2 - 4}px;top:calc(50% - 4px)` : `top:${PHONE.end / 2 - 4}px;left:calc(50% - 4px)`
+  const context = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: width + 2 * padX + 8, height: height + 2 * padY + 8 } })
+  const page = await context.newPage()
+  await page.setContent(`<body style="margin:0;background:transparent">
+    <div id="phone" style="position:relative;display:inline-block;box-sizing:border-box;padding:${padY}px ${padX}px;background:${PHONE.body};border:2px solid ${PHONE.edge};border-radius:${PHONE.radius}px">
+      <span style="position:absolute;width:8px;height:8px;border-radius:50%;background:${PHONE.dot};${dot}"></span>
+      <img alt="" width="${width}" height="${height}" style="display:block" src="data:image/png;base64,${screen.toString("base64")}">
+    </div></body>`)
+  await page.locator("#phone img").evaluate((img) => img.decode())
+  await page.locator("#phone").screenshot({ path: file, omitBackground: true })
+  await context.close()
+}
+
+/**
+ * Screenshot of the viewport, of the full page, or of one element. `phone`: the viewport as a
+ * phone's screen, drawn inside a phone (never with `target`, `clip` or `fullPage`: a screen is
+ * what the phone shows, no more).
+ */
+async function save(page, name, { target, fullPage = false, clip, phone = false } = {}) {
   const file = path.join(OUT, `${name}.png`)
-  if (target) await target.screenshot({ path: file })
+  if (phone) await framePhone(page.context().browser(), await page.screenshot(), page.viewportSize(), file)
+  else if (target) await target.screenshot({ path: file })
   else if (clip) await page.screenshot({ path: file, clip, fullPage })
   else await page.screenshot({ path: file, fullPage })
   console.log(`  ✓ ${name}.png`)
@@ -208,17 +235,13 @@ async function run() {
     await mob.close()
   })
 
-  // The planning as a phone shows it (#1407), framed from the « Affichage des créneaux » row to the
-  // end of the first day, so the three captures compare like for like:
+  // The planning as a phone shows it (#1407), each capture drawn inside a phone:
   //  - held upright with no choice made: the list, and the sentence that offers the Frise;
   //  - held upright with « Frise » chosen: the chart cut at the right, to scroll sideways;
   //  - turned sideways: the whole day.
-  const planningClip = async (page, last) => {
-    const top = await page.locator("#shift-view-label").boundingBox()
-    const bottom = await last.boundingBox()
-    const y = Math.max(0, top.y - 20)
-    return { x: 0, y, width: page.viewportSize().width, height: bottom.y + bottom.height + 20 - y }
-  }
+  // Always the screen as held, never a full-page capture: that one resizes the page, and what
+  // depends on the way the phone is held (the sentence, the view) would be gone from the picture.
+  const toPlanning = (page) => page.locator("#shift-view-label").evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 20))
   await shot("public-list-mobile", async () => {
     const mob = await browser.newContext(MOBILE)
     await mob.addInitScript(playedShiftViewHint)
@@ -226,10 +249,8 @@ async function run() {
     await m.goto(withOrg(`/${EVENT_SLUG}`))
     await settle(m)
     await m.getByText("Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».").waitFor({ state: "visible" })
-    // The screen as held, not a full-page capture: that one resizes the page, and the sentence,
-    // tied to the phone being upright, would be gone from the picture.
-    await m.locator("#shift-view-label").evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 20))
-    await save(m, "public-list-mobile")
+    await toPlanning(m)
+    await save(m, "public-list-mobile", { phone: true })
     await mob.close()
   })
   await shot("public-timeline-phone-upright", async () => {
@@ -239,9 +260,9 @@ async function run() {
     await m.addInitScript(() => localStorage.setItem("benevoles:public-shift-view", "frise"))
     await m.goto(withOrg(`/${EVENT_SLUG}`))
     await settle(m)
-    const chart = m.getByRole("region", { name: /^Planning du / }).first()
-    await chart.waitFor({ state: "visible" })
-    await save(m, "public-timeline-phone-upright", { clip: await planningClip(m, chart), fullPage: true })
+    await m.getByRole("region", { name: /^Planning du / }).first().waitFor({ state: "visible" })
+    await toPlanning(m)
+    await save(m, "public-timeline-phone-upright", { phone: true })
     await mob.close()
   })
   await shot("public-timeline-phone-turned", async () => {
@@ -252,7 +273,9 @@ async function run() {
     await settle(m)
     const chart = m.getByRole("region", { name: /^Planning du / }).first()
     await chart.waitFor({ state: "visible" })
-    await save(m, "public-timeline-phone-turned", { clip: await planningClip(m, chart), fullPage: true })
+    // From the first day's title: its whole chart fits the screen, down to the hours.
+    await m.getByRole("heading", { level: 2 }).first().evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 16))
+    await save(m, "public-timeline-phone-turned", { phone: true })
     await mob.close()
   })
 
@@ -264,7 +287,7 @@ async function run() {
     const m = await mob.newPage()
     await m.goto(`${BASE}/saison-automne?org=epicerie-de-la-gare`)
     await settle(m)
-    await save(m, "public-permanences-mobile")
+    await save(m, "public-permanences-mobile", { phone: true })
     await mob.close()
   })
 
