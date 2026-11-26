@@ -9,7 +9,8 @@ import { reportError } from "./report-error"
 import { addressHash } from "./notifications/smtp-outcome"
 import { outboxMessageHost } from "./notifications/outbox-message-id"
 import { bounceMailboxConfigFrom, type BounceMailboxConfig } from "./bounce-mailbox-config"
-import { enhancedStatusOfDiagnostic, isPermanentFailure, outboxIdFromMessageId, parseBounceDsn, responseCodeOfDiagnostic, directRefFromMessageId, type ParsedBounce } from "./bounce-dsn"
+import { DAY_MS, RETENTION_DAYS, daysAgo } from "./retention"
+import { enhancedStatusOfDiagnostic, isPermanentFailure, outboxIdFromMessageId, parseBounceDsn, responseCodeOfDiagnostic, directRefFromMessageId, type DsnRecipient, type ParsedBounce } from "./bounce-dsn"
 
 /**
  * Deferred bounces (#602): the IMAP side. A scheduled run reads the mailbox that receives Gandi's
@@ -178,6 +179,29 @@ type BounceOutcomeRow = {
   createdAt: Date
 }
 
+/** The two id forms a notice can be correlated by; both null for a pre-fix direct send. */
+type BounceOutcomeIds = {
+  outboxId: string | null
+  messageRef: string | null
+}
+
+/** A known send is correlated by exactly one non-null id form. */
+type KnownSendIds = { outboxId: string; messageRef: null } | { outboxId: null; messageRef: string }
+
+/**
+ * End of the bounded exception for direct sends made before the `<direct-…>` fix (#602).
+ * DELETE THIS WHOLE PATH, ITS CONSTANT AND ITS TESTS after this date: the DeliveryOutcome rows it
+ * matches are purged by the nightly cleanup after RETENTION_DAYS.deliveryOutcome (30 days), so
+ * none can still exist by then, and the exception has no reason to live on.
+ *
+ * Security: a forged notice sent to the mailbox can, through this path, only flag an address to
+ * which this deployment really sent a direct email in the retention window; the effect is the
+ * mention « Adresse à vérifier » for that member's own organisation. That is why the path is
+ * bounded in time and limited to pre-fix rows (no outboxId, no messageRef): since the fix every
+ * direct send of a recorded kind stores a messageRef, so such a row can only predate it.
+ */
+export const LEGACY_DIRECT_BOUNCES_UNTIL = new Date("2026-12-31T23:59:59Z")
+
 /** When a DSN lists several recipients with different fates, the message-level verdict keeps the strongest. */
 function strongerVerdict(current: BounceVerdict, next: BounceVerdict): BounceVerdict {
   const rank: Record<BounceVerdict, number> = { uncorrelated: 0, ignored: 1, ignored_temporary: 2, already_known: 3, flagged: 4 }
@@ -185,40 +209,77 @@ function strongerVerdict(current: BounceVerdict, next: BounceVerdict): BounceVer
 }
 
 /**
- * Correlate one parsed DSN with the rows of the send it answers, then record the permanent
- * failure once. An outbox send is found by its row id, a direct send by the random reference of
- * its Message-ID. In both cases the organisation, member, kind and address hash come only
- * from our own rows, never from the message: a forged DSN can at most flag an address we already
- * wrote to.
+ * The id fields of the row a permanent bounce writes. Each path keeps its own row shape: an
+ * outbox send carries its row id, a direct send its reference and a null outboxId, and the
+ * legacy path is explicit that both are null.
  */
-export async function analyzeBounceDsn(
+function outcomeIdFields(ids: BounceOutcomeIds): { outboxId?: string | null; messageRef?: string | null } {
+  if (ids.messageRef) return { outboxId: null, messageRef: ids.messageRef }
+  if (ids.outboxId) return { outboxId: ids.outboxId }
+  return { outboxId: null, messageRef: null }
+}
+
+type PermanentBounce = {
+  ids: BounceOutcomeIds
+  organizationId: string | null
+  volunteerId: string | null
+  kind: string
+  addressHash: string
+  recipient: DsnRecipient
+}
+
+/**
+ * The `rejected_permanent` row shared by the three correlation paths. The organisation, member,
+ * kind and address hash always come from our own rows, never from the notice.
+ *
+ * A write failure is not "uncorrelated": the DSN is ours, it just was not recorded, and the
+ * message stays in the inbox for the next run. Let it throw so the scan counts an error.
+ */
+async function recordPermanentBounce(db: PrismaClient, bounce: PermanentBounce): Promise<void> {
+  await db.deliveryOutcome.create({
+    data: {
+      // The matched row's organisation only: a DSN never chooses a tenant.
+      organizationId: bounce.organizationId,
+      volunteerId: bounce.volunteerId ?? null,
+      ...outcomeIdFields(bounce.ids),
+      kind: bounce.kind,
+      outcome: "rejected_permanent",
+      reason: "bounced_after_acceptance",
+      responseCode: responseCodeOfDiagnostic(bounce.recipient.diagnosticCode),
+      enhancedStatus: bounce.recipient.status ?? enhancedStatusOfDiagnostic(bounce.recipient.diagnosticCode),
+      addressHash: bounce.addressHash,
+    },
+  })
+}
+
+/** Idempotent per (send, address): a permanent failure already recorded for that address wins. */
+function hasRejectedPermanent(outcomes: BounceOutcomeRow[], hash: string): boolean {
+  return outcomes.some((outcome) => outcome.addressHash === hash && outcome.outcome === "rejected_permanent")
+}
+
+/**
+ * Correlate one parsed DSN with the rows of a send identified by an outbox row id or a direct
+ * reference, then record the permanent failure once. An outbox send also reads its queue row
+ * (organisation fallback); a direct send has none, so only its own outcomes decide the
+ * organisation.
+ */
+async function analyzeKnownSend(
   parsed: ParsedBounce,
-  opts: { host: string; secret: string; db?: PrismaClient },
+  opts: { secret: string; db: PrismaClient },
+  ids: KnownSendIds,
 ): Promise<BounceVerdict> {
-  // Not a DSN at all (auto-reply, read receipt, ordinary mail): leave it in INBOX, counted apart
-  // from the DSNs that look like ours but cannot be correlated.
-  if (!parsed.isDsn) return "ignored"
-  if (!parsed.originalMessageId) return "uncorrelated"
-  const outboxId = outboxIdFromMessageId(parsed.originalMessageId, opts.host)
-  const messageRef = outboxId ? null : directRefFromMessageId(parsed.originalMessageId, opts.host)
+  const { outboxId, messageRef } = ids
   // The key is built explicitly, never as a nullable filter: `{ messageRef: null }` would match
   // every legacy row (the address-only fallback the design forbids), and a missing filter would
-  // read the whole table. A message that is neither of our two id forms has no key at all.
-  const outcomeKey: { outboxId: string } | { messageRef: string } | null = outboxId
-    ? { outboxId }
-    : messageRef
-      ? { messageRef }
-      : null
-  if (!outcomeKey) return "uncorrelated"
-  const db = opts.db ?? prisma
+  // read the whole table.
+  const outcomeKey: { outboxId: string } | { messageRef: string } =
+    ids.outboxId !== null ? { outboxId: ids.outboxId } : { messageRef: ids.messageRef }
 
-  // An outbox send also reads its queue row (organisation fallback); a direct send has none, so
-  // only its own outcomes decide the organisation. `outcomeKey` selects exactly one id form.
   const [outbox, outcomes] = await Promise.all([
     outboxId
-      ? db.notificationOutbox.findUnique({ where: { id: outboxId }, select: { id: true, organizationId: true } })
+      ? opts.db.notificationOutbox.findUnique({ where: { id: outboxId }, select: { id: true, organizationId: true } })
       : Promise.resolve(null),
-    db.deliveryOutcome.findMany({
+    opts.db.deliveryOutcome.findMany({
       where: outcomeKey,
       orderBy: { createdAt: "desc" },
       select: { addressHash: true, outcome: true, organizationId: true, volunteerId: true, kind: true, createdAt: true },
@@ -243,38 +304,169 @@ export async function analyzeBounceDsn(
     }
     // Idempotent per (outbox row or direct reference, address): a second DSN for the same
     // refusal writes nothing.
-    if (outcomes.some((outcome) => outcome.addressHash === hash && outcome.outcome === "rejected_permanent")) {
+    if (hasRejectedPermanent(outcomes as BounceOutcomeRow[], hash)) {
       verdict = strongerVerdict(verdict, "already_known")
       continue
     }
 
-    // A write failure is not "uncorrelated": the DSN is ours, it just was not recorded, and the
-    // message stays in the inbox for the next run. Let it throw so the scan counts an error.
-    await db.deliveryOutcome.create({
-      data: {
-        // The matched row's organisation only: a DSN never chooses a tenant.
-        organizationId: outbox?.organizationId ?? matched.organizationId ?? null,
-        volunteerId: matched.volunteerId ?? null,
-        outboxId: outboxId ?? null,
-        // Absent for an outbox send: the row is matched by `outboxId` (and existing outbox rows
-        // keep their shape unchanged).
-        ...(messageRef ? { messageRef } : {}),
-        kind: matched.kind,
-        outcome: "rejected_permanent",
-        reason: "bounced_after_acceptance",
-        responseCode: responseCodeOfDiagnostic(recipient.diagnosticCode),
-        enhancedStatus: recipient.status ?? enhancedStatusOfDiagnostic(recipient.diagnosticCode),
-        addressHash: hash,
-      },
+    await recordPermanentBounce(opts.db, {
+      ids: { outboxId, messageRef },
+      organizationId: outbox?.organizationId ?? matched.organizationId ?? null,
+      volunteerId: matched.volunteerId,
+      kind: matched.kind,
+      addressHash: hash,
+      recipient,
     })
     verdict = strongerVerdict(verdict, "flagged")
   }
   return verdict
 }
 
+/** One (organisation, member) pair a legacy notice can still be attributed to. */
+type LegacyDirectPair = {
+  organizationId: string | null
+  volunteerId: string
+  kind: string
+  createdAt: Date
+}
+
+/**
+ * Whether a legacy bounce was already recorded for this (organisation, member) pair after the
+ * pair's accepted row. A member belongs to one organisation, but the pair is written out in full:
+ * the idempotency key is the pair, never the address alone.
+ */
+async function legacyBounceAlreadyKnown(db: PrismaClient, hash: string, pair: LegacyDirectPair): Promise<boolean> {
+  const existing = await db.deliveryOutcome.findFirst({
+    where: {
+      addressHash: hash,
+      outboxId: null,
+      messageRef: null,
+      outcome: "rejected_permanent",
+      reason: "bounced_after_acceptance",
+      organizationId: pair.organizationId,
+      volunteerId: pair.volunteerId,
+      createdAt: { gt: pair.createdAt },
+    },
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    select: { id: true },
+  })
+  return existing !== null
+}
+
+/**
+ * The bounded exception for direct sends made before the `<direct-…>` fix: their Message-ID was
+ * random, so the only link left is the address. Only a permanent failure is considered. For each
+ * distinct (organisation, member) that received a pre-fix direct email at that address within the
+ * retention window, its most recent accepted row stands in for the send; the notice's own
+ * Message-ID host is never trusted for anything. Temporary statuses write nothing and are not
+ * looked up.
+ *
+ * Every pair is handled, not only the latest row for the address: the same address can appear in
+ * two organisations, and the refusal concerns each member who really wrote to it. The reads are
+ * ordered (`createdAt` desc, then `id` desc) so the pair chosen never depends on insertion order.
+ *
+ * This path ends by itself at LEGACY_DIRECT_BOUNCES_UNTIL. Before it, a row can only be a
+ * pre-fix direct send; after it, the path is skipped without a query.
+ */
+async function analyzeLegacyDirectBounce(
+  parsed: ParsedBounce,
+  opts: { secret: string; db: PrismaClient; now: Date },
+): Promise<BounceVerdict> {
+  if (opts.now.getTime() > LEGACY_DIRECT_BOUNCES_UNTIL.getTime()) return "uncorrelated"
+  const since = daysAgo(opts.now, RETENTION_DAYS.deliveryOutcome)
+
+  let verdict: BounceVerdict = "uncorrelated"
+  for (const recipient of parsed.recipients) {
+    if (!isPermanentFailure(recipient)) continue
+    const hash = addressHash(recipient.finalRecipient, opts.secret)
+    // A row without an outboxId, a messageRef or a member, accepted by the relay in the
+    // retention window, can only be a direct send made before the fix.
+    const rows = await opts.db.deliveryOutcome.findMany({
+      where: {
+        addressHash: hash,
+        outboxId: null,
+        messageRef: null,
+        outcome: "accepted_by_relay",
+        volunteerId: { not: null },
+        createdAt: { gte: since },
+      },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      select: { organizationId: true, volunteerId: true, kind: true, createdAt: true },
+    })
+
+    // Rows come newest first: the first row of each pair is the one whose kind is written.
+    const pairs = new Map<string, LegacyDirectPair>()
+    for (const row of rows) {
+      if (!row.volunteerId) continue
+      const key = `${row.organizationId ?? ""}\u0000${row.volunteerId}`
+      if (pairs.has(key)) continue
+      pairs.set(key, {
+        organizationId: row.organizationId,
+        volunteerId: row.volunteerId,
+        kind: row.kind,
+        createdAt: row.createdAt,
+      })
+    }
+    if (pairs.size === 0) continue
+
+    let wrote = false
+    for (const pair of pairs.values()) {
+      // Idempotent per (organisation, member, address): a second notice writes nothing for a
+      // pair already recorded, and still flags the pairs that were not.
+      if (await legacyBounceAlreadyKnown(opts.db, hash, pair)) continue
+
+      await recordPermanentBounce(opts.db, {
+        ids: { outboxId: null, messageRef: null },
+        organizationId: pair.organizationId,
+        volunteerId: pair.volunteerId,
+        kind: pair.kind,
+        addressHash: hash,
+        recipient,
+      })
+      wrote = true
+    }
+    verdict = strongerVerdict(verdict, wrote ? "flagged" : "already_known")
+  }
+  return verdict
+}
+
+/**
+ * Correlate one parsed DSN with the rows of the send it answers, then record the permanent
+ * failure once. An outbox send is found by its row id, a direct send by the random reference of
+ * its Message-ID. A notice carrying neither form takes the bounded legacy path above. In every
+ * case the organisation, member, kind and address hash come only from our own rows, never from
+ * the message: a forged DSN can at most flag an address we already wrote to.
+ */
+export async function analyzeBounceDsn(
+  parsed: ParsedBounce,
+  opts: { host: string; secret: string; db?: PrismaClient; now?: Date },
+): Promise<BounceVerdict> {
+  // Not a DSN at all (auto-reply, read receipt, ordinary mail): leave it in INBOX, counted apart
+  // from the DSNs that look like ours but cannot be correlated.
+  if (!parsed.isDsn) return "ignored"
+  if (!parsed.originalMessageId) return "uncorrelated"
+
+  const db = opts.db ?? prisma
+  const outboxId = outboxIdFromMessageId(parsed.originalMessageId, opts.host)
+  if (outboxId) return analyzeKnownSend(parsed, { secret: opts.secret, db }, { outboxId, messageRef: null })
+  const messageRef = directRefFromMessageId(parsed.originalMessageId, opts.host)
+  // An id of one of our two forms never falls through to the legacy path, even when its own
+  // lookup finds nothing.
+  if (messageRef) return analyzeKnownSend(parsed, { secret: opts.secret, db }, { outboxId: null, messageRef })
+  return analyzeLegacyDirectBounce(parsed, { secret: opts.secret, db, now: opts.now ?? new Date() })
+}
+
 const BOUNCE_JOB = "bounces"
 const STALE_RUN_MS = 20 * 60 * 1000
-const DAY_MS = 24 * 60 * 60 * 1000
+
+/**
+ * The analyzer a scheduled run gives to the mailbox scan. The run's own clock is bound here so the
+ * bounded legacy path ends on that run's time, not on a second `new Date()` taken later.
+ */
+export function deferredBounceAnalyzer(opts: { db: PrismaClient; now: Date }): (raw: Buffer) => Promise<BounceVerdict> {
+  return (raw) =>
+    parseBounceDsn(raw).then((parsed) => analyzeBounceDsn(parsed, { host: outboxMessageHost(), secret: env.AUTH_SECRET, db: opts.db, now: opts.now }))
+}
 
 type UncorrelatedRun = { at: string; count: number }
 
@@ -349,9 +541,7 @@ export async function processDeferredBounces(deps: ProcessDeferredBouncesDeps = 
   try {
     result = deps.scan
       ? await deps.scan(config)
-      : await scanBounceMailbox(config, {
-          analyze: (raw) => parseBounceDsn(raw).then((parsed) => analyzeBounceDsn(parsed, { host: outboxMessageHost(), secret: env.AUTH_SECRET, db })),
-        })
+      : await scanBounceMailbox(config, { analyze: deferredBounceAnalyzer({ db, now }) })
   } catch (e) {
     report(e)
     result = { ...ZERO_COUNTS, errors: 1, processedFolder: config.processedFolder }
