@@ -45,6 +45,8 @@ const DESKTOP = { viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1, 
 const MOBILE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2, locale: "fr-CH", timezoneId: "Europe/Zurich" }
 
 const withOrg = (p) => `${BASE}${p}${p.includes("?") ? "&" : "?"}org=${ORG}`
+// No capture may catch the one-time hint mid-animation (#1407): mark it played before any load.
+const playedShiftViewHint = () => localStorage.setItem("benevoles:public-shift-view-hint", "1")
 
 async function settle(page) {
   await page.waitForLoadState("networkidle")
@@ -111,6 +113,7 @@ async function run() {
   // ── What volunteers see ──────────────────────────────────────────────────
   console.log("Public pages…")
   const desk = await browser.newContext(DESKTOP)
+  await desk.addInitScript(playedShiftViewHint)
   const p = await desk.newPage()
 
   await shot("public-timeline", async () => {
@@ -159,6 +162,7 @@ async function run() {
   // A fresh context: the selection of the shots above is kept by the browser.
   await shot("public-waitlist-selection", async () => {
     const fresh = await browser.newContext(DESKTOP)
+    await fresh.addInitScript(playedShiftViewHint)
     const w = await fresh.newPage()
     await w.goto(withOrg(`/${EVENT_SLUG}`))
     await settle(w)
@@ -195,6 +199,7 @@ async function run() {
   // The Frise on a phone, chosen with « Frise » (a phone opens on the list, #1407).
   await shot("public-timeline-mobile", async () => {
     const mob = await browser.newContext(MOBILE)
+    await mob.addInitScript(playedShiftViewHint)
     const m = await mob.newPage()
     await m.addInitScript(() => localStorage.setItem("benevoles:public-shift-view", "frise"))
     await m.goto(withOrg(`/${EVENT_SLUG}`))
@@ -207,6 +212,7 @@ async function run() {
   // dates. Needs scripts/seed-demo-permanences.ts (its own organisation, « Épicerie de la Gare »).
   await shot("public-permanences-mobile", async () => {
     const mob = await browser.newContext(MOBILE)
+    await mob.addInitScript(playedShiftViewHint)
     const m = await mob.newPage()
     await m.goto(`${BASE}/saison-automne?org=epicerie-de-la-gare`)
     await settle(m)
@@ -219,6 +225,7 @@ async function run() {
   // before the setting was turned on: her name is hidden, the others who chose it are listed).
   await shot("public-roster-signup-box", async () => {
     const fresh = await browser.newContext(DESKTOP)
+    await fresh.addInitScript(playedShiftViewHint)
     const r = await fresh.newPage()
     await r.goto(`${BASE}/${ROSTER.event}?org=${ROSTER.org}`)
     await settle(r)
@@ -246,6 +253,7 @@ async function run() {
   // who is on the bar she touched.
   await shot("public-roster-switch", async () => {
     const lea = await browser.newContext(DESKTOP)
+    await lea.addInitScript(playedShiftViewHint)
     const l = await lea.newPage()
     await l.goto(`${BASE}/my/${ROSTER.token}?org=${ROSTER.org}`)
     await settle(l)
@@ -337,6 +345,7 @@ async function run() {
     const shiftId = href ? new URL(href, BASE).searchParams.get("shift") : null
     if (!shiftId) throw new Error("no underfilled shift link found")
     const publicContext = await browser.newContext(DESKTOP)
+    await publicContext.addInitScript(playedShiftViewHint)
     const d = await publicContext.newPage()
     await d.goto(withOrg(`/ne-peux-pas/invitation/${TOKENS.invite}/${shiftId}`))
     await settle(d)
