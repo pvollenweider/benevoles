@@ -208,6 +208,54 @@ async function run() {
     await mob.close()
   })
 
+  // The planning as a phone shows it (#1407), framed from the « Affichage des créneaux » row to the
+  // end of the first day, so the three captures compare like for like:
+  //  - held upright with no choice made: the list, and the sentence that offers the Frise;
+  //  - held upright with « Frise » chosen: the chart cut at the right, to scroll sideways;
+  //  - turned sideways: the whole day.
+  const planningClip = async (page, last) => {
+    const top = await page.locator("#shift-view-label").boundingBox()
+    const bottom = await last.boundingBox()
+    const y = Math.max(0, top.y - 20)
+    return { x: 0, y, width: page.viewportSize().width, height: bottom.y + bottom.height + 20 - y }
+  }
+  await shot("public-list-mobile", async () => {
+    const mob = await browser.newContext(MOBILE)
+    await mob.addInitScript(playedShiftViewHint)
+    const m = await mob.newPage()
+    await m.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(m)
+    await m.getByText("Pour voir la journée en frise, tourne le téléphone ou touche « Frise ».").waitFor({ state: "visible" })
+    // The screen as held, not a full-page capture: that one resizes the page, and the sentence,
+    // tied to the phone being upright, would be gone from the picture.
+    await m.locator("#shift-view-label").evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 20))
+    await save(m, "public-list-mobile")
+    await mob.close()
+  })
+  await shot("public-timeline-phone-upright", async () => {
+    const mob = await browser.newContext(MOBILE)
+    await mob.addInitScript(playedShiftViewHint)
+    const m = await mob.newPage()
+    await m.addInitScript(() => localStorage.setItem("benevoles:public-shift-view", "frise"))
+    await m.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(m)
+    const chart = m.getByRole("region", { name: /^Planning du / }).first()
+    await chart.waitFor({ state: "visible" })
+    await save(m, "public-timeline-phone-upright", { clip: await planningClip(m, chart), fullPage: true })
+    await mob.close()
+  })
+  await shot("public-timeline-phone-turned", async () => {
+    const mob = await browser.newContext({ ...MOBILE, viewport: { width: 844, height: 390 } })
+    await mob.addInitScript(playedShiftViewHint)
+    const m = await mob.newPage()
+    await m.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(m)
+    const chart = m.getByRole("region", { name: /^Planning du / }).first()
+    await chart.waitFor({ state: "visible" })
+    await save(m, "public-timeline-phone-turned", { clip: await planningClip(m, chart), fullPage: true })
+    await mob.close()
+  })
+
   // A season of weekly permanences (#866, #872), on a phone: the month buttons and the first
   // dates. Needs scripts/seed-demo-permanences.ts (its own organisation, « Épicerie de la Gare »).
   await shot("public-permanences-mobile", async () => {
