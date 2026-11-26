@@ -15,11 +15,15 @@ import type { ShiftViewSetting } from "./shift-view"
 export const LABEL_W = 92
 /** The chart stops shrinking below this many px per minute and scrolls sideways instead. */
 export const MIN_PX_PER_MIN = 0.6
+/** The chart never stretches beyond this many px per minute: a short day stays a readable chart. */
+export const MAX_PX_PER_MIN = 2
 /** A bar is never narrower than this (24 px, the AA target size). */
 export const MIN_BAR_W = 24
 
 /** The page's `px-4`, both sides. */
 export const PAGE_GUTTER = 32
+/** The scrolling card's 1 px `border`, both sides: it is outside the card's inner width. */
+export const CARD_BORDER = 2
 /** The chart card's `p-3`, both sides. */
 export const CARD_PADDING = 24
 
@@ -73,23 +77,34 @@ function durationOf(shift: FriseTimeRange): number {
 
 /**
  * The width of the narrowest bar at a given viewport, in CSS px. `friseDayReadableWidth` inverts
- * this: at the width it returns, the narrowest bar is exactly `READABLE_BAR_W`.
+ * this: at the width it returns, the narrowest bar is exactly `READABLE_BAR_W`. The plot is fluid
+ * between its scroll floor (`MIN_PX_PER_MIN`) and its stretch ceiling (`MAX_PX_PER_MIN`).
  */
 export function narrowestBarWidth(day: FriseDay, viewport: number): number {
   const axis = daySpan(day)
   if (!axis || day.shifts.length === 0) return 0
-  // The plot is fluid; it never gets narrower than its scroll floor (MIN_PX_PER_MIN), which makes
-  // the card scroll instead.
-  const plot = Math.max(viewport - PAGE_GUTTER - CARD_PADDING - LABEL_W, axis.span * MIN_PX_PER_MIN)
+  // The card's inner width, minus its padding and label column; the plot never gets narrower than
+  // its scroll floor (the card scrolls instead) nor wider than its stretch ceiling.
+  const plot = Math.min(
+    Math.max(viewport - PAGE_GUTTER - CARD_BORDER - CARD_PADDING - LABEL_W, axis.span * MIN_PX_PER_MIN),
+    axis.span * MAX_PX_PER_MIN,
+  )
   return Math.min(...day.shifts.map((s) => Math.max(MIN_BAR_W, (plot * durationOf(s)) / axis.span)))
 }
 
-/** The smallest viewport at which one day's chart neither scrolls nor squeezes a bar too far. */
+/**
+ * The smallest viewport at which one day's chart neither scrolls nor squeezes a bar too far.
+ * `Infinity` when a shift is too short to ever reach its readable width, even with the chart fully
+ * stretched: the day is never readable, whatever the screen.
+ */
 export function friseDayReadableWidth(day: FriseDay): number | null {
   const axis = daySpan(day)
   if (!axis || day.shifts.length === 0) return null
-  // 32 (page px-4) + 24 (card padding) + LABEL_W + the plot the bars need.
-  const chartLeft = PAGE_GUTTER + CARD_PADDING + LABEL_W
+  // A bar is at most `duration × MAX_PX_PER_MIN` wide: a shift under 32 min (46 overnight) can
+  // never print its end time and state, however wide the screen.
+  if (day.shifts.some((s) => durationOf(s) * MAX_PX_PER_MIN < readableBarMin(s))) return Infinity
+  // 32 (page px-4) + 2 (card border) + 24 (card padding) + LABEL_W + the plot the bars need.
+  const chartLeft = PAGE_GUTTER + CARD_BORDER + CARD_PADDING + LABEL_W
   const scroll = chartLeft + axis.span * MIN_PX_PER_MIN
   const bars = day.shifts.map((s) => chartLeft + Math.ceil((readableBarMin(s) * axis.span) / durationOf(s)))
   return Math.ceil(Math.max(scroll, ...bars))
@@ -98,6 +113,7 @@ export function friseDayReadableWidth(day: FriseDay): number | null {
 /**
  * The smallest viewport at which the timeline is readable for every day of the event, all days
  * included (not only the month shown). `null` for an event with no shift; never below 320.
+ * `Infinity` when any day holds a shift too short to reach its readable width.
  */
 export function friseReadableWidth(days: FriseDay[]): number | null {
   const widths = days.map(friseDayReadableWidth).filter((w): w is number => w !== null)

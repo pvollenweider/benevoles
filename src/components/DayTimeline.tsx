@@ -11,7 +11,7 @@ import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 import { FRISE_KEYS_SHOWN, FRISE_KEYS_SPOKEN, friseKey, friseTabStop, friseTarget, type FriseRows } from "@/lib/frise-keyboard"
-import { chartMinWidth, daySpan, LABEL_W, MIN_BAR_W } from "@/lib/frise-geometry"
+import { chartMinWidth, daySpan, LABEL_W, MAX_PX_PER_MIN, MIN_BAR_W } from "@/lib/frise-geometry"
 
 export { fmt }
 export type { TimelineShift }
@@ -26,9 +26,8 @@ const AXIS_H  = 18
 // The chart is fluid: it takes the whole width of its card and positions everything
 // in percent of the day. Below MIN_PX_PER_MIN it stops shrinking and the card scrolls
 // horizontally, as on phones; MAX_PX_PER_MIN stops a short day from being stretched.
-// LABEL_W, MIN_PX_PER_MIN and MIN_BAR_W are shared with the rule that computes the
-// width from which the timeline stays readable (src/lib/frise-geometry.ts).
-const MAX_PX_PER_MIN = 2
+// LABEL_W, MIN_PX_PER_MIN, MAX_PX_PER_MIN and MIN_BAR_W are shared with the rule that
+// computes the width from which the timeline stays readable (src/lib/frise-geometry.ts).
 // The faint frame of a full bar, in classes and not inline: an inline outline would hide the focus
 // outline, now that a full bar takes the focus (#1075); with the focus, the buttons' one (globals.css).
 const FULL_OUTLINE = "not-focus-visible:outline not-focus-visible:outline-[rgba(0,0,0,0.07)]"
