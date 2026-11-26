@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { COLOR_OPTIONS, getBarClasses, getListBorderClass, LIST_BORDER_HEX, type ColorKey } from "../roles"
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { COLOR_OPTIONS, getBarClasses, getListBorderClass } from "../roles"
 import { shiftViewState, type TimelineShift } from "../public-timeline"
 import { shiftListRowLook } from "../shift-list-look"
 
@@ -57,6 +59,15 @@ describe("shiftListRowLook for a row that can be activated", () => {
     expect(row.statusLine).not.toContain("font-semibold")
   })
 
+  it("keeps the green card and the poste's colour on a held shift while registrations are closed", () => {
+    const row = look({ view: state({ held: "active", locked: true }) })
+    expect(row.kind).toBe("held")
+    expect(row.button).toContain("min-h-11")
+    expect(row.button).toContain("border-green-700")
+    expect(row.button).toContain("bg-green-50")
+    expect(row.button).toContain("border-l-blue-600")
+  })
+
   it("stays a card on a full shift with a waiting list, without the plain places status", () => {
     const row = look({ view: state({ shift: shift({ status: "full", waitlistEnabled: true, spotsLeft: 0, registered: 4 }) }) })
     expect(row.kind).toBe("card")
@@ -109,9 +120,10 @@ describe("shiftListRowLook for a row that cannot be activated", () => {
       expect(row.button).toContain("justify-between")
       expect(row.button).toContain("items-baseline")
       expect(row.button).toContain("gap-x-3")
+      expect(row.button).toContain("gap-y-0.5")
       expect(row.button).toContain("sm:justify-start")
       expect(row.button).toContain("sm:gap-x-2")
-      expect(row.title).toContain("text-[15px]")
+      expect(row.title).toContain("text-[0.9375rem]")
       expect(row.statusLine).toContain("text-sm")
       expect(row.details).toContain("text-sm")
       expect(row.details).toContain("w-full")
@@ -132,8 +144,54 @@ describe("shiftListRowLook for a row that cannot be activated", () => {
   })
 })
 
-// Guard for WCAG 2.2 SC 1.4.11 Non-text Contrast: the 6 px left border identifies the poste on a
-// card, against the white card ground. It must reach 3:1 on white for every option of the palette.
+// Guard for WCAG 2.2 SC 1.4.11 Non-text Contrast: the 6 px left stripe identifies the poste on a
+// card. It is painted on four grounds: the white card, the page's gray-50, the selected blue-50
+// and the held green-50. The colours are Tailwind 4's, read from its stylesheet (`theme.css`,
+// `--color-<name>-<shade>: oklch(...)`) and converted to sRGB here, so the guard follows the
+// palette the project really paints instead of a hand-copied table.
+const THEME_CSS = readFileSync(path.join(process.cwd(), "node_modules/tailwindcss/theme.css"), "utf8")
+const THEME_VALUES = new Map<string, string>()
+for (const match of THEME_CSS.matchAll(/--color-([a-z0-9-]+):\s*([^;]+);/g)) {
+  THEME_VALUES.set(match[1], match[2].trim())
+}
+
+/** One `oklch(...)` value from Tailwind's theme to `#rrggbb`, via OKLab then linear sRGB. */
+function oklchHex(value: string): string {
+  const match = value.match(/^oklch\(\s*([\d.]+)%\s+([\d.]+)\s+([\d.]+)\s*\)$/)
+  if (!match) throw new Error(`Unreadable oklch colour in theme.css: ${value}`)
+  const lightness = Number(match[1]) / 100
+  const chroma = Number(match[2])
+  const hue = (Number(match[3]) * Math.PI) / 180
+  const a = chroma * Math.cos(hue)
+  const b = chroma * Math.sin(hue)
+  // OKLab → linear sRGB (Björn Ottosson's matrices).
+  const l = (lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3
+  const m = (lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3
+  const s = (lightness - 0.0894841775 * a - 1.291485548 * b) ** 3
+  const linear = [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ]
+  return `#${linear
+    .map((channel) => {
+      const encoded = channel <= 0.0031308 ? 12.92 * channel : 1.055 * channel ** (1 / 2.4) - 0.055
+      return Math.round(Math.min(1, Math.max(0, encoded)) * 255).toString(16).padStart(2, "0")
+    })
+    .join("")}`
+}
+
+/** A Tailwind colour token (`sky-600`, `gray-50`, `white`) as sRGB, from theme.css itself. */
+function themeHex(token: string): string {
+  const value = THEME_VALUES.get(token)
+  if (!value) throw new Error(`--color-${token} is missing from node_modules/tailwindcss/theme.css`)
+  if (value.startsWith("#")) {
+    const hex = value.slice(1)
+    return `#${hex.length === 3 ? hex.split("").map((c) => c + c).join("") : hex.toLowerCase()}`
+  }
+  return oklchHex(value)
+}
+
 function contrastRatio(a: string, b: string): number {
   const lum = (hex: string) => {
     const [r, g, bl] = [1, 3, 5].map((i) => {
@@ -154,12 +212,20 @@ describe("the list's poste colours", () => {
     }
   })
 
-  it("has a hex value and at least 3:1 against white for every option", () => {
-    expect(Object.keys(LIST_BORDER_HEX).sort()).toEqual(COLOR_OPTIONS.map((o) => o.key).sort())
+  it("has at least 3:1 on the white, gray-50, blue-50 and green-50 grounds for every option", () => {
+    const grounds = {
+      white: themeHex("white"),
+      "gray-50": themeHex("gray-50"),
+      "blue-50": themeHex("blue-50"),
+      "green-50": themeHex("green-50"),
+    }
     for (const { key, label } of COLOR_OPTIONS) {
-      const hex = LIST_BORDER_HEX[key as ColorKey]
-      expect(hex, label).toMatch(/^#[0-9a-f]{6}$/i)
-      expect(contrastRatio(hex, "#ffffff"), label).toBeGreaterThanOrEqual(3)
+      const shade = getBarClasses("Peu importe", "default", key).split(" ")[0].replace("bg-", "")
+      const colour = themeHex(shade)
+      expect(colour, label).toMatch(/^#[0-9a-f]{6}$/)
+      for (const [ground, hex] of Object.entries(grounds)) {
+        expect(contrastRatio(colour, hex), `${label}: ${shade} (${colour}) on ${ground} (${hex})`).toBeGreaterThanOrEqual(3)
+      }
     }
   })
 })

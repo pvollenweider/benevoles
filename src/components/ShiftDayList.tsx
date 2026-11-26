@@ -104,8 +104,10 @@ export default function ShiftDayList({
               onClick={() => { if (view.clickable) onToggle(shift.id, shift.status) }}
               className={look.button}
             >
-              <span className={look.title}>{text.title}</span>
-              {/* Spaces between the lines: the accessible name reads them apart. */}
+              <span className={look.title}>{text.title}{look.kind === "quiet" ? " " : null}</span>
+              {/* Spaces between the lines: the accessible name reads them apart. On a quiet row the
+                  button is a flex container, where a whitespace-only text node has no box: the
+                  spaces its name needs are inside the spans instead, without changing the layout. */}
               {" "}
               <span className={look.statusLine}>
                 {view.held ? (
@@ -118,7 +120,7 @@ export default function ShiftDayList({
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 ) : null}
-                <span>{text.status}</span>
+                <span>{text.status}{look.kind === "quiet" ? " " : null}</span>
               </span>
               {text.details && <>{" "}<span className={look.details}>{text.details}</span></>}
             </button>

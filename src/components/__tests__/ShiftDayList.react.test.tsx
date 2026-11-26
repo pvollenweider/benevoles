@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, fireEvent } from "@testing-library/react"
 
 import ShiftDayList from "../ShiftDayList"
-import type { TimelineShift } from "@/lib/public-timeline"
+import type { HeldKind, TimelineShift } from "@/lib/public-timeline"
 
 const shift = (id: string, over: Partial<TimelineShift> = {}): TimelineShift => ({
   id, roleName: "Buvette", label: "Buvette", startTime: "18:00", endTime: "22:00", status: "open", capacity: 4, registered: 2, spotsLeft: 2, ...over,
@@ -67,6 +67,72 @@ describe("ShiftDayList look", () => {
     )
     const items = screen.getAllByRole("listitem")
     expect(items[1]).toHaveClass("mt-1")
+  })
+
+  it("puts a quiet row followed by a card 8 px apart", () => {
+    render(
+      <ShiftDayList
+        shifts={[
+          shift("a", { roleName: "Accueil", label: "Accueil", startTime: "09:00", endTime: "11:00", status: "full", spotsLeft: 0, registered: 4 }),
+          shift("b", { roleName: "Buvette", label: "Buvette", startTime: "10:00", endTime: "12:00" }),
+        ]}
+        shows={[]}
+        selected={new Set()}
+        onToggle={() => {}}
+        dayLabel="samedi 24 octobre"
+      />,
+    )
+    expect(screen.getAllByRole("listitem")[1]).toHaveClass("mt-2")
+  })
+
+  it("puts a card followed by a quiet row 8 px apart", () => {
+    render(
+      <ShiftDayList
+        shifts={[
+          shift("a", { roleName: "Buvette", label: "Buvette", startTime: "09:00", endTime: "11:00" }),
+          shift("b", { roleName: "Accueil", label: "Accueil", startTime: "10:00", endTime: "12:00", status: "full", spotsLeft: 0, registered: 4 }),
+        ]}
+        shows={[]}
+        selected={new Set()}
+        onToggle={() => {}}
+        dayLabel="samedi 24 octobre"
+      />,
+    )
+    expect(screen.getAllByRole("listitem")[1]).toHaveClass("mt-2")
+  })
+
+  it("puts a show band followed by a quiet row 8 px apart", () => {
+    render(
+      <ShiftDayList
+        shifts={[shift("a", { roleName: "Accueil", label: "Accueil", startTime: "09:00", endTime: "11:00", status: "full", spotsLeft: 0, registered: 4 })]}
+        shows={[{ name: "Concert", startTime: "20:00", endTime: "22:00" }]}
+        selected={new Set()}
+        onToggle={() => {}}
+        dayLabel="samedi 24 octobre"
+      />,
+    )
+    const items = screen.getAllByRole("listitem")
+    expect(items).toHaveLength(2)
+    expect(items[0]).toHaveTextContent("Spectacle : Concert, 20h–22h")
+    expect(items[1]).toHaveClass("mt-2")
+  })
+
+  it("keeps the green card and the poste's colour on a held shift while registrations are closed", () => {
+    render(
+      <ShiftDayList
+        shifts={[shift("h")]}
+        shows={[]}
+        selected={new Set()}
+        held={new Map<string, HeldKind>([["h", "active"]])}
+        onToggle={() => {}}
+        locked
+        dayLabel="samedi 24 octobre"
+      />,
+    )
+    const item = screen.getByRole("button", { name: /^18h–22h · Buvette/ })
+    expect(item).toHaveClass("min-h-11", "bg-green-50", "border-green-700", "border-l-amber-700")
+    expect(item).toHaveAttribute("aria-disabled", "true")
+    expect(item).not.toHaveAttribute("aria-pressed")
   })
 })
 

@@ -1476,3 +1476,14 @@ Pour le jeu de tournage de `scripts/seed-demo.ts` (« Fête du village de Montve
 - **EVENT_CREATE_BLANK** (`event-create-blank`), **EVENT_CREATE_TEMPLATE** (`event-create-template`), **EVENT_VISIBILITY_REGISTRATION_WINDOW** (`event-visibility-registration-window`) et **EVENT_DUPLICATE** (`event-duplicate`) : le nouveau groupe allonge et décale le formulaire ; les scènes qui cadrent les champs sous les inscriptions sont périmées. À refilmer.
 - Confirmés en plus : **ORGANIZER_CREATE_PUBLISH** (`organizer-create-publish`, la scène « inscription » cadre « Heures du fuseau de l'organisation », juste au-dessus du nouveau groupe) et **ADMIN_FEATURES_OVERVIEW** (`admin-features-tour`, les scènes « lifecycle » et « appearance » cadrent Visibilité, Inscriptions et Couleur de la page, donc le nouveau groupe entre dans le champ). À refilmer.
 - Vérifiés et laissés tels quels : `event-review-publish` (revue, aperçu et partage seulement), `event-program-pages-qr` (Spectacles, en haut du formulaire), `reminders-changes` (message de rappel et case, au-dessus), `shift-eligibility-rules` (Description et Téléphone, au-dessus), `last-minute-changes` (aucune scène sur le formulaire d'événement). Aucune capture n'est régénérée dans ce changement.
+
+## À refilmer : couleur du poste et lignes grisées dans la liste (#1407, 26 novembre 2026)
+
+Dans la vue **Liste**, un créneau qui peut être choisi porte désormais un bord gauche de 6 px à la couleur de son poste, et un créneau qui ne peut pas être choisi devient une ligne grise sans cadre ni couleur, dont l'état suit le titre ou passe dessous quand la ligne est trop étroite. Quatre vidéos montrent la liste avec son ancien aspect ; leur narration reste juste, seule l'image est périmée. À refilmer avec le prochain lot :
+
+- **VOLUNTEER_REGISTER** (`volunteer-register-mobile`) : la liste ouverte au chargement du téléphone montre l'ancien aspect.
+- **VOLUNTEER_DISCOVER_EVENT** (`volunteer-discover-event`) : la scène de la liste sur téléphone montre l'ancien aspect.
+- **SHIFT_ELIGIBILITY_RULES** (`shift-eligibility-rules`) : la liste de la page publique montre l'ancien aspect.
+- **SHIFT_ROSTER_VISIBILITY** (`shift-roster-visibility`) : les lignes de la liste et leurs noms montrent l'ancien aspect.
+
+Aucune narration ne change.

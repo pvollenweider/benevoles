@@ -173,14 +173,6 @@ const PALETTE_LIST_BORDER: Record<ColorKey, string> = {
   yellow:   "border-l-yellow-700",
 }
 
-/** Tailwind hex values of the list border shades, for the contrast guard (≥ 3:1 on white). */
-export const LIST_BORDER_HEX: Record<ColorKey, string> = {
-  blue: "#2563eb", amber: "#b45309", pink: "#db2777", violet: "#7c3aed",
-  red: "#dc2626", orange: "#c2410c", stone: "#57534e", teal: "#0f766e",
-  indigo: "#4f46e5", cyan: "#0e7490", lime: "#4d7c0f", rose: "#e11d48",
-  fuchsia: "#c026d3", sky: "#0284c7", emerald: "#047857", yellow: "#a16207",
-}
-
 export function getListBorderClass(roleName: string, colorKey?: string | null): string {
   return PALETTE_LIST_BORDER[colorKeyOf(roleName, colorKey)]
 }

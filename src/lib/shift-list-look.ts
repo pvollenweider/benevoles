@@ -42,8 +42,8 @@ const CARD_DETAILS = "mt-0.5 block text-sm text-gray-700"
 // The left padding is the card's 16 px plus its 6 px left border, so the text starts at the same x.
 // Title and state are flex items: state at the right when both fit, wrapped under the title when
 // not; from `sm` it follows the title after a fixed gap. The details take their own full line.
-const QUIET_BUTTON = `${BUTTON_BASE} flex min-h-8 flex-wrap items-baseline justify-between gap-x-3 border-0 bg-transparent px-4 py-1.5 pl-[22px] font-normal text-gray-500 forced-colors:text-[GrayText] sm:justify-start sm:gap-x-2`
-const QUIET_TITLE = "min-w-0 break-words text-[15px]"
+const QUIET_BUTTON = `${BUTTON_BASE} flex min-h-8 flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 border-0 bg-transparent px-4 py-1.5 pl-[22px] font-normal text-gray-500 forced-colors:text-[GrayText] sm:justify-start sm:gap-x-2`
+const QUIET_TITLE = "min-w-0 break-words text-[0.9375rem]"
 const QUIET_STATUS = "min-w-0 break-words text-sm"
 const QUIET_DETAILS = "mt-0.5 block w-full min-w-0 break-words text-sm"
 
