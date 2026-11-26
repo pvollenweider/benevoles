@@ -27,12 +27,14 @@ const event = {
 } satisfies EventData
 
 describe("EventPageClient — Frise / Liste (#808)", () => {
-  afterEach(() => { cleanup(); localStorage.clear(); Reflect.deleteProperty(window, "matchMedia") })
+  afterEach(() => { cleanup(); localStorage.clear(); Reflect.deleteProperty(window, "matchMedia"); vi.unstubAllGlobals() })
 
   it("renders both views in the server HTML, CSS showing the one for the screen", () => {
     const html = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
-    expect(html).toContain('class="sm:hidden"')
-    expect(html).toContain('class="hidden sm:block"')
+    // The two wrappers and the toggle look share one media query, computed from this event.
+    expect(html).toContain("event-shift-view-narrow")
+    expect(html).toContain("event-shift-view-wide")
+    expect(html).toContain("@media (min-width:320px)")
     expect(html).not.toContain('aria-pressed="true"')
   })
 
@@ -103,5 +105,73 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
     act(() => { wide = true; listeners.forEach((l) => l()) })
     expect(item).toHaveFocus()
     expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
+  })
+
+  it("follows the event's setting « Frise » on every width, without the « auto » double render", () => {
+    const friseEvent = { ...event, publicShiftView: "frise" as const }
+    const html = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={friseEvent} />)
+    // One view only, and its button is pressed without waiting for the width.
+    expect(html).toContain("Planning du")
+    expect(html).not.toContain("Créneaux du")
+    expect(html).toContain('aria-pressed="true"')
+    expect(html).not.toContain("event-shift-view-wide")
+  })
+
+  it("follows the event's setting « Liste » on a wide screen", () => {
+    const listeEvent = { ...event, publicShiftView: "liste" as const }
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={listeEvent} />)
+    expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.queryByRole("region", { name: /Planning du/ })).not.toBeInTheDocument()
+    expect(screen.getByRole("list", { name: /Créneaux du/ })).toBeInTheDocument()
+  })
+
+  it("shows the list on a wide screen for a long event, even in automatic", () => {
+    const long = {
+      ...event,
+      startDate: "2030-06-01T00:00:00.000Z",
+      endDate: "2030-10-31T00:00:00.000Z",
+      shifts: [shift("s1", { date: "2030-06-02T00:00:00.000Z" })],
+    }
+    render(<EventPageClient orgSlug="org" eventSlug="saison" initialEvent={long} />)
+    expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.queryByRole("region", { name: /Planning du/ })).not.toBeInTheDocument()
+  })
+
+  it("lets a choice kept on the device win over the event's setting", () => {
+    localStorage.setItem(SHIFT_VIEW_KEY, "liste")
+    const friseEvent = { ...event, publicShiftView: "frise" as const }
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={friseEvent} />)
+    expect(screen.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByRole("list", { name: /Créneaux du/ })).toBeInTheDocument()
+  })
+
+  it("proposes turning the phone, then keeps the sentence's box while hiding it", async () => {
+    const listeners = new Set<() => void>()
+    let portrait = true
+    Object.defineProperty(window, "matchMedia", { configurable: true, value: (query: string) => ({
+      get matches() { return query === "(pointer: coarse)" ? true : query === "(orientation: portrait)" ? portrait : false },
+      addEventListener: (_: string, l: () => void) => listeners.add(l),
+      removeEventListener: (_: string, l: () => void) => listeners.delete(l),
+    }) })
+    vi.stubGlobal("screen", { width: 390, height: 844 })
+
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+    const sentence = await screen.findByText("Tourne le téléphone pour voir la journée en frise.")
+    expect(sentence).not.toHaveClass("invisible")
+
+    // Turned sideways: the sentence stops holding, but keeps its place for the list.
+    act(() => { portrait = false; listeners.forEach((l) => l()) })
+    expect(screen.getByText("Tourne le téléphone pour voir la journée en frise.")).toHaveClass("invisible")
+  })
+
+  it("computes the automatic breakpoint from the event's shifts, capped at 640 px", () => {
+    // 10–11 and 13–14: span 240 min, shortest 60 min -> 148 + 256 = 404 px.
+    const narrow = { ...event, shifts: [shift("a", { startTime: "10:00", endTime: "11:00" }), shift("b", { startTime: "13:00", endTime: "14:00" })] }
+    const narrowHtml = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={narrow} />)
+    expect(narrowHtml).toContain("@media (min-width:404px)")
+    // 08:00–08:30 and 20:00–20:30: span 720 min, shortest 30 min -> far above 640: capped there.
+    const wide = { ...event, shifts: [shift("a", { startTime: "08:00", endTime: "08:30" }), shift("b", { startTime: "20:00", endTime: "20:30" })] }
+    const wideHtml = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={wide} />)
+    expect(wideHtml).toContain("@media (min-width:640px)")
   })
 })

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
+import { useEffect, useLayoutEffect, useRef, useState, useMemo, type RefObject } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
 import type { OrgLogo } from "@/lib/org-logo"
@@ -54,7 +54,8 @@ import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
 import HydrationNotice from "@/components/HydrationNotice"
 import { groupDaysByMonth, isLongEvent, usesMonthView, visibleDays } from "@/lib/long-event"
-import { readShiftView, saveShiftView, shiftViewButtonLook, shownShiftView, WIDE_SHIFT_VIEW_QUERY, type ShiftView, type ShiftViewButtonLook } from "@/lib/shift-view"
+import { readShiftView, readShiftViewHintPlayed, saveShiftView, saveShiftViewHintPlayed, shiftViewButtonLook, shiftViewSetting, shownShiftView, showsRotateHint, wideShiftViewQuery, type ShiftView, type ShiftViewButtonLook, type ShiftViewSetting } from "@/lib/shift-view"
+import { chartMinWidth, daySpan, friseFromWidth, friseReadableWidth, type FriseDay } from "@/lib/frise-geometry"
 import { useMediaQuery } from "@/lib/use-media-query"
 import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter, { type FooterSite } from "@/components/PublicFooter"
@@ -146,6 +147,8 @@ export type EventData = {
   /** Workload (#465 warnings, or the #1171 protection limits); absent from an older payload = warnings. */
   workload?: WorkloadMode
   accentColorKey: string | null
+  /** Default view of the shifts (part A): "auto", "frise" or "liste"; absent = "auto". */
+  publicShiftView?: ShiftViewSetting
   showSchedule: Show[]
   volunteerCharter: string | null
   /** With volunteerCharter, picks the exact text the sign-up route hashes (#569). */
@@ -246,22 +249,89 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // « Voir tous les postes » (#947): the visitor lifts the group link's filter, and can put it back.
   const [showAllRoles, setShowAllRoles] = useState(false)
   const [groupNote, setGroupNote] = useState("")
-  // « Frise » or « Liste » (#808): the visitor's choice kept on the device and read once hydrated
-  // (the admin preview never reads storage); with none, the list on a phone, the timeline from
-  // `sm` up (#1407). Before the width is known, « auto » renders both and CSS shows one.
+  // « Frise » or « Liste » (#808, part B): the visitor's choice kept on the device and read once
+  // hydrated (the admin preview never reads storage); with none, the event's setting, else the
+  // width from which the timeline stays readable. A long event shows the list on every width.
+  // Before the width is known, « auto » renders both and a page-level media query shows one.
   const hydrated = useHydrated()
-  const wideScreen = useMediaQuery(WIDE_SHIFT_VIEW_QUERY)
   const [chosenShiftView, setChosenShiftView] = useState<ShiftView | null>(null)
   // The screen's default stops following the width (a phone turned sideways, a page zoomed past
   // the breakpoint) once a shift is focused or picked: it must not vanish under the visitor's
   // finger or keyboard focus. Picked counts too: Safari on iOS does not focus a tapped button.
   const [keptShiftView, setKeptShiftView] = useState<ShiftView | null>(null)
+  // The event's days as the width rule sees them: every shift, grouped by date, plus the show
+  // bands of that day (their span counts, exactly as the chart draws it).
+  const friseDays = useMemo<FriseDay[]>(() => {
+    const byDay = new Map<string, FriseDay>()
+    const dayOf = (key: string) => {
+      let day = byDay.get(key)
+      if (!day) { day = { shifts: [], shows: [] }; byDay.set(key, day) }
+      return day
+    }
+    for (const shift of event?.shifts ?? []) dayOf(shift.date.slice(0, 10)).shifts.push(shift)
+    for (const show of event?.showSchedule ?? []) (dayOf(show.date).shows ??= []).push(show)
+    return [...byDay.values()]
+  }, [event?.shifts, event?.showSchedule])
+  // `friseFromWidth`: 0 = always, null = never, else the viewport from which the timeline is the
+  // default, capped at 640 px (never later than the old `sm` breakpoint).
+  const fromWidth = useMemo(() => (event
+    ? friseFromWidth({
+        setting: shiftViewSetting(event.publicShiftView),
+        long: isLongEvent(event.startDate, event.endDate),
+        readableWidth: friseReadableWidth(friseDays),
+      })
+    : null), [event, friseDays])
+  const wideScreen = useMediaQuery(wideShiftViewQuery(fromWidth ?? 0))
+  const savedShiftView = hydrated && !preview ? readShiftView() : null
   const keepShiftView = () => { if (shiftView !== "auto" && !keptShiftView) setKeptShiftView(shiftView) }
-  const shiftView = shownShiftView(chosenShiftView ?? keptShiftView, hydrated && !preview ? readShiftView() : null, wideScreen)
+  const shiftView = shownShiftView(chosenShiftView ?? keptShiftView, savedShiftView, wideScreen, fromWidth)
   const chooseShiftView = (view: ShiftView) => {
     setChosenShiftView(view)
     if (!preview) saveShiftView(view)
   }
+  // The one-time hint on « Frise » (part C): only while the list is shown, with no choice made and
+  // only once on this device. Decoration only: it changes no text and is never announced.
+  const [hintActive, setHintActive] = useState(false)
+  useEffect(() => {
+    if (!hydrated || preview || embed || shiftView !== "liste") {
+      const reset = setTimeout(() => setHintActive(false), 0)
+      return () => clearTimeout(reset)
+    }
+    if (chosenShiftView || savedShiftView || readShiftViewHintPlayed()) return
+    saveShiftViewHintPlayed()
+    // One frame later: a decoration, never a render-time side effect.
+    const start = requestAnimationFrame(() => setHintActive(true))
+    // Finite even if the animation ends differently: a fixed count and a total under 5 s.
+    const stop = setTimeout(() => setHintActive(false), 3600)
+    return () => { cancelAnimationFrame(start); clearTimeout(stop) }
+  }, [hydrated, preview, embed, shiftView, chosenShiftView, savedShiftView])
+  // « Tourne le téléphone… » (part D): a touch device held upright whose screen could show the
+  // timeline. Nothing is rendered for it on the server.
+  const coarsePointer = useMediaQuery("(pointer: coarse)")
+  const portrait = useMediaQuery("(orientation: portrait)")
+  const screenLongSide = useScreenLongSide()
+  const rotateHint = showsRotateHint({
+    view: shiftView,
+    chosen: chosenShiftView,
+    saved: savedShiftView,
+    kept: keptShiftView,
+    from: fromWidth,
+    coarsePointer,
+    portrait,
+    screenLongSide,
+  })
+  // Once shown, the sentence keeps its box (made invisible) when the condition stops, so the list
+  // does not move under the finger. Nothing is rendered on the server.
+  const [rotateHintShown, setRotateHintShown] = useState(false)
+  useEffect(() => {
+    if (!rotateHint || preview || embed) return
+    const show = setTimeout(() => setRotateHintShown(true), 0)
+    return () => clearTimeout(show)
+  }, [rotateHint, preview, embed])
+  // Measured once the timeline column exists: a sentence that says the chart scrolls would be
+  // false on a wide screen where it fits. Nothing in the server HTML for it.
+  const [timelineColumnRef, timelineColumnWidth] = useElementWidth<HTMLDivElement>(!!event)
+
   // Long events (#866): one month at a time, chosen by the visitor; null = the first month shown.
   const [chosenMonth, setChosenMonth] = useState<string | null>(null)
   // Said once the month is changed: the dates below the buttons are swapped silently otherwise.
@@ -867,6 +937,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
   const page = (
     <div className={embed ? "bg-gray-50" : "min-h-screen bg-gray-50"}>
+      {/* The « auto » view (part B): one media query, computed from this event's width, replaces the
+          fixed `sm` breakpoint for the two view wrappers and the toggle's pressed look. Only a
+          number is interpolated, never anything typed by an organiser. */}
+      {fromWidth !== null && fromWidth > 0 && <style>{shiftViewBreakpointCss(fromWidth)}</style>}
       {/* The preview sits inside the admin layout, which already has its own skip link and main. */}
       {!preview && <SkipLink />}
       {preview && (
@@ -1085,14 +1159,21 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 (« auto »), the look of the pressed button follows the CSS breakpoint. */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span id="shift-view-label" className="text-sm text-gray-700">Affichage des créneaux</span>
-            <div role="group" aria-labelledby="shift-view-label" className="inline-flex rounded-xl border border-gray-300 text-sm">
+            <div
+              role="group"
+              aria-labelledby="shift-view-label"
+              className="inline-flex rounded-xl border border-gray-300 text-sm"
+              // The one-time hint (part C) stops on the first interaction with these buttons.
+              onPointerDown={() => setHintActive(false)}
+              onFocusCapture={() => setHintActive(false)}
+            >
               {(["frise", "liste"] as const).map((view) => (
                 <button
                   key={view}
                   type="button"
                   aria-pressed={shiftView === "auto" ? undefined : shiftView === view}
                   onClick={() => chooseShiftView(view)}
-                  className={`inline-flex min-h-11 items-center gap-2 px-4 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${SHIFT_VIEW_BUTTON_LOOK[shiftViewButtonLook(view, shiftView)]}`}
+                  className={`inline-flex min-h-11 items-center gap-2 px-4 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${SHIFT_VIEW_BUTTON_LOOK[shiftViewButtonLook(view, shiftView)]} ${view === "frise" && hintActive && shiftView === "liste" ? "shift-view-hint" : ""}`}
                 >
                   <ShiftViewIcon view={view} />
                   {view === "frise" ? "Frise" : "Liste"}
@@ -1113,6 +1194,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               </Switch>
             )}
             </div>
+            {/* Turning the phone is the other way to the timeline (part D): once shown, its box
+                stays (invisible) when the condition stops, so the list does not move under the
+                finger. Not a live region, not tied to the group, never in the server HTML. */}
+            {!preview && !embed && rotateHintShown && (
+              <p className={`text-sm text-gray-700 ${rotateHint ? "" : "invisible"}`}>Tourne le téléphone pour voir la journée en frise.</p>
+            )}
             {/* The guide's page on reading the schedule (#1096); in a sentence, not beside the switches. */}
             <p className="text-sm text-gray-700">Comment lire le planning et choisir tes créneaux : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.chooseShifts)} about="la lecture du planning" /></p>
             {rosterUrl && rosterOn && (
@@ -1132,7 +1219,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             {/* minmax(0,1fr): the timelines column may shrink below the chart width and scroll */}
             <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start">
               {/* Left: timelines */}
-              <div className="space-y-6" onFocusCapture={keepShiftView}>
+              <div className="space-y-6" ref={timelineColumnRef} onFocusCapture={keepShiftView}>
                 {months && month && (
                   // A view filter of this page, not navigation: a group, like « Affichage des créneaux ».
                   <div role="group" aria-label="Choisir le mois" className="flex flex-wrap gap-2">
@@ -1157,20 +1244,27 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 )}
                 {daysOnPage.map((day) => [day, shiftsByDay[day]] as const).map(([day, dayShifts]) => {
                   const dayShows = (event.showSchedule ?? []).filter((s) => s.date === day)
+                  // Measured: the sentence is only true when this day's chart really scrolls
+                  // (its min-width exceeds the card's inner width, borders excluded). Not in the
+                  // server HTML: the width is unknown there.
+                  const axis = daySpan({ shifts: dayShifts, shows: dayShows })
+                  const chartOverflows = hydrated && timelineColumnWidth !== null && !!axis
+                    && chartMinWidth(axis.span) > timelineColumnWidth - 2
                   return (
                     <div key={day}>
                       <h2 className="text-sm font-semibold text-gray-600 mb-3">
                         {formatCalendarDay(day)}
                       </h2>
-                      {shiftView === "frise" && (
-                        <p className="sm:hidden text-[11px] text-gray-500 text-center mb-1.5">
+                      {shiftView === "frise" && chartOverflows && (
+                        <p className="text-[11px] text-gray-500 text-center mb-1.5">
                           <span aria-hidden="true">← </span>Fais défiler pour voir toutes les plages<span aria-hidden="true"> →</span>
                         </p>
                       )}
-                      {/* « auto » (#1407): both, the list below `sm`, the timeline from there up;
-                          display:none keeps the hidden one out of the tab order and the reading. */}
+                      {/* « auto » (#1407): both views, split by this event's own breakpoint (the
+                          <style> above); display:none keeps the hidden one out of the tab order
+                          and the reading. */}
                       {shiftView !== "frise" && (
-                        <div className={shiftView === "auto" ? "sm:hidden" : undefined}>
+                        <div className={shiftView === "auto" ? "event-shift-view-narrow" : undefined}>
                         <ShiftDayList
                           shifts={dayShifts}
                           shows={dayShows}
@@ -1189,7 +1283,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         </div>
                       )}
                       {shiftView !== "liste" && (
-                        <div className={shiftView === "auto" ? "hidden sm:block" : undefined}>
+                        <div className={shiftView === "auto" ? "event-shift-view-wide" : undefined}>
                       <DayTimeline
                         shifts={dayShifts}
                         shows={dayShows}
@@ -1657,12 +1751,85 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
  * preview it is a plain <div>, the admin layout's <main id="main"> already wrapping the page.
  * The header (title, session) stays a banner outside it, the dialogs and the footer after it.
  */
-// The pressed look of « Frise » / « Liste »; with the width unknown, `sm` decides (#1407).
+// The pressed look of « Frise » / « Liste »; with the width unknown, the page's own media query
+// decides (#1407), through the two custom classes below.
 const SHIFT_VIEW_BUTTON_LOOK: Record<ShiftViewButtonLook, string> = {
   on: "bg-gray-900 text-white",
   off: "text-gray-700 hover:bg-gray-50",
-  "on-when-wide": "text-gray-700 hover:bg-gray-50 sm:bg-gray-900 sm:text-white sm:hover:bg-gray-900",
-  "on-when-narrow": "bg-gray-900 text-white sm:bg-transparent sm:text-gray-700 sm:hover:bg-gray-50",
+  "on-when-wide": "event-shift-look-wide",
+  "on-when-narrow": "event-shift-look-narrow",
+}
+
+/**
+ * The one media query that shows the right view before the width is read (#1407): the two view
+ * wrappers and the toggle's pressed look share this event's breakpoint, so nothing moves once the
+ * script knows the width. The only interpolated value is `from`, a computed number.
+ */
+function shiftViewBreakpointCss(from: number): string {
+  return [
+    // Below the breakpoint: the timeline wrapper is hidden, the list wrapper is the block; the
+    // « Liste » button is pressed-looking, « Frise » is not.
+    ".event-shift-view-wide{display:none}",
+    ".event-shift-look-wide{color:#374151}",
+    ".event-shift-look-narrow{background-color:#111827;color:#fff}",
+    "@media (hover:hover){.event-shift-look-wide:hover{background-color:#f9fafb}.event-shift-look-narrow:hover{background-color:#111827}}",
+    // From the breakpoint up: the list wrapper goes, the timeline wrapper takes over, and the
+    // pressed look swaps.
+    `@media (min-width:${from}px){`,
+    ".event-shift-view-narrow{display:none}",
+    ".event-shift-view-wide{display:block}",
+    ".event-shift-look-wide{background-color:#111827;color:#fff}",
+    ".event-shift-look-narrow{background-color:transparent;color:#374151}",
+    ".event-shift-look-wide:hover{background-color:#111827}",
+    ".event-shift-look-narrow:hover{background-color:#f9fafb}",
+    "}",
+  ].join("\n")
+}
+
+/** The `window.screen` long side, live (rotation), never the viewport's height. */
+function useScreenLongSide(): number | null {
+  const [longSide, setLongSide] = useState<number | null>(null)
+  useEffect(() => {
+    const read = () => {
+      const side = Math.max(window.screen?.width ?? 0, window.screen?.height ?? 0)
+      setLongSide(side > 0 ? side : null)
+    }
+    read()
+    window.addEventListener("resize", read)
+    window.addEventListener("orientationchange", read)
+    const orientation = window.screen?.orientation
+    orientation?.addEventListener?.("change", read)
+    return () => {
+      window.removeEventListener("resize", read)
+      window.removeEventListener("orientationchange", read)
+      orientation?.removeEventListener?.("change", read)
+    }
+  }, [])
+  return longSide
+}
+
+/**
+ * The client width of an element, measured after hydration. `null` until it is known: a caller
+ * that must not render before measuring keeps it out of the server HTML.
+ */
+function useElementWidth<T extends HTMLElement>(enabled: boolean): [RefObject<T | null>, number | null] {
+  const ref = useRef<T | null>(null)
+  const [width, setWidth] = useState<number | null>(null)
+  useEffect(() => {
+    if (!enabled) return
+    const el = ref.current
+    if (!el) return
+    const read = () => setWidth(el.clientWidth > 0 ? el.clientWidth : null)
+    read()
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", read)
+      return () => window.removeEventListener("resize", read)
+    }
+    const observer = new ResizeObserver(read)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [enabled])
+  return [ref, enabled ? width : null]
 }
 
 /** A small picture of each view (#1407): bars across a line of time, or rows one under another. */
@@ -1670,11 +1837,12 @@ function ShiftViewIcon({ view }: { view: ShiftView }) {
   return (
     <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
       {view === "frise" ? (
-        <>
-          <path d="M2 4h6" />
-          <path d="M6 8h7" />
-          <path d="M4 12h5" />
-        </>
+        // `shift-view-bars`: the one-time hint draws these three bars in, from the left (part C).
+        <g className="shift-view-bars">
+          <path d="M2 4h6" pathLength={1} />
+          <path d="M6 8h7" pathLength={1} />
+          <path d="M4 12h5" pathLength={1} />
+        </g>
       ) : (
         <>
           <path d="M2 4h.01M2 8h.01M2 12h.01" strokeWidth="2.5" />

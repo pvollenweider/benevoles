@@ -11,6 +11,7 @@ import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 import { FRISE_KEYS_SHOWN, FRISE_KEYS_SPOKEN, friseKey, friseTabStop, friseTarget, type FriseRows } from "@/lib/frise-keyboard"
+import { chartMinWidth, daySpan, LABEL_W, MIN_BAR_W } from "@/lib/frise-geometry"
 
 export { fmt }
 export type { TimelineShift }
@@ -20,18 +21,14 @@ type Show = GanttShow
 const ROW_H   = 44
 const LANE_GAP = 4
 const GAP     = 4
-// 92, not 72: long role names ("Chauffeurs artistes", "Techniciens de scène"…) were truncated
-// to near-illegibility, especially on mobile where the card is already narrow (#217).
-const LABEL_W = 92
 const SHOW_H  = 22
 const AXIS_H  = 18
 // The chart is fluid: it takes the whole width of its card and positions everything
-// in percent of the day. Below MIN_PX_PER_MIN (36 px per hour) it stops shrinking and
-// the card scrolls horizontally, as on phones; MAX_PX_PER_MIN stops a short day from
-// being stretched. Bars are at least MIN_BAR_W wide (24 px, the AA target size).
-const MIN_PX_PER_MIN = 0.6
+// in percent of the day. Below MIN_PX_PER_MIN it stops shrinking and the card scrolls
+// horizontally, as on phones; MAX_PX_PER_MIN stops a short day from being stretched.
+// LABEL_W, MIN_PX_PER_MIN and MIN_BAR_W are shared with the rule that computes the
+// width from which the timeline stays readable (src/lib/frise-geometry.ts).
 const MAX_PX_PER_MIN = 2
-const MIN_BAR_W = 24
 // The faint frame of a full bar, in classes and not inline: an inline outline would hide the focus
 // outline, now that a full bar takes the focus (#1075); with the focus, the buttons' one (globals.css).
 const FULL_OUTLINE = "not-focus-visible:outline not-focus-visible:outline-[rgba(0,0,0,0.07)]"
@@ -83,13 +80,11 @@ export default function DayTimeline({
   const visible = shifts.filter((s) => s.status !== "cancelled")
   if (visible.length === 0) return null
 
-  const allMins = [
-    ...visible.flatMap((s) => [toMin(s.startTime), toMinEnd(s.endTime, s.startTime)]),
-    ...shows.flatMap((s) => [toMin(s.startTime), toMinEnd(s.endTime, s.startTime)]),
-  ]
-  const dayStart = Math.floor(Math.min(...allMins) / 60) * 60
-  const dayEnd   = Math.ceil(Math.max(...allMins)  / 60) * 60
-  const span     = dayEnd - dayStart
+  // One source with the readable-width rule: the span includes the show bands, exactly as the
+  // chart draws them (src/lib/frise-geometry.ts).
+  const axis = daySpan({ shifts: visible, shows })
+  if (!axis) return null
+  const { dayStart, dayEnd, span } = axis
 
   // Position and size as a share of the chart width.
   const pct  = (min: number) => ((min - dayStart) / span) * 100
@@ -159,7 +154,7 @@ export default function DayTimeline({
       {/* First in the region: read on entering it; the visible form is under the chart. */}
       <p id={hintId} className="sr-only">{FRISE_KEYS_SPOKEN}</p>
       {/* Fluid width; the min-width only sets the point where the card starts to scroll. */}
-      <div className="p-3" style={{ minWidth: LABEL_W + span * MIN_PX_PER_MIN + 24 }}>
+      <div className="p-3" style={{ minWidth: chartMinWidth(span) }}>
         <div className="relative">
 
           {/* Label column */}
