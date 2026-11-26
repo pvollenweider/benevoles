@@ -151,6 +151,40 @@ const PALETTE_BAR: Record<ColorKey, Record<BarState, string>> = {
   },
 }
 
+// ── List rows — the poste's colour on the left of a shift that can be chosen ────────────────
+// The border uses the same shade as the timeline bar's `default` state, so a row and its bar read
+// as the same poste. Keep every class written in full: Tailwind cannot see concatenation.
+const PALETTE_LIST_BORDER: Record<ColorKey, string> = {
+  blue:     "border-l-blue-600",
+  amber:    "border-l-amber-700",
+  pink:     "border-l-pink-600",
+  violet:   "border-l-violet-600",
+  red:      "border-l-red-600",
+  orange:   "border-l-orange-700",
+  stone:    "border-l-stone-600",
+  teal:     "border-l-teal-700",
+  indigo:   "border-l-indigo-600",
+  cyan:     "border-l-cyan-700",
+  lime:     "border-l-lime-700",
+  rose:     "border-l-rose-600",
+  fuchsia:  "border-l-fuchsia-600",
+  sky:      "border-l-sky-600",
+  emerald:  "border-l-emerald-700",
+  yellow:   "border-l-yellow-700",
+}
+
+/** Tailwind hex values of the list border shades, for the contrast guard (≥ 3:1 on white). */
+export const LIST_BORDER_HEX: Record<ColorKey, string> = {
+  blue: "#2563eb", amber: "#b45309", pink: "#db2777", violet: "#7c3aed",
+  red: "#dc2626", orange: "#c2410c", stone: "#57534e", teal: "#0f766e",
+  indigo: "#4f46e5", cyan: "#0e7490", lime: "#4d7c0f", rose: "#e11d48",
+  fuchsia: "#c026d3", sky: "#0284c7", emerald: "#047857", yellow: "#a16207",
+}
+
+export function getListBorderClass(roleName: string, colorKey?: string | null): string {
+  return PALETTE_LIST_BORDER[colorKeyOf(roleName, colorKey)]
+}
+
 const PALETTE_ACCENT: Record<ColorKey, string> = {
   blue: "bg-blue-400", amber: "bg-amber-400", pink: "bg-pink-400", violet: "bg-violet-400",
   red: "bg-red-400", orange: "bg-orange-400", stone: "bg-stone-400", teal: "bg-teal-400",
