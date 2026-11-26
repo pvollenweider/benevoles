@@ -23,12 +23,17 @@ const db = vi.hoisted(() => ({
 vi.mock("@/lib/prisma", () => ({
   prisma: { organization: { findMany: db.orgFindMany, findUnique: db.orgFindUnique }, adminUser: { count: db.adminCount } },
 }))
+const report = vi.hoisted(() => ({ error: vi.fn() }))
+vi.mock("@/lib/report-error", () => ({ reportError: () => report.error }))
 vi.mock("@/lib/limit-hits-data", () => ({ loadLimitHits: vi.fn(async () => ({ groups: [], truncated: false })) }))
 vi.mock("@/lib/usage-stats", () => ({ loadOrganizationCumulative: vi.fn(async () => []) }))
 vi.mock("@/lib/org-inactivity-data", () => ({ loadOrganizationInactivity: vi.fn(async () => null) }))
 vi.mock("@/lib/send-batches-data", () => ({ loadSendBatches: vi.fn(async () => []) }))
+vi.mock("@/lib/admin-emails-data", () => ({ loadAdminEmails: vi.fn(async () => ({ rows: [], truncated: false, total: 0 })) }))
 
 import { ORG_ACCOUNT_ROLE_WHERE, OWNER_ROLE } from "@/lib/permissions"
+import { RETENTION_DAYS } from "@/lib/retention"
+import { loadAdminEmails } from "@/lib/admin-emails-data"
 import { ORG_ACTIVITY_FILTER } from "@/lib/org-list-activity"
 import OrgDetail from "@/components/super-admin/OrgDetail"
 import SuperAdminOrgsPage from "@/app/super-admin/organizations/page"
@@ -119,6 +124,46 @@ describe("the super-admin organisation detail page separates front-desk accounts
     expect(db.adminCount).toHaveBeenCalledWith({ where: { organizationId: "org-fete", role: "front_desk" } })
     const detail = find(tree, "OrgDetail")
     expect(detail?.props.frontDeskCount).toBe(4)
+  })
+
+  it("formats the administrator-email days on the server in the operator's zone", async () => {
+    vi.mocked(loadAdminEmails).mockResolvedValueOnce({
+      rows: [{ day: "2026-11-26", kind: "admin_notification", kindLabel: "Notification à l'équipe", accepted: 2, failed: 1 }],
+      truncated: true,
+      total: 61,
+    })
+
+    const tree = await OrgDetailPage({ params: Promise.resolve({ slug: "fete" }) })
+    const detail = find(tree, "OrgDetail")
+
+    expect(detail?.props.adminEmails).toEqual({
+      unavailable: false,
+      rows: [{ dateTime: "2026-11-26", dateLabel: "26 novembre 2026", kindLabel: "Notification à l'équipe", accepted: 2, failed: 1 }],
+      days: RETENTION_DAYS.deliveryOutcome,
+      zone: "Jours en heure de Zurich.",
+      truncated: true,
+    })
+  })
+
+  it("keeps the sheet and its other sections when the administrator-email query fails", async () => {
+    const failure = new Error("the query failed")
+    vi.mocked(loadAdminEmails).mockRejectedValueOnce(failure)
+
+    const tree = await OrgDetailPage({ params: Promise.resolve({ slug: "fete" }) })
+    const detail = find(tree, "OrgDetail")
+
+    expect(report.error).toHaveBeenCalledWith(failure)
+    expect(detail?.props.adminEmails).toEqual({
+      unavailable: true,
+      days: RETENTION_DAYS.deliveryOutcome,
+      zone: "Jours en heure de Zurich.",
+    })
+    // The rest of the page was loaded and still renders, its actions included.
+    expect(detail?.props.frontDeskCount).toBe(4)
+    expect(detail?.props.org).toMatchObject({ slug: "fete" })
+    render(tree)
+    expect(screen.getByText("Ces emails ne peuvent pas être affichés pour le moment.")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Suspendre pour abus" })).toBeInTheDocument()
   })
 
   it("renders the one line « Comptes accueil : n », without listing them", () => {
