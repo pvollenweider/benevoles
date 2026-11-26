@@ -174,6 +174,20 @@ export function outboxIdFromMessageId(messageId: string | null, host: string): s
   return match[1]
 }
 
+/**
+ * The direct send's random reference from a Message-ID, only when it is exactly this deployment's
+ * format (`<direct-<40 hex chars>@<host>>`, host compared case-insensitively). The reference is
+ * generated lowercase by directMessageRef; anything else — an outbox id, a shorter or longer
+ * reference, another host — is not one of ours.
+ */
+export function directRefFromMessageId(messageId: string | null, host: string): string | null {
+  if (!messageId) return null
+  const match = /^<direct-([a-z0-9]{40})@([^>]+)>$/.exec(messageId.trim())
+  if (!match) return null
+  if (match[2].toLowerCase() !== host.trim().toLowerCase()) return null
+  return match[1]
+}
+
 /** One recipient is a permanent failure only when the report says `Action: failed` and a 5.x.x status. */
 export function isPermanentFailure(recipient: DsnRecipient): boolean {
   if (recipient.action !== "failed") return false

@@ -1498,6 +1498,10 @@ model DeliveryOutcome {
   volunteerId    String?
   // The outbox row this send went through, when there was one (nullable: synchronous sends).
   outboxId       String?
+  // The random reference of a direct send's Message-ID, null for outbox sends (they are
+  // matched by `outboxId`). Like the address, it is opaque and lets a deferred bounce find the
+  // rows of one direct send without trusting anything in the notice.
+  messageRef     String?
   kind           String
   outcome        String // "accepted_by_relay" | "rejected_permanent" | "failed_temporary" | "unknown"
   reason         String? // normalized reason, see SmtpReason in src/lib/notifications/smtp-outcome.ts
@@ -1511,6 +1515,7 @@ model DeliveryOutcome {
   @@index([organizationId, createdAt])
   @@index([volunteerId, createdAt])
   @@index([addressHash, createdAt])
+  @@index([messageRef])
 }
 
 // Reusable targeted-message templates of an organisation (#482): a name, a subject and a plain

@@ -17,6 +17,8 @@ export type DeliveryOutcomeContext = {
   organizationId?: string | null
   volunteerId?: string | null
   outboxId?: string | null
+  /** The random reference of a direct send's Message-ID; null for outbox sends. */
+  messageRef?: string | null
 }
 
 /**
@@ -27,6 +29,11 @@ export type DeliveryOutcomeContext = {
  * organization itself manages, so that one keeps its row (with `volunteerId: null`).
  */
 const NOT_RECORDED_KINDS = new Set(["product_update"])
+
+/** Whether a send of this kind gets DeliveryOutcome rows — and therefore a direct Message-ID. */
+export function isRecordedKind(kind: string): boolean {
+  return !NOT_RECORDED_KINDS.has(kind)
+}
 
 /**
  * Stores one recipient's outcome. Never throws: a recording failure is reported to Sentry
@@ -42,6 +49,7 @@ export async function recordDeliveryOutcome(ctx: DeliveryOutcomeContext, outcome
         organizationId: ctx.organizationId ?? null,
         volunteerId: ctx.volunteerId ?? null,
         outboxId: ctx.outboxId ?? null,
+        messageRef: ctx.messageRef ?? null,
         kind: ctx.kind,
         outcome: outcome.outcome,
         reason: outcome.reason,

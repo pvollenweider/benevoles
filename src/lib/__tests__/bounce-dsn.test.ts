@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest"
 import { readFileSync } from "fs"
 import { join } from "path"
 import {
+  directRefFromMessageId,
   isPermanentFailure,
   outboxIdFromMessageId,
   parseBounceDsn,
@@ -89,6 +90,24 @@ describe("parseBounceDsn", () => {
     expect(parsed.originalMessageId).toBe("<outbox-clx0000000000000000000002@www.benevol.app>")
     expect(parsed.recipients[0]).toMatchObject({ finalRecipient: "inconnu@exemple.org", status: "5.1.1" })
   })
+
+  it("parses a real-shaped Outlook notice whose original Message-ID is a direct reference", async () => {
+    const parsed = await parseBounceDsn(fixture("outlook-550-5.5.0-direct.eml"))
+    expect(parsed.isDsn).toBe(true)
+    expect(parsed.reportType).toBe("delivery-status")
+    expect(parsed.originalMessageId).toBe("<direct-a1b2c3d4e5f60718293a4b5c6d7e8f9012345678@www.benevol.app>")
+    expect(parsed.recipients).toEqual([
+      {
+        finalRecipient: "membre.inconnu@example.org",
+        action: "failed",
+        status: "5.5.0",
+        diagnosticCode: "smtp;550 5.5.0 Requested action not taken: mailbox unavailable.",
+      },
+    ])
+    // The correlation only trusts this deployment's host, not the reporting MTA in the notice.
+    expect(directRefFromMessageId(parsed.originalMessageId, HOST)).toBe("a1b2c3d4e5f60718293a4b5c6d7e8f9012345678")
+    expect(directRefFromMessageId(parsed.originalMessageId, "example.org")).toBeNull()
+  })
 })
 
 describe("outboxIdFromMessageId", () => {
@@ -99,6 +118,33 @@ describe("outboxIdFromMessageId", () => {
     expect(outboxIdFromMessageId("<other@www.benevol.app>", HOST)).toBeNull()
     expect(outboxIdFromMessageId("<outbox-abc123@www.benevol.app>", "benevol.app")).toBeNull()
     expect(outboxIdFromMessageId(null, HOST)).toBeNull()
+  })
+})
+
+describe("directRefFromMessageId", () => {
+  const REF = "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"
+  const ID = `<direct-${REF}@www.benevol.app>`
+
+  it("accepts only the exact direct format for this deployment's host", () => {
+    expect(directRefFromMessageId(ID, HOST)).toBe(REF)
+    expect(directRefFromMessageId(`<direct-${REF}@WWW.BENEVOL.APP>`, HOST)).toBe(REF)
+    expect(directRefFromMessageId(`<direct-${REF}@benevol.app>`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${REF}@www.benevol.app>`, "benevol.app")).toBeNull()
+    expect(directRefFromMessageId(null, HOST)).toBeNull()
+  })
+
+  it("is strict: no missing brackets, no wrong length, no non-hex or uppercase reference", () => {
+    expect(directRefFromMessageId(`direct-${REF}@www.benevol.app`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${REF}@www.benevol.app`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${REF.slice(0, 39)}@www.benevol.app>`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${REF}x@www.benevol.app>`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${REF.toUpperCase()}@www.benevol.app>`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${"-".repeat(40)}@www.benevol.app>`, HOST)).toBeNull()
+  })
+
+  it("keeps the two id forms apart", () => {
+    expect(directRefFromMessageId("<outbox-abc123@www.benevol.app>", HOST)).toBeNull()
+    expect(outboxIdFromMessageId(ID, HOST)).toBeNull()
   })
 })
 

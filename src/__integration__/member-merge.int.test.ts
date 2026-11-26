@@ -175,14 +175,14 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
     const { addressHash } = await import("@/lib/notifications/smtp-outcome")
     const { env } = await import("@/lib/env")
     const keepHash = addressHash(keep.email!, env.AUTH_SECRET)
-    const matching = await prisma.deliveryOutcome.create({ data: { organizationId: orgId, volunteerId: absorb.id, kind: "signup", outcome: "accepted_by_relay", addressHash: keepHash } })
+    const matching = await prisma.deliveryOutcome.create({ data: { organizationId: orgId, volunteerId: absorb.id, kind: "signup", outcome: "accepted_by_relay", addressHash: keepHash, messageRef: "b".repeat(40), outboxId: null } })
     const other = await prisma.deliveryOutcome.create({ data: { organizationId: orgId, volunteerId: absorb.id, kind: "signup", outcome: "rejected_permanent", addressHash: "unrelated-hash" } })
 
     const db = getOrgClient(orgId)
     const result = await runMemberMerge(db, orgId, ADMIN_ACTOR, keep.id, absorb.id, {})
     expect(result.plan.deliveryOutcomeIdsToReassign).toEqual([matching.id])
 
-    expect((await prisma.deliveryOutcome.findUniqueOrThrow({ where: { id: matching.id } })).volunteerId).toBe(keep.id)
+    expect((await prisma.deliveryOutcome.findUniqueOrThrow({ where: { id: matching.id } }))).toMatchObject({ volunteerId: keep.id, messageRef: "b".repeat(40) })
     // Left attached to the tombstone — removed later by the retention purge (cascade on delete),
     // not by the merge itself.
     expect((await prisma.deliveryOutcome.findUniqueOrThrow({ where: { id: other.id } })).volunteerId).toBe(absorb.id)

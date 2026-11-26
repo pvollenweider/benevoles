@@ -9,7 +9,7 @@ import { reportError } from "./report-error"
 import { addressHash } from "./notifications/smtp-outcome"
 import { outboxMessageHost } from "./notifications/outbox-message-id"
 import { bounceMailboxConfigFrom, type BounceMailboxConfig } from "./bounce-mailbox-config"
-import { enhancedStatusOfDiagnostic, isPermanentFailure, outboxIdFromMessageId, parseBounceDsn, responseCodeOfDiagnostic, type ParsedBounce } from "./bounce-dsn"
+import { enhancedStatusOfDiagnostic, isPermanentFailure, outboxIdFromMessageId, parseBounceDsn, responseCodeOfDiagnostic, directRefFromMessageId, type ParsedBounce } from "./bounce-dsn"
 
 /**
  * Deferred bounces (#602): the IMAP side. A scheduled run reads the mailbox that receives Gandi's
@@ -185,9 +185,11 @@ function strongerVerdict(current: BounceVerdict, next: BounceVerdict): BounceVer
 }
 
 /**
- * Correlate one parsed DSN with the outbox row and its already recorded outcomes, then record the
- * permanent failure once. The organisation, member, kind and address hash come only from our own
- * rows, never from the message: a forged DSN can at most flag an address we already wrote to.
+ * Correlate one parsed DSN with the rows of the send it answers, then record the permanent
+ * failure once. An outbox send is found by its row id, a direct send by the random reference of
+ * its Message-ID. In both cases the organisation, member, kind and address hash come only
+ * from our own rows, never from the message: a forged DSN can at most flag an address we already
+ * wrote to.
  */
 export async function analyzeBounceDsn(
   parsed: ParsedBounce,
@@ -198,13 +200,19 @@ export async function analyzeBounceDsn(
   if (!parsed.isDsn) return "ignored"
   if (!parsed.originalMessageId) return "uncorrelated"
   const outboxId = outboxIdFromMessageId(parsed.originalMessageId, opts.host)
-  if (!outboxId) return "uncorrelated"
+  const messageRef = outboxId ? null : directRefFromMessageId(parsed.originalMessageId, opts.host)
+  if (!outboxId && !messageRef) return "uncorrelated"
   const db = opts.db ?? prisma
 
+  // An outbox send also reads its queue row (organisation fallback); a direct send has none, so
+  // only its own outcomes decide the organisation. Null `outboxId`/`messageRef` narrows the
+  // outcome query to exactly one of the two id forms.
   const [outbox, outcomes] = await Promise.all([
-    db.notificationOutbox.findUnique({ where: { id: outboxId }, select: { id: true, organizationId: true } }),
+    outboxId
+      ? db.notificationOutbox.findUnique({ where: { id: outboxId }, select: { id: true, organizationId: true } })
+      : Promise.resolve(null),
     db.deliveryOutcome.findMany({
-      where: { outboxId },
+      where: outboxId ? { outboxId } : { messageRef },
       orderBy: { createdAt: "desc" },
       select: { addressHash: true, outcome: true, organizationId: true, volunteerId: true, kind: true, createdAt: true },
     }),
@@ -226,7 +234,8 @@ export async function analyzeBounceDsn(
       verdict = strongerVerdict(verdict, "ignored_temporary")
       continue
     }
-    // Idempotent per (outbox row, address): a second DSN for the same refusal writes nothing.
+    // Idempotent per (outbox row or direct reference, address): a second DSN for the same
+    // refusal writes nothing.
     if (outcomes.some((outcome) => outcome.addressHash === hash && outcome.outcome === "rejected_permanent")) {
       verdict = strongerVerdict(verdict, "already_known")
       continue
@@ -239,7 +248,10 @@ export async function analyzeBounceDsn(
         // The matched row's organisation only: a DSN never chooses a tenant.
         organizationId: outbox?.organizationId ?? matched.organizationId ?? null,
         volunteerId: matched.volunteerId ?? null,
-        outboxId,
+        outboxId: outboxId ?? null,
+        // Absent for an outbox send: the row is matched by `outboxId` (and existing outbox rows
+        // keep their shape unchanged).
+        ...(messageRef ? { messageRef } : {}),
         kind: matched.kind,
         outcome: "rejected_permanent",
         reason: "bounced_after_acceptance",

@@ -14,6 +14,8 @@ vi.mock("../../prisma", () => ({
 vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32) } }))
 
 import { emailChannel, maskPersonalLinkTokens, missingSmtpOutcome } from "../channels/email"
+import { directRefFromMessageId } from "@/lib/bounce-dsn"
+import { outboxMessageHost } from "../outbox-message-id"
 import type { NotificationPayload } from "../types"
 
 const deliveryOutcomeCreate = m.deliveryOutcomeCreate
@@ -77,6 +79,8 @@ describe("emailChannel without SMTP_HOST", () => {
     expect(logged).not.toContain("alice@example.org")
     expect(logged).not.toContain("secret-token-value")
     expect(log).not.toHaveBeenCalled()
+    // Nothing was submitted: a later notice could not be correlated with this attempt.
+    expect(deliveryOutcomeCreate.mock.calls.at(-1)?.[0].data.messageRef).toBeNull()
   })
 
   it("in development: prints the email to the console and succeeds, masking the personal link", async () => {
@@ -229,6 +233,51 @@ describe("emailChannel with SMTP_HOST: records the outcome, never a raw reply or
     const outcome = await freshChannel.send(payload)
     expect(outcome.ok).toBe(true)
     expect(deliveryOutcomeCreate.mock.calls[0][0].data.outcome).toBe("accepted_by_relay")
+  })
+
+  // a direct send has no outbox row to be matched by, so it gets a random Message-ID
+  // reference that its DeliveryOutcome rows carry; a deferred bounce finds them by it.
+  it("a direct send sets a <direct-…> Message-ID and records its reference", async () => {
+    const sendMail = vi.fn().mockResolvedValue({ accepted: ["alice@example.org"], rejected: [], response: "250 2.0.0 Ok: queued" })
+    vi.doMock("nodemailer", () => ({ default: { createTransport: () => ({ sendMail }) } }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    expect((await freshChannel.send(payload)).ok).toBe(true)
+
+    const sentId = sendMail.mock.calls[0][0].messageId as string
+    const ref = directRefFromMessageId(sentId, outboxMessageHost())
+    expect(ref).toMatch(/^[a-z0-9]{40}$/)
+    const data = deliveryOutcomeCreate.mock.calls[0][0].data
+    expect(data).toMatchObject({ messageRef: ref, outboxId: null })
+    // The reference says nothing about the address: the row keeps only its hash.
+    expect(JSON.stringify(data)).not.toContain("alice@example.org")
+  })
+
+  it("an outbox send keeps its <outbox-…> Message-ID and records no messageRef", async () => {
+    const rowId = "clx0000000000000000000001"
+    const outboxId = `<outbox-${rowId}@${outboxMessageHost()}>`
+    const sendMail = vi.fn().mockResolvedValue({ accepted: ["alice@example.org"], rejected: [], response: "250 2.0.0 Ok: queued" })
+    vi.doMock("nodemailer", () => ({ default: { createTransport: () => ({ sendMail }) } }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    expect((await freshChannel.send({ ...payload, messageId: outboxId, outboxId: rowId })).ok).toBe(true)
+
+    expect(sendMail.mock.calls[0][0].messageId).toBe(outboxId)
+    expect(deliveryOutcomeCreate.mock.calls[0][0].data).toMatchObject({ messageRef: null, outboxId: rowId })
+  })
+
+  it("a kind that records no DeliveryOutcome gets neither a direct Message-ID nor a reference", async () => {
+    const sendMail = vi.fn().mockResolvedValue({ accepted: ["alice@example.org"], rejected: [], response: "250 2.0.0 Ok: queued" })
+    vi.doMock("nodemailer", () => ({ default: { createTransport: () => ({ sendMail }) } }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    const productUpdate = {
+      kind: "product_update",
+      organizationId: null,
+      recipient: { email: "alice@example.org", name: "Alice" },
+      data: { subject: "Nouveautés", content: "Bonjour", unsubscribeUrl: "https://example.org/unsubscribe" },
+    } as unknown as NotificationPayload
+    expect((await freshChannel.send(productUpdate)).ok).toBe(true)
+
+    expect(sendMail.mock.calls[0][0].messageId).toBeUndefined()
+    expect(deliveryOutcomeCreate).not.toHaveBeenCalled()
   })
 
   // #300: the organization's logo at the top of the email, hosted on its own address, with its
