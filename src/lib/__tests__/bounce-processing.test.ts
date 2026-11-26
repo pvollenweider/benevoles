@@ -14,7 +14,7 @@ vi.mock("@/lib/report-error", () => ({ reportError: () => () => undefined }))
 
 import { addressStatus } from "../address-status"
 import { parseBounceDsn, type ParsedBounce } from "../bounce-dsn"
-import { analyzeBounceDsn } from "../bounce-mailbox"
+import { analyzeBounceDsn, LEGACY_DIRECT_BOUNCES_UNTIL } from "../bounce-mailbox"
 import { addressHash } from "../notifications/smtp-outcome"
 
 // Deferred bounces (#602): correlation, idempotency and the outcome created. The DSN fixtures are
@@ -28,6 +28,9 @@ const OUTBOX = "clx0000000000000000000001"
 const RECIPIENT = "eleve.test@ecole-exemple.org"
 const DIRECT_REF = "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"
 const DIRECT_RECIPIENT = "membre.inconnu@example.org"
+// A date before LEGACY_DIRECT_BOUNCES_UNTIL, so the bounded path is still open.
+const LEGACY_NOW = new Date("2026-12-01T10:00:00Z")
+const LEGACY_ROW_TIME = new Date("2026-11-15T08:00:00Z")
 
 const fixture = (name: string) => readFileSync(join(process.cwd(), "src/lib/__tests__/fixtures/bounces", name))
 
@@ -50,10 +53,10 @@ const matchingOutcome = (over: Partial<OutcomeRow> = {}): OutcomeRow => ({
   ...over,
 })
 
-const mocks = vi.hoisted(() => ({ findUnique: vi.fn(), findMany: vi.fn(), create: vi.fn() }))
+const mocks = vi.hoisted(() => ({ findUnique: vi.fn(), findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn() }))
 const db = {
   notificationOutbox: { findUnique: mocks.findUnique },
-  deliveryOutcome: { findMany: mocks.findMany, create: mocks.create },
+  deliveryOutcome: { findMany: mocks.findMany, findFirst: mocks.findFirst, create: mocks.create },
 } as unknown as PrismaClient
 
 const analyze = async (name: string) => analyzeBounceDsn(await parseBounceDsn(fixture(name)), { host: HOST, secret: SECRET, db })
@@ -70,11 +73,30 @@ const directParsed = (over: Partial<ParsedBounce> = {}): ParsedBounce => ({
 })
 const analyzeDirect = (over: Partial<ParsedBounce> = {}) => analyzeBounceDsn(directParsed(over), { host: HOST, secret: SECRET, db })
 
+/** A DSN whose original Message-ID is not one of this deployment's two forms (a pre-fix send). */
+const legacyParsed = (over: Partial<ParsedBounce> = {}): ParsedBounce =>
+  directParsed({ originalMessageId: "<20261118090000.legacy@other.example.org>", ...over })
+const analyzeLegacy = (over: Partial<ParsedBounce> = {}, now: Date = LEGACY_NOW) =>
+  analyzeBounceDsn(legacyParsed(over), { host: HOST, secret: SECRET, db, now })
+
+/** A pre-fix direct send: no outboxId, no messageRef, accepted by the relay, with a member. */
+const legacyRow = (over: Partial<OutcomeRow> = {}): OutcomeRow => ({
+  addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
+  outcome: "accepted_by_relay",
+  organizationId: ORG,
+  volunteerId: VOLUNTEER,
+  kind: "reminder_j1",
+  createdAt: LEGACY_ROW_TIME,
+  ...over,
+})
+
 describe("analyzeBounceDsn", () => {
   beforeEach(() => {
     for (const fn of Object.values(mocks)) fn.mockReset()
     mocks.findUnique.mockResolvedValue({ id: OUTBOX, organizationId: ORG })
     mocks.findMany.mockResolvedValue([matchingOutcome()])
+    // No pre-fix direct row by default: the legacy path stays uncorrelated unless a test opts in.
+    mocks.findFirst.mockResolvedValue(null)
     mocks.create.mockResolvedValue({})
   })
 
@@ -234,6 +256,128 @@ describe("analyzeBounceDsn", () => {
   it("never correlates a direct reference whose recipient hash is not among its rows", async () => {
     mocks.findMany.mockResolvedValue([matchingOutcome({ addressHash: addressHash(RECIPIENT, SECRET) })])
     expect(await analyzeDirect()).toBe("uncorrelated")
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  // Legacy direct sends (before the <direct-…> fix) have a random Message-ID: the bounded
+  // exception below is the only link left, through the most recent pre-fix accepted row.
+  it("flags a legacy direct bounce from the most recent pre-fix row, with its organisation, member and kind", async () => {
+    mocks.findFirst.mockResolvedValueOnce(legacyRow()).mockResolvedValueOnce(null)
+    expect(await analyzeLegacy()).toBe("flagged")
+
+    expect(mocks.findFirst.mock.calls[0][0]).toEqual({
+      where: {
+        addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
+        outboxId: null,
+        messageRef: null,
+        outcome: "accepted_by_relay",
+        volunteerId: { not: null },
+        // The retention window, counted from the injected current time.
+        createdAt: { gte: new Date("2026-11-01T10:00:00Z") },
+      },
+      orderBy: { createdAt: "desc" },
+      select: { organizationId: true, volunteerId: true, kind: true, createdAt: true },
+    })
+    expect(mocks.create).toHaveBeenCalledWith({
+      data: {
+        organizationId: ORG,
+        volunteerId: VOLUNTEER,
+        outboxId: null,
+        messageRef: null,
+        kind: "reminder_j1",
+        outcome: "rejected_permanent",
+        reason: "bounced_after_acceptance",
+        responseCode: 550,
+        enhancedStatus: "5.5.0",
+        addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
+      },
+    })
+  })
+
+  it("applies the legacy path to a random Message-ID on our own host too", async () => {
+    mocks.findFirst.mockResolvedValueOnce(legacyRow()).mockResolvedValueOnce(null)
+    expect(await analyzeLegacy({ originalMessageId: `<20261118090000.random@${HOST}>` })).toBe("flagged")
+    expect(mocks.create).toHaveBeenCalledOnce()
+  })
+
+  it("treats a second legacy notice for the same accepted row as already known", async () => {
+    mocks.findFirst.mockResolvedValueOnce(legacyRow()).mockResolvedValueOnce({ id: "outcome-existing" })
+    expect(await analyzeLegacy()).toBe("already_known")
+    // The idempotency lookup is the pre-fix bounce for this address, after the accepted row.
+    expect(mocks.findFirst.mock.calls[1][0]).toEqual({
+      where: {
+        addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
+        outboxId: null,
+        messageRef: null,
+        outcome: "rejected_permanent",
+        reason: "bounced_after_acceptance",
+        createdAt: { gt: LEGACY_ROW_TIME },
+      },
+      select: { id: true },
+    })
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("uses the most recent row when the same address has pre-fix rows in two organisations", async () => {
+    mocks.findFirst
+      .mockResolvedValueOnce(legacyRow({ organizationId: "org-recent", kind: "manual_reminder", createdAt: new Date("2026-11-20T08:00:00Z") }))
+      .mockResolvedValueOnce(null)
+    expect(await analyzeLegacy()).toBe("flagged")
+    expect(mocks.findFirst.mock.calls[0][0].orderBy).toEqual({ createdAt: "desc" })
+    expect(mocks.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ organizationId: "org-recent", kind: "manual_reminder" }) }),
+    )
+  })
+
+  it("never uses a row with an outboxId or a messageRef, another outcome, or no member", async () => {
+    mocks.findFirst.mockResolvedValue(null)
+    expect(await analyzeLegacy()).toBe("uncorrelated")
+    expect(mocks.create).not.toHaveBeenCalled()
+    expect(mocks.findFirst.mock.calls[0][0].where).toEqual({
+      addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
+      outboxId: null,
+      messageRef: null,
+      outcome: "accepted_by_relay",
+      volunteerId: { not: null },
+      createdAt: { gte: new Date("2026-11-01T10:00:00Z") },
+    })
+  })
+
+  it("writes nothing for a legacy temporary status, and never looks a row up", async () => {
+    const temporary = legacyParsed({
+      recipients: [{ finalRecipient: DIRECT_RECIPIENT, action: "delayed", status: "4.4.1", diagnosticCode: "smtp;450 4.4.1 Try later" }],
+    })
+    expect(await analyzeBounceDsn(temporary, { host: HOST, secret: SECRET, db, now: LEGACY_NOW })).toBe("uncorrelated")
+    expect(mocks.findFirst).not.toHaveBeenCalled()
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("stops the legacy path after LEGACY_DIRECT_BOUNCES_UNTIL, without any query", async () => {
+    const after = new Date(LEGACY_DIRECT_BOUNCES_UNTIL.getTime() + 1)
+    expect(await analyzeLegacy({}, after)).toBe("uncorrelated")
+    expect(mocks.findFirst).not.toHaveBeenCalled()
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("never falls through to the legacy path for an outbox id of this host with no rows", async () => {
+    mocks.findUnique.mockResolvedValue(null)
+    mocks.findMany.mockResolvedValue([])
+    expect(await analyzeDirect({ originalMessageId: `<outbox-${OUTBOX}@${HOST}>` })).toBe("uncorrelated")
+    expect(mocks.findFirst).not.toHaveBeenCalled()
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("never falls through to the legacy path for a direct reference of this host with no rows", async () => {
+    mocks.findMany.mockResolvedValue([])
+    expect(await analyzeDirect()).toBe("uncorrelated")
+    expect(mocks.findFirst).not.toHaveBeenCalled()
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("leaves a notice without an original Message-ID uncorrelated, without any query", async () => {
+    expect(await analyzeDirect({ originalMessageId: null })).toBe("uncorrelated")
+    expect(mocks.findMany).not.toHaveBeenCalled()
+    expect(mocks.findFirst).not.toHaveBeenCalled()
     expect(mocks.create).not.toHaveBeenCalled()
   })
 })
