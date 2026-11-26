@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { simpleParser } from "mailparser"
+import { DIRECT_MESSAGE_REF_LENGTH } from "./notifications/outbox-message-id"
 
 /**
  * Pure RFC 3464 delivery status notification (DSN) parsing for deferred bounces (#602). No
@@ -10,10 +11,10 @@ import { simpleParser } from "mailparser"
  *
  * Gandi's Postfix accepts the message from the app, then reports the remote server's refusal in a
  * `multipart/report; report-type=delivery-status` message sent to the envelope sender. The
- * original `Message-ID` (`<outbox-<id>@host>`, see outboxMessageId) comes from the attached
- * `message/rfc822` or `text/rfc822-headers` part, never from free text. A message without a
- * delivery-status block or without that attached original header is not a DSN we act on:
- * auto-replies, read receipts and forged messages stay in the inbox.
+ * original `Message-ID` (`<outbox-<id>@host>` or `<direct-<ref>@host>`, see outboxMessageId and
+ * directMessageId) comes from the attached `message/rfc822` or `text/rfc822-headers` part, never
+ * from free text. A message without a delivery-status block or without that attached original
+ * header is not a DSN we act on: auto-replies, read receipts and forged messages stay in the inbox.
  */
 
 export type DsnRecipient = {
@@ -38,6 +39,11 @@ export type ParsedBounce = {
 const FINAL_RECIPIENT_RE = /^final-recipient\s*:/im
 const ENHANCED_STATUS_RE = /\b([245]\.\d{1,3}\.\d{1,3})\b/
 const DIAGNOSTIC_CODE_RE = /(?:^|;)\s*(\d{3})\b/
+/**
+ * Exactly what `directMessageRef()` generates: lowercase hex only, and a length derived from the
+ * generator's byte count. The host is checked separately, case-insensitively.
+ */
+const DIRECT_REF_RE = new RegExp(`^<direct-([0-9a-f]{${DIRECT_MESSAGE_REF_LENGTH}})@([^>]+)>$`)
 
 type ContentType = { mediaType: string | null; reportType: string | null }
 
@@ -176,13 +182,13 @@ export function outboxIdFromMessageId(messageId: string | null, host: string): s
 
 /**
  * The direct send's random reference from a Message-ID, only when it is exactly this deployment's
- * format (`<direct-<40 hex chars>@<host>>`, host compared case-insensitively). The reference is
- * generated lowercase by directMessageRef; anything else — an outbox id, a shorter or longer
- * reference, another host — is not one of ours.
+ * format (`<direct-<length lowercase hex chars>@<host>>`, host compared case-insensitively). The
+ * reference is generated lowercase by directMessageRef; anything else — an outbox id, a shorter
+ * or longer reference, a non-hex character, another host — is not one of ours.
  */
 export function directRefFromMessageId(messageId: string | null, host: string): string | null {
   if (!messageId) return null
-  const match = /^<direct-([a-z0-9]{40})@([^>]+)>$/.exec(messageId.trim())
+  const match = DIRECT_REF_RE.exec(messageId.trim())
   if (!match) return null
   if (match[2].toLowerCase() !== host.trim().toLowerCase()) return null
   return match[1]

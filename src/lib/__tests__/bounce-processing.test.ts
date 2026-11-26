@@ -114,6 +114,22 @@ describe("analyzeBounceDsn", () => {
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
+  // A nullable filter here would read every legacy row: `{ messageRef: null }` matches them all.
+  it("never queries DeliveryOutcome rows with a null or missing messageRef filter", async () => {
+    // Neither an outbox id nor a direct reference: no key at all, so no query either.
+    mocks.findMany.mockResolvedValue([])
+    expect(await analyzeDirect({ originalMessageId: "<random-nodemailer-id@example.org>" })).toBe("uncorrelated")
+    expect(mocks.findMany).not.toHaveBeenCalled()
+
+    // A valid direct reference always filters on a non-empty string.
+    expect(await analyzeDirect()).toBe("uncorrelated")
+    expect(mocks.findMany).toHaveBeenCalledOnce()
+    const where = mocks.findMany.mock.calls[0][0].where as Record<string, unknown>
+    expect(where).toHaveProperty("messageRef")
+    expect(typeof where.messageRef).toBe("string")
+    expect((where.messageRef as string).length).toBeGreaterThan(0)
+  })
+
   it("never correlates a recipient whose hash is not among the outbox outcomes", async () => {
     expect(await analyze("dsn-recipient-hash-mismatch.eml")).toBe("uncorrelated")
     expect(mocks.create).not.toHaveBeenCalled()

@@ -23,8 +23,16 @@ export function outboxMessageId(rowId: string): string {
   return `<outbox-${rowId}@${outboxMessageHost()}>`
 }
 
-/** 20 random bytes, rendered as 40 lowercase hex characters: 160 bits, letters and digits only. */
-const DIRECT_MESSAGE_REF_BYTES = 20
+/**
+ * Random bytes behind `directMessageRef()`, rendered as two lowercase hex characters each: 160
+ * bits today, above the 120-bit bound. Exported so the bounce parser derives its accepted length
+ * from the generator instead of repeating it; `DIRECT_MESSAGE_REF_LENGTH` is the one length the
+ * code and the docs share.
+ */
+export const DIRECT_MESSAGE_REF_BYTES = 20
+
+/** Length in characters of a `directMessageRef()`: two lowercase hex characters per byte. */
+export const DIRECT_MESSAGE_REF_LENGTH = DIRECT_MESSAGE_REF_BYTES * 2
 
 /**
  * Random reference of a direct send's Message-ID. A direct send has no outbox row to be

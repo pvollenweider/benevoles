@@ -201,18 +201,25 @@ export async function analyzeBounceDsn(
   if (!parsed.originalMessageId) return "uncorrelated"
   const outboxId = outboxIdFromMessageId(parsed.originalMessageId, opts.host)
   const messageRef = outboxId ? null : directRefFromMessageId(parsed.originalMessageId, opts.host)
-  if (!outboxId && !messageRef) return "uncorrelated"
+  // The key is built explicitly, never as a nullable filter: `{ messageRef: null }` would match
+  // every legacy row (the address-only fallback the design forbids), and a missing filter would
+  // read the whole table. A message that is neither of our two id forms has no key at all.
+  const outcomeKey: { outboxId: string } | { messageRef: string } | null = outboxId
+    ? { outboxId }
+    : messageRef
+      ? { messageRef }
+      : null
+  if (!outcomeKey) return "uncorrelated"
   const db = opts.db ?? prisma
 
   // An outbox send also reads its queue row (organisation fallback); a direct send has none, so
-  // only its own outcomes decide the organisation. Null `outboxId`/`messageRef` narrows the
-  // outcome query to exactly one of the two id forms.
+  // only its own outcomes decide the organisation. `outcomeKey` selects exactly one id form.
   const [outbox, outcomes] = await Promise.all([
     outboxId
       ? db.notificationOutbox.findUnique({ where: { id: outboxId }, select: { id: true, organizationId: true } })
       : Promise.resolve(null),
     db.deliveryOutcome.findMany({
-      where: outboxId ? { outboxId } : { messageRef },
+      where: outcomeKey,
       orderBy: { createdAt: "desc" },
       select: { addressHash: true, outcome: true, organizationId: true, volunteerId: true, kind: true, createdAt: true },
     }),

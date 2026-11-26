@@ -245,11 +245,38 @@ describe("emailChannel with SMTP_HOST: records the outcome, never a raw reply or
 
     const sentId = sendMail.mock.calls[0][0].messageId as string
     const ref = directRefFromMessageId(sentId, outboxMessageHost())
-    expect(ref).toMatch(/^[a-z0-9]{40}$/)
+    expect(ref).not.toBeNull()
     const data = deliveryOutcomeCreate.mock.calls[0][0].data
     expect(data).toMatchObject({ messageRef: ref, outboxId: null })
     // The reference says nothing about the address: the row keeps only its hash.
     expect(JSON.stringify(data)).not.toContain("alice@example.org")
+  })
+
+  it("records the direct reference when sendMail throws", async () => {
+    const sendMail = vi.fn().mockRejectedValue(Object.assign(new Error("timeout"), { code: "ETIMEDOUT" }))
+    vi.doMock("nodemailer", () => ({ default: { createTransport: () => ({ sendMail }) } }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    expect((await freshChannel.send(payload)).ok).toBe(false)
+
+    const ref = directRefFromMessageId(sendMail.mock.calls[0][0].messageId as string, outboxMessageHost())
+    expect(ref).not.toBeNull()
+    expect(deliveryOutcomeCreate.mock.calls[0][0].data).toMatchObject({ messageRef: ref, outcome: "failed_temporary" })
+  })
+
+  it("records the direct reference on a partial acceptance", async () => {
+    const sendMail = vi.fn().mockResolvedValue({
+      accepted: [],
+      rejected: ["alice@example.org"],
+      rejectedErrors: [{ recipient: "alice@example.org", responseCode: 550, response: "550 5.1.1 mailbox unavailable" }],
+      response: "250 2.0.0 Ok: queued",
+    })
+    vi.doMock("nodemailer", () => ({ default: { createTransport: () => ({ sendMail }) } }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    expect((await freshChannel.send(payload)).ok).toBe(false)
+
+    const ref = directRefFromMessageId(sendMail.mock.calls[0][0].messageId as string, outboxMessageHost())
+    expect(ref).not.toBeNull()
+    expect(deliveryOutcomeCreate.mock.calls[0][0].data).toMatchObject({ messageRef: ref, outcome: "rejected_permanent" })
   })
 
   it("an outbox send keeps its <outbox-…> Message-ID and records no messageRef", async () => {

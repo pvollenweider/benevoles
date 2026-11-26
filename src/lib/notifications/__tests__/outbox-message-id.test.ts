@@ -3,17 +3,18 @@
 
 import { describe, expect, it } from "vitest"
 import { directRefFromMessageId, outboxIdFromMessageId } from "@/lib/bounce-dsn"
-import { directMessageId, directMessageRef, outboxMessageHost } from "../outbox-message-id"
+import { DIRECT_MESSAGE_REF_BYTES, DIRECT_MESSAGE_REF_LENGTH, directMessageId, directMessageRef, outboxMessageHost } from "../outbox-message-id"
 
 // The Message-ID of a direct send: a random reference tied to its DeliveryOutcome rows,
 // so a deferred bounce can be matched without trusting anything in the notice.
 
 describe("directMessageRef", () => {
-  it("is 40 lowercase letters and digits: 160 random bits, above the 120-bit bound", () => {
+  it("is the generated length of lowercase hex characters: 160 random bits, above the 120-bit bound", () => {
     const ref = directMessageRef()
-    expect(ref).toMatch(/^[a-z0-9]{40}$/)
-    expect(ref).toHaveLength(40)
-    expect(ref.length * 4).toBeGreaterThanOrEqual(120)
+    expect(ref).toMatch(new RegExp(`^[0-9a-f]{${DIRECT_MESSAGE_REF_LENGTH}}$`))
+    expect(ref).toHaveLength(DIRECT_MESSAGE_REF_LENGTH)
+    expect(DIRECT_MESSAGE_REF_LENGTH).toBe(DIRECT_MESSAGE_REF_BYTES * 2)
+    expect(DIRECT_MESSAGE_REF_BYTES * 8).toBeGreaterThanOrEqual(120)
   })
 
   it("is unguessable: two calls never return the same reference", () => {
@@ -27,11 +28,13 @@ describe("directMessageId", () => {
     expect(directMessageId(ref)).toBe(`<direct-${ref}@${outboxMessageHost()}>`)
   })
 
-  it("round-trips through the bounce parser, and never looks like an outbox id", () => {
-    const id = directMessageId(directMessageRef())
+  it("is always read back by the bounce parser, and never looks like an outbox id", () => {
     const host = outboxMessageHost()
-    const ref = directRefFromMessageId(id, host)
-    expect(ref).toMatch(/^[a-z0-9]{40}$/)
-    expect(outboxIdFromMessageId(id, host)).toBeNull()
+    for (let i = 0; i < 20; i++) {
+      const ref = directMessageRef()
+      const id = directMessageId(ref)
+      expect(directRefFromMessageId(id, host)).toBe(ref)
+      expect(outboxIdFromMessageId(id, host)).toBeNull()
+    }
   })
 })

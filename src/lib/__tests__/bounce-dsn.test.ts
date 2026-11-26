@@ -12,6 +12,7 @@ import {
   responseCodeOfDiagnostic,
   type DsnRecipient,
 } from "../bounce-dsn"
+import { DIRECT_MESSAGE_REF_LENGTH } from "../notifications/outbox-message-id"
 
 const fixture = (name: string) => readFileSync(join(process.cwd(), "src/lib/__tests__/fixtures/bounces", name))
 const HOST = "www.benevol.app"
@@ -136,10 +137,11 @@ describe("directRefFromMessageId", () => {
   it("is strict: no missing brackets, no wrong length, no non-hex or uppercase reference", () => {
     expect(directRefFromMessageId(`direct-${REF}@www.benevol.app`, HOST)).toBeNull()
     expect(directRefFromMessageId(`<direct-${REF}@www.benevol.app`, HOST)).toBeNull()
-    expect(directRefFromMessageId(`<direct-${REF.slice(0, 39)}@www.benevol.app>`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${REF.slice(0, DIRECT_MESSAGE_REF_LENGTH - 1)}@www.benevol.app>`, HOST)).toBeNull()
     expect(directRefFromMessageId(`<direct-${REF}x@www.benevol.app>`, HOST)).toBeNull()
     expect(directRefFromMessageId(`<direct-${REF.toUpperCase()}@www.benevol.app>`, HOST)).toBeNull()
-    expect(directRefFromMessageId(`<direct-${"-".repeat(40)}@www.benevol.app>`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${"g".repeat(DIRECT_MESSAGE_REF_LENGTH)}@www.benevol.app>`, HOST)).toBeNull()
+    expect(directRefFromMessageId(`<direct-${"-".repeat(DIRECT_MESSAGE_REF_LENGTH)}@www.benevol.app>`, HOST)).toBeNull()
   })
 
   it("keeps the two id forms apart", () => {
