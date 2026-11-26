@@ -18,6 +18,7 @@ import { ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC, ROSTER_ENABLE_REMINDER, ROSTER_SETT
 import DocMoreLink from "@/components/DocMoreLink"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 import RequiredMark from "@/components/RequiredMark"
+import { SHIFT_VIEW_SETTINGS, type ShiftViewSetting } from "@/lib/shift-view"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -42,6 +43,8 @@ type EventFormData = {
   isListed: boolean
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: string | null
+  /** Default view of the shifts on the public page (#1407): auto, frise or liste. */
+  publicShiftView: ShiftViewSetting
   /** Registration window (#463): the switch, and local « YYYY-MM-DDTHH:MM » (empty = none). */
   registrationsOpen: boolean
   registrationOpensAt: string
@@ -81,6 +84,7 @@ const defaultData: EventFormData = {
   remindersEnabled: true,
   isListed: true,
   accentColorKey: null,
+  publicShiftView: "auto",
   latitude: null,
   longitude: null,
   registrationsOpen: true,
@@ -763,6 +767,30 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         {isEdit ? null : (
           <p className="text-sm text-gray-700">L&apos;événement est créé en brouillon : les créneaux viennent ensuite, la publication à la fin.</p>
         )}
+
+        {/* Default view of the shifts (#1407): the event's setting, under each visitor's own
+            choice. A native radio group, like the cancellation deadline's. */}
+        <fieldset id="event-public-shift-view" aria-describedby="event-public-shift-view-hint">
+          <legend className="text-sm font-medium text-gray-700 mb-1">Affichage des créneaux par défaut</legend>
+          <p id="event-public-shift-view-hint" className="text-xs text-gray-600 mb-2">
+            Automatique : la frise quand elle reste lisible sur l&apos;écran, sinon la liste ; toujours la liste pour des permanences répétées. Frise : sur un téléphone, il faut parfois la faire défiler sur le côté. Chaque visiteur peut changer d&apos;affichage, et son choix est gardé.
+          </p>
+          <div className="space-y-1">
+            {SHIFT_VIEW_SETTINGS.map((setting) => (
+              <label key={setting} className="flex min-h-11 items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="radio"
+                  name="event-public-shift-view"
+                  value={setting}
+                  checked={form.publicShiftView === setting}
+                  onChange={() => setForm((f) => ({ ...f, publicShiftView: setting }))}
+                  className="h-4 w-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                />
+                {setting === "auto" ? "Automatique" : setting === "frise" ? "Frise" : "Liste"}
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
         <fieldset aria-describedby="event-accent-hint">
           <legend className="text-sm font-medium text-gray-700 mb-1">Couleur de la page d&apos;inscription</legend>

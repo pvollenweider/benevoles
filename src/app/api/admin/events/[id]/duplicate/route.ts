@@ -15,6 +15,7 @@ import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 import { newEventWorkload } from "@/lib/workload-policy-data"
 import { workloadProtectionShipped } from "@/lib/workload-shipped"
 import { orgTimeZone } from "@/lib/time-zone"
+import { shiftViewSetting } from "@/lib/shift-view"
 
 /**
  * Duplicates an event as a draft (#378): title, new start date (every date moves by the same
@@ -83,7 +84,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     newEventWorkload(organizationId, source.organization),
   ])
   const workload = duplicatedWorkload(source, (parsed.data.copy?.settings ?? DEFAULT_COPY.settings), { gate: workloadGate, newEvent: newEventWorkloadValue, timeZone: orgTimeZone(source.organization) })
-  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault, sectorsGate, newEventSectors, swapsGate, newEventSwaps }, parsed.data)
+  const plan = duplicatePlan({ ...source, publicShiftView: shiftViewSetting(source.publicShiftView), leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault, sectorsGate, newEventSectors, swapsGate, newEventSwaps }, parsed.data)
 
   // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
   const slugged = eventSlugFromTitle(plan.event.title)

@@ -4,6 +4,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { cancelDeadlineFormFrom } from "@/lib/cancel-deadline"
 import { getOrgContext } from "@/lib/auth-guard"
 import EventForm from "@/components/admin/EventForm"
+import { shiftViewSetting } from "@/lib/shift-view"
 import type { Metadata } from "next"
 import Link from "next/link"
 import WizardSteps from "@/components/admin/WizardSteps"
@@ -77,6 +78,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     registrationOpensAt: utcToLocalInput(event.registrationOpensAt, timeZone),
     registrationClosesAt: utcToLocalInput(event.registrationClosesAt, timeZone),
     accentColorKey: event.accentColorKey,
+    publicShiftView: shiftViewSetting(event.publicShiftView),
     latitude: event.latitude,
     longitude: event.longitude,
     dayContactName: event.dayContactName ?? "",
