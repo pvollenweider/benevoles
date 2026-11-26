@@ -10,7 +10,9 @@ import { loadLimitHits } from "@/lib/limit-hits-data"
 import { LIMIT_HITS_DAYS, zoneSentence } from "@/lib/limit-hits-view"
 import { loadSendBatches } from "@/lib/send-batches-data"
 import { batchSummary } from "@/lib/send-batches"
-import { daysAgo } from "@/lib/retention"
+import { loadAdminEmails } from "@/lib/admin-emails-data"
+import { dayZoneSentence } from "@/lib/admin-emails-view"
+import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
 import { FRONT_DESK_ROLE, ORG_ACCOUNT_ROLE_WHERE } from "@/lib/permissions"
 
 
@@ -66,16 +68,20 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
 
   if (!org) notFound()
   const now = new Date()
-  const [cumulative, inactivity, limitHits, frontDeskCount] = await Promise.all([
+  const [cumulative, inactivity, limitHits, frontDeskCount, adminEmails] = await Promise.all([
     loadOrganizationCumulative(org.id),
     loadOrganizationInactivity(org.id, now),
     loadLimitHits({ organizationId: org.id, now }),
     // Apart from the administrators (#1142): one count, never the list.
     prisma.adminUser.count({ where: { organizationId: org.id, role: FRONT_DESK_ROLE } }),
+    // The emails its administrators received, over the DeliveryOutcome retention window.
+    loadAdminEmails({ organizationId: org.id, now }),
   ])
   // Its batches of emails of the same days (#1101): the same records the organisers see.
   const batches = await loadSendBatches(org.id, { since: daysAgo(now, LIMIT_HITS_DAYS), limit: 30 })
   const at = (d: Date) => d.toLocaleString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
+  // A civil day ("YYYY-MM-DD") in the operator's zone, written out on the server for the client.
+  const longDay = (day: string) => new Date(`${day}T12:00:00Z`).toLocaleDateString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", year: "numeric" })
 
   return (
     <OrgDetail
@@ -104,6 +110,12 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         exempt: inactivity.exempt,
         applies: org.active && org.suspendedAt === null,
       } : undefined}
+      adminEmails={{
+        rows: adminEmails.rows.map((r) => ({ dateTime: r.day, dateLabel: longDay(r.day), kindLabel: r.kindLabel, accepted: r.accepted, failed: r.failed })),
+        days: RETENTION_DAYS.deliveryOutcome,
+        zone: dayZoneSentence(APP_TIME_ZONE),
+        truncated: adminEmails.truncated,
+      }}
     />
   )
 }

@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Emails envoyés aux administrateurs** : sur la fiche d'une organisation, l'opérateur voit par jour et par type d'email les emails envoyés aux administrateurs, acceptés par le relais ou refusés ou en échec, sur les 30 jours conservés, sans adresse ni contenu. <!-- interne -->
 - **Pages en Markdown** : chaque page publique existe aussi en Markdown à son adresse suivie de `.md`, annoncée dans la page et dans `/llms.txt`.
 - **Vidéos** : un tutoriel montre comment ajouter un texte de la bibliothèque de modèles, le compléter et vérifier l'aperçu avant l'envoi.
 - **Vidéos** : « Retrouver toutes mes inscriptions » montre comment récupérer le lien personnel, gérer les créneaux de plusieurs événements, s'abonner au calendrier et renouveler le lien. Le tour de la page « Mes inscriptions », l'inscription depuis un téléphone, les changements de dernière minute, la publication des affectations, la relance des invités, les réglages des emails, l'offre de place en liste d'attente, les échecs d'envoi, le suivi des inscriptions et les questions aux bénévoles ont été actualisés.
