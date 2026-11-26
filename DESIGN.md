@@ -305,7 +305,7 @@ La timeline Gantt (inscription bénévole + vue admin) est le composant le plus 
 - **Don't** mettre de kicker uppercase au-dessus de chaque section ("ÉVÉNEMENTS", "MEMBRES", "PARAMÈTRES"). Si une section a besoin d'un en-tête, c'est un `<h2>` en weight 600.
 - **Don't** copier l'esthétique Salesforce / Monday.com : metrics en gros chiffres, palette bleu-gris, jargon de conversion. benevol.app organise des bénévoles, pas des pipelines commerciaux.
 - **Don't** introduire de web font pour l'interface admin. La police système est la bonne réponse : native, rapide, lisible. Si un jour une web font est utilisée, ce sera uniquement sur la landing page.
-- **Don't** utiliser des animations qui distraient de la tâche. Motion = retour d'état uniquement (transitions 150ms ease, focus ring, hover), et tout mouvement (défilement doux, effet d'échelle, rotation) passe par `motion-safe:`. Pas de scroll-driven animations, pas d'entrées orchestrées sur les dashboards. Seule animation décorative : la pluie de la page introuvable (404), qui n'accompagne aucune tâche, toujours sous `motion-safe:`.
+- **Don't** utiliser des animations qui distraient de la tâche. Motion = retour d'état uniquement (transitions 150ms ease, focus ring, hover), et tout mouvement (défilement doux, effet d'échelle, rotation) passe par `motion-safe:`. Pas de scroll-driven animations, pas d'entrées orchestrées sur les dashboards. Deux animations décoratives seulement : la pluie de la page introuvable (404), qui n'accompagne aucune tâche, et l'indication unique sur le bouton « Frise » de la page publique, qui montre une fois qu'on peut changer d'affichage ; toutes deux toujours sous `motion-safe:`.
 
 ## 7. Écarts connus du code
 

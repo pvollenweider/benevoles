@@ -64,6 +64,12 @@ describe("describeChanges", () => {
     ])
   })
 
+  it("reads the default view of the shifts in French (#1407)", () => {
+    expect(describeChanges({ publicShiftView: { from: "auto", to: "liste" } }, undefined, "Event")).toEqual([
+      "affichage des créneaux par défaut : automatique → liste",
+    ])
+  })
+
   it("keeps an unknown value as stored (#929)", () => {
     expect(describeChanges({ status: { from: "mystery", to: "open" } }, undefined, "Shift")).toEqual(["statut : mystery → ouvert"])
   })

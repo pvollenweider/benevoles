@@ -89,6 +89,8 @@ const FIELD_LABELS: Record<string, string> = {
   requirePhone: "téléphone obligatoire",
   // Shift roster between volunteers (#1068): the event's setting, and a volunteer's own choice.
   shiftRosterEnabled: "qui est inscrit, visible des bénévoles confirmés et des membres invités",
+  // Default view of the shifts on the public page (#1407).
+  publicShiftView: "affichage des créneaux par défaut",
   rosterName: "nom affiché aux autres bénévoles",
   rosterAudience: "nom visible par",
   isListed: "visibilité",

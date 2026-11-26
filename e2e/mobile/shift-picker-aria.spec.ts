@@ -22,7 +22,8 @@ test.beforeAll(async ({ browser }) => {
 test("a tapped bar is pressed; the selection card and one « Continuer » follow", async ({ page }) => {
   test.setTimeout(90_000) // dev server compiles each page on first visit
   await page.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
-  // A phone opens on the list (#1407): this snapshot is about the Frise, chosen beforehand.
+  // This snapshot is about the Frise, chosen beforehand so it does not depend on the default view.
+  // The day (10h–16h) fits the phone's width: no « Fais défiler » sentence above the chart.
   await page.addInitScript(() => localStorage.setItem("benevoles:public-shift-view", "frise"))
   await page.goto(`/${event.slug}?org=default`)
   const region = page.getByRole("region", { name: "Planning du mardi 1 octobre" })
@@ -32,7 +33,6 @@ test("a tapped bar is pressed; the selection card and one « Continuer » follow
   await expect(page.getByRole("main")).toMatchAriaSnapshot(`
     - main:
       - heading "mardi 1 octobre" [level=2]
-      - paragraph: Fais défiler pour voir toutes les plages
       - region "Planning du mardi 1 octobre":
         - button /^10h–12h \\d+.\\d+, Bar\\W+sélectionner/ [pressed=false]
         - button /^14h–16h \\d+.\\d+, Accueil\\W+sélectionner/ [pressed=false]

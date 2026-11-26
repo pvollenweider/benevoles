@@ -187,6 +187,10 @@ model Event {
   // Accent colour of the public page (#300, part 1): a key of the curated palette
   // (src/lib/event-accent.ts), never a free value, so the header stays readable.
   accentColorKey      String?
+  // Default view of the shifts on the public page (#1407): "auto" (the timeline from the width
+  // where it stays readable, the list below; always the list for a long event), "frise" or
+  // "liste". A visitor's choice, kept on the device, still wins. A validated set of values.
+  publicShiftView     String    @default("auto")
   // Registration window (#463), independent from publication: a published event can be visible
   // while sign-ups are closed. Open by default so existing events keep working; copies and
   // templates start closed. Optional schedule, as instants (entered in the organisation's zone).

@@ -46,6 +46,22 @@ describe("toPublicEvent", () => {
   })
 })
 
+// The default view of the shifts (#1407): sent to the public page, with a safe fallback.
+describe("toPublicEvent shift view setting", () => {
+  const row = (publicShiftView: string) => ({
+    id: "e", slug: "fete", title: "Fête", description: null, location: null, startDate: new Date(), endDate: new Date(),
+    publicInstructions: null, confirmationMessage: null, requirePhone: false, showSchedule: [], publicShiftView,
+    organization: { name: "Org", slug: "org", volunteerCharter: null }, pages: [], shifts: [],
+  } as unknown as PublicEventRow)
+
+  it("passes « frise » and « liste » through, and falls back to « auto » for anything else", () => {
+    expect(toPublicEvent(row("frise")).publicShiftView).toBe("frise")
+    expect(toPublicEvent(row("liste")).publicShiftView).toBe("liste")
+    expect(toPublicEvent(row("auto")).publicShiftView).toBe("auto")
+    expect(toPublicEvent(row("autre")).publicShiftView).toBe("auto")
+  })
+})
+
 // The public page resolves the charter with the same inputs as the sign-up route, which hashes it (#569).
 describe("toPublicEvent charter", () => {
   it("passes the organization's insurance choice with its charter", () => {

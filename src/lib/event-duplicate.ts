@@ -10,6 +10,7 @@ import { duplicatedScope } from "./question-scope"
 import { leadersForCopy } from "./leader-postes"
 import { buildPolicy, parseWorkloadPolicy, policyValues, type WorkloadPolicy } from "./workload-policy"
 import { cleanPageRoleNames } from "./event-page-postes"
+import type { ShiftViewSetting } from "./shift-view"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -113,6 +114,8 @@ export type DuplicableEvent = {
   /** The organisation's default for new events (#1068): the copy's value when the settings are not copied. */
   organizationRosterDefault?: boolean
   accentColorKey: string | null
+  /** Default view of the shifts (#1407): copied with the settings, else « auto ». */
+  publicShiftView?: ShiftViewSetting
   /** Day-of contact (#560): copied with the settings, like the other messages. */
   dayContactName?: string | null
   dayContactPhone?: string | null
@@ -310,6 +313,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       requireEmailConfirmation: copy.settings ? source.requireEmailConfirmation ?? false : false,
       shiftRosterEnabled: copy.settings ? source.shiftRosterEnabled ?? false : source.organizationRosterDefault ?? false,
       accentColorKey: copy.settings ? source.accentColorKey : null,
+      publicShiftView: copy.settings ? source.publicShiftView ?? "auto" : "auto",
       dayContactName: copy.settings ? source.dayContactName ?? null : null,
       dayContactPhone: copy.settings ? source.dayContactPhone ?? null : null,
       cancelDeadlineDays: copy.settings ? source.cancelDeadlineDays ?? null : null,

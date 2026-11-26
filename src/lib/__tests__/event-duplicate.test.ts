@@ -73,6 +73,15 @@ describe("duplicatePlan", () => {
     expect(plan.event.showSchedule).toEqual([{ name: "Concert", date: "2027-07-03", startTime: "20:00", endTime: "22:00" }])
   })
 
+  it("copies the default view of the shifts with the settings, else starts from « auto » (#1407)", () => {
+    const fromAuto = duplicatePlan({ ...source, publicShiftView: "frise" }, { copy: { settings: true } })
+    expect(fromAuto.event.publicShiftView).toBe("frise")
+    const withoutSettings = duplicatePlan({ ...source, publicShiftView: "liste" }, { copy: { settings: false } })
+    expect(withoutSettings.event.publicShiftView).toBe("auto")
+    const olderSource = duplicatePlan(source, { copy: { settings: true } })
+    expect(olderSource.event.publicShiftView).toBe("auto")
+  })
+
   it("copies the answer condition onto the copy of its question, and drops it with the settings (#962)", () => {
     const plan = duplicatePlan(source, {})
     const copiedQuestion = plan.questions.find((q) => q.label === "Permis de conduire")!

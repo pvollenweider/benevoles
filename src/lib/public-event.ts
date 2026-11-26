@@ -11,6 +11,7 @@ import { SCOPE_ROLES } from "@/lib/question-scope"
 import { workloadModeOf } from "@/lib/workload-view"
 import { shiftHasEnded } from "@/lib/shift-ended"
 import { reservedAnswerConditions } from "@/lib/role-answer"
+import { shiftViewSetting } from "@/lib/shift-view"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
@@ -167,6 +168,8 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     // the event's rules, not anyone's data.
     workload: workloadModeOf(event, orgTimeZone(event.organization)),
     accentColorKey: event.accentColorKey,
+    // Default view of the shifts (#1407): the public page applies it under the visitor's choice.
+    publicShiftView: shiftViewSetting(event.publicShiftView),
     showSchedule: event.showSchedule,
     // Both needed to show the exact charter text the sign-up route hashes (#569): resolveCharterText.
     volunteerCharter: event.organization.volunteerCharter,

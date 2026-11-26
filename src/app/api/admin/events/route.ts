@@ -6,6 +6,7 @@ import { NextResponse } from "next/server"
 import { civilDateSchema, DATE_ORDER_ERROR, isOrderedPeriod } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { ACCENT_KEYS } from "@/lib/event-accent"
+import { SHIFT_VIEW_SETTINGS } from "@/lib/shift-view"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
@@ -32,6 +33,8 @@ const schema = z.object({
   shiftRosterEnabled: z.boolean().optional(),
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
+  /** Default view of the shifts on the public page (#1407): auto, frise or liste. */
+  publicShiftView: z.enum(SHIFT_VIEW_SETTINGS).optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   /** Day-of contact (#560), for registered volunteers only. */
