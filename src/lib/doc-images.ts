@@ -46,12 +46,25 @@ export function docImageFromBytes(src: string, bytes: Uint8Array): DocImage | nu
   return { src: `${src}?v=${version}`, ...size }
 }
 
+/**
+ * A capture drawn inside a phone by scripts/screenshots.mjs (`save(…, { phone: true })`): a
+ * 390 × 844 screen plus the phone's body and its edge, at twice the pixels. Known by its exact pixel size, so
+ * nothing has to be listed by hand; src/lib/__tests__/doc-images.test.ts reads the real files.
+ */
+export const PHONE_CAPTURE_PX = { short: 844, long: 1856 }
+
+export function phoneCapture(size: { width: number; height: number }): "upright" | "turned" | null {
+  if (size.width === PHONE_CAPTURE_PX.short && size.height === PHONE_CAPTURE_PX.long) return "upright"
+  if (size.width === PHONE_CAPTURE_PX.long && size.height === PHONE_CAPTURE_PX.short) return "turned"
+  return null
+}
+
 const escapeAttr = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
 /**
  * The `<img>` of a Markdown image. Its alt text stays as written (WCAG 1.1.1). A known screenshot
- * gets its versioned URL and its size; every image but the page's first is loaded lazily and
+ * gets its versioned URL and its size (a phone capture, the size of a phone); every image but the page's first is loaded lazily and
  * decoded off the main thread (the first may be in view at load, where lazy loading would delay it).
  */
 export function docImageTag(
@@ -61,7 +74,11 @@ export function docImageTag(
 ): string {
   const attrs = [`src="${escapeAttr(info?.src ?? image.src)}"`, `alt="${escapeAttr(image.alt)}"`]
   if (image.title) attrs.push(`title="${escapeAttr(image.title)}"`)
-  if (info) attrs.push(`width="${info.width}"`, `height="${info.height}"`)
+  // A phone is shown at the size of a phone, not stretched to the column: its size in CSS pixels
+  // (half its pixels). src/app/globals.css finds it by that size (no class: the Markdown
+  // sanitizer keeps none) and holds an upright and a turned phone at the same scale.
+  if (info && phoneCapture(info)) attrs.push(`width="${info.width / 2}"`, `height="${info.height / 2}"`)
+  else if (info) attrs.push(`width="${info.width}"`, `height="${info.height}"`)
   if (index > 0) attrs.push(`loading="lazy"`, `decoding="async"`)
   return `<img ${attrs.join(" ")}>`
 }

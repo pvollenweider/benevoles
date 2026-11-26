@@ -273,3 +273,25 @@ html:has([data-theme-scope].dark) {
     display: none;
   }
 }
+
+
+/* Phone captures of the documentation, found by the size src/lib/doc-images.ts gives them
+   (422 × 928 upright, 928 × 422 turned): a phone is not stretched to the text column. The turned
+   phone takes the column up to 40rem; the upright one takes the share that keeps both at the same
+   scale (422 / 928 of it), and never less than 13.75rem so it stays readable on a narrow screen.
+   The picture is already a phone: no frame, corner or shadow of the other captures around it. */
+img[src^="/doc-img/"][width="422"][height="928"],
+img[src^="/doc-img/"][width="928"][height="422"] {
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+img[src^="/doc-img/"][width="928"][height="422"] {
+  width: 100%;
+  max-width: 40rem;
+}
+img[src^="/doc-img/"][width="422"][height="928"] {
+  width: clamp(13.75rem, 45.47%, 18.2rem);
+  max-width: 100%;
+}
