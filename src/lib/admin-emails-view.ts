@@ -4,7 +4,8 @@
 import type { NotificationKind } from "@/lib/notifications/types"
 import { civilDate } from "@/lib/operator-activity"
 import { kindLabel } from "@/lib/outbox-view"
-import { APP_TIME_ZONE } from "@/lib/time-zone"
+import { daysAgo } from "@/lib/retention"
+import { APP_TIME_ZONE, localDateTimeToUtc } from "@/lib/time-zone"
 
 /**
  * The emails an organisation's administrators received: what the operator sees on the
@@ -18,11 +19,29 @@ import { APP_TIME_ZONE } from "@/lib/time-zone"
 /** The anchor of the section on an organisation's page. */
 export const ADMIN_EMAILS_ANCHOR = "org-admin-emails"
 
-/** At most this many (day, kind) rows: past it the page says only the latest are shown. */
+/** At most this many (day, kind) rows: the cap never cuts a day, see groupAdminEmailCounts. */
 export const ADMIN_EMAILS_MAX_ROWS = 60
 
 /** Said when the section holds more rows than it shows. */
-export const ADMIN_EMAILS_TRUNCATED_SENTENCE = `Seules les ${ADMIN_EMAILS_MAX_ROWS} lignes les plus récentes sont affichées ; les suivantes ne le sont pas.`
+export const ADMIN_EMAILS_TRUNCATED_SENTENCE = "Seuls les jours les plus récents sont affichés."
+
+/** What a column of accepted emails means: taken in charge by our server, not delivered. */
+export const ADMIN_EMAILS_ACCEPTED_NOTE = "Un email accepté a été pris en charge par notre serveur d'envoi ; cela ne prouve pas qu'il est arrivé dans la boîte du destinataire."
+
+/** The section's own sentence when its query failed: the page and its actions stay usable. */
+export const ADMIN_EMAILS_UNAVAILABLE_SENTENCE = "Ces emails ne peuvent pas être affichés pour le moment."
+
+/** The section's own sentence when the window has no administrator email. */
+export const ADMIN_EMAILS_EMPTY_SENTENCE = "Aucun email envoyé aux administrateurs sur cette période."
+
+/**
+ * The start of the retention window: local midnight of its oldest civil day, so the oldest day
+ * shown is a whole day. `daysAgo` alone is an exact instant and would show that day partly.
+ */
+export function adminEmailsWindowStart(now: Date, days: number, timeZone: string = APP_TIME_ZONE): Date {
+  const oldestDay = civilDate(daysAgo(now, days), timeZone)
+  return localDateTimeToUtc(new Date(`${oldestDay}T00:00:00Z`), "00:00", timeZone)
+}
 
 /**
  * Kinds sent to an organisation's administrators, read from the templates and their callers.
@@ -157,7 +176,18 @@ function finish(map: Map<string, Pending>, maxRows: number): AdminEmailsView {
     || a.kindLabel.localeCompare(b.kindLabel, "fr")
     || a.kind.localeCompare(b.kind),
   )
-  return { rows: all.slice(0, maxRows), truncated: all.length > maxRows, total: all.length }
+  // Keep whole days, newest first: a day is never cut in the middle. A single day larger than
+  // the cap is still shown whole (nothing else would fit after it).
+  const rows: AdminEmailLine[] = []
+  for (let i = 0; i < all.length;) {
+    const day = all[i].day
+    let end = i
+    while (end < all.length && all[end].day === day) end += 1
+    if (rows.length > 0 && rows.length + (end - i) > maxRows) break
+    rows.push(...all.slice(i, end))
+    i = end
+  }
+  return { rows, truncated: rows.length < all.length, total: all.length }
 }
 
 /**

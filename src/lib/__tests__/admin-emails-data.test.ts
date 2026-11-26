@@ -7,9 +7,9 @@ const queryRaw = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({ prisma: { $queryRaw: queryRaw } }))
 
 import { loadAdminEmails } from "../admin-emails-data"
-import { ADMIN_EMAIL_KINDS } from "../admin-emails-view"
+import { ADMIN_EMAIL_KINDS, adminEmailsWindowStart } from "../admin-emails-view"
 import { APP_TIME_ZONE } from "../time-zone"
-import { daysAgo, RETENTION_DAYS } from "../retention"
+import { RETENTION_DAYS } from "../retention"
 
 const now = new Date("2026-12-15T12:00:00Z")
 
@@ -33,13 +33,14 @@ describe("loadAdminEmails", () => {
     expect(values[3]).toEqual([...ADMIN_EMAIL_KINDS])
   })
 
-  it("takes the window from the DeliveryOutcome retention constant", async () => {
+  it("takes the window from the DeliveryOutcome retention constant, starting at local midnight", async () => {
     queryRaw.mockResolvedValue([])
 
     await loadAdminEmails({ organizationId: "org-a", now })
 
     const { values } = lastQuery()
-    expect(values[2]).toEqual(daysAgo(now, RETENTION_DAYS.deliveryOutcome))
+    expect(values[2]).toEqual(adminEmailsWindowStart(now, RETENTION_DAYS.deliveryOutcome))
+    expect((values[2] as Date).toISOString()).toBe("2026-11-14T23:00:00.000Z")
     expect(RETENTION_DAYS.deliveryOutcome).toBe(30)
   })
 

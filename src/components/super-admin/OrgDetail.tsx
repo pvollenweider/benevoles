@@ -61,13 +61,14 @@ type Org = {
 }
 
 const EMPTY_ADMIN_EMAILS = {
+  unavailable: false,
   rows: [] as AdminEmailDisplayRow[],
   days: RETENTION_DAYS.deliveryOutcome,
   zone: dayZoneSentence(APP_TIME_ZONE),
   truncated: false,
 }
 
-export default function OrgDetail({ org, cumulative, inactivity, limitHits, recentBatches = [], frontDeskCount = 0, zone = "", adminEmails = EMPTY_ADMIN_EMAILS }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean }; recentBatches?: { id: string; line: string; createdAt: string; heldSentence: string | null; failed: boolean }[]; frontDeskCount?: number; zone?: string; adminEmails?: { rows: AdminEmailDisplayRow[]; days: number; zone: string; truncated: boolean } }) {
+export default function OrgDetail({ org, cumulative, inactivity, limitHits, recentBatches = [], frontDeskCount = 0, zone = "", adminEmails = EMPTY_ADMIN_EMAILS }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean }; recentBatches?: { id: string; line: string; createdAt: string; heldSentence: string | null; failed: boolean }[]; frontDeskCount?: number; zone?: string; adminEmails?: { unavailable?: boolean; rows?: AdminEmailDisplayRow[]; days: number; zone: string; truncated?: boolean } }) {
   const router = useRouter()
   const sourceLabel = signupSourceLabel(org.signupSource, org.signupSourceDetail)
   const [, startTransition] = useTransition()
@@ -506,7 +507,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
       )}
 
       {/* The emails this organisation's administrators received: kind, day, relay outcome, no content. */}
-      <AdminEmailsTable rows={adminEmails.rows} days={adminEmails.days} zone={adminEmails.zone} truncated={adminEmails.truncated} />
+      <AdminEmailsTable rows={adminEmails.rows} days={adminEmails.days} zone={adminEmails.zone} truncated={adminEmails.truncated} unavailable={adminEmails.unavailable} />
 
       {/* Periodic check of inactive organisations (#811): postpone or exclude. */}
       {inactivity && <InactivityPanel {...inactivity} />}

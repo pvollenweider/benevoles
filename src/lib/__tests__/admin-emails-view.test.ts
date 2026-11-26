@@ -6,6 +6,7 @@ import {
   ADMIN_EMAIL_KINDS,
   ADMIN_EMAILS_MAX_ROWS,
   NOT_ADMIN_EMAIL_KINDS,
+  adminEmailsWindowStart,
   dayZoneSentence,
   groupAdminEmailCounts,
   groupAdminEmails,
@@ -72,10 +73,20 @@ describe("groupAdminEmails — kinds and outcomes", () => {
   })
 })
 
+describe("adminEmailsWindowStart — whole oldest day", () => {
+  it("starts at local midnight of the oldest day in winter", () => {
+    expect(adminEmailsWindowStart(new Date("2026-12-15T12:00:00Z"), 30, "Europe/Zurich").toISOString()).toBe("2026-11-14T23:00:00.000Z")
+  })
+
+  it("starts at local midnight of the oldest day in summer", () => {
+    expect(adminEmailsWindowStart(new Date("2026-07-15T12:00:00Z"), 30, "Europe/Zurich").toISOString()).toBe("2026-06-14T22:00:00.000Z")
+  })
+})
+
 describe("groupAdminEmails — cap", () => {
   const days = (n: number) => Array.from({ length: n }, (_, i) => at(new Date(Date.UTC(2026, 0, 1 + i, 12)).toISOString(), "admin_notification"))
 
-  it("keeps the latest 60 rows and says more exist", () => {
+  it("keeps the latest 60 whole days and says more exist", () => {
     const view = groupAdminEmails(days(ADMIN_EMAILS_MAX_ROWS + 1), "Europe/Zurich")
 
     expect(view.rows).toHaveLength(ADMIN_EMAILS_MAX_ROWS)
@@ -91,6 +102,35 @@ describe("groupAdminEmails — cap", () => {
     expect(view.rows).toHaveLength(ADMIN_EMAILS_MAX_ROWS)
     expect(view.truncated).toBe(false)
     expect(view.total).toBe(ADMIN_EMAILS_MAX_ROWS)
+  })
+
+  it("never cuts a day in the middle: stops before the day that would exceed the cap", () => {
+    const view = groupAdminEmails([
+      at("2026-01-03T10:00:00Z", "admin_notification"),
+      at("2026-01-03T11:00:00Z", "admin_invite"),
+      at("2026-01-02T10:00:00Z", "admin_notification"),
+      at("2026-01-02T11:00:00Z", "admin_invite"),
+      at("2026-01-01T10:00:00Z", "admin_notification"),
+    ], "Europe/Zurich", 3)
+
+    expect(view.rows.map((r) => r.day)).toEqual(["2026-01-03", "2026-01-03"])
+    expect(view.rows.map((r) => r.kind)).toEqual(["admin_invite", "admin_notification"])
+    expect(view.truncated).toBe(true)
+    expect(view.total).toBe(5)
+  })
+
+  it("shows a single day larger than the cap whole", () => {
+    const view = groupAdminEmails([
+      at("2026-01-03T10:00:00Z", "admin_notification"),
+      at("2026-01-03T11:00:00Z", "admin_invite"),
+      at("2026-01-03T12:00:00Z", "admin_welcome"),
+      at("2026-01-03T13:00:00Z", "space_approved"),
+    ], "Europe/Zurich", 3)
+
+    expect(view.rows).toHaveLength(4)
+    expect(view.rows.every((r) => r.day === "2026-01-03")).toBe(true)
+    expect(view.truncated).toBe(false)
+    expect(view.total).toBe(4)
   })
 })
 

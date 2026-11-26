@@ -3,8 +3,8 @@
 
 import { prisma } from "@/lib/prisma"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
-import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
-import { ADMIN_EMAIL_KINDS, groupAdminEmailCounts, type AdminEmailsView } from "@/lib/admin-emails-view"
+import { RETENTION_DAYS } from "@/lib/retention"
+import { ADMIN_EMAIL_KINDS, adminEmailsWindowStart, groupAdminEmailCounts, type AdminEmailsView } from "@/lib/admin-emails-view"
 
 /**
  * The emails this organisation's administrators received, over the DeliveryOutcome retention
@@ -13,10 +13,13 @@ import { ADMIN_EMAIL_KINDS, groupAdminEmailCounts, type AdminEmailsView } from "
  * always applied, and only the kinds addressed to administrators are read.
  */
 export async function loadAdminEmails(opts: { organizationId: string; now?: Date }): Promise<AdminEmailsView> {
-  const since = daysAgo(opts.now ?? new Date(), RETENTION_DAYS.deliveryOutcome)
+  // Whole oldest day: local midnight, not the exact instant of `now - 30 days`.
+  const since = adminEmailsWindowStart(opts.now ?? new Date(), RETENTION_DAYS.deliveryOutcome)
   // Prisma stores createdAt as a timestamp WITHOUT time zone holding UTC (prisma/migrations):
   // read it as UTC first, then convert it to APP_TIME_ZONE, or every day is shifted by the
-  // winter/summer offset.
+  // winter/summer offset. The Date bound is passed as is, like the raw queries of
+  // operator-activity-data.ts: Prisma binds it as the column's timestamp type, not as a
+  // timestamptz, so the comparison does not depend on the session time zone.
   const rows = await prisma.$queryRaw<{ day: string; kind: string; outcome: string; count: number }[]>`
     SELECT to_char(date_trunc('day', ("createdAt" AT TIME ZONE 'UTC') AT TIME ZONE ${APP_TIME_ZONE}), 'YYYY-MM-DD') AS day,
            "kind" AS kind,

@@ -2,7 +2,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { formatCount } from "@/lib/usage-counters"
-import { ADMIN_EMAILS_ANCHOR, ADMIN_EMAILS_TRUNCATED_SENTENCE } from "@/lib/admin-emails-view"
+import {
+  ADMIN_EMAILS_ACCEPTED_NOTE,
+  ADMIN_EMAILS_ANCHOR,
+  ADMIN_EMAILS_EMPTY_SENTENCE,
+  ADMIN_EMAILS_TRUNCATED_SENTENCE,
+  ADMIN_EMAILS_UNAVAILABLE_SENTENCE,
+} from "@/lib/admin-emails-view"
 
 /** One row of the section, its date already formatted on the server. */
 export type AdminEmailDisplayRow = {
@@ -17,27 +23,47 @@ export type AdminEmailDisplayRow = {
 
 /**
  * « Emails envoyés aux administrateurs » on an organisation's page: read-only, no content, no
- * address. Counts come from DeliveryOutcome (accepted by the relay or refused/failed), grouped
+ * address. Counts come from DeliveryOutcome (accepted by the server or refused/failed), grouped
  * by day and by kind. Zero stays the digit « 0 »; only a refused count above zero is emphasised.
+ *
+ * `unavailable` is the page's own fallback when the query failed: the heading and the section
+ * stay, one sentence replaces the table, and the organisation's actions above stay usable.
  */
-export default function AdminEmailsTable({ rows, days, zone, truncated }: { rows: AdminEmailDisplayRow[]; days: number; zone: string; truncated: boolean }) {
+export default function AdminEmailsTable({
+  rows = [],
+  days,
+  zone,
+  truncated = false,
+  unavailable = false,
+}: {
+  rows?: AdminEmailDisplayRow[]
+  days: number
+  zone: string
+  truncated?: boolean
+  unavailable?: boolean
+}) {
+  const showTable = !unavailable && rows.length > 0
   return (
     <section aria-labelledby={ADMIN_EMAILS_ANCHOR} className="bg-white border border-gray-200 rounded-xl p-4">
       <h2 id={ADMIN_EMAILS_ANCHOR} className="text-sm font-semibold text-gray-900">Emails envoyés aux administrateurs</h2>
       <p className="text-xs text-gray-600 mt-0.5">
-        Les {days} derniers jours, les plus récents d&apos;abord. Les nombres comptent les emails acceptés par le relais d&apos;envoi, pas une preuve de remise. {zone}{truncated && ` ${ADMIN_EMAILS_TRUNCATED_SENTENCE}`}
+        Les {days} derniers jours, les plus récents d&apos;abord.
+        {showTable && ` ${ADMIN_EMAILS_ACCEPTED_NOTE}`} {zone}{showTable && truncated && ` ${ADMIN_EMAILS_TRUNCATED_SENTENCE}`}
       </p>
-      {rows.length === 0 ? (
-        <p className="text-sm text-gray-700 mt-2">Aucun email envoyé aux administrateurs sur cette période.</p>
+      {unavailable ? (
+        <p className="text-sm text-gray-700 mt-2">{ADMIN_EMAILS_UNAVAILABLE_SENTENCE}</p>
+      ) : rows.length === 0 ? (
+        <p className="text-sm text-gray-700 mt-2">{ADMIN_EMAILS_EMPTY_SENTENCE}</p>
       ) : (
         // Focusable region so a keyboard user can scroll the table sideways on a narrow screen.
-        <div tabIndex={0} role="region" aria-labelledby={ADMIN_EMAILS_ANCHOR} className="mt-2 overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        // It has its own name: the section and the table already carry the heading's one.
+        <div tabIndex={0} role="region" aria-label="Tableau des emails envoyés aux administrateurs" className="mt-2 overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table aria-labelledby={ADMIN_EMAILS_ANCHOR} className="w-full text-sm">
             <thead className="bg-gray-50 text-left text-xs text-gray-700">
               <tr>
                 <th scope="col" className="px-4 py-2 font-medium">Date</th>
                 <th scope="col" className="px-4 py-2 font-medium">Type d&apos;email</th>
-                <th scope="col" className="px-4 py-2 font-medium text-right">Acceptés par le relais</th>
+                <th scope="col" className="px-4 py-2 font-medium text-right">Acceptés par le serveur d&apos;envoi</th>
                 <th scope="col" className="px-4 py-2 font-medium text-right">Refusés ou en échec</th>
               </tr>
             </thead>
@@ -47,7 +73,7 @@ export default function AdminEmailsTable({ rows, days, zone, truncated }: { rows
                   <th scope="row" className="px-4 py-2 text-left font-normal whitespace-nowrap text-gray-900">
                     <time dateTime={r.dateTime}>{r.dateLabel}</time>
                   </th>
-                  <td className="px-4 py-2 text-gray-700 break-words">{r.kindLabel}</td>
+                  <th scope="row" className="px-4 py-2 text-left font-normal text-gray-700 break-words">{r.kindLabel}</th>
                   <td className="px-4 py-2 text-right tabular-nums text-gray-900">{formatCount(r.accepted)}</td>
                   <td className={`px-4 py-2 text-right tabular-nums ${r.failed > 0 ? "font-medium text-red-700" : "text-gray-900"}`}>{formatCount(r.failed)}</td>
                 </tr>

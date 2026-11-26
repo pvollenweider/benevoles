@@ -20,13 +20,14 @@ const row = (over: Partial<AdminEmailDisplayRow> = {}): AdminEmailDisplayRow => 
   ...over,
 })
 
-function renderSection(props: { rows?: AdminEmailDisplayRow[]; days?: number; zone?: string; truncated?: boolean } = {}) {
+function renderSection(props: { rows?: AdminEmailDisplayRow[]; days?: number; zone?: string; truncated?: boolean; unavailable?: boolean } = {}) {
   return render(
     <AdminEmailsTable
       rows={props.rows ?? [row()]}
       days={props.days ?? 30}
       zone={props.zone ?? "Jours en heure de Zurich."}
       truncated={props.truncated ?? false}
+      unavailable={props.unavailable ?? false}
     />,
   )
 }
@@ -41,13 +42,15 @@ function cellsOf(dateTime: string): HTMLElement[] {
 describe("AdminEmailsTable", () => {
   afterEach(cleanup)
 
-  it("names the scrollable region and the table by the heading, with four column headers", () => {
+  it("names the section and the table by the heading, and the scroll region by itself", () => {
     renderSection()
 
-    expect(screen.getByRole("heading", { level: 2, name: "Emails envoyés aux administrateurs" })).toBeInTheDocument()
-    // The named <section> is itself a region; the scrollable wrapper is the focusable one.
-    const region = screen.getAllByRole("region", { name: "Emails envoyés aux administrateurs" }).find((r) => r.tabIndex === 0)
-    expect(region).toBeDefined()
+    const heading = screen.getByRole("heading", { level: 2, name: "Emails envoyés aux administrateurs" })
+    expect(heading).toBeInTheDocument()
+    // The named <section> is itself a region; the scrollable wrapper has its own name.
+    const section = screen.getByRole("region", { name: "Emails envoyés aux administrateurs" })
+    expect(section.tagName).toBe("SECTION")
+    const region = screen.getByRole("region", { name: "Tableau des emails envoyés aux administrateurs" })
     expect(region).toHaveAttribute("tabindex", "0")
     expect(region).toHaveClass("overflow-x-auto")
     expect(region).not.toHaveClass("overflow-hidden")
@@ -57,13 +60,13 @@ describe("AdminEmailsTable", () => {
     expect(headers.map((h) => h.textContent)).toEqual([
       "Date",
       "Type d'email",
-      "Acceptés par le relais",
+      "Acceptés par le serveur d'envoi",
       "Refusés ou en échec",
     ])
     for (const header of headers) expect(header).toHaveAttribute("scope", "col")
   })
 
-  it("puts the date in a row header as a time element with the right dateTime", () => {
+  it("puts the date and the kind in row headers, the date in a time element", () => {
     renderSection()
 
     const header = screen.getByRole("rowheader", { name: "26 novembre 2026" })
@@ -73,6 +76,11 @@ describe("AdminEmailsTable", () => {
     const time = header.querySelector("time")
     expect(time).toHaveAttribute("dateTime", "2026-11-26")
     expect(time).toHaveTextContent("26 novembre 2026")
+
+    const kind = screen.getByRole("rowheader", { name: "Résumé quotidien des adresses à vérifier" })
+    expect(kind.tagName).toBe("TH")
+    expect(kind).toHaveAttribute("scope", "row")
+    expect(kind).toHaveClass("font-normal", "text-left")
   })
 
   it("shows zero as the digit 0, without emphasis", () => {
@@ -106,6 +114,22 @@ describe("AdminEmailsTable", () => {
     const empty = screen.getByText("Aucun email envoyé aux administrateurs sur cette période.")
     expect(empty.tagName).toBe("P")
     expect(screen.queryByRole("table")).toBeNull()
+    // Empty state: the intro keeps only the period sentence and the zone.
+    const intro = screen.getByText(/Les 30 derniers jours/)
+    expect(intro).toHaveTextContent("Les 30 derniers jours, les plus récents d'abord.")
+    expect(intro).toHaveTextContent("Jours en heure de Zurich.")
+    expect(intro).not.toHaveTextContent("Un email accepté")
+  })
+
+  it("keeps the section and heading, without a table, when the query failed", () => {
+    renderSection({ rows: [], unavailable: true })
+
+    expect(screen.getByRole("heading", { level: 2, name: "Emails envoyés aux administrateurs" })).toBeInTheDocument()
+    expect(screen.getByText("Ces emails ne peuvent pas être affichés pour le moment.")).toBeInTheDocument()
+    expect(screen.queryByRole("table")).toBeNull()
+    expect(screen.queryByText("Aucun email envoyé aux administrateurs sur cette période.")).toBeNull()
+    const intro = screen.getByText(/Les 30 derniers jours/)
+    expect(intro).not.toHaveTextContent("Un email accepté")
   })
 
   it("introduces the period, the meaning of the numbers and the zone before the table", () => {
@@ -113,15 +137,15 @@ describe("AdminEmailsTable", () => {
 
     const intro = screen.getByText(/Les 30 derniers jours, les plus récents d'abord/)
     expect(intro.tagName).toBe("P")
-    expect(intro).toHaveTextContent("Les nombres comptent les emails acceptés par le relais d'envoi, pas une preuve de remise.")
+    expect(intro).toHaveTextContent("Un email accepté a été pris en charge par notre serveur d'envoi ; cela ne prouve pas qu'il est arrivé dans la boîte du destinataire.")
     expect(intro).toHaveTextContent("Jours en heure de Zurich.")
-    expect(intro).not.toHaveTextContent("Seules les 60 lignes")
+    expect(intro).not.toHaveTextContent("Seuls les jours les plus récents")
     expect(intro.compareDocumentPosition(screen.getByRole("table")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  it("says when further rows are not shown", () => {
+  it("says when only the latest days are shown", () => {
     renderSection({ truncated: true })
 
-    expect(screen.getByText(/Seules les 60 lignes les plus récentes sont affichées ; les suivantes ne le sont pas\./)).toBeInTheDocument()
+    expect(screen.getByText(/Seuls les jours les plus récents sont affichés\./)).toBeInTheDocument()
   })
 })

@@ -23,6 +23,8 @@ const db = vi.hoisted(() => ({
 vi.mock("@/lib/prisma", () => ({
   prisma: { organization: { findMany: db.orgFindMany, findUnique: db.orgFindUnique }, adminUser: { count: db.adminCount } },
 }))
+const report = vi.hoisted(() => ({ error: vi.fn() }))
+vi.mock("@/lib/report-error", () => ({ reportError: () => report.error }))
 vi.mock("@/lib/limit-hits-data", () => ({ loadLimitHits: vi.fn(async () => ({ groups: [], truncated: false })) }))
 vi.mock("@/lib/usage-stats", () => ({ loadOrganizationCumulative: vi.fn(async () => []) }))
 vi.mock("@/lib/org-inactivity-data", () => ({ loadOrganizationInactivity: vi.fn(async () => null) }))
@@ -135,11 +137,33 @@ describe("the super-admin organisation detail page separates front-desk accounts
     const detail = find(tree, "OrgDetail")
 
     expect(detail?.props.adminEmails).toEqual({
+      unavailable: false,
       rows: [{ dateTime: "2026-11-26", dateLabel: "26 novembre 2026", kindLabel: "Notification à l'équipe", accepted: 2, failed: 1 }],
       days: RETENTION_DAYS.deliveryOutcome,
       zone: "Jours en heure de Zurich.",
       truncated: true,
     })
+  })
+
+  it("keeps the sheet and its other sections when the administrator-email query fails", async () => {
+    const failure = new Error("the query failed")
+    vi.mocked(loadAdminEmails).mockRejectedValueOnce(failure)
+
+    const tree = await OrgDetailPage({ params: Promise.resolve({ slug: "fete" }) })
+    const detail = find(tree, "OrgDetail")
+
+    expect(report.error).toHaveBeenCalledWith(failure)
+    expect(detail?.props.adminEmails).toEqual({
+      unavailable: true,
+      days: RETENTION_DAYS.deliveryOutcome,
+      zone: "Jours en heure de Zurich.",
+    })
+    // The rest of the page was loaded and still renders, its actions included.
+    expect(detail?.props.frontDeskCount).toBe(4)
+    expect(detail?.props.org).toMatchObject({ slug: "fete" })
+    render(tree)
+    expect(screen.getByText("Ces emails ne peuvent pas être affichés pour le moment.")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Suspendre pour abus" })).toBeInTheDocument()
   })
 
   it("renders the one line « Comptes accueil : n », without listing them", () => {
