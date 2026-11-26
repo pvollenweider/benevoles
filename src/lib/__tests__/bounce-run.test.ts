@@ -2,13 +2,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { readFileSync } from "fs"
+import { join } from "path"
 import type { PrismaClient } from "@/generated/prisma/client"
 
 vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "test-secret-at-least-32-characters-long" } }))
 vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => undefined }))
 
-import { processDeferredBounces, type BounceScanResult } from "../bounce-mailbox"
+import { deferredBounceAnalyzer, processDeferredBounces, LEGACY_DIRECT_BOUNCES_UNTIL, type BounceScanResult } from "../bounce-mailbox"
 import type { BounceMailboxConfig } from "../bounce-mailbox-config"
 
 const config: BounceMailboxConfig = {
@@ -101,6 +103,31 @@ describe("processDeferredBounces", () => {
     const scan = vi.fn().mockResolvedValue(scanResult())
     expect(await run({ scan })).toMatchObject({ configured: true, scanned: 3 })
     expect(scan).toHaveBeenCalledOnce()
+  })
+
+  it("binds the run's clock to the scan analyzer, so the bounded legacy path uses it", async () => {
+    const outcome = { findMany: vi.fn(), findFirst: vi.fn(), create: vi.fn() }
+    const outcomeDb = { deliveryOutcome: outcome } as unknown as PrismaClient
+    // A DSN whose original Message-ID is not one of this deployment's two forms.
+    const raw = readFileSync(join(process.cwd(), "src/lib/__tests__/fixtures/bounces/forged-dsn-other-message-id.eml"))
+
+    const now = new Date("2026-12-01T10:00:00Z")
+    outcome.findMany.mockResolvedValue([
+      { organizationId: "org-a", volunteerId: "vol-1", kind: "reminder_j1", createdAt: new Date("2026-11-15T08:00:00Z") },
+    ])
+    outcome.findFirst.mockResolvedValue(null)
+    outcome.create.mockResolvedValue({})
+    expect(await deferredBounceAnalyzer({ db: outcomeDb, now })(raw)).toBe("flagged")
+    // The retention window is counted from the run's time, not from a second `new Date()`.
+    expect(outcome.findMany.mock.calls[0][0].where.createdAt).toEqual({ gte: new Date("2026-11-01T10:00:00Z") })
+
+    outcome.findMany.mockClear()
+    outcome.findFirst.mockClear()
+    outcome.create.mockClear()
+    const after = new Date(LEGACY_DIRECT_BOUNCES_UNTIL.getTime() + 1)
+    expect(await deferredBounceAnalyzer({ db: outcomeDb, now: after })(raw)).toBe("uncorrelated")
+    expect(outcome.findMany).not.toHaveBeenCalled()
+    expect(outcome.create).not.toHaveBeenCalled()
   })
 
   it("reports a mailbox/connection failure without recording the raw error text", async () => {

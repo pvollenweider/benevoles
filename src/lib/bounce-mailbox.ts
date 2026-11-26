@@ -322,8 +322,20 @@ async function analyzeKnownSend(
   return verdict
 }
 
-/** Whether a legacy bounce was already recorded after the accepted row it matched. */
-async function legacyBounceAlreadyKnown(db: PrismaClient, hash: string, acceptedAt: Date): Promise<boolean> {
+/** One (organisation, member) pair a legacy notice can still be attributed to. */
+type LegacyDirectPair = {
+  organizationId: string | null
+  volunteerId: string
+  kind: string
+  createdAt: Date
+}
+
+/**
+ * Whether a legacy bounce was already recorded for this (organisation, member) pair after the
+ * pair's accepted row. A member belongs to one organisation, but the pair is written out in full:
+ * the idempotency key is the pair, never the address alone.
+ */
+async function legacyBounceAlreadyKnown(db: PrismaClient, hash: string, pair: LegacyDirectPair): Promise<boolean> {
   const existing = await db.deliveryOutcome.findFirst({
     where: {
       addressHash: hash,
@@ -331,8 +343,11 @@ async function legacyBounceAlreadyKnown(db: PrismaClient, hash: string, accepted
       messageRef: null,
       outcome: "rejected_permanent",
       reason: "bounced_after_acceptance",
-      createdAt: { gt: acceptedAt },
+      organizationId: pair.organizationId,
+      volunteerId: pair.volunteerId,
+      createdAt: { gt: pair.createdAt },
     },
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     select: { id: true },
   })
   return existing !== null
@@ -340,10 +355,15 @@ async function legacyBounceAlreadyKnown(db: PrismaClient, hash: string, accepted
 
 /**
  * The bounded exception for direct sends made before the `<direct-…>` fix: their Message-ID was
- * random, so the only link left is the address. Only a permanent failure is considered, and only
- * the most recent pre-fix accepted row for that address within the retention window can stand in
- * for the send; the notice's own Message-ID host is never trusted for anything. Temporary
- * statuses write nothing and are not looked up.
+ * random, so the only link left is the address. Only a permanent failure is considered. For each
+ * distinct (organisation, member) that received a pre-fix direct email at that address within the
+ * retention window, its most recent accepted row stands in for the send; the notice's own
+ * Message-ID host is never trusted for anything. Temporary statuses write nothing and are not
+ * looked up.
+ *
+ * Every pair is handled, not only the latest row for the address: the same address can appear in
+ * two organisations, and the refusal concerns each member who really wrote to it. The reads are
+ * ordered (`createdAt` desc, then `id` desc) so the pair chosen never depends on insertion order.
  *
  * This path ends by itself at LEGACY_DIRECT_BOUNCES_UNTIL. Before it, a row can only be a
  * pre-fix direct send; after it, the path is skipped without a query.
@@ -361,7 +381,7 @@ async function analyzeLegacyDirectBounce(
     const hash = addressHash(recipient.finalRecipient, opts.secret)
     // A row without an outboxId, a messageRef or a member, accepted by the relay in the
     // retention window, can only be a direct send made before the fix.
-    const matched = await opts.db.deliveryOutcome.findFirst({
+    const rows = await opts.db.deliveryOutcome.findMany({
       where: {
         addressHash: hash,
         outboxId: null,
@@ -370,25 +390,42 @@ async function analyzeLegacyDirectBounce(
         volunteerId: { not: null },
         createdAt: { gte: since },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       select: { organizationId: true, volunteerId: true, kind: true, createdAt: true },
     })
-    if (!matched) continue
 
-    if (await legacyBounceAlreadyKnown(opts.db, hash, matched.createdAt)) {
-      verdict = strongerVerdict(verdict, "already_known")
-      continue
+    // Rows come newest first: the first row of each pair is the one whose kind is written.
+    const pairs = new Map<string, LegacyDirectPair>()
+    for (const row of rows) {
+      if (!row.volunteerId) continue
+      const key = `${row.organizationId ?? ""}\u0000${row.volunteerId}`
+      if (pairs.has(key)) continue
+      pairs.set(key, {
+        organizationId: row.organizationId,
+        volunteerId: row.volunteerId,
+        kind: row.kind,
+        createdAt: row.createdAt,
+      })
     }
+    if (pairs.size === 0) continue
 
-    await recordPermanentBounce(opts.db, {
-      ids: { outboxId: null, messageRef: null },
-      organizationId: matched.organizationId,
-      volunteerId: matched.volunteerId,
-      kind: matched.kind,
-      addressHash: hash,
-      recipient,
-    })
-    verdict = strongerVerdict(verdict, "flagged")
+    let wrote = false
+    for (const pair of pairs.values()) {
+      // Idempotent per (organisation, member, address): a second notice writes nothing for a
+      // pair already recorded, and still flags the pairs that were not.
+      if (await legacyBounceAlreadyKnown(opts.db, hash, pair)) continue
+
+      await recordPermanentBounce(opts.db, {
+        ids: { outboxId: null, messageRef: null },
+        organizationId: pair.organizationId,
+        volunteerId: pair.volunteerId,
+        kind: pair.kind,
+        addressHash: hash,
+        recipient,
+      })
+      wrote = true
+    }
+    verdict = strongerVerdict(verdict, wrote ? "flagged" : "already_known")
   }
   return verdict
 }
@@ -421,6 +458,15 @@ export async function analyzeBounceDsn(
 
 const BOUNCE_JOB = "bounces"
 const STALE_RUN_MS = 20 * 60 * 1000
+
+/**
+ * The analyzer a scheduled run gives to the mailbox scan. The run's own clock is bound here so the
+ * bounded legacy path ends on that run's time, not on a second `new Date()` taken later.
+ */
+export function deferredBounceAnalyzer(opts: { db: PrismaClient; now: Date }): (raw: Buffer) => Promise<BounceVerdict> {
+  return (raw) =>
+    parseBounceDsn(raw).then((parsed) => analyzeBounceDsn(parsed, { host: outboxMessageHost(), secret: env.AUTH_SECRET, db: opts.db, now: opts.now }))
+}
 
 type UncorrelatedRun = { at: string; count: number }
 
@@ -495,10 +541,7 @@ export async function processDeferredBounces(deps: ProcessDeferredBouncesDeps = 
   try {
     result = deps.scan
       ? await deps.scan(config)
-      : await scanBounceMailbox(config, {
-          analyze: (raw) =>
-            parseBounceDsn(raw).then((parsed) => analyzeBounceDsn(parsed, { host: outboxMessageHost(), secret: env.AUTH_SECRET, db, now })),
-        })
+      : await scanBounceMailbox(config, { analyze: deferredBounceAnalyzer({ db, now }) })
   } catch (e) {
     report(e)
     result = { ...ZERO_COUNTS, errors: 1, processedFolder: config.processedFolder }

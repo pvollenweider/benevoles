@@ -130,23 +130,26 @@ describe("analyzeBounceDsn", () => {
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
-  it("never correlates a forged Message-ID", async () => {
+  it("never correlates a forged Message-ID with no pre-fix row", async () => {
+    mocks.findMany.mockResolvedValue([])
     expect(await analyze("forged-dsn-other-message-id.eml")).toBe("uncorrelated")
-    expect(mocks.findMany).not.toHaveBeenCalled()
+    expect(mocks.findMany).toHaveBeenCalledOnce()
+    expect(mocks.findMany.mock.calls[0][0].where).toMatchObject({ outboxId: null, messageRef: null })
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
-  // A nullable filter here would read every legacy row: `{ messageRef: null }` matches them all.
-  it("never queries DeliveryOutcome rows with a null or missing messageRef filter", async () => {
-    // Neither an outbox id nor a direct reference: no key at all, so no query either.
+  it("uses an explicit, filtered query for an unrecognised Message-ID and never an unfiltered read", async () => {
+    // Neither an outbox id nor a direct reference: only the bounded legacy query, with its own
+    // explicit null filters (an unfiltered read would see every organisation's rows).
     mocks.findMany.mockResolvedValue([])
     expect(await analyzeDirect({ originalMessageId: "<random-nodemailer-id@example.org>" })).toBe("uncorrelated")
-    expect(mocks.findMany).not.toHaveBeenCalled()
+    expect(mocks.findMany).toHaveBeenCalledOnce()
+    expect(mocks.findMany.mock.calls[0][0].where).toMatchObject({ outboxId: null, messageRef: null })
 
     // A valid direct reference always filters on a non-empty string.
     expect(await analyzeDirect()).toBe("uncorrelated")
-    expect(mocks.findMany).toHaveBeenCalledOnce()
-    const where = mocks.findMany.mock.calls[0][0].where as Record<string, unknown>
+    expect(mocks.findMany).toHaveBeenCalledTimes(2)
+    const where = mocks.findMany.mock.calls[1][0].where as Record<string, unknown>
     expect(where).toHaveProperty("messageRef")
     expect(typeof where.messageRef).toBe("string")
     expect((where.messageRef as string).length).toBeGreaterThan(0)
@@ -247,9 +250,12 @@ describe("analyzeBounceDsn", () => {
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
-  it("never correlates a direct reference for another host", async () => {
+  it("does not treat a direct reference for another host as our direct reference", async () => {
+    // It is not one of our forms, so only the bounded legacy query (no pre-fix row here) runs.
+    mocks.findMany.mockResolvedValue([])
     expect(await analyzeDirect({ originalMessageId: `<direct-${DIRECT_REF}@other.example.org>` })).toBe("uncorrelated")
-    expect(mocks.findMany).not.toHaveBeenCalled()
+    expect(mocks.findMany).toHaveBeenCalledOnce()
+    expect(mocks.findMany.mock.calls[0][0].where).toMatchObject({ outboxId: null, messageRef: null })
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
@@ -260,12 +266,18 @@ describe("analyzeBounceDsn", () => {
   })
 
   // Legacy direct sends (before the <direct-…> fix) have a random Message-ID: the bounded
-  // exception below is the only link left, through the most recent pre-fix accepted row.
-  it("flags a legacy direct bounce from the most recent pre-fix row, with its organisation, member and kind", async () => {
-    mocks.findFirst.mockResolvedValueOnce(legacyRow()).mockResolvedValueOnce(null)
+  // exception below is the only link left. Every (organisation, member) pair that wrote to the
+  // address is flagged, not only the latest row for that address.
+  it("flags every (organisation, member) pair, with its own organisation, member and most recent kind", async () => {
+    mocks.findMany.mockResolvedValue([
+      legacyRow({ organizationId: "org-a", volunteerId: "vol-a", kind: "manual_reminder", createdAt: new Date("2026-11-20T08:00:00Z") }),
+      legacyRow({ organizationId: "org-a", volunteerId: "vol-a", kind: "reminder_j1", createdAt: LEGACY_ROW_TIME }),
+      legacyRow({ organizationId: "org-b", volunteerId: "vol-b", kind: "registration_confirmation", createdAt: new Date("2026-11-18T08:00:00Z") }),
+    ])
+    mocks.findFirst.mockResolvedValue(null)
     expect(await analyzeLegacy()).toBe("flagged")
 
-    expect(mocks.findFirst.mock.calls[0][0]).toEqual({
+    expect(mocks.findMany.mock.calls[0][0]).toEqual({
       where: {
         addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
         outboxId: null,
@@ -275,65 +287,118 @@ describe("analyzeBounceDsn", () => {
         // The retention window, counted from the injected current time.
         createdAt: { gte: new Date("2026-11-01T10:00:00Z") },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       select: { organizationId: true, volunteerId: true, kind: true, createdAt: true },
     })
-    expect(mocks.create).toHaveBeenCalledWith({
-      data: {
-        organizationId: ORG,
-        volunteerId: VOLUNTEER,
-        outboxId: null,
-        messageRef: null,
-        kind: "reminder_j1",
-        outcome: "rejected_permanent",
-        reason: "bounced_after_acceptance",
-        responseCode: 550,
-        enhancedStatus: "5.5.0",
-        addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
-      },
+    expect(mocks.create).toHaveBeenCalledTimes(2)
+    expect(mocks.create.mock.calls[0][0].data).toEqual({
+      organizationId: "org-a",
+      volunteerId: "vol-a",
+      outboxId: null,
+      messageRef: null,
+      kind: "manual_reminder",
+      outcome: "rejected_permanent",
+      reason: "bounced_after_acceptance",
+      responseCode: 550,
+      enhancedStatus: "5.5.0",
+      addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
+    })
+    expect(mocks.create.mock.calls[1][0].data).toEqual({
+      organizationId: "org-b",
+      volunteerId: "vol-b",
+      outboxId: null,
+      messageRef: null,
+      kind: "registration_confirmation",
+      outcome: "rejected_permanent",
+      reason: "bounced_after_acceptance",
+      responseCode: 550,
+      enhancedStatus: "5.5.0",
+      addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
     })
   })
 
   it("applies the legacy path to a random Message-ID on our own host too", async () => {
-    mocks.findFirst.mockResolvedValueOnce(legacyRow()).mockResolvedValueOnce(null)
+    mocks.findMany.mockResolvedValue([legacyRow()])
+    mocks.findFirst.mockResolvedValue(null)
     expect(await analyzeLegacy({ originalMessageId: `<20261118090000.random@${HOST}>` })).toBe("flagged")
     expect(mocks.create).toHaveBeenCalledOnce()
   })
 
-  it("treats a second legacy notice for the same accepted row as already known", async () => {
-    mocks.findFirst.mockResolvedValueOnce(legacyRow()).mockResolvedValueOnce({ id: "outcome-existing" })
+  it("treats a second legacy notice as already known for every pair, writing nothing", async () => {
+    mocks.findMany.mockResolvedValue([
+      legacyRow({ organizationId: "org-a", volunteerId: "vol-a" }),
+      legacyRow({ organizationId: "org-b", volunteerId: "vol-b" }),
+    ])
+    mocks.findFirst.mockResolvedValue({ id: "outcome-existing" })
     expect(await analyzeLegacy()).toBe("already_known")
-    // The idempotency lookup is the pre-fix bounce for this address, after the accepted row.
-    expect(mocks.findFirst.mock.calls[1][0]).toEqual({
+
+    expect(mocks.findFirst).toHaveBeenCalledTimes(2)
+    expect(mocks.findFirst.mock.calls[0][0]).toEqual({
       where: {
         addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
         outboxId: null,
         messageRef: null,
         outcome: "rejected_permanent",
         reason: "bounced_after_acceptance",
+        organizationId: "org-a",
+        volunteerId: "vol-a",
         createdAt: { gt: LEGACY_ROW_TIME },
       },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       select: { id: true },
     })
+    expect(mocks.findFirst.mock.calls[1][0].where).toMatchObject({ organizationId: "org-b", volunteerId: "vol-b" })
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
-  it("uses the most recent row when the same address has pre-fix rows in two organisations", async () => {
-    mocks.findFirst
-      .mockResolvedValueOnce(legacyRow({ organizationId: "org-recent", kind: "manual_reminder", createdAt: new Date("2026-11-20T08:00:00Z") }))
-      .mockResolvedValueOnce(null)
+  it("writes only the pair that was not already recorded", async () => {
+    mocks.findMany.mockResolvedValue([
+      legacyRow({ organizationId: "org-a", volunteerId: "vol-a" }),
+      legacyRow({ organizationId: "org-b", volunteerId: "vol-b", kind: "manual_reminder" }),
+    ])
+    mocks.findFirst.mockResolvedValueOnce({ id: "outcome-existing" }).mockResolvedValueOnce(null)
     expect(await analyzeLegacy()).toBe("flagged")
-    expect(mocks.findFirst.mock.calls[0][0].orderBy).toEqual({ createdAt: "desc" })
-    expect(mocks.create).toHaveBeenCalledWith(
-      expect.objectContaining({ data: expect.objectContaining({ organizationId: "org-recent", kind: "manual_reminder" }) }),
-    )
+
+    expect(mocks.create).toHaveBeenCalledOnce()
+    expect(mocks.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ organizationId: "org-b", volunteerId: "vol-b", kind: "manual_reminder" }),
+    })
   })
 
-  it("never uses a row with an outboxId or a messageRef, another outcome, or no member", async () => {
+  it("keeps a null organisation from the matched row", async () => {
+    mocks.findMany.mockResolvedValue([legacyRow({ organizationId: null })])
     mocks.findFirst.mockResolvedValue(null)
+    expect(await analyzeLegacy()).toBe("flagged")
+    expect(mocks.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ organizationId: null, volunteerId: VOLUNTEER }),
+    })
+    expect(mocks.findFirst.mock.calls[0][0].where).toMatchObject({ organizationId: null })
+  })
+
+  it("flags a permanent recipient while a temporary one writes nothing", async () => {
+    const mixed = legacyParsed({
+      recipients: [
+        { finalRecipient: DIRECT_RECIPIENT, action: "failed", status: "5.5.0", diagnosticCode: "smtp;550 5.5.0 mailbox unavailable" },
+        { finalRecipient: "retard@exemple.org", action: "delayed", status: "4.4.1", diagnosticCode: "smtp;450 4.4.1 Try later" },
+      ],
+    })
+    mocks.findMany.mockResolvedValue([legacyRow()])
+    mocks.findFirst.mockResolvedValue(null)
+    expect(await analyzeBounceDsn(mixed, { host: HOST, secret: SECRET, db, now: LEGACY_NOW })).toBe("flagged")
+
+    // Only the permanent recipient was looked up and recorded.
+    expect(mocks.findMany).toHaveBeenCalledOnce()
+    expect(mocks.create).toHaveBeenCalledOnce()
+    expect(mocks.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ addressHash: addressHash(DIRECT_RECIPIENT, SECRET) }),
+    })
+  })
+
+  it("filters out rows with an outboxId or a messageRef, another outcome, or no member", async () => {
+    mocks.findMany.mockResolvedValue([])
     expect(await analyzeLegacy()).toBe("uncorrelated")
     expect(mocks.create).not.toHaveBeenCalled()
-    expect(mocks.findFirst.mock.calls[0][0].where).toEqual({
+    expect(mocks.findMany.mock.calls[0][0].where).toEqual({
       addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
       outboxId: null,
       messageRef: null,
@@ -348,13 +413,23 @@ describe("analyzeBounceDsn", () => {
       recipients: [{ finalRecipient: DIRECT_RECIPIENT, action: "delayed", status: "4.4.1", diagnosticCode: "smtp;450 4.4.1 Try later" }],
     })
     expect(await analyzeBounceDsn(temporary, { host: HOST, secret: SECRET, db, now: LEGACY_NOW })).toBe("uncorrelated")
+    expect(mocks.findMany).not.toHaveBeenCalled()
     expect(mocks.findFirst).not.toHaveBeenCalled()
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
-  it("stops the legacy path after LEGACY_DIRECT_BOUNCES_UNTIL, without any query", async () => {
+  it("still matches at the exact LEGACY_DIRECT_BOUNCES_UNTIL instant, and not one millisecond later", async () => {
+    mocks.findMany.mockResolvedValue([legacyRow()])
+    mocks.findFirst.mockResolvedValue(null)
+    expect(await analyzeLegacy({}, LEGACY_DIRECT_BOUNCES_UNTIL)).toBe("flagged")
+    expect(mocks.findMany).toHaveBeenCalledOnce()
+
+    mocks.findMany.mockClear()
+    mocks.findFirst.mockClear()
+    mocks.create.mockClear()
     const after = new Date(LEGACY_DIRECT_BOUNCES_UNTIL.getTime() + 1)
     expect(await analyzeLegacy({}, after)).toBe("uncorrelated")
+    expect(mocks.findMany).not.toHaveBeenCalled()
     expect(mocks.findFirst).not.toHaveBeenCalled()
     expect(mocks.create).not.toHaveBeenCalled()
   })
