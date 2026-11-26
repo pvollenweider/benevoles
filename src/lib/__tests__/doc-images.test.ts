@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { docImageFile, docImageFromBytes, docImageTag, pngSize } from "../doc-images"
+import { docImageFile, docImageFromBytes, docImageTag, phoneCapture, pngSize } from "../doc-images"
 import { renderEventPageMarkdown } from "../event-page-markdown"
 import { loadDocUnits } from "../doc-units"
 import { renderDocUnitParts } from "../public-content"
@@ -92,6 +92,37 @@ describe("docImageTag", () => {
   it("escapes its attributes", () => {
     const html = docImageTag({ src: "/a.png", alt: 'Un "devis" <b>' }, null, 0)
     expect(html).toContain('alt="Un &quot;devis&quot; &lt;b&gt;"')
+  })
+})
+
+describe("phone captures", () => {
+  const DOC_IMG = path.join(process.cwd(), "public/doc-img")
+  const size = (name: string) => pngSize(fs.readFileSync(path.join(DOC_IMG, `${name}.png`)))!
+
+  it("knows an upright and a turned phone by their pixel size, and nothing else", () => {
+    expect(phoneCapture({ width: 844, height: 1856 })).toBe("upright")
+    expect(phoneCapture({ width: 1856, height: 844 })).toBe("turned")
+    expect(phoneCapture({ width: 780, height: 1688 })).toBeNull()
+    expect(phoneCapture({ width: 1280, height: 800 })).toBeNull()
+  })
+
+  it("recognises the captures the script draws inside a phone, and not the bare ones", () => {
+    for (const name of ["public-list-mobile", "public-timeline-phone-upright", "public-timeline-phone", "public-permanences-mobile"]) {
+      expect(phoneCapture(size(name)), name).toBe("upright")
+    }
+    expect(phoneCapture(size("public-timeline-phone-turned"))).toBe("turned")
+    expect(phoneCapture(size("public-timeline-mobile"))).toBeNull()
+    expect(phoneCapture(size("public-timeline"))).toBeNull()
+  })
+
+  it("gives a phone the size of a phone in CSS pixels, half its pixels, which the stylesheet looks for", () => {
+    expect(docImageTag({ src: "/doc-img/p.png", alt: "x" }, { src: "/doc-img/p.png?v=1", width: 844, height: 1856 }, 0))
+      .toBe('<img src="/doc-img/p.png?v=1" alt="x" width="422" height="928">')
+    expect(docImageTag({ src: "/doc-img/p.png", alt: "x" }, { src: "/doc-img/p.png?v=1", width: 1856, height: 844 }, 0))
+      .toBe('<img src="/doc-img/p.png?v=1" alt="x" width="928" height="422">')
+    const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf-8")
+    expect(css).toContain('img[src^="/doc-img/"][width="422"][height="928"]')
+    expect(css).toContain('img[src^="/doc-img/"][width="928"][height="422"]')
   })
 })
 
