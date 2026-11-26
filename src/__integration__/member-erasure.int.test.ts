@@ -125,6 +125,9 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     const otherLeader = await prisma.sectorLeader.create({ data: { eventId, roleName: "Bar", name: "Paul", email: `${tag}-paul@example.org`, tokenHash: `${tag}-lead-hash-2` } })
     await prisma.deliveryOutcome.create({ data: { organizationId: orgId, volunteerId: x.id, kind: "signup", outcome: "accepted_by_relay" } })
     await prisma.deliveryOutcome.create({ data: { organizationId: orgId, kind: "leader_link", outcome: "accepted_by_relay", addressHash: addressHash(v.email, env.AUTH_SECRET) } })
+    // A deferred bounce of a direct send: no outboxId, matched by its random reference.
+    // It carries the member and their address hash, so erasure removes it too.
+    const directBounce = await prisma.deliveryOutcome.create({ data: { organizationId: orgId, volunteerId: x.id, messageRef: "a".repeat(40), kind: "reminder_j1", outcome: "rejected_permanent", reason: "bounced_after_acceptance", addressHash: addressHash(v.email, env.AUTH_SECRET) } })
     await prisma.duplicateDismissal.create({ data: { organizationId: orgId, volunteerIdA: [x.id, other.id].sort()[0], volunteerIdB: [x.id, other.id].sort()[1], signalsFingerprint: "name" } })
     const message = await prisma.targetedMessage.create({ data: { organizationId: orgId, eventId, authorName: "Admin", subject: "Info", message: "Bonjour", audienceLabel: "Tous", recipientCount: 2 } })
     const outboxToX = await prisma.notificationOutbox.create({ data: { organizationId: orgId, status: "pending", payload: sealPayload({ kind: "reminder_j2", recipient: { email: v.email }, volunteerId: x.id, data: {} }) } })
@@ -148,6 +151,7 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     const result = await runMemberErasure(getOrgClient(orgId), orgId, ADMIN_ACTOR, x.id)
     expect(result.alreadyErased).toBe(false)
     expect(result.outboxDeleted).toBe(4)
+    expect(await prisma.deliveryOutcome.findUnique({ where: { id: directBounce.id } })).toBeNull()
     expect(result.counts).toMatchObject({ registrations: 2, upcomingLive: 1, invites: 1, shiftDeclines: 2, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 1 })
 
     // 1. No value the person gave survives, in any table — except in the other organisation's own

@@ -9,7 +9,8 @@ import { render, type EmailBrand } from "../templates"
 import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 import { orgBaseUrl } from "@/lib/urls"
 import { classifySmtpOutcome, type SmtpErrorLike, type SmtpInfoLike } from "../smtp-outcome"
-import { recordDeliveryOutcomes } from "../delivery-outcomes"
+import { recordDeliveryOutcomes, isRecordedKind } from "../delivery-outcomes"
+import { directMessageId, directMessageRef } from "../outbox-message-id"
 import { isRecipientAddressRejection } from "../recipient-rejection"
 import { encodeOutcomeReason } from "@/lib/outbox-view"
 import { siteDomain, siteName } from "@/lib/site"
@@ -99,14 +100,20 @@ export const emailChannel: { send: Send } = {
     const replyTo = org?.replyTo ?? env.EMAIL_REPLY_TO ?? undefined
     const transport = createTransport()
 
-    const recordCtx = { kind: payload.kind, organizationId: payload.organizationId, volunteerId: payload.volunteerId, outboxId: payload.outboxId }
+    // The outbox sets `messageId` (stable per row); a direct send with recorded outcomes gets its
+    // own random reference instead, so a later deferred bounce can find its rows. A kind
+    // that records nothing gets neither: there would be no row to match the notice against.
+    const messageRef = !payload.messageId && isRecordedKind(payload.kind) ? directMessageRef() : null
+    const messageId = payload.messageId ?? (messageRef ? directMessageId(messageRef) : undefined)
+    const recordCtx = { kind: payload.kind, organizationId: payload.organizationId, volunteerId: payload.volunteerId, outboxId: payload.outboxId, messageRef }
 
     if (!transport) {
       const outcome = missingSmtpOutcome(process.env.NODE_ENV)
       if (!outcome.ok) {
         console.error(`[notif:email] ${payload.kind} failed: code=SMTP_HOST_MISSING category=failed_temporary`)
         const classified = [{ recipient: to, outcome: "failed_temporary" as const, reason: "other" as const, responseCode: null, enhancedStatus: null }]
-        await recordDeliveryOutcomes(recordCtx, classified)
+        // Nothing was submitted, so there is no Message-ID to correlate a later notice with.
+        await recordDeliveryOutcomes({ ...recordCtx, messageRef: null }, classified)
         return { ok: false as const, reason: encodeOutcomeReason(classified[0]) }
       }
       console.log(`[notif:email→${to}] ${subject}`)
@@ -115,7 +122,7 @@ export const emailChannel: { send: Send } = {
     }
 
     try {
-      const info = await transport.sendMail({ from, to, subject, html, text, replyTo, ...(payload.messageId ? { messageId: payload.messageId } : {}) })
+      const info = await transport.sendMail({ from, to, subject, html, text, replyTo, ...(messageId ? { messageId } : {}) })
       const [classified] = classifySmtpOutcome([to], { info: info as SmtpInfoLike })
       await recordDeliveryOutcomes(recordCtx, [classified])
       if (classified.outcome !== "accepted_by_relay") {

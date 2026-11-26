@@ -13,7 +13,7 @@ vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => undefined }))
 
 import { addressStatus } from "../address-status"
-import { parseBounceDsn } from "../bounce-dsn"
+import { parseBounceDsn, type ParsedBounce } from "../bounce-dsn"
 import { analyzeBounceDsn } from "../bounce-mailbox"
 import { addressHash } from "../notifications/smtp-outcome"
 
@@ -26,6 +26,8 @@ const ORG = "org-a"
 const VOLUNTEER = "vol-1"
 const OUTBOX = "clx0000000000000000000001"
 const RECIPIENT = "eleve.test@ecole-exemple.org"
+const DIRECT_REF = "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"
+const DIRECT_RECIPIENT = "membre.inconnu@example.org"
 
 const fixture = (name: string) => readFileSync(join(process.cwd(), "src/lib/__tests__/fixtures/bounces", name))
 
@@ -55,6 +57,18 @@ const db = {
 } as unknown as PrismaClient
 
 const analyze = async (name: string) => analyzeBounceDsn(await parseBounceDsn(fixture(name)), { host: HOST, secret: SECRET, db })
+
+/** A parsed direct-send DSN; the real-shaped Outlook fixture covers the parsing side. */
+const directParsed = (over: Partial<ParsedBounce> = {}): ParsedBounce => ({
+  isDsn: true,
+  reportType: "delivery-status",
+  originalMessageId: `<direct-${DIRECT_REF}@${HOST}>`,
+  recipients: [
+    { finalRecipient: DIRECT_RECIPIENT, action: "failed", status: "5.5.0", diagnosticCode: "smtp;550 5.5.0 Requested action not taken: mailbox unavailable." },
+  ],
+  ...over,
+})
+const analyzeDirect = (over: Partial<ParsedBounce> = {}) => analyzeBounceDsn(directParsed(over), { host: HOST, secret: SECRET, db })
 
 describe("analyzeBounceDsn", () => {
   beforeEach(() => {
@@ -100,6 +114,22 @@ describe("analyzeBounceDsn", () => {
     expect(mocks.create).not.toHaveBeenCalled()
   })
 
+  // A nullable filter here would read every legacy row: `{ messageRef: null }` matches them all.
+  it("never queries DeliveryOutcome rows with a null or missing messageRef filter", async () => {
+    // Neither an outbox id nor a direct reference: no key at all, so no query either.
+    mocks.findMany.mockResolvedValue([])
+    expect(await analyzeDirect({ originalMessageId: "<random-nodemailer-id@example.org>" })).toBe("uncorrelated")
+    expect(mocks.findMany).not.toHaveBeenCalled()
+
+    // A valid direct reference always filters on a non-empty string.
+    expect(await analyzeDirect()).toBe("uncorrelated")
+    expect(mocks.findMany).toHaveBeenCalledOnce()
+    const where = mocks.findMany.mock.calls[0][0].where as Record<string, unknown>
+    expect(where).toHaveProperty("messageRef")
+    expect(typeof where.messageRef).toBe("string")
+    expect((where.messageRef as string).length).toBeGreaterThan(0)
+  })
+
   it("never correlates a recipient whose hash is not among the outbox outcomes", async () => {
     expect(await analyze("dsn-recipient-hash-mismatch.eml")).toBe("uncorrelated")
     expect(mocks.create).not.toHaveBeenCalled()
@@ -143,5 +173,67 @@ describe("analyzeBounceDsn", () => {
       new Date("2026-11-18T10:00:00Z"),
     )
     expect(status.kind).toBe("to_verify")
+  })
+
+  // a direct send is matched by the random reference of its Message-ID, and its own
+  // DeliveryOutcome rows alone say which organisation, member and kind the bounce belongs to.
+  it("flags a direct bounce once, carrying the matched row's organisation, member and kind", async () => {
+    mocks.findMany.mockResolvedValue([
+      matchingOutcome({ addressHash: addressHash(DIRECT_RECIPIENT, SECRET), kind: "reminder_j1" }),
+    ])
+    expect(await analyze("outlook-550-5.5.0-direct.eml")).toBe("flagged")
+
+    // No NotificationOutbox row exists for a direct send: only its outcomes are read.
+    expect(mocks.findUnique).not.toHaveBeenCalled()
+    expect(mocks.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { messageRef: DIRECT_REF } }))
+    expect(mocks.create).toHaveBeenCalledWith({
+      data: {
+        organizationId: ORG,
+        volunteerId: VOLUNTEER,
+        outboxId: null,
+        messageRef: DIRECT_REF,
+        kind: "reminder_j1",
+        outcome: "rejected_permanent",
+        reason: "bounced_after_acceptance",
+        responseCode: 550,
+        enhancedStatus: "5.5.0",
+        addressHash: addressHash(DIRECT_RECIPIENT, SECRET),
+      },
+    })
+  })
+
+  it("is idempotent per (direct reference, address): a second notice is already known", async () => {
+    mocks.findMany.mockResolvedValue([
+      matchingOutcome({ addressHash: addressHash(DIRECT_RECIPIENT, SECRET), outcome: "rejected_permanent" }),
+    ])
+    expect(await analyzeDirect()).toBe("already_known")
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("ignores a direct temporary status and never writes", async () => {
+    mocks.findMany.mockResolvedValue([matchingOutcome({ addressHash: addressHash(DIRECT_RECIPIENT, SECRET) })])
+    const temporary = directParsed({
+      recipients: [{ finalRecipient: DIRECT_RECIPIENT, action: "delayed", status: "4.4.1", diagnosticCode: "smtp;450 4.4.1 Try later" }],
+    })
+    expect(await analyzeBounceDsn(temporary, { host: HOST, secret: SECRET, db })).toBe("ignored_temporary")
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("never correlates a direct reference with no outcome row", async () => {
+    mocks.findMany.mockResolvedValue([])
+    expect(await analyzeDirect({ originalMessageId: `<direct-${"f".repeat(40)}@${HOST}>` })).toBe("uncorrelated")
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("never correlates a direct reference for another host", async () => {
+    expect(await analyzeDirect({ originalMessageId: `<direct-${DIRECT_REF}@other.example.org>` })).toBe("uncorrelated")
+    expect(mocks.findMany).not.toHaveBeenCalled()
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
+  it("never correlates a direct reference whose recipient hash is not among its rows", async () => {
+    mocks.findMany.mockResolvedValue([matchingOutcome({ addressHash: addressHash(RECIPIENT, SECRET) })])
+    expect(await analyzeDirect()).toBe("uncorrelated")
+    expect(mocks.create).not.toHaveBeenCalled()
   })
 })

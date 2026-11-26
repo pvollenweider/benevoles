@@ -92,6 +92,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Administration de la plateforme** : en production, le cookie qui retient l'organisation choisie porte le préfixe `__Host-` ; il faut choisir l'organisation à nouveau une fois. <!-- interne -->
 - **Accès accueil** : la liste des accès d'un événement ne retient que les comptes accueil de l'organisation, dans la requête et sur chaque ligne. <!-- interne -->
 - **Contrôle des dépendances en intégration continue** : un avis de sécurité sans version corrigée, dont l'application n'est pas exposée, peut être accepté pour un mois au plus, avec sa raison et sa date de fin dans `src/lib/audit-exceptions.ts` ; passé cette date, le contrôle échoue de nouveau. Première exception : `picomatch` (GHSA-fc5q-39xc-vjpf), outil de build seulement, jusqu'au 17 décembre 2026. <!-- interne -->
+- **Rejets différés des emails envoyés hors de la file** : tout email envoyé directement (rappels, renvois de lien, invitations…) porte désormais un `Message-ID` propre à ce déploiement, et la référence correspondante est enregistrée avec son résultat d'envoi ; l'avis de non-remise reçu plus tard est donc rapproché et l'adresse du membre passe « Adresse à vérifier », comme pour un envoi par la file. Les avis déjà reçus pour d'anciens envois directs restent non rapprochés et ne modifient aucune adresse.
 
 ## [2.8.0] — 2026-11-17
 
