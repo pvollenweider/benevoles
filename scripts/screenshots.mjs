@@ -235,6 +235,19 @@ async function run() {
     await mob.close()
   })
 
+  // The same screen drawn inside a phone, for the pages and the README that show it as a picture
+  // (the home page draws its own phone around « public-timeline-mobile », which stays bare).
+  await shot("public-timeline-phone", async () => {
+    const mob = await browser.newContext(MOBILE)
+    await mob.addInitScript(playedShiftViewHint)
+    const m = await mob.newPage()
+    await m.addInitScript(() => localStorage.setItem("benevoles:public-shift-view", "frise"))
+    await m.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(m)
+    await save(m, "public-timeline-phone", { phone: true })
+    await mob.close()
+  })
+
   // The planning as a phone shows it (#1407), each capture drawn inside a phone:
   //  - held upright with no choice made: the list, and the sentence that offers the Frise;
   //  - held upright with « Frise » chosen: the chart cut at the right, to scroll sideways;

@@ -21,6 +21,7 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "public-selection": ["src/app/[eventSlug]/page.tsx"],
   "public-registration-birthdate": ["src/app/[eventSlug]/page.tsx"],
   "public-timeline-mobile": ["src/app/[eventSlug]/page.tsx"],
+  "public-timeline-phone": ["src/app/[eventSlug]/page.tsx"],
   "public-list-mobile": ["src/app/[eventSlug]/page.tsx"],
   "public-timeline-phone-upright": ["src/app/[eventSlug]/page.tsx"],
   "public-timeline-phone-turned": ["src/app/[eventSlug]/page.tsx"],
