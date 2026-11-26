@@ -214,3 +214,61 @@ html:has([data-theme-scope].dark) {
 .hydration-notice > p {
   margin-bottom: 1rem;
 }
+
+/* One-time hint on the « Frise » button of the public event page (#1407, part C): the three bars
+   of the icon draw in from the left once, and a neutral ring expands and fades around the button
+   twice. Decoration only: no text change, nothing announced, and the base state is the full icon
+   (keyframes only define the starting frame). Under « Réduire les animations » nothing replaces
+   it; in forced colours the ring is hidden. */
+@keyframes shift-view-bars-draw {
+  from { stroke-dashoffset: 1; }
+}
+
+@keyframes shift-view-ring {
+  0% { opacity: 0.55; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.12); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shift-view-hint {
+    position: relative;
+  }
+
+  .shift-view-hint .shift-view-bars path {
+    stroke-dasharray: 1;
+    animation: shift-view-bars-draw 900ms ease-out both;
+  }
+
+  .shift-view-hint .shift-view-bars path:nth-child(2) { animation-delay: 120ms; }
+  .shift-view-hint .shift-view-bars path:nth-child(3) { animation-delay: 240ms; }
+
+  /* A pseudo-element, never an outline: neutral gray-400, unlike the blue-600 focus ring. */
+  .shift-view-hint::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid #9ca3af;
+    border-radius: 11px;
+    pointer-events: none;
+    opacity: 0;
+    animation: shift-view-ring 900ms ease-out 2;
+  }
+
+  /* Not started, and cancelled, while the button has the keyboard focus. */
+  .shift-view-hint:focus-visible .shift-view-bars path,
+  .shift-view-hint:focus-visible::after {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .shift-view-hint .shift-view-bars path {
+    animation: none;
+    stroke-dasharray: none;
+  }
+
+  .shift-view-hint::after {
+    content: none;
+    display: none;
+  }
+}
