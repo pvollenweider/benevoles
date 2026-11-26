@@ -1198,11 +1198,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             </div>
             {/* Turning the phone is the other way to the timeline (part D). Its line is reserved
                 from the server HTML on, inside a wrapper the event's media query shows only below
-                the threshold (like the list): nothing moves when hydration shows it. `invisible`
-                keeps it out of the accessibility tree until the condition holds, and keeps its
-                place when the condition stops, so the list does not move under the finger. Not a
-                live region, not tied to the group. */}
-            {!preview && !embed && fromWidth !== null && fromWidth > 0 && (
+                the threshold, on a touch device held upright: nothing moves when hydration shows
+                it. The wrapper exists only while the list is (or may be) the view shown: once
+                « Frise » is chosen, the timeline is shown and the reserved line would be an empty
+                band; a display:none element adds no `space-y` space either. `invisible` keeps it
+                out of the accessibility tree until the condition holds, and keeps its place when
+                the condition stops, so the list does not move under the finger. Not a live region,
+                not tied to the group. */}
+            {!preview && !embed && fromWidth !== null && fromWidth > 0 && shiftView !== "frise" && (
               <div className="event-shift-rotate-narrow">
                 <p className={`text-sm text-gray-700 ${rotateHint ? "" : "invisible"}`}>Tourne le téléphone pour voir la journée en frise.</p>
               </div>
@@ -1774,6 +1777,12 @@ const SHIFT_VIEW_BUTTON_LOOK: Record<ShiftViewButtonLook, string> = {
  */
 function shiftViewBreakpointCss(from: number): string {
   return [
+    // The rotate sentence's line: rendered only while the list is (or may be) the view shown, and
+    // shown only below the breakpoint, on a touch device held upright. A narrow desktop window, a
+    // phone turned sideways, or a timeline shown at every width keep no blank line. The later
+    // min-width block overrides this one above the breakpoint.
+    ".event-shift-rotate-narrow{display:none}",
+    "@media (pointer:coarse) and (orientation:portrait){.event-shift-rotate-narrow{display:block}}",
     // Below the breakpoint: the timeline wrapper is hidden, the list wrapper is the block; the
     // « Liste » button is pressed-looking, « Frise » is not.
     ".event-shift-view-wide{display:none}",

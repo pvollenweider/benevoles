@@ -230,6 +230,18 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
     expect(html).toContain("event-shift-rotate-narrow")
     expect(html).toContain("Tourne le téléphone pour voir la journée en frise.")
     expect(html).toContain("invisible")
+    // The line is shown by CSS only below the event's threshold, on a touch device held upright:
+    // a narrow desktop window (fine pointer) or a phone turned sideways keeps no blank line.
+    expect(html).toContain("(pointer:coarse) and (orientation:portrait)")
+    expect(html).toContain(".event-shift-rotate-narrow{display:none}")
+    expect(html).toContain("@media (min-width:320px)")
+  })
+
+  it("renders no reserved line once « Frise » is chosen", () => {
+    render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={event} />)
+    fireEvent.click(screen.getByRole("button", { name: "Frise" }))
+    expect(screen.queryByText("Tourne le téléphone pour voir la journée en frise.")).not.toBeInTheDocument()
+    expect(document.querySelector(".event-shift-rotate-narrow")).toBeNull()
   })
 
   it("renders no rotate sentence when the threshold is not a positive number", () => {
@@ -323,18 +335,27 @@ describe("EventPageClient — Frise / Liste (#808)", () => {
     ["a positive threshold", event],
     ["the setting « Frise »", { ...event, publicShiftView: "frise" as const }],
     ["the setting « Liste »", { ...event, publicShiftView: "liste" as const }],
-  ])("hydrates the server HTML for %s without a hydration warning", async (_label, initialEvent) => {
+  ])("hydrates the server HTML for %s without a recoverable error", async (_label, initialEvent) => {
     const container = document.createElement("div")
     document.body.appendChild(container)
     container.innerHTML = renderToString(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={initialEvent} />)
     const errors: string[] = []
+    const recoverable: unknown[] = []
     const spy = vi.spyOn(console, "error").mockImplementation((...args: unknown[]) => { errors.push(args.map(String).join(" ")) })
     let root: Root | undefined
-    act(() => { root = hydrateRoot(container, <EventPageClient orgSlug="org" eventSlug="fete" initialEvent={initialEvent} />) })
+    act(() => {
+      root = hydrateRoot(
+        container,
+        <EventPageClient orgSlug="org" eventSlug="fete" initialEvent={initialEvent} />,
+        // React reports a server/client mismatch here even when console.error is quiet about it.
+        { onRecoverableError: (error) => { recoverable.push(error) } },
+      )
+    })
     await act(async () => {})
     spy.mockRestore()
     act(() => root?.unmount())
     container.remove()
+    expect(recoverable).toEqual([])
     expect(errors.filter((e) => /hydrat|did not match/i.test(e))).toEqual([])
   })
 
