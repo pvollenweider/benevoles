@@ -55,7 +55,12 @@ test("turned sideways, the phone shows the Frise", async ({ page }) => {
   const frise = page.getByRole("button", { name: "Frise" })
   await waitForHydration(frise)
   await expect(frise).toHaveAttribute("aria-pressed", "true")
+  // Held upright again at 390 px: this small day (08h–12h, shortest shift 1 h 30) stays readable
+  // there (from 321 px, src/lib/frise-geometry.ts), so the Frise remains the default.
   await page.setViewportSize({ width: 390, height: 844 })
+  await expect(frise).toHaveAttribute("aria-pressed", "true")
+  // Under its readable width, the list.
+  await page.setViewportSize({ width: 320, height: 640 })
   await expect(page.getByRole("button", { name: "Liste" })).toHaveAttribute("aria-pressed", "true")
   await expect(page.getByRole("list", { name: /^Créneaux du / })).toBeVisible()
 })
