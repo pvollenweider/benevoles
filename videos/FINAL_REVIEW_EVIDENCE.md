@@ -1472,35 +1472,28 @@ La largeur où la frise reste lisible compte maintenant la bordure de sa carte (
 
 Pour le jeu de tournage de `scripts/seed-demo.ts` (« Fête du village de Montvert »), `friseFromWidth` vaut **640 px** en « Automatique » (834 px lisibles, plafonnés) : à 390 px le téléphone ouvre toujours la liste et la frise déborde, donc la phrase de défilement reste vraie. Pour `scripts/seed-demo-roster.ts` (« Marché de Noël »), il vaut aussi **640 px** (654 px lisibles, plafonnés). Aucun sélecteur de capture ne change pour autant.
 
-- **VOLUNTEER_REGISTER** (`volunteer-register-mobile`) et **VOLUNTEER_DISCOVER_EVENT** (`volunteer-discover-event`) : image périmée par la phrase « Tourne le téléphone… » et sa ligne réservée, pas par le défaut ni par la phrase de défilement. La narration reste juste ; à refilmer.
 - **EVENT_CREATE_BLANK** (`event-create-blank`), **EVENT_CREATE_TEMPLATE** (`event-create-template`), **EVENT_VISIBILITY_REGISTRATION_WINDOW** (`event-visibility-registration-window`) et **EVENT_DUPLICATE** (`event-duplicate`) : le nouveau groupe allonge et décale le formulaire ; les scènes qui cadrent les champs sous les inscriptions sont périmées. À refilmer.
-- Confirmés en plus : **ORGANIZER_CREATE_PUBLISH** (`organizer-create-publish`, la scène « inscription » cadre « Heures du fuseau de l'organisation », juste au-dessus du nouveau groupe) et **ADMIN_FEATURES_OVERVIEW** (`admin-features-tour`, les scènes « lifecycle » et « appearance » cadrent Visibilité, Inscriptions et Couleur de la page, donc le nouveau groupe entre dans le champ). À refilmer.
+- Confirmés en plus : **ORGANIZER_CREATE_PUBLISH** (`organizer-create-publish`, la scène « inscription » cadre « Heures du fuseau de l'organisation », juste au-dessus du nouveau groupe). À refilmer.
 - Vérifiés et laissés tels quels : `event-review-publish` (revue, aperçu et partage seulement), `event-program-pages-qr` (Spectacles, en haut du formulaire), `reminders-changes` (message de rappel et case, au-dessus), `shift-eligibility-rules` (Description et Téléphone, au-dessus), `last-minute-changes` (aucune scène sur le formulaire d'événement). Aucune capture n'est régénérée dans ce changement.
 
 ## À refilmer : couleur du poste et lignes grisées dans la liste (#1407, 26 novembre 2026)
 
-Dans la vue **Liste**, un créneau qui peut être choisi porte désormais un bord gauche de 6 px à la couleur de son poste, et un créneau qui ne peut pas être choisi devient une ligne grise sans cadre ni couleur, dont l'état suit le titre ou passe dessous quand la ligne est trop étroite. Quatre vidéos montrent la liste avec son ancien aspect ; leur narration reste juste, seule l'image est périmée. À refilmer avec le prochain lot :
+Dans la vue **Liste**, un créneau qui peut être choisi porte désormais un bord gauche de 6 px à la couleur de son poste, et un créneau qui ne peut pas être choisi devient une ligne grise sans cadre ni couleur, dont l'état suit le titre ou passe dessous quand la ligne est trop étroite. Une vidéo montre la liste avec son ancien aspect ; sa narration reste juste, seule l'image est périmée. À refilmer avec le prochain lot :
 
-- **VOLUNTEER_REGISTER** (`volunteer-register-mobile`) : la liste ouverte au chargement du téléphone montre l'ancien aspect.
-- **VOLUNTEER_DISCOVER_EVENT** (`volunteer-discover-event`) : la scène de la liste sur téléphone montre l'ancien aspect.
 - **SHIFT_ELIGIBILITY_RULES** (`shift-eligibility-rules`) : la liste de la page publique montre l'ancien aspect.
-- **SHIFT_ROSTER_VISIBILITY** (`shift-roster-visibility`) : les lignes de la liste et leurs noms montrent l'ancien aspect.
 
-Aucune narration ne change.
+La narration ne change pas.
 
 ## À refilmer : convention des bénévoles (#1468, 27 novembre 2026)
 
-Le texte accepté à l'inscription s'appelle désormais « convention des bénévoles » partout. Les paramètres gagnent le commutateur « Demander aux bénévoles d'accepter une convention », qui peut être désactivé : le formulaire public n'affiche alors ni case, ni lien, ni fenêtre. Les sources (narration, bloc `viewer`, scripts, sélecteurs de capture) sont mises à jour dans ce lot ; aucune capture ni aucun rendu n'est régénéré ici, la voix et les captures longues restant hors de ce changement. La révision du catalogue est à incrémenter au rendu. L'étiquette `charte` retirée de `ORG_TIMEZONE_CHARTER` n'est pas remise : le catalogue affiche ses étiquettes aux visiteurs sur la page de la vidéo, et elles servent aussi à la recherche.
+Le texte accepté à l'inscription s'appelle désormais « convention des bénévoles » partout. Les paramètres gagnent le commutateur « Demander aux bénévoles d'accepter une convention », qui peut être désactivé : le formulaire public n'affiche alors ni case, ni lien, ni fenêtre. Les sources (narration, bloc `viewer`, scripts, sélecteurs de capture) ont été mises à jour ; les vidéos ci-dessous restent à refilmer. L'étiquette `charte` retirée de `ORG_TIMEZONE_CHARTER` n'est pas remise : le catalogue affiche ses étiquettes aux visiteurs sur la page de la vidéo, et elles servent aussi à la recherche.
 
 **Narration et image changent** :
 
-- **ORG_TIMEZONE_CHARTER** (`org-timezone-charter`) : la narration des chapitres « accueil » et « convention », le bloc `viewer`, le titre et le script changent ; l'image montre le nouveau titre de section et le commutateur de demande de convention.
 - **ORG_FIRST_STEPS** (`masterclass-03-first-steps`) : la narration des chapitres « checklist » et « identité », le bloc `viewer` et le script changent ; l'image montre la section renommée dans les paramètres.
-- **ADMIN_FEATURES_OVERVIEW** (`admin-features-tour`) : la narration du chapitre « organisation » et le script changent ; l'image montre la section renommée dans les paramètres.
 
 **Image seule** (la narration écrite change de casse, la prononciation reste la même) :
 
-- **EVENT_REVIEW_PUBLISH** (`event-review-publish`) : la fenêtre ouverte dans le formulaire s'intitule « Convention des bénévoles » ; la narration dit déjà « cette convention ».
 - **VOLUNTEER_FORM_RECAP** (`volunteer-form-recap`) : la fenêtre de la convention porte le nouveau titre ; la narration ne fait que perdre la majuscule.
 - **ACCESSIBILITY_KEYBOARD_DISPLAY** (`accessibility-keyboard-display`) : le sélecteur de vérification vise le nouveau titre de section ; l'image des paramètres est périmée par le titre et le commutateur ajouté.
 
@@ -1513,38 +1506,21 @@ Le texte accepté à l'inscription s'appelle désormais « convention des béné
 
 Le formulaire d'événement porte un nouveau groupe **Créneaux qui se chevauchent**, après les inscriptions et avant « Affichage des créneaux par défaut » : une ligne d'état, un bouton « Autoriser les chevauchements… » et, une fois l'option active, une note. Le réglage est désactivé par défaut : dans tous les jeux de tournage, les refus et mentions de chevauchement filmés restent vrais, et aucun sélecteur de capture ne change.
 
-- Image seule, le groupe allonge et décale le formulaire sous les inscriptions : **EVENT_CREATE_BLANK**, **EVENT_CREATE_TEMPLATE**, **EVENT_VISIBILITY_REGISTRATION_WINDOW**, **EVENT_DUPLICATE**, **ORGANIZER_CREATE_PUBLISH** et **ADMIN_FEATURES_OVERVIEW**, déjà listées dans « À refilmer : affichage des créneaux par défaut ». À refilmer en une seule fois.
+- Image seule, le groupe allonge et décale le formulaire sous les inscriptions : **EVENT_CREATE_BLANK**, **EVENT_CREATE_TEMPLATE**, **EVENT_VISIBILITY_REGISTRATION_WINDOW**, **EVENT_DUPLICATE**, **ORGANIZER_CREATE_PUBLISH**, déjà listées dans « À refilmer : affichage des créneaux par défaut ». À refilmer en une seule fois.
 - Vérifiées et laissées telles quelles, leur narration parle du refus d'un chevauchement, qui reste la règle par défaut : `volunteer-choose-shifts`, `volunteer-confirmation-errors`, `registrations-management`, `shift-swaps`, `accessibility-keyboard-display`, `members-duplicates-merge`.
-- Aucune vidéo ne présente le nouveau réglage. Aucune capture n'est régénérée dans ce changement.
-
-## À refilmer : alerte immédiate d'adresse refusée (#1476, 27 novembre 2026)
-
-Dans **Paramètres des emails**, le texte d'aide de la case « Résumé quotidien des adresses à vérifier » gagne deux phrases : l'alerte immédiate quand la personne a un créneau dans les trois jours, et le fait que décocher la coupe aussi. Le libellé de la case ne change pas, donc le sélecteur de capture (`videos/tools/record.ts`) reste valable.
-
-- **ORG_EMAIL_SETTINGS** (`org-email-settings`) : image seule, la scène qui cadre cette case montre l'ancien texte d'aide. La narration reste juste. À refilmer avec le prochain lot ; une phrase sur l'alerte immédiate pourrait y être ajoutée.
-- Aucune vidéo ne montre le nouvel email. Aucune capture vidéo n'est régénérée dans ce changement.
+- Le tour d'administration du lot 44 montre désormais ces groupes ; les autres vidéos ci-dessus restent à refilmer.
 
 ## À refilmer : détails d'un créneau sans le choisir (#1471, 27 novembre 2026)
 
 Dans la vue **Liste** de la page d'inscription, chaque créneau qui a des informations (description, lieu, consignes) porte un bouton « Détails » sur sa propre ligne ; sous la **Frise**, une ligne affiche les détails du créneau survolé, parcouru au clavier ou touché, et une phrase d'invite avant cela. Les noms des boutons de créneau ne changent pas : aucun sélecteur de capture ne casse.
 
-- Image seule, la liste s'allonge et la frise gagne une ligne : **VOLUNTEER_REGISTER**, **VOLUNTEER_DISCOVER_EVENT**, **VOLUNTEER_CHOOSE_SHIFTS**, **VOLUNTEER_FORM_RECAP**, **SHIFT_ROSTER_VISIBILITY**, **SHIFT_ELIGIBILITY_RULES**, déjà listées pour la vue Liste. Une phrase sur « Détails » pourrait rejoindre la narration de **VOLUNTEER_CHOOSE_SHIFTS**.
-- Aucune vidéo n'est régénérée dans ce changement.
-
-## À refilmer : créneaux courts dans la frise (#1470, 27 novembre 2026)
-
-Sur la page d'inscription, la ligne sous la frise reprend maintenant les mots de la vue Liste (« 18h–20h · Bar », puis le statut) au lieu de « Bar · 18h–20h », et apparaît aussi sur les événements qui ont un créneau d'une heure ou moins. Dans la frise des organisateurs, une barre de moins de 80 px affiche le libellé du créneau avant son horaire, et son nom suit cet ordre.
-
-- **SHIFT_ROSTER_VISIBILITY** (`shift-roster-visibility`) : la ligne de la frise avec « Voir qui est inscrit » change d’ordre et gagne l’état du créneau ; le sélecteur de `videos/lib/record-shift-roster.ts` suit ce changement. Image seule, à refilmer.
-- Les jeux de tournage n'ont pas de créneau de moins d'une heure : aucune autre vidéo ne change. Aucune vidéo n'est régénérée dans ce changement.
+- Image seule, la liste s'allonge et la frise gagne une ligne : **VOLUNTEER_FORM_RECAP**, **SHIFT_ELIGIBILITY_RULES**, déjà listées pour la vue Liste.
 
 ## À refilmer : créneaux regroupés par secteur sur la page d'inscription (#1469, 27 novembre 2026)
 
 Une fois le premier secteur enregistré, la carte **Secteurs** des informations de l'événement montre un second interrupteur, « Regrouper les créneaux par secteur sur la page d'inscription », désactivé par défaut. Activé, la page d'inscription range les créneaux de chaque journée sous le nom de leur secteur. Sans l'option, la page d'inscription ne change pas : aucun sélecteur de capture ne casse.
 
 - **SECTORS** (`sectors`) : narration modifiée (« Les bénévoles ne voient pas les secteurs, sauf si vous choisissez de regrouper les créneaux par secteur sur la page d'inscription »), avec le bloc `viewer` et le script ; la carte Secteurs filmée après le premier secteur montre le nouvel interrupteur. À refilmer avec le prochain lot.
-- **SECTOR_LEADERS** (`sector-leaders`) : la carte Secteurs, si elle est filmée une fois les secteurs adoptés, gagne l'interrupteur. Image seule.
-- Aucune vidéo n'est régénérée dans ce changement.
 
 ## Lot 44 — en cours, 27 novembre 2026
 
@@ -1567,3 +1543,13 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **SECTOR_LEADERS — READY, publiée, révision 8.** La carte Secteurs n'est pas filmée dans ce parcours. [Revue](evidence/batch44/sector-leaders/review.md).
 
 **ORG_TIMEZONE_CHARTER — READY, publiée, révision 5.** La convention et son commutateur sont présentés dans les paramètres et le formulaire. [Revue](evidence/batch44/org-timezone-charter/review.md).
+
+**ORG_FIRST_STEPS — NOT READY, non publiée.** La répétition atteint le guide mais le lecteur vidéo réel est absent du serveur isolé sans source média ; aucun lecteur de substitution n'a été utilisé. [Suivi et preuves](evidence/batch44/STATUS.md).
+
+**ADMIN_FEATURES_OVERVIEW — READY, publiée, révision 8.** Le formulaire actuel montre aussi les réglages d'affichage et de chevauchement (#1407, #1467). [Revue](evidence/batch44/admin-features-tour/review.md).
+
+**EVENT_REVIEW_PUBLISH — READY, publiée, révision 5.** La fenêtre de l'aperçu porte le titre actuel de la convention. [Revue](evidence/batch44/event-review-publish/review.md).
+
+**ACCESSIBILITY_KEYBOARD_DISPLAY — NOT READY, non publiée.** L'autorisation Accessibilité macOS est refusée au processus de capture ; les inserts Safari et VoiceOver requis ne peuvent pas être vérifiés. [Preuve](evidence/batch44/accessibility-keyboard-display/native-preflight.txt).
+
+**ORG_EMAIL_SETTINGS — READY, publiée, révision 7.** Le texte d'aide du résumé quotidien et de l'alerte immédiate est à jour. [Revue](evidence/batch44/org-email-settings/review.md).
