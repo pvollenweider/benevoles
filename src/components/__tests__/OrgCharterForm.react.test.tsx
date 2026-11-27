@@ -1,9 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, afterEach } from "vitest"
+import { describe, it, expect, afterEach, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, cleanup, fireEvent, within } from "@testing-library/react"
+import { render, screen, cleanup, fireEvent, waitFor, within, act } from "@testing-library/react"
 
 import OrgCharterForm from "../admin/OrgCharterForm"
 import {
@@ -13,15 +13,18 @@ import {
   LEGACY_DEFAULT_CHARTERS,
 } from "@/lib/volunteer-charter"
 
-// The insurance switch of the charter settings (#579): its state is exposed by aria-checked, which
-// also drives its forced-colours styling (`forced-colors:aria-checked:*`), so the attribute must
-// follow every toggle.
+// The switches of the convention settings (#579, #1468): their state is exposed by aria-checked,
+// which also drives the forced-colours styling (`forced-colors:aria-checked:*`), so the attribute
+// must follow every toggle.
+const insuranceSwitch = () => screen.getByRole("switch", { name: "Assurance RC fournie par l'organisation" })
+const conventionSwitch = () => screen.getByRole("switch", { name: "Demander aux bénévoles d'accepter une convention" })
+
 describe("OrgCharterForm insurance switch", () => {
   afterEach(cleanup)
 
   it("is a named switch whose aria-checked follows the state", () => {
     render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={false} />)
-    const toggle = screen.getByRole("switch", { name: "Assurance RC fournie par l'organisation" })
+    const toggle = insuranceSwitch()
     expect(toggle).toHaveAttribute("aria-checked", "false")
 
     fireEvent.click(toggle)
@@ -35,12 +38,12 @@ describe("OrgCharterForm insurance switch", () => {
 
   it("starts checked when the organisation provides insurance", () => {
     render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={true} />)
-    expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "true")
+    expect(insuranceSwitch()).toHaveAttribute("aria-checked", "true")
   })
 
   it("keeps the forced-colours state classes on the attribute, not on a class toggle", () => {
     render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={false} />)
-    const toggle = screen.getByRole("switch")
+    const toggle = insuranceSwitch()
     expect(toggle.className).toContain("forced-colors:aria-checked:bg-[Highlight]")
     expect(toggle.className).toContain("forced-colors:border-[CanvasText]")
     expect(toggle.firstElementChild?.className).toContain("forced-colors:bg-[CanvasText]")
@@ -49,30 +52,30 @@ describe("OrgCharterForm insurance switch", () => {
 
 const WITH = buildVolunteerCharter({ hasOrgInsurance: true })
 const WITHOUT = buildVolunteerCharter({ hasOrgInsurance: false })
-const textarea = () => screen.getByRole("textbox", { name: "Charte des bénévoles" }) as HTMLTextAreaElement
+const textarea = () => screen.getByRole("textbox", { name: "Convention des bénévoles" }) as HTMLTextAreaElement
 const UPDATE = "Mettre à jour le paragraphe sur l'assurance"
 
-describe("OrgCharterForm insurance switch and the charter text", () => {
+describe("OrgCharterForm insurance switch and the convention text", () => {
   afterEach(cleanup)
 
   it("switches a default text to the other default, and says so", async () => {
     render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={true} />)
     expect(textarea().value).toBe(WITH)
-    fireEvent.click(screen.getByRole("switch"))
+    fireEvent.click(insuranceSwitch())
     expect(textarea().value).toBe(WITHOUT)
     expect(screen.queryByRole("button", { name: UPDATE })).toBeNull()
-    expect(await screen.findByText("Texte de la charte adapté à ce choix.")).toBeInTheDocument()
+    expect(await screen.findByText("Texte de la convention adapté à ce choix.")).toBeInTheDocument()
   })
 
   it("gives a saved old default the new wording when toggled", () => {
     render(<OrgCharterForm initialCharter={LEGACY_DEFAULT_CHARTERS.withOrgInsurance} initialHasOrgInsurance={true} />)
-    fireEvent.click(screen.getByRole("switch"))
+    fireEvent.click(insuranceSwitch())
     expect(textarea().value).toBe(WITHOUT)
   })
 
   it("resets an old default to the current default", () => {
     render(<OrgCharterForm initialCharter={LEGACY_DEFAULT_CHARTERS.withoutOrgInsurance} initialHasOrgInsurance={false} />)
-    fireEvent.click(screen.getByRole("button", { name: "Réinitialiser la charte par défaut" }))
+    fireEvent.click(screen.getByRole("button", { name: "Réinitialiser la convention par défaut" }))
     expect(textarea().value).toBe(WITHOUT)
   })
 
@@ -81,11 +84,11 @@ describe("OrgCharterForm insurance switch and the charter text", () => {
     const custom = WITH.replace("bienveillant", "chaleureux")
     render(<OrgCharterForm initialCharter={custom} initialHasOrgInsurance={true} />)
     expect(screen.queryByRole("button", { name: UPDATE })).toBeNull()
-    const toggle = screen.getByRole("switch")
+    const toggle = insuranceSwitch()
     fireEvent.click(toggle)
     expect(toggle).toHaveAttribute("aria-checked", "false")
     expect(textarea().value).toBe(custom)
-    expect(toggle).toHaveAccessibleDescription(/Votre texte de charte est personnalisé : il n'a pas été modifié/)
+    expect(toggle).toHaveAccessibleDescription(/Votre texte de convention est personnalisé : il n'a pas été modifié/)
     expect(screen.getByRole("button", { name: UPDATE })).toBeInTheDocument()
     expect(await screen.findByText("Votre texte personnalisé n'a pas été modifié.")).toBeInTheDocument()
   })
@@ -93,7 +96,7 @@ describe("OrgCharterForm insurance switch and the charter text", () => {
   it("shows what will change before replacing just the insurance paragraph", async () => {
     const custom = WITH.replace("bienveillant", "chaleureux")
     render(<OrgCharterForm initialCharter={custom} initialHasOrgInsurance={true} />)
-    fireEvent.click(screen.getByRole("switch"))
+    fireEvent.click(insuranceSwitch())
     fireEvent.click(screen.getByRole("button", { name: UPDATE }))
     const preview = screen.getByRole("group", { name: "Ce paragraphe sera remplacé :" })
     expect(within(preview).getByText(INSURANCE_CLAUSE_WITH_ORG_RC)).toBeInTheDocument()
@@ -108,7 +111,7 @@ describe("OrgCharterForm insurance switch and the charter text", () => {
   it("closes the preview when the text is edited, so typing never moves focus into it", () => {
     const custom = WITH.replace("bienveillant", "chaleureux")
     render(<OrgCharterForm initialCharter={custom} initialHasOrgInsurance={true} />)
-    fireEvent.click(screen.getByRole("switch"))
+    fireEvent.click(insuranceSwitch())
     fireEvent.click(screen.getByRole("button", { name: UPDATE }))
     expect(screen.getByRole("group")).toBeInTheDocument()
     textarea().focus()
@@ -118,16 +121,106 @@ describe("OrgCharterForm insurance switch and the charter text", () => {
   })
 
   it("appends the paragraph to a customised text that has none, and Annuler changes nothing", () => {
-    render(<OrgCharterForm initialCharter="Notre charte." initialHasOrgInsurance={false} />)
-    fireEvent.click(screen.getByRole("switch"))
+    render(<OrgCharterForm initialCharter="Notre convention." initialHasOrgInsurance={false} />)
+    fireEvent.click(insuranceSwitch())
     fireEvent.click(screen.getByRole("button", { name: UPDATE }))
     let preview = screen.getByRole("group", { name: "Ce paragraphe sera ajouté à la fin du texte :" })
     fireEvent.click(within(preview).getByRole("button", { name: "Annuler" }))
     expect(screen.queryByRole("group")).toBeNull()
-    expect(textarea().value).toBe("Notre charte.")
+    expect(textarea().value).toBe("Notre convention.")
     fireEvent.click(screen.getByRole("button", { name: UPDATE }))
     preview = screen.getByRole("group", { name: "Ce paragraphe sera ajouté à la fin du texte :" })
     fireEvent.click(within(preview).getByRole("button", { name: "Ajouter le paragraphe" }))
-    expect(textarea().value).toBe(`Notre charte.\n\n${INSURANCE_CLAUSE_WITH_ORG_RC}`)
+    expect(textarea().value).toBe(`Notre convention.\n\n${INSURANCE_CLAUSE_WITH_ORG_RC}`)
+  })
+})
+
+// « Demander aux bénévoles d'accepter une convention » (#1468): off removes the controls instead of
+// disabling them, keeps their state for the save, and says what the organisation loses.
+describe("OrgCharterForm convention switch", () => {
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  it("is a named switch on by default, and the heading is renamed", () => {
+    render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={true} />)
+    expect(screen.getByRole("heading", { name: "Convention des bénévoles" })).toBeInTheDocument()
+    expect(conventionSwitch()).toHaveAttribute("aria-checked", "true")
+    expect(conventionSwitch()).toHaveAccessibleDescription("Les bénévoles lisent et acceptent ce texte en s'inscrivant.")
+    expect(screen.getByText("Les bénévoles lisent et acceptent ce texte en s'inscrivant.")).toBeInTheDocument()
+    expect(screen.queryByText("Ce texte est présenté aux bénévoles lors de l'inscription.")).toBeNull()
+  })
+
+  it("removes the dependent controls, keeps the focus on the switch and ties the warning to it", async () => {
+    render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={true} />)
+    act(() => conventionSwitch().focus())
+    fireEvent.click(conventionSwitch())
+
+    const toggle = conventionSwitch()
+    expect(toggle).toHaveAttribute("aria-checked", "false")
+    expect(toggle).toHaveFocus()
+    expect(screen.queryByRole("textbox")).toBeNull()
+    expect(screen.queryByRole("button", { name: "Réinitialiser la convention par défaut" })).toBeNull()
+    expect(screen.queryByText("Les bénévoles lisent et acceptent ce texte en s'inscrivant.")).toBeNull()
+    expect(screen.queryByRole("switch", { name: "Assurance RC fournie par l'organisation" })).toBeNull()
+    expect(screen.getByText("Aucune convention n'est demandée à l'inscription.")).toBeInTheDocument()
+    const warning = screen.getByText(/les bénévoles s'inscriront sans accepter de convention/).closest("p")!
+    expect(warning).toHaveClass("text-sm")
+    expect(warning).not.toHaveClass("text-xs")
+    expect(warning).toHaveClass("text-gray-800")
+    expect(within(warning).getByText("Attention :")).toHaveClass("font-semibold")
+    expect(toggle).toHaveAccessibleDescription(/^Aucune convention n'est demandée à l'inscription\. Attention : les bénévoles s'inscriront sans accepter de convention/)
+    expect(await screen.findByText("Convention désactivée. Enregistrez pour l'appliquer.")).toBeInTheDocument()
+
+    fireEvent.click(toggle)
+    expect(toggle).toHaveAttribute("aria-checked", "true")
+    expect(toggle).toHaveFocus()
+    expect(await screen.findByText("Convention réactivée. Enregistrez pour l'appliquer.")).toBeInTheDocument()
+  })
+
+  it("keeps the text and the insurance choice in state, and restores them when back on", () => {
+    render(<OrgCharterForm initialCharter="Notre convention." initialHasOrgInsurance={false} />)
+    expect(insuranceSwitch()).toHaveAttribute("aria-checked", "false")
+    fireEvent.click(conventionSwitch())
+    expect(screen.queryByRole("textbox")).toBeNull()
+    fireEvent.click(conventionSwitch())
+    expect(textarea().value).toBe("Notre convention.")
+    expect(insuranceSwitch()).toHaveAttribute("aria-checked", "false")
+  })
+
+  it("starts off when the organisation already asks for no convention, with the warning on load", () => {
+    render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={true} initialVolunteerConventionEnabled={false} />)
+    expect(conventionSwitch()).toHaveAttribute("aria-checked", "false")
+    expect(conventionSwitch()).toHaveAccessibleDescription(/^Aucune convention n'est demandée à l'inscription\. Attention :/)
+    expect(screen.getByText(/^Attention :/)).toBeInTheDocument()
+    expect(screen.queryByRole("textbox")).toBeNull()
+  })
+
+  it("saves the switch off with the text and the insurance choice", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }))
+    vi.stubGlobal("fetch", fetchMock)
+    render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={true} />)
+    fireEvent.click(conventionSwitch())
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+    expect(fetchMock).toHaveBeenCalledWith("/api/admin/settings/organization", expect.objectContaining({
+      method: "PATCH",
+      body: JSON.stringify({ volunteerCharter: WITH, hasOrgInsurance: true, volunteerConventionEnabled: false }),
+    }))
+  })
+
+  it("saves the switch back on as true", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }))
+    vi.stubGlobal("fetch", fetchMock)
+    render(<OrgCharterForm initialCharter={null} initialHasOrgInsurance={true} />)
+    fireEvent.click(conventionSwitch())
+    fireEvent.click(conventionSwitch())
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+    expect(fetchMock).toHaveBeenCalledWith("/api/admin/settings/organization", expect.objectContaining({
+      method: "PATCH",
+      body: JSON.stringify({ volunteerCharter: WITH, hasOrgInsurance: true, volunteerConventionEnabled: true }),
+    }))
   })
 })

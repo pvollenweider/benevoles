@@ -307,6 +307,10 @@ export async function confirmSignupConfirmation(token: string, now: Date = new D
               ...registrationToken.data(token),
               status: "waiting",
               waitingPosition: position,
+              // Proof of acceptance copied from the request, exactly as it was recorded (#569): a
+              // request made while no convention was asked has none, and keeps none even if the
+              // organisation turned the convention on before this confirmation (#1468). The
+              // volunteer signed up under the rules shown to them.
               charterAcceptedHash: current.charterAcceptedHash,
               charterAcceptedAt: current.charterAcceptedAt,
               groupLinkId: current.groupLinkId,
@@ -331,6 +335,7 @@ export async function confirmSignupConfirmation(token: string, now: Date = new D
               ...registrationToken.data(token),
               status: next,
               waitingPosition: null,
+              // Same proof as the request recorded, which may be none (#1468).
               charterAcceptedHash: current.charterAcceptedHash,
               charterAcceptedAt: current.charterAcceptedAt,
               groupLinkId: current.groupLinkId,

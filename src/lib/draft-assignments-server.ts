@@ -271,7 +271,7 @@ function storedOutcome(row: PublicationRow): PublishOutcome {
 
 /**
  * Publishes the selected drafts, all or nothing, in one transaction (Codex, lot C): each becomes an
- * active registration (`source: "admin_draft"`, no charter acceptance invented), with the
+ * active registration (`source: "admin_draft"`, no convention acceptance invented), with the
  * acknowledgements' evidence, the event log and one grouped email per person (the organiser's
  * placement email, #916) written in the same transaction. Every rule is checked again under the
  * locks on the rows as they are now, each person's batch judged as a whole by the workload

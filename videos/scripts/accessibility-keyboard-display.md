@@ -143,7 +143,7 @@ WAITING TTS — plafond mensuel connu ; aucun appel. Narration entière à rég�
 - Vous rencontrez une difficulté ?
 - Indiquez la page, le geste tenté, le résultat attendu, le navigateur et, si vous en utilisez un, le lecteur d'écran.
 
-Précontrôles sur le build du lot 22-7 : `verify-accessibility-picker.ts` et `verify-accessibility-current-pages.ts` passent. Onglets actuels, Cumul, Charte des bénévoles, sélection publique au clavier et vrai lien Accessibilité contrôlés ; largeur de document 381 px à 320 px toujours observée. Ces captures ne valident ni le zoom natif ni VoiceOver, et ne sont pas un film final.
+Précontrôles sur le build du lot 22-7 : `verify-accessibility-picker.ts` et `verify-accessibility-current-pages.ts` passent. Onglets actuels, Cumul, Convention des bénévoles, sélection publique au clavier et vrai lien Accessibilité contrôlés ; largeur de document 381 px à 320 px toujours observée. Ces captures ne valident ni le zoom natif ni VoiceOver, et ne sont pas un film final.
 
 ## Révision du 2026-10-22 — lot 30
 

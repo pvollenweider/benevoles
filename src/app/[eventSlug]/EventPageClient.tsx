@@ -60,7 +60,7 @@ import { useMediaQuery } from "@/lib/use-media-query"
 import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter, { type FooterSite } from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
-import { resolveCharterText } from "@/lib/volunteer-charter"
+import { isVolunteerConventionAsked, resolveCharterText } from "@/lib/volunteer-charter"
 import {
   ROSTER_NOTICE_VERSION, ROSTER_QUERY_PARAM, eventPageRosterViewer, signupRosterBox, type ShiftRosterEntry,
 } from "@/lib/shift-roster"
@@ -153,6 +153,8 @@ export type EventData = {
   volunteerCharter: string | null
   /** With volunteerCharter, picks the exact text the sign-up route hashes (#569). */
   hasOrgInsurance: boolean
+  /** Whether the sign-up asks for the convention at all (#1468); absent = asked. */
+  volunteerConventionEnabled?: boolean
   shifts: Shift[]
   pages: { slug: string; title: string }[]
   /** Only in the admin preview (#370). */
@@ -214,6 +216,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   type MyReg = MyRegistration
 
   const [event, setEvent] = useState<EventData | null>(initialEvent ?? null)
+  // One decision for the whole page (#1468): render the box and the modal, require them at
+  // validation, and know whether a stale refusal can point at a box at all.
+  const conventionAsked = isVolunteerConventionAsked(event?.volunteerConventionEnabled)
   const [loading, setLoading] = useState(!initialEvent)
   const serverRendered = !!initialEvent
   const [selectedShifts, setSelectedShifts] = useState<Set<string>>(new Set())
@@ -658,6 +663,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     const invalid = validateSignup({
       form,
       charterAccepted,
+      volunteerConventionEnabled: event?.volunteerConventionEnabled,
       requirePhone: event?.requirePhone ?? false,
       ageGatedShifts: ageGatedSelectedShifts,
       minorsProtected,
@@ -675,7 +681,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
         requestAnimationFrame(() => document.getElementById(`q-${first.condition.questionId}`)?.focus())
         return
       }
-      const box = !charterAccepted ? "charter" : !form.consent ? "consent" : null
+      const box = conventionAsked && !charterAccepted ? "charter" : !form.consent ? "consent" : null
       setInvalidCheckbox(box)
       // A missing birth date (minimum age, minors' protection) is said on its field, which takes focus.
       const birth = !box && asksBirthDate && !form.birthDate
@@ -780,11 +786,19 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       }
       // Errors never carry a management token (#285): the owner gets it by email instead.
       setFailure(describeSignupFailure({ status: res.status, body: data }))
-      // The server refused the charter (#569): back to the checkbox, the alert is still announced.
+      // The server refused the convention (#569): back to the checkbox, the alert is still announced.
       if (data.field === "charterAccepted") {
-        setCharterAccepted(false)
-        setInvalidCheckbox("charter")
-        requestAnimationFrame(() => document.getElementById("reg-charter")?.focus())
+        // Stale page (#1468): the convention was turned on after this page loaded, so there is
+        // no box to mark or focus. The failure message takes focus and says to reload the page.
+        const box = conventionAsked ? document.getElementById("reg-charter") : null
+        if (box) {
+          setCharterAccepted(false)
+          setInvalidCheckbox("charter")
+          requestAnimationFrame(() => box.focus())
+        } else {
+          setInvalidCheckbox(null)
+          requestAnimationFrame(() => failureRef.current?.focus())
+        }
         return
       }
       requestAnimationFrame(() => failureRef.current?.focus())
@@ -1591,30 +1605,33 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                 </div>
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    id="reg-charter"
-                    type="checkbox"
-                    checked={charterAccepted}
-                    aria-invalid={invalidCheckbox === "charter" || undefined}
-                    aria-describedby={invalidCheckbox === "charter" ? (failure ? "signup-failure" : "signup-error") : undefined}
-                    onChange={(e) => { setCharterAccepted(e.target.checked); if (e.target.checked && invalidCheckbox === "charter") setInvalidCheckbox(null) }}
-                    className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
-                  />
-                  <span className="text-sm text-gray-600">
-                    J&apos;ai lu et j&apos;accepte la{" "}
-                    <button
-                      ref={charterTriggerRef}
-                      type="button"
-                      // Same WebKit fallback to <main> as for the ✕: ModalShell restores its opener.
-                      onClick={() => setShowCharter(true)}
-                      className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
-                    >
-                      convention des bénévoles
-                    </button>
-                    .
-                  </span>
-                </label>
+                {/* No convention asked (#1468): only the data consent remains, and no modal is reachable. */}
+                {conventionAsked && (
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      id="reg-charter"
+                      type="checkbox"
+                      checked={charterAccepted}
+                      aria-invalid={invalidCheckbox === "charter" || undefined}
+                      aria-describedby={invalidCheckbox === "charter" ? (failure ? "signup-failure" : "signup-error") : undefined}
+                      onChange={(e) => { setCharterAccepted(e.target.checked); if (e.target.checked && invalidCheckbox === "charter") setInvalidCheckbox(null) }}
+                      className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
+                    />
+                    <span className="text-sm text-gray-600">
+                      J&apos;ai lu et j&apos;accepte la{" "}
+                      <button
+                        ref={charterTriggerRef}
+                        type="button"
+                        // Same WebKit fallback to <main> as for the ✕: ModalShell restores its opener.
+                        onClick={() => setShowCharter(true)}
+                        className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                      >
+                        convention des bénévoles
+                      </button>
+                      .
+                    </span>
+                  </label>
+                )}
 
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
@@ -1705,9 +1722,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
         )}
       </ContentLandmark>
 
-      {showCharter && (
+      {conventionAsked && showCharter && (
         <ModalShell
-          title="Convention des Bénévoles"
+          title="Convention des bénévoles"
           onClose={closeCharter}
           closeOnBackdrop={false}
           panelClassName="max-w-lg"

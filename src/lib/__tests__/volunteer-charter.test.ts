@@ -10,6 +10,7 @@ import {
   INSURANCE_CLAUSE_WITH_ORG_RC,
   INSURANCE_CLAUSE_WITHOUT_ORG_RC,
   isCustomizedCharter,
+  isVolunteerConventionAsked,
   LEGACY_DEFAULT_CHARTERS,
   LEGACY_INSURANCE_CLAUSE_WITH_ORG_RC,
   LEGACY_INSURANCE_CLAUSE_WITHOUT_ORG_RC,
@@ -166,13 +167,31 @@ describe("planInsuranceParagraphUpdate", () => {
 
 // An organization without its own text still shows the default charter to volunteers, so the
 // read-only settings summary must not say « aucune ».
+describe("isVolunteerConventionAsked", () => {
+  it("asks for the convention by default, including for an older payload without the field", () => {
+    expect(isVolunteerConventionAsked(true)).toBe(true)
+    expect(isVolunteerConventionAsked(undefined)).toBe(true)
+    expect(isVolunteerConventionAsked(null)).toBe(true)
+  })
+
+  it("asks for nothing once the organisation turned the convention off", () => {
+    expect(isVolunteerConventionAsked(false)).toBe(false)
+  })
+})
+
 describe("charterStatusLabel", () => {
-  it("reports the default charter when none was customized", () => {
+  it("reports the default convention when none was customized", () => {
     expect(charterStatusLabel(null)).toBe("par défaut")
     expect(charterStatusLabel(undefined)).toBe("par défaut")
   })
 
-  it("reports a custom charter", () => {
-    expect(charterStatusLabel("Notre charte")).toBe("personnalisée")
+  it("reports a custom convention", () => {
+    expect(charterStatusLabel("Notre convention")).toBe("personnalisée")
+  })
+
+  it("reports « aucune » when the organisation asks for no convention", () => {
+    expect(charterStatusLabel(null, false)).toBe("aucune")
+    expect(charterStatusLabel("Notre convention", false)).toBe("aucune")
+    expect(charterStatusLabel(undefined, undefined)).toBe("par défaut")
   })
 })

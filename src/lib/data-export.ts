@@ -68,9 +68,10 @@ export type MemberExportRow = {
    */
   deliveryOutcomes?: { date: Date | string; kind: string; outcome: string; reason: string | null }[]
   /**
-   * Last time this member accepted the volunteer charter at a public sign-up (#569), across all
+   * Last time this member accepted the volunteer convention at a public sign-up (#569), across all
    * their registrations; null if every one of their registrations was added by an admin by hand
-   * (no volunteer consent was given there) or they have none.
+   * (no volunteer consent was given there), if the organisation asked for no convention (#1468),
+   * or if they have none.
    */
   charterAcceptedAt?: Date | string | null
   /**

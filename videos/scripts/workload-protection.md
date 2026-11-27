@@ -23,7 +23,7 @@ Montrer la fonction bêta « Protection des pauses et de la charge » (#1171, PR
 11. « Activer la protection » : refus (« Ces limites ne sont pas respectées aujourd'hui par le programme de Noah De Jong. … rien n'a été activé ni modifié. »), « Programmes à modifier d'abord ».
 12. « Jours sans mission » : « Ne pas appliquer cette règle », « Aperçu » (aucun programme), « Activer la protection » : « Activée ».
 13. « Limites personnelles », « Ajouter des limites pour une personne » : Camille Rossi, « Durée maximale par journée de service » 6 h, « Enregistrer les limites de la personne ».
-14. Page publique : Emma choisit samedi « Accueil Chapiteau » (14 h 30 à 18 h) et « Bar Grande Scène » (18 h à 22 h) ; le récapitulatif affiche « Ces créneaux dépassent les limites de l'événement » (7 h 30 d'affilée, aucun temps entre le Chapiteau et la Grande Scène) ; prénom, nom, email, date de naissance, charte et consentement ; « Confirmer mon inscription » : refus 409, même explication.
+14. Page publique : Emma choisit samedi « Accueil Chapiteau » (14 h 30 à 18 h) et « Bar Grande Scène » (18 h à 22 h) ; le récapitulatif affiche « Ces créneaux dépassent les limites de l'événement » (7 h 30 d'affilée, aucun temps entre le Chapiteau et la Grande Scène) ; prénom, nom, email, date de naissance, convention et consentement ; « Confirmer mon inscription » : refus 409, même explication.
 15. « Mes inscriptions » de Sarah : « Annuler » sur « Accueil Chapiteau », « Oui, annuler ».
 16. Inscriptions : ses deux créneaux du dimanche portent « Limite dépassée : … » (attente entre l'accueil du matin et le bar du soir).
 17. « Mes inscriptions » de Sarah rechargée : carte « Pauses et charge », puis « Mes limites ».

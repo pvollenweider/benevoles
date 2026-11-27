@@ -152,7 +152,24 @@ export function resolveCharterText(organizationCharter: string | null | undefine
   return organizationCharter ?? buildVolunteerCharter({ hasOrgInsurance })
 }
 
-/** Read-only settings summary: a null charter is not missing, volunteers see the default text. */
-export function charterStatusLabel(organizationCharter: string | null | undefined): "personnalisée" | "par défaut" {
+/**
+ * Whether a public sign-up asks the volunteer to accept the volunteer convention (#1468): the one
+ * place that decides it, for the public page, the sign-up route including its pending-request path,
+ * and the settings summary. On unless the organisation turned it off; an older payload without the
+ * field keeps the previous behaviour.
+ */
+export function isVolunteerConventionAsked(volunteerConventionEnabled: boolean | null | undefined): boolean {
+  return volunteerConventionEnabled !== false
+}
+
+/**
+ * Read-only settings summary: a null charter is not missing, volunteers see the default text.
+ * « aucune » when the organisation asks for no convention at all.
+ */
+export function charterStatusLabel(
+  organizationCharter: string | null | undefined,
+  volunteerConventionEnabled: boolean | null | undefined = true,
+): "personnalisée" | "par défaut" | "aucune" {
+  if (!isVolunteerConventionAsked(volunteerConventionEnabled)) return "aucune"
   return organizationCharter == null ? "par défaut" : "personnalisée"
 }

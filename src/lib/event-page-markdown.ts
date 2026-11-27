@@ -12,7 +12,7 @@
  * Sanitized at render time, not on write, so a stricter allowlist can be adopted later without
  * needing to re-process already-stored content.
  *
- * Admins are trusted within their own org today (the charte and public instructions are already
+ * Admins are trusted within their own org today (the convention and public instructions are already
  * admin-authored, unescaped free text) — but `marked` parses raw inline HTML in Markdown by
  * default, and a stored, unsanitized `<script>` here would run for every visitor of the public
  * page, not just admins. DOMPurify strips anything outside a plain-content allowlist regardless

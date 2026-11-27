@@ -141,6 +141,17 @@ describe("public sign-up confirmed by email (#1253)", () => {
     })
   })
 
+  it("stores no acceptance proof in the pending request when no convention is asked", async () => {
+    m.events = [event({ organization: { slug: "asso", timeZone: "Europe/Zurich", volunteerConventionEnabled: false } })]
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ charterAccepted: undefined }))
+    expect(res.status).toBe(201)
+    expect(m.confirmationCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ charterAcceptedHash: null, charterAcceptedAt: null }),
+    }))
+    expect(m.txCreate.mock.calls[0][0].data).toEqual(expect.objectContaining({ charterAcceptedHash: null, charterAcceptedAt: null }))
+  })
+
   it("does not reserve a full shift with a waitlist: only the confirmation email, entered at the click", async () => {
     m.events = [event()]
     const { POST } = await import("@/app/api/public/registrations/route")

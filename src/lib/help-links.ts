@@ -69,7 +69,7 @@ export const SECTION_DOC_LINKS = {
   admin: {
     milestones: { unit: "jalons" },
     adminTeam: { unit: "equipe-d-organisation" },
-    charter: { unit: "charte-du-benevole" },
+    charter: { unit: "convention-des-benevoles" },
   },
   benevole: {
     chooseShifts: { unit: "choisir-ses-creneaux" },

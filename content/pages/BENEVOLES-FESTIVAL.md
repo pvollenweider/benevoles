@@ -36,15 +36,15 @@ Pour qu'un bénévole motivé ne passe pas tout le week-end au bar, vous pouvez 
 
 En savoir plus : [horaires et créneaux de nuit](../guide/horaires-et-nuit.md), [gérer les postes](../guide/gerer-les-postes.md), [le tutoriel vidéo sur les créneaux de nuit](/videos/SHIFT_NIGHT_DST).
 
-## Les t-shirts, la charte et l'accès au site
+## Les t-shirts, la convention et l'accès au site
 
 Le formulaire d'inscription peut poser jusqu'à cinq questions de plus, comme la taille de t-shirt, le permis de conduire ou le régime alimentaire. Une synthèse compte les réponses : vous savez combien de t-shirts commander dans chaque taille.
 
-Les bénévoles acceptent votre charte avant de s'inscrire. L'événement peut aussi avoir ses propres pages d'information : l'accès et le parking, le règlement, une foire aux questions.
+Les bénévoles acceptent votre convention avant de s'inscrire. L'événement peut aussi avoir ses propres pages d'information : l'accès et le parking, le règlement, une foire aux questions.
 
 <!-- video: EVENT_QUESTIONS -->
 
-En savoir plus : [questions aux bénévoles](../guide/questions-aux-benevoles.md), [la charte du bénévole](../guide/charte-du-benevole.md), [les pages personnalisées](../guide/pages-personnalisees.md), [le tutoriel vidéo sur les questions](/videos/EVENT_QUESTIONS).
+En savoir plus : [questions aux bénévoles](../guide/questions-aux-benevoles.md), [la convention des bénévoles](../guide/convention-des-benevoles.md), [les pages personnalisées](../guide/pages-personnalisees.md), [le tutoriel vidéo sur les questions](/videos/EVENT_QUESTIONS).
 
 ## Quand quelqu'un se désiste
 

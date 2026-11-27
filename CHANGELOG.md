@@ -30,6 +30,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Convention des bénévoles** : le texte que les bénévoles acceptent à l'inscription porte ce nom partout, dans les paramètres comme dans les guides. Une organisation peut aussi choisir de ne pas en demander : les bénévoles s'inscrivent alors sans l'accepter, et aucune preuve d'acceptation n'est conservée.
 - **Frise ou liste sur la page d'inscription** (#1407) : la page choisit l'affichage le plus lisible, la frise quand elle tient à l'écran, la liste sinon (souvent sur un téléphone tenu droit) et toujours pour une saison de permanences. L'organisateur peut imposer « Frise » ou « Liste » dans les paramètres de l'événement, et le choix du visiteur l'emporte toujours. Sur téléphone, une phrase propose de le tourner ou de toucher « Frise ».
 - **Vue Liste des créneaux** : chaque créneau disponible porte à gauche la couleur de son poste, comme dans la frise ; les créneaux qu'on ne peut pas choisir (complet, fermé, terminé…) sont plus discrets.
 - **Emails de confirmation et de rappel** (#1429) : le bouton principal devient **Mes inscriptions** et ouvre le lien personnel vers toutes les inscriptions auprès de l'organisation. Les emails qui demandent une action sur un événement (place proposée, échange, disponibilités) gardent leur lien, et les liens déjà reçus continuent de fonctionner.

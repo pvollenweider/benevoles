@@ -16,7 +16,7 @@ aliases: [equipe-admin]
 
 L'équipe d'organisation, ce sont les organisateurs de votre espace. Deux rôles :
 
-- **Propriétaire** : tous les droits, dont la gestion de l'équipe d'organisation, les paramètres de l'organisation (nom, titre public, adresse, fuseau horaire, charte, paramètres des emails, masquer les **Premiers pas**) et la suppression définitive d'un événement archivé.
+- **Propriétaire** : tous les droits, dont la gestion de l'équipe d'organisation, les paramètres de l'organisation (nom, titre public, adresse, fuseau horaire, convention, paramètres des emails, masquer les **Premiers pas**) et la suppression définitive d'un événement archivé.
 - **Organisateur** : événements (création, duplication, modification, publication, archivage), postes, créneaux, questions, pages personnalisées, responsables de secteur, jalons, inscriptions, demandes et présences, membres (import et export compris) et invitations, messages aux bénévoles et modèles de messages, rappel manuel, rapports et exports, journaux, et renvoi d'un email en échec. Il voit l'équipe et un résumé des paramètres de l'organisation, sans pouvoir les changer ; la page le dit.
 
 Dans la documentation, les paramètres marqués **(réservé aux propriétaires)** ne sont modifiables que par un propriétaire.
@@ -30,4 +30,4 @@ Sur cette page, un propriétaire peut :
 - **changer le rôle** d'un organisateur dans sa ligne ; le changement s'applique aussitôt, y compris à ses sessions ouvertes ;
 - **retirer** un organisateur de l'équipe. Il est impossible de se retirer soi-même ou de retirer le dernier organisateur actif, et l'organisation garde toujours au moins un propriétaire actif.
 
-La même page porte aussi les paramètres de l'organisation : voir [Personnaliser l'organisation](personnaliser-l-organisation.md) et [Charte du bénévole](charte-du-benevole.md).
+La même page porte aussi les paramètres de l'organisation : voir [Personnaliser l'organisation](personnaliser-l-organisation.md) et [Convention des bénévoles](convention-des-benevoles.md).

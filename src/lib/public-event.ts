@@ -20,7 +20,7 @@ import { shiftViewSetting } from "@/lib/shift-view"
  */
 export const publicEventInclude = {
   // The logo's metadata only (#300): the page loads the image from its own URL.
-  organization: { select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, timeZone: true, logo: ORG_LOGO_SELECT } },
+  organization: { select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, volunteerConventionEnabled: true, timeZone: true, logo: ORG_LOGO_SELECT } },
   shifts: {
     where: { status: { not: "cancelled" } },
     // Every spot taken counts, a pending request or a waitlist offer included (#484): the page
@@ -174,6 +174,8 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     // Both needed to show the exact charter text the sign-up route hashes (#569): resolveCharterText.
     volunteerCharter: event.organization.volunteerCharter,
     hasOrgInsurance: event.organization.hasOrgInsurance,
+    // Whether the sign-up asks for the volunteer convention at all (#1468): isVolunteerConventionAsked.
+    volunteerConventionEnabled: event.organization.volunteerConventionEnabled,
     shifts,
     // Never the postes a page is attached to (#1324): the link is for the confirmed volunteers
     // reached with a personal or leader link, and for emails. Pick the two public fields here, so

@@ -6,6 +6,7 @@ import { shiftsClash } from "./shift-overlap"
 import { tooLongSignupField } from "./signup-limits"
 import { answerConditionProblems, answerConditionRefusal, rawAnswerValues, type ReservedAnswerCondition } from "./role-answer"
 import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
+import { isVolunteerConventionAsked } from "./volunteer-charter"
 
 /**
  * Pure logic of the public sign-up page (EventPageClient), kept out of the component so it can
@@ -138,6 +139,8 @@ export function shiftsByDay<S extends { date: string }>(shifts: S[]): Record<str
 export function validateSignup(input: {
   form: SignupForm
   charterAccepted: boolean
+  /** An organisation may ask for no convention at all (#1468); absent = asked (older payloads). */
+  volunteerConventionEnabled?: boolean
   requirePhone: boolean
   ageGatedShifts: SignupShift[]
   /** The event protects minors (#1171, lot 2): the birth date is required. */
@@ -148,7 +151,9 @@ export function validateSignup(input: {
   answers?: Record<string, unknown>
 }): string | null {
   const { form } = input
-  if (!input.charterAccepted) return "Accepte la convention des bénévoles."
+  if (isVolunteerConventionAsked(input.volunteerConventionEnabled) && !input.charterAccepted) {
+    return "Accepte la convention des bénévoles."
+  }
   if (!form.consent) return "Coche la case d'accord sur tes données pour t'inscrire."
   if (!form.firstName || !form.lastName || !form.email) return "Prénom, nom et email sont obligatoires."
   // `required` already blocks an empty field; this catches a whitespace-only one.

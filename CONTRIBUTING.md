@@ -121,7 +121,7 @@ src/
     product-updates/        # Désabonnement des nouveautés produit
     admin/                  # Interface admin (protégée, scopée par org)
       dashboard/ events/ members/ search/ account/
-      settings/             # admins (équipe, nom, slug, fuseau, charte), notifications, message-templates, activity
+      settings/             # admins (équipe, nom, slug, fuseau, convention), notifications, message-templates, activity
     super-admin/            # organizations, product-updates, health, profile (rôle super_admin)
     api/
       public/ admin/ super-admin/
