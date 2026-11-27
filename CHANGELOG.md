@@ -13,7 +13,9 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
-- **Vidéos** : le calendrier présente l'abonnement automatique, et les parcours bénévoles montrent la liste colorée par poste et les détails des créneaux. Les vidéos de paramètres et de responsables de secteur sont actualisées.
+- **Vidéos** : « S’inscrire comme bénévole depuis son téléphone » et « Trouver et lire la page d’inscription » montrent la page d'inscription de la version 2.9 : la liste aux couleurs des postes sur un téléphone, et la phrase qui propose de le tourner pour voir la frise. « Ajouter ses créneaux à son calendrier » explique l'abonnement qui se met à jour tout seul ; les vidéos sur le choix des créneaux, « Voir qui est inscrit », les responsables de secteur et la convention des bénévoles sont à jour.
+
+- **Vidéos** : le tour de l'administration, la publication d'un événement et les paramètres des emails sont actualisés.
 
 ## [2.9.0] — 2026-11-27
 
