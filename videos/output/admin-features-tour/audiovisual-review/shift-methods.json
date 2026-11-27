@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:44:09.204Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:48:20.461Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "019ca29f7e0e453c315f599ba2508beb2db3abafe1c816ea65a6f673df613084",
-  "clipSha256": "81d521fddb6a0f5e4356345959bae2ec2db48448d11ca588916be487e200d900",
+  "clipSha256": "6c1e632d42775ff297bbc6f612f1daf5aebc94374af44b91ea247bd557af259c",
   "scene": "shift-methods",
   "review": {
     "heardOpening": "Pour construire le planning, trois méthodes se complètent",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Ajouter un créneau depuis la liste",
-        "visibleSeconds": 2.2,
-        "visible": "Basculement sur l'onglet Liste puis ouverture du formulaire d'ajout d'un créneau",
+        "spokenSeconds": 3.2,
+        "spoken": "ajouter un créneau depuis la liste",
+        "visibleSeconds": 3.5,
+        "visible": "Basculement vers l'onglet Liste et ouverture du formulaire d'ajout d'un créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.6,
+        "spokenSeconds": 5.3,
         "spoken": "copier un créneau existant",
-        "visibleSeconds": 5,
-        "visible": "Sélection d'un créneau sur la frise et duplication avec confirmation « Créneau dupliqué »",
+        "visibleSeconds": 6.2,
+        "visible": "Sélection d'un créneau sur la frise et clic sur Dupliquer",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "ou dessiner directement sa plage sur la frise puis l'élargir",
-        "visibleSeconds": 7.5,
-        "visible": "Tracé d'une nouvelle plage horaire directement sur la frise puis étirement de sa durée",
+        "spokenSeconds": 7.7,
+        "spoken": "dessiner directement sa plage sur la frise puis l’élargir",
+        "visibleSeconds": 8.5,
+        "visible": "Tracé d'un nouveau créneau à la souris sur la frise suivi de l'ajustement de ses horaires",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "la création en série prépare plusieurs créneaux d'un coup",
-        "visibleSeconds": 11,
-        "visible": "Clic sur le bouton « Créer une série » et affichage du formulaire dédié",
+        "spokenSeconds": 12.5,
+        "spoken": "la création en série prépare plusieurs créneaux d’un coup",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur Créer une série et ouverture du formulaire de création en série",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement calée sur les démonstrations rapides à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

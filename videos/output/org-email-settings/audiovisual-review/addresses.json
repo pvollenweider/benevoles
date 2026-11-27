@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:15:40.287Z",
-  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "reviewedAt": "2026-11-27T20:21:13.968Z",
+  "videoSha256": "70b3d1912845c2159aeca8d622458c134b8be6538822a94f8f0019ce87967971",
   "promptSha256": "ad439d9d1d8033ec4970d8717c4754ea7bab95980cd617641d86f5ab57ac0928",
-  "clipSha256": "8c4e6ffe02ec494b710ca501c0f775f049129768f49d7f0a9b9b4d49a3e7c21d",
+  "clipSha256": "28d821995090f2482631a0fcf97d0e89e693414fbc7bdc1054630300e9b96b3a",
   "scene": "addresses",
   "review": {
     "heardOpening": "Le résumé quotidien des adresses à vérifier",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact",
+        "spokenSeconds": 0,
+        "spoken": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact.",
         "visibleSeconds": 0,
-        "visible": "L'option « Résumé quotidien des adresses à vérifier » cochée est visible sur la page des paramètres d'emails",
+        "visible": "Option cochée « Résumé quotidien des adresses à vérifier » affichée sur la page Paramètres des emails.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
-        "spoken": "Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement",
-        "visibleSeconds": 0,
-        "visible": "La description sous la case cochée explicite la condition de déclenchement après échec définitif depuis la veille",
+        "spokenSeconds": 4.5,
+        "spoken": "Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement depuis la veille.",
+        "visibleSeconds": 4.5,
+        "visible": "Texte explicatif visible sous la case à cocher détaillant les conditions d'envoi en cas d'échec définitif.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
-        "spoken": "L’équipe reçoit au maximum un résumé par jour, même après plusieurs échecs",
-        "visibleSeconds": 14.8,
-        "visible": "Écran fixe pertinent affichant la configuration du résumé quotidien des adresses",
+        "spokenSeconds": 13.5,
+        "spoken": "L’équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.",
+        "visibleSeconds": 13.5,
+        "visible": "Écran stable maintenu sur la configuration des emails automatiques.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage statique explicatif."
+      "observation": "Voix de synthèse féminine fluide, naturelle et parfaitement intelligible, sans artefact audio."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

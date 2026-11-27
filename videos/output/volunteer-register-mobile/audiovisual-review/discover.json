@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:46:48.698Z",
-  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "reviewedAt": "2026-11-27T17:04:55.290Z",
+  "videoSha256": "b6e62ceecd3366c1a3e368134cc97edb658cb55104beecb4df2c657e8385188e",
   "promptSha256": "59ed9b6f90dd83522f91612c19a185c349cab01bad0306fafba8e1a1770ea248",
-  "clipSha256": "64ffd3b703ac421cb297d5ae186d745391f60b335074458c7542ea49544a0009",
+  "clipSha256": "ae40ffd03170d24dfaacdbb00096f19a46ef5811f30324ec682bb95bdd1fdbc4",
   "scene": "discover",
   "review": {
     "heardOpening": "Sur la page de l'événement",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Sur la page de l'événement",
-        "visibleSeconds": 0.5,
-        "visible": "Page de l'événement affichée avec le titre « Fête du village de Montvert »",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2,
         "spoken": "tu retrouves les horaires",
-        "visibleSeconds": 2.2,
-        "visible": "Créneaux horaires visibles sur la frise chronologique (15h–18h, 18h–22h, 14h–18h)",
+        "visibleSeconds": 0,
+        "visible": "Les plages horaires de chaque créneau (ex. 07h–09h, 08h–12h) sont affichées dans la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
+        "spokenSeconds": 3,
         "spoken": "les postes",
-        "visibleSeconds": 3.4,
-        "visible": "Intitulés des postes affichés sous les créneaux (« file d'attente », « Chauffeur navette »)",
+        "visibleSeconds": 0,
+        "visible": "Les intitulés des postes (Montage, Navette, Accueil, Buvette) apparaissent en face des horaires",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "et le nombre de places encore disponibles",
-        "visibleSeconds": 4.5,
-        "visible": "Jauges et mentions de places restantes affichées (« 2/3 », « 4/4 », « Complet »)",
+        "spokenSeconds": 4.1,
+        "spoken": "le nombre de places encore disponibles",
+        "visibleSeconds": 0,
+        "visible": "Le statut de disponibilité est visible sous chaque intitulé (ex. 2 places libres sur 6, Complet, 1 place libre sur 3)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
+      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec l'écran affiché."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

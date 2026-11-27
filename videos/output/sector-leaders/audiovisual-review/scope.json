@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-29T06:54:00.143Z",
-  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "reviewedAt": "2026-11-27T19:11:00.152Z",
+  "videoSha256": "36b34e44a9b368957475e2d4f9eb4a52416f25618876f65098753196f7ece2d8",
   "promptSha256": "9e1c41918bfb701f5c3241dcf92cbce881609e46930f5483d70ab476293d180e",
-  "clipSha256": "3ace9109e9d20b723a94ad1d6beed2b18df08ea0d73d19e9ac2296205cf5bac9",
+  "clipSha256": "dd1db5aba901762f90f127c23aa2cec13940b2345df998d3fd990e85ae951ea2",
   "scene": "scope",
   "review": {
     "heardOpening": "Cet espace est en lecture seule",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Cet espace est en lecture seule : le responsable ne modifie pas les créneaux",
-        "visibleSeconds": 0.5,
-        "visible": "Affichage de la page 'Responsable - Buvette' listant les bénévoles inscrits sans bouton d'édition",
+        "spokenSeconds": 0,
+        "spoken": "Cet espace est en lecture seule",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page « Responsable - Buvette » en consultation seule, sans options d'édition",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "Il ne voit pas les équipes des autres postes.",
-        "visibleSeconds": 6.7,
-        "visible": "Défilement vers le bas affichant les autres créneaux dédiés exclusivement au poste Buvette",
+        "spokenSeconds": 2.5,
+        "spoken": "le responsable ne modifie pas les créneaux et ne retire pas les inscriptions",
+        "visibleSeconds": 2.5,
+        "visible": "Vue statique des créneaux et des bénévoles inscrits ou en liste d'attente, sans boutons d'action",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
-        "spoken": "Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
-        "visibleSeconds": 9,
-        "visible": "Affichage fixe du bas de page et des créneaux Buvette sans action d'édition possible",
+        "spokenSeconds": 6.2,
+        "spoken": "Il ne voit pas les équipes des autres postes",
+        "visibleSeconds": 6.2,
+        "visible": "Seul le poste Buvette apparaît dans l'interface",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur",
+        "visibleSeconds": 8.5,
+        "visible": "Défilement vers le bas révélant le reste des créneaux de la buvette jusqu'au pied de page",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine posée, claire et bien articulée, parfaitement synchronisée avec la présentation."
+      "observation": "Voix masculine posée, claire et bien articulée, avec une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

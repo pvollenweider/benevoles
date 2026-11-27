@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:19:20.911Z",
-  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "reviewedAt": "2026-11-27T20:09:26.830Z",
+  "videoSha256": "c5064180292f4fa02fd344a512f49cb9acef1ae902c52ddb923dd4cf3a1ab430",
   "promptSha256": "9f045e4d54b74f272f4c51fdc0c20225496e10cdf06b108ad25157cee98fcc2f",
-  "clipSha256": "a76e3754f5b8179a781d67e30a87df2a800061278ed9032ca866b6b212ae7485",
+  "clipSha256": "6c0f2b9e76124933f433110793dc477195694f38525df2c58a91541422aa6b87",
   "scene": "result",
   "review": {
-    "heardOpening": "Le résultat",
+    "heardOpening": "Le résultat est un événement publié",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
-        "spoken": "avec son lien public",
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat est un événement publié avec son lien public, son QR code, et ses outils d'invitation.",
         "visibleSeconds": 0,
-        "visible": "Lien à partager affiché sous la section Publication",
+        "visible": "Section Publication affichant le lien à partager, ainsi que les options QR code et Inviter des membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "son QR code",
-        "visibleSeconds": 0,
-        "visible": "Lien cliquable QR code affiché",
+        "spokenSeconds": 6.8,
+        "spoken": "Publier ouvre l'accès.",
+        "visibleSeconds": 7,
+        "visible": "Affichage de l'onglet Partage montrant les liens à partager et les options de diffusion",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "ses outils d’invitation",
-        "visibleSeconds": 0,
-        "visible": "Lien Inviter des membres affiché",
+        "spokenSeconds": 10.5,
+        "spoken": "ni la vérification régulière des inscriptions et des besoins de personnel.",
+        "visibleSeconds": 10.7,
+        "visible": "Navigation vers l'onglet Inscriptions affichant la liste des inscrits et les statuts des créneaux",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'écran récapitulatif fixe."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-29T06:54:33.294Z",
-  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "reviewedAt": "2026-11-27T19:11:44.124Z",
+  "videoSha256": "36b34e44a9b368957475e2d4f9eb4a52416f25618876f65098753196f7ece2d8",
   "promptSha256": "fb41faee6480d77874c2003aa5b99d521c8de86e6ee34635f6a7f1f54e2dc137",
-  "clipSha256": "d7d9b3dc279110b5fc04e484bc5ec6cbe83c1d8599e1a5f7e0737d92626049e1",
+  "clipSha256": "1a4f84ee2d460af25c49f459064d25a37ed4e446eb9a40e931cb3e29716970c3",
   "scene": "contact",
   "review": {
-    "heardOpening": "Attention à une autre distinction : le contact opérationnel",
+    "heardOpening": "Attention à une autre distinction :",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Attention à une autre distinction :",
-        "visibleSeconds": 0.7,
-        "visible": "Affichage du formulaire Nouveau créneau",
+        "spokenSeconds": 0.5,
+        "spoken": "Attention à une autre distinction",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture du formulaire Nouveau créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.1,
-        "spoken": "Le contact opérationnel indiqué sur un créneau",
-        "visibleSeconds": 2.5,
-        "visible": "Saisie du nom Elodie Rochat dans le champ Personne de contact",
+        "spokenSeconds": 2.4,
+        "spoken": "le contact opérationnel indiqué sur un créneau",
+        "visibleSeconds": 2.6,
+        "visible": "Saisie du nom Élodie Rochat dans le champ Personne de contact",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "L'organisateur renseigne ce contact séparément dans le créneau",
+        "spokenSeconds": 5.4,
+        "spoken": "doivent joindre sur place",
         "visibleSeconds": 5.5,
-        "visible": "Le contact et le numéro de téléphone restent visibles dans le formulaire",
+        "visible": "Saisie du numéro dans le champ Téléphone du contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "L'organisateur renseigne ce contact séparément dans le créneau",
+        "visibleSeconds": 13,
+        "visible": "Affichage stable de la section Infos pratiques pour les bénévoles avec le contact renseigné",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les explications sur le formulaire."
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les démonstrations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

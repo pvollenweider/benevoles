@@ -1,12 +1,12 @@
 {
   "anchor": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l’organisation de l’événement",
-  "windowStart": 0.2980000000000018,
+  "windowStart": 13.734000000000002,
   "result": {
     "found": true,
-    "startSeconds": 23.3,
+    "startSeconds": 8.2,
     "wordsHeard": "Ajoute"
   },
-  "onset": 23.598000000000003,
-  "proposedCut": 23.215271,
+  "onset": 21.934,
+  "proposedCut": 21.7332295,
   "note": "Proposal only; recut then independently audit before capture"
 }

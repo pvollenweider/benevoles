@@ -1,12 +1,12 @@
 {
   "anchor": "Pour le terrain, Documents à imprimer propose le planning complet, une",
-  "windowStart": 193.88299999999998,
+  "windowStart": 218.511,
   "result": {
     "found": true,
-    "startSeconds": 29.14,
+    "startSeconds": 13.78,
     "wordsHeard": "Pour le terrain, documents à imprimer propose le planning complet, une"
   },
-  "onset": 223.02299999999997,
-  "proposedCut": 222.7717085,
+  "onset": 232.291,
+  "proposedCut": 232.0589375,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:43:59.043Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:48:04.923Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "938056435b855e201047041c29f030b0be6435deaff1f7d1a0f6e7b34a7315bb",
-  "clipSha256": "29b1897f5e456f36c73db4cd94c16f86f971c6b3759d9d09a0c3ec875bace9e5",
+  "clipSha256": "2f21a686e7c9827c8e0d3e6b80e4c0578f15fb11c2fd4a3c0421832f0efc24e8",
   "scene": "duplicate",
   "review": {
     "heardOpening": "Pour repartir d'une édition précédente",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "dupliquez l'événement",
-        "visibleSeconds": 0.5,
-        "visible": "Page 'Dupliquer l'événement' affichée avec le champ de titre pour la copie",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 2.5,
-        "spoken": "et décalez toutes les dates",
-        "visibleSeconds": 2.5,
-        "visible": "Champ 'Premier jour de la copie' avec mention du décalage de toutes les dates",
+        "spokenSeconds": 2.2,
+        "spoken": "dupliquez l'événement et décalez toutes les dates",
+        "visibleSeconds": 1,
+        "visible": "Page 'Dupliquer l'événement' affichée avec le champ de date 'Premier jour de la copie'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.2,
-        "spoken": "Vous choisissez ce qui est repris : les créneaux, les paramètres, les pages d'information et les responsables.",
+        "spoken": "Vous choisissez ce qui est repris",
         "visibleSeconds": 5.5,
-        "visible": "Section 'Ce qui est copié' visible avec les options pour les créneaux, paramètres, pages et responsables",
+        "visible": "Défilement vers la section 'Ce qui est copié' présentant les différentes options",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "les créneaux, les paramètres, les pages d'information et les responsables",
+        "visibleSeconds": 7,
+        "visible": "Cases à cocher visibles pour les créneaux, messages et paramètres, pages personnalisées et responsables",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et bien articulée, accompagnée d'une musique de fond discrète."
+      "observation": "Voix off féminine naturelle, posée et bien synchronisée avec le défilement de la page."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

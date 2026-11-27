@@ -1,18 +1,18 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:44:41.732Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:49:35.113Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "34c7c965c32dfa80c79781b1038a27b38c2be12875c7f32edbfffc7d4096c29b",
-  "clipSha256": "89fcbd60101493cfd8ca5072988a7d77fae4a02bbc2f69b3a5bc2094295aa2c1",
+  "clipSha256": "8e31e18ea6cbb063e3f6899a0a55b5df3fd40c57a9b2bac7d14fd0e28cc88c68",
   "scene": "messages",
   "review": {
     "heardOpening": "Les messages ciblent tous les inscrits",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Les messages ciblent tous les inscrits, un poste, un créneau",
-        "visibleSeconds": 0.5,
-        "visible": "Options de sélection des destinataires affichées sous Écrire aux bénévoles",
+        "spokenSeconds": 0.8,
+        "spoken": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau.",
+        "visibleSeconds": 0,
+        "visible": "Options de sélection des destinataires affichées sous 'Écrire aux bénévoles'",
         "sync": "aligned",
         "severity": "none"
       },
@@ -20,23 +20,31 @@
         "spokenSeconds": 6.8,
         "spoken": "Les modèles réutilisables acceptent des variables comme le prénom",
         "visibleSeconds": 6.5,
-        "visible": "Affichage de la page Modèles de messages dans les paramètres",
+        "visible": "Affichage de la page des modèles de messages dans les paramètres",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13.5,
-        "spoken": "Vous choisissez un envoi immédiat ou programmé",
-        "visibleSeconds": 12.5,
-        "visible": "Options d'envoi 'Maintenant' ou 'Programmer l'envoi' avec le bouton 'Voir l'aperçu et envoyer'",
+        "spoken": "Vous choisissez un envoi immédiat ou programmé et prévisualisez toujours le résultat avant l’envoi.",
+        "visibleSeconds": 14.5,
+        "visible": "Options 'Quand l'envoyer ?' (Maintenant / Programmer l'envoi) et bouton 'Voir l'aperçu et envoyer'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.8,
-        "spoken": "La section Messages programmés permet de suivre les envois à venir",
-        "visibleSeconds": 19.5,
-        "visible": "Affichage de la section 'Messages programmés' et des options de délais des rappels automatiques",
+        "spokenSeconds": 20.2,
+        "spoken": "La section Messages programmés permet de suivre les envois à venir.",
+        "visibleSeconds": 20,
+        "visible": "Section 'Messages programmés' visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "Des délais propres à l'événement peuvent remplacer les rappels habituels.",
+        "visibleSeconds": 20,
+        "visible": "Option 'Délais propres à cet événement' visible dans le bloc des rappels automatiques",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée, bien articulée et parfaitement synchronisée avec les changements d'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
