@@ -1,0 +1,10 @@
+welcome: 3 audiovisual checkpoints; no issue reported
+selection: 6 audiovisual checkpoints; no issue reported
+identity: 4 audiovisual checkpoints; no issue reported
+questions: 3 audiovisual checkpoints; no issue reported
+agreement: 3 audiovisual checkpoints; no issue reported
+recap: 3 audiovisual checkpoints; REVIEW
+  00:15 Changement soudain de voix : passage brutal d'une voix masculine à une voix féminine pour la dernière phrase.
+workload: 3 audiovisual checkpoints; no issue reported
+result: 4 audiovisual checkpoints; no issue reported
+8 scene reviews; 1 flagged. This does not replace inspection of the final video.
