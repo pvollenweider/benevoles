@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:47:14.033Z",
-  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
-  "promptSha256": "c45c1886d32282825b9653ad6eedfbaf86448341b1fc08fa698e5c4a49ee6bb5",
-  "clipSha256": "553fddc8b3b948900c7cce92fe565d6e332f1a3fefb74cf5a629bc71cd0a70ae",
+  "reviewedAt": "2026-11-27T17:05:49.174Z",
+  "videoSha256": "b6e62ceecd3366c1a3e368134cc97edb658cb55104beecb4df2c657e8385188e",
+  "promptSha256": "0c266b2a70b96b64f5086498d18695bf027049375f7676aac14035f5fcca9725",
+  "clipSha256": "abc9f390989f3fce5e0b70d0b53df4169888192db8d20e8956a92e8064b456f8",
   "scene": "success",
   "review": {
     "heardOpening": "Et voilà, ta demande est envoyée !",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "ta demande est envoyée",
+        "spokenSeconds": 0.8,
+        "spoken": "ta demande est envoyée ! Regarde tes emails",
         "visibleSeconds": 0,
-        "visible": "Page de confirmation affichant « Demande d'inscription reçue »",
+        "visible": "Écran de confirmation avec le message 'Demande d'inscription reçue' et consigne de vérifier les emails",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Regarde tes emails : la confirmation arrive dans ta boîte",
-        "visibleSeconds": 0,
-        "visible": "Texte explicatif à l'écran invitant à vérifier ses emails y compris les courriers indésirables",
+        "spokenSeconds": 3.5,
+        "spoken": "Ouvre le courriel de confirmation pour vérifier ton créneau",
+        "visibleSeconds": 3.7,
+        "visible": "Affichage de l'email de confirmation avec le créneau 'Accueil · 05/12/2026 · 15:00-18:00'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription",
-        "visibleSeconds": 0,
-        "visible": "Écran stable de confirmation accompagnant la conclusion sur le suivi par email",
+        "spokenSeconds": 7,
+        "spoken": "Le bouton Mes inscriptions ouvre ton lien personnel",
+        "visibleSeconds": 3.7,
+        "visible": "Bouton bleu 'Mes inscriptions' visible dans le corps du courriel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "La phrase sous le bouton te rappelle de garder ce lien pour toi",
+        "visibleSeconds": 3.7,
+        "visible": "Phrase affichée sous le bouton : 'Ce lien ouvre toutes tes inscriptions auprès de Fêtes de Montvert. Ne le partage pas.'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et engageante, sans souffle ni hésitation."
+      "observation": "Voix off féminine naturelle, chaleureuse et parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

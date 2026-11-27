@@ -1,69 +1,61 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:37:59.779Z",
-  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "reviewedAt": "2026-11-27T17:47:33.070Z",
+  "videoSha256": "047f1868f59eb6fc827eafe396c736dfe156cbaf5ae79035633e52ca71f74059",
   "promptSha256": "d81594e82f4fa8d77af0e6febc4ac6bb32ea326a2ff5563710aed76fa94b9bea",
-  "clipSha256": "e706dbf1ec4acc725746224eacae2ac915e057f83fb538a4d648c34ea22a753a",
+  "clipSha256": "c6e8f15f8a2ebaf32c3228b65bf54aa055b5e7150bc5e69dd480a91e5d8fda5f",
   "scene": "roster-confirm",
   "review": {
     "heardOpening": "Ouvrez le véritable email de confirmation",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
-        "spoken": "Ouvrez le véritable email de confirmation.",
-        "visibleSeconds": 1,
-        "visible": "Affichage de l'email de confirmation avec le bouton Gérer mes inscriptions",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 3,
-        "spoken": "Suivez son lien personnel.",
-        "visibleSeconds": 3.5,
-        "visible": "Clic sur le bouton Gérer mes inscriptions",
+        "spokenSeconds": 2.8,
+        "spoken": "Suivez son lien personnel",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le bouton bleu « Mes inscriptions » dans l'email",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.5,
         "spoken": "La carte Qui est inscrit montre uniquement vos propres créneaux confirmés",
-        "visibleSeconds": 4.5,
-        "visible": "Page Mes inscriptions affichée avec la carte Qui est inscrit",
+        "visibleSeconds": 6,
+        "visible": "Affichage de la page avec la section « Qui est inscrit »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.8,
-        "spoken": "L’état À confirmer rappelle votre demande du formulaire.",
+        "spoken": "L’état À confirmer rappelle votre demande du formulaire",
         "visibleSeconds": 17,
-        "visible": "Aucun état ni mention « À confirmer » n'apparaît à l'écran",
+        "visible": "L'état « À confirmer » n'apparaît nulle part sur la page (seul l'état « Confirmé » figure plus haut)",
         "sync": "missing",
-        "severity": "major"
+        "severity": "minor"
       },
       {
-        "spokenSeconds": 20.8,
-        "spoken": "Activez Afficher mon nom aux autres bénévoles.",
-        "visibleSeconds": 22,
-        "visible": "L'interrupteur Afficher mon nom aux autres bénévoles est activé",
+        "spokenSeconds": 20,
+        "spoken": "Activez Afficher mon nom aux autres bénévoles",
+        "visibleSeconds": 21.5,
+        "visible": "L'interrupteur « Afficher mon nom aux autres bénévoles » est basculé sur activé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 26.8,
-        "spoken": "suivez Voir qui est inscrit sur les autres créneaux.",
-        "visibleSeconds": 27.5,
-        "visible": "Clic sur Voir qui est inscrit sur les autres créneaux et ouverture du planning",
+        "spokenSeconds": 27.8,
+        "spoken": "suivez Voir qui est inscrit sur les autres créneaux",
+        "visibleSeconds": 28,
+        "visible": "Clic sur le lien « Voir qui est inscrit sur les autres créneaux » puis ouverture du planning en frise",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "À 00:17, la voix mentionne « L'état À confirmer », mais aucune mention ni statut de ce nom n'est visible sur la page."
+      "À 00:16, la voix évoque un état « À confirmer », mais cette mention n'apparaît nulle part à l'écran (le créneau est déjà au statut « Confirmé »)."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, avec un fond sonore musical discret."
+      "observation": "Voix off féminine naturelle, calme et bien articulée, sans parasite audio."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

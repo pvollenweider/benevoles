@@ -1,178 +1,182 @@
 WEBVTT
 
-00:00:01.138 --> 00:00:05.861
+00:00:01.175 --> 00:00:05.388
 Dans Paramètres, Emails, le propriétaire
 choisit les messages utiles pour toute
 
-00:00:05.861 --> 00:00:10.583
+00:00:05.388 --> 00:00:09.602
 l’organisation. Les organisateurs peuvent
 suivre les envois, mais pas changer ces
 
-00:00:10.583 --> 00:00:15.306
+00:00:09.602 --> 00:00:13.815
 paramètres. Voyons les rappels, les
 alertes et l’adresse de réponse, puis
 
-00:00:15.306 --> 00:00:19.599
+00:00:13.815 --> 00:00:17.645
 vérifions un vrai message de test, sans
 contacter les bénévoles.
 
-00:00:21.761 --> 00:00:27.112
+00:00:19.833 --> 00:00:24.956
 Vous pouvez activer le rappel à deux
 jours, à un jour, puis le jour même, deux
 
-00:00:27.112 --> 00:00:31.795
+00:00:24.956 --> 00:00:29.118
 à 4 h avant le premier créneau de la
-journée. Décochons puis recochons le
+journée. Décochons le premier
 
-00:00:31.795 --> 00:00:35.809
-premier rappel. Pour une personne sur
-plusieurs créneaux du même événement le
+00:00:29.118 --> 00:00:32.961
+rappel. Recochons-le pour le garder. Pour
+une personne sur plusieurs créneaux du
 
-00:00:35.809 --> 00:00:40.491
-même jour, chaque rappel regroupe ses
-créneaux dans un seul email, pas un email
+00:00:32.961 --> 00:00:37.443
+même événement le même jour, chaque rappel
+regroupe ses créneaux dans un seul email,
 
-00:00:40.491 --> 00:00:41.160
-par créneau.
+00:00:37.443 --> 00:00:39.044
+pas un email par créneau.
 
-00:00:41.615 --> 00:00:46.391
-Dans les paramètres d’un événement, la
-case Rappels automatiques peut couper tous
+00:00:39.498 --> 00:00:44.053
+Ouvrons les paramètres de notre événement.
+Décochez la case Rappels automatiques pour
 
-00:00:46.391 --> 00:00:51.167
-ses rappels, sans changer les autres
-événements. Son onglet Messages indique ce
+00:00:44.053 --> 00:00:48.987
+couper les rappels de cet événement. Son
+onglet Messages indique ce qui partira
 
-00:00:51.167 --> 00:00:55.942
-qui partira vraiment. Un brouillon
-n’envoie pas de rappel. Pour un événement
+00:00:48.987 --> 00:00:53.541
+vraiment. Un brouillon n’envoie pas de
+rappel. Pour un événement publié, les
 
-00:00:55.942 --> 00:01:00.320
-publié, les rappels habituels suivent les
-choix de l'organisation. Des délais
+00:00:53.541 --> 00:00:58.096
+rappels habituels suivent les choix de
+l'organisation. Des délais propres à cet
 
-00:01:00.320 --> 00:01:05.096
-propres à cet événement les remplacent. Le
-fuseau de l'organisation reste utilisé.
+00:00:58.096 --> 00:01:01.512
+événement les remplacent. Le fuseau de
+l'organisation reste utilisé.
 
-00:01:05.549 --> 00:01:09.891
+00:01:01.969 --> 00:01:06.123
 L’option Prévenir les organisateurs à
 chaque inscription envoie un email à
 
-00:01:09.891 --> 00:01:13.444
+00:01:06.123 --> 00:01:09.522
 chaque organisateur actif lorsqu’une
 personne s’inscrit depuis la page
 
-00:01:13.444 --> 00:01:17.786
+00:01:09.522 --> 00:01:13.676
 d’inscription. Elle facilite le suivi d’un
 petit événement, mais peut devenir
 
-00:01:17.786 --> 00:01:20.155
+00:01:13.676 --> 00:01:15.942
 bruyante lorsque les inscriptions sont
 nombreuses.
 
-00:01:20.610 --> 00:01:25.093
+00:01:16.398 --> 00:01:20.323
 Prévenir en cas de désistement est un
 paramètre séparé. Il informe les
 
-00:01:25.093 --> 00:01:29.950
+00:01:20.323 --> 00:01:24.574
 organisateurs et les responsables du poste
 quand une place confirmée ou une demande
 
-00:01:29.950 --> 00:01:34.807
+00:01:24.574 --> 00:01:28.826
 est annulée, avec les places manquantes et
 le mot éventuel du bénévole. Décocher
 
-00:01:34.807 --> 00:01:38.917
+00:01:28.826 --> 00:01:32.424
 cette option coupe aussi l’email aux
 responsables. Quitter une liste d’attente
 
-00:01:38.917 --> 00:01:42.279
+00:01:32.424 --> 00:01:35.367
 ou refuser une place proposée n’envoie pas
 cette alerte.
 
-00:01:42.733 --> 00:01:47.570
+00:01:35.821 --> 00:01:40.271
 Le résumé quotidien des adresses à
 vérifier aide à repérer les problèmes de
 
-00:01:47.570 --> 00:01:52.035
+00:01:40.271 --> 00:01:44.379
 contact. Il part seulement si une
 confirmation, une proposition de place ou
 
-00:01:52.035 --> 00:01:56.872
+00:01:44.379 --> 00:01:48.830
 un rappel a échoué définitivement depuis
 la veille. Un incident temporaire seul ne
 
-00:01:56.872 --> 00:02:01.709
+00:01:48.830 --> 00:01:53.280
 le déclenche pas. L’équipe reçoit au
 maximum un résumé par jour, même après
 
-00:02:01.709 --> 00:02:02.453
+00:01:53.280 --> 00:01:53.965
 plusieurs échecs.
 
-00:02:04.618 --> 00:02:09.902
+00:01:56.136 --> 00:02:01.091
 L’adresse de réponse indique où arrive un
 message lorsqu’un bénévole répond à un
 
-00:02:09.902 --> 00:02:14.779
+00:02:01.091 --> 00:02:05.666
 email de la plateforme. Saisissons
 benevoles arobase example point org. Si le
 
-00:02:14.779 --> 00:02:20.062
+00:02:05.666 --> 00:02:10.240
 champ reste vide, l’adresse par défaut est
-utilisée. Cette adresse apparaît aussi sur
+utilisée. Cette adresse apparaît aussi
 
-00:02:20.062 --> 00:02:22.501
-la page Mes inscriptions des bénévoles.
+00:02:10.240 --> 00:02:14.433
+dans le détail des inscriptions de
+l'événement, pour écrire à l'organisation.
 
-00:02:22.956 --> 00:02:27.732
+00:02:14.887 --> 00:02:19.453
 Enregistrez les paramètres avant de les
 tester. Le message Paramètres enregistrés
 
-00:02:27.732 --> 00:02:32.942
+00:02:19.453 --> 00:02:24.434
 confirme que vos choix sont conservés.
 Modifier les cases sans enregistrer ne
 
-00:02:32.942 --> 00:02:38.152
+00:02:24.434 --> 00:02:29.416
 change pas les prochains envois. Le test
 utilise lui aussi la dernière
 
-00:02:38.152 --> 00:02:39.020
+00:02:29.416 --> 00:02:30.246
 configuration enregistrée.
 
-00:02:41.185 --> 00:02:46.496
+00:02:32.406 --> 00:02:37.835
 M’envoyer un email de test envoie un
 exemple à votre propre compte, pas aux
 
-00:02:46.496 --> 00:02:51.048
+00:02:37.835 --> 00:02:42.488
 bénévoles. Ouvrons le message reçu dans la
 boîte locale de démonstration. Vérifiez
 
-00:02:51.048 --> 00:02:55.599
+00:02:42.488 --> 00:02:47.141
 l’expéditeur et l’adresse de réponse, ici
 benevoles arobase example point org, puis
 
-00:02:55.599 --> 00:03:00.151
-le contenu du message. Dans cette
-formation, les emails restent sur notre
+00:02:47.141 --> 00:02:52.182
+le texte qui rappelle où la réponse
+arrivera. C'est un exemple destiné au
 
-00:03:00.151 --> 00:03:03.186
-serveur local et ne partent pas sur
-Internet.
+00:02:52.182 --> 00:02:56.835
+compte organisateur. Dans cette formation,
+les emails restent sur notre serveur local
 
-00:03:03.640 --> 00:03:08.657
+00:02:56.835 --> 00:02:59.162
+et ne partent pas sur Internet.
+
+00:02:59.619 --> 00:03:04.639
 Les paramètres sont enregistrés et le
 message de test est visible dans la boîte
 
-00:03:08.657 --> 00:03:12.598
+00:03:04.639 --> 00:03:08.583
 de démonstration. Dans Emails envoyés,
 Envoyé indique une acceptation par le
 
-00:03:12.598 --> 00:03:17.973
+00:03:08.583 --> 00:03:13.962
 serveur d’envoi, pas une preuve de remise
 ni de lecture par le bénévole. Pour écrire
 
-00:03:17.973 --> 00:03:21.915
+00:03:13.962 --> 00:03:17.906
 ponctuellement à un groupe, utilisez
 plutôt les messages ciblés de l’événement.
 

@@ -1,18 +1,18 @@
 {
   "slug": "org-timezone-charter",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-11T23:00:18.307Z",
+  "recordedAt": "2026-11-27T19:20:03.849Z",
   "video": "capture.webm",
   "product": {
-    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
-    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
-    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
-    "buildId": "y5HTtrg_9cOS9PQo5uo57",
-    "snapshot": "/tmp/benevoles-video-production.batch7",
-    "builtAt": "2026-10-11T21:29:41.103Z"
+    "commit": "27875d4c2e57b1072ab3880405695d1872a5460e",
+    "sourceTree": "c20234f334484ea7ffd80b068e68ed48255d95b7",
+    "productSourceSha256": "58fb5a5eb03a24b241f02aa45450bfc677e42e5bb46cda36c2a2227f89a17784",
+    "buildId": "WhmgksIKqT4RNMXyOkZNI",
+    "snapshot": "/tmp/benevoles-video-production.aNOKSf",
+    "builtAt": "2026-11-27T17:11:47.388Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "formation-charter",
     "scenario": "ORG_TIMEZONE_CHARTER",
@@ -26,150 +26,150 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 29533
+      "atMs": 29116
     },
     {
       "kind": "click",
-      "atMs": 47353
+      "atMs": 47947
     },
     {
       "kind": "click",
-      "atMs": 48920
+      "atMs": 49638
     },
     {
       "kind": "click",
-      "atMs": 61485
+      "atMs": 63554
     },
     {
       "kind": "click",
-      "atMs": 62268
+      "atMs": 64368
     },
     {
       "kind": "click",
-      "atMs": 63135
+      "atMs": 65177
     },
     {
       "kind": "click",
-      "atMs": 71634
+      "atMs": 73781
     },
     {
       "kind": "click",
-      "atMs": 75982
+      "atMs": 78596
     },
     {
       "kind": "click",
-      "atMs": 82416
+      "atMs": 85593
     },
     {
       "kind": "click",
-      "atMs": 91849
+      "atMs": 95210
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1120,
-      "endMs": 12320
+      "startMs": 1189,
+      "endMs": 11946
     },
     {
       "id": "timezone",
-      "startMs": 14481,
-      "endMs": 28613
+      "startMs": 14111,
+      "endMs": 28117
     },
     {
       "id": "timezone-result",
-      "startMs": 29067,
-      "endMs": 40979
+      "startMs": 28569,
+      "endMs": 41239
     },
     {
       "id": "charter",
-      "startMs": 43151,
-      "endMs": 66105
+      "startMs": 43413,
+      "endMs": 68020
     },
     {
       "id": "public-setup",
-      "startMs": 68272,
-      "endMs": 81436
+      "startMs": 70179,
+      "endMs": 84265
     },
     {
       "id": "public-result",
-      "startMs": 81888,
-      "endMs": 95710
+      "startMs": 84716,
+      "endMs": 100014
     },
     {
       "id": "attention",
-      "startMs": 96163,
-      "endMs": 113559
+      "startMs": 100466,
+      "endMs": 118066
     },
     {
       "id": "result",
-      "startMs": 114013,
-      "endMs": 129484
+      "startMs": 118518,
+      "endMs": 132863
     }
   ],
   "anchors": [
     {
       "segmentId": "timezone-result",
       "phrase": "un créneau prévu à neuf",
-      "startMs": 3426,
-      "endMs": 5515,
-      "cueMs": 32494
+      "startMs": 3503,
+      "endMs": 5718,
+      "cueMs": 32076
     },
     {
       "segmentId": "charter",
-      "phrase": "Le réglage Assurance RC fournie",
-      "startMs": 3704,
-      "endMs": 9764,
-      "cueMs": 46857
+      "phrase": "Le paramètre Assurance RC fournie",
+      "startMs": 4018,
+      "endMs": 9930,
+      "cueMs": 47433
     },
     {
       "segmentId": "charter",
       "phrase": "Réinitialiser la convention par défaut",
-      "startMs": 17858,
-      "endMs": 22512,
-      "cueMs": 61009
+      "startMs": 19626,
+      "endMs": 24218,
+      "cueMs": 63041
     },
     {
       "segmentId": "public-setup",
       "phrase": "Vous arrivez au formulaire, avec",
-      "startMs": 7228,
-      "endMs": 13162,
-      "cueMs": 75511
+      "startMs": 7932,
+      "endMs": 13701,
+      "cueMs": 78113
     },
     {
       "segmentId": "public-result",
       "phrase": "Ouvrez la convention depuis le",
-      "startMs": 0,
-      "endMs": 1598,
-      "cueMs": 81946
+      "startMs": 382,
+      "endMs": 2065,
+      "cueMs": 85100
     },
     {
       "segmentId": "public-result",
       "phrase": "faisons-le défiler pour lire aussi",
-      "startMs": 4489,
-      "endMs": 8559,
-      "cueMs": 86378
+      "startMs": 5506,
+      "endMs": 9414,
+      "cueMs": 90223
     },
     {
       "segmentId": "public-result",
       "phrase": "Le bouton J’ai lu et",
-      "startMs": 9466,
-      "endMs": 13432,
-      "cueMs": 91355
+      "startMs": 10025,
+      "endMs": 15137,
+      "cueMs": 94741
     },
     {
       "segmentId": "attention",
       "phrase": "Une modification de votre texte",
-      "startMs": 6107,
-      "endMs": 9277,
-      "cueMs": 102272
+      "startMs": 6033,
+      "endMs": 9507,
+      "cueMs": 106507
     },
     {
       "segmentId": "attention",
       "phrase": "Pour une information urgente, utilisez",
-      "startMs": 13325,
-      "endMs": 16804,
-      "cueMs": 109489
+      "startMs": 13377,
+      "endMs": 17432,
+      "cueMs": 113843
     }
   ]
 }

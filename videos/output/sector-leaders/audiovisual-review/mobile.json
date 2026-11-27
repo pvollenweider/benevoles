@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-29T06:53:51.255Z",
-  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "reviewedAt": "2026-11-27T19:10:48.116Z",
+  "videoSha256": "36b34e44a9b368957475e2d4f9eb4a52416f25618876f65098753196f7ece2d8",
   "promptSha256": "71e9915e46bd0167f2f73a6064bea0845b1a6b44cd5c875f98d3291bcdc522f8",
-  "clipSha256": "d98859effdbe9d44b5b1e1c8e91e136f575b120b52deee231bae6d278ce34af3",
+  "clipSha256": "3601d2363785da31b3309c2f324d5952c847635712ecaa360725f153d507b70b",
   "scene": "mobile",
   "review": {
     "heardOpening": "Sur téléphone, la même page",
@@ -12,31 +12,31 @@
         "spokenSeconds": 0.5,
         "spoken": "Sur téléphone, la même page accompagne le responsable sur le terrain.",
         "visibleSeconds": 0.5,
-        "visible": "Affichage de la page de gestion des bénévoles au format mobile avec les créneaux et inscrits.",
+        "visible": "Affichage de la page de gestion des créneaux 'Responsable - Buvette' en vue mobile.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 3.7,
         "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
-        "visibleSeconds": 4.1,
-        "visible": "Présence visible des adresses email et des numéros de téléphone associés à chaque bénévole.",
+        "visibleSeconds": 3.7,
+        "visible": "Affichage des coordonnées cliquables (adresses e-mail et numéros de téléphone) sous chaque bénévole.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.4,
+        "spokenSeconds": 9.3,
         "spoken": "On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires.",
         "visibleSeconds": 9.5,
-        "visible": "Défilement vers le bas révélant les créneaux suivants et leurs horaires respectifs.",
+        "visible": "Défilement vers le bas affichant les créneaux suivants avec leurs horaires et les bénévoles assignés.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.1,
-        "spoken": "Les coordonnées servent à l'organisation de la mission",
-        "visibleSeconds": 14.1,
-        "visible": "Vue stabilisée sur la liste des bénévoles et le pied de page.",
+        "spokenSeconds": 13.5,
+        "spoken": "Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+        "visibleSeconds": 13.5,
+        "visible": "Vue stabilisée en bas de page pour le rappel déontologique.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine fluide, claire et bien synchronisée avec le défilement de l'interface."
+      "observation": "Voix off masculine posée, claire et bien articulée, synchronisée avec les éléments affichés."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

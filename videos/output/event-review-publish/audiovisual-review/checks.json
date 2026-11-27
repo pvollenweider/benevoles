@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:19:06.978Z",
-  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "reviewedAt": "2026-11-27T20:08:28.859Z",
+  "videoSha256": "c5064180292f4fa02fd344a512f49cb9acef1ae902c52ddb923dd4cf3a1ab430",
   "promptSha256": "8d457ae433ba7dcc4f5f35df96548f60adc47f5d8928d129c4436f23ecb3c601",
-  "clipSha256": "15cb27a0076c01a79cd62be086674a84a799d5b203a0045b3afafcdd1a8c478c",
+  "clipSha256": "f1ecd838fd43c1cf866d7c69935a0f9904340fae55c9f3474df4e72e5bbe3a9d",
   "scene": "checks",
   "review": {
-    "heardOpening": "Les lignes marquées comme faites couvrent",
+    "heardOpening": "Les lignes marquées comme faites",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1.2,
         "spoken": "Les lignes marquées comme faites couvrent le titre, les dates et le planning.",
-        "visibleSeconds": 0.5,
-        "visible": "Page 'Vérification et publication' affichant les lignes cochées avec les dates et les créneaux.",
+        "visibleSeconds": 1,
+        "visible": "Page 'Vérifier avant publication' avec les lignes cochées pour les dates et les créneaux/postes.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.7,
-        "spoken": "Un point obligatoire manquant bloque le bouton Publier, notamment l’absence totale de créneau actif.",
-        "visibleSeconds": 5.7,
-        "visible": "Écran stable détaillant l'état de vérification des éléments obligatoires et alertes.",
+        "spokenSeconds": 7.1,
+        "spoken": "bloque le bouton Publier, notamment l'absence totale de créneau actif.",
+        "visibleSeconds": 5,
+        "visible": "Défilement vers le bas affichant la section 'Publication' et le bouton bleu 'Publier'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur, améliorent le parcours",
-        "visibleSeconds": 11.5,
-        "visible": "Lignes 'Lieu', 'Instructions publiques' et '2 responsables de secteur' visibles dans la liste récapitulative.",
+        "spokenSeconds": 13,
+        "spoken": "Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur",
+        "visibleSeconds": 13,
+        "visible": "Lignes visibles dans la liste : 'Lieu', 'Instructions publiques renseignées', '2 responsables de secteur'.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix synthétique fluide, posée et parfaitement intelligible, accompagnée d'une discrète musique de fond."
+      "observation": "Voix féminine calme, articulée et intelligible, accompagnée d'un léger fond musical."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

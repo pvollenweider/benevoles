@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:43:48.041Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:46:59.895Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "cf43ae78225f83d39ffcda55ad3938e61b7f9acb2d75599aa9cc057f9e6cf396",
-  "clipSha256": "680e4e8209ee8439cf781c5626e694a904190930198528357be795304c339ee0",
+  "clipSha256": "72efa0cd15b33f6fb559726d8c65c755519b750dbf117df34e9b1887eb770fda",
   "scene": "intro",
   "review": {
     "heardOpening": "Voici une visite complète",
     "checkpoints": [
       {
-        "spokenSeconds": 0.1,
+        "spokenSeconds": 0.5,
         "spoken": "Voici une visite complète de l'administration",
         "visibleSeconds": 0,
-        "visible": "Page d'administration avec encart de titre « Organiser ses bénévoles, du premier paramètre au jour J »",
+        "visible": "Encart d'introduction « Organiser ses bénévoles, du premier paramètre au jour J » superposé à l'interface d'administration.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "dans l'ordre où vous l'utiliserez vraiment",
-        "visibleSeconds": 2.7,
-        "visible": "L'encart de titre s'efface pour afficher l'onglet Événements",
+        "spokenSeconds": 5.2,
+        "spoken": "préparer votre organisation",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du bandeau d'introduction, affichage de l'interface d'administration avec le menu de navigation (Tableau de bord, Événements, Membres, Paramètres).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
-        "spoken": "préparer votre organisation, construire un événement",
-        "visibleSeconds": 5,
-        "visible": "Affichage fixe de la liste des événements présentant l'événement Fête du village de Montvert",
+        "spokenSeconds": 7,
+        "spoken": "construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J",
+        "visibleSeconds": 3,
+        "visible": "Écran stable de la liste des événements, servant de support visuel à l'annonce du sommaire.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et posée, accompagnée d'une musique de fond discrète."
+      "observation": "Voix féminine claire, naturelle et posée, bonne articulation sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

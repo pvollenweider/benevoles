@@ -1,34 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:37:36.014Z",
-  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "reviewedAt": "2026-11-27T17:46:56.898Z",
+  "videoSha256": "047f1868f59eb6fc827eafe396c736dfe156cbaf5ae79035633e52ca71f74059",
   "promptSha256": "82e4b9f26a40689d6a0b5bb246e83b2d18271b9c71fcd25273788c5a326c712d",
-  "clipSha256": "103dfe475ac028f413e49a6252028319a9cddb6d75e680a05ad1c2f934960177",
+  "clipSha256": "8aed89c59a031ad5d4b9dbfa400eaea5bcbdae168038ad0512d41464bc2ac6f7",
   "scene": "roster-publication",
   "review": {
     "heardOpening": "Retrouvons notre événement de démonstration",
     "checkpoints": [
       {
-        "spokenSeconds": 3.4,
-        "spoken": "Dans ses paramètres, la même option est activée.",
-        "visibleSeconds": 3,
-        "visible": "Dans l'onglet Paramètres, la case « Montrer aux bénévoles qui est inscrit » est cochée.",
+        "spokenSeconds": 4,
+        "spoken": "Dans ses paramètres, la même option est activée",
+        "visibleSeconds": 4,
+        "visible": "L'option 'Montrer aux bénévoles qui est inscrit' est cochée dans les paramètres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "Sur Vérifier avant publication, la note Qui est inscrit est activé",
+        "spokenSeconds": 6,
+        "spoken": "Vous pouvez la désactiver puis la réactiver",
+        "visibleSeconds": 6.5,
+        "visible": "La case est décochée à 00:06 puis réactivée à 00:07",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Sur Vérifier avant publication",
         "visibleSeconds": 9.5,
-        "visible": "Affichage de l'écran « Vérifier avant publication » avec l'encadré d'avertissement « Qui est inscrit est activé : prévenez vos bénévoles ».",
+        "visible": "Affichage de l'écran 'Vérifier avant publication'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22,
-        "spoken": "Publions l’événement.",
-        "visibleSeconds": 22.2,
-        "visible": "Clic sur le bouton bleu « Publier », l'événement passe au statut « Public » avec le bouton « Partager le lien ».",
+        "spokenSeconds": 11,
+        "spoken": "la note Qui est inscrit est activé : prévenez vos bénévoles, rappelle votre information",
+        "visibleSeconds": 11,
+        "visible": "La note d'information bleue mentionnant « Qui est inscrit » est activé : prévenez vos bénévoles est visible sous Publication",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Publions l’événement",
+        "visibleSeconds": 20.5,
+        "visible": "Clic sur le bouton bleu 'Publier'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, fluide et naturelle, parfaitement synchronisée avec la navigation à l'écran."
+      "observation": "Voix féminine calme, claire et bien articulée, en parfaite synchronisation avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

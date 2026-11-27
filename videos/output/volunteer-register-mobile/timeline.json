@@ -1,15 +1,15 @@
 {
   "slug": "volunteer-register-mobile",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-11-16T20:44:29.595Z",
+  "recordedAt": "2026-11-27T17:04:15.717Z",
   "video": "capture.webm",
   "product": {
-    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
-    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
-    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
-    "buildId": "HO6mRRAZuOevekAmdhN_C",
-    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
-    "builtAt": "2026-11-16T19:13:45.446Z"
+    "commit": "27875d4c2e57b1072ab3880405695d1872a5460e",
+    "sourceTree": "c20234f334484ea7ffd80b068e68ed48255d95b7",
+    "productSourceSha256": "58fb5a5eb03a24b241f02aa45450bfc677e42e5bb46cda36c2a2227f89a17784",
+    "buildId": "SnDoVVXeIpWiSWHVLWJ4W",
+    "snapshot": "/tmp/benevoles-video-production.ao2Ycj",
+    "builtAt": "2026-11-27T16:58:04.102Z"
   },
   "captureEnvironment": {
     "locale": "fr-CH",
@@ -26,96 +26,96 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 17958
+      "atMs": 16775
     },
     {
       "kind": "click",
-      "atMs": 19674
+      "atMs": 18550
     },
     {
       "kind": "click",
-      "atMs": 25074
+      "atMs": 23643
     },
     {
       "kind": "click",
-      "atMs": 26056
+      "atMs": 24659
     },
     {
       "kind": "click",
-      "atMs": 27057
+      "atMs": 25659
     },
     {
       "kind": "click",
-      "atMs": 28056
+      "atMs": 26660
     },
     {
       "kind": "click",
-      "atMs": 32641
+      "atMs": 31095
     },
     {
       "kind": "click",
-      "atMs": 33440
+      "atMs": 33276
     },
     {
       "kind": "click",
-      "atMs": 34240
+      "atMs": 34959
     },
     {
       "kind": "click",
-      "atMs": 43456
+      "atMs": 42892
     }
   ],
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 9670
+      "endMs": 8828
     },
     {
       "id": "discover",
-      "startMs": 10122,
-      "endMs": 17011
+      "startMs": 9280,
+      "endMs": 15825
     },
     {
       "id": "choose",
-      "startMs": 17464,
-      "endMs": 24127
+      "startMs": 16280,
+      "endMs": 22648
     },
     {
       "id": "details",
-      "startMs": 24578,
-      "endMs": 31662
+      "startMs": 23129,
+      "endMs": 30131
     },
     {
       "id": "preferences",
-      "startMs": 32116,
-      "endMs": 38912
+      "startMs": 30583,
+      "endMs": 37446
     },
     {
       "id": "confirm",
-      "startMs": 39364,
-      "endMs": 44597
+      "startMs": 37898,
+      "endMs": 43549
     },
     {
       "id": "success",
-      "startMs": 45048,
-      "endMs": 55608
+      "startMs": 44002,
+      "endMs": 59809
     }
   ],
   "anchors": [
     {
       "segmentId": "confirm",
       "phrase": "Un dernier coup d’œil au",
-      "startMs": 459,
-      "endMs": 3390,
-      "cueMs": 39826
+      "startMs": 401,
+      "endMs": 3084,
+      "cueMs": 38302
     },
     {
-      "segmentId": "confirm",
-      "phrase": "confirme ton inscription.",
-      "startMs": 3585,
-      "endMs": 4783,
-      "cueMs": 42949
+      "segmentId": "success",
+      "phrase": "Ouvre le courriel de confirmation",
+      "startMs": 3601,
+      "endMs": 6403,
+      "cueMs": 47604
     }
   ]
 }

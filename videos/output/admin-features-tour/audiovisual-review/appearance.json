@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:43:59.214Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:47:52.788Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "a7180648bfad2e37efa7114b00ecbcdc0fd77a3c62ce2fc6cff0dd286dd4b096",
-  "clipSha256": "6ee9428c9deb8316240845a8932e08ef28f1fcd2a1de706e32b93114ccb01498",
+  "clipSha256": "c2ff03c3525aee09782058452d7414634feaf0f384fa1717d44e8c3597920e22",
   "scene": "appearance",
   "review": {
-    "heardOpening": "Dans ses paramètres, vous réglez le titre",
+    "heardOpening": "Dans ses paramètres vous réglez",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Dans ses paramètres, vous réglez le titre, les dates",
+        "spokenSeconds": 0.5,
+        "spoken": "Dans ses paramètres, vous réglez le titre",
         "visibleSeconds": 1,
-        "visible": "L'onglet Paramètres est affiché avec les champs Titre et Description",
+        "visible": "Page Paramètres affichée avec le champ Titre et la description de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.7,
-        "spoken": "et une couleur d’en-tête accessible.",
+        "spokenSeconds": 3.8,
+        "spoken": "et une couleur d'en-tête accessible",
         "visibleSeconds": 4.1,
-        "visible": "Affichage de la section Couleur d'en-tête avec la palette accessible",
+        "visible": "Section 'Couleur de la page d'inscription' avec la palette et l'aperçu",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 6.3,
         "spoken": "Le lieu peut recevoir des coordonnées",
-        "visibleSeconds": 6,
-        "visible": "Retour sur les champs Lieu et Coordonnées GPS ou lien de carte",
+        "visibleSeconds": 6.2,
+        "visible": "Affichage des champs Lieu et Coordonnées GPS ou lien de carte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "les bénévoles obtiennent alors un lien OpenStreetMap",
+        "visibleSeconds": 8.5,
+        "visible": "Texte explicatif sous le champ GPS mentionnant le lien OpenStreetMap",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off de synthèse fluide, claire et bien calée sur les sections de l'écran."
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les changements d'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

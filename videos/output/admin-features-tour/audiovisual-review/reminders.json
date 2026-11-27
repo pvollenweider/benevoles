@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:44:34.420Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:49:44.933Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "1026cc6d63cb97a6a75ee4a2e792d88eb2dc6e50bc58cade78f7026b257a0e47",
-  "clipSha256": "7d2ef1bfe0475da70e41a359ce841f618d037fc07ec088bf29faf2a1aa7d2071",
+  "clipSha256": "90ae668e4f8aff5d1dbc8a6877101745c86c1352a11b5ba676a012e999b6ca7e",
   "scene": "reminders",
   "review": {
     "heardOpening": "Les rappels automatiques peuvent partir",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
-        "spoken": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même",
-        "visibleSeconds": 1,
-        "visible": "Cases à cocher Rappel J-2, Rappel J-1 et Rappel du jour affichées dans Paramètres des emails",
+        "spokenSeconds": 2.2,
+        "spoken": "deux jours avant, la veille et le jour même",
+        "visibleSeconds": 2,
+        "visible": "Options 'Rappel J-2', 'Rappel J-1' et 'Rappel du jour' cochées sous 'Rappels automatiques aux bénévoles inscrits'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.7,
+        "spokenSeconds": 6.8,
         "spoken": "où arrivent les réponses",
-        "visibleSeconds": 6.7,
-        "visible": "Champ Adresse de réponse visible sous les options de rappel",
+        "visibleSeconds": 6.8,
+        "visible": "Champ 'Adresse de réponse' visible en bas du formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8.7,
-        "spoken": "si ses admins doivent être prévenus à chaque nouvelle inscription",
+        "spoken": "et si ses admins doivent être prévenus à chaque nouvelle inscription",
         "visibleSeconds": 8.7,
-        "visible": "Option Prévenir les organisateurs à chaque inscription visible avec sa case cochée",
+        "visible": "Option 'Prévenir les organisateurs à chaque inscription' cochée à l'écran",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement intelligible, sans bruits parasites."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'écran d'options présenté."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

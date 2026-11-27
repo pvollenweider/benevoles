@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:19:02.394Z",
-  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "reviewedAt": "2026-11-27T20:08:41.004Z",
+  "videoSha256": "c5064180292f4fa02fd344a512f49cb9acef1ae902c52ddb923dd4cf3a1ab430",
   "promptSha256": "b7db8747e50e80d36d5c635e2191c990aee7447c5a76951f3f80e756f2fa98da",
-  "clipSha256": "e70344f932ab3827a2c6a802d20dbc36b95ce09655ff4e6a00d7d7d31c67e095",
+  "clipSha256": "1b238edcd55753485a3ca8a5d8d4e774d42e830d4756a84cb5b5ab31520b962c",
   "scene": "preview-start",
   "review": {
-    "heardOpening": "Prévisualiser comme un bénévole ouvre la vraie page d'inscription",
+    "heardOpening": "Prévisualiser comme un bénévole",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Prévisualiser comme un bénévole ouvre la vraie page d'inscription",
+        "spokenSeconds": 0.1,
+        "spoken": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription",
         "visibleSeconds": 0.8,
-        "visible": "L'interrupteur 'Prévisualiser comme un bénévole' est activé et ouvre la page d'aperçu de l'événement",
+        "visible": "Clic sur le lien 'Prévisualiser comme un bénévole' et ouverture de l'onglet Aperçu bénévole",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.4,
-        "spoken": "On vérifie d'abord l'en-tête, le lieu, les instructions",
-        "visibleSeconds": 6.5,
-        "visible": "L'en-tête avec le titre, le lieu 'Place du Collège, Montvert' et le message d'instructions sont bien visibles",
+        "spokenSeconds": 6.8,
+        "spoken": "On vérifie d’abord l’en-tête, le lieu, les instructions",
+        "visibleSeconds": 7,
+        "visible": "Affichage de l'en-tête de l'événement, de l'adresse à Montvert et du texte d'instructions",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
+        "spokenSeconds": 11,
         "spoken": "le programme et les créneaux",
-        "visibleSeconds": 10.5,
-        "visible": "La frise chronologique affichant les différents créneaux horaires et postes du samedi 17 octobre est visible à l'écran",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la section 'Affichage des créneaux' en bas de la page d'aperçu",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
+      "observation": "Voix pédagogique, claire et bien articulée, parfaitement synchronisée avec la navigation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

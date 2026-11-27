@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:16:02.787Z",
-  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "reviewedAt": "2026-11-27T20:21:33.844Z",
+  "videoSha256": "70b3d1912845c2159aeca8d622458c134b8be6538822a94f8f0019ce87967971",
   "promptSha256": "aac36ef3efa0084e16e58b2566581193404caa70088fcb70dcd9134051ea583d",
-  "clipSha256": "007ac35c4fc502566e68bbdb5f1e52cd9e73493c200afb3532529078f943f09e",
+  "clipSha256": "283d6ef6f45ecc30232d47f946da52e7104570020655d0eaba4a8cf23640fcce",
   "scene": "save",
   "review": {
     "heardOpening": "Enregistrez les paramètres avant de les tester",
     "checkpoints": [
       {
-        "spokenSeconds": 1.1,
+        "spokenSeconds": 0.6,
         "spoken": "Enregistrez les paramètres avant de les tester",
-        "visibleSeconds": 0.8,
-        "visible": "Clic sur le bouton bleu Enregistrer",
+        "visibleSeconds": 1,
+        "visible": "Le bouton Enregistrer est actif et la mention Paramètres enregistrés apparaît en dessous",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
+        "spokenSeconds": 3.4,
         "spoken": "Le message Paramètres enregistrés confirme que vos choix sont conservés",
-        "visibleSeconds": 1.2,
-        "visible": "Apparition de la mention Paramètres enregistrés sous le bouton Enregistrer",
-        "sync": "early",
+        "visibleSeconds": 3.4,
+        "visible": "Le texte Paramètres enregistrés reste bien affiché sous le bouton Enregistrer",
+        "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
+        "spokenSeconds": 11.2,
         "spoken": "Le test utilise lui aussi la dernière configuration enregistrée",
-        "visibleSeconds": 12,
-        "visible": "Le bouton Envoyer un email de test et les paramètres restent visibles à l'écran",
+        "visibleSeconds": 11.2,
+        "visible": "Le bouton Envoyer un email de test et la configuration des cases demeurent visibles à l'écran",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et bien articulée, sans parasite sonore."
+      "observation": "Voix féminine claire, fluide et naturelle, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

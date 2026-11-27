@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:19:02.973Z",
-  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "reviewedAt": "2026-11-27T20:08:17.368Z",
+  "videoSha256": "c5064180292f4fa02fd344a512f49cb9acef1ae902c52ddb923dd4cf3a1ab430",
   "promptSha256": "03eb0eb67d25b45eaada2b695d763f523768cd8d43184b5d1cc4224e11c324fe",
-  "clipSha256": "d4e80d3527e93fe26dae5e70b456adc26880547dc30319054e90b61292f04e3e",
+  "clipSha256": "88736fcaf660505e476a32c494646aa9ee91b5a2b7f9433a42473de7fa6a20de",
   "scene": "welcome",
   "review": {
     "heardOpening": "Avant de publier, l'écran de vérification",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "l'écran de vérification rassemble ce qui compte vraiment",
-        "visibleSeconds": 2.8,
-        "visible": "Disparition du bandeau d'introduction et affichage complet de la page Vérification",
+        "spokenSeconds": 0.5,
+        "spoken": "Avant de publier, l’écran de vérification rassemble ce qui compte vraiment.",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du bandeau d'introduction et affichage complet de la page « Vérifier avant publication »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "Il évite d'ouvrir une page vide ou incohérente",
-        "visibleSeconds": 4.1,
-        "visible": "Liste des points de contrôle de l'événement avec indicateurs de statut et liens Modifier",
+        "spokenSeconds": 4,
+        "spoken": "Il évite d’ouvrir une page vide ou incohérente",
+        "visibleSeconds": 4,
+        "visible": "Liste des éléments clés vérifiés (dates, créneaux, lieu, messages, responsables)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
-        "spoken": "rappelle que tout restera modifiable après la publication",
-        "visibleSeconds": 7,
-        "visible": "Mention visible sous le titre : « Tout reste modifiable après la publication »",
+        "spokenSeconds": 6.8,
+        "spoken": "et rappelle que tout restera modifiable après la publication.",
+        "visibleSeconds": 6.8,
+        "visible": "Mention sous le titre : « Dernier coup d'œil avant d'ouvrir les inscriptions. Tout reste modifiable après la publication. »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la présentation de l'écran."
+      "observation": "Voix naturelle, posée et parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

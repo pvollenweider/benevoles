@@ -1,15 +1,15 @@
 {
   "slug": "org-email-settings",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-11-16T20:14:10.306Z",
+  "recordedAt": "2026-11-27T20:19:30.082Z",
   "video": "capture.webm",
   "product": {
-    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
-    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
-    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
-    "buildId": "HO6mRRAZuOevekAmdhN_C",
-    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
-    "builtAt": "2026-11-16T19:13:45.446Z"
+    "commit": "27875d4c2e57b1072ab3880405695d1872a5460e",
+    "sourceTree": "c20234f334484ea7ffd80b068e68ed48255d95b7",
+    "productSourceSha256": "58fb5a5eb03a24b241f02aa45450bfc677e42e5bb46cda36c2a2227f89a17784",
+    "buildId": "WhmgksIKqT4RNMXyOkZNI",
+    "snapshot": "/tmp/benevoles-video-production.aNOKSf",
+    "builtAt": "2026-11-27T17:11:47.388Z"
   },
   "captureEnvironment": {
     "locale": "fr-CH",
@@ -26,269 +26,283 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 30158
+      "atMs": 28349
     },
     {
       "kind": "click",
-      "atMs": 31575
+      "atMs": 30459
     },
     {
       "kind": "click",
-      "atMs": 47260
+      "atMs": 42926
     },
     {
       "kind": "click",
-      "atMs": 70424
+      "atMs": 66657
     },
     {
       "kind": "click",
-      "atMs": 75089
+      "atMs": 71122
     },
     {
       "kind": "click",
-      "atMs": 94389
+      "atMs": 88356
     },
     {
       "kind": "click",
-      "atMs": 97121
+      "atMs": 90922
     },
     {
       "kind": "click",
-      "atMs": 110722
+      "atMs": 103205
     },
     {
       "kind": "click",
-      "atMs": 117405
+      "atMs": 109388
     },
     {
       "kind": "click",
-      "atMs": 131504
+      "atMs": 122588
     },
     {
       "kind": "key",
-      "atMs": 131815
+      "atMs": 122901
     },
     {
       "kind": "key",
-      "atMs": 131823
+      "atMs": 122906
     },
     {
       "kind": "key",
-      "atMs": 131943
+      "atMs": 123026
     },
     {
       "kind": "key",
-      "atMs": 132063
+      "atMs": 123145
     },
     {
       "kind": "key",
-      "atMs": 132181
+      "atMs": 123263
     },
     {
       "kind": "key",
-      "atMs": 132298
+      "atMs": 123382
     },
     {
       "kind": "key",
-      "atMs": 132416
+      "atMs": 123501
     },
     {
       "kind": "key",
-      "atMs": 132534
+      "atMs": 123620
     },
     {
       "kind": "key",
-      "atMs": 132653
+      "atMs": 123739
     },
     {
       "kind": "key",
-      "atMs": 132772
+      "atMs": 123856
     },
     {
       "kind": "key",
-      "atMs": 132888
+      "atMs": 123973
     },
     {
       "kind": "key",
-      "atMs": 133006
+      "atMs": 124092
     },
     {
       "kind": "key",
-      "atMs": 133126
+      "atMs": 124211
     },
     {
       "kind": "key",
-      "atMs": 133243
+      "atMs": 124329
     },
     {
       "kind": "key",
-      "atMs": 133363
+      "atMs": 124448
     },
     {
       "kind": "key",
-      "atMs": 133481
+      "atMs": 124567
     },
     {
       "kind": "key",
-      "atMs": 133599
+      "atMs": 124685
     },
     {
       "kind": "key",
-      "atMs": 133717
+      "atMs": 124801
     },
     {
       "kind": "key",
-      "atMs": 133837
+      "atMs": 124919
     },
     {
       "kind": "key",
-      "atMs": 133955
+      "atMs": 125043
     },
     {
       "kind": "key",
-      "atMs": 134074
+      "atMs": 125161
     },
     {
       "kind": "key",
-      "atMs": 134193
+      "atMs": 125279
     },
     {
       "kind": "click",
-      "atMs": 143621
+      "atMs": 135687
     },
     {
       "kind": "click",
-      "atMs": 161954
+      "atMs": 153170
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1138,
-      "endMs": 19600
+      "startMs": 1175,
+      "endMs": 17650
     },
     {
       "id": "reminders",
-      "startMs": 21761,
-      "endMs": 41162
+      "startMs": 19833,
+      "endMs": 39045
     },
     {
       "id": "event-reminders",
-      "startMs": 41615,
-      "endMs": 65097
+      "startMs": 39498,
+      "endMs": 61515
     },
     {
       "id": "admin-alert",
-      "startMs": 65549,
-      "endMs": 80157
+      "startMs": 61969,
+      "endMs": 75945
     },
     {
       "id": "withdrawal",
-      "startMs": 80610,
-      "endMs": 102280
+      "startMs": 76398,
+      "endMs": 95368
     },
     {
       "id": "addresses",
-      "startMs": 102733,
-      "endMs": 122455
+      "startMs": 95821,
+      "endMs": 113969
     },
     {
       "id": "reply-to",
-      "startMs": 124618,
-      "endMs": 142503
+      "startMs": 116136,
+      "endMs": 134435
     },
     {
       "id": "save",
-      "startMs": 142956,
-      "endMs": 159022
+      "startMs": 134887,
+      "endMs": 150247
     },
     {
       "id": "test",
-      "startMs": 161185,
-      "endMs": 183188
+      "startMs": 152406,
+      "endMs": 179165
     },
     {
       "id": "result",
-      "startMs": 183640,
-      "endMs": 201915
+      "startMs": 179619,
+      "endMs": 197908
     }
   ],
   "anchors": [
     {
       "segmentId": "reminders",
-      "phrase": "Décochons puis recochons le premier rappel",
-      "startMs": 7917,
-      "endMs": 10394,
-      "cueMs": 29679
+      "phrase": "Décochons le premier rappel",
+      "startMs": 8001,
+      "endMs": 9550,
+      "cueMs": 27836
     },
     {
       "segmentId": "reminders",
-      "phrase": "Décochons puis recochons le premier rappel",
-      "startMs": 7917,
-      "endMs": 10394,
-      "cueMs": 30464
+      "phrase": "Recochons-le",
+      "startMs": 10141,
+      "endMs": 11154,
+      "cueMs": 29976
+    },
+    {
+      "segmentId": "event-reminders",
+      "phrase": "Décochez la case Rappels automatiques",
+      "startMs": 2937,
+      "endMs": 6900,
+      "cueMs": 42442
     },
     {
       "segmentId": "event-reminders",
       "phrase": "Son onglet Messages",
-      "startMs": 8072,
-      "endMs": 10504,
-      "cueMs": 49899
+      "startMs": 7413,
+      "endMs": 9798,
+      "cueMs": 46912
     },
     {
       "segmentId": "withdrawal",
       "phrase": "Décocher cette option coupe aussi",
-      "startMs": 13288,
-      "endMs": 16212,
-      "cueMs": 93901
+      "startMs": 11484,
+      "endMs": 14267,
+      "cueMs": 87884
     },
     {
       "segmentId": "reply-to",
       "phrase": "Saisissons benevoles arobase example point org",
-      "startMs": 6422,
-      "endMs": 9501,
-      "cueMs": 131042
+      "startMs": 5964,
+      "endMs": 9525,
+      "cueMs": 122102
+    },
+    {
+      "segmentId": "reply-to",
+      "phrase": "Cette adresse apparaît aussi",
+      "startMs": 11523,
+      "endMs": 18031,
+      "cueMs": 127661
     },
     {
       "segmentId": "save",
       "phrase": "Enregistrez les paramètres avant de les tester",
-      "startMs": 189,
-      "endMs": 3064,
-      "cueMs": 143147
+      "startMs": 326,
+      "endMs": 2918,
+      "cueMs": 135219
     },
     {
       "segmentId": "save",
       "phrase": "Le message Paramètres enregistrés",
-      "startMs": 3451,
-      "endMs": 7471,
-      "cueMs": 146409
+      "startMs": 3524,
+      "endMs": 7305,
+      "cueMs": 138413
     },
     {
       "segmentId": "test",
       "phrase": "M’envoyer un email de test",
-      "startMs": 298,
-      "endMs": 4800,
-      "cueMs": 161485
+      "startMs": 291,
+      "endMs": 5415,
+      "cueMs": 152699
     },
     {
       "segmentId": "test",
       "phrase": "Ouvrons le message reçu",
-      "startMs": 5225,
-      "endMs": 8697,
-      "cueMs": 166413
+      "startMs": 5830,
+      "endMs": 8903,
+      "cueMs": 158238
     },
     {
       "segmentId": "result",
       "phrase": "Dans Emails envoyés",
-      "startMs": 6055,
-      "endMs": 13415,
-      "cueMs": 189697
+      "startMs": 5626,
+      "endMs": 13418,
+      "cueMs": 185248
     }
   ],
   "detailFrames": [
     {
-      "startMs": 21794,
-      "endMs": 21795,
+      "startMs": 19882,
+      "endMs": 19883,
       "x": 140,
       "y": 223,
       "width": 640,

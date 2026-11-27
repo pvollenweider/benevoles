@@ -1,12 +1,12 @@
 {
   "anchor": "Les rappels automatiques peuvent partir deux jours avant, la veille et",
-  "windowStart": 180.462,
+  "windowStart": 208.079,
   "result": {
     "found": true,
-    "startSeconds": 30.37,
+    "startSeconds": 12.2,
     "wordsHeard": "Les rappels automatiques peuvent partir deux jours avant, la veille et"
   },
-  "onset": 210.832,
-  "proposedCut": 210.4621665,
+  "onset": 220.279,
+  "proposedCut": 219.95387499999998,
   "note": "Proposal only; recut then independently audit before capture"
 }

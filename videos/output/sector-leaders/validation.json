@@ -1,101 +1,101 @@
 {
   "id": "SECTOR_LEADERS",
   "slug": "sector-leaders",
-  "validatedAt": "2026-10-29T06:52:42.045Z",
+  "validatedAt": "2026-11-27T20:24:20.039Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 296760,
+  "captureMs": 292360,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 22841,
-      "audioMs": 22839,
-      "driftMs": 2
+      "visualMs": 22864,
+      "audioMs": 22860,
+      "driftMs": 4
     },
     {
       "id": "nominate",
-      "visualMs": 20828,
-      "audioMs": 20826,
+      "visualMs": 21744,
+      "audioMs": 21742,
       "driftMs": 2
     },
     {
       "id": "registered",
-      "visualMs": 17915,
-      "audioMs": 17912,
-      "driftMs": 3
+      "visualMs": 18078,
+      "audioMs": 18077,
+      "driftMs": 1
     },
     {
       "id": "email",
-      "visualMs": 15617,
-      "audioMs": 15615,
-      "driftMs": 2
+      "visualMs": 16757,
+      "audioMs": 16754,
+      "driftMs": 3
     },
     {
       "id": "roster",
-      "visualMs": 19823,
-      "audioMs": 19821,
+      "visualMs": 18788,
+      "audioMs": 18786,
       "driftMs": 2
     },
     {
       "id": "mobile",
-      "visualMs": 20290,
-      "audioMs": 20289,
-      "driftMs": 1
+      "visualMs": 18407,
+      "audioMs": 18405,
+      "driftMs": 2
     },
     {
       "id": "scope",
-      "visualMs": 13964,
-      "audioMs": 13963,
+      "visualMs": 13952,
+      "audioMs": 13951,
       "driftMs": 1
     },
     {
       "id": "new-signup",
-      "visualMs": 31496,
-      "audioMs": 31496,
-      "driftMs": 0
-    },
-    {
-      "id": "notification",
-      "visualMs": 21004,
-      "audioMs": 21002,
+      "visualMs": 30913,
+      "audioMs": 30911,
       "driftMs": 2
     },
     {
+      "id": "notification",
+      "visualMs": 19897,
+      "audioMs": 19890,
+      "driftMs": 7
+    },
+    {
       "id": "contact",
-      "visualMs": 17587,
-      "audioMs": 17585,
+      "visualMs": 17119,
+      "audioMs": 17117,
       "driftMs": 2
     },
     {
       "id": "remove",
-      "visualMs": 21960,
-      "audioMs": 21957,
-      "driftMs": 3
+      "visualMs": 21098,
+      "audioMs": 21096,
+      "driftMs": 2
     },
     {
       "id": "leaders-sector-scope",
-      "visualMs": 31903,
-      "audioMs": 31902,
-      "driftMs": 1
+      "visualMs": 31995,
+      "audioMs": 31993,
+      "driftMs": 2
     },
     {
       "id": "leaders-sector-roster",
-      "visualMs": 23632,
-      "audioMs": 23632,
-      "driftMs": 0
+      "visualMs": 22879,
+      "audioMs": 22877,
+      "driftMs": 2
     }
   ],
   "anchorsChecked": 28,
   "music": {
-    "voicedWindows": 278,
-    "musicOnlyWindows": 3,
+    "voicedWindows": 271,
+    "musicOnlyWindows": 4,
     "smallestGapLu": 13.7,
     "largestGapLu": 19.1,
-    "quietestMusicOnlyLufs": -32.9,
-    "loudestMusicOnlyLufs": -32.7,
-    "medianVoiceLufs": -16.7
+    "quietestMusicOnlyLufs": -33.3,
+    "loudestMusicOnlyLufs": -32.5,
+    "medianVoiceLufs": -16.4
   },
   "issues": []
 }

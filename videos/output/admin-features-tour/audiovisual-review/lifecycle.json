@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:43:58.151Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:47:41.469Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "d91880d1cedd30549bff1d6b098c7fb6bfbbcc1d2fbbb6e5ea03f682278dd2eb",
-  "clipSha256": "ff2a752c1c7a4d748afdb4eead4b28ed83bc4ebaecf05283d0d5c107a607dc22",
+  "clipSha256": "b3f036737b9d7bebbf6514bd5fe4ebf93d7f02edef952c729ef140a328387e9e",
   "scene": "lifecycle",
   "review": {
     "heardOpening": "Un événement suit un cycle clair",
     "checkpoints": [
       {
+        "spokenSeconds": 0.5,
+        "spoken": "Un événement suit un cycle clair",
+        "visibleSeconds": 0.8,
+        "visible": "Navigation vers l'onglet Paramètres puis défilement vers la section Visibilité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
         "spokenSeconds": 2.8,
         "spoken": "brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé",
-        "visibleSeconds": 2,
-        "visible": "Menu déroulant 'Statut' affichant 'Publié (visible)'",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage du champ Statut indiquant « Publié (visible) »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.7,
-        "spoken": "Même publié, il peut rester non répertorié et accessible seulement par son lien.",
-        "visibleSeconds": 2,
-        "visible": "Option 'Afficher cet événement sur la page publique de l'organisation' cochée avec son texte explicatif",
+        "spokenSeconds": 8.8,
+        "spoken": "Même publié, il peut rester non répertorié et accessible seulement par son lien",
+        "visibleSeconds": 8.8,
+        "visible": "Option cochée « Afficher cet événement sur la page publique de l'organisation » visible avec son texte explicatif",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.",
-        "visibleSeconds": 2,
-        "visible": "Section 'Inscriptions' avec champs 'Ouverture programmée' et 'Fermeture programmée'",
+        "spokenSeconds": 14.2,
+        "spoken": "Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise",
+        "visibleSeconds": 14,
+        "visible": "Section Inscriptions visible avec case « Inscriptions ouvertes » et dates d'ouverture/fermeture programmées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage des paramètres à l'écran."
+      "observation": "Voix féminine posée, chaleureuse et parfaitement intelligible, débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

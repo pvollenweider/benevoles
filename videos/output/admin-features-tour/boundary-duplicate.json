@@ -1,12 +1,12 @@
 {
   "anchor": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les",
-  "windowStart": 44.93600000000001,
+  "windowStart": 63.665000000000006,
   "result": {
     "found": true,
-    "startSeconds": 30.1,
-    "wordsHeard": "Pour repartir d'une édition précédente dupliquez l'événement et décalez toutes les"
+    "startSeconds": 17.74,
+    "wordsHeard": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les"
   },
-  "onset": 75.036,
-  "proposedCut": 74.93606249999999,
+  "onset": 81.405,
+  "proposedCut": 81.1957915,
   "note": "Proposal only; recut then independently audit before capture"
 }

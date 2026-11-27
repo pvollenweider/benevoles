@@ -1,77 +1,77 @@
 {
   "id": "VOLUNTEER_CALENDAR",
   "slug": "volunteer-calendar",
-  "validatedAt": "2026-10-16T10:16:00.681Z",
+  "validatedAt": "2026-11-27T20:24:18.885Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 182520,
+  "captureMs": 99200,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 19423,
-      "audioMs": 19421,
-      "driftMs": 2
-    },
-    {
-      "id": "one",
-      "visualMs": 17687,
-      "audioMs": 17686,
+      "visualMs": 8562,
+      "audioMs": 8561,
       "driftMs": 1
     },
     {
-      "id": "all",
-      "visualMs": 18936,
-      "audioMs": 18934,
+      "id": "page",
+      "visualMs": 10506,
+      "audioMs": 10504,
       "driftMs": 2
     },
     {
-      "id": "import",
-      "visualMs": 19082,
-      "audioMs": 19082,
-      "driftMs": 0
+      "id": "device",
+      "visualMs": 14193,
+      "audioMs": 14184,
+      "driftMs": 9
     },
     {
-      "id": "details",
-      "visualMs": 17404,
-      "audioMs": 17403,
+      "id": "online",
+      "visualMs": 15480,
+      "audioMs": 15479,
       "driftMs": 1
     },
     {
-      "id": "night",
-      "visualMs": 17922,
-      "audioMs": 17920,
+      "id": "privacy",
+      "visualMs": 10901,
+      "audioMs": 10899,
       "driftMs": 2
     },
     {
       "id": "change",
-      "visualMs": 20494,
-      "audioMs": 20494,
-      "driftMs": 0
+      "visualMs": 10239,
+      "audioMs": 10238,
+      "driftMs": 1
     },
     {
-      "id": "reimport",
-      "visualMs": 18732,
-      "audioMs": 18731,
+      "id": "file",
+      "visualMs": 10928,
+      "audioMs": 10923,
+      "driftMs": 5
+    },
+    {
+      "id": "renew",
+      "visualMs": 8857,
+      "audioMs": 8856,
       "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 18889,
-      "audioMs": 18889,
-      "driftMs": 0
+      "visualMs": 4758,
+      "audioMs": 4756,
+      "driftMs": 2
     }
   ],
   "anchorsChecked": 5,
   "music": {
-    "voicedWindows": 170,
-    "musicOnlyWindows": 6,
-    "smallestGapLu": 14.1,
-    "largestGapLu": 19,
-    "quietestMusicOnlyLufs": -34.2,
-    "loudestMusicOnlyLufs": -33,
-    "medianVoiceLufs": -16.6
+    "voicedWindows": 93,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.5,
+    "largestGapLu": 18.7,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
   },
   "issues": []
 }
