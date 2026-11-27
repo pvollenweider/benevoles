@@ -55,6 +55,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Mes inscriptions, délai d'annulation passé** : la page de toutes tes inscriptions indique l'adresse de l'organisation pour prévenir d'un empêchement, et non plus l'adresse de contact de benevol.app.
 - **Inscription avec confirmation par e-mail** : une personne n'est plus refusée parce qu'une autre a envoyé des demandes avec son adresse. Une nouvelle demande qui ne peut pas être enregistrée (créneau déjà pris, horaires qui se chevauchent) ne remplace plus la demande en attente, dont le lien reste valable.
 - **Rappels propres à un événement** : un rappel ajouté ou modifié après l'heure où il aurait dû partir ne part plus pour les personnes déjà inscrites.
 - **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste non plus. La personne placée sur ce poste la reçoit toujours.

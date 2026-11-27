@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { buildOrgPageData, ORG_SCOPE_SENTENCE, orgRegistrationStatusLabel, type OrgPageRegistrationInput } from "../org-personal-page"
+import { buildOrgPageData, orgCancelContactEmail, ORG_SCOPE_SENTENCE, orgRegistrationStatusLabel, type OrgPageRegistrationInput } from "../org-personal-page"
 
 const TZ = "Europe/Zurich"
 const NOW = new Date("2031-05-01T08:00:00Z") // 10:00 in Zurich
@@ -37,6 +37,22 @@ const build = (registrations: OrgPageRegistrationInput[]) => buildOrgPageData({
   now: NOW,
   timeZone: TZ,
   orgHomeUrl: "https://asso.example",
+})
+
+// Regression: a volunteer past the cancellation deadline was told to write to the platform's
+// public contact address instead of the organisation, and did.
+describe("orgCancelContactEmail", () => {
+  it("is the organisation's reply address when it has one", () => {
+    expect(orgCancelContactEmail("club@example.org", "reponses@example.net")).toBe("club@example.org")
+    expect(orgCancelContactEmail("  club@example.org ", null)).toBe("club@example.org")
+  })
+  it("falls back to the instance's reply address, like the page of one event", () => {
+    expect(orgCancelContactEmail(null, "reponses@example.net")).toBe("reponses@example.net")
+    expect(orgCancelContactEmail("   ", "reponses@example.net")).toBe("reponses@example.net")
+  })
+  it("names no address when neither exists", () => {
+    expect(orgCancelContactEmail(null, undefined)).toBeNull()
+  })
 })
 
 describe("orgRegistrationStatusLabel", () => {

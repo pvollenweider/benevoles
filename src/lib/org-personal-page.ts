@@ -161,6 +161,16 @@ function iso(value: Date | string | null): string | null {
   return value instanceof Date ? value.toISOString() : value
 }
 
+/**
+ * The address a volunteer is told to write to when a shift can no longer be cancelled online: the
+ * organisation's own reply address, else the instance's reply address, exactly as on the page of
+ * one event (`/api/public/registrations/[token]`). Never the platform's public contact address:
+ * a volunteer who cannot come must reach the organisers, not the operator of the service.
+ */
+export function orgCancelContactEmail(replyToEmail: string | null | undefined, instanceReplyTo: string | null | undefined): string | null {
+  return replyToEmail?.trim() || instanceReplyTo?.trim() || null
+}
+
 /** Builds the page's serialisable data, filtered and ordered. */
 export function buildOrgPageData(input: OrgPageBuildInput): OrgPageData {
   const { timeZone, now } = input
