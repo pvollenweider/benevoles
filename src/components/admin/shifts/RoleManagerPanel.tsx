@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useLayoutEffect, useState, useRef } from "react"
+import Link from "next/link"
 import { flushSync } from "react-dom"
 import { deleteRoleRecap, type ActionRecap } from "@/lib/action-recap"
 import { requestJson } from "@/lib/use-submit"
@@ -62,7 +63,7 @@ export type RoleManagerQuestion = {
 export default function RoleManagerPanel({
   open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onRequestClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
-  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste, mealOnTheGoShown = false, questions = [],
+  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste, mealOnTheGoShown = false, questions = [], overlapsAllowed = false,
 }: {
   open:             boolean
   /** Id of the panel's root, which « Gérer les postes » controls (`aria-controls`). */
@@ -95,6 +96,8 @@ export default function RoleManagerPanel({
   mealOnTheGoShown?: boolean
   /** The event's active questions (#962): the « Accès » editor offers the choice ones asked to all. */
   questions?: RoleManagerQuestion[]
+  /** The event allows overlapping shifts (#1467): the per-poste « Cumul » is replaced by one sentence. */
+  overlapsAllowed?: boolean
 }) {
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
@@ -577,18 +580,20 @@ export default function RoleManagerPanel({
                     {/* A long list of tags wraps, whole (#606). */}
                     {assignedOnly ? "Accès : par l'organisation" : answerCondition ? "Accès : réponse" : reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
                   </button>
-                  <button
-                    ref={(el) => setRoleButton(overlapBtnRefs.current, role, el)}
-                    type="button"
-                    onClick={() => startOverlap(role)}
-                    disabled={isBusy}
-                    aria-expanded={overlapRole === role}
-                    aria-controls={overlapRole === role ? `overlap-form-${i}` : undefined}
-                    aria-label={cumulable ? `Cumul : oui, poste « ${role} » cumulable avec un autre créneau` : `Cumul : non, poste « ${role} » non cumulable avec un autre créneau`}
-                    className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
-                  >
-                    {cumulable ? "Cumul : oui" : "Cumul : non"}
-                  </button>
+                  {!overlapsAllowed && (
+                    <button
+                      ref={(el) => setRoleButton(overlapBtnRefs.current, role, el)}
+                      type="button"
+                      onClick={() => startOverlap(role)}
+                      disabled={isBusy}
+                      aria-expanded={overlapRole === role}
+                      aria-controls={overlapRole === role ? `overlap-form-${i}` : undefined}
+                      aria-label={cumulable ? `Cumul : oui, poste « ${role} » cumulable avec un autre créneau` : `Cumul : non, poste « ${role} » non cumulable avec un autre créneau`}
+                      className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                    >
+                      {cumulable ? "Cumul : oui" : "Cumul : non"}
+                    </button>
+                  )}
                   {mealOnTheGoShown && (
                     <button
                       ref={(el) => setRoleButton(mealBtnRefs.current, role, el)}
@@ -766,8 +771,15 @@ export default function RoleManagerPanel({
       <div>
         {/* Focused by code only, when the row whose button should get focus back is gone. */}
         <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">{managePostesLabel(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)}</h2>
-        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou à l&apos;organisation, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
+        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou à l&apos;organisation{overlapsAllowed ? "" : ", le rendre cumulable avec un autre créneau"} ou le supprimer (avec tous ses créneaux).</p>
       </div>
+      {/* The « Cumul » control is replaced, once for the whole panel (#1467): every shift of the
+          event may overlap. The per-poste values stay stored and come back once it is off. */}
+      {overlapsAllowed && (
+        <p className="text-xs text-gray-700">
+          Tous les créneaux de cet événement peuvent se chevaucher (<Link href={`/admin/events/${eventId}/edit#event-overlaps`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Paramètres de l&apos;événement : créneaux qui se chevauchent</Link>).
+        </p>
+      )}
       {roleActionError && (
         <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
       )}

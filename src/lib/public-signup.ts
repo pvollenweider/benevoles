@@ -3,6 +3,7 @@
 
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
+import { shiftsOverlap } from "./utils"
 import { tooLongSignupField } from "./signup-limits"
 import { answerConditionProblems, answerConditionRefusal, rawAnswerValues, type ReservedAnswerCondition } from "./role-answer"
 import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
@@ -102,7 +103,8 @@ export function isShiftSelectable(shift: SignupShift | undefined, myShiftIds: Se
 }
 
 /** Shifts that clash with something already selected or registered, so they can't be picked too (#986: a cumulable role never clashes). */
-export function conflictingShiftIds<S extends SignupShift>(shifts: S[], selected: Set<string>, myShiftIds: Set<string>): Set<string> {
+export function conflictingShiftIds<S extends SignupShift>(shifts: S[], selected: Set<string>, myShiftIds: Set<string>, eventOverlapsAllowed = false): Set<string> {
+  if (eventOverlapsAllowed) return new Set()
   const taken = shifts.filter((s) => selected.has(s.id) || myShiftIds.has(s.id))
   return new Set(
     shifts
@@ -110,6 +112,15 @@ export function conflictingShiftIds<S extends SignupShift>(shifts: S[], selected
       .filter((candidate) => taken.some((ref) => shiftsClash(candidate, ref)))
       .map((s) => s.id),
   )
+}
+
+/** The first selected or held shift the picked one overlaps, named for the status announcement (#1467). */
+export function overlappingTakenLabel(
+  shift: SignupShift | undefined,
+  taken: { id: string; label: string; date: string; startTime: string; endTime: string }[],
+): string | null {
+  if (!shift) return null
+  return taken.find((s) => s.id !== shift.id && shiftsOverlap(shift, s))?.label ?? null
 }
 
 /** Whether at least one shift can still be signed up for (open, or full with a waitlist; never one that is over). */

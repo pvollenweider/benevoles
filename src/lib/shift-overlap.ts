@@ -10,8 +10,16 @@ import { shiftsOverlap } from "./utils"
  * (`Shift.overlapAllowed`, « Cumulable avec un autre créneau », set on every shift of the role).
  * One cumulable shift is enough: first aid can run while serving coffee, whichever is cumulable.
  *
- * Used by every check: public sign-up (page and server), manual placement, member merge and the
- * open-shifts finder. Pure, no Prisma import: it runs on the public page too.
+ * A whole event may allow overlaps too (#1467, `Event.overlapsAllowed`): when the setting is on,
+ * two shifts of that event never clash, whatever their postes. Every caller passes it as
+ * `eventOverlapsAllowed`; the per-poste values stay in the database and apply again once it is off.
+ * The rule never looks at events itself: callers compare one event only, and a pair of shifts of
+ * two different events is never given one of their events' setting (see member merge, the only
+ * caller that can hold shifts of several events at once).
+ *
+ * Used by every check: public sign-up (page and server), manual placement, swaps, proposals,
+ * member merge, the registrations list and the open-shifts finder. Pure, no Prisma import: it runs
+ * on the public page too.
  */
 export type OverlapShift = {
   date: Date | string
@@ -21,14 +29,19 @@ export type OverlapShift = {
   overlapAllowed?: boolean | null
 }
 
-export function shiftsClash(a: OverlapShift, b: OverlapShift): boolean {
+/** `eventOverlapsAllowed`: the event's setting (#1467), passed by every caller. */
+export function shiftsClash(a: OverlapShift, b: OverlapShift, eventOverlapsAllowed = false): boolean {
+  if (eventOverlapsAllowed) return false
   if (a.overlapAllowed || b.overlapAllowed) return false
   return shiftsOverlap(a, b)
 }
 
-/** Overlap the rule lets through: the hours overlap, but one of the roles is cumulable. */
-export function allowedOverlap(a: OverlapShift, b: OverlapShift): boolean {
-  return !!(a.overlapAllowed || b.overlapAllowed) && shiftsOverlap(a, b)
+/**
+ * Overlap the rule lets through: the hours overlap, but the event allows overlaps (#1467) or one of
+ * the roles is cumulable.
+ */
+export function allowedOverlap(a: OverlapShift, b: OverlapShift, eventOverlapsAllowed = false): boolean {
+  return (eventOverlapsAllowed || !!(a.overlapAllowed || b.overlapAllowed)) && shiftsOverlap(a, b)
 }
 
 /**

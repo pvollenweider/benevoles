@@ -171,7 +171,7 @@ const REG_SELECT = {
 } as const
 
 const EVENT_SELECT = {
-  id: true, title: true, organizationId: true, publicStatus: true, shiftSwapsEnabled: true, shiftSwapsApproval: true,
+  id: true, title: true, organizationId: true, publicStatus: true, shiftSwapsEnabled: true, shiftSwapsApproval: true, overlapsAllowed: true,
   cancelDeadlineDays: true, cancelDeadlineHours: true,
   organization: { select: { slug: true, timeZone: true, active: true, suspendedAt: true } },
 } as const
@@ -231,6 +231,7 @@ async function personCheck(tx: Tx, event: LoadedEvent, giving: LoadedRegistratio
     limits: roleLimits(roleShifts),
     answerCondition,
     answers,
+    eventOverlapsAllowed: event.overlapsAllowed,
   })
 }
 

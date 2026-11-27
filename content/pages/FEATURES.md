@@ -39,7 +39,7 @@ En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [confi
 <!-- image: VOLUNTEER_REGISTER | La page d'inscription sur un téléphone : le créneau choisi, puis le court formulaire « Vos informations ». -->
 
 - **Sans compte ni mot de passe** : le bénévole ouvre le lien, choisit ses créneaux et confirme. Pour un deuxième événement, ses coordonnées sont déjà remplies s'il utilise le même appareil.
-- **Plusieurs créneaux en une fois**, avec les places restantes et les chevauchements signalés, puis un récapitulatif avant de confirmer. Un poste peut se cumuler avec un autre créneau, comme les premiers secours tenus depuis la buvette.
+- **Plusieurs créneaux en une fois**, avec les places restantes et les chevauchements signalés, puis un récapitulatif avant de confirmer. Un poste peut se cumuler avec un autre créneau, comme les premiers secours tenus depuis la buvette, ou l'événement peut autoriser tous les chevauchements.
 - **En frise ou en liste** : le planning de la journée s'affiche en frise, ou en liste dans l'ordre des heures. Sur un téléphone tenu droit, la liste s'ouvre d'office quand la frise n'y serait pas lisible ; sur un écran plus large, la frise s'affiche même si une longue journée demande de la faire défiler latéralement ; une saison de permanences s'affiche toujours en liste. L'organisation choisit le défaut de son événement, et le choix de chacun reste gardé sur son appareil.
 - **Une liste d'attente** : quand une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
 - **Une confirmation par email, si vous le souhaitez** : sur les événements où vous l'activez, un bénévole qui s'inscrit sans lien personnel réserve ses places le temps de confirmer son adresse. Il reçoit un email qui liste ses créneaux et l'échéance, puis un bouton **Confirmer mon inscription** ; ouvrir le lien ne suffit pas. Les places sont tenues 24 heures au plus, jamais au-delà du début du premier créneau. Un créneau complet avec liste d'attente n'y entre qu'à la confirmation. Désactivée par défaut, l'option laisse le parcours d'inscription immédiate inchangé.
@@ -171,7 +171,7 @@ Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec
 
 ### Un bénévole peut-il prendre plusieurs créneaux ?
 
-Oui, en une seule inscription : il sélectionne ses créneaux sur le planning, relit le récapitulatif et confirme une fois. Deux créneaux qui se chevauchent ne peuvent pas être pris ensemble, sauf sur un poste que vous rendez cumulable avec un autre créneau, comme les premiers secours tenus depuis la buvette. Sur un poste très demandé, vous pouvez limiter le nombre de créneaux par personne, par exemple à deux pour la loge des artistes.
+Oui, en une seule inscription : il sélectionne ses créneaux sur le planning, relit le récapitulatif et confirme une fois. Deux créneaux qui se chevauchent ne peuvent pas être pris ensemble, sauf sur un poste que vous rendez cumulable avec un autre créneau, comme les premiers secours tenus depuis la buvette, ou quand vous autorisez les chevauchements pour tout l'événement. Sur un poste très demandé, vous pouvez limiter le nombre de créneaux par personne, par exemple à deux pour la loge des artistes.
 
 ### Que se passe-t-il quand un créneau est complet ?
 

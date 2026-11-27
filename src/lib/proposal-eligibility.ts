@@ -130,6 +130,8 @@ export function startModel(input: ProposalInput): Model {
     const key = a < b ? `${a}|${b}` : `${b}|${a}`
     let v = clashMemo.get(key)
     if (v === undefined) {
+      // The generator keeps the per-poste rule even when the event allows overlaps (#1467): that
+      // setting lets people and organisers choose an overlap, it never lets the solver create one.
       v = shiftsClash(shiftById.get(a)!, shiftById.get(b)!)
       clashMemo.set(key, v)
     }

@@ -86,6 +86,7 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
             initialShiftIds={initialShiftIds}
             today={localDay(new Date(), timeZone)}
             timeZone={timeZone}
+            eventOverlapsAllowed={event.overlapsAllowed}
           />
         </>
       )}

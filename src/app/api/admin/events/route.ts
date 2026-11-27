@@ -35,6 +35,8 @@ const schema = z.object({
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
   /** Default view of the shifts on the public page (#1407): auto, frise or liste. */
   publicShiftView: z.enum(SHIFT_VIEW_SETTINGS).optional(),
+  /** Overlapping shifts allowed for the whole event (#1467): a strict boolean. */
+  overlapsAllowed: z.boolean().optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   /** Day-of contact (#560), for registered volunteers only. */

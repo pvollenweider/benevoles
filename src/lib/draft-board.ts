@@ -43,6 +43,8 @@ export type BoardInput = {
   reserved: ReadonlyMap<string, string[]>
   answerConditions?: ReadonlyMap<string, ReservedAnswerCondition>
   limits: ReadonlyMap<string, number>
+  /** The event allows overlapping shifts (#1467). */
+  overlapsAllowed?: boolean
 }
 
 export type BoardItem = {
@@ -166,7 +168,7 @@ export function buildBoard(input: BoardInput): Board {
   const pending = input.drafts
   const verdict = judgeDraftBatch({
     eventId: input.eventId, organizationId: input.organizationId, timeZone: input.timeZone, availability, now: input.now,
-    drafts: pending, shifts: input.shifts, people: new Map(input.people.map((p) => [p.id, p])), reserved: input.reserved, answerConditions: input.answerConditions, limits: input.limits,
+    drafts: pending, shifts: input.shifts, people: new Map(input.people.map((p) => [p.id, p])), reserved: input.reserved, answerConditions: input.answerConditions, limits: input.limits, overlapsAllowed: input.overlapsAllowed,
   })
   type Found = { message: string; marker: string }
   const add = (map: Map<string, Found[]>, key: string, p: DraftProblem) => map.set(key, [...(map.get(key) ?? []), { message: p.message, marker: blockingMarker(p.code) }])

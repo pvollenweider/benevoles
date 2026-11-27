@@ -104,6 +104,8 @@ export type ProposalInput = {
   availability: { timeZone: string; dates: string[] }
   /** The event's workload protection, complete and on; null: generation refused (P14). */
   policy: ActivePolicy | null
+  /** The event allows overlapping shifts (#1467): no overlap is a hard rule. Absent from older runs = off. */
+  overlapsAllowed?: boolean
   rotation: { maxConsecutiveDays: number | null; maxNightAddOns: number | null }
   seed: number
   /**

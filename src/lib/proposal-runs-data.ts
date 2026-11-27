@@ -71,7 +71,7 @@ const day = (d: Date | string) => (typeof d === "string" ? d.slice(0, 10) : d.to
 export async function buildProposalSnapshot(db: Db, eventId: string, config: ProposalConfig, replacement: Replacement | "compute", now: Date, opts: { ownDrafts?: boolean } = {}): Promise<SnapshotResult> {
   const event = await db.event.findFirst({
     where: { id: eventId },
-    select: { id: true, organizationId: true, availabilityEnabled: true, availabilityAdoptedAt: true, organization: { select: { timeZone: true } }, ...WORKLOAD_EVENT_SELECT },
+    select: { id: true, organizationId: true, availabilityEnabled: true, availabilityAdoptedAt: true, overlapsAllowed: true, organization: { select: { timeZone: true } }, ...WORKLOAD_EVENT_SELECT },
   })
   if (!event) return { ok: false, status: 404, error: "Événement introuvable.", code: "not_found" }
   const gate = await readAvailabilityGate(db as never, eventId)
@@ -157,6 +157,7 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
     timeZone: orgTimeZone(event.organization),
     availability: { timeZone: gate.timeZone, dates: [...gate.dates] },
     policy: workload.kind === "on" ? workload.policy : null,
+    overlapsAllowed: event.overlapsAllowed,
     rotation: config.rotation,
     seed: config.seed ?? DEFAULT_PROPOSAL_SEED,
     budget: { evaluations: config.budget?.evaluations ?? DEFAULT_PROPOSAL_BUDGET.evaluations, stagnation: DEFAULT_PROPOSAL_BUDGET.stagnation },

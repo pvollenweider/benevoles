@@ -24,7 +24,7 @@ export type DayOfSnapshot = {
 export type DayOfEventBase = { id: string; startDate: Date; endDate: Date }
 
 /** The registration window (#463), so « Ajouter un besoin » can say why the send is blocked (#1304). */
-export type DayOfRegistrationWindow = { publicStatus: string; registrationsOpen: boolean; registrationOpensAt: Date | null; registrationClosesAt: Date | null }
+export type DayOfRegistrationWindow = { publicStatus: string; registrationsOpen: boolean; registrationOpensAt: Date | null; registrationClosesAt: Date | null; overlapsAllowed: boolean }
 
 export type DayOfLoaded = DayOfSnapshot & {
   event: DayOfEventBase & DayOfRegistrationWindow
@@ -60,7 +60,7 @@ export async function loadDayOf(
     select: {
       id: true, startDate: true, endDate: true,
       ...(withRegistrationWindow
-        ? { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true }
+        ? { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, overlapsAllowed: true }
         : {}),
       organization: { select: { timeZone: true } },
       shifts: {
@@ -106,6 +106,7 @@ export async function loadDayOf(
         registrationsOpen: registration.registrationsOpen!,
         registrationOpensAt: registration.registrationOpensAt ?? null,
         registrationClosesAt: registration.registrationClosesAt ?? null,
+        overlapsAllowed: registration.overlapsAllowed ?? false,
       }
     : baseEvent
   return {

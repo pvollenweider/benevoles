@@ -116,6 +116,8 @@ export type DuplicableEvent = {
   accentColorKey: string | null
   /** Default view of the shifts (#1407): copied with the settings, else « auto ». */
   publicShiftView?: ShiftViewSetting
+  /** Overlapping shifts allowed (#1467): copied with the settings only, like the default view. */
+  overlapsAllowed?: boolean
   /** Day-of contact (#560): copied with the settings, like the other messages. */
   dayContactName?: string | null
   dayContactPhone?: string | null
@@ -314,6 +316,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       shiftRosterEnabled: copy.settings ? source.shiftRosterEnabled ?? false : source.organizationRosterDefault ?? false,
       accentColorKey: copy.settings ? source.accentColorKey : null,
       publicShiftView: copy.settings ? source.publicShiftView ?? "auto" : "auto",
+      overlapsAllowed: copy.settings ? !!source.overlapsAllowed : false,
       dayContactName: copy.settings ? source.dayContactName ?? null : null,
       dayContactPhone: copy.settings ? source.dayContactPhone ?? null : null,
       cancelDeadlineDays: copy.settings ? source.cancelDeadlineDays ?? null : null,

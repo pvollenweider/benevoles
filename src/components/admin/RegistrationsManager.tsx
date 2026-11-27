@@ -30,6 +30,7 @@ import {
   leaderRoleOptions,
   listCountAnnouncement,
   manualAddManyAnnouncement,
+  allowedOverlapMarks,
   resendAnnouncement,
   type ShiftRef,
 } from "@/lib/registrations-list"
@@ -67,10 +68,12 @@ type Props = {
   sectorFilter?: { value: string; label: string } | null
   /** The event uses dated availability (#1146, lot B): the add form shows each person's fit, a shift filter links to « Affecter selon les disponibilités ». */
   availability?: boolean
+  /** The event allows overlapping shifts (#1467): marks the allowed overlaps, no warning when adding. */
+  eventOverlapsAllowed?: boolean
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, personalLimits, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null, availability = false }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, personalLimits, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null, availability = false, eventOverlapsAllowed = false }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Workload per volunteer, from the registrations shown here: the non-blocking #465 warnings, or,
   // on a protected event (#1171), the limits it enforces that a programme no longer respects.
@@ -83,6 +86,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       new Map(registrations.map((r) => [r.volunteer.id, { birthDate: r.volunteer.birthDate ?? null, personal: personalLimits?.[r.volunteer.id] ?? null }])),
     ),
     [registrations, mode, personalLimits],
+  )
+  // Two shifts at the same hours for one person (#986, #1467): marked on both rows, whatever let it through.
+  const allowedOverlaps = useMemo(
+    () => allowedOverlapMarks(registrations),
+    [registrations],
   )
   const [search, setSearch] = useState(initialSearch ?? "")
   const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null
@@ -624,6 +632,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           onFormChange={setAddForm}
           onAdded={handleAdded}
           onCancel={handleAddCancel}
+          eventOverlapsAllowed={eventOverlapsAllowed}
         />
       )}
 
@@ -689,7 +698,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                   onDecision={(kind) => openDecision(reg, kind)}
                   answers={answersByVolunteer[reg.volunteer.id] ?? []}
                   workload={workload.get(reg.volunteer.id) ?? []}
-                workloadBlocks={blocksWorkload(mode)}
+                  workloadBlocks={blocksWorkload(mode)}
+                  overlapsWith={allowedOverlaps.get(reg.id)}
                 />
               ))}
             </tbody>

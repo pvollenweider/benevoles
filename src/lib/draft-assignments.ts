@@ -217,6 +217,8 @@ export type BatchInput = {
   answerConditions?: ReadonlyMap<string, ReservedAnswerCondition>
   /** Limits per person and role (roleLimits), from every live shift of the event. */
   limits: ReadonlyMap<string, number>
+  /** The event allows overlapping shifts (#1467): an overlap is no reason to refuse. */
+  overlapsAllowed?: boolean
 }
 
 const LIVE = new Set(["active", "waiting", "offered", "requested"])
@@ -325,13 +327,13 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
     // Overlaps: with the missions held, and between the drafts of the batch (each pair once).
     for (let i = 0; i < usable.length; i++) {
       const { draft, shift } = usable[i]
-      const held = committed.find((h) => shiftsClash(h.shift, shift))
+      const held = committed.find((h) => shiftsClash(h.shift, shift, input.overlapsAllowed))
       if (held) {
         problems.push({ draftId: draft.id, volunteerId, shiftId: shift.id, code: "overlap", message: `${who} : ${shiftWords(shift)} chevauche ${shiftWords(held.shift)}, déjà prévu.`, short: capFirst(`${shiftWords(shift)} chevauche ${shiftWords(held.shift)}, déjà prévu.`) })
         continue
       }
       for (let j = i + 1; j < usable.length; j++) {
-        if (shiftsClash(usable[j].shift, shift)) {
+        if (shiftsClash(usable[j].shift, shift, input.overlapsAllowed)) {
           problems.push({ draftId: draft.id, volunteerId, shiftId: shift.id, code: "overlap", message: `${who} : ${shiftWords(shift)} chevauche ${shiftWords(usable[j].shift)}, deux affectations à publier.`, short: capFirst(`${shiftWords(shift)} chevauche ${shiftWords(usable[j].shift)}, deux affectations à publier.`) })
         }
       }

@@ -18,6 +18,8 @@ import { ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC, ROSTER_ENABLE_REMINDER, ROSTER_SETT
 import DocMoreLink from "@/components/DocMoreLink"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 import RequiredMark from "@/components/RequiredMark"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import type { ActionRecap } from "@/lib/action-recap"
 import { SHIFT_VIEW_SETTINGS, type ShiftViewSetting } from "@/lib/shift-view"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
@@ -45,6 +47,8 @@ type EventFormData = {
   accentColorKey: string | null
   /** Default view of the shifts on the public page (#1407): auto, frise or liste. */
   publicShiftView: ShiftViewSetting
+  /** The event allows overlapping shifts (#1467): off by default. */
+  overlapsAllowed: boolean
   /** Registration window (#463): the switch, and local « YYYY-MM-DDTHH:MM » (empty = none). */
   registrationsOpen: boolean
   registrationOpensAt: string
@@ -85,6 +89,7 @@ const defaultData: EventFormData = {
   isListed: true,
   accentColorKey: null,
   publicShiftView: "auto",
+  overlapsAllowed: false,
   latitude: null,
   longitude: null,
   registrationsOpen: true,
@@ -107,6 +112,16 @@ function eventBody(form: EventFormData) {
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
 const inputCls = "w-full border border-gray-500 rounded-xl px-3 py-2.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
 
+/** The confirmation before overlapping shifts are allowed for the event (#1467). */
+const OVERLAPS_ALLOW_RECAP: ActionRecap = {
+  title: "Autoriser les créneaux qui se chevauchent ?",
+  warning: "Plus aucune inscription ne sera refusée parce que deux créneaux se chevauchent : inscription par les bénévoles, ajout par l'organisation et échanges de créneaux. Une personne pourra être attendue à deux endroits en même temps : vérifier le planning devient votre travail. La protection des pauses et de la charge, si elle est active, garde ses propres règles.",
+  confirmLabel: "Autoriser",
+  cancelLabel: "Annuler",
+  danger: false,
+  lines: [],
+}
+
 export default function EventForm({ initialData, createdHref, timeZone = "Europe/Zurich" }: Props) {
   const router = useRouter()
   const isEdit = !!initialData?.id
@@ -128,6 +143,10 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   // cleared only by the next successful save — separate from `save` so the alert and its
   // « Réessayer » button don't disappear the moment a retry starts.
   const [saveError, setSaveError] = useState<string | null>(null)
+  // Overlapping shifts (#1467): the one button opens the confirmation before turning it on.
+  const [overlapsDialogOpen, setOverlapsDialogOpen] = useState(false)
+  const [overlapsTurnedOff, setOverlapsTurnedOff] = useState(false)
+  const overlapsButtonRef = useRef<HTMLButtonElement>(null)
 
   const mounted = useRef(false)
   // The last status the server confirmed (each PATCH answers with the saved event), so a
@@ -210,6 +229,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
     if (isEdit && window.location.hash === "#event-reminders") document.getElementById("event-reminders-enabled")?.focus()
     // Same from the review's note on the shift roster (#1068).
     if (window.location.hash === "#event-shift-roster-setting") document.getElementById("event-shift-roster")?.focus()
+    // From the poste settings' sentence (#1467): the fieldset is the link target, its button takes the focus.
+    if (window.location.hash === "#event-overlaps") document.getElementById("event-overlaps-button")?.focus()
   }, [isEdit])
 
   // Auto-save in edit mode with 800ms debounce
@@ -764,6 +785,40 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
           </fieldset>
         )}
 
+        {/* Overlapping shifts for the whole event (#1467): off by default, one button, a dialog
+            before turning it on, and an amber note while it is on. */}
+        <fieldset id="event-overlaps">
+          <legend className="text-sm font-medium text-gray-700 mb-1">Créneaux qui se chevauchent</legend>
+          <p className="text-sm text-gray-800">Chevauchements : {form.overlapsAllowed ? "autorisés" : "non autorisés"}</p>
+          <p id="event-overlaps-help" className="text-xs text-gray-600 mt-1">
+            Sans cette option, une personne ne peut pas s&apos;inscrire à deux créneaux aux mêmes heures, sauf si un des deux postes est cumulable.
+          </p>
+          <button
+            ref={overlapsButtonRef}
+            id="event-overlaps-button"
+            type="button"
+            aria-describedby={form.overlapsAllowed ? "event-overlaps-help event-overlaps-note" : overlapsTurnedOff ? "event-overlaps-help event-overlaps-kept" : "event-overlaps-help"}
+            onClick={() => {
+              if (!form.overlapsAllowed) { setOverlapsDialogOpen(true); return }
+              setForm((f) => ({ ...f, overlapsAllowed: false }))
+              setOverlapsTurnedOff(true)
+              announce(setSavedAnnouncement, "Chevauchements : non autorisés.")
+            }}
+            className="mt-2 min-h-11 rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            {form.overlapsAllowed ? "Ne plus autoriser les chevauchements" : "Autoriser les chevauchements…"}
+          </button>
+          {form.overlapsAllowed && (
+            <p id="event-overlaps-note" className="mt-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 forced-colors:border-[CanvasText]">
+              <strong className="font-semibold">Attention :</strong> Les chevauchements ne sont plus vérifiés pour cet événement. Les inscriptions qui se chevauchent sont signalées dans la liste des inscriptions.
+            </p>
+          )}
+          {/* Only after turning it off here: on an event that never allowed overlaps it would raise a question nobody asked. */}
+          {!form.overlapsAllowed && overlapsTurnedOff && (
+            <p id="event-overlaps-kept" className="mt-2 text-xs text-gray-600">Les inscriptions existantes qui se chevauchent sont conservées.</p>
+          )}
+        </fieldset>
+
         {isEdit ? null : (
           <p className="text-sm text-gray-700">L&apos;événement est créé en brouillon : les créneaux viennent ensuite, la publication à la fin.</p>
         )}
@@ -838,6 +893,18 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         )}
 
       </form>
+      {overlapsDialogOpen && (
+        <ConfirmActionModal
+          recap={OVERLAPS_ALLOW_RECAP}
+          busy={false}
+          onConfirm={() => {
+            setOverlapsDialogOpen(false)
+            setForm((f) => ({ ...f, overlapsAllowed: true }))
+            announce(setSavedAnnouncement, "Chevauchements : autorisés.")
+          }}
+          onCancel={() => setOverlapsDialogOpen(false)}
+        />
+      )}
     </>
   )
 }

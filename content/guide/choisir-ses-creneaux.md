@@ -34,7 +34,7 @@ Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré
 | Barre grisée « Fermé » | Inscriptions désactivées |
 | Barre grisée « Terminé » | Créneau déjà fini (son heure de fin est passée) : on ne peut plus s'y inscrire |
 | Barre colorée, et dessous la mention « Limite atteinte » | Tu as déjà pris le nombre maximum de créneaux de ce poste : ce créneau ne peut pas être ajouté |
-| Barre grisée (striée) | Créneau qui chevauche une de tes sélections : impossible de le choisir (sauf poste cumulable, voir plus bas) |
+| Barre grisée (striée) | Créneau qui chevauche une de tes sélections : impossible de le choisir (sauf poste cumulable ou événement qui autorise les chevauchements, voir plus bas) |
 | Fond violet (🎪) | Plage d'un spectacle, repère visuel uniquement |
 
 Chaque créneau ouvert affiche aussi le nombre d'inscrits sur la capacité totale (par exemple « 3/5 ») : pratique pour repérer un créneau avec assez de place pour s'inscrire à plusieurs.
@@ -68,6 +68,8 @@ Certains postes limitent le nombre de créneaux par personne. Si tu en as déjà
 Un créneau marqué « Sur validation » se choisit comme les autres, mais ton inscription y sera une demande : voir [Inscriptions sur validation](inscriptions-sur-validation.md).
 
 L'application empêche automatiquement de sélectionner deux créneaux qui se chevauchent. Certains postes peuvent pourtant se cumuler avec un autre créneau, par exemple les premiers secours pendant que tu tiens la buvette : l'organisation l'a prévu, et ces créneaux restent sélectionnables même s'ils se passent en même temps qu'un autre de tes choix.
+
+Une organisation peut aussi autoriser les chevauchements pour tout un événement. Aucun créneau n'est alors grisé pour cette raison : quand tu en choisis un qui a lieu en même temps qu'un autre, la page te le dit, et le récapitulatif te demande de vérifier que tu peux faire les deux.
 
 ## Voir qui est inscrit
 

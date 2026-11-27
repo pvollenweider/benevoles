@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Créneaux qui se chevauchent** (#1467) : un réglage de l'événement autorise une personne à s'inscrire à deux créneaux aux mêmes heures, quel que soit le poste. L'option est désactivée par défaut et demande une confirmation ; les inscriptions qui se chevauchent restent signalées dans la liste.
 - **Toutes tes inscriptions en un lien** (#1429) : un bénévole reçoit un lien personnel qui rassemble ses créneaux à venir dans tous les événements d'une organisation. Il peut y annuler un créneau, ouvrir la page de l'événement et renouveler son lien ; « J'ai perdu mon lien » le lui renvoie par email.
 - **Mon calendrier** (#1429) : depuis cette page, le bénévole abonne son agenda à ses créneaux confirmés, tous événements confondus. L'agenda se met à jour tout seul quand un horaire change ou qu'un créneau est annulé. Google Agenda et un fichier `.ics` sont aussi proposés. Après un renouvellement du lien personnel, il faut s'abonner de nouveau.
 - **Bibliothèque de modèles de messages** (#1414) : 50 textes prêts à l'emploi, rangés en 11 catégories, à ajouter en un clic depuis **Paramètres › Modèles de messages**, avec un aperçu de l'email tel que le bénévole le recevra. Les mentions `[à compléter]` bloquent l'envoi tant qu'elles restent. Une organisation peut garder jusqu'à 100 modèles.
