@@ -1573,3 +1573,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **ADMIN_FEATURES_OVERVIEW — READY, publiée, révision 8.** Le formulaire actuel montre aussi les réglages d'affichage et de chevauchement (#1407, #1467). [Revue](evidence/batch44/admin-features-tour/review.md).
 
 **EVENT_REVIEW_PUBLISH — READY, publiée, révision 5.** La fenêtre de l'aperçu porte le titre actuel de la convention. [Revue](evidence/batch44/event-review-publish/review.md).
+
+**ACCESSIBILITY_KEYBOARD_DISPLAY — NOT READY, non publiée.** L'autorisation Accessibilité macOS est refusée au processus de capture ; les inserts Safari et VoiceOver requis ne peuvent pas être vérifiés. [Preuve](evidence/batch44/accessibility-keyboard-display/native-preflight.txt).
