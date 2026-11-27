@@ -345,6 +345,33 @@
       "level": "avance"
     },
     {
+      "id": "EVENT_SIGNUP_PAGE_SETTINGS",
+      "manifest": "event-signup-page-settings",
+      "category": "event-preparation",
+      "tags": [
+        "page-publique",
+        "frise",
+        "liste",
+        "chevauchements",
+        "convention",
+        "secteurs"
+      ],
+      "published": false,
+      "seedScenario": "signup-page-settings",
+      "themes": [
+        "evenement-cycle-de-vie",
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Réglages de la page d'inscription",
+      "updatedAt": "2026-11-27",
+      "revision": 1,
+      "level": "avance",
+      "added": "2026-11-27"
+    },
+    {
       "id": "EVENT_QUESTIONS",
       "manifest": "event-questions",
       "category": "event-preparation",
