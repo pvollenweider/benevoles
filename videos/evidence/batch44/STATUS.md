@@ -20,3 +20,4 @@
 
 - EVENT_CREATE_BLANK — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
 - EVENT_CREATE_TEMPLATE — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
+- EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published: rehearsal and take 1 completed, but the final independent audio audit returned HTTP 402 (Gemini prepayment credits depleted); audiovisual review also requires this synthetic fixture to be explicitly supported. Resume the review after those blockers are resolved.
