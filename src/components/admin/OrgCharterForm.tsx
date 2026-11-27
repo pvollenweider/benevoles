@@ -183,11 +183,6 @@ export default function OrgCharterForm({
                 ? "Les bénévoles lisent et acceptent ce texte en s'inscrivant."
                 : "Aucune convention n'est demandée à l'inscription."}
             </p>
-            {!conventionEnabled && (
-              <p id={conventionWarningId} className="text-sm text-gray-800 mt-1">
-                <span className="font-semibold">Attention :</span> les bénévoles s&apos;inscriront sans accepter de convention. La clause d&apos;assurance du texte par défaut ne leur sera plus présentée, et vous n&apos;aurez pas de trace d&apos;une acceptation.
-              </p>
-            )}
           </div>
           <SwitchKnob
             checked={conventionEnabled}
@@ -196,6 +191,12 @@ export default function OrgCharterForm({
             describedBy={conventionEnabled ? conventionDescriptionId : `${conventionDescriptionId} ${conventionWarningId}`}
           />
         </div>
+        {/* Under the row, on its full width: beside the knob it wrapped in a narrow column on a phone. */}
+        {!conventionEnabled && (
+          <p id={conventionWarningId} className="text-sm text-gray-800 mt-2">
+            <span className="font-semibold">Attention :</span> les bénévoles s&apos;inscriront sans accepter de convention. La clause d&apos;assurance du texte par défaut ne leur sera plus présentée, et vous n&apos;aurez pas de trace d&apos;une acceptation.
+          </p>
+        )}
       </div>
 
       {conventionEnabled && (
