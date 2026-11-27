@@ -30,6 +30,9 @@ describe("sign-up page settings fixture (scripts/seed-video-signup-settings.ts)"
 
   test("the tools that film and review it accept it explicitly", () => {
     expect(read("videos/tools/local-production.ts")).toContain('"signup-page-settings"')
+    expect(read("videos/tools/local-production.ts")).toContain('"EVENT_SIGNUP_PAGE_SETTINGS"')
+    // The public page is opened on the organisation's own address, as volunteers see it.
+    expect(recorder).toContain("https://${ORG_SLUG}.benevol.app/${EVENT_SLUG}")
     expect(read("videos/tools/audit-audiovisual.ts")).toContain('"EVENT_SIGNUP_PAGE_SETTINGS"')
     expect(read("videos/tools/audit-full-final-audio.ts")).toContain('"EVENT_SIGNUP_PAGE_SETTINGS"')
   })
