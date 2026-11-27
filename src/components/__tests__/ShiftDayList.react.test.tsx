@@ -7,6 +7,7 @@ import { render, screen, cleanup, fireEvent } from "@testing-library/react"
 
 import ShiftDayList from "../ShiftDayList"
 import type { HeldKind, TimelineShift } from "@/lib/public-timeline"
+import { shiftDetailsById } from "@/lib/shift-details"
 
 const shift = (id: string, over: Partial<TimelineShift> = {}): TimelineShift => ({
   id, roleName: "Buvette", label: "Buvette", startTime: "18:00", endTime: "22:00", status: "open", capacity: 4, registered: 2, spotsLeft: 2, ...over,
@@ -200,5 +201,47 @@ describe("ShiftDayList with the roster", () => {
     )
     expect(screen.getByRole("button", { name: /^18h–22h/ })).toHaveAccessibleDescription("Avec toi : Aline, initiale M.")
     expect(screen.getByRole("button", { name: /^10h–12h/ })).toHaveAccessibleDescription("Sur ce créneau : Zoé, initiale R. Réservé à certains membres.")
+  })
+})
+
+// « Détails » (#1471): read a shift's details without selecting it.
+describe("ShiftDayList details", () => {
+  afterEach(cleanup)
+  const details = shiftDetailsById([{ id: "a", description: "Servir les boissons", locationDetails: "Entrée B", instructions: "Chaussures fermées" }, { id: "full", instructions: "Gilet fourni" }])
+  const shifts = [shift("a"), shift("full", { roleName: "Accueil", label: "Accueil", startTime: "09:00", endTime: "11:00", status: "full", registered: 4, spotsLeft: 0 }), shift("plain", { roleName: "Bar", label: "Bar", startTime: "12:00", endTime: "14:00" })]
+
+  it("opens and closes the details in place, without selecting the shift or moving the focus", () => {
+    const onToggle = vi.fn()
+    render(<ShiftDayList shifts={shifts} shows={[]} selected={new Set()} onToggle={onToggle} dayLabel="samedi 24 octobre" details={details} />)
+    const button = screen.getByRole("button", { name: "Détails : 18h–22h · Buvette" })
+    expect(button).toHaveTextContent("Détails")
+    expect(button).toHaveAttribute("aria-expanded", "false")
+    const panel = document.getElementById(button.getAttribute("aria-controls")!)!
+    expect(panel).not.toBeVisible()
+    button.focus()
+    fireEvent.click(button)
+    expect(button).toHaveAttribute("aria-expanded", "true")
+    expect(panel).toBeVisible()
+    expect(panel).toHaveTextContent("Servir les boissons")
+    expect(panel).toHaveTextContent(/Lieu :\s*Entrée B/)
+    expect(panel).toHaveTextContent(/À savoir :\s*Chaussures fermées/)
+    expect(document.activeElement).toBe(button)
+    expect(onToggle).not.toHaveBeenCalled()
+    fireEvent.click(button)
+    expect(panel).not.toBeVisible()
+  })
+
+  it("is offered under a shift that cannot be chosen, never disabled, and only where there is something to read", () => {
+    render(<ShiftDayList shifts={shifts} shows={[]} selected={new Set()} onToggle={() => {}} dayLabel="samedi 24 octobre" details={details} />)
+    const full = screen.getByRole("button", { name: "Détails : 09h–11h · Accueil" })
+    expect(full).not.toHaveAttribute("aria-disabled")
+    expect(screen.queryByRole("button", { name: /^Détails : 12h–14h/ })).toBeNull()
+  })
+
+  it("leaves the row's own name and description untouched", () => {
+    render(<ShiftDayList shifts={shifts} shows={[]} selected={new Set()} onToggle={() => {}} dayLabel="samedi 24 octobre" details={details} />)
+    const row = screen.getByRole("button", { name: /^18h–22h · Buvette/ })
+    expect(row).not.toHaveAttribute("aria-describedby")
+    expect(row).not.toHaveTextContent("Entrée B")
   })
 })

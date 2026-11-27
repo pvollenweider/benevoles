@@ -55,6 +55,15 @@ Tourné à l'horizontale, il montre toute la journée d'un coup :
 
 Certains postes affichent un petit repère (par exemple « 18+ ») : ils demandent un âge minimum, voir [Âge minimum sur un poste](age-minimum.md). Un créneau complet avec liste d'attente se rejoint comme un autre, voir [Liste d'attente](liste-d-attente.md).
 
+## Lire les détails d'un créneau sans le choisir
+
+Avant de choisir, tu peux lire ce que l'organisation a indiqué sur un créneau : sa description, le lieu (avec un lien vers la carte) et les consignes.
+
+- Dans la vue **Liste**, touche **Détails** sous le créneau : ses informations s'affichent juste en dessous, sans le sélectionner. Touche à nouveau **Détails** pour les replier.
+- Dans la **Frise**, les détails du créneau que tu survoles, ou que tu parcours au clavier, s'affichent sous le planning. Sur un téléphone, toucher une barre la choisit : pour lire sans choisir, passe en vue **Liste**.
+
+Les coordonnées de la personne de contact ne s'affichent qu'une fois inscrit, dans l'email de confirmation et sur ta page « Mes inscriptions ».
+
 ## Sélectionner un créneau
 
 Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection : dans la colonne de droite (« Créneaux sélectionnés ») sur ordinateur, sous le planning sur téléphone. Pour le retirer, clique sur le **✕** à droite de son nom dans cette liste.

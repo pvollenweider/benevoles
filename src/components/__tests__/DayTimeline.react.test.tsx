@@ -6,6 +6,8 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, fireEvent } from "@testing-library/react"
 
 import DayTimeline, { type TimelineShift } from "../DayTimeline"
+import { act } from "@testing-library/react"
+import { shiftDetailsById, DETAILS_HOVER_DELAY_MS } from "@/lib/shift-details"
 
 const shift = (id: string, over: Partial<TimelineShift> = {}): TimelineShift => ({
   id, roleName: "Bar", label: "Bar", startTime: "18:00", endTime: "20:00", status: "open", capacity: 5, registered: 2, spotsLeft: 3, ...over,
@@ -325,5 +327,41 @@ describe("DayTimeline with the keyboard", () => {
     fireEvent.keyDown(bar("open"), { key: "ArrowLeft" })
     expect(bar("full")).toHaveAccessibleDescription("Sur ce créneau : Zoé, initiale R.")
     expect(screen.getByText("Bar · 08h–10h")).toBeInTheDocument()
+  })
+})
+
+// Details under the frise (#1471): read without selecting.
+describe("DayTimeline details", () => {
+  afterEach(() => { cleanup(); vi.useRealTimers() })
+  const details = shiftDetailsById([{ id: "a", description: "Servir les boissons", locationDetails: "Entrée B", instructions: "Chaussures fermées" }])
+  const line = () => document.querySelector("[data-frise-detail]") as HTMLElement
+
+  it("describes each bar with its place and says where the rest is", () => {
+    render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "10:00", endTime: "12:00" })]} shows={[]} selected={new Set()} onToggle={() => {}} details={details} />)
+    const bars = screen.getAllByRole("button").filter((b) => b.closest("[role=region]"))
+    const withDetails = bars.find((b) => (b.getAttribute("aria-describedby") ?? "").includes("details-bar-a"))!
+    expect(withDetails).toHaveAccessibleDescription(/Lieu : Entrée B\. Détails sous le planning\./)
+    expect(line()).toHaveTextContent(/vue « Liste » montre les détails sans choisir/)
+  })
+
+  it("shows a bar's details at once on focus, and after a rest for a mouse pointer", () => {
+    vi.useFakeTimers()
+    render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "10:00", endTime: "12:00" })]} shows={[]} selected={new Set()} onToggle={() => {}} details={details} />)
+    const barA = document.querySelector('[aria-describedby~="details-bar-a"]') as HTMLElement
+    fireEvent.pointerEnter(barA.parentElement!, { pointerType: "mouse" })
+    expect(line()).not.toHaveTextContent("Servir les boissons")
+    act(() => { vi.advanceTimersByTime(DETAILS_HOVER_DELAY_MS) })
+    expect(line()).toHaveTextContent("Servir les boissons")
+    expect(line()).toHaveTextContent(/À savoir :\s*Chaussures fermées/)
+  })
+
+  it("does not follow a pointer that only crosses a bar", () => {
+    vi.useFakeTimers()
+    render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set()} onToggle={() => {}} details={details} />)
+    const wrapper = (document.querySelector('[aria-describedby~="details-bar-a"]') as HTMLElement).parentElement!
+    fireEvent.pointerEnter(wrapper, { pointerType: "mouse" })
+    fireEvent.pointerLeave(wrapper, { pointerType: "mouse" })
+    act(() => { vi.advanceTimersByTime(DETAILS_HOVER_DELAY_MS * 2) })
+    expect(line()).not.toHaveTextContent("Servir les boissons")
   })
 })

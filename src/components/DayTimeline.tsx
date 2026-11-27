@@ -5,10 +5,12 @@
 
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
-import { useId, useRef, useState, type KeyboardEvent } from "react"
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react"
 import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
+import ShiftInfoList from "@/components/ShiftInfoList"
+import { barDetailsText, DETAILS_HOVER_DELAY_MS, FRISE_DETAILS_PROMPT, type ShiftDetails } from "@/lib/shift-details"
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 import { FRISE_KEYS_SHOWN, FRISE_KEYS_SPOKEN, friseKey, friseTabStop, friseTarget, type FriseRows } from "@/lib/frise-keyboard"
 import { chartMinWidth, daySpan, LABEL_W, MAX_PX_PER_MIN, MIN_BAR_W } from "@/lib/frise-geometry"
@@ -45,6 +47,7 @@ export default function DayTimeline({
   reservedShiftIds,
   dayLabel,
   roster,
+  details,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -70,8 +73,31 @@ export default function DayTimeline({
    * bar that can't be chosen lets taps through to its wrapper, which updates the line.
    */
   roster?: Map<string, ShiftRosterEntry> | null
+  /**
+   * What can be read about a shift before choosing it (#1471), by shift id, only for shifts that
+   * have some. The same line under the chart shows it; each bar says the place and where the rest
+   * is in its description.
+   */
+  details?: Map<string, ShiftDetails> | null
 }) {
   const [detailId, setDetailId] = useState<string | null>(null)
+  // The line follows a pointer only after it rests on a bar (#1471): on its way down to a link of
+  // the line, the pointer crosses other bars, which must not replace it. A click, a tap or the
+  // keyboard focus changes it at once. While the focus is inside the line, it never changes.
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const lineRef = useRef<HTMLDivElement>(null)
+  useEffect(() => () => { if (hoverTimer.current) clearTimeout(hoverTimer.current) }, [])
+  const hasLine = !!roster || (details?.size ?? 0) > 0
+  const lineHasFocus = () => !!lineRef.current && lineRef.current.contains(document.activeElement)
+  const showNow = (id: string) => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current)
+    if (!lineHasFocus()) setDetailId(id)
+  }
+  const showAfterRest = (id: string) => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current)
+    hoverTimer.current = setTimeout(() => { if (!lineHasFocus()) setDetailId(id) }, DETAILS_HOVER_DELAY_MS)
+  }
+  const cancelRest = () => { if (hoverTimer.current) clearTimeout(hoverTimer.current) }
   // Keyboard (#1075): one tab stop per day, the bar focused or touched last; arrows between bars.
   const [stopId, setStopId] = useState<string | null>(null)
   const bars = useRef(new Map<string, HTMLButtonElement>())
@@ -139,8 +165,9 @@ export default function DayTimeline({
   // A long day would print overlapping hour labels: print every other hour.
   const hourStep = hours.length > 14 ? 2 : 1
 
-  const detailShift = roster && detailId ? visible.find((s) => s.id === detailId) : undefined
+  const detailShift = hasLine && detailId ? visible.find((s) => s.id === detailId) : undefined
   const detailEntry = detailShift ? roster?.get(detailShift.id) : undefined
+  const detailInfo = detailShift ? details?.get(detailShift.id) : undefined
 
   return (
     <>
@@ -253,10 +280,11 @@ export default function DayTimeline({
                     // (the button keeps its full accessible name).
                     <div
                       key={shift.id}
-                      onPointerEnter={roster ? () => setDetailId(shift.id) : undefined}
+                      onPointerEnter={hasLine ? (e) => { if (e.pointerType === "mouse") showAfterRest(shift.id); else showNow(shift.id) } : undefined}
+                      onPointerLeave={hasLine ? cancelRest : undefined}
                       // A touch moves the tab stop too: Safari does not focus a clicked button.
-                      onClick={() => { setStopId(shift.id); if (roster) setDetailId(shift.id) }}
-                      onFocus={() => { setStopId(shift.id); if (roster) setDetailId(shift.id) }}
+                      onClick={() => { setStopId(shift.id); if (hasLine) showNow(shift.id) }}
+                      onFocus={() => { setStopId(shift.id); if (hasLine) showNow(shift.id) }}
                       className="absolute @container focus-within:z-20"
                       style={{
                         left: `${pct(startMin)}%`,
@@ -276,7 +304,7 @@ export default function DayTimeline({
                         aria-disabled={clickable ? undefined : true}
                         aria-pressed={clickable ? isSelected : undefined}
                         aria-label={ariaLabel}
-                        aria-describedby={roster ? `roster-bar-${shift.id}` : undefined}
+                        aria-describedby={[roster && `roster-bar-${shift.id}`, details?.has(shift.id) && `details-bar-${shift.id}`].filter(Boolean).join(" ") || undefined}
                         onClick={() => { if (clickable) onToggle(shift.id, shift.status) }}
                         onKeyDown={onBarKey(shift.id)}
                         // In forced colours, the GrayText the system gave a disabled bar; a held bar keeps its CanvasText frame.
@@ -366,7 +394,8 @@ export default function DayTimeline({
                           </div>
                         )}
                       </button>
-                      {roster && <span id={`roster-bar-${shift.id}`} className="sr-only">{rosterSpokenSummary(roster.get(shift.id), roster.get(shift.id)?.own ?? false)}</span>}
+                      {details?.get(shift.id) && <span id={`details-bar-${shift.id}`} className="sr-only">{barDetailsText(details.get(shift.id)!)}</span>}
+                        {roster && <span id={`roster-bar-${shift.id}`} className="sr-only">{rosterSpokenSummary(roster.get(shift.id), roster.get(shift.id)?.own ?? false)}</span>}
                       {showSubLabel && (
                         <span
                           className="absolute inset-x-0 bottom-0 text-[10px] text-gray-600 truncate text-center pointer-events-none"
@@ -431,16 +460,19 @@ export default function DayTimeline({
         </div>
       </div>
     </div>
-    {roster && (
-      // Plain text, not live: the focused bar's description says the same. Kept until another bar.
-      <p data-roster-detail className="-mt-3 mb-5 min-h-10 text-sm text-gray-700 break-words">
+    {hasLine && (
+      // Plain text, not live: the focused bar's description says the place and where the rest is.
+      // Kept until another bar; a fixed minimum height, so the page does not jump under the pointer.
+      <div ref={lineRef} data-frise-detail data-roster-detail={roster ? "" : undefined} className="-mt-3 mb-5 min-h-16 text-sm text-gray-700 break-words">
         {detailShift ? (
           <>
-            <span className="block font-medium text-gray-900">{detailShift.label} · {fmt(detailShift.startTime)}–{fmt(detailShift.endTime)}</span>
-            {" "}<RosterSummary entry={detailEntry} own={detailEntry?.own ?? false} />
+            <p className="font-medium text-gray-900">{detailShift.label} · {fmt(detailShift.startTime)}–{fmt(detailShift.endTime)}</p>
+            {detailInfo?.description && <p className="mt-0.5 whitespace-pre-line">{detailInfo.description}</p>}
+            {detailInfo && <ShiftInfoList info={detailInfo.info} className="mt-0.5" />}
+            {roster && <p className="mt-0.5"><RosterSummary entry={detailEntry} own={detailEntry?.own ?? false} /></p>}
           </>
-        ) : ROSTER_FRISE_PROMPT}
-      </p>
+        ) : <p>{roster ? ROSTER_FRISE_PROMPT : FRISE_DETAILS_PROMPT}</p>}
+      </div>
     )}
     {/* Only while a bar has the keyboard focus (never for a mouse or a touch): the keys, in short. */}
     <p aria-hidden="true" data-frise-keys className="hidden peer-has-[:focus-visible]:block -mt-3 mb-5 text-sm text-balance text-gray-600">{FRISE_KEYS_SHOWN}</p>

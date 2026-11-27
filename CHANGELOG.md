@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Détails d'un créneau sans le choisir** (#1471) : dans la vue Liste, un bouton « Détails » sous chaque créneau montre sa description, son lieu et ses consignes sans le sélectionner ; dans la frise, ces détails s'affichent sous le planning pour le créneau survolé ou parcouru au clavier.
 - **Alerte quand un bénévole attendu bientôt ne reçoit pas ses emails** (#1476) : si l'adresse d'une personne inscrite à un créneau dans les trois jours est refusée, les organisateurs sont prévenus tout de suite, avec son prochain créneau et son téléphone, sans attendre le résumé de la nuit.
 - **Créneaux qui se chevauchent** (#1467) : un réglage de l'événement autorise une personne à s'inscrire à deux créneaux aux mêmes heures, quel que soit le poste. L'option est désactivée par défaut et demande une confirmation ; les inscriptions qui se chevauchent restent signalées dans la liste.
 - **Toutes tes inscriptions en un lien** (#1429) : un bénévole reçoit un lien personnel qui rassemble ses créneaux à venir dans tous les événements d'une organisation. Il peut y annuler un créneau, ouvrir la page de l'événement et renouveler son lien ; « J'ai perdu mon lien » le lui renvoie par email.
