@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:44:24.938Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:49:17.703Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "036c473b52b5607609c177becdd924bbc2c89cdf5990eb44df73a439afd5a68a",
-  "clipSha256": "6ac2630ac78357d01d7c48f51346194c8b1c955c2c1b5ab486bb6a8db70fa971",
+  "clipSha256": "a9a9f9f5f272479bd03c770f9bc16626935290fe987fe1d574154053a79f078e",
   "scene": "pages",
   "review": {
     "heardOpening": "Vous pouvez aussi créer des pages publiques",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "créer des pages publiques",
-        "visibleSeconds": 2.5,
-        "visible": "Clic sur le bouton '+ Ajouter une page' et ouverture de la fenêtre modale 'Nouvelle page'",
+        "spokenSeconds": 1.2,
+        "spoken": "Vous pouvez aussi créer des pages publiques",
+        "visibleSeconds": 3.4,
+        "visible": "Clic sur le bouton « + Ajouter une page » et ouverture de la modale",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 5.4,
         "spoken": "Donnez un titre et rédigez le contenu",
-        "visibleSeconds": 6,
-        "visible": "Saisie du titre 'Accès bénévoles' puis du texte dans le champ contenu",
+        "visibleSeconds": 6.3,
+        "visible": "Saisie du titre « Accès bénévoles » et du contenu descriptif",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.8,
         "spoken": "puis enregistrez la page",
-        "visibleSeconds": 8.8,
-        "visible": "Validation et fermeture de la modale, la nouvelle page apparaît dans la liste",
+        "visibleSeconds": 8.9,
+        "visible": "Clic sur le bouton bleu « Enregistrer »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.6,
-        "spoken": "organisez leur ordre avec les flèches",
-        "visibleSeconds": 10.3,
-        "visible": "Clic sur la flèche vers le haut pour repositionner la page 'Accès bénévoles'",
+        "spokenSeconds": 9.8,
+        "spoken": "Puis organisez leur ordre avec les flèches",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur la flèche pour faire remonter la page « Accès bénévoles »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien articulée, parfaitement synchronisée avec les actions affichées."
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

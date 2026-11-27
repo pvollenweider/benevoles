@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:37:39.724Z",
-  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "reviewedAt": "2026-11-27T17:47:12.345Z",
+  "videoSha256": "047f1868f59eb6fc827eafe396c736dfe156cbaf5ae79035633e52ca71f74059",
   "promptSha256": "7868e4779b159da72cd83f495c60e968d09e2296cf61a5c54fd444fd83c85416",
-  "clipSha256": "53a3a6988e03d47af62cd988c1c84ad44ca7ddda9fd1321440f66b3ce194200e",
+  "clipSha256": "5e3dfb51dcec13d09e9a8de62562d407ce799d1ebc1df7e74afad552a15a0243",
   "scene": "roster-signup",
   "review": {
-    "heardOpening": "Voici la page vue par un visiteur anonyme",
+    "heardOpening": "Voici la page vue par un visiteur anonyme.",
     "checkpoints": [
       {
-        "spokenSeconds": 6.4,
-        "spoken": "Choisissez un créneau, puis continuez",
-        "visibleSeconds": 6.8,
-        "visible": "Sélection du créneau Accueil puis clic sur le bouton Continuer",
+        "spokenSeconds": 6,
+        "spoken": "Choisissez un créneau, puis continuez.",
+        "visibleSeconds": 6,
+        "visible": "Sélection du créneau Accueil 09h-12h puis clic sur le bouton Continuer.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "Renseignez votre prénom, votre nom et votre adresse email",
-        "visibleSeconds": 10.4,
-        "visible": "Saisie du prénom, du nom et de l'email dans les champs du formulaire",
+        "spokenSeconds": 9,
+        "spoken": "Renseignez votre prénom, votre nom et votre adresse email.",
+        "visibleSeconds": 9,
+        "visible": "Remplissage des champs Prénom (Aline), Nom (Martin) et Email.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "Acceptez la convention et l’utilisation des données pour l’inscription",
-        "visibleSeconds": 14.3,
-        "visible": "Cochage successif des deux premières cases obligatoires",
+        "spokenSeconds": 12,
+        "spoken": "Acceptez la convention et l’utilisation des données pour l’inscription.",
+        "visibleSeconds": 12.5,
+        "visible": "Coche des deux premières cases obligatoires de convention et de traitement des données.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 36.3,
-        "spoken": "puis confirmez l’inscription",
-        "visibleSeconds": 36.5,
-        "visible": "Clic sur le bouton Confirmer mon inscription menant à l'écran de confirmation",
+        "spokenSeconds": 33,
+        "spoken": "Cochez cette case si vous le souhaitez, puis confirmez l’inscription.",
+        "visibleSeconds": 34,
+        "visible": "Clic sur le bouton Confirmer mon inscription sans cocher la case facultative, menant à l'écran de confirmation.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et parfaitement synchronisée avec la démonstration visuelle."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les démonstrations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

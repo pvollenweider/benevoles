@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-29T06:53:04.719Z",
-  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "reviewedAt": "2026-11-27T19:09:56.766Z",
+  "videoSha256": "36b34e44a9b368957475e2d4f9eb4a52416f25618876f65098753196f7ece2d8",
   "promptSha256": "cdfd64997d8285f9b3b741ed6f93a76b41ca523b192a612692d28d14a7f4b689",
-  "clipSha256": "b43692ef0f2e8ec58e8a241e1a98fe538301b5966dd2eb9c360bb9e2d342781b",
+  "clipSha256": "c1e9d4fb9c5e24df025a9297b8aa3818b0d913d1a0a8e5c8cbbf65b055cf2f47",
   "scene": "nominate",
   "review": {
-    "heardOpening": "Dans l'événement, ouvrez les responsables",
+    "heardOpening": "Dans l'événement",
     "checkpoints": [
       {
-        "spokenSeconds": 1.4,
+        "spokenSeconds": 1.8,
         "spoken": "ouvrez les responsables",
-        "visibleSeconds": 2.1,
-        "visible": "Navigation vers l'onglet Responsables de secteur sous Paramètres",
+        "visibleSeconds": 2,
+        "visible": "Ouverture de l'onglet « Responsables de secteur » dans les paramètres de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.3,
         "spoken": "et ajoutez une personne.",
-        "visibleSeconds": 3.1,
-        "visible": "Clic sur « + Ajouter un responsable » et ouverture du formulaire d'ajout",
+        "visibleSeconds": 2.9,
+        "visible": "Clic sur « + Ajouter un responsable » et affichage du formulaire d'ajout",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
-        "spoken": "Choisissez le poste,",
-        "visibleSeconds": 5.8,
-        "visible": "Sélection de la valeur « Montage » dans le champ Poste",
+        "spokenSeconds": 5.2,
+        "spoken": "Choisissez le poste, puis renseignez son nom et son email.",
+        "visibleSeconds": 6,
+        "visible": "Sélection du poste « Montage », puis saisie du nom « Samira Perrin » et de l'adresse email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.4,
-        "spoken": "puis renseignez son nom et son email.",
-        "visibleSeconds": 7.4,
-        "visible": "Saisie de « Samira Perrin » dans le champ Nom puis de l'adresse email",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15.6,
+        "spokenSeconds": 16.5,
         "spoken": "Ajouter et envoyer le lien enregistre la nomination",
-        "visibleSeconds": 16.5,
-        "visible": "Clic sur le bouton « Ajouter et envoyer le lien » et affichage de Samira Perrin dans la liste",
+        "visibleSeconds": 17,
+        "visible": "Clic sur le bouton « Ajouter et envoyer le lien » et affichage du nouveau responsable dans la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine calme, posée et parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

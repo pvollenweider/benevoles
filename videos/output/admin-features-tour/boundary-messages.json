@@ -1,12 +1,12 @@
 {
   "anchor": "Les messages ciblent tous les inscrits, un poste, un créneau, la",
-  "windowStart": 156.368,
+  "windowStart": 180.23700000000002,
   "result": {
     "found": true,
-    "startSeconds": 28.06,
-    "wordsHeard": "Les messages ciblent tous les inscrits un poste un créneau la"
+    "startSeconds": 12.74,
+    "wordsHeard": "Les messages ciblent tous les inscrits, un poste, un créneau, la"
   },
-  "onset": 184.428,
-  "proposedCut": 184.0166875,
+  "onset": 192.97700000000003,
+  "proposedCut": 192.7481875,
   "note": "Proposal only; recut then independently audit before capture"
 }

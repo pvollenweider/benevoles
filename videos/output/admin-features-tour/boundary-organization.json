@@ -1,12 +1,12 @@
 {
   "anchor": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine",
-  "windowStart": 0,
+  "windowStart": 0.6280000000000001,
   "result": {
     "found": true,
-    "startSeconds": 12.82,
+    "startSeconds": 12.1,
     "wordsHeard": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine"
   },
-  "onset": 12.82,
-  "proposedCut": 12.6311875,
+  "onset": 12.728,
+  "proposedCut": 12.245292,
   "note": "Proposal only; recut then independently audit before capture"
 }

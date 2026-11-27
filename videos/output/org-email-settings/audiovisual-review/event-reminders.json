@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:15:21.997Z",
-  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
-  "promptSha256": "afa6933956489457fda8b5f936daf2e8f8f80de90627b00ce72dbfa07ce24a62",
-  "clipSha256": "2fff2abe8e1b1691673ba7e9b75cce0d6c8e750aba3a8709090f25d6a9a0c24d",
+  "reviewedAt": "2026-11-27T20:20:39.301Z",
+  "videoSha256": "70b3d1912845c2159aeca8d622458c134b8be6538822a94f8f0019ce87967971",
+  "promptSha256": "f93d9a84f27b8f1473a0837b5aa7fe5876bbf4882cea24bbb29259a56d204781",
+  "clipSha256": "d8ea4ba1ea3f99734586bb317d40021655cf190ba2a9a14f12b652d8bb8f425e",
   "scene": "event-reminders",
   "review": {
-    "heardOpening": "Dans les paramètres d'un événement",
+    "heardOpening": "Ouvrons les paramètres de notre événement.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.4,
-        "spoken": "la case Rappels automatiques peut couper tous ses rappels",
-        "visibleSeconds": 4.6,
-        "visible": "Décochage de la case Rappels automatiques dans l'onglet Paramètres",
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrons les paramètres de notre événement.",
+        "visibleSeconds": 0,
+        "visible": "L'onglet Paramètres de l'événement est affiché à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.8,
+        "spokenSeconds": 3,
+        "spoken": "Décochez la case Rappels automatiques pour couper les rappels de cet événement.",
+        "visibleSeconds": 3.4,
+        "visible": "La case Rappels automatiques est décochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
         "spoken": "Son onglet Messages indique ce qui partira vraiment.",
-        "visibleSeconds": 7.6,
-        "visible": "Ouverture de l'onglet Messages puis défilement jusqu'à la section Rappels",
+        "visibleSeconds": 7.5,
+        "visible": "Clic sur l'onglet Messages et affichage de la page Messages avec la section Rappels.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
-        "spoken": "les rappels habituels suivent les choix de l'organisation.",
+        "spokenSeconds": 14.5,
+        "spoken": "les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent.",
         "visibleSeconds": 15,
-        "visible": "Affichage des options de rappels avec le choix actif Délais habituels et l'alternative Délais propres",
+        "visible": "Affichage des options de délais des rappels automatiques (habituels ou propres à cet événement).",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et fluide, sans bruits parasites."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

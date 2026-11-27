@@ -1,15 +1,15 @@
 {
   "slug": "volunteer-calendar",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-16T10:12:21.486Z",
+  "recordedAt": "2026-11-27T18:35:42.324Z",
   "video": "capture.webm",
   "product": {
-    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
-    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
-    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
-    "buildId": "gHYEjPtpdQYUNytuIhMkh",
-    "snapshot": "/tmp/benevoles-video-production.Batch231",
-    "builtAt": "2026-10-16T08:22:06.973Z"
+    "commit": "27875d4c2e57b1072ab3880405695d1872a5460e",
+    "sourceTree": "c20234f334484ea7ffd80b068e68ed48255d95b7",
+    "productSourceSha256": "58fb5a5eb03a24b241f02aa45450bfc677e42e5bb46cda36c2a2227f89a17784",
+    "buildId": "WhmgksIKqT4RNMXyOkZNI",
+    "snapshot": "/tmp/benevoles-video-production.aNOKSf",
+    "builtAt": "2026-11-27T17:11:47.388Z"
   },
   "captureEnvironment": {
     "locale": "fr-CH",
@@ -26,115 +26,115 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 20417
+      "atMs": 36415
     },
     {
       "kind": "click",
-      "atMs": 38529
+      "atMs": 37232
     },
     {
       "kind": "click",
-      "atMs": 114341
+      "atMs": 64554
     },
     {
       "kind": "click",
-      "atMs": 115140
+      "atMs": 65397
     },
     {
       "kind": "click",
-      "atMs": 116049
+      "atMs": 66298
     },
     {
       "kind": "click",
-      "atMs": 123257
+      "atMs": 68023
     },
     {
       "kind": "click",
-      "atMs": 134628
+      "atMs": 75757
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 46,
-      "endMs": 19469
+      "startMs": 678,
+      "endMs": 9240
     },
     {
-      "id": "one",
-      "startMs": 19921,
-      "endMs": 37608
+      "id": "page",
+      "startMs": 9698,
+      "endMs": 20204
     },
     {
-      "id": "all",
-      "startMs": 38061,
-      "endMs": 56997
+      "id": "device",
+      "startMs": 20658,
+      "endMs": 34851
     },
     {
-      "id": "import",
-      "startMs": 57449,
-      "endMs": 76531
+      "id": "online",
+      "startMs": 35303,
+      "endMs": 50783
     },
     {
-      "id": "details",
-      "startMs": 76982,
-      "endMs": 94386
-    },
-    {
-      "id": "night",
-      "startMs": 94838,
-      "endMs": 112760
+      "id": "privacy",
+      "startMs": 51235,
+      "endMs": 62136
     },
     {
       "id": "change",
-      "startMs": 113214,
-      "endMs": 133708
+      "startMs": 62590,
+      "endMs": 72829
     },
     {
-      "id": "reimport",
-      "startMs": 134160,
-      "endMs": 152892
+      "id": "file",
+      "startMs": 73287,
+      "endMs": 84215
+    },
+    {
+      "id": "renew",
+      "startMs": 84672,
+      "endMs": 93529
     },
     {
       "id": "result",
-      "startMs": 153344,
-      "endMs": 172233
+      "startMs": 93980,
+      "endMs": 98738
     }
   ],
   "anchors": [
     {
-      "segmentId": "one",
-      "phrase": "Ce téléchargement ne crée pas",
-      "startMs": 11358,
-      "endMs": 14084,
-      "cueMs": 31283
+      "segmentId": "device",
+      "phrase": "choisis S'abonner avec l'agenda",
+      "startMs": 565,
+      "endMs": 6982,
+      "cueMs": 21224
     },
     {
-      "segmentId": "all",
-      "phrase": "L'inscription en liste d'attente n'y",
-      "startMs": 12281,
-      "endMs": 14135,
-      "cueMs": 50343
+      "segmentId": "online",
+      "phrase": "ouvre Google Agenda ou autre",
+      "startMs": 616,
+      "endMs": 7601,
+      "cueMs": 35921
     },
     {
-      "segmentId": "details",
-      "phrase": "le lieu, les consignes et",
-      "startMs": 6352,
-      "endMs": 9833,
-      "cueMs": 83336
-    },
-    {
-      "segmentId": "details",
-      "phrase": "Garde ce fichier pour toi",
-      "startMs": 12593,
-      "endMs": 13622,
-      "cueMs": 89576
+      "segmentId": "online",
+      "phrase": "puis copie l'adresse de l'abonnement",
+      "startMs": 616,
+      "endMs": 7601,
+      "cueMs": 36722
     },
     {
       "segmentId": "change",
-      "phrase": "il ne se met pas",
-      "startMs": 9548,
-      "endMs": 10706,
-      "cueMs": 122762
+      "phrase": "Si l'organisation change un horaire",
+      "startMs": 535,
+      "endMs": 6377,
+      "cueMs": 63125
+    },
+    {
+      "segmentId": "file",
+      "phrase": "Télécharger tout mon planning",
+      "startMs": 1938,
+      "endMs": 6481,
+      "cueMs": 75228
     }
   ]
 }

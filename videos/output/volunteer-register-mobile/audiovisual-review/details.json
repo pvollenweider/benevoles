@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:47:01.438Z",
-  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "reviewedAt": "2026-11-27T17:05:15.501Z",
+  "videoSha256": "b6e62ceecd3366c1a3e368134cc97edb658cb55104beecb4df2c657e8385188e",
   "promptSha256": "0d42ccd9a564af293e3b0d88d877caee961dfdbc2cbe1aa921e90e554f243ca3",
-  "clipSha256": "1bd4a209f25eb26c5c85cb75d8d18b08f5f785f6951e4a5337d04a7cec3c42be",
+  "clipSha256": "25f7b7dc525c45d0c1b4ccc596f5819bbaafcea490e31fef161d936704d1c9c1",
   "scene": "details",
   "review": {
     "heardOpening": "Ajoute ensuite tes coordonnées",
@@ -12,23 +12,23 @@
         "spokenSeconds": 0.5,
         "spoken": "Ajoute ensuite tes coordonnées",
         "visibleSeconds": 0.8,
-        "visible": "Saisie du prénom « Alex » puis du nom « Martin » dans les champs correspondants",
+        "visible": "Saisie du prénom « Alex » puis du nom « Martin » dans les champs de coordonnées",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 2.2,
-        "spoken": "Elles servent uniquement à l’organisation de l’événement",
-        "visibleSeconds": 2.6,
-        "visible": "Saisie de l'adresse email « alex.martin@example.org » puis du numéro de téléphone",
+        "spoken": "Elles servent uniquement à l'organisation de l'événement",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie de l'adresse email « alex.martin@example.org »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "et à l’envoi des informations utiles.",
+        "spokenSeconds": 4.5,
+        "spoken": "et à l'envoi des informations utiles",
         "visibleSeconds": 4.2,
-        "visible": "L'encadré 'Transmis à l'organisation' résume l'usage des coordonnées au-dessus des champs",
+        "visible": "Saisie du numéro de téléphone « 079 000 12 34 » dans le champ correspondant",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la saisie du formulaire."
+      "observation": "Voix féminine claire, fluide et naturelle, parfaitement synchronisée avec la saisie à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

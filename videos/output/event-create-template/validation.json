@@ -1,56 +1,59 @@
 {
   "id": "EVENT_CREATE_TEMPLATE",
   "slug": "event-create-template",
-  "validatedAt": "2026-10-11T10:01:00.235Z",
+  "validatedAt": "2026-11-27T20:51:54.841Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 122720,
+  "captureMs": 115320,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 12102,
-      "audioMs": 12100,
+      "visualMs": 11660,
+      "audioMs": 11658,
       "driftMs": 2
     },
     {
       "id": "compare",
-      "visualMs": 36572,
-      "audioMs": 36571,
+      "visualMs": 34027,
+      "audioMs": 34026,
       "driftMs": 1
     },
     {
       "id": "preview",
-      "visualMs": 16855,
-      "audioMs": 16855,
-      "driftMs": 0
-    },
-    {
-      "id": "create",
-      "visualMs": 13425,
-      "audioMs": 13422,
-      "driftMs": 3
-    },
-    {
-      "id": "adapt",
-      "visualMs": 18546,
-      "audioMs": 18545,
+      "visualMs": 14504,
+      "audioMs": 14503,
       "driftMs": 1
     },
     {
-      "id": "result",
-      "visualMs": 16469,
-      "audioMs": 16467,
+      "id": "create",
+      "visualMs": 13948,
+      "audioMs": 13946,
       "driftMs": 2
+    },
+    {
+      "id": "adapt",
+      "visualMs": 16452,
+      "audioMs": 16447,
+      "driftMs": 5
+    },
+    {
+      "id": "result",
+      "visualMs": 15971,
+      "audioMs": 15970,
+      "driftMs": 1
     }
   ],
   "anchorsChecked": 12,
   "music": {
-    "voicedWindows": 114,
-    "musicOnlyWindows": 2,
-    "smallestGapLu": 12,
-    "largestGapLu": 20,
-    "quietestMusicOnlyLufs": -14.3
+    "voicedWindows": 100,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 18.7,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.7
   },
   "issues": []
 }

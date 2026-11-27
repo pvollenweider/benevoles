@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-29T06:52:52.436Z",
-  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "reviewedAt": "2026-11-27T19:09:43.993Z",
+  "videoSha256": "36b34e44a9b368957475e2d4f9eb4a52416f25618876f65098753196f7ece2d8",
   "promptSha256": "a749edb625ce9738ae0a0032ecf33243a48127682ab9ff0bf085fd25e44da2e5",
-  "clipSha256": "7229985b549b7c7b32b21476814f1f5f6f928c93f1b29f369c040af281b39a6d",
+  "clipSha256": "17881e7ab31f62c0799ab152f3dd3af3e7e6f2f2da91f3c7220c5412a3a3f5a9",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Le jour de la fête",
+    "heardOpening": "Le jour de la fête, vous n'avez pas besoin",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
         "visibleSeconds": 0.5,
-        "visible": "Encart de titre « Responsables de poste et de secteur : accompagner son équipe » affiché au centre de l'écran.",
+        "visible": "Cartouche de titre affiché : « Responsables de poste et de secteur : accompagner son équipe ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Un responsable de poste peut suivre son équipe",
+        "spokenSeconds": 4.1,
+        "spoken": "Un responsable de poste peut suivre son équipe, retrouver les créneaux",
         "visibleSeconds": 3.5,
-        "visible": "L'encart disparaît pour laisser place à la vue d'ensemble « Aperçu » de l'événement « Fête du village de Montvert ».",
+        "visible": "Le bandeau de titre s'estompe, laissant place à la vue Aperçu de l'événement Fête du village de Montvert.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
+        "spokenSeconds": 9.4,
         "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel",
         "visibleSeconds": 10,
-        "visible": "Écran d'accueil de l'événement stable présentant la synthèse et les alertes (annonce générale des étapes à venir).",
+        "visible": "Vue d'ensemble Aperçu maintenue en fond pour introduire les étapes à venir.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine posée, fluide et claire, sans bruit parasite."
+      "observation": "Voix off masculine fluide, claire et bien posée, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

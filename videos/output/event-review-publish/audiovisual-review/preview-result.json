@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:19:13.400Z",
-  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "reviewedAt": "2026-11-27T20:09:05.100Z",
+  "videoSha256": "c5064180292f4fa02fd344a512f49cb9acef1ae902c52ddb923dd4cf3a1ab430",
   "promptSha256": "0c38dbf2ef794979aa6b067d383a2336ecb65a23662e6d97ea84a44b660c11ab",
-  "clipSha256": "734c3dbb5d31095e33a4a12ea6a7b2dd081299ba216a13a3427adf9fbfa4ba45",
+  "clipSha256": "0fb1b211c32cbc92866d2a899c0d856db9013c3f56d78cbc41ac8aa0c0e62df0",
   "scene": "preview-result",
   "review": {
-    "heardOpening": "Le bouton de simulation",
+    "heardOpening": "Le bouton de simulation affiche ensuite",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
-        "spoken": "Le bouton de simulation",
-        "visibleSeconds": 1,
-        "visible": "Clic sur le bouton bleu « Voir la confirmation (aperçu) » en bas du formulaire",
+        "spokenSeconds": 0.8,
+        "spoken": "Le bouton de simulation affiche ensuite la confirmation",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur le bouton 'Voir la confirmation (aperçu)' et affichage de la page 'Aperçu de la confirmation'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 1.8,
-        "spoken": "affiche ensuite la confirmation",
-        "visibleSeconds": 1.9,
-        "visible": "Affichage de la page « Aperçu de la confirmation (rien n'a été enregistré) »",
+        "spokenSeconds": 3.5,
+        "spoken": "et l’email automatique avec les valeurs de test.",
+        "visibleSeconds": 3,
+        "visible": "Aperçu du modèle d'email avec les variables fictives renseignées ('Hello Alex !')",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.7,
-        "spoken": "et l’email automatique avec les valeurs de test",
-        "visibleSeconds": 3.5,
-        "visible": "Aperçu du courriel avec les données fictives (« Hello Alex ! », créneau, lieu)",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 6.8,
         "spoken": "C’est ici qu’on repère un message trop vague, une consigne manquante ou une variable mal placée",
-        "visibleSeconds": 6.3,
-        "visible": "Écran d'aperçu stable permettant la relecture du message et des variables de test",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage fixe de l'écran de prévisualisation permettant la relecture des textes et consignes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, fluide et naturelle, bien calée sur les actions à l'écran."
+      "observation": "Voix claire, posée et parfaitement intelligible, bien calée sur l'enchaînement des écrans."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

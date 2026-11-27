@@ -15,3 +15,9 @@
 - EVENT_REVIEW_PUBLISH — READY published: take 2 shows the current convention window and passes audiovisual, final-audio, frame/timeline and validation checks; narration unchanged.
 - ACCESSIBILITY_KEYBOARD_DISPLAY — NOT READY, not published: macOS Accessibility permission was denied for the native capture process; required Safari zoom and VoiceOver inserts cannot be verified. No substitute capture or narrated take.
 - ORG_EMAIL_SETTINGS — READY published: take 1 passed audiovisual, final-audio, frame/timeline and validation checks; expanded address-alert help visible, narration unchanged.
+
+## Phase C
+
+- EVENT_CREATE_BLANK — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
+- EVENT_CREATE_TEMPLATE — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
+- EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published: rehearsal and take 1 completed, but the final independent audio audit returned HTTP 402 (Gemini prepayment credits depleted); audiovisual review also requires this synthetic fixture to be explicitly supported. Resume the review after those blockers are resolved.

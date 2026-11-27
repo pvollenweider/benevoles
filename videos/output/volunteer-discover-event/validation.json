@@ -1,76 +1,77 @@
 {
   "id": "VOLUNTEER_DISCOVER_EVENT",
   "slug": "volunteer-discover-event",
-  "validatedAt": "2026-10-11T19:53:51.298Z",
+  "validatedAt": "2026-11-27T20:24:19.511Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 179000,
+  "captureMs": 176680,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13179,
-      "audioMs": 13176,
-      "driftMs": 3
+      "visualMs": 13946,
+      "audioMs": 13942,
+      "driftMs": 4
     },
     {
       "id": "access",
-      "visualMs": 18739,
-      "audioMs": 18736,
-      "driftMs": 3
+      "visualMs": 20018,
+      "audioMs": 20017,
+      "driftMs": 1
     },
     {
       "id": "identity",
-      "visualMs": 14650,
-      "audioMs": 14649,
-      "driftMs": 1
+      "visualMs": 15117,
+      "audioMs": 15115,
+      "driftMs": 2
     },
     {
       "id": "pages",
-      "visualMs": 16425,
-      "audioMs": 16424,
-      "driftMs": 1
+      "visualMs": 17912,
+      "audioMs": 17908,
+      "driftMs": 4
     },
     {
       "id": "desktop",
-      "visualMs": 17571,
-      "audioMs": 17569,
+      "visualMs": 20160,
+      "audioMs": 20158,
       "driftMs": 2
     },
     {
       "id": "states",
-      "visualMs": 24223,
-      "audioMs": 24222,
+      "visualMs": 24425,
+      "audioMs": 24424,
       "driftMs": 1
     },
     {
       "id": "mobile",
-      "visualMs": 22671,
-      "audioMs": 22668,
-      "driftMs": 3
+      "visualMs": 17447,
+      "audioMs": 17445,
+      "driftMs": 2
     },
     {
       "id": "invitation",
-      "visualMs": 20531,
-      "audioMs": 20529,
+      "visualMs": 18556,
+      "audioMs": 18554,
       "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 16028,
-      "audioMs": 16027,
-      "driftMs": 1
+      "visualMs": 15150,
+      "audioMs": 15147,
+      "driftMs": 3
     }
   ],
-  "anchorsChecked": 16,
+  "anchorsChecked": 17,
   "music": {
-    "voicedWindows": 156,
-    "musicOnlyWindows": 2,
-    "smallestGapLu": 12.2,
-    "largestGapLu": 18.7,
-    "quietestMusicOnlyLufs": -33,
-    "loudestMusicOnlyLufs": -32.2,
-    "medianVoiceLufs": -16.6
+    "voicedWindows": 152,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.5,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -33.4,
+    "medianVoiceLufs": -16.5
   },
   "issues": []
 }

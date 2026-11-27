@@ -1,94 +1,26 @@
 {
-  "receivedAt": "2026-10-11T18:37:30.052Z",
+  "receivedAt": "2026-11-27T18:33:00.907Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 5310,
-    "total_input_tokens": 715,
+    "total_tokens": 2759,
+    "total_input_tokens": 399,
     "input_tokens_by_modality": [
       {
         "modality": "text",
-        "tokens": 715
+        "tokens": 399
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 4595,
+    "total_output_tokens": 2360,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 4595
+        "tokens": 2360
       }
     ],
     "total_tool_use_tokens": 0,
     "total_thought_tokens": 0,
-    "raw_prompt_token": 976,
-    "model_invocation_token_counts": [
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 759
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 1955
-          }
-        ]
-      },
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 939
-          },
-          {
-            "modality": "audio",
-            "tokens": 259
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 2644
-          }
-        ]
-      }
-    ],
-    "non_grounding_model_invocation_token_counts": [
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 759
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 1955
-          }
-        ]
-      },
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 939
-          },
-          {
-            "modality": "audio",
-            "tokens": 259
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 2644
-          }
-        ]
-      }
-    ]
+    "initial_input_tokens": 399
   },
   "steps": [
     {
@@ -96,7 +28,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 11771352
+          "encodedLength": 6051880
         }
       ]
     }

@@ -1,131 +1,132 @@
 WEBVTT
 
-00:00:00.000 --> 00:00:04.178
+00:00:00.000 --> 00:00:04.139
 Quand aucun modèle ne correspond vraiment,
 partez d’une page blanche. L’événement est
 
-00:00:04.178 --> 00:00:08.008
+00:00:04.139 --> 00:00:07.933
 d’abord créé comme brouillon : vous pouvez
 préparer tranquillement les informations
 
-00:00:08.008 --> 00:00:12.882
+00:00:07.933 --> 00:00:12.761
 et le planning avant de les montrer aux
 bénévoles. Créons ensemble une fête de
 
-00:00:12.882 --> 00:00:14.275
+00:00:12.761 --> 00:00:14.141
 quartier sur deux jours.
 
-00:00:16.440 --> 00:00:20.700
+00:00:16.302 --> 00:00:20.601
 Commençons par un titre parlant, une
 courte description, puis les dates réelles
 
-00:00:20.700 --> 00:00:26.734
+00:00:20.601 --> 00:00:26.692
 de la manifestation. La date de fin se
 cale d’abord sur la date de début ; pour
 
-00:00:26.734 --> 00:00:31.704
+00:00:26.692 --> 00:00:31.708
 cette fête sur deux jours, nous la faisons
 terminer le dimanche. Ces dates encadrent
 
-00:00:31.704 --> 00:00:34.189
+00:00:31.708 --> 00:00:34.216
 ensuite les créneaux et les éventuels
 spectacles.
 
-00:00:34.645 --> 00:00:39.148
+00:00:34.668 --> 00:00:39.571
 Le lieu reste lisible comme une adresse.
 Juste dessous, collez une paire de
 
-00:00:39.148 --> 00:00:43.651
+00:00:39.571 --> 00:00:44.474
 coordonnées ou un lien de carte reconnu.
 L’application extrait le point et prépare
 
-00:00:43.651 --> 00:00:49.194
+00:00:44.474 --> 00:00:50.509
 un lien Vérifier sur la carte. Le bénévole
 trouvera Voir sur la carte sur la page
 
-00:00:49.194 --> 00:00:53.004
-publique. La carte externe ne s’ouvre que
-lorsqu’on suit ce lien.
+00:00:50.509 --> 00:00:54.658
+d’inscription. La carte externe ne s’ouvre
+que lorsqu’on suit ce lien.
 
-00:00:55.170 --> 00:00:58.492
+00:00:56.817 --> 00:01:00.247
 Les instructions publiques apparaissent
 avant l’inscription : indiquez ici
 
-00:00:58.492 --> 00:01:02.921
+00:01:00.247 --> 00:01:04.821
 l’entrée à utiliser et le moment
 d’arrivée. Le message de confirmation est
 
-00:01:02.921 --> 00:01:07.719
+00:01:04.821 --> 00:01:09.776
 affiché juste après l’inscription et
 accepte du texte mis en forme ainsi que
 
-00:01:07.719 --> 00:01:12.518
+00:01:09.776 --> 00:01:14.731
 des variables. Il doit rassurer et donner
 la prochaine étape, sans remplacer les
 
-00:01:12.518 --> 00:01:14.363
+00:01:14.731 --> 00:01:16.637
 consignes propres à chaque créneau.
 
-00:01:14.816 --> 00:01:19.778
+00:01:17.091 --> 00:01:22.406
 Rendez le téléphone obligatoire seulement
 si l’équipe doit joindre les bénévoles le
 
-00:01:19.778 --> 00:01:24.327
+00:01:22.406 --> 00:01:27.278
 jour même. La couleur personnalise
 l’en-tête public avec une palette prévue
 
-00:01:24.327 --> 00:01:29.289
+00:01:27.278 --> 00:01:32.593
 pour garder un texte lisible. Choisissons
 Émeraude et regardons l’aperçu. Ces deux
 
-00:01:29.289 --> 00:01:31.770
-réglages pourront être modifiés plus tard.
+00:01:32.593 --> 00:01:35.251
+paramètres pourront être modifiés plus
+tard.
 
-00:01:32.223 --> 00:01:36.151
+00:01:35.705 --> 00:01:39.364
 Le bouton Créer l’événement enregistre
 maintenant un brouillon, puis ouvre
 
-00:01:36.151 --> 00:01:40.471
+00:01:39.364 --> 00:01:43.389
 directement l’étape des créneaux. Rien
 n’est encore publié. Le bandeau de
 
-00:01:40.471 --> 00:01:44.792
+00:01:43.389 --> 00:01:47.415
 progression montre clairement qu’il reste
 à construire le planning, vérifier le
 
-00:01:44.792 --> 00:01:47.934
+00:01:47.415 --> 00:01:50.342
 parcours bénévole et décider du moment de
 publication.
 
-00:01:48.388 --> 00:01:52.559
+00:01:50.795 --> 00:01:55.063
 Après la création, les modifications des
-réglages s’enregistrent automatiquement
+paramètres s’enregistrent automatiquement
 
-00:01:52.559 --> 00:01:57.194
+00:01:55.063 --> 00:01:59.805
 après une courte pause. Corrigeons la
 description, puis attendons Modifications
 
-00:01:57.194 --> 00:02:03.219
+00:01:59.805 --> 00:02:05.970
 enregistrées à, suivi de l’heure. Ce
 témoin confirme la sauvegarde. Si la page
 
-00:02:03.219 --> 00:02:08.780
+00:02:05.970 --> 00:02:11.660
 dit Modifications non enregistrées, restez
 sur place et réessayez avant de partir.
 
-00:02:09.234 --> 00:02:13.850
+00:02:12.112 --> 00:02:16.864
 Le résultat est un brouillon structuré,
 encore invisible au public : identité,
 
-00:02:13.850 --> 00:02:18.467
+00:02:16.864 --> 00:02:21.615
 dates, adresse, point sur la carte et
 messages sont prêts. Retrouvons-le dans
 
-00:02:18.467 --> 00:02:23.468
+00:02:21.615 --> 00:02:26.763
 les événements. Il reste à créer les
 créneaux, tester le parcours bénévole dans
 
-00:02:23.468 --> 00:02:26.161
+00:02:26.763 --> 00:02:29.535
 l’aperçu, puis publier quand tout est
 prêt.
 

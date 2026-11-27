@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:44:38.559Z",
-  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "reviewedAt": "2026-11-27T19:49:58.061Z",
+  "videoSha256": "f71ff41c5baf4eadda3aaf0a03c8b106bd635e8f625612a6ef04e4e4503cf5ce",
   "promptSha256": "f9d31f2d03c2a494a19d2d741f2746193b20a5e8d05f0a65fc8363cc823abbc9",
-  "clipSha256": "ae22d59bca158791244e399fab9d84af74c0c19c274b1bc86ad4a7e79acfd1c0",
+  "clipSha256": "dc6ced03c47904bf2d285713d819c7f1768321e0c1933f51ee48a63232ee9f94",
   "scene": "reports",
   "review": {
-    "heardOpening": "Pour le terrain",
+    "heardOpening": "Pour le terrain, Documents à imprimer propose",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "Documents à imprimer propose le planning complet",
+        "spokenSeconds": 1.5,
+        "spoken": "Documents à imprimer propose le planning complet, une vue par poste, une vue par bénévole",
         "visibleSeconds": 1,
-        "visible": "Section 'Documents à imprimer' affichant les liens de planning (Planning par jour, par poste, individuel)",
+        "visible": "Page Documents à imprimer affichant les liens Planning par jour, Planning par poste et Planning individuel, puis défilement vers Planning complet",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "la feuille de présence et la liste avec téléphones",
-        "visibleSeconds": 7.2,
-        "visible": "Défilement vers la section 'Pour les organisateurs seulement' montrant 'Feuille de présence' et 'Liste avec téléphones'",
+        "spokenSeconds": 7.3,
+        "spoken": "la feuille de présence et la liste avec téléphones réservée aux organisateurs",
+        "visibleSeconds": 6.8,
+        "visible": "Section 'Pour les organisateurs seulement' affichant Feuille d'émargement et Liste avec téléphones",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
-        "spoken": "Les badges se génèrent en PDF, avec un filtre par poste",
+        "spokenSeconds": 12.5,
+        "spoken": "Les badges se génèrent en PDF, avec un filtre par poste et une sélection de bénévole pour la réimpression",
         "visibleSeconds": 11.5,
-        "visible": "Section 'Badges' visible avec le filtre 'Poste' et le sélecteur 'Bénévole (réimpression)'",
+        "visible": "Section Badges avec les listes déroulantes Poste et Bénévole (réimpression) ainsi que le bouton Ouvrir les badges",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire et fluide, parfaitement synchronisée avec les défilements de l'écran."
+      "observation": "Voix off féminine claire, posée et parfaitement synchronisée avec le défilement de la page."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

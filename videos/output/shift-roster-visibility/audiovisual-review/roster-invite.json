@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:37:51.896Z",
-  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "reviewedAt": "2026-11-27T17:47:59.327Z",
+  "videoSha256": "047f1868f59eb6fc827eafe396c736dfe156cbaf5ae79035633e52ca71f74059",
   "promptSha256": "47c2f20b938f03abdc0912a243707f7c023a55cc79ddf6040221526c64dab304",
-  "clipSha256": "7da9f440b4338a167047965146761aa2757066b4306471a537aa6f32d896d535",
+  "clipSha256": "c94d36498da68bf79e98f2976c133ddad224b1b89d31d9dbcbfc56130251c8f5",
   "scene": "roster-invite",
   "review": {
-    "heardOpening": "Un membre qui arrive par son lien d’invitation",
+    "heardOpening": "Un membre qui arrive par son lien",
     "checkpoints": [
       {
-        "spokenSeconds": 5.3,
+        "spokenSeconds": 5.4,
         "spoken": "Activez Voir qui est inscrit",
-        "visibleSeconds": 6.7,
+        "visibleSeconds": 6,
         "visible": "L'interrupteur « Voir qui est inscrit » est activé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
+        "spokenSeconds": 8.8,
         "spoken": "En Liste",
-        "visibleSeconds": 8.2,
-        "visible": "L'onglet Liste est sélectionné et la vue en liste s'affiche",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur l'onglet Liste et passage à la vue Liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
-        "spoken": "Aline apparaît avec son prénom et l’initiale de son nom, à côté du nombre des autres bénévoles",
-        "visibleSeconds": 8.8,
-        "visible": "La mention « Sur ce créneau : Aline M. et 2 autres bénévoles » est visible sous le créneau Accueil",
+        "spokenSeconds": 10.1,
+        "spoken": "Aline apparaît avec son prénom et l'initiale de son nom",
+        "visibleSeconds": 9.8,
+        "visible": "Mention « Sur ce créneau : Aline M. et 2 autres bénévoles » visible sous le premier créneau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et parfaitement synchronisée avec la démonstration visuelle."
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

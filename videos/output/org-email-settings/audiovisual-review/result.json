@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:16:16.348Z",
-  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "reviewedAt": "2026-11-27T20:21:56.028Z",
+  "videoSha256": "70b3d1912845c2159aeca8d622458c134b8be6538822a94f8f0019ce87967971",
   "promptSha256": "cbf1afe02d49b02f1392c4b71decd3113624096a6e132b6cec368862fae040b9",
-  "clipSha256": "637a3f603e605aec8eccb69c9247d6caae078e8d592f391561da1cb1db903b5a",
+  "clipSha256": "877bf792e6dfb8a74396e5dae510b9446431039d6d772cc333ade62f7f9e3ce2",
   "scene": "result",
   "review": {
     "heardOpening": "Les paramètres sont enregistrés et le message de test",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
+        "spokenSeconds": 2.2,
         "spoken": "le message de test est visible dans la boîte de démonstration",
-        "visibleSeconds": 1.5,
-        "visible": "L'email de test envoyé à Camille est affiché à l'écran dans l'interface de messagerie",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage du courriel reçu intitulé « Email de test — Les amis de Montvert »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.6,
+        "spokenSeconds": 6.2,
         "spoken": "Dans Emails envoyés, Envoyé indique une acceptation par le serveur d’envoi",
-        "visibleSeconds": 6.2,
-        "visible": "Transition vers la page Paramètres affichant la section 'Emails envoyés' avec le statut 'Envoyé'",
+        "visibleSeconds": 6,
+        "visible": "Retour sur la page Paramètres avec la section « Emails envoyés » affichant le statut « Envoyé »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.1,
-        "spoken": "utilisez plutôt les messages ciblés de l’événement",
-        "visibleSeconds": 14.5,
-        "visible": "Écran stable sur la liste des emails envoyés en illustration du conseil formulé",
+        "spokenSeconds": 14.5,
+        "spoken": "Pour écrire ponctuellement à un groupe, utilisez plutôt les messages ciblés de l’événement",
+        "visibleSeconds": 14,
+        "visible": "Écran stable sur la page des paramètres d'e-mails pour cette recommandation générale de conclusion",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les visuels."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

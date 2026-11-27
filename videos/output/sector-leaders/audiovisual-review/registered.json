@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-29T06:53:16.182Z",
-  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "reviewedAt": "2026-11-27T19:10:08.851Z",
+  "videoSha256": "36b34e44a9b368957475e2d4f9eb4a52416f25618876f65098753196f7ece2d8",
   "promptSha256": "0046baa415cc739f7d652a4f8c13886647e90a6197de268151e266d1ae9f87f3",
-  "clipSha256": "7b22958bcd4451bcddfde5e3fd55d39cac481d1eed706611c1552f2d360d7833",
+  "clipSha256": "a3607479bb4949be154d9e5f2490e64c84c0093369af48db056b97211c97e15d",
   "scene": "registered",
   "review": {
     "heardOpening": "Si la personne participe déjà",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées",
-        "visibleSeconds": 1.5,
-        "visible": "Le formulaire d'ajout d'un responsable s'affiche et les coordonnées de Camille Rochat sont sélectionnées",
+        "spokenSeconds": 2.1,
+        "spoken": "la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir",
+        "visibleSeconds": 2.2,
+        "visible": "Sélection d'un inscrit dans la liste déroulante qui préremplit automatiquement le nom, l'email et le poste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "Vérifiez le poste proposé avant de confirmer.",
+        "spokenSeconds": 6,
+        "spoken": "Vérifiez le poste proposé avant de confirmer",
         "visibleSeconds": 9.5,
-        "visible": "Le champ Poste est modifié d'Accueil en Démontage avant validation",
+        "visible": "Modification du champ Poste qui passe de 'Accueil' à 'Démontage'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13,
         "spoken": "la nomination ne remplace pas une inscription",
-        "visibleSeconds": 13.8,
-        "visible": "Clic sur « Ajouter et envoyer le lien » et retour à la liste affichant désormais 4 responsables",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur 'Ajouter et envoyer le lien' et retour à la liste avec le compteur passant à '4 responsables'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions affichées à l'écran."
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:24:21.779Z",
-  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
-  "promptSha256": "b2e82bb2e114a5a8873e093c75149e40febe9a655e9ec44366a2465d66b74074",
-  "clipSha256": "59b46e1670d0fe76dc1b5ec9dd5d98bba379aa7d124fda01a38ba9719da28970",
+  "reviewedAt": "2026-11-27T20:46:32.003Z",
+  "videoSha256": "3ae73bca800edf4b9c3b942dab2e5a2982ad0c8409b4c8208efd4e0ca1ad0288",
+  "promptSha256": "3c2daff203e5c633cc783f718b7da9d1059a4a34e4e100affb0c5b4a52061dc8",
+  "clipSha256": "05c4522540e82cb52506fe80d9b387d976fb0cc315947f4a5f488c17f3899487",
   "scene": "result",
   "review": {
-    "heardOpening": "Le résultat est un brouillon",
+    "heardOpening": "Le résultat est un brouillon structuré",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Le résultat est un brouillon structuré, encore invisible au public",
-        "visibleSeconds": 0,
-        "visible": "Formulaire d'édition affichant le statut Brouillon (non visible)",
+        "visibleSeconds": 0.5,
+        "visible": "Section Visibilité affichant le statut Brouillon (non visible)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.7,
-        "spoken": "Retrouvons-le dans les événements.",
-        "visibleSeconds": 8.8,
-        "visible": "Affichage de la page Événements listant l'événement Fête du quartier des Tilleuls au statut Brouillon",
+        "spokenSeconds": 9.1,
+        "spoken": "Retrouvons-le dans les événements",
+        "visibleSeconds": 9.5,
+        "visible": "Transition vers la page Événements montrant l'événement Fête du quartier des Tilleuls en statut Brouillon",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu, puis publier quand tout est prêt.",
-        "visibleSeconds": 11.2,
-        "visible": "Vue d'ensemble de la page Événements avec le guide des premiers pas et l'événement créé",
+        "spokenSeconds": 11.8,
+        "spoken": "Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu, puis publier quand tout est prêt",
+        "visibleSeconds": 11.8,
+        "visible": "Page Événements affichant le guide des étapes et la fiche de l'événement brouillon",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la transition visuelle."
+      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

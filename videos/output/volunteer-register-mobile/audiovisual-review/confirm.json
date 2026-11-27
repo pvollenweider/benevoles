@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:47:01.258Z",
-  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "reviewedAt": "2026-11-27T17:05:38.136Z",
+  "videoSha256": "b6e62ceecd3366c1a3e368134cc97edb658cb55104beecb4df2c657e8385188e",
   "promptSha256": "b0d2b92b78a4bf34ec5ae16ad9261d8dcd266616966c832ff7abd5c1c046591e",
-  "clipSha256": "448ceacededfc84b590db714db2c2c0b017e911538dc019ced0155b8302284b2",
+  "clipSha256": "c9efe345a5ea59d5e05aabb3120d77f22eeb8ff711a8f04c89c94422e741ad1a",
   "scene": "confirm",
   "review": {
     "heardOpening": "Un dernier coup d'œil au récapitulatif",
@@ -12,15 +12,23 @@
         "spokenSeconds": 0.5,
         "spoken": "Un dernier coup d’œil au récapitulatif",
         "visibleSeconds": 0.5,
-        "visible": "Section « Tes informations » et récapitulatif du créneau affichés à l'écran",
+        "visible": "Affichage de la section récapitulative « Tes informations » et « Tes créneaux »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.8,
+        "spokenSeconds": 3.6,
         "spoken": "confirme ton inscription",
-        "visibleSeconds": 3.7,
-        "visible": "Affichage de la page « Demande d'inscription reçue »",
+        "visibleSeconds": 3.6,
+        "visible": "Clic sur le bouton « Confirmer mon inscription »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "confirme ton inscription",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage de l'écran de confirmation « Demande d'inscription reçue »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -29,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, fluide et naturelle, bien synchronisée avec les éléments affichés."
+      "observation": "Voix claire, fluide et parfaitement synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

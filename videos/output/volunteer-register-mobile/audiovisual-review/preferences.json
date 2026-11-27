@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:47:03.013Z",
-  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "reviewedAt": "2026-11-27T17:05:26.463Z",
+  "videoSha256": "b6e62ceecd3366c1a3e368134cc97edb658cb55104beecb4df2c657e8385188e",
   "promptSha256": "c42f191ec98b2d934f2ee37d903b7fbe167aa2d3abae79e33d10793ccd1e021c",
-  "clipSha256": "22fe0ed1d8149e8fc5b213a1cc54d02fa8d546e4e334dce208882e8712d52b89",
+  "clipSha256": "e1631c4cc57e34d057d99b829fd97c8556b75072410e2a4d57843740b8c57358",
   "scene": "preferences",
   "review": {
     "heardOpening": "Réponds aux quelques questions pratiques",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 0,
         "spoken": "Réponds aux quelques questions pratiques",
-        "visibleSeconds": 0,
-        "visible": "Défilement vers le bas révélant les réponses aux champs du formulaire (taille de t-shirt, etc.)",
+        "visibleSeconds": 0.5,
+        "visible": "Formulaire affichant les informations et questions pratiques puis défilement vers le bas",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 2.1,
         "spoken": "puis accepte la convention",
-        "visibleSeconds": 1,
-        "visible": "Case à cocher « J'ai lu et j'accepte la convention des bénévoles » cochée",
+        "visibleSeconds": 2.8,
+        "visible": "Coche de la case « J'ai lu et j'accepte la convention des bénévoles »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3,
-        "spoken": "et l’utilisation de tes données pour cet événement.",
-        "visibleSeconds": 2.5,
-        "visible": "Clic et activation de la case « J'accepte que l'association qui organise cet événement utilise mes données... »",
+        "spokenSeconds": 3.7,
+        "spoken": "et l’utilisation de tes données pour cet événement",
+        "visibleSeconds": 4.2,
+        "visible": "Coche de la case d'autorisation d'utilisation des données",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les interactions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

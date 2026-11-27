@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T21:38:15.403Z",
-  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "reviewedAt": "2026-11-27T17:48:23.808Z",
+  "videoSha256": "047f1868f59eb6fc827eafe396c736dfe156cbaf5ae79035633e52ca71f74059",
   "promptSha256": "8492ef1ec227ae3e34751b75f60805f1e2d53c3e0cfd678162f80bcbdb0c1e37",
-  "clipSha256": "ad7978e9187e0c4b84752b2cd49b3ff735ca7c613a1d8d93f87d37e95fc89870",
+  "clipSha256": "10e03d3faa68371b835988a9b00b66fde17f05bc63940f66a546d1761b880642",
   "scene": "roster-withdraw",
   "review": {
     "heardOpening": "Revenons sur la page Mes inscriptions d'Aline",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
-        "spoken": "Désactivez Afficher mon nom aux autres bénévoles",
-        "visibleSeconds": 3.8,
-        "visible": "L'interrupteur 'Afficher mon nom aux autres bénévoles' est désactivé par un clic",
+        "spokenSeconds": 4.1,
+        "spoken": "Désactivez Afficher mon nom aux autres bénévoles.",
+        "visibleSeconds": 5,
+        "visible": "L'interrupteur 'Afficher mon nom aux autres bénévoles' est basculé en position désactivée.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
-        "spoken": "L'état Masqué confirme le retrait",
-        "visibleSeconds": 4.5,
-        "visible": "La mention 'Masqué' apparaît à côté du curseur désactivé",
+        "spokenSeconds": 7.4,
+        "spoken": "L’état Masqué confirme le retrait.",
+        "visibleSeconds": 7,
+        "visible": "La mention 'Masqué' apparaît à droite de l'interrupteur désactivé.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "Sur la page ouverte par l'invitation, Aline a disparu ; sa place reste comptée",
-        "visibleSeconds": 10.5,
-        "visible": "Affichage de la liste des créneaux indiquant 'Sur ce créneau : 3 autres bénévoles, sans nom affiché'",
+        "spokenSeconds": 10,
+        "spoken": "Sur la page ouverte par l’invitation, Aline a disparu ; sa place reste comptée.",
+        "visibleSeconds": 11.8,
+        "visible": "Sur la page du planning, l'option 'Voir qui est inscrit' affiche '3 autres bénévoles, sans nom affiché' sans mentionner Aline.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "voici la même page sans identification",
-        "visibleSeconds": 16,
-        "visible": "Transition vers la vue publique non identifiée avec le lien '+ J'ai perdu mon lien personnel'",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 19.5,
-        "spoken": "L'interrupteur et les noms ont disparu",
-        "visibleSeconds": 17.5,
-        "visible": "L'interrupteur 'Voir qui est inscrit' et les détails des bénévoles ne figurent plus sur l'écran",
+        "spokenSeconds": 18,
+        "spoken": "voici la même page sans identification. L’interrupteur et les noms ont disparu.",
+        "visibleSeconds": 18,
+        "visible": "Affichage de la page sans utilisateur connecté, sans bouton 'Voir qui est inscrit' ni noms de bénévoles.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée, naturelle et parfaitement intelligible tout au long de l'extrait."
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, bien synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

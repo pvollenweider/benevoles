@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T20:16:04.940Z",
-  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
-  "promptSha256": "16fbb0e697ea9b35d474d1e6a4af14c0725321ccc531a6d7c3291bcaa8d7627c",
-  "clipSha256": "3176dc8e6152c658aa135c341187c317bafa0af01c89d4bf0e793f2a64ea910b",
+  "reviewedAt": "2026-11-27T20:21:23.766Z",
+  "videoSha256": "70b3d1912845c2159aeca8d622458c134b8be6538822a94f8f0019ce87967971",
+  "promptSha256": "024fb36f76461a5af971707c3c9cdc4b3667b386639af87818faa9c834a2a6ed",
+  "clipSha256": "44f28210173b99fccc21bf6d991d993d0c62e350fb93f853a9b04ae57633bd36",
   "scene": "reply-to",
   "review": {
-    "heardOpening": "L'adresse de réponse",
+    "heardOpening": "L'adresse de réponse indique où arrive un message",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.8,
         "spoken": "L'adresse de réponse indique où arrive un message",
         "visibleSeconds": 0.5,
-        "visible": "Champ Adresse de réponse visible dans les paramètres d'emails",
+        "visible": "Affichage de la page Paramètres avec la section Emails et le champ Adresse de réponse",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 6.3,
         "spoken": "Saisissons benevoles arobase example point org",
-        "visibleSeconds": 6.6,
+        "visibleSeconds": 7,
         "visible": "Saisie de benevoles@example.org dans le champ Adresse de réponse",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "Si le champ reste vide, l’adresse par défaut est utilisée",
+        "spokenSeconds": 10.3,
+        "spoken": "Si le champ reste vide, l'adresse par défaut est utilisée",
         "visibleSeconds": 10.5,
-        "visible": "Texte d'aide sous le champ précisant le comportement si laissé vide",
+        "visible": "Texte explicatif visible sous le champ précisant l'utilisation de l'adresse par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Cette adresse apparaît aussi dans le détail des inscriptions de l'événement",
+        "visibleSeconds": 14,
+        "visible": "Écran stable sur les paramètres des emails pendant l'explication générale",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et rythmée, bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien synchronisée avec la saisie à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

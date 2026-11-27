@@ -1,9 +1,9 @@
 {
-  "sourceSha256": "df7c57763328f45bebbf2533312c1bf725181eabad8d2cb56e188846a93d5bba",
+  "sourceSha256": "a1f8c749601b673a53d95c8513056df4d226507d8158a091f10c21852f83b7ef",
   "sampledActualMailpitIntervals": [
     {
-      "startMs": 166520,
-      "endMs": 189800
+      "startMs": 158440,
+      "endMs": 185400
     }
   ],
   "header": {
