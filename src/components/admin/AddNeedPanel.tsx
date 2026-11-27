@@ -55,6 +55,8 @@ type Props = {
   today: string
   timeZone: string
   event: RegistrationWindow
+  /** The event allows overlapping shifts (#1467): the finder offers them. */
+  eventOverlapsAllowed?: boolean
   /** The event's existing postes, offered in the field. */
   roles: string[]
   /** A new need on the board: inserted at once, announced, and the visible notice returned. */
@@ -70,7 +72,7 @@ const fieldClass = "input w-full min-h-11"
 
 const people = (n: number) => `${n} personne${n > 1 ? "s" : ""}`
 
-export default function AddNeedPanel({ eventId, today, timeZone, event, roles, onCreated, announce }: Props) {
+export default function AddNeedPanel({ eventId, today, timeZone, event, eventOverlapsAllowed = false, roles, onCreated, announce }: Props) {
   const id = useId()
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<"need" | "notify">("need")
@@ -436,6 +438,7 @@ export default function AddNeedPanel({ eventId, today, timeZone, event, roles, o
               registeredTodayDefault
               pushDefaultOn
               lockedShift
+              eventOverlapsAllowed={eventOverlapsAllowed}
               onSent={(result) => {
                 setSent(result)
                 announce(`Étape 2 terminée : email envoyé à ${people(result.sent)}.${result.pushRequested && (result.pushDevices ?? 0) > 0 ? ` Notification sur ${result.pushDevices} appareil${(result.pushDevices ?? 0) > 1 ? "s" : ""}.` : ""}`)

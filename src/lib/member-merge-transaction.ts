@@ -102,6 +102,8 @@ export async function loadMergeInput(db: OrgScopedPrisma, keepId: string, absorb
 
   const shiftIds = [...new Set([...keepRegistrations, ...absorbRegistrations].map((r) => r.shiftId))]
   const shifts = shiftIds.length ? await db.shift.findMany({ where: { id: { in: shiftIds } }, select: SHIFT_SELECT }) : []
+  // The event setting of the shifts compared (#1467), by event: a merge may span several events.
+  const events = shifts.length ? await db.event.findMany({ where: { id: { in: [...new Set(shifts.map((s) => s.eventId))] } }, select: { id: true, overlapsAllowed: true } }) : []
 
   // The DeliveryOutcome rule compares against the KEPT member's final address (what the member's
   // address will actually be once the merge's field choices are applied), not necessarily its
@@ -110,6 +112,7 @@ export async function loadMergeInput(db: OrgScopedPrisma, keepId: string, absorb
 
   return {
     keep, absorb, shifts,
+    eventOverlapsAllowed: Object.fromEntries(events.map((e) => [e.id, e.overlapsAllowed])),
     keepRegistrations, absorbRegistrations, keepInvites, absorbInvites,
     keepShiftDeclines, absorbShiftDeclines, keepAnswers, absorbAnswers,
     absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed,

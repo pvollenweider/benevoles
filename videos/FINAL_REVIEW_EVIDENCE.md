@@ -1508,3 +1508,11 @@ Le texte accepté à l'inscription s'appelle désormais « convention des béné
 
 - **DATA_EXPORTS_ARCHIVES** (`data-exports-archives`) : seules deux occurrences écrites de « Convention » passent en minuscules ; le fichier CSV montré et l'image ne changent pas.
 - **WORKLOAD_PROTECTION** (`workload-protection`) : le scénario dit « convention » au lieu de « charte » ; aucune narration, aucun bloc `viewer`, aucune image ne change.
+
+## À refilmer : chevauchements autorisés pour l'événement (#1467, 27 novembre 2026)
+
+Le formulaire d'événement porte un nouveau groupe **Créneaux qui se chevauchent**, après les inscriptions et avant « Affichage des créneaux par défaut » : une ligne d'état, un bouton « Autoriser les chevauchements… » et, une fois l'option active, une note. Le réglage est désactivé par défaut : dans tous les jeux de tournage, les refus et mentions de chevauchement filmés restent vrais, et aucun sélecteur de capture ne change.
+
+- Image seule, le groupe allonge et décale le formulaire sous les inscriptions : **EVENT_CREATE_BLANK**, **EVENT_CREATE_TEMPLATE**, **EVENT_VISIBILITY_REGISTRATION_WINDOW**, **EVENT_DUPLICATE**, **ORGANIZER_CREATE_PUBLISH** et **ADMIN_FEATURES_OVERVIEW**, déjà listées dans « À refilmer : affichage des créneaux par défaut ». À refilmer en une seule fois.
+- Vérifiées et laissées telles quelles, leur narration parle du refus d'un chevauchement, qui reste la règle par défaut : `volunteer-choose-shifts`, `volunteer-confirmation-errors`, `registrations-management`, `shift-swaps`, `accessibility-keyboard-display`, `members-duplicates-merge`.
+- Aucune vidéo ne présente le nouveau réglage. Aucune capture n'est régénérée dans ce changement.

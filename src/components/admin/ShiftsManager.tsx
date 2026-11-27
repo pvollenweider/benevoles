@@ -50,7 +50,7 @@ type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
   eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none", initialRecurrences = [], today = "",
-  initialSectors = null, mealOnTheGoShown = false, initialPlaces = null, questions = [],
+  initialSectors = null, mealOnTheGoShown = false, initialPlaces = null, questions = [], overlapsAllowed = false,
 }: {
   eventId:        string
   eventStartDate: string
@@ -71,6 +71,8 @@ export default function ShiftsManager({
   initialPlaces?: AdminPlace[] | null
   /** The event's active questions (#962), for a poste's answer condition. */
   questions?: RoleManagerQuestion[]
+  /** The event allows overlapping shifts (#1467): no per-poste « cumulable » mention nor control. */
+  overlapsAllowed?: boolean
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
@@ -497,6 +499,7 @@ export default function ShiftsManager({
         onAddPoste={(sector, opener) => openForm(singleDay ? { date: dates[0] } : {}, null, { sector, opener })}
         mealOnTheGoShown={mealOnTheGoShown}
         questions={questions}
+        overlapsAllowed={overlapsAllowed}
       />
 
       {/* Quick-add / edit form */}
@@ -528,7 +531,7 @@ export default function ShiftsManager({
       {/* What the figures on a bar mean (#925), once above the days; each bar's name says it in words. */}
       {view === "timeline" && daysWithShifts.length > 0 && (
         <p className="text-xs text-gray-600 pl-1">
-          Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne, l&apos;accès réservé et le cumul avec un autre créneau se règlent sur le poste, dans « {managePostes} ».
+          Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne et l&apos;accès réservé se règlent sur le poste, dans « {managePostes} ».{overlapsAllowed ? " Les chevauchements sont autorisés pour tout l'événement (paramètres de l'événement)." : " Le cumul avec un autre créneau se règle aussi sur le poste."}
           {usesMinimum && " Un créneau avec un minimum de personnes affiche « sous le minimum (2) » tant qu'il ne l'a pas, encadré de pointillés, puis « minimum atteint » jusqu'à ce qu'il soit complet."}
         </p>
       )}
@@ -586,8 +589,9 @@ export default function ShiftsManager({
                     <p className="font-medium text-gray-800">{s.roleName}</p>
                     {s.label !== s.roleName && <p className="text-xs text-gray-500">{s.label}</p>}
                     {s.minAge != null && <p className="text-[11px] text-gray-500">{s.minAge} ans minimum</p>}
-                    {/* A cumulable role (#986): why someone may hold it and an overlapping shift. */}
-                    {s.overlapAllowed && <p className="text-[11px] text-gray-600">Cumulable avec un autre créneau</p>}
+                    {/* A cumulable role (#986): why someone may hold it and an overlapping shift. The
+                        event's setting (#1467) supersedes it, so the mention is hidden while on. */}
+                    {s.overlapAllowed && !overlapsAllowed && <p className="text-[11px] text-gray-600">Cumulable avec un autre créneau</p>}
                     {/* A role assigned by the organisation only (#1145): why it is not on the public page. */}
                     {s.assignedOnly && <p className="text-[11px] text-gray-600">Attribué par l&apos;organisation</p>}
                   </td>

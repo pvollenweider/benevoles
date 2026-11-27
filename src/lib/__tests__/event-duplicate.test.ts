@@ -82,6 +82,15 @@ describe("duplicatePlan", () => {
     expect(olderSource.event.publicShiftView).toBe("auto")
   })
 
+  it("copies overlapping shifts with the settings, like the default view (#1467)", () => {
+    const withSettings = duplicatePlan({ ...source, overlapsAllowed: true }, { copy: { settings: true } })
+    expect(withSettings.event.overlapsAllowed).toBe(true)
+    const withoutSettings = duplicatePlan({ ...source, overlapsAllowed: true }, { copy: { settings: false } })
+    expect(withoutSettings.event.overlapsAllowed).toBe(false)
+    const olderSource = duplicatePlan(source, { copy: { settings: true } })
+    expect(olderSource.event.overlapsAllowed).toBe(false)
+  })
+
   it("copies the answer condition onto the copy of its question, and drops it with the settings (#962)", () => {
     const plan = duplicatePlan(source, {})
     const copiedQuestion = plan.questions.find((q) => q.label === "Permis de conduire")!

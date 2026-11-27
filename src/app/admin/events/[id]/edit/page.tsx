@@ -79,6 +79,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     registrationClosesAt: utcToLocalInput(event.registrationClosesAt, timeZone),
     accentColorKey: event.accentColorKey,
     publicShiftView: shiftViewSetting(event.publicShiftView),
+    overlapsAllowed: event.overlapsAllowed,
     latitude: event.latitude,
     longitude: event.longitude,
     dayContactName: event.dayContactName ?? "",

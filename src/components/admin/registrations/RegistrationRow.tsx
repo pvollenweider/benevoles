@@ -10,6 +10,8 @@ import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { spokenShortWhen } from "@/lib/spoken-time"
 import { attendanceStateOf } from "@/lib/attendance-state"
 import { personName, shiftName, shiftSpoken, type Registration } from "./types"
+import type { ShiftRef } from "@/lib/registrations-list"
+import { spokenShift } from "@/lib/spoken-time"
 
 const sourceLabels: Record<string, string> = {
   public_form: "Formulaire",
@@ -30,10 +32,12 @@ type Props = {
   workload: WorkloadNotice[]
   /** The event's protection is on (#1171): the notices are limits the event enforces, not warnings. */
   workloadBlocks?: boolean
+  /** The other shift of an overlap the rule lets through (#986, #1467), same wording for both causes. */
+  overlapsWith?: ShiftRef
 }
 
 // ── One row of the registrations table ──────────────────────────────────────
-export default function RegistrationRow({ reg, selected, onToggleSelected, onDecision, answers, workload, workloadBlocks = false }: Props) {
+export default function RegistrationRow({ reg, selected, onToggleSelected, onDecision, answers, workload, workloadBlocks = false, overlapsWith }: Props) {
   // Presence, absence and an early departure are shown for confirmed people only (#399, #1141).
   const attendance = reg.status === "active" ? attendanceStateOf(reg) : "expected"
   return (
@@ -76,6 +80,13 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
             // The arrow is decorative: the words carry the state, never the colour nor the glyph alone.
             <span className="inline-flex items-center rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-700">
               <span aria-hidden="true">→ </span>Parti avant la fin
+            </span>
+          )}
+          {overlapsWith && (
+            // An overlap the rule lets through (#986, #1467): the same mark for a cumulable poste and
+            // for an event that allows overlaps; the other shift is named for screen readers.
+            <span className="inline-flex items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-900">
+              Chevauchement autorisé<span className="sr-only"> avec {spokenShift(overlapsWith)}</span>
             </span>
           )}
         </p>

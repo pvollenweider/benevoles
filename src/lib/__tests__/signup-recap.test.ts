@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { fmtDuration, gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "../signup-recap"
+import { allowedOverlapNotices, allowedOverlapText, fmtDuration, gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "../signup-recap"
 
 const s = (id: string, over: Partial<RecapShiftInput>): RecapShiftInput => ({
   id, roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", status: "open", waitlistEnabled: false, minAge: null, ...over,
@@ -65,5 +65,43 @@ describe("signup recap, a poste reserved to an answer (#962)", () => {
     const [withCondition] = recapShifts([{ ...base, reservedAnswer: { questionLabel: "Permis de conduire", answers: ["Oui", "En cours"] } }])
     expect(withCondition.answerMention).toBe("Réponse requise : Permis de conduire, Oui ou En cours")
     expect(recapShifts([base])[0].answerMention).toBeNull()
+  })
+})
+
+// The event allows overlapping shifts (#1467): a warning line, never the refusal; the red banner
+// disappears, and the block also names an overlap with a shift already held.
+describe("signup recap, an event that allows overlaps (#1467)", () => {
+  const at = (id: string, startTime: string, endTime: string, date = "2026-07-04"): RecapShiftInput =>
+    ({ id, roleName: "Bar", label: id, date, startTime, endTime, status: "open", waitlistEnabled: false, minAge: null })
+
+  it("gives the allowed overlap its own gap kind and plain words", () => {
+    const rows = recapShifts([at("a", "10:00", "14:00"), at("b", "12:00", "16:00")])
+    const gap = gapAfter(rows, 0, true)
+    expect(gap).toEqual({ kind: "allowed_overlap", minutes: 120 })
+    expect(gapLabel(gap!)).toBe("Ces deux créneaux se chevauchent de 2 h. C'est autorisé pour cet événement : vérifie que tu peux tenir les deux, ou préviens l'organisation si quelqu'un te remplace.")
+    expect(hasOverlap(rows, true)).toBe(false)
+  })
+
+  it("keeps the refusal when the event does not allow overlaps", () => {
+    const rows = recapShifts([at("a", "10:00", "14:00"), at("b", "12:00", "16:00")])
+    expect(gapAfter(rows, 0, false)?.kind).toBe("overlap")
+    expect(hasOverlap(rows, false)).toBe(true)
+  })
+
+  it("finds an overlap with a shift already held, and between shifts that are not neighbours", () => {
+    const rows = recapShifts([at("a", "08:00", "14:00"), at("b", "12:00", "15:00"), at("c", "16:00", "18:00")])
+    expect(gapAfter(rows, 0, true)?.kind).toBe("allowed_overlap")
+    const notices = allowedOverlapNotices(rows, [{ roleName: "Accueil", label: "Accueil", date: "2026-07-04", startTime: "13:00", endTime: "15:00" }])
+    expect(notices).toContainEqual({ kind: "picked", minutes: 120 })
+    expect(notices).toContainEqual({ kind: "held", minutes: 60, label: "Accueil" })
+    expect(allowedOverlapText({ kind: "held", minutes: 90, label: "Accueil" })).toBe(
+      "Ce créneau a lieu en même temps que ton créneau « Accueil » pendant 1 h 30. Tu peux quand même t'inscrire. Vérifie que tu peux faire les deux. Si quelqu'un te remplace, dis-le à l'organisation.",
+    )
+  })
+
+  it("warns about an overlap with a held shift at any hour, not only next to a picked one", () => {
+    const rows = recapShifts([at("a", "10:00", "12:00")])
+    expect(allowedOverlapNotices(rows, [{ roleName: "Accueil", label: "Accueil", date: "2026-07-04", startTime: "11:00", endTime: "13:00" }]))
+      .toEqual([{ kind: "held", minutes: 60, label: "Accueil" }])
   })
 })

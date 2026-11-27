@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { existingOverlapRefusal, findOverlap, selectionOverlapRefusal } from "../signup-eligibility"
 import { conflictingShiftIds, type SignupShift } from "../public-signup"
-import { addConflictMessage, chosenOverlapMessage, overlappingShiftIds, type ShiftRef } from "../registrations-list"
+import { addConflictMessage, allowedOverlapMarks, chosenOverlapMessage, overlappingShiftIds, type ShiftRef } from "../registrations-list"
 import { mergeConflicts, type MemberMergeInput, type ShiftMeta } from "../member-merge"
 import { findCandidates, type EventShiftRef } from "../open-shifts"
 import { gapAfter, gapLabel, hasOverlap, recapShifts, type RecapShiftInput } from "../signup-recap"
@@ -175,5 +175,81 @@ describe("event duplication and history", () => {
 
   it("names the option in the history", () => {
     expect(describeChanges({ overlapAllowed: { from: false, to: true } })).toEqual(["cumulable avec un autre créneau : non → oui"])
+  })
+})
+
+// The event setting (#1467) reaches every caller of the one rule: nothing is refused or flagged
+// when it is on, and the per-poste values keep their own effect.
+describe("the event setting, at each call site (#1467)", () => {
+  const DAY2 = "2026-07-04"
+
+  it("public page: no shift is marked as a conflict, bars and rows stay selectable", () => {
+    const s = (id: string, startTime: string, endTime: string): SignupShift => ({ id, label: id, date: DAY2, startTime, endTime, status: "open", waitlistEnabled: false, minAge: null })
+    const shifts = [s("buvette", "10:00", "14:00"), s("accueil", "12:00", "13:00")]
+    expect(conflictingShiftIds(shifts, new Set(["buvette"]), new Set())).toEqual(new Set(["accueil"]))
+    expect(conflictingShiftIds(shifts, new Set(["buvette"]), new Set(), true)).toEqual(new Set())
+    const row = { ...shifts[1], roleName: "Accueil", capacity: 2, registered: 0, spotsLeft: 2, displayOrder: 0, colorKey: null }
+    const view = shiftViewState({ shift: row, held: undefined, selected: false, conflict: false, reserved: false, locked: false })
+    expect(view.clickable).toBe(true)
+    expect(shiftListText(row, view, { locked: false }).status).not.toMatch(/Chevauche/)
+  })
+
+  it("manual placement: no warning for an allowed overlap", () => {
+    const ref = (id: string, startTime: string, endTime: string): ShiftRef => ({ id, roleName: id, label: id, date: DAY2, startTime, endTime, capacity: 2, registrationCount: 0 })
+    const a = ref("buvette", "10:00", "14:00"), b = ref("accueil", "12:00", "13:00")
+    expect(addConflictMessage(b, [a])).toMatch(/plage horaire/)
+    expect(addConflictMessage(b, [a], true)).toBeNull()
+    expect(chosenOverlapMessage(b, [a])).toMatch(/chevauche/)
+    expect(chosenOverlapMessage(b, [a], true)).toBeNull()
+  })
+
+  it("registrations list: marks the two rows of an overlap the event allows, like a cumulable poste", () => {
+    const ref = (id: string, startTime: string, endTime: string, overlapAllowed?: boolean): ShiftRef => ({ id, roleName: id, label: id, date: DAY2, startTime, endTime, capacity: 2, registrationCount: 0, overlapAllowed })
+    const person = { id: "v1" }
+    const rows = [
+      { id: "r1", status: "active", volunteer: person, shift: ref("buvette", "10:00", "14:00") },
+      { id: "r2", status: "active", volunteer: person, shift: ref("accueil", "12:00", "13:00") },
+    ]
+    expect(allowedOverlapMarks(rows).size).toBe(0)
+    const marks = allowedOverlapMarks(rows, true)
+    expect(marks.get("r1")?.id).toBe("accueil")
+    expect(marks.get("r2")?.id).toBe("buvette")
+    // A cumulable poste is marked the same way, with the setting off.
+    const cumulable = [{ ...rows[0], shift: ref("secours", "09:00", "17:00", true) }, rows[1]]
+    expect(allowedOverlapMarks(cumulable).size).toBe(2)
+    // A waiting entry does not commit the person to the hours.
+    expect(allowedOverlapMarks([{ ...rows[0], status: "waiting" }, rows[1]], true).size).toBe(0)
+  })
+
+  it("member merge: the setting of one event never exempts a pair of shifts of two events", () => {
+    const meta = (id: string, eventId: string, startTime: string, endTime: string): ShiftMeta => ({
+      id, eventId, roleName: id, label: id, date: new Date(DAY2), startTime, endTime, minAge: null, maxPerVolunteer: null, reservedTags: [],
+    })
+    const make = (eventIds: [string, string], eventOverlapsAllowed: Record<string, boolean>): MemberMergeInput => ({
+      keep: { id: "k", firstName: "A", lastName: "B", email: "a@example.org", phone: null, tags: [], notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, active: true, createdAt: new Date("2026-01-01"), organizationId: "o", mergedIntoId: null },
+      absorb: { id: "x", firstName: "A", lastName: "B", email: "b@example.org", phone: null, tags: [], notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, active: true, createdAt: new Date("2026-01-01"), organizationId: "o", mergedIntoId: null },
+      shifts: [meta("a", eventIds[0], "10:00", "14:00"), meta("b", eventIds[1], "12:00", "13:00")],
+      keepRegistrations: [{ id: "r1", eventId: eventIds[0], shiftId: "a", status: "active", checkedInAt: null }],
+      absorbRegistrations: [{ id: "r2", eventId: eventIds[1], shiftId: "b", status: "active", checkedInAt: null }],
+      keepInvites: [], absorbInvites: [], keepShiftDeclines: [], absorbShiftDeclines: [], keepAnswers: [], absorbAnswers: [], absorbPushSubscriptions: [], absorbDeliveryOutcomes: [], sectorLeadersMatchingAbsorbed: [], keepAddressHash: null,
+      eventOverlapsAllowed,
+    })
+    // Same event, setting on: no overlap conflict.
+    expect(mergeConflicts(make(["e1", "e1"], { e1: true }), {}).filter((c) => c.kind === "overlap")).toEqual([])
+    // Two events, the setting of one: the pair still clashes.
+    expect(mergeConflicts(make(["e1", "e2"], { e1: true, e2: false }), {}).filter((c) => c.kind === "overlap")).toHaveLength(1)
+    // Two events, both allow it: each event's own setting, no clash.
+    expect(mergeConflicts(make(["e1", "e2"], { e1: true, e2: true }), {}).filter((c) => c.kind === "overlap")).toEqual([])
+  })
+
+  it("open-shifts finder offers an overlapping shift when the event allows it", () => {
+    const ref = (id: string, startTime: string, endTime: string, overlapAllowed?: boolean): EventShiftRef => ({ id, roleName: id, label: id, date: DAY2, startTime, endTime, overlapAllowed })
+    const buvette = ref("buvette", "10:00", "14:00"), accueil = ref("accueil", "12:00", "13:00")
+    const members = [{ id: "m", firstName: "M", lastName: "M", hasEmail: true, active: true, tags: [] }]
+    const base = { shifts: [{ ...accueil, placesLeft: 1 }], eventShifts: [buvette, accueil], members, registrations: [{ volunteerId: "m", shiftId: "buvette", status: "active" }], invites: [] }
+    const off = findCandidates(base)
+    expect(off.candidates[0].fits[0].status).toBe("overlap")
+    const on = findCandidates({ ...base, eventOverlapsAllowed: true })
+    expect(on.candidates[0].fits[0].status).toBe("offer")
   })
 })

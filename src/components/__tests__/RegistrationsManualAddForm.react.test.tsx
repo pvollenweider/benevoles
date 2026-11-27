@@ -13,9 +13,9 @@ import { NETWORK_ERROR } from "@/lib/use-submit"
 // Manual addition of a registration by the organizer, on its own (#402, #465, #466).
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrationCount: 1 }
 
-function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () => {}, registrations = [], shifts = [shift] }: { initial?: AddFormValues; onAdded?: (r: Registration[]) => void; shifts?: typeof shift[]; onCancel?: () => void; registrations?: Registration[] }) {
+function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () => {}, registrations = [], shifts = [shift], eventOverlapsAllowed = false }: { initial?: AddFormValues; onAdded?: (r: Registration[]) => void; shifts?: typeof shift[]; onCancel?: () => void; registrations?: Registration[]; eventOverlapsAllowed?: boolean }) {
   const [form, setForm] = useState(initial)
-  return <ManualAddForm eventId="evt-1" shifts={shifts} registrations={registrations} timeZone="Europe/Zurich" form={form} onFormChange={setForm} onAdded={onAdded} onCancel={onCancel} />
+  return <ManualAddForm eventId="evt-1" shifts={shifts} registrations={registrations} timeZone="Europe/Zurich" eventOverlapsAllowed={eventOverlapsAllowed} form={form} onFormChange={setForm} onAdded={onAdded} onCancel={onCancel} />
 }
 
 const combo = () => screen.getByRole("combobox", { name: "Créneau" })
@@ -106,6 +106,18 @@ describe("ManualAddForm", () => {
     expect(combo()).not.toHaveAttribute("aria-invalid")
     expect(combo()).not.toHaveAttribute("aria-describedby")
     expect(screen.queryByText("Sélectionnez un créneau.")).toBeNull()
+  })
+
+  it("drops the conflict warning when the event allows overlapping shifts (#1467)", () => {
+    const held = { ...shift, id: "s0", startTime: "11:00", endTime: "13:00" }
+    const registration = {
+      id: "r0", status: "active", source: "public_form", comment: null, createdAt: "2026-06-01T00:00:00.000Z", waitingPosition: null, isLeader: false,
+      volunteer: { id: "v1", firstName: "Aline", lastName: "Exemple", email: "aline@example.org", phone: null },
+      shift: { ...held, date: "2026-07-04" },
+    } satisfies Registration
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, email: "aline@example.org", shiftId: "s1" }} registrations={[registration]} shifts={[shift, held]} eventOverlapsAllowed />)
+    expect(combo().getAttribute("aria-describedby") ?? "").not.toContain("add-shift-conflict")
+    expect(screen.queryByText(/plage horaire/)).toBeNull()
   })
 
   it("describes the field with a conflict, without making it invalid", () => {

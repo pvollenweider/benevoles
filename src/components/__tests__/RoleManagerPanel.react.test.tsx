@@ -36,12 +36,12 @@ type Spies = {
  * Holds the shifts and the edited order like ShiftsManager does, and shows them for the assertions.
  * `frozenRoles`: the order ignores updates, so a renamed role's row is never rendered under its new name.
  */
-function Harness({ open = true, spies, frozenRoles = false, initialRoles = ["Bar", "Accueil"] }: { open?: boolean; spies: Spies; frozenRoles?: boolean; initialRoles?: string[] }) {
+function Harness({ open = true, spies, frozenRoles = false, initialRoles = ["Bar", "Accueil"], overlapsAllowed = false }: { open?: boolean; spies: Spies; frozenRoles?: boolean; initialRoles?: string[]; overlapsAllowed?: boolean }) {
   const [shifts, setShifts] = useState(initialShifts)
   const [roles, setRoles] = useState(initialRoles)
   return (
     <>
-      <RoleManagerPanel open={open} panelId="roles-panel" eventId="evt-1" shifts={shifts} setShifts={setShifts} roles={roles} setRoles={frozenRoles ? () => {} : setRoles} {...spies} />
+      <RoleManagerPanel open={open} panelId="roles-panel" eventId="evt-1" overlapsAllowed={overlapsAllowed} shifts={shifts} setShifts={setShifts} roles={roles} setRoles={frozenRoles ? () => {} : setRoles} {...spies} />
       <output data-testid="roles">{roles.join(",")}</output>
       <output data-testid="shift-roles">{shifts.map(s => s.roleName).join(",")}</output>
     </>
@@ -153,6 +153,15 @@ describe("RoleManagerPanel", () => {
     // Reopened, the box is ticked from the saved setting.
     fireEvent.click(access)
     expect(screen.getByRole("checkbox", { name: "Poste « Bar » attribué par l'organisation uniquement" })).toBeChecked()
+  })
+
+  it("replaces every per-poste « Cumul » control with one sentence and its link when the event allows overlaps (#1467)", () => {
+    render(<Harness spies={makeSpies()} overlapsAllowed />)
+    expect(screen.queryByRole("button", { name: /^Cumul/ })).toBeNull()
+    expect(screen.getByText(/Tous les créneaux de cet événement peuvent se chevaucher/)).toBeInTheDocument()
+    const link = screen.getByRole("link", { name: "Paramètres de l'événement : créneaux qui se chevauchent" })
+    expect(link).toHaveAttribute("href", "/admin/events/evt-1/edit#event-overlaps")
+    expect(screen.getAllByText(/Tous les créneaux de cet événement peuvent se chevaucher/)).toHaveLength(1)
   })
 
   // « Cumul » (#986): the same disclosure as « Limite » and « Accès ».

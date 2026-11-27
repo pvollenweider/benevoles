@@ -20,10 +20,11 @@ export type SignupConflict =
 export function overlapConflict(
   existing: { shift: OverlapShift & { label: string } }[],
   asked: (OverlapShift & { label: string })[],
+  eventOverlapsAllowed = false,
 ): SignupConflict | null {
   for (const reg of existing) {
     for (const shift of asked) {
-      if (shiftsClash(reg.shift, shift)) return { kind: "overlap", shift: shift.label, held: reg.shift.label }
+      if (shiftsClash(reg.shift, shift, eventOverlapsAllowed)) return { kind: "overlap", shift: shift.label, held: reg.shift.label }
     }
   }
   return null

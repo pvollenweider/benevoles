@@ -211,3 +211,20 @@ describe("words and canonical forms", () => {
     expect(selectionCanonical([{ id: "b", revision: 2 }, { id: "a", revision: 1 }])).toBe("a:1,b:2")
   })
 })
+
+// The event allows overlapping shifts (#1467): an organiser's draft batch is publishable.
+describe("judgeDraftBatch, an event that allows overlaps (#1467)", () => {
+  const nadia = person("v-nadia", "Nadia", "Rochat")
+  it("refuses an overlap by default and accepts the same batch when the event allows it", () => {
+    const a = shift("s1", "10:00", "14:00"), b = shift("s2", "13:00", "16:00")
+    const drafts = [draft("d1", a, nadia), draft("d2", b, nadia)]
+    expect(codes(input(drafts, [a, b], [nadia]))).toEqual(["overlap"])
+    expect(codes(input(drafts, [a, b], [nadia], { overlapsAllowed: true }))).toEqual([])
+  })
+  it("still refuses an overlap with a held mission when off, and accepts it when on", () => {
+    const a = shift("s1", "10:00", "14:00")
+    const held = person("v-nadia", "Nadia", "Rochat", { held: [{ id: "r1", status: "active", shift: shift("s9", "12:00", "13:00") }] })
+    expect(codes(input([draft("d1", a, held)], [a], [held]))).toEqual(["overlap"])
+    expect(codes(input([draft("d1", a, held)], [a], [held], { overlapsAllowed: true }))).toEqual([])
+  })
+})

@@ -3,7 +3,7 @@
 
 import ShiftInfoList from "@/components/ShiftInfoList"
 import { REQUEST_SHORT, WAITLIST_SHORT } from "@/lib/waitlist-copy"
-import { gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "@/lib/signup-recap"
+import { allowedOverlapNotices, allowedOverlapText, gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapHeldShift, type RecapShiftInput } from "@/lib/signup-recap"
 import type { ShiftInfo } from "@/lib/shift-info"
 import type { WorkloadShift } from "@/lib/workload"
 import { blocksWorkload, recapWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
@@ -15,8 +15,8 @@ type Props = {
   commentGiven: boolean
   /** Labels of the custom questions answered (#483), listed in « Transmis à l'organisation ». */
   answeredQuestions?: string[]
-  /** Shifts this volunteer already holds on the event, counted in the workload warnings (#465). */
-  heldShifts?: WorkloadShift[]
+  /** Shifts this volunteer already holds on the event, counted in the workload warnings (#465) and the overlap warning (#1467). */
+  heldShifts?: (WorkloadShift & Partial<RecapHeldShift>)[]
   timeZone: string
   /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
   workload?: WorkloadMode
@@ -24,6 +24,8 @@ type Props = {
   birthDate?: string
   /** Compact for the sidebar, roomier inside the form card. */
   variant: "card" | "sidebar"
+  /** The event allows overlapping shifts (#1467): warn, never refuse. */
+  eventOverlapsAllowed?: boolean
 }
 
 /**
@@ -31,15 +33,20 @@ type Props = {
  * what sits between them, waitlist and age flags, and the personal data that will be sent.
  * Pure render; the same component sits in the form card (phone) and the sidebar (desktop).
  */
-export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, answeredQuestions = [], heldShifts = [], timeZone, workload: mode = { kind: "warnings", timeZone }, birthDate, variant }: Props) {
+export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, answeredQuestions = [], heldShifts = [], timeZone, workload: mode = { kind: "warnings", timeZone }, birthDate, variant, eventOverlapsAllowed = false }: Props) {
   const rows = recapShifts(shifts)
   // Waitlist entries may never become shifts: only firm places count (#465).
   const workload = recapWorkloadNotices(shifts.filter((sh) => !rows.find((r) => r.id === sh.id)?.waitlist), heldShifts, mode, birthDate ? { birthDate } : null)
   const blocks = blocksWorkload(mode)
   const byId = new Map(shifts.map((s) => [s.id, s]))
   const needsBirthDate = rows.some((r) => r.minAge !== null) || workloadNeedsBirthDate(mode)
-  const overlap = hasOverlap(rows)
+  const overlap = hasOverlap(rows, eventOverlapsAllowed)
+  // The event allows overlaps (#1467): one amber block at the top, never the red refusal. The
+  // per-pair line still says it, in the same plain words. The block's id is given to the card only
+  // (the recap is rendered twice): the confirm button references that single element.
+  const allowedNotices = eventOverlapsAllowed ? allowedOverlapNotices(rows, heldShifts) : []
   const dense = variant === "sidebar"
+  const allowedBlockId = !dense && allowedNotices.length > 0 ? "signup-recap-allowed-overlaps" : undefined
   const text = dense ? "text-xs" : "text-sm"
 
   return (
@@ -54,6 +61,19 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
         <p className={`${dense ? "mx-4 mb-2" : ""} rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-800`}>
           <strong>Attention :</strong> deux de tes créneaux se chevauchent, retires-en un avant de confirmer.
         </p>
+      )}
+      {allowedNotices.length > 0 && (
+        <div id={allowedBlockId} className={`${dense ? "mx-4 mb-2" : ""} rounded-lg bg-amber-50 border border-amber-300 px-3 py-2 text-xs text-amber-950`}>
+          <p>
+            <strong className="font-medium text-amber-900">À vérifier :</strong>{" "}
+            {allowedOverlapText(allowedNotices[0])}
+          </p>
+          {allowedNotices.length > 1 && (
+            <ul role="list" className="mt-1 space-y-0.5">
+              {allowedNotices.slice(1).map((n, i) => <li key={i}>{allowedOverlapText(n)}</li>)}
+            </ul>
+          )}
+        </div>
       )}
       {workload.length > 0 && (blocks ? (
         // A protected event (#1171): the server refuses this sign-up, said before confirming.
@@ -76,7 +96,7 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
       {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the markers. */}
       <ol role="list" className={dense ? "divide-y divide-gray-100" : "space-y-2"}>
         {rows.map((r, i) => {
-          const gap = gapAfter(rows, i)
+          const gap = gapAfter(rows, i, eventOverlapsAllowed)
           const label = gap ? gapLabel(gap) : null
           const source = byId.get(r.id)
           return (

@@ -95,6 +95,7 @@ export default async function DayOfPage({ params, searchParams }: { params: Prom
           registrationOpensAt: event.registrationOpensAt?.toISOString() ?? null,
           registrationClosesAt: event.registrationClosesAt?.toISOString() ?? null,
         }}
+        overlapsAllowed={event.overlapsAllowed}
         activeSectorIds={sector.options.filter((o) => o.value && o.value !== "autres").map((o) => o.value)}
       />
 

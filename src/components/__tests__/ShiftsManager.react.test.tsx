@@ -61,6 +61,14 @@ describe("ShiftsManager view toggle", () => {
     const group = screen.getByRole("group", { name: "Affichage des créneaux" })
     expect(group).not.toHaveClass("overflow-hidden")
   })
+
+  it("hides the per-shift « cumulable » mention when the event allows overlaps (#1467)", () => {
+    const { rerender } = render(<ShiftsManager eventId="evt-1" eventStartDate="2026-07-04" eventEndDate="2026-07-04" initialShifts={[{ ...shift, overlapAllowed: true }]} />)
+    fireEvent.click(screen.getByRole("button", { name: "Liste" }))
+    expect(screen.getByText("Cumulable avec un autre créneau")).toBeInTheDocument()
+    rerender(<ShiftsManager eventId="evt-1" eventStartDate="2026-07-04" eventEndDate="2026-07-04" initialShifts={[{ ...shift, overlapAllowed: true }]} overlapsAllowed />)
+    expect(screen.queryByText("Cumulable avec un autre créneau")).toBeNull()
+  })
 })
 
 // Shift editor (#554): focus moves into it on open, comes back to its opener on close, and the

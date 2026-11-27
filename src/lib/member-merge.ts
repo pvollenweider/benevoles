@@ -131,6 +131,8 @@ export interface MemberMergeInput {
   sectorLeadersMatchingAbsorbed: SectorLeaderLite[]
   /** HMAC-SHA256 of the kept record's normalized email, if any — for the DeliveryOutcome rule. */
   keepAddressHash: string | null
+  /** Per event, whether its shifts may overlap (#1467). Absent = off, as before the setting. */
+  eventOverlapsAllowed?: Record<string, boolean>
 }
 
 export const MERGEABLE_FIELDS = ["firstName", "lastName", "email", "phone", "birthDate", "availabilityNote"] as const
@@ -275,7 +277,9 @@ export function mergeConflicts(input: MemberMergeInput, choices: MemberMergeChoi
       if (b.shiftId === a.shiftId) continue
       const shiftB = shifts.get(b.shiftId)
       if (!shiftB) continue
-      if (shiftsClash(shiftA, shiftB)) {
+      // Each shift needs its own event's setting: one event never exempts a pair that spans two.
+      const allowed = !!input.eventOverlapsAllowed?.[shiftA.eventId] && !!input.eventOverlapsAllowed?.[shiftB.eventId]
+      if (shiftsClash(shiftA, shiftB, allowed)) {
         conflicts.push({ kind: "overlap", shiftIds: [shiftA.id, shiftB.id], labels: [shiftA.label, shiftB.label] })
       }
     }

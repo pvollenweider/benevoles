@@ -101,6 +101,8 @@ type Props = {
    * Absent for a front-desk account, which never renders « Ajouter un besoin » (#1142).
    */
   registrationWindow?: RegistrationWindow
+  /** The event allows overlapping shifts (#1467): the finder offers them. */
+  overlapsAllowed?: boolean
   /** The event's active sector ids, to tell whether the page's filter hides the new shift. */
   activeSectorIds?: string[]
   /**
@@ -144,7 +146,7 @@ const telClass = `inline-flex items-center min-h-11 px-3 rounded-xl border borde
  * page. Search, focus, an action in flight and the marks made here survive each read (merge and
  * ordering rules in day-of-sync.ts). Polls are silent unless something changed elsewhere.
  */
-export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt, sector = "", roles = [], timeZone, registrationWindow, activeSectorIds = [], frontDesk = false, onAccessEnded }: Props) {
+export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt, sector = "", roles = [], timeZone, registrationWindow, overlapsAllowed = false, activeSectorIds = [], frontDesk = false, onAccessEnded }: Props) {
   const [snap, setSnap] = useState<Snapshot>({ board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt })
   const { board, today, refreshedAt } = snap
   const [query, setQuery] = useState("")
@@ -748,6 +750,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
           today={today}
           timeZone={timeZone}
           event={registrationWindow}
+          eventOverlapsAllowed={overlapsAllowed}
           roles={roles}
           onCreated={onNeedCreated}
           announce={say}

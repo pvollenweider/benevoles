@@ -169,13 +169,15 @@ export function personSwapCheck(input: {
   /** The poste's answer condition (#962), and the person's stored answers by question id. */
   answerCondition?: ReservedAnswerCondition | null
   answers?: Map<string, string[]>
+  /** The event allows overlapping shifts (#1467): an overlap never refuses a swap. */
+  eventOverlapsAllowed?: boolean
 }): SwapCheck {
   const { person, giving, receiving, reserved, limits } = input
   if (!person.active || person.erasedAt || person.mergedIntoId) return refuse("volunteer_gone")
   const kept = input.held.filter((h) => h.id !== giving.id)
   // The partial unique index allows one live registration per person and shift.
   if (kept.some((h) => h.shift.id === receiving.id)) return refuse("already_on_shift")
-  if (kept.some((h) => COMMITTED.has(h.status) && shiftsClash(h.shift, receiving))) return refuse("overlap")
+  if (kept.some((h) => COMMITTED.has(h.status) && shiftsClash(h.shift, receiving, input.eventOverlapsAllowed))) return refuse("overlap")
   if (roleLimitBreaches([receiving], kept.map((h) => h.shift), limits).length > 0) return refuse("role_limit")
   if (receiving.minAge != null) {
     // Fails closed, as the sign-up: no known birth date never reaches a minimum age.

@@ -223,3 +223,15 @@ describe("swap states and words", () => {
     }
   })
 })
+
+// The event allows overlapping shifts (#1467): an overlap is no longer a reason to refuse a swap.
+describe("personSwapCheck, an event that allows overlaps (#1467)", () => {
+  const person = { active: true, tags: [] as string[], birthDate: new Date("1990-01-01") }
+  const receiving = shift({ id: "sb", startTime: "14:00", endTime: "16:00" })
+  const other: HeldRegistration = { id: "r2", status: "active", shift: shift({ id: "sx", startTime: "15:00", endTime: "17:00", roleName: "Accueil" }) }
+  const input = { person, giving: { id: "rp" }, receiving, reserved: new Map<string, string[]>(), limits: new Map<string, number>(), held: [{ id: "rp", status: "active", shift: shift({ id: "sa" }) }, other] }
+  it("refuses the overlap when the event does not allow it, accepts it when it does", () => {
+    expect(personSwapCheck(input)).toEqual({ ok: false, code: "overlap" })
+    expect(personSwapCheck({ ...input, eventOverlapsAllowed: true })).toEqual({ ok: true })
+  })
+})

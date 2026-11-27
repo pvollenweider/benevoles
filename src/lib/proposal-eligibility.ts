@@ -130,7 +130,7 @@ export function startModel(input: ProposalInput): Model {
     const key = a < b ? `${a}|${b}` : `${b}|${a}`
     let v = clashMemo.get(key)
     if (v === undefined) {
-      v = shiftsClash(shiftById.get(a)!, shiftById.get(b)!)
+      v = shiftsClash(shiftById.get(a)!, shiftById.get(b)!, input.overlapsAllowed)
       clashMemo.set(key, v)
     }
     return v

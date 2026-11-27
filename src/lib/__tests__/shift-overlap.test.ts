@@ -89,3 +89,34 @@ describe("roleOverlapAllowed", () => {
     expect(roleOverlapAllowed([], "Secours")).toBe(false)
   })
 })
+
+// The event setting (#1467): when on, two shifts of that event never clash, whatever their postes.
+// Per-poste values stay stored and apply again once it is off.
+describe("the event allows overlapping shifts (#1467)", () => {
+  const coffee = shift("2026-07-04", "10:00", "14:00")
+  const afternoon = shift("2026-07-04", "12:00", "16:00")
+  const cumulable = shift("2026-07-04", "09:00", "17:00", true)
+
+  it("lets two ordinary shifts overlap when the event allows it", () => {
+    expect(shiftsClash(coffee, afternoon, true)).toBe(false)
+    expect(allowedOverlap(coffee, afternoon, true)).toBe(true)
+  })
+
+  it("is off by default, and a per-poste value still applies on its own", () => {
+    expect(shiftsClash(coffee, afternoon)).toBe(true)
+    expect(shiftsClash(coffee, cumulable)).toBe(false)
+    expect(shiftsClash(coffee, cumulable, true)).toBe(false)
+  })
+
+  it("reads a night shift into the next day, and still lets it pass when the event allows it", () => {
+    const night = shift("2026-07-04", "22:00", "02:00")
+    const early = shift("2026-07-05", "01:00", "03:00")
+    expect(shiftsClash(night, early)).toBe(true)
+    expect(shiftsClash(night, early, true)).toBe(false)
+  })
+
+  it("does not count touching ends as an overlap, even with the event setting on", () => {
+    expect(shiftsClash(coffee, shift("2026-07-04", "14:00", "18:00"), true)).toBe(false)
+    expect(allowedOverlap(coffee, shift("2026-07-04", "14:00", "18:00"), true)).toBe(false)
+  })
+})

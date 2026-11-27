@@ -13,7 +13,7 @@ import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import { SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX } from "@/lib/signup-limits"
 import SignupRecap from "@/components/public/SignupRecap"
 import { blocksWorkload, recapWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
-import { isWaitlistShift } from "@/lib/signup-recap"
+import { allowedOverlapNotices, isWaitlistShift, recapShifts } from "@/lib/signup-recap"
 import ShiftRow from "@/components/public/ShiftRow"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -25,6 +25,7 @@ import {
   hasAvailableShift as anyShiftAvailable,
   isShiftSelectable,
   noAvailableShiftText,
+  overlappingTakenLabel,
   prefillContact,
   proposedShiftState,
   proposedShiftText,
@@ -149,6 +150,8 @@ export type EventData = {
   accentColorKey: string | null
   /** Default view of the shifts (part A): "auto", "frise" or "liste"; absent = "auto". */
   publicShiftView?: ShiftViewSetting
+  /** The event allows overlapping shifts (#1467): warn, never refuse. */
+  overlapsAllowed?: boolean
   showSchedule: Show[]
   volunteerCharter: string | null
   /** With volunteerCharter, picks the exact text the sign-up route hashes (#569). */
@@ -466,9 +469,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const rosterBox = signupRosterBox(!!event?.shiftRosterEnabled, ageGatedSelectedShifts.length > 0 ? form.birthDate : "", event?.startDate ?? "")
 
   const conflictingShiftIds = useMemo(
-    () => (event ? computeConflictingShiftIds(event.shifts, selectedShifts, myShiftIds) : new Set<string>()),
+    () => (event ? computeConflictingShiftIds(event.shifts, selectedShifts, myShiftIds, event.overlapsAllowed) : new Set<string>()),
     [event, selectedShifts, myShiftIds]
   )
+  // The recap's amber block (#1467) is shown for a picked or held overlap the event allows: the
+  // confirm button references that one element, never both recaps.
+  const allowedOverlapShown = useMemo(() => {
+    if (!event?.overlapsAllowed) return false
+    const rows = recapShifts((event.shifts ?? []).filter((s) => selectedShifts.has(s.id)))
+    return allowedOverlapNotices(rows, heldShifts).length > 0
+  }, [event, selectedShifts, heldShifts])
 
   useEffect(() => {
     if (serverRendered) return
@@ -646,6 +656,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     }
     setLimitNotice("")
     setLimitNoticeDay(null)
+    // The event allows overlaps (#1467): the planning no longer marks a conflict, so the existing
+    // status region says the overlap and that it is allowed, once, at pick time.
+    if (target && event?.overlapsAllowed && !selectedShifts.has(id)) {
+      const taken = event.shifts.filter((s) => s.id !== id && (selectedShifts.has(s.id) || myShiftIds.has(s.id)))
+      const label = overlappingTakenLabel(target, taken)
+      if (label) announce(setLimitNotice, `Ce créneau est en même temps que « ${label} ». C'est autorisé.`)
+    }
     setSelectedShifts((prev) => {
       const next = new Set(prev)
       if (next.has(id)) { next.delete(id); return next }
@@ -1455,6 +1472,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   workload={event.workload}
                   birthDate={form.birthDate}
                   variant="sidebar"
+                  eventOverlapsAllowed={event.overlapsAllowed}
                 />
                 <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
                   <p className="text-[11px] text-gray-500 font-medium">{event.organizationName}</p>
@@ -1483,6 +1501,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   workload={event.workload}
                   birthDate={form.birthDate}
                   variant="card"
+                  eventOverlapsAllowed={event.overlapsAllowed}
                 />
               </div>
 
@@ -1710,7 +1729,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   ref={submitButtonRef}
                   type="submit"
                   aria-disabled={submitting || undefined}
-                  aria-describedby={workloadBlocked ? "signup-workload-blocked" : undefined}
+                  aria-describedby={workloadBlocked ? "signup-workload-blocked" : allowedOverlapShown ? "signup-recap-allowed-overlaps" : undefined}
                   className={`w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   {submitting ? "Envoi en cours…" : preview ? "Voir la confirmation (aperçu)" : "Confirmer mon inscription"}

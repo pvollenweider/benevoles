@@ -45,8 +45,9 @@ export function certificates(model: Model): Certificate[] {
     else if (eligible < cap) out.push({ kind: "shift", level: "capacity", shiftId: s.id, need: cap, eligible })
   }
   // Groups of shifts sharing one instant: at each start, the open shifts running then, none cumulable.
+  // An event that allows overlaps (#1467) can put the same person on all of them: no such proof.
   const seen = new Set<string>()
-  for (const s of model.open) {
+  for (const s of model.input.overlapsAllowed ? [] : model.open) {
     const at = model.interval.get(s.id)!.start
     const group = model.open.filter((o) => {
       const i = model.interval.get(o.id)!
@@ -121,7 +122,7 @@ export function validateAssignments(input: ProposalInput, assignments: readonly 
     const p = people.get(volunteerId)
     if (!p) continue
     const all = [...new Set([...p.fixedShiftIds, ...ids])].map((id) => shifts.get(id)).filter((s) => !!s)
-    for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) if (shiftsClash(all[i]!, all[j]!)) v.push({ code: "overlap", volunteerId, shiftId: all[j]!.id })
+    for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) if (shiftsClash(all[i]!, all[j]!, input.overlapsAllowed)) v.push({ code: "overlap", volunteerId, shiftId: all[j]!.id })
     const roles = new Map<string, number>()
     for (const id of [...p.liveShiftIds, ...ids]) {
       const r = shifts.get(id)?.roleName

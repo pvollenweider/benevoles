@@ -3,7 +3,7 @@
 
 import { fold } from "./text-fold"
 
-import { shiftsClash } from "./shift-overlap"
+import { allowedOverlap, shiftsClash } from "./shift-overlap"
 import { clockTime } from "./gantt-utils"
 import { matchesGroupFilter, type RegistrationGroupFilter } from "./group-links"
 
@@ -117,18 +117,47 @@ export function memberResultsSentence(found: number): string {
 }
 
 /** Why the selected shift can't be added for that volunteer, or null. */
-export function addConflictMessage(selected: ShiftRef | null, volunteerShifts: ShiftRef[] | undefined): string | null {
+export function addConflictMessage(selected: ShiftRef | null, volunteerShifts: ShiftRef[] | undefined, eventOverlapsAllowed = false): string | null {
   if (!selected || !volunteerShifts) return null
   if (volunteerShifts.some((e) => e.id === selected.id)) return "Ce bénévole est déjà inscrit à ce créneau."
-  if (volunteerShifts.some((e) => shiftsClash(selected, e))) return "Ce bénévole est déjà inscrit à un autre créneau pour cette plage horaire."
+  if (volunteerShifts.some((e) => shiftsClash(selected, e, eventOverlapsAllowed))) return "Ce bénévole est déjà inscrit à un autre créneau pour cette plage horaire."
   return null
 }
 
-/** Shifts (not already held) that clash with one of `existing` (#986: not with a cumulable role). */
-export function overlappingShiftIds(shifts: ShiftRef[], existing: ShiftRef[] | undefined): Set<string> {
+/**
+ * Shifts (not already held) that clash with one of `existing` (#986: not with a cumulable role).
+ * The admin picker keeps this informational « conflit » mention, so callers may leave the event's
+ * setting (#1467) out on purpose; the warning that blocks a choice is `addConflictMessage`'s.
+ */
+export function overlappingShiftIds(shifts: ShiftRef[], existing: ShiftRef[] | undefined, eventOverlapsAllowed = false): Set<string> {
   if (!existing) return new Set()
   const held = new Set(existing.map((s) => s.id))
-  return new Set(shifts.filter((s) => !held.has(s.id) && existing.some((e) => shiftsClash(s, e))).map((s) => s.id))
+  return new Set(shifts.filter((s) => !held.has(s.id) && existing.some((e) => shiftsClash(s, e, eventOverlapsAllowed))).map((s) => s.id))
+}
+
+/**
+ * The registrations whose volunteer holds an overlap the rule lets through (#986, #1467), mapped
+ * to the other shift: a cumulable poste or an event that allows overlaps. One mark per row; the
+ * same wording for both, because the organiser has to check the planning either way.
+ */
+export function allowedOverlapMarks(
+  registrations: { id: string; status?: string; volunteer: { id: string }; shift: ShiftRef }[],
+  eventOverlapsAllowed = false,
+): Map<string, ShiftRef> {
+  const out = new Map<string, ShiftRef>()
+  const committed = registrations.filter((r) => r.status === "active" || r.status === "requested")
+  const byVolunteer = new Map<string, typeof committed>()
+  for (const r of committed) byVolunteer.set(r.volunteer.id, [...(byVolunteer.get(r.volunteer.id) ?? []), r])
+  for (const rows of byVolunteer.values()) {
+    for (let i = 0; i < rows.length; i++) {
+      for (let j = i + 1; j < rows.length; j++) {
+        if (!allowedOverlap(rows[i].shift, rows[j].shift, eventOverlapsAllowed)) continue
+        if (!out.has(rows[i].id)) out.set(rows[i].id, rows[j].shift)
+        if (!out.has(rows[j].id)) out.set(rows[j].id, rows[i].shift)
+      }
+    }
+  }
+  return out
 }
 
 /** Roles a volunteer is registered on, to offer when making them sector leader. */
@@ -178,9 +207,9 @@ export function manualAddManyAnnouncement(person: string, shifts: Pick<ShiftRef,
 }
 
 /** A shift chosen in the add form that overlaps another one chosen in the same form (#918). */
-export function chosenOverlapMessage(selected: ShiftRef | null, otherChosen: ShiftRef[]): string | null {
+export function chosenOverlapMessage(selected: ShiftRef | null, otherChosen: ShiftRef[], eventOverlapsAllowed = false): string | null {
   if (!selected) return null
-  return otherChosen.some((o) => o.id !== selected.id && shiftsClash(selected, o))
+  return otherChosen.some((o) => o.id !== selected.id && shiftsClash(selected, o, eventOverlapsAllowed))
     ? "Ce créneau chevauche un autre créneau choisi dans ce formulaire."
     : null
 }

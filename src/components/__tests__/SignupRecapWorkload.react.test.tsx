@@ -54,3 +54,36 @@ describe("SignupRecap — workload protection", () => {
     expect(screen.getByText(/est incomplète/)).toBeInTheDocument()
   })
 })
+
+// The event allows overlapping shifts (#1467): one amber block at the top, the plain per-pair line,
+// and never the red « retires-en un » banner.
+describe("SignupRecap — overlapping shifts allowed (#1467)", () => {
+  afterEach(cleanup)
+
+  it("warns in one amber block and keeps the plain per-pair line", () => {
+    const { container } = render(<SignupRecap {...props} eventOverlapsAllowed shifts={[shift("a", "10:00", "14:00"), { ...shift("b", "12:00", "16:00"), roleName: "Accueil", label: "Accueil" }]} />)
+    const block = document.getElementById("signup-recap-allowed-overlaps")!
+    expect(block).toHaveClass("bg-amber-50")
+    expect(block).toHaveTextContent("À vérifier : Ces deux créneaux ont lieu en même temps pendant 2 h. Tu peux quand même t'inscrire.")
+    expect(container).toHaveTextContent("Ces deux créneaux se chevauchent de 2 h. C'est autorisé pour cet événement")
+    expect(container).not.toHaveTextContent("retires-en un")
+  })
+
+  it("names a shift already held, even when it is the only overlap", () => {
+    render(<SignupRecap {...props} eventOverlapsAllowed shifts={[shift("a", "10:00", "12:00")]}
+      heldShifts={[{ id: "h", roleName: "Accueil", label: "Accueil", date: "2026-07-04", startTime: "11:00", endTime: "13:00" }]} />)
+    expect(document.getElementById("signup-recap-allowed-overlaps")).toHaveTextContent("Ce créneau a lieu en même temps que ton créneau « Accueil » pendant 1 h.")
+  })
+
+  it("gives the block an id to the card only, so the confirm button can reference one element", () => {
+    render(<SignupRecap {...props} variant="sidebar" eventOverlapsAllowed shifts={[shift("a", "10:00", "14:00"), shift("b", "12:00", "16:00")]} />)
+    expect(screen.getByText(/À vérifier :/)).toBeInTheDocument()
+    expect(document.getElementById("signup-recap-allowed-overlaps")).toBeNull()
+  })
+
+  it("shows no block when the event does not allow overlaps", () => {
+    render(<SignupRecap {...props} shifts={[shift("a", "10:00", "14:00"), shift("b", "12:00", "16:00")]} />)
+    expect(screen.getByText(/retires-en un/)).toBeInTheDocument()
+    expect(screen.queryByText(/À vérifier :/)).toBeNull()
+  })
+})
