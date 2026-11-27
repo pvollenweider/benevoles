@@ -1559,3 +1559,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **VOLUNTEER_CHOOSE_SHIFTS — READY, publiée, révision 4.** Le parcours montre le sélecteur et la ligne de détails actuels. [Revue](evidence/batch44/volunteer-choose-shifts/review.md).
 
 **VOLUNTEER_FORM_RECAP — NOT READY, non publiée.** La première prise signale un changement de voix ; la seconde corrige la voix mais le retrait annoncé dans la scène de charge n'est pas montré assez longtemps. [Suivi et preuves](evidence/batch44/STATUS.md).
+
+**VOLUNTEER_CALENDAR — READY, publiée, révision 4.** La nouvelle narration présente l'abonnement de l'organisation et le fichier ponctuel ; le flux et son horaire modifié sont vérifiés. [Revue](evidence/batch44/volunteer-calendar/review.md).

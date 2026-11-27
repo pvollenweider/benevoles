@@ -2,7 +2,7 @@
   "id": "VOLUNTEER_CALENDAR",
   "slug": "volunteer-calendar",
   "title": "Ajouter ses créneaux à son calendrier",
-  "description": "Télécharger son planning confirmé, l'importer dans son agenda et comprendre les mises à jour.",
+  "description": "Abonner son agenda aux créneaux confirmés de l'organisation ou télécharger un fichier à importer une fois.",
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
@@ -15,64 +15,64 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Tes créneaux confirmés peuvent rejoindre l'agenda que tu utilises déjà. Depuis ton lien personnel, tu télécharges un fichier calendrier, puis tu l'importes dans ton agenda. Ici, Camille a trois créneaux confirmés, dont un de nuit, et une inscription en attente. Nous allons voir ce qui est ajouté et comment reprendre un horaire après une modification.",
-      "fallbackDurationMs": 30000
+      "transcript": "Tes créneaux confirmés peuvent rejoindre l'agenda que tu utilises déjà. Le plus simple est de t'y abonner : ton agenda se met ensuite à jour tout seul.",
+      "fallbackDurationMs": 9815
     },
     {
-      "id": "one",
-      "transcript": "Sous le créneau Accueil, Ajouter à mon calendrier télécharge uniquement ce créneau. Le fichier porte l'extension point i c s : c'est un format que les applications de calendrier peuvent lire. Ce téléchargement ne crée pas une nouvelle inscription dans Benevol. Il prépare simplement un événement à ajouter à ton propre agenda.",
-      "fallbackDurationMs": 30000
+      "id": "page",
+      "transcript": "Ouvre ta page Mes inscriptions depuis ton lien personnel. La carte Mon calendrier réunit tous tes créneaux confirmés auprès de l'organisation, tous événements confondus.",
+      "fallbackDurationMs": 10985
     },
     {
-      "id": "all",
-      "transcript": "Avec plusieurs créneaux confirmés, le lien Télécharger tout mon planning, dans la carte Mon calendrier, permet de récupérer un seul fichier pour l'ensemble. Le planning de Camille contient l'Accueil, le Rangement de nuit et la Buvette du dimanche. L'inscription en liste d'attente n'y figure pas : elle n'est pas encore confirmée. Les offres et les demandes en cours de validation sont également exclues.",
-      "fallbackDurationMs": 35000
+      "id": "device",
+      "transcript": "Sur un iPhone, un iPad, un Mac, ou avec Outlook ou Thunderbird, choisis S'abonner avec l'agenda de cet appareil. Ton agenda s'ouvre et te demande de confirmer l'abonnement. Cette étape se passe dans ton agenda : elle n'est pas filmée ici.",
+      "fallbackDurationMs": 15470
     },
     {
-      "id": "import",
-      "transcript": "Le fichier est prêt à être ouvert dans ton application de calendrier. L'import n'est pas réalisé dans cette démonstration : il dépend de ton application. Selon celle-ci, tu verras une fenêtre d'import ou une proposition d'ajout. Sur Google Agenda depuis un ordinateur, l'import se trouve dans les paramètres. Vérifie le calendrier choisi et les horaires avant de confirmer.",
-      "fallbackDurationMs": 30000
+      "id": "online",
+      "transcript": "Avec Google Agenda, et donc sur un téléphone Android, ouvre Google Agenda ou autre agenda en ligne, puis copie l'adresse de l'abonnement. Sur un ordinateur, dans Google Agenda, choisis Autres agendas, puis À partir de l'URL, et colle l'adresse.",
+      "fallbackDurationMs": 15860
     },
     {
-      "id": "details",
-      "transcript": "Le fichier contient le nom de la fête et le poste, ainsi que les informations pratiques que nous voyons ici dans Benevol : le lieu, les consignes et le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Garde ce fichier pour toi : il contient ton lien personnel, ce n'est pas un planning collectif à publier.",
-      "fallbackDurationMs": 30000
-    },
-    {
-      "id": "night",
-      "transcript": "Le Rangement commence samedi à vingt-deux heures et se termine dimanche à deux heures. L'agenda doit donc montrer la fin le lendemain, pas une mission qui se termine avant de commencer. Les horaires sont calculés avec le fuseau de l'organisation. Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil : vérifie ce paramètre.",
-      "fallbackDurationMs": 30000
+      "id": "privacy",
+      "transcript": "L'abonnement contient seulement tes créneaux confirmés : pas la liste d'attente, ni les demandes à valider. Son adresse permet de voir tes créneaux, pas de les modifier. Garde-la quand même pour toi.",
+      "fallbackDurationMs": 12935
     },
     {
       "id": "change",
-      "transcript": "Ce fichier n'est pas un abonnement au planning. L'organisateur décale maintenant le début du Rangement à vingt-trois heures. L'ancien fichier conserve vingt-deux heures : il ne se met pas à jour tout seul. Si ton créneau change, l'organisation te prévient par email. Reviens sur ton lien personnel pour voir les informations actuelles et télécharger la nouvelle version.",
-      "fallbackDurationMs": 32000
+      "transcript": "Si l'organisation change un horaire, tu reçois un email, et ton agenda reprend le nouvel horaire sans rien refaire. Selon l'agenda, cela prend quelques heures, parfois un jour.",
+      "fallbackDurationMs": 11440
     },
     {
-      "id": "reimport",
-      "transcript": "Télécharge à nouveau le planning pour récupérer l'horaire actuel. Le fichier conserve le même identifiant pour chaque inscription. Lorsque tu l'importes dans ton agenda, le remplacement ou l'ajout dépend de ton application et de la méthode utilisée. Cette étape n'est pas filmée ici : vérifie le nouvel horaire et l'absence de doublon dans ton agenda avant de t'y fier.",
-      "fallbackDurationMs": 30000
+      "id": "file",
+      "transcript": "Tu préfères un fichier ? Télécharger tout mon planning te donne un fichier point i c s à importer une fois. Lui ne se met pas à jour : après un changement, télécharge-le de nouveau.",
+      "fallbackDurationMs": 11765
+    },
+    {
+      "id": "renew",
+      "transcript": "Si ton lien personnel est renouvelé, l'adresse de l'abonnement change aussi. Abonne-toi de nouveau depuis le nouveau lien, puis retire l'ancien abonnement de ton agenda.",
+      "fallbackDurationMs": 10985
     },
     {
       "id": "result",
-      "transcript": "Ton agenda aide à te rappeler les horaires, mais la page Mes inscriptions reste la référence. Elle affiche aussi l'attente, les offres et les demandes, qui n'ont pas leur place dans le fichier des créneaux confirmés. Après une modification, consulte cette page, récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
-      "fallbackDurationMs": 30000
+      "transcript": "En cas de doute, ta page Mes inscriptions et les emails de l'organisation font foi.",
+      "fallbackDurationMs": 5395
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, tu ajoutes tes créneaux confirmés à ton agenda et tu vois comment reprendre un horaire après une modification.",
+    "summary": "Abonne ton agenda à tous tes créneaux confirmés de l'organisation ou télécharge un fichier à importer une fois.",
     "steps": [
-      "Depuis ton lien personnel, clique sur « Ajouter à mon calendrier » sous un créneau, ou sur « Télécharger tout mon planning » dans la carte « Mon calendrier ».",
-      "Ouvre le fichier .ics téléchargé dans ton application de calendrier et choisis le calendrier de destination.",
-      "Vérifie les horaires présentés, notamment la fin le lendemain pour un créneau de nuit.",
-      "Si un créneau change, reviens sur ton lien personnel et télécharge la nouvelle version.",
-      "Importe-la, puis vérifie l'horaire et l'absence de doublon dans ton agenda."
+      "Ouvre ta page « Mes inscriptions » avec ton lien personnel et trouve « Mon calendrier ».",
+      "Sur un appareil compatible, choisis « S'abonner avec l'agenda de cet appareil » et confirme dans ton agenda.",
+      "Pour Google Agenda, copie l'adresse et ajoute-la depuis « Autres agendas », puis « À partir de l'URL » sur ordinateur.",
+      "Pour une copie ponctuelle, télécharge tout ton planning et importe le fichier .ics.",
+      "Si ton lien personnel est renouvelé, abonne-toi avec la nouvelle adresse et retire l'ancien abonnement."
     ],
     "remember": [
-      "Seuls les créneaux confirmés vont dans le fichier : pas l'attente, les offres ni les demandes.",
-      "Le fichier ne se met pas à jour tout seul : l'organisation te prévient par email en cas de changement.",
-      "Le fichier contient ton lien personnel : garde-le pour toi.",
-      "Ta page Mes inscriptions reste la référence."
+      "L'abonnement contient les créneaux confirmés de toute l'organisation et se met à jour avec un délai variable.",
+      "L'adresse permet de voir tes créneaux, sans les modifier : garde-la pour toi.",
+      "Le fichier téléchargé ne se met pas à jour ; télécharge-le à nouveau après un changement.",
+      "Ta page « Mes inscriptions » et les emails de l'organisation font foi."
     ]
   },
   "continuousPauseTags": false

@@ -761,14 +761,14 @@
         "mise-à-jour"
       ],
       "seedScenario": "personal-calendar",
-      "feature": "Export calendrier des créneaux",
+      "feature": "Abonnement au calendrier des créneaux",
       "level": "essentiel",
       "published": true,
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-16",
-      "revision": 3,
+      "updatedAt": "2026-11-27",
+      "revision": 4,
       "themes": [
         "parcours-benevole"
       ]

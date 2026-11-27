@@ -46,3 +46,9 @@ Contrôle du lot 22-8 : assertions du fichier ICS calculées avec le fuseau de l
 ## Révision du 2026-10-16 — lot 23-2
 
 Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.
+
+## Révision du 2026-11-27 — lot 44
+
+La démonstration utilise la page « Mes inscriptions » de l'organisation et la carte « Mon calendrier ». Elle présente l'abonnement qui se met à jour, l'adresse à copier pour Google Agenda et le fichier .ics ponctuel. Les créneaux confirmés de tous les événements sont inclus ; l'attente et les demandes à valider sont exclues. L'adresse de lecture reste privée et change avec le lien personnel.
+
+Le tournage vérifie le vrai flux avant et après une modification d'horaire, avec les mêmes identifiants, puis télécharge le fichier réel. L'adresse est masquée à l'image. Aucun agenda externe n'est ouvert ni montré comme configuré ; ses étapes sont expliquées seulement.
