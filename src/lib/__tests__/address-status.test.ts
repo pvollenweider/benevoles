@@ -26,12 +26,51 @@ describe("addressStatus", () => {
     expect(status).toEqual({ kind: "ok" })
   })
 
-  it("latest wins: a later acceptance on the same address clears an earlier rejection", () => {
+  it("an acceptance that has stayed 48 hours without a bounce clears an earlier rejection", () => {
     const status = addressStatus(HASH_CURRENT, [
       o({ outcome: "rejected_permanent", createdAt: new Date("2026-03-01T00:00:00Z") }),
       o({ outcome: "accepted_by_relay", createdAt: new Date("2026-03-10T00:00:00Z") }),
     ], now)
     expect(status).toEqual({ kind: "ok" })
+  })
+
+  // Regression (#1477): a mailbox that bounces after acceptance had its mark cleared by every new
+  // reminder our relay accepted, until the bounce was read, so the organisers' filter showed nobody.
+  it("keeps « to verify » when a new email was only just accepted by the relay", () => {
+    const since = new Date("2026-03-14T15:15:00Z")
+    const status = addressStatus(HASH_CURRENT, [
+      o({ outcome: "accepted_by_relay", createdAt: new Date("2026-03-14T12:00:00Z") }),
+      o({ outcome: "rejected_permanent", createdAt: since }),
+      o({ outcome: "accepted_by_relay", createdAt: new Date("2026-03-15T09:00:00Z") }),
+    ], now)
+    expect(status).toEqual({ kind: "to_verify", since })
+  })
+
+  it("the 48 hours run from the acceptance: one second short keeps the mark, the exact time clears it", () => {
+    const since = new Date("2026-03-10T00:00:00Z")
+    const accepted = new Date("2026-03-13T10:00:00Z")
+    const rows = [o({ outcome: "rejected_permanent", createdAt: since }), o({ outcome: "accepted_by_relay", createdAt: accepted })]
+    expect(addressStatus(HASH_CURRENT, rows, new Date("2026-03-15T09:59:59Z"))).toEqual({ kind: "to_verify", since })
+    expect(addressStatus(HASH_CURRENT, rows, new Date("2026-03-15T10:00:00Z"))).toEqual({ kind: "ok" })
+  })
+
+  it("a new rejection after an old acceptance restarts the mark from that rejection", () => {
+    const since = new Date("2026-03-14T00:00:00Z")
+    const status = addressStatus(HASH_CURRENT, [
+      o({ outcome: "rejected_permanent", createdAt: new Date("2026-03-01T00:00:00Z") }),
+      o({ outcome: "accepted_by_relay", createdAt: new Date("2026-03-05T00:00:00Z") }),
+      o({ outcome: "rejected_permanent", createdAt: since }),
+    ], now)
+    expect(status).toEqual({ kind: "to_verify", since })
+  })
+
+  it("a temporary failure after a rejection does not clear the mark", () => {
+    const since = new Date("2026-03-10T00:00:00Z")
+    const status = addressStatus(HASH_CURRENT, [
+      o({ outcome: "rejected_permanent", createdAt: since }),
+      o({ outcome: "failed_temporary", createdAt: new Date("2026-03-14T00:00:00Z") }),
+    ], now)
+    expect(status).toEqual({ kind: "to_verify", since })
   })
 
   it("latest wins the other way too: a later rejection re-flags an address that once succeeded", () => {
