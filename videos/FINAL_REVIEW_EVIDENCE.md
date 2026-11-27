@@ -1548,4 +1548,6 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 
 ## Lot 44 — en cours, 27 novembre 2026
 
-**VOLUNTEER_REGISTER — NOT READY.** La première prise clique sur la confirmation avant son annonce ; la seconde passe la validation et les contrôles audiovisuels automatisés, mais le visionnage intégral avec la narration reste à faire avant toute publication. [Suivi et preuves](evidence/batch44/STATUS.md).
+**VOLUNTEER_REGISTER — READY, publiée, révision 7.** La seconde prise passe la revue audiovisuelle, la transcription indépendante du MP4, la revue des images et la validation ; la narration est inchangée. [Suivi et preuves](evidence/batch44/STATUS.md).
+
+**VOLUNTEER_DISCOVER_EVENT — READY, publiée, révision 5.** La seconde prise montre la liste, ses couleurs et le conseil de rotation avant la frise. [Revue](evidence/batch44/volunteer-discover-event/review.md).
