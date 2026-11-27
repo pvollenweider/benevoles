@@ -6,7 +6,8 @@ Seule la dernière version publiée reçoit des correctifs de sécurité.
 
 | Version | Supportée |
 |---------|-----------|
-| 2.8.x   | ✅ |
+| 2.9.x   | ✅ |
+| 2.8.x   | ❌ |
 | 2.7.x   | ❌ |
 | 2.6.x   | ❌ |
 | 2.5.x   | ❌ |

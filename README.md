@@ -239,6 +239,8 @@ git pull && docker compose up -d --build   # mise à jour
 
 `POSTGRES_PASSWORD` est obligatoire et PostgreSQL n'est pas publié sur l'hôte. Fichier `.env`, variables transmises, tâches planifiées et contrôle de santé : [docs/deploiement.md](docs/deploiement.md#docker-compose). Installation existante : [Mettre à jour une installation Compose existante](docs/deploiement.md#mettre-à-jour-une-installation-compose-existante).
 
+**Depuis 2.8.x**, sur Kubernetes, l'application et les migrations ont chacune leur rôle PostgreSQL : créer les rôles et les secrets `APP_DB_PASSWORD` et `MIGRATE_DB_PASSWORD` avant la mise à jour, voir [Mise à jour depuis 2.8.x](docs/deploiement.md#mise-à-jour-depuis-28x). Rien à changer avec Docker Compose.
+
 **Depuis 2.7.x**, Docker Compose lance lui-même les tâches planifiées et demande `CRON_SECRET` dans `.env` : retirer d'abord du cron de l'hôte les appels à `/api/cron/*`, voir [Mise à jour depuis 2.7.x](docs/deploiement.md#mise-à-jour-depuis-27x).
 
 **Depuis 2.5.x**, Docker Compose demande `POSTGRES_PASSWORD` et `AUTH_SECRET` avant la mise à jour, et chaque organisateur se reconnecte une fois : voir [Mise à jour depuis 2.5.x](docs/deploiement.md#mise-à-jour-depuis-25x).
