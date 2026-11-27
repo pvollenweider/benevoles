@@ -1,18 +1,18 @@
 {
   "slug": "event-create-blank",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-11T16:22:31.391Z",
+  "recordedAt": "2026-11-27T20:44:18.364Z",
   "video": "capture.webm",
   "product": {
-    "commit": "c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da",
-    "sourceTree": "2423fbfb6764b6163a3c84843ec863e73f70beb7",
-    "productSourceSha256": "982fcc0bc34afe00d4ec867bd14adb2051de73f320d9e06b993c4e2cd07a9d87",
-    "buildId": "vU8UL5zPG_yurF8zdluCe",
-    "snapshot": "/tmp/benevoles-video-production.batch4",
-    "builtAt": "2026-10-11T16:01:24.202Z"
+    "commit": "f345e1224fbb137c17c0ec2c8274ba4570bd51a9",
+    "sourceTree": "5b46ee904987817667980526e99b82ecba67b936",
+    "productSourceSha256": "8c4d9071c0cf4571ee4f2e9318b64f9a7a87e085e9671e8b7c6d4ad075e18a3a",
+    "buildId": "b9pCkSi99S66RniP68oOt",
+    "snapshot": "/tmp/benevoles-video-production.lo504hWH",
+    "builtAt": "2026-11-27T20:38:31.558Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "formation-blank",
     "scenario": "EVENT_CREATE_BLANK",
@@ -26,912 +26,912 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 3129
+      "atMs": 3165
     },
     {
       "kind": "click",
-      "atMs": 7327
+      "atMs": 7274
     },
     {
       "kind": "click",
-      "atMs": 16944
+      "atMs": 16825
     },
     {
       "kind": "key",
-      "atMs": 17251
+      "atMs": 17137
     },
     {
       "kind": "key",
-      "atMs": 17448
+      "atMs": 17337
     },
     {
       "kind": "key",
-      "atMs": 17546
+      "atMs": 17434
     },
     {
       "kind": "key",
-      "atMs": 17646
+      "atMs": 17534
     },
     {
       "kind": "key",
-      "atMs": 17745
+      "atMs": 17634
     },
     {
       "kind": "key",
-      "atMs": 17844
+      "atMs": 17733
     },
     {
       "kind": "key",
-      "atMs": 17943
+      "atMs": 17830
     },
     {
       "kind": "key",
-      "atMs": 18042
+      "atMs": 17928
     },
     {
       "kind": "key",
-      "atMs": 18141
+      "atMs": 18026
     },
     {
       "kind": "key",
-      "atMs": 18238
+      "atMs": 18124
     },
     {
       "kind": "key",
-      "atMs": 18337
+      "atMs": 18222
     },
     {
       "kind": "key",
-      "atMs": 18436
+      "atMs": 18320
     },
     {
       "kind": "key",
-      "atMs": 18537
+      "atMs": 18418
     },
     {
       "kind": "key",
-      "atMs": 18640
+      "atMs": 18516
     },
     {
       "kind": "key",
-      "atMs": 18740
+      "atMs": 18614
     },
     {
       "kind": "key",
-      "atMs": 18842
+      "atMs": 18712
     },
     {
       "kind": "key",
-      "atMs": 18944
+      "atMs": 18810
     },
     {
       "kind": "key",
-      "atMs": 19041
+      "atMs": 18908
     },
     {
       "kind": "key",
-      "atMs": 19140
+      "atMs": 19007
     },
     {
       "kind": "key",
-      "atMs": 19238
+      "atMs": 19106
     },
     {
       "kind": "key",
-      "atMs": 19337
+      "atMs": 19204
     },
     {
       "kind": "key",
-      "atMs": 19435
+      "atMs": 19302
     },
     {
       "kind": "key",
-      "atMs": 19533
+      "atMs": 19400
     },
     {
       "kind": "key",
-      "atMs": 19636
+      "atMs": 19498
     },
     {
       "kind": "key",
-      "atMs": 19738
+      "atMs": 19596
     },
     {
       "kind": "key",
-      "atMs": 19842
+      "atMs": 19694
     },
     {
       "kind": "key",
-      "atMs": 19946
+      "atMs": 19796
     },
     {
       "kind": "key",
-      "atMs": 20045
-    },
-    {
-      "kind": "click",
-      "atMs": 20826
+      "atMs": 19894
     },
     {
       "kind": "click",
-      "atMs": 26543
+      "atMs": 20690
     },
     {
       "kind": "click",
-      "atMs": 28475
+      "atMs": 26818
     },
     {
       "kind": "click",
-      "atMs": 30358
+      "atMs": 28757
     },
     {
       "kind": "click",
-      "atMs": 35160
+      "atMs": 30639
     },
     {
       "kind": "click",
-      "atMs": 38092
-    },
-    {
-      "kind": "key",
-      "atMs": 38398
-    },
-    {
-      "kind": "key",
-      "atMs": 38497
-    },
-    {
-      "kind": "key",
-      "atMs": 38595
-    },
-    {
-      "kind": "key",
-      "atMs": 38694
-    },
-    {
-      "kind": "key",
-      "atMs": 38793
-    },
-    {
-      "kind": "key",
-      "atMs": 38889
-    },
-    {
-      "kind": "key",
-      "atMs": 38990
-    },
-    {
-      "kind": "key",
-      "atMs": 39092
-    },
-    {
-      "kind": "key",
-      "atMs": 39193
-    },
-    {
-      "kind": "key",
-      "atMs": 39295
-    },
-    {
-      "kind": "key",
-      "atMs": 39400
-    },
-    {
-      "kind": "key",
-      "atMs": 39504
-    },
-    {
-      "kind": "key",
-      "atMs": 39607
-    },
-    {
-      "kind": "key",
-      "atMs": 39709
-    },
-    {
-      "kind": "key",
-      "atMs": 39810
-    },
-    {
-      "kind": "key",
-      "atMs": 39912
-    },
-    {
-      "kind": "key",
-      "atMs": 40015
-    },
-    {
-      "kind": "key",
-      "atMs": 40116
-    },
-    {
-      "kind": "key",
-      "atMs": 40219
+      "atMs": 35206
     },
     {
       "kind": "click",
-      "atMs": 55707
+      "atMs": 37739
     },
     {
       "kind": "key",
-      "atMs": 56015
+      "atMs": 38047
     },
     {
       "kind": "key",
-      "atMs": 56113
+      "atMs": 38145
     },
     {
       "kind": "key",
-      "atMs": 56213
+      "atMs": 38289
     },
     {
       "kind": "key",
-      "atMs": 56311
+      "atMs": 38386
     },
     {
       "kind": "key",
-      "atMs": 56409
+      "atMs": 38484
     },
     {
       "kind": "key",
-      "atMs": 56509
+      "atMs": 38581
     },
     {
       "kind": "key",
-      "atMs": 56607
+      "atMs": 38678
     },
     {
       "kind": "key",
-      "atMs": 56705
+      "atMs": 38776
     },
     {
       "kind": "key",
-      "atMs": 56805
+      "atMs": 38874
     },
     {
       "kind": "key",
-      "atMs": 56904
+      "atMs": 38972
     },
     {
       "kind": "key",
-      "atMs": 57002
+      "atMs": 39069
     },
     {
       "kind": "key",
-      "atMs": 57104
+      "atMs": 39166
     },
     {
       "kind": "key",
-      "atMs": 57205
+      "atMs": 39266
     },
     {
       "kind": "key",
-      "atMs": 57310
+      "atMs": 39363
     },
     {
       "kind": "key",
-      "atMs": 57413
+      "atMs": 39461
     },
     {
       "kind": "key",
-      "atMs": 57512
+      "atMs": 39559
     },
     {
       "kind": "key",
-      "atMs": 57613
+      "atMs": 39658
     },
     {
       "kind": "key",
-      "atMs": 57716
+      "atMs": 39756
     },
     {
       "kind": "key",
-      "atMs": 57818
-    },
-    {
-      "kind": "key",
-      "atMs": 57920
-    },
-    {
-      "kind": "key",
-      "atMs": 58025
-    },
-    {
-      "kind": "key",
-      "atMs": 58127
-    },
-    {
-      "kind": "key",
-      "atMs": 58228
-    },
-    {
-      "kind": "key",
-      "atMs": 58330
-    },
-    {
-      "kind": "key",
-      "atMs": 58432
-    },
-    {
-      "kind": "key",
-      "atMs": 58536
-    },
-    {
-      "kind": "key",
-      "atMs": 58637
-    },
-    {
-      "kind": "key",
-      "atMs": 58739
-    },
-    {
-      "kind": "key",
-      "atMs": 58841
-    },
-    {
-      "kind": "key",
-      "atMs": 58945
-    },
-    {
-      "kind": "key",
-      "atMs": 59048
-    },
-    {
-      "kind": "key",
-      "atMs": 59147
-    },
-    {
-      "kind": "key",
-      "atMs": 59246
-    },
-    {
-      "kind": "key",
-      "atMs": 59349
-    },
-    {
-      "kind": "key",
-      "atMs": 59448
-    },
-    {
-      "kind": "key",
-      "atMs": 59554
-    },
-    {
-      "kind": "key",
-      "atMs": 59653
-    },
-    {
-      "kind": "key",
-      "atMs": 59756
-    },
-    {
-      "kind": "key",
-      "atMs": 59856
-    },
-    {
-      "kind": "key",
-      "atMs": 59957
-    },
-    {
-      "kind": "key",
-      "atMs": 60061
-    },
-    {
-      "kind": "key",
-      "atMs": 60164
-    },
-    {
-      "kind": "key",
-      "atMs": 60268
-    },
-    {
-      "kind": "key",
-      "atMs": 60370
-    },
-    {
-      "kind": "key",
-      "atMs": 60476
-    },
-    {
-      "kind": "key",
-      "atMs": 60578
-    },
-    {
-      "kind": "key",
-      "atMs": 60708
-    },
-    {
-      "kind": "key",
-      "atMs": 60810
-    },
-    {
-      "kind": "key",
-      "atMs": 60913
-    },
-    {
-      "kind": "key",
-      "atMs": 61014
-    },
-    {
-      "kind": "key",
-      "atMs": 61118
-    },
-    {
-      "kind": "key",
-      "atMs": 61218
-    },
-    {
-      "kind": "key",
-      "atMs": 61324
-    },
-    {
-      "kind": "key",
-      "atMs": 61423
-    },
-    {
-      "kind": "key",
-      "atMs": 61524
-    },
-    {
-      "kind": "key",
-      "atMs": 61622
-    },
-    {
-      "kind": "key",
-      "atMs": 61721
-    },
-    {
-      "kind": "key",
-      "atMs": 61821
-    },
-    {
-      "kind": "key",
-      "atMs": 62022
-    },
-    {
-      "kind": "key",
-      "atMs": 62120
-    },
-    {
-      "kind": "key",
-      "atMs": 62222
-    },
-    {
-      "kind": "key",
-      "atMs": 62324
-    },
-    {
-      "kind": "key",
-      "atMs": 62428
-    },
-    {
-      "kind": "key",
-      "atMs": 64393
+      "atMs": 39854
     },
     {
       "kind": "click",
-      "atMs": 64907
+      "atMs": 57360
     },
     {
       "kind": "key",
-      "atMs": 65214
+      "atMs": 57670
     },
     {
       "kind": "key",
-      "atMs": 65313
+      "atMs": 57768
     },
     {
       "kind": "key",
-      "atMs": 65412
+      "atMs": 57866
     },
     {
       "kind": "key",
-      "atMs": 65509
+      "atMs": 57965
     },
     {
       "kind": "key",
-      "atMs": 65609
+      "atMs": 58063
     },
     {
       "kind": "key",
-      "atMs": 65708
+      "atMs": 58161
     },
     {
       "kind": "key",
-      "atMs": 65806
+      "atMs": 58259
     },
     {
       "kind": "key",
-      "atMs": 65905
+      "atMs": 58357
     },
     {
       "kind": "key",
-      "atMs": 66007
+      "atMs": 58456
     },
     {
       "kind": "key",
-      "atMs": 66210
+      "atMs": 58554
     },
     {
       "kind": "key",
-      "atMs": 66309
+      "atMs": 58652
     },
     {
       "kind": "key",
-      "atMs": 66408
+      "atMs": 58750
     },
     {
       "kind": "key",
-      "atMs": 66511
+      "atMs": 58848
     },
     {
       "kind": "key",
-      "atMs": 66610
+      "atMs": 58948
     },
     {
       "kind": "key",
-      "atMs": 66708
+      "atMs": 59105
     },
     {
       "kind": "key",
-      "atMs": 66806
+      "atMs": 59207
     },
     {
       "kind": "key",
-      "atMs": 66903
+      "atMs": 59305
     },
     {
       "kind": "key",
-      "atMs": 67000
+      "atMs": 59403
     },
     {
       "kind": "key",
-      "atMs": 67102
+      "atMs": 59501
     },
     {
       "kind": "key",
-      "atMs": 67205
+      "atMs": 59599
     },
     {
       "kind": "key",
-      "atMs": 67309
+      "atMs": 59698
     },
     {
       "kind": "key",
-      "atMs": 67412
+      "atMs": 59796
     },
     {
       "kind": "key",
-      "atMs": 67514
+      "atMs": 59894
     },
     {
       "kind": "key",
-      "atMs": 67614
+      "atMs": 59992
     },
     {
       "kind": "key",
-      "atMs": 67718
+      "atMs": 60090
     },
     {
       "kind": "key",
-      "atMs": 67821
+      "atMs": 60188
     },
     {
       "kind": "key",
-      "atMs": 67923
+      "atMs": 60286
     },
     {
       "kind": "key",
-      "atMs": 68025
+      "atMs": 60385
     },
     {
       "kind": "key",
-      "atMs": 68126
+      "atMs": 60483
     },
     {
       "kind": "key",
-      "atMs": 68228
+      "atMs": 60581
     },
     {
       "kind": "key",
-      "atMs": 68330
+      "atMs": 60679
     },
     {
       "kind": "key",
-      "atMs": 68432
+      "atMs": 60778
     },
     {
       "kind": "key",
-      "atMs": 68536
+      "atMs": 60877
     },
     {
       "kind": "key",
-      "atMs": 68635
+      "atMs": 60976
     },
     {
       "kind": "key",
-      "atMs": 68734
+      "atMs": 61075
     },
     {
       "kind": "key",
-      "atMs": 68833
+      "atMs": 61174
     },
     {
       "kind": "key",
-      "atMs": 68933
+      "atMs": 61272
     },
     {
       "kind": "key",
-      "atMs": 69034
+      "atMs": 61370
     },
     {
       "kind": "key",
-      "atMs": 69135
+      "atMs": 61468
     },
     {
       "kind": "key",
-      "atMs": 69238
+      "atMs": 61566
     },
     {
       "kind": "key",
-      "atMs": 69340
+      "atMs": 61664
     },
     {
       "kind": "key",
-      "atMs": 69439
+      "atMs": 61763
     },
     {
       "kind": "key",
-      "atMs": 69542
+      "atMs": 61862
     },
     {
       "kind": "key",
-      "atMs": 69742
+      "atMs": 61960
     },
     {
       "kind": "key",
-      "atMs": 69840
+      "atMs": 62058
     },
     {
       "kind": "key",
-      "atMs": 69941
+      "atMs": 62157
     },
     {
       "kind": "key",
-      "atMs": 70043
+      "atMs": 62254
     },
     {
       "kind": "key",
-      "atMs": 70146
+      "atMs": 62352
     },
     {
       "kind": "key",
-      "atMs": 70248
+      "atMs": 62450
     },
     {
       "kind": "key",
-      "atMs": 70349
+      "atMs": 62548
     },
     {
       "kind": "key",
-      "atMs": 70453
+      "atMs": 62646
     },
     {
       "kind": "key",
-      "atMs": 70558
+      "atMs": 62743
     },
     {
       "kind": "key",
-      "atMs": 70659
+      "atMs": 62842
     },
     {
       "kind": "key",
-      "atMs": 70761
+      "atMs": 62941
     },
     {
       "kind": "key",
-      "atMs": 70868
+      "atMs": 63039
     },
     {
       "kind": "key",
-      "atMs": 70970
+      "atMs": 63137
     },
     {
       "kind": "key",
-      "atMs": 71072
+      "atMs": 63236
     },
     {
       "kind": "key",
-      "atMs": 71172
+      "atMs": 63335
     },
     {
       "kind": "key",
-      "atMs": 71275
+      "atMs": 63531
     },
     {
       "kind": "key",
-      "atMs": 71377
+      "atMs": 63629
     },
     {
       "kind": "key",
-      "atMs": 71479
+      "atMs": 63727
     },
     {
       "kind": "key",
-      "atMs": 71580
+      "atMs": 63825
     },
     {
       "kind": "key",
-      "atMs": 71682
+      "atMs": 63923
     },
     {
       "kind": "key",
-      "atMs": 71785
+      "atMs": 66345
     },
     {
+      "kind": "click",
+      "atMs": 66871
+    },
+    {
+      "kind": "key",
+      "atMs": 67181
+    },
+    {
+      "kind": "key",
+      "atMs": 67280
+    },
+    {
+      "kind": "key",
+      "atMs": 67378
+    },
+    {
+      "kind": "key",
+      "atMs": 67476
+    },
+    {
+      "kind": "key",
+      "atMs": 67574
+    },
+    {
+      "kind": "key",
+      "atMs": 67672
+    },
+    {
+      "kind": "key",
+      "atMs": 67770
+    },
+    {
+      "kind": "key",
+      "atMs": 67868
+    },
+    {
+      "kind": "key",
+      "atMs": 67966
+    },
+    {
+      "kind": "key",
+      "atMs": 68162
+    },
+    {
+      "kind": "key",
+      "atMs": 68260
+    },
+    {
+      "kind": "key",
+      "atMs": 68359
+    },
+    {
+      "kind": "key",
+      "atMs": 68457
+    },
+    {
+      "kind": "key",
+      "atMs": 68561
+    },
+    {
+      "kind": "key",
+      "atMs": 68660
+    },
+    {
+      "kind": "key",
+      "atMs": 68760
+    },
+    {
+      "kind": "key",
+      "atMs": 68858
+    },
+    {
+      "kind": "key",
+      "atMs": 68962
+    },
+    {
+      "kind": "key",
+      "atMs": 69064
+    },
+    {
+      "kind": "key",
+      "atMs": 69164
+    },
+    {
+      "kind": "key",
+      "atMs": 69262
+    },
+    {
+      "kind": "key",
+      "atMs": 69360
+    },
+    {
+      "kind": "key",
+      "atMs": 69459
+    },
+    {
+      "kind": "key",
+      "atMs": 69557
+    },
+    {
+      "kind": "key",
+      "atMs": 69656
+    },
+    {
+      "kind": "key",
+      "atMs": 69755
+    },
+    {
+      "kind": "key",
+      "atMs": 69853
+    },
+    {
+      "kind": "key",
+      "atMs": 69951
+    },
+    {
+      "kind": "key",
+      "atMs": 70049
+    },
+    {
+      "kind": "key",
+      "atMs": 70147
+    },
+    {
+      "kind": "key",
+      "atMs": 70244
+    },
+    {
+      "kind": "key",
+      "atMs": 70342
+    },
+    {
+      "kind": "key",
+      "atMs": 70440
+    },
+    {
+      "kind": "key",
+      "atMs": 70538
+    },
+    {
+      "kind": "key",
+      "atMs": 70635
+    },
+    {
+      "kind": "key",
+      "atMs": 70733
+    },
+    {
+      "kind": "key",
+      "atMs": 70831
+    },
+    {
+      "kind": "key",
+      "atMs": 70929
+    },
+    {
+      "kind": "key",
+      "atMs": 71028
+    },
+    {
+      "kind": "key",
+      "atMs": 71126
+    },
+    {
+      "kind": "key",
+      "atMs": 71225
+    },
+    {
+      "kind": "key",
+      "atMs": 71323
+    },
+    {
+      "kind": "key",
+      "atMs": 71421
+    },
+    {
+      "kind": "key",
+      "atMs": 71618
+    },
+    {
+      "kind": "key",
+      "atMs": 71716
+    },
+    {
+      "kind": "key",
+      "atMs": 71814
+    },
+    {
       "kind": "key",
-      "atMs": 71885
+      "atMs": 71912
     },
     {
       "kind": "key",
-      "atMs": 71983
+      "atMs": 72010
     },
     {
       "kind": "key",
-      "atMs": 72082
+      "atMs": 72109
     },
     {
       "kind": "key",
-      "atMs": 72182
+      "atMs": 72208
     },
     {
       "kind": "key",
-      "atMs": 72282
+      "atMs": 72306
     },
     {
       "kind": "key",
-      "atMs": 72380
+      "atMs": 72405
     },
     {
       "kind": "key",
-      "atMs": 72479
+      "atMs": 72503
     },
     {
       "kind": "key",
-      "atMs": 72579
+      "atMs": 72603
     },
     {
       "kind": "key",
-      "atMs": 72680
+      "atMs": 72702
     },
     {
       "kind": "key",
-      "atMs": 72782
+      "atMs": 72800
     },
     {
       "kind": "key",
-      "atMs": 72884
+      "atMs": 72898
     },
     {
       "kind": "key",
-      "atMs": 72988
+      "atMs": 72996
     },
     {
       "kind": "key",
-      "atMs": 73092
+      "atMs": 73095
     },
     {
       "kind": "key",
       "atMs": 73193
     },
     {
-      "kind": "click",
-      "atMs": 75839
+      "kind": "key",
+      "atMs": 73291
+    },
+    {
+      "kind": "key",
+      "atMs": 73390
+    },
+    {
+      "kind": "key",
+      "atMs": 73489
+    },
+    {
+      "kind": "key",
+      "atMs": 73588
+    },
+    {
+      "kind": "key",
+      "atMs": 73687
+    },
+    {
+      "kind": "key",
+      "atMs": 73784
+    },
+    {
+      "kind": "key",
+      "atMs": 73883
+    },
+    {
+      "kind": "key",
+      "atMs": 73982
+    },
+    {
+      "kind": "key",
+      "atMs": 74083
+    },
+    {
+      "kind": "key",
+      "atMs": 74182
+    },
+    {
+      "kind": "key",
+      "atMs": 74286
+    },
+    {
+      "kind": "key",
+      "atMs": 74397
+    },
+    {
+      "kind": "key",
+      "atMs": 74495
+    },
+    {
+      "kind": "key",
+      "atMs": 74593
+    },
+    {
+      "kind": "key",
+      "atMs": 74691
+    },
+    {
+      "kind": "key",
+      "atMs": 74789
+    },
+    {
+      "kind": "key",
+      "atMs": 74888
+    },
+    {
+      "kind": "key",
+      "atMs": 74986
     },
     {
       "kind": "click",
-      "atMs": 86390
+      "atMs": 77887
     },
     {
       "kind": "click",
-      "atMs": 94890
+      "atMs": 89973
     },
     {
       "kind": "click",
-      "atMs": 116288
+      "atMs": 98254
+    },
+    {
+      "kind": "click",
+      "atMs": 119286
     }
   ],
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 14277
+      "endMs": 14143
     },
     {
       "id": "identity-dates",
-      "startMs": 16440,
-      "endMs": 34191
+      "startMs": 16302,
+      "endMs": 34217
     },
     {
       "id": "location",
-      "startMs": 34645,
-      "endMs": 53007
+      "startMs": 34668,
+      "endMs": 54659
     },
     {
       "id": "public-content",
-      "startMs": 55170,
-      "endMs": 74365
+      "startMs": 56817,
+      "endMs": 76638
     },
     {
       "id": "phone-color",
-      "startMs": 74816,
-      "endMs": 91771
+      "startMs": 77091,
+      "endMs": 95253
     },
     {
       "id": "create",
-      "startMs": 92223,
-      "endMs": 107936
+      "startMs": 95705,
+      "endMs": 110343
     },
     {
       "id": "autosave",
-      "startMs": 108388,
-      "endMs": 128782
+      "startMs": 110795,
+      "endMs": 131661
     },
     {
       "id": "result",
-      "startMs": 129234,
-      "endMs": 146161
+      "startMs": 132112,
+      "endMs": 149536
     }
   ],
   "anchors": [
     {
       "segmentId": "identity-dates",
       "phrase": "pour cette fête sur deux",
-      "startMs": 9601,
-      "endMs": 12680,
-      "cueMs": 26043
+      "startMs": 9985,
+      "endMs": 13656,
+      "cueMs": 26288
     },
     {
       "segmentId": "location",
       "phrase": "Juste dessous, collez une paire",
-      "startMs": 2951,
-      "endMs": 6750,
-      "cueMs": 37597
+      "startMs": 2576,
+      "endMs": 7516,
+      "cueMs": 37245
     },
     {
       "segmentId": "phone-color",
       "phrase": "Rendez le téléphone obligatoire seulement",
-      "startMs": 554,
-      "endMs": 5758,
-      "cueMs": 75372
+      "startMs": 312,
+      "endMs": 5895,
+      "cueMs": 77404
     },
     {
       "segmentId": "phone-color",
       "phrase": "Choisissons Émeraude et regardons l’aperçu.",
-      "startMs": 11104,
-      "endMs": 13717,
-      "cueMs": 85921
+      "startMs": 12402,
+      "endMs": 14391,
+      "cueMs": 89493
     },
     {
       "segmentId": "phone-color",
-      "phrase": "Ces deux réglages pourront être",
-      "startMs": 14688,
-      "endMs": 16490,
-      "cueMs": 89505
+      "phrase": "Ces deux paramètres pourront être",
+      "startMs": 14834,
+      "endMs": 18019,
+      "cueMs": 91931
     },
     {
       "segmentId": "autosave",
       "phrase": "Corrigeons la description",
-      "startMs": 7409,
-      "endMs": 12163,
-      "cueMs": 115799
+      "startMs": 7995,
+      "endMs": 11955,
+      "cueMs": 118791
     },
     {
       "segmentId": "result",
       "phrase": "Retrouvons-le dans les événements",
-      "startMs": 9161,
-      "endMs": 10752,
-      "cueMs": 138398
+      "startMs": 9613,
+      "endMs": 10561,
+      "cueMs": 141726
     }
   ]
 }

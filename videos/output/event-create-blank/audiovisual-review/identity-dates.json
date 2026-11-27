@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:24:00.247Z",
-  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
-  "promptSha256": "d4a0423d764a7be690959bb82407c02955756ee00515d05ead968490f96bd3d9",
-  "clipSha256": "d7e0b7a8909348fd2e784a95ef575612f3c59a5a35453dfec2feae19cc4f40e8",
+  "reviewedAt": "2026-11-27T20:45:23.472Z",
+  "videoSha256": "3ae73bca800edf4b9c3b942dab2e5a2982ad0c8409b4c8208efd4e0ca1ad0288",
+  "promptSha256": "cfda50476b86a904da177258066e60db8c310b2555f7a03ba305895ace7209ff",
+  "clipSha256": "d5106584d1dea63a213048fc7e94f6d99d95c710ab2e54c8e467bfe00a370ff5",
   "scene": "identity-dates",
   "review": {
     "heardOpening": "Commençons par un titre parlant",
     "checkpoints": [
       {
-        "spokenSeconds": 0.1,
+        "spokenSeconds": 0.5,
         "spoken": "Commençons par un titre parlant",
-        "visibleSeconds": 0.8,
-        "visible": "Saisie de « Fête du quartier des Tilleuls » dans le champ Titre",
+        "visibleSeconds": 1,
+        "visible": "Saisie de 'Fête du quartier des Tilleuls' dans le champ Titre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.3,
+        "spokenSeconds": 2.5,
         "spoken": "une courte description",
-        "visibleSeconds": 3.6,
-        "visible": "Renseignement du champ Description",
+        "visibleSeconds": 4,
+        "visible": "Saisie de la description dans le champ dédié",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 7,
         "spoken": "La date de fin se cale d’abord sur la date de début",
-        "visibleSeconds": 8.5,
-        "visible": "Saisie de la date de début au 14.11.2026 et duplication automatique dans le champ Date fin",
+        "visibleSeconds": 10.5,
+        "visible": "Saisie du 14/11/2026 en date de début, qui se reporte automatiquement dans la date de fin",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.8,
+        "spokenSeconds": 11.5,
         "spoken": "nous la faisons terminer le dimanche",
-        "visibleSeconds": 12,
-        "visible": "Modification de la date de fin au 15.11.2026",
+        "visibleSeconds": 12.8,
+        "visible": "La date de fin est ajustée au 15/11/2026",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix off féminine naturelle, fluide et bien calée sur les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
