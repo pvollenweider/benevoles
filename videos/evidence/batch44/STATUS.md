@@ -21,3 +21,5 @@
 - EVENT_CREATE_BLANK — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
 - EVENT_CREATE_TEMPLATE — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
 - EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published: rehearsal and take 1 completed, but the final independent audio audit returned HTTP 402 (Gemini prepayment credits depleted); audiovisual review also requires this synthetic fixture to be explicitly supported. Resume the review after those blockers are resolved.
+
+- EVENT_SIGNUP_PAGE_SETTINGS — NOT READY, not published: verified main build and transcript dry-run passed; rehearsal could not start because local-production.ts rejects the signup-page-settings seed as not explicitly supported. No narrated take.
