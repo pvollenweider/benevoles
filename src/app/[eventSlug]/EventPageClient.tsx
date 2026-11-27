@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { shiftDetailsById } from "@/lib/shift-details"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
@@ -424,6 +425,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const closedShiftIds = useMemo(() => new Set(myRegistrations.filter((r) => r.cancellable === false).map((r) => r.shiftId)), [myRegistrations])
   // Held shifts by status, for the schedule: named and drawn as the visitor's own (#534).
   const heldByShift = useMemo(() => heldKinds(myRegistrations), [myRegistrations])
+  // What a volunteer can read about each shift before choosing it (#1471): « Détails » in the
+  // list, the line under the frise.
+  const shiftDetailsMap = useMemo(() => shiftDetailsById(event?.shifts ?? []), [event?.shifts])
   // Shifts of reserved roles (#470) this visitor can't take; the server checks it again at sign-up.
   const reservedShiftIds = useMemo(
     () => new Set((event?.shifts ?? []).filter((s) => s.reserved && !allowedReserved.has(s.roleName)).map((s) => s.id)),
@@ -1320,6 +1324,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           reservedShiftIds={reservedShiftIds}
                           dayLabel={formatCalendarDay(day)}
                           roster={shownRoster}
+                          details={shiftDetailsMap}
                         />
                         </div>
                       )}
@@ -1338,6 +1343,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         reservedShiftIds={reservedShiftIds}
                         dayLabel={formatCalendarDay(day)}
                         roster={shownRoster}
+                        details={shiftDetailsMap}
                       />
                         </div>
                       )}

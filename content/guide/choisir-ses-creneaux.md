@@ -43,7 +43,7 @@ Sur un téléphone tenu droit, les créneaux s'affichent en **Liste** quand la f
 
 Dans la vue **Liste**, un créneau qui peut être choisi porte la couleur de son poste sur un bord à gauche ; un créneau qui ne peut pas être choisi (complet, fermé, terminé, réservé, en conflit, inscriptions fermées) est écrit en gris, sans cadre ; son état suit le titre (à droite sur un petit écran), ou passe dessous quand la ligne est trop étroite.
 
-![Planning public d'un événement sur un téléphone tenu droit, en liste : sous les boutons « Frise » et « Liste », la phrase « Pour voir la journée en frise, tourne le téléphone ou touche « Frise ». », puis les créneaux du jour les uns sous les autres, ceux qu'on peut choisir avec la couleur de leur poste à gauche, les créneaux complets en gris sans cadre](/doc-img/public-list-mobile.png)
+![Planning public d'un événement sur un téléphone tenu droit, en liste : sous les boutons « Frise » et « Liste », la phrase « Pour voir la journée en frise, tourne le téléphone ou touche « Frise ». », puis les créneaux du jour les uns sous les autres, ceux qu'on peut choisir avec la couleur de leur poste à gauche, les créneaux complets en gris sans cadre, et sous chacun un bouton « Détails »](/doc-img/public-list-mobile.png)
 
 La même journée en **Frise**, sur le même téléphone. Tenu droit, il ne montre que le début de la journée, et le reste se fait défiler sur le côté :
 
@@ -54,6 +54,15 @@ Tourné à l'horizontale, il montre toute la journée d'un coup :
 ![Frise de la même journée sur le téléphone tourné à l'horizontale : les postes en lignes et tous les créneaux de la journée visibles ensemble, de 7 h à 1 h du matin](/doc-img/public-timeline-phone-turned.png)
 
 Certains postes affichent un petit repère (par exemple « 18+ ») : ils demandent un âge minimum, voir [Âge minimum sur un poste](age-minimum.md). Un créneau complet avec liste d'attente se rejoint comme un autre, voir [Liste d'attente](liste-d-attente.md).
+
+## Lire les détails d'un créneau sans le choisir
+
+Avant de choisir, tu peux lire ce que l'organisation a indiqué sur un créneau : sa description, le lieu (avec un lien vers la carte) et les consignes.
+
+- Dans la vue **Liste**, touche **Détails** sous le créneau : ses informations s'affichent juste en dessous, sans le sélectionner. Touche à nouveau **Détails** pour les replier.
+- Dans la **Frise**, les détails du créneau que tu survoles, ou que tu parcours au clavier, s'affichent sous le planning. Sur un téléphone, toucher une barre la choisit : pour lire sans choisir, passe en vue **Liste**.
+
+Les coordonnées de la personne de contact ne s'affichent qu'une fois inscrit, dans l'email de confirmation et sur ta page « Mes inscriptions ».
 
 ## Sélectionner un créneau
 

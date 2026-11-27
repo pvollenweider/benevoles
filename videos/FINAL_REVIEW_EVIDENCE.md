@@ -1523,3 +1523,10 @@ Dans **Paramètres des emails**, le texte d'aide de la case « Résumé quotidie
 
 - **ORG_EMAIL_SETTINGS** (`org-email-settings`) : image seule, la scène qui cadre cette case montre l'ancien texte d'aide. La narration reste juste. À refilmer avec le prochain lot ; une phrase sur l'alerte immédiate pourrait y être ajoutée.
 - Aucune vidéo ne montre le nouvel email. Aucune capture vidéo n'est régénérée dans ce changement.
+
+## À refilmer : détails d'un créneau sans le choisir (#1471, 27 novembre 2026)
+
+Dans la vue **Liste** de la page d'inscription, chaque créneau qui a des informations (description, lieu, consignes) porte un bouton « Détails » sur sa propre ligne ; sous la **Frise**, une ligne affiche les détails du créneau survolé, parcouru au clavier ou touché, et une phrase d'invite avant cela. Les noms des boutons de créneau ne changent pas : aucun sélecteur de capture ne casse.
+
+- Image seule, la liste s'allonge et la frise gagne une ligne : **VOLUNTEER_REGISTER**, **VOLUNTEER_DISCOVER_EVENT**, **VOLUNTEER_CHOOSE_SHIFTS**, **VOLUNTEER_FORM_RECAP**, **SHIFT_ROSTER_VISIBILITY**, **SHIFT_ELIGIBILITY_RULES**, déjà listées pour la vue Liste. Une phrase sur « Détails » pourrait rejoindre la narration de **VOLUNTEER_CHOOSE_SHIFTS**.
+- Aucune vidéo n'est régénérée dans ce changement.
