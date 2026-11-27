@@ -10,7 +10,7 @@ import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/li
 import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
 import ShiftInfoList from "@/components/ShiftInfoList"
-import { barDetailsText, DETAILS_HOVER_DELAY_MS, FRISE_DETAILS_PROMPT, type ShiftDetails } from "@/lib/shift-details"
+import { barDetailsText, DETAILS_HOVER_DELAY_MS, FRISE_DETAILS_PROMPT, FRISE_DETAILS_ROSTER_PROMPT, type ShiftDetails } from "@/lib/shift-details"
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 import { FRISE_KEYS_SHOWN, FRISE_KEYS_SPOKEN, friseKey, friseTabStop, friseTarget, type FriseRows } from "@/lib/frise-keyboard"
 import { chartMinWidth, daySpan, LABEL_W, MAX_PX_PER_MIN, MIN_BAR_W } from "@/lib/frise-geometry"
@@ -81,21 +81,28 @@ export default function DayTimeline({
   details?: Map<string, ShiftDetails> | null
 }) {
   const [detailId, setDetailId] = useState<string | null>(null)
-  // The line follows a pointer only after it rests on a bar (#1471): on its way down to a link of
-  // the line, the pointer crosses other bars, which must not replace it. A click, a tap or the
-  // keyboard focus changes it at once. While the focus is inside the line, it never changes.
+  // With details (#1471), the line follows a pointer only after it rests on a bar: on its way down
+  // to a link of the line, the pointer crosses other bars, which must not replace it; nor does a
+  // rest while the keyboard focus is in the line. A click, a tap or the focus changes it at once.
+  // The roster alone keeps its immediate hover: its line has no link to reach.
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lineRef = useRef<HTMLDivElement>(null)
   useEffect(() => () => { if (hoverTimer.current) clearTimeout(hoverTimer.current) }, [])
-  const hasLine = !!roster || (details?.size ?? 0) > 0
-  const lineHasFocus = () => !!lineRef.current && lineRef.current.contains(document.activeElement)
+  const hasDetails = (details?.size ?? 0) > 0
+  const hasLine = !!roster || hasDetails
+  const keyboardInLine = () => !!lineRef.current?.querySelector(":focus-visible")
   const showNow = (id: string) => {
     if (hoverTimer.current) clearTimeout(hoverTimer.current)
-    if (!lineHasFocus()) setDetailId(id)
+    setDetailId(id)
   }
   const showAfterRest = (id: string) => {
     if (hoverTimer.current) clearTimeout(hoverTimer.current)
-    hoverTimer.current = setTimeout(() => { if (!lineHasFocus()) setDetailId(id) }, DETAILS_HOVER_DELAY_MS)
+    hoverTimer.current = setTimeout(() => { if (!keyboardInLine()) setDetailId(id) }, DETAILS_HOVER_DELAY_MS)
+  }
+  // A mouse or a hovering pen crosses bars; a touch lands on one.
+  const onBarPointer = (id: string, pointerType: string) => {
+    if (hasDetails && (pointerType === "mouse" || pointerType === "pen")) showAfterRest(id)
+    else showNow(id)
   }
   const cancelRest = () => { if (hoverTimer.current) clearTimeout(hoverTimer.current) }
   // Keyboard (#1075): one tab stop per day, the bar focused or touched last; arrows between bars.
@@ -280,7 +287,7 @@ export default function DayTimeline({
                     // (the button keeps its full accessible name).
                     <div
                       key={shift.id}
-                      onPointerEnter={hasLine ? (e) => { if (e.pointerType === "mouse") showAfterRest(shift.id); else showNow(shift.id) } : undefined}
+                      onPointerEnter={hasLine ? (e) => onBarPointer(shift.id, e.pointerType) : undefined}
                       onPointerLeave={hasLine ? cancelRest : undefined}
                       // A touch moves the tab stop too: Safari does not focus a clicked button.
                       onClick={() => { setStopId(shift.id); if (hasLine) showNow(shift.id) }}
@@ -463,7 +470,7 @@ export default function DayTimeline({
     {hasLine && (
       // Plain text, not live: the focused bar's description says the place and where the rest is.
       // Kept until another bar; a fixed minimum height, so the page does not jump under the pointer.
-      <div ref={lineRef} data-frise-detail data-roster-detail={roster ? "" : undefined} className="-mt-3 mb-5 min-h-16 text-sm text-gray-700 break-words">
+      <div ref={lineRef} data-frise-detail data-roster-detail={roster ? "" : undefined} className={`-mt-3 mb-5 ${hasDetails ? "min-h-16" : "min-h-10"} text-sm text-gray-700 break-words`}>
         {detailShift ? (
           <>
             <p className="font-medium text-gray-900">{detailShift.label} · {fmt(detailShift.startTime)}–{fmt(detailShift.endTime)}</p>
@@ -471,7 +478,7 @@ export default function DayTimeline({
             {detailInfo && <ShiftInfoList info={detailInfo.info} className="mt-0.5" />}
             {roster && <p className="mt-0.5"><RosterSummary entry={detailEntry} own={detailEntry?.own ?? false} /></p>}
           </>
-        ) : <p>{roster ? ROSTER_FRISE_PROMPT : FRISE_DETAILS_PROMPT}</p>}
+        ) : <p>{!hasDetails ? ROSTER_FRISE_PROMPT : roster ? FRISE_DETAILS_ROSTER_PROMPT : FRISE_DETAILS_PROMPT}</p>}
       </div>
     )}
     {/* Only while a bar has the keyboard focus (never for a mouse or a touch): the keys, in short. */}

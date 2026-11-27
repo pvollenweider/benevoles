@@ -14,9 +14,13 @@ describe("shiftDetails (#1471)", () => {
   it("is null when there is nothing to read beyond the name and the time", () => {
     expect(shiftDetails({ description: "  ", locationDetails: null, instructions: "" })).toBeNull()
   })
-  it("counts a meeting point alone, and a description alone", () => {
-    expect(shiftDetails({ latitude: 46.2, longitude: 6.1 })).not.toBeNull()
+  // Regression (review of #1471): every shift inherits the event's meeting point, so a map link
+  // alone put « Détails » under every shift of an event with an address.
+  it("does not count a meeting point alone, but keeps its link once there is something else", () => {
+    expect(shiftDetails({ latitude: 46.2, longitude: 6.1 })).toBeNull()
+    expect(shiftDetails({ instructions: "Gilet", latitude: 46.2, longitude: 6.1 })?.info).toMatchObject({ latitude: 46.2, longitude: 6.1 })
     expect(shiftDetails({ description: "Accueillir les visiteurs" })).not.toBeNull()
+    expect(shiftDetails({ mealOnTheGo: true })).not.toBeNull()
   })
   it("maps only the shifts that have details", () => {
     const map = shiftDetailsById([{ id: "a", instructions: "Gilet fourni" }, { id: "b" }])
@@ -32,6 +36,6 @@ describe("names and descriptions", () => {
     expect(barDetailsText(shiftDetails({ locationDetails: "Entrée B", instructions: "Gilet" })!)).toBe("Lieu : Entrée B. Détails sous le planning.")
     expect(barDetailsText(shiftDetails({ locationDetails: "Entrée B" })!)).toBe("Lieu : Entrée B.")
     expect(barDetailsText(shiftDetails({ description: "Servir" })!)).toBe("Détails sous le planning.")
-    expect(barDetailsText(shiftDetails({ latitude: 46.2, longitude: 6.1 })!)).toBe("Lieu : Point de rendez-vous. Détails sous le planning.")
+    expect(barDetailsText(shiftDetails({ instructions: "Gilet", latitude: 46.2, longitude: 6.1 })!)).toBe("Lieu : Point de rendez-vous. Détails sous le planning.")
   })
 })
