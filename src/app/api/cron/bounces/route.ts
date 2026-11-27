@@ -5,6 +5,9 @@ import { NextResponse } from "next/server"
 import { env } from "@/lib/env"
 import { isCronAuthorized } from "@/lib/cron-auth"
 import { processDeferredBounces } from "@/lib/bounce-mailbox"
+import { enqueueAddressAlerts } from "@/lib/address-alert-data"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
+import { reportError } from "@/lib/report-error"
 
 export const dynamic = "force-dynamic"
 
@@ -19,5 +22,12 @@ export async function POST(req: Request) {
   if (!isCronAuthorized(req, env.CRON_SECRET)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
-  return NextResponse.json(await processDeferredBounces())
+  const result = await processDeferredBounces()
+  // Right after the bounces are recorded (#1476): tell the organisers at once when someone whose
+  // address has just failed is expected soon. Runs without IMAP settings too: an immediate refusal
+  // by our relay is recorded at send time. A failure here never hides the bounce run's result.
+  const addressAlerts = await enqueueAddressAlerts()
+    .then((ids) => { deliverAfterResponse(ids); return ids.length })
+    .catch((e) => { reportError("bounces.address_alerts")(e); return 0 })
+  return NextResponse.json({ ...result, addressAlerts })
 }

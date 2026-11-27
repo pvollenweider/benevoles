@@ -43,6 +43,7 @@ export type NotificationKind =
   | "registration_added_by_organizer"
   | "release_available"
   | "addresses_to_verify_summary"
+  | "address_to_verify_alert"
   | "past_event_notice"
   | "org_reactivation"
   | "org_inactivity_notice"
