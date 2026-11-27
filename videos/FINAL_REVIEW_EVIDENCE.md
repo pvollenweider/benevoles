@@ -1565,3 +1565,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **SECTORS — NOT READY, non publiée.** La seconde prise montre l'interrupteur de regroupement désactivé, mais la revue signale que l'adresse évoquée pour le filtre n'est pas visible. [Suivi et preuves](evidence/batch44/STATUS.md).
 
 **SECTOR_LEADERS — READY, publiée, révision 8.** La carte Secteurs n'est pas filmée dans ce parcours. [Revue](evidence/batch44/sector-leaders/review.md).
+
+**ORG_TIMEZONE_CHARTER — READY, publiée, révision 5.** La convention et son commutateur sont présentés dans les paramètres et le formulaire. [Revue](evidence/batch44/org-timezone-charter/review.md).

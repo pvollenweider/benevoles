@@ -33,7 +33,14 @@ async function main() {
           db.shift.updateMany({ where: { eventId }, data: { date } }),
         ])
       }
-      if (scenario === "charter") await db.organization.update({ where: { id }, data: { timeZone: "Europe/Paris" } })
+      if (scenario === "charter") {
+        const date = new Date(`${new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10)}T00:00:00Z`)
+        await db.$transaction([
+          db.organization.update({ where: { id }, data: { timeZone: "Europe/Paris" } }),
+          db.event.update({ where: { id: `${id}-event-0` }, data: { startDate: date, endDate: date } }),
+          db.shift.updateMany({ where: { eventId: `${id}-event-0` }, data: { date } }),
+        ])
+      }
       if (scenario === "team") {
         await db.organization.update({ where: { id }, data: { outboundEmailApprovedAt: new Date("2026-10-01T08:00:00Z"), publicationApprovedAt: new Date("2026-10-01T08:00:00Z") } })
         assert.equal(await db.adminUser.count({ where: { organizationId: id, email: "video.team.owner@example.org" } }), 1)
@@ -77,7 +84,7 @@ async function main() {
       ] })
       if (scenario === "identity") await tx.orgSlugHistory.create({ data: { id: `${id}-old-address`, organizationId: id, slug: "montvert-ancien" } })
       for (const [index, title] of (scenario === "identity" ? ["Fête du village de Montvert", "Marché solidaire", "Rencontre des organisateurs"] : ["Fête du village de Montvert"]).entries()) {
-        const eventId = `${id}-event-${index}`, date = scenario === "email" ? new Date(`${new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10)}T00:00:00Z`) : new Date(`2026-11-${14 + index * 7}T00:00:00Z`)
+        const eventId = `${id}-event-${index}`, date = scenario === "email" || scenario === "charter" ? new Date(`${new Date(Date.now() + (scenario === "charter" ? 14 : 7) * 86400000).toISOString().slice(0, 10)}T00:00:00Z`) : new Date(`2026-11-${14 + index * 7}T00:00:00Z`)
         await tx.event.create({ data: { id: eventId, organizationId: id, title, slug: `rencontre-${index}`, description: "Événement fictif de formation.", location: "Place du Collège, Montvert", startDate: date, endDate: date, publicStatus: "published", isListed: index !== 2, remindersEnabled: scenario === "email" } })
         for (const [order, roleName] of ["Accueil", "Buvette"].entries()) await tx.shift.create({ data: { id: `${eventId}-shift-${order}`, eventId, date, roleName, label: order ? "Service du midi" : "Entrée principale", startTime: order ? "12:00" : "09:00", endTime: order ? "14:00" : "12:00", capacity: 4, status: "open", displayOrder: order } })
         if (scenario === "planning") {
