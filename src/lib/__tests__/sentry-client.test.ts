@@ -307,6 +307,23 @@ describe("interrupted page stream (« Connection closed. »)", () => {
     expect(isInterruptedPageStream(none)).toBe(false)
     expect(beforeSendClient(none)).toBe(none)
   })
+  // Firefox's wording for the same interruption (Sentry issue 164148668): no stack at all.
+  it("drops Firefox's « Error in input stream » when it has no stack", () => {
+    const firefox = event({ type: "TypeError", value: "Error in input stream", mechanism: { type: "generic", handled: true } })
+    expect(isInterruptedPageStream(firefox)).toBe(true)
+    expect(beforeSendClient(firefox)).toBeNull()
+  })
+
+  it("keeps Firefox's message when a stack frame could point at our code, or with another type or wording", () => {
+    const framed = event(exception({ type: "TypeError", value: "Error in input stream" }))
+    expect(isInterruptedPageStream(framed)).toBe(false)
+    expect(beforeSendClient(framed)).toBe(framed)
+    for (const [type, value] of [["Error", "Error in input stream"], ["TypeError", "Error in input stream while parsing"], ["TypeError", "error in input stream"]]) {
+      const e = event({ type, value })
+      expect(isInterruptedPageStream(e), `${type}: ${value}`).toBe(false)
+      expect(beforeSendClient(e), `${type}: ${value}`).toBe(e)
+    }
+  })
 })
 
 // Regression guards: what every public page downloads (#773).

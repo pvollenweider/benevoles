@@ -232,6 +232,14 @@ export function isInjectedEvalRefusal(event: Event): boolean {
 }
 
 /**
+ * Firefox's wording when the body of a response stops arriving while it is read: the same
+ * interrupted page stream, seen in production right after a sign-in redirected to the dashboard
+ * (Sentry issue 164148668, no stack, handled by the framework). Dropped only without any stack
+ * frame: with one, the event could point at code of ours and stays visible.
+ */
+const FIREFOX_INTERRUPTED_BODY = "Error in input stream"
+
+/**
  * « Connection closed. » raised by the React Server Components client when the stream of a page
  * ends before all its data arrived: the connection dropped, the laptop went to sleep, the tab was
  * closed or the navigation was interrupted. The server-side equivalents are already ignored
@@ -244,7 +252,11 @@ export function isInjectedEvalRefusal(event: Event): boolean {
 export function isInterruptedPageStream(event: Event): boolean {
   const exceptions = event.exception?.values ?? []
   if (exceptions.length === 0) return false
-  return exceptions.every((ex) => ex.type === "Error" && ex.value === "Connection closed.")
+  return exceptions.every(
+    (ex) =>
+      (ex.type === "Error" && ex.value === "Connection closed.") ||
+      (ex.type === "TypeError" && ex.value === FIREFOX_INTERRUPTED_BODY && !ex.stacktrace?.frames?.length),
+  )
 }
 
 /** Client `beforeSend`: drops browser noise that `ignoreErrors` cannot express, then scrubs. */
