@@ -9,3 +9,4 @@
 - VOLUNTEER_CALENDAR — READY published: take 1 verified the organisation feed before and after a schedule change, browser download, masked address, final transcript, frames, music and validation. The AV note about unfilmed Google steps is resolved by the explicit scope and on-card instructions. Baseline retained.
 - SECTORS — NOT READY, not published: take 1 omitted the post-creation grouping switch and had an abrupt final transition; take 2 fixes both, but the audiovisual review still flags that the URL mentioned in the filter explanation is not visible. Narration as supplied; no further take.
 - SECTOR_LEADERS — READY published: take 1 passed audiovisual, final-audio, frame/timeline and validation checks; the post-adoption settings card is not shown. Narration unchanged.
+- ORG_TIMEZONE_CHARTER — READY published: take 1 passed audiovisual, final-audio, frame/timeline and validation checks; updated convention narration and switch shown.
