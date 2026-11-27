@@ -149,6 +149,11 @@ async function main() {
     const { seedVideoWorkloadProtection } = await import("./seed-video-workload")
     return seedVideoWorkloadProtection(prisma)
   }
+  // The sign-up page settings: its own organisation (scripts/seed-video-signup-settings.ts).
+  if (scenario === "signup-page-settings") {
+    const { seedVideoSignupPageSettings } = await import("./seed-video-signup-settings")
+    return seedVideoSignupPageSettings(prisma)
+  }
   // Assignment proposals (#1172): its own organisation (scripts/seed-video-proposals.ts).
   if (scenario === "assignment-proposals") {
     const { seedVideoAssignmentProposals } = await import("./seed-video-proposals")
