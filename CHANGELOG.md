@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Vidéos** : le calendrier présente l'abonnement automatique, et les parcours bénévoles montrent la liste colorée par poste et les détails des créneaux. Les vidéos de paramètres et de responsables de secteur sont actualisées.
+
 ## [2.9.0] — 2026-11-27
 
 ### En bref

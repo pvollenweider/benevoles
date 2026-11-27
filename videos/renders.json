@@ -1,6 +1,6 @@
 {
   "admin-features-tour": {
-    "durationMs": 293960,
+    "durationMs": 305320,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -102,7 +102,7 @@
     "poster": true
   },
   "event-review-publish": {
-    "durationMs": 128120,
+    "durationMs": 130400,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -174,7 +174,7 @@
     "poster": true
   },
   "org-email-settings": {
-    "durationMs": 210600,
+    "durationMs": 198960,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -192,7 +192,7 @@
     "poster": true
   },
   "org-timezone-charter": {
-    "durationMs": 133480,
+    "durationMs": 133880,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -246,7 +246,7 @@
     "poster": true
   },
   "sector-leaders": {
-    "durationMs": 282640,
+    "durationMs": 292360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -294,7 +294,7 @@
     "poster": true
   },
   "shift-roster-visibility": {
-    "durationMs": 260000,
+    "durationMs": 262360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -342,13 +342,13 @@
     "poster": true
   },
   "volunteer-calendar": {
-    "durationMs": 182520,
+    "durationMs": 99200,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-choose-shifts": {
-    "durationMs": 164720,
+    "durationMs": 171680,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -360,7 +360,7 @@
     "poster": true
   },
   "volunteer-discover-event": {
-    "durationMs": 167880,
+    "durationMs": 176680,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -396,7 +396,7 @@
     "poster": true
   },
   "volunteer-register-mobile": {
-    "durationMs": 57280,
+    "durationMs": 60360,
     "width": 390,
     "height": 844,
     "poster": true
