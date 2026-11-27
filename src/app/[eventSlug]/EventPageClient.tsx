@@ -788,13 +788,17 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       setFailure(describeSignupFailure({ status: res.status, body: data }))
       // The server refused the convention (#569): back to the checkbox, the alert is still announced.
       if (data.field === "charterAccepted") {
-        setCharterAccepted(false)
-        setInvalidCheckbox("charter")
-        const box = document.getElementById("reg-charter")
-        // Stale page (#1468): the convention was turned on after this page loaded, so there is no
-        // box to focus. The failure message takes focus and says to reload the page.
-        if (box) requestAnimationFrame(() => box.focus())
-        else requestAnimationFrame(() => failureRef.current?.focus())
+        // Stale page (#1468): the convention was turned on after this page loaded, so there is
+        // no box to mark or focus. The failure message takes focus and says to reload the page.
+        const box = conventionAsked ? document.getElementById("reg-charter") : null
+        if (box) {
+          setCharterAccepted(false)
+          setInvalidCheckbox("charter")
+          requestAnimationFrame(() => box.focus())
+        } else {
+          setInvalidCheckbox(null)
+          requestAnimationFrame(() => failureRef.current?.focus())
+        }
         return
       }
       requestAnimationFrame(() => failureRef.current?.focus())

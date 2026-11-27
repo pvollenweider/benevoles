@@ -84,7 +84,8 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
   })
 
   // Required since #696: a page opened before the field was sent gets the same readable refusal,
-  // with a hint to reload, and nothing is looked up or stored.
+  // with a hint to reload. The event is read first (its organisation decides whether a convention
+  // is asked, #1468); nothing is stored.
   it("refuses a sign-up that does not send the field, asking to reload the page", async () => {
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ charterAccepted: undefined }))
@@ -166,10 +167,24 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
       organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: true, volunteerConventionEnabled: false },
     })
     const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ charterAccepted: true }))
+    expect(res.status).toBeLessThan(300)
+    expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ charterAcceptedHash: null, charterAcceptedAt: null }),
+    }))
+    expect(m.charterUpsert).not.toHaveBeenCalled()
+  })
+
+  it("ignores an explicit refusal from a page loaded before the convention was turned off", async () => {
+    m.eventFindFirst.mockResolvedValue({
+      id: "evt-1", organizationId: "org-a", title: "Fête", confirmationMessage: null,
+      organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: true, volunteerConventionEnabled: false },
+    })
+    const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ charterAccepted: false }))
     expect(res.status).toBeLessThan(300)
     expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ charterAcceptedHash: null }),
+      data: expect.objectContaining({ charterAcceptedHash: null, charterAcceptedAt: null }),
     }))
     expect(m.charterUpsert).not.toHaveBeenCalled()
   })

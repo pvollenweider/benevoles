@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useId, useRef, useState } from "react"
+import { useEffect, useId, useRef, useState, type Ref } from "react"
 import {
   buildVolunteerCharter,
   charterTextAfterToggle,
@@ -13,9 +13,44 @@ import {
 } from "@/lib/volunteer-charter"
 import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
 import DocMoreLink from "@/components/DocMoreLink"
-import Switch from "@/components/public/Switch"
 import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 import { MARKDOWN_TEXT_MAX } from "@/lib/text-limits"
+
+/**
+ * The knob of a settings row (DESIGN.md §5): the label sits on the left and stays the accessible
+ * name, so both switches of the card share this track and draw it the same way. Forced colours paint
+ * both backgrounds in Canvas: system colours keep the knob and the « on » track apart there
+ * (WCAG 1.4.11). Off, a gray-500 border and a gray-600 knob on a white track (4.6:1 and 7.6:1 on
+ * the gray-50 row), like Switch.tsx (#1123).
+ */
+function SwitchKnob({ checked, onToggle, labelledBy, describedBy, buttonRef }: {
+  checked: boolean
+  onToggle: () => void
+  labelledBy: string
+  describedBy?: string
+  buttonRef?: Ref<HTMLButtonElement>
+}) {
+  return (
+    <button
+      ref={buttonRef}
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-labelledby={labelledBy}
+      aria-describedby={describedBy}
+      onClick={onToggle}
+      className={`group relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 forced-colors:border-[CanvasText] forced-colors:aria-checked:bg-[Highlight] ${
+        checked ? "border-transparent bg-blue-600" : "border-gray-500 bg-white"
+      }`}
+    >
+      <span
+        className={`inline-block h-5 w-5 transform rounded-full shadow transition duration-200 forced-colors:bg-[CanvasText] forced-colors:group-aria-checked:bg-[HighlightText] ${
+          checked ? "translate-x-5 bg-white" : "translate-x-0 bg-gray-600"
+        }`}
+      />
+    </button>
+  )
+}
 
 export default function OrgCharterForm({
   initialCharter,
@@ -27,6 +62,8 @@ export default function OrgCharterForm({
   /** Missing means on, like the column's default (#1468). */
   initialVolunteerConventionEnabled?: boolean
 }) {
+  const conventionLabelId = useId()
+  const conventionDescriptionId = useId()
   const insuranceLabelId = useId()
   const insuranceDescriptionId = useId()
   const conventionWarningId = useId()
@@ -135,31 +172,37 @@ export default function OrgCharterForm({
         <p className="text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.admin.charter)} about="la convention des bénévoles" /></p>
       </div>
 
-      {/* First in the section, before everything it controls: its state says whether the rest exists. */}
-      <div className="space-y-2">
-        <Switch
-          checked={conventionEnabled}
-          onToggle={handleConventionToggle}
-          describedBy={conventionEnabled ? undefined : conventionWarningId}
-        >
-          Demander aux bénévoles d&apos;accepter une convention
-        </Switch>
-        {!conventionEnabled && (
-          <p id={conventionWarningId} className="text-sm text-gray-700">
-            Attention : les bénévoles s&apos;inscriront sans accepter de convention. La clause d&apos;assurance du texte par défaut ne leur sera plus présentée, et vous n&apos;aurez pas de trace d&apos;une acceptation.
-          </p>
-        )}
+      {/* First in the section, before everything it controls: its state says whether the rest
+          exists. Same row as the insurance switch, so the two knobs line up and read as one pattern. */}
+      <div className="bg-gray-50 rounded-xl px-4 py-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p id={conventionLabelId} className="text-sm font-medium text-gray-800">Demander aux bénévoles d&apos;accepter une convention</p>
+            <p id={conventionDescriptionId} className="text-xs text-gray-500 mt-0.5">
+              {conventionEnabled
+                ? "Les bénévoles lisent et acceptent ce texte en s'inscrivant."
+                : "Aucune convention n'est demandée à l'inscription."}
+            </p>
+            {!conventionEnabled && (
+              <p id={conventionWarningId} className="text-sm text-gray-800 mt-1">
+                <span className="font-semibold">Attention :</span> les bénévoles s&apos;inscriront sans accepter de convention. La clause d&apos;assurance du texte par défaut ne leur sera plus présentée, et vous n&apos;aurez pas de trace d&apos;une acceptation.
+              </p>
+            )}
+          </div>
+          <SwitchKnob
+            checked={conventionEnabled}
+            onToggle={handleConventionToggle}
+            labelledBy={conventionLabelId}
+            describedBy={conventionEnabled ? conventionDescriptionId : `${conventionDescriptionId} ${conventionWarningId}`}
+          />
+        </div>
       </div>
 
       {conventionEnabled && (
         <>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Ce texte est présenté aux bénévoles lors de l&apos;inscription.
-          </p>
-
           <div className="bg-gray-50 rounded-xl px-4 py-3 space-y-3">
-            <div className="flex items-center justify-between gap-3">
-              <div>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
                 <p id={insuranceLabelId} className="text-sm font-medium text-gray-800">Assurance RC fournie par l&apos;organisation</p>
                 <p id={insuranceDescriptionId} className="text-xs text-gray-500 mt-0.5">
                   {hasOrgInsurance
@@ -167,27 +210,13 @@ export default function OrgCharterForm({
                     : "Chaque bénévole répond lui-même des dommages causés à des tiers."}
                 </p>
               </div>
-              <button
-                ref={switchRef}
-                type="button"
-                role="switch"
-                aria-checked={hasOrgInsurance}
-                aria-labelledby={insuranceLabelId}
-                aria-describedby={showCustomNote ? `${insuranceDescriptionId} ${customNoteId}` : insuranceDescriptionId}
-                onClick={() => handleToggle(!hasOrgInsurance)}
-                className={`group relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 forced-colors:border-[CanvasText] forced-colors:aria-checked:bg-[Highlight] ${
-                  hasOrgInsurance ? "border-transparent bg-blue-600" : "border-gray-500 bg-white"
-                }`}
-              >
-                {/* Forced colours paint both backgrounds in Canvas: system colours keep the knob and the
-                    « on » track apart there (WCAG 1.4.11). Off, a gray-500 border and a gray-600 knob on a white
-                    track (4.6:1 and 7.6:1 on the gray-50 row), like Switch.tsx (#1123). */}
-                <span
-                  className={`inline-block h-5 w-5 transform rounded-full shadow transition duration-200 forced-colors:bg-[CanvasText] forced-colors:group-aria-checked:bg-[HighlightText] ${
-                    hasOrgInsurance ? "translate-x-5 bg-white" : "translate-x-0 bg-gray-600"
-                  }`}
-                />
-              </button>
+              <SwitchKnob
+                checked={hasOrgInsurance}
+                onToggle={() => handleToggle(!hasOrgInsurance)}
+                labelledBy={insuranceLabelId}
+                describedBy={showCustomNote ? `${insuranceDescriptionId} ${customNoteId}` : insuranceDescriptionId}
+                buttonRef={switchRef}
+              />
             </div>
 
             {showCustomNote && (

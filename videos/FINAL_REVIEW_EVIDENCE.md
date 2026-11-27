@@ -1488,9 +1488,9 @@ Dans la vue **Liste**, un créneau qui peut être choisi porte désormais un bor
 
 Aucune narration ne change.
 
-## À refilmer : convention des bénévoles (#1468, 1er décembre 2026)
+## À refilmer : convention des bénévoles (#1468, 27 novembre 2026)
 
-Le texte accepté à l'inscription s'appelle désormais « convention des bénévoles » partout. Les paramètres gagnent le commutateur « Demander aux bénévoles d'accepter une convention », qui peut être désactivé : le formulaire public n'affiche alors ni case, ni lien, ni fenêtre. Les sources (narration, bloc `viewer`, scripts, sélecteurs de capture) sont mises à jour dans ce lot ; aucune capture ni aucun rendu n'est régénéré ici, la voix et les captures longues restant hors de ce changement. La révision du catalogue est à incrémenter au rendu.
+Le texte accepté à l'inscription s'appelle désormais « convention des bénévoles » partout. Les paramètres gagnent le commutateur « Demander aux bénévoles d'accepter une convention », qui peut être désactivé : le formulaire public n'affiche alors ni case, ni lien, ni fenêtre. Les sources (narration, bloc `viewer`, scripts, sélecteurs de capture) sont mises à jour dans ce lot ; aucune capture ni aucun rendu n'est régénéré ici, la voix et les captures longues restant hors de ce changement. La révision du catalogue est à incrémenter au rendu. L'étiquette `charte` retirée de `ORG_TIMEZONE_CHARTER` n'est pas remise : le catalogue affiche ses étiquettes aux visiteurs sur la page de la vidéo, et elles servent aussi à la recherche.
 
 **Narration et image changent** :
 
