@@ -7,15 +7,17 @@ import { useState } from "react"
 import Link from "next/link"
 import { announce } from "@/lib/announce"
 import Switch from "@/components/public/Switch"
-import { SECTORS_ADOPTED_NOTICE, SECTORS_OPTION_HINT, SECTORS_OPTION_LABEL } from "@/lib/sectors"
+import { PUBLIC_GROUPING_HINT, PUBLIC_GROUPING_LABEL, SECTORS_ADOPTED_NOTICE, SECTORS_OPTION_HINT, SECTORS_OPTION_LABEL } from "@/lib/sectors"
 
 /**
  * « Organiser les postes par secteurs » (#1147), on the event's information page: an immediate
  * switch (DESIGN.md, « Interrupteur ») saved by its own route, apart from the autosaved event form.
  * Its state flips only once the server agreed. Once the event adopted sectors (a first sector
- * saved), the switch gives way to the sentence saying it can no longer be turned off.
+ * saved), the switch gives way to the sentence saying it can no longer be turned off, and to a second
+ * switch (#1469): « Regrouper les créneaux par secteur sur la page d'inscription », off by default,
+ * saved by its own route, the only way the sector names reach the volunteers.
  */
-export default function EventSectorsOption({ eventId, initialEnabled, adopted }: { eventId: string; initialEnabled: boolean; adopted: boolean }) {
+export default function EventSectorsOption({ eventId, initialEnabled, adopted, initialPublicGrouping = false }: { eventId: string; initialEnabled: boolean; adopted: boolean; initialPublicGrouping?: boolean }) {
   const [enabled, setEnabled] = useState(initialEnabled)
   const [saving, setSaving] = useState(false)
   const [status, setStatus] = useState("")
@@ -57,6 +59,7 @@ export default function EventSectorsOption({ eventId, initialEnabled, adopted }:
       {adopted ? (
         <>
           <p className="text-sm text-gray-800">{SECTORS_ADOPTED_NOTICE}</p>
+          <PublicGroupingSwitch eventId={eventId} initial={initialPublicGrouping} />
           <p className="text-sm">
             <Link href={shiftsLink} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Organiser les secteurs dans Créneaux</Link>
           </p>
@@ -81,5 +84,53 @@ export default function EventSectorsOption({ eventId, initialEnabled, adopted }:
         </>
       )}
     </section>
+  )
+}
+
+/**
+ * The sign-up page grouped by sector (#1469): its own hint, status and alert (the first switch is
+ * not rendered once the event adopted sectors), the state flipping only once the server agreed.
+ */
+function PublicGroupingSwitch({ eventId, initial }: { eventId: string; initial: boolean }) {
+  const [on, setOn] = useState(initial)
+  const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState("")
+  const [error, setError] = useState("")
+
+  async function toggle() {
+    if (saving) return
+    setSaving(true)
+    setStatus("")
+    setError("")
+    try {
+      const res = await fetch(`/api/admin/events/${eventId}/sectors/public`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled: !on }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (res.ok) {
+        setOn(!!data.publicSectorGrouping)
+        announce(setStatus, data.publicSectorGrouping
+          ? "Regroupement activé : la page d'inscription montre vos secteurs."
+          : "Regroupement désactivé : la page d'inscription reste sans secteurs.")
+      } else {
+        announce(setError, typeof data.error === "string" ? data.error : "Le paramètre n'a pas pu être enregistré. Réessayez.")
+      }
+    } catch {
+      announce(setError, "Le paramètre n'a pas pu être enregistré. Vérifiez votre connexion, puis réessayez.")
+    }
+    setSaving(false)
+  }
+
+  return (
+    <div className="space-y-2 pt-1">
+      <Switch checked={on} onToggle={toggle} busy={saving} describedBy={error ? "event-sectors-public-hint event-sectors-public-error" : "event-sectors-public-hint"} data-sectors-public-switch="1">
+        {PUBLIC_GROUPING_LABEL}
+      </Switch>
+      <p id="event-sectors-public-hint" className="text-xs text-gray-600">{PUBLIC_GROUPING_HINT}</p>
+      <p role="status" className={status ? "text-sm text-green-800" : "sr-only"}>{status}</p>
+      <p id="event-sectors-public-error" role="alert" className={error ? "text-sm text-red-700" : "sr-only"}>{error}</p>
+    </div>
   )
 }

@@ -126,6 +126,7 @@ const FIELD_LABELS: Record<string, string> = {
   // Sectors (#1147): a poste's sector (by name), the event's option and how many postes moved.
   sector: "secteur",
   sectorsEnabled: "organisation des postes par secteurs",
+  publicSectorGrouping: "créneaux regroupés par secteur sur la page d'inscription",
   // Shift swaps (#1174): the event's options.
   shiftSwapsEnabled: "demandes d'échange de créneaux",
   shiftSwapsApproval: "validation de chaque échange",

@@ -25,6 +25,8 @@ export type TimelineShift = {
   colorKey?: string | null
   /** Reserved to an answer (#962): said on the bar, never hidden nor disabled by it. */
   reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
+  /** Its sector (#1469), only when the event groups its shifts by sector on the sign-up page. */
+  sectorId?: string | null
 }
 
 /** What the visitor already holds on a shift (#534): their registration's live status. */

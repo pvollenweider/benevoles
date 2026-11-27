@@ -232,6 +232,10 @@ model Event {
   // even with every sector archived, and the option can no longer be turned off.
   sectorsEnabled      Boolean   @default(false)
   sectorsAdoptedAt    DateTime?
+  // Group the shifts by sector on the sign-up page (#1469): off by default, so sector names, written
+  // under the promise that volunteers never see them, become public only when an organiser chooses
+  // it. Read only once the event adopted sectors (src/lib/public-event.ts).
+  publicSectorGrouping Boolean  @default(false)
   // Shift swaps between volunteers (#1174, beta capability « shiftSwaps », src/lib/shift-swaps.ts):
   // two confirmed volunteers of the same poste trade their shifts. Off for every existing event
   // (column default); a new event starts with Organization.shiftSwapsDefault while the capability

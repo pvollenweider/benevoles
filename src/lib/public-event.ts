@@ -12,6 +12,7 @@ import { workloadModeOf } from "@/lib/workload-view"
 import { shiftHasEnded } from "@/lib/shift-ended"
 import { reservedAnswerConditions } from "@/lib/role-answer"
 import { shiftViewSetting } from "@/lib/shift-view"
+import { publicSectorsOf } from "@/lib/sectors"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
@@ -29,6 +30,8 @@ export const publicEventInclude = {
     include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } }, place: { select: { name: true } } },
     orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
   },
+  // Sectors (#1469): read only to group the shifts when the event chose it (`publicSectorsOf`).
+  sectors: { where: { archivedAt: null }, select: { id: true, name: true, displayOrder: true, archivedAt: true } },
   pages: {
     select: { slug: true, title: true },
     orderBy: { displayOrder: "asc" },
@@ -90,6 +93,8 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
   // Answer conditions (#962), shared by a poste's shifts: said on every one of them, never hidden.
   const answerConditions = reservedAnswerConditions(event.shifts)
   const questionById = new Map((event.questions ?? []).map((q) => [q.id, q]))
+  // Sectors (#1469): only when the event groups its shifts by sector on the sign-up page.
+  const publicSectors = publicSectorsOf(event)
   const shifts = publicShifts(event.shifts).map((shift) => {
     // Meeting point (#191): the shift's whole pair, else the event's, never half of each.
     const point = coordinatesOf(shift) ?? eventPoint
@@ -114,6 +119,7 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     latitude: point?.latitude ?? null,
     longitude: point?.longitude ?? null,
     displayOrder: shift.displayOrder,
+    sectorId: publicSectors.sectorOf(shift.sectorId),
     waitlistEnabled: shift.waitlistEnabled,
     requiresApproval: shift.requiresApproval,
     minAge: shift.minAge,
@@ -179,6 +185,10 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     // Whether the sign-up asks for the volunteer convention at all (#1468): isVolunteerConventionAsked.
     volunteerConventionEnabled: event.organization.volunteerConventionEnabled,
     shifts,
+    // The sectors the shifts are grouped by (#1469), in order; empty unless the event chose it.
+    // Only those a published shift is in: a sector holding only postes assigned by the organisation
+    // (#1145) is never named.
+    sectors: publicSectors.sectors.filter((s) => shifts.some((shift) => shift.sectorId === s.id)),
     // Never the postes a page is attached to (#1324): the link is for the confirmed volunteers
     // reached with a personal or leader link, and for emails. Pick the two public fields here, so
     // a wider query can never leak `roleNames` into the page, its API, the embed or the preview.

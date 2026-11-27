@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { hasShortShift, shiftDetailsById } from "@/lib/shift-details"
+import type { PublicSector } from "@/lib/sectors"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
@@ -118,6 +119,8 @@ type Shift = {
   reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
   /** Its role may overlap another shift (#986): never shown as a conflict. */
   overlapAllowed?: boolean
+  /** Its sector (#1469), only when the event groups its shifts by sector; else null or absent. */
+  sectorId?: string | null
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
@@ -160,6 +163,8 @@ export type EventData = {
   /** Whether the sign-up asks for the convention at all (#1468); absent = asked. */
   volunteerConventionEnabled?: boolean
   shifts: Shift[]
+  /** The sectors the page groups the shifts by (#1469), in order; empty or absent = no grouping. */
+  sectors?: PublicSector[]
   pages: { slug: string; title: string }[]
   /** Only in the admin preview (#370). */
   publicStatus?: string
@@ -1329,6 +1334,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           dayLabel={formatCalendarDay(day)}
                           roster={shownRoster}
                           details={shiftDetailsMap}
+                          sectors={event.sectors}
                         />
                         </div>
                       )}
@@ -1349,6 +1355,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         roster={shownRoster}
                         details={shiftDetailsMap}
                         shortShifts={shortShiftsLine}
+                        sectors={event.sectors}
                       />
                         </div>
                       )}

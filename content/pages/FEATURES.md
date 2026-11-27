@@ -28,7 +28,7 @@ C'est gratuit, open source et hébergé en France. Ça convient aussi bien à un
 - **Des permanences qui reviennent chaque semaine** : l'accueil du mercredi ou la distribution du samedi se décrit une fois pour toute la saison, jours fériés et fermetures exclus.
 - **Un bon départ** : des modèles d'événement (festival, buvette, manifestation sportive, fête de village) et d'activités régulières (épicerie participative, distribution alimentaire, permanence d'accueil, repair café), ou l'événement de l'an dernier dupliqué avec toutes ses dates décalées.
 - **Un brouillon, puis la publication**, après une page de vérification qui signale ce qui manque : un créneau sans lieu ou sans contact, des inscriptions fermées sans date d'ouverture.
-- **Des secteurs**, quand un événement compte beaucoup de postes : « Parking Nord » et « Parking Sud » se regroupent dans le secteur « Parking ». Le planning, les filtres, les documents à imprimer et les messages suivent vos secteurs ; les bénévoles ne les voient pas. L'option se choisit événement par événement, désactivée par défaut.
+- **Des secteurs**, quand un événement compte beaucoup de postes : « Parking Nord » et « Parking Sud » se regroupent dans le secteur « Parking ». Le planning, les filtres, les documents à imprimer et les messages suivent vos secteurs ; les bénévoles ne les voient pas, sauf si vous choisissez de regrouper les créneaux par secteur sur la page d'inscription. L'option se choisit événement par événement, désactivée par défaut.
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
