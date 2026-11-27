@@ -138,7 +138,7 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   await bruno.getByRole("button", { name: "Frise", exact: true }).click()
   await expect(bruno.getByText(/Touche, survole ou sélectionne/)).toBeVisible()
   await bruno.getByRole("button", { name: /, Buvette[^:]* : sélectionner/ }).first().focus()
-  await expect(bruno.getByText("Buvette · 10h–12h")).toBeVisible()
+  await expect(bruno.getByText("10h–12h · Buvette")).toBeVisible()
   // #1075: a shift that can't be chosen (here Bruno's own) is reached with the arrows too, and
   // brings up its line; its description says who is on it.
   await bruno.keyboard.press("ArrowDown")
@@ -147,7 +147,7 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   await expect(own).toHaveAccessibleName("14h–16h, Caisse : inscription confirmée")
   await expect(own).toHaveAttribute("aria-disabled", "true")
   await expect(own).toHaveAccessibleDescription("Avec toi : personne d'autre pour l'instant.")
-  await expect(bruno.getByText("Caisse · 14h–16h")).toBeVisible()
+  await expect(bruno.getByText("14h–16h · Caisse")).toBeVisible()
   await bruno.keyboard.press("ArrowUp")
   await expect(bruno.getByRole("button", { name: /, Buvette[^:]* : sélectionner/ }).first()).toBeFocused()
   await bruno.setViewportSize({ width: 320, height: 800 })

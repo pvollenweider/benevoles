@@ -175,3 +175,13 @@ describe("shiftListStatus", () => {
     expect(shiftListStatus({ status: "closed", registrationCount: 4, capacity: 4 })).toBe("closed")
   })
 })
+
+// Short shifts (#1470): a narrow bar shows its label first, and its name follows.
+describe("timelineBarName with the label first", () => {
+  it("puts the shift's own label before its hours, and only when it differs from the poste", () => {
+    const s = { roleName: "Signaleurs", label: "Km 12", date: "2026-07-04", startTime: "08:00", endTime: "08:30", registrationCount: 0, capacity: 2 }
+    expect(timelineBarName(s, { labelFirst: true })).toBe("Signaleurs, Km 12, 08h–08h30, 0/2 inscrit, 2 libres, modifier")
+    expect(timelineBarName(s)).toBe("Signaleurs, 08h–08h30, Km 12, 0/2 inscrit, 2 libres, modifier")
+    expect(timelineBarName({ ...s, label: "Signaleurs" }, { labelFirst: true })).toBe("Signaleurs, 08h–08h30, 0/2 inscrit, 2 libres, modifier")
+  })
+})

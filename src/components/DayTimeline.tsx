@@ -476,7 +476,7 @@ export default function DayTimeline({
     {hasLine && (
       // Plain text, not live: the focused bar's description says the place and where the rest is.
       // Kept until another bar; a fixed minimum height, so the page does not jump under the pointer.
-      <div ref={lineRef} data-frise-detail data-roster-detail={roster ? "" : undefined} className={`-mt-3 mb-5 ${hasDetails ? "min-h-16" : "min-h-10"} text-sm text-gray-700 break-words`}>
+      <div ref={lineRef} data-frise-detail data-roster-detail={roster ? "" : undefined} className={`-mt-3 mb-5 ${hasDetails ? "min-h-24" : "min-h-16"} text-sm text-gray-700 break-words`}>
         {detailShift ? (
           <>
             {/* The list's own words (#1470): what a bar too narrow for its text cannot show. */}

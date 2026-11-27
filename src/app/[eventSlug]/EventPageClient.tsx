@@ -428,8 +428,6 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // What a volunteer can read about each shift before choosing it (#1471): « Détails » in the
   // list, the line under the frise.
   const shiftDetailsMap = useMemo(() => shiftDetailsById(event?.shifts ?? []), [event?.shifts])
-  // An event with a short shift (#1470): every day's frise gets the line naming the bar pointed at.
-  const shortShiftsLine = useMemo(() => hasShortShift(event?.shifts ?? []), [event?.shifts])
   // Shifts of reserved roles (#470) this visitor can't take; the server checks it again at sign-up.
   const reservedShiftIds = useMemo(
     () => new Set((event?.shifts ?? []).filter((s) => s.reserved && !allowedReserved.has(s.roleName)).map((s) => s.id)),
@@ -621,6 +619,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const longEvent = isLongEvent(event.startDate, event.endDate)
   const today = new Date().toLocaleDateString("sv-SE", { timeZone: event.timeZone })
   const shownDays = visibleDays(Object.keys(shiftsByDay), today, longEvent)
+  // A short shift among those the page shows (#1470): every shown day's frise then gets the line
+  // naming the bar pointed at. Decided once, from what the page shows (a group or shared link
+  // without the short poste gets no line).
+  const shortShiftsLine = hasShortShift(shownDays.flatMap((day) => shiftsByDay[day] ?? []))
   const months = usesMonthView(shownDays) ? groupDaysByMonth(shownDays) : null
   const month = months ? (months.find((m) => m.key === chosenMonth) ?? months[0]) : null
   const daysOnPage = month ? month.days : shownDays

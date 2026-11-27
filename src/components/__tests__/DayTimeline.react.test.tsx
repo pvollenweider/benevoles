@@ -377,7 +377,7 @@ describe("DayTimeline details", () => {
     const roleLine = document.querySelector("[data-roster-detail]") as HTMLElement
     expect(roleLine).toHaveTextContent(/qui est inscrit/)
     expect(roleLine).not.toHaveTextContent(/détails/)
-    expect(roleLine.className).toContain("min-h-10")
+    expect(roleLine.className).toContain("min-h-16")
   })
 
   it("adds no line and no description at all without roster and details", () => {

@@ -1535,5 +1535,5 @@ Dans la vue **Liste** de la page d'inscription, chaque créneau qui a des inform
 
 Sur la page d'inscription, la ligne sous la frise reprend maintenant les mots de la vue Liste (« 18h–20h · Bar », puis le statut) au lieu de « Bar · 18h–20h », et apparaît aussi sur les événements qui ont un créneau d'une heure ou moins. Dans la frise des organisateurs, une barre de moins de 80 px affiche le libellé du créneau avant son horaire, et son nom suit cet ordre.
 
-- **SHIFT_ROSTER_VISIBILITY** (`shift-roster-visibility`) : la ligne de la frise avec « Voir qui est inscrit » change d'ordre ; vérifier le sélecteur qui lit son texte avant la prochaine capture, et la narration si elle cite la ligne mot pour mot.
+- **SHIFT_ROSTER_VISIBILITY** (`shift-roster-visibility`) : la ligne de la frise avec « Voir qui est inscrit » change d’ordre et gagne l’état du créneau ; le sélecteur de `videos/lib/record-shift-roster.ts` suit ce changement. Image seule, à refilmer.
 - Les jeux de tournage n'ont pas de créneau de moins d'une heure : aucune autre vidéo ne change. Aucune vidéo n'est régénérée dans ce changement.

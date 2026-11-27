@@ -50,4 +50,8 @@ describe("hasShortShift (#1470)", () => {
     expect(hasShortShift([{ startTime: "22:00", endTime: "00:30" }])).toBe(false)
     expect(hasShortShift([{ startTime: "23:30", endTime: "00:15" }])).toBe(true)
   })
+  it("reads time like the frise: « 24:00 » ends the day, equal hours are a whole day", () => {
+    expect(hasShortShift([{ startTime: "23:30", endTime: "24:00" }])).toBe(true)
+    expect(hasShortShift([{ startTime: "08:00", endTime: "08:00" }])).toBe(false)
+  })
 })

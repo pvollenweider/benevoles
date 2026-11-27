@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { coordinatesOf } from "./map-link"
+import { toMin, toMinEnd } from "./gantt-utils"
 import { type ShiftInfo } from "./shift-info"
 
 /**
@@ -84,13 +85,7 @@ export const SHORT_SHIFT_MINUTES = 60
 /** Whether an event has a short shift (#1470), cancelled ones aside. A night shift counts its
  * real length (22:00 to 00:30 is 150 minutes). */
 export function hasShortShift(shifts: { startTime: string; endTime: string; status?: string }[]): boolean {
-  const minutes = (t: string) => { const [h, m = "0"] = t.split(":"); return parseInt(h, 10) * 60 + parseInt(m, 10) }
-  return shifts.some((s) => {
-    if (s.status === "cancelled") return false
-    let d = minutes(s.endTime) - minutes(s.startTime)
-    if (d <= 0) d += 24 * 60
-    return d <= SHORT_SHIFT_MINUTES
-  })
+  return shifts.some((s) => s.status !== "cancelled" && toMinEnd(s.endTime, s.startTime) - toMin(s.startTime) <= SHORT_SHIFT_MINUTES)
 }
 
 /** Said in the line under the frise when it is there only for short shifts. */
