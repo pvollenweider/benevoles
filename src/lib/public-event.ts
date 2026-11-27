@@ -170,6 +170,8 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     accentColorKey: event.accentColorKey,
     // Default view of the shifts (#1407): the public page applies it under the visitor's choice.
     publicShiftView: shiftViewSetting(event.publicShiftView),
+    // Overlapping shifts allowed for the event (#1467): the page warns instead of refusing.
+    overlapsAllowed: !!event.overlapsAllowed,
     showSchedule: event.showSchedule,
     // Both needed to show the exact charter text the sign-up route hashes (#569): resolveCharterText.
     volunteerCharter: event.organization.volunteerCharter,

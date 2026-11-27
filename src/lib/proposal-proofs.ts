@@ -121,7 +121,7 @@ export function validateAssignments(input: ProposalInput, assignments: readonly 
     const p = people.get(volunteerId)
     if (!p) continue
     const all = [...new Set([...p.fixedShiftIds, ...ids])].map((id) => shifts.get(id)).filter((s) => !!s)
-    for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) if (shiftsClash(all[i]!, all[j]!)) v.push({ code: "overlap", volunteerId, shiftId: all[j]!.id })
+    for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) if (shiftsClash(all[i]!, all[j]!, input.overlapsAllowed)) v.push({ code: "overlap", volunteerId, shiftId: all[j]!.id })
     const roles = new Map<string, number>()
     for (const id of [...p.liveShiftIds, ...ids]) {
       const r = shifts.get(id)?.roleName

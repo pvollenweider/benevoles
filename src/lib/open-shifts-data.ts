@@ -19,7 +19,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
     where: { id: eventId },
     select: {
       id: true, title: true, slug: true, organizationId: true,
-      publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
+      publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, overlapsAllowed: true,
       organization: { select: { name: true, slug: true, timeZone: true } },
       shifts: {
         where: { status: { not: "cancelled" } },

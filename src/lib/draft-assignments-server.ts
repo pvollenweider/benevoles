@@ -328,7 +328,7 @@ export async function publishDrafts(db: Db, input: PublishInput): Promise<Publis
       // 7. Everything the rules read, as it is now.
       const event = await tx.event.findFirst({
         where: { id: eventId },
-        select: { id: true, title: true, organizationId: true, publicStatus: true, availabilityEnabled: true, availabilityAdoptedAt: true, organization: { select: { name: true, slug: true, timeZone: true } } },
+        select: { id: true, title: true, organizationId: true, publicStatus: true, availabilityEnabled: true, availabilityAdoptedAt: true, overlapsAllowed: true, organization: { select: { name: true, slug: true, timeZone: true } } },
       })
       if (!event) throw new PublicationRollback({ ok: false, status: 404, error: NOT_FOUND, code: "not_found" })
       const refused = (problems: DraftProblem[]) => new PublicationRollback({ ok: false, status: 409, error: publicationRefusalText(problems), code: "refused", problems })
@@ -359,7 +359,7 @@ export async function publishDrafts(db: Db, input: PublishInput): Promise<Publis
 
       const verdict = judgeDraftBatch({
         eventId, organizationId: event.organizationId, timeZone, availability: { timeZone: availability.timeZone, dates: availability.dates }, now,
-        drafts, shifts, people: personMap, reserved: reservedRoles(roleRows), answerConditions, limits: roleLimits(roleRows),
+        drafts, shifts, people: personMap, reserved: reservedRoles(roleRows), answerConditions, limits: roleLimits(roleRows), overlapsAllowed: event.overlapsAllowed,
       })
       const problems = [...verdict.problems]
 

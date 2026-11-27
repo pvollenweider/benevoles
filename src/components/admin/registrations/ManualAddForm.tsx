@@ -43,10 +43,12 @@ type Props = {
   /** The registrations the server created, one per shift chosen (#918). */
   onAdded: (regs: Registration[]) => void
   onCancel: () => void
+  /** The event allows overlapping shifts (#1467): no warning for an overlap the rule lets through. */
+  eventOverlapsAllowed?: boolean
 }
 
 // ── Manual registration by the organizer ─────────────────────────────────────
-export default function ManualAddForm({ eventId, shifts, registrations, timeZone, workloadMode, organizerEmail = null, availability = false, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
+export default function ManualAddForm({ eventId, shifts, registrations, timeZone, workloadMode, organizerEmail = null, availability = false, form: addForm, onFormChange: setAddForm, onAdded, onCancel, eventOverlapsAllowed = false }: Props) {
   // The request the role-limit warning is about: the override only applies to that exact form.
   const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   // Manual addition: what this shift would add to the workload of a volunteer already registered.
@@ -233,7 +235,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   // overlaps another shift chosen in this form. A warning: the add stays possible.
   function conflictOf(shiftId: string): string | null {
     const selected = shifts.find((s) => s.id === shiftId) ?? null
-    return addConflictMessage(selected, volunteerShifts) ?? chosenOverlapMessage(selected, chosenShifts)
+    return addConflictMessage(selected, volunteerShifts, eventOverlapsAllowed) ?? chosenOverlapMessage(selected, chosenShifts, eventOverlapsAllowed)
   }
   const conflictMessage = selectedShiftObj ? conflictOf(selectedShiftObj.id) : null
   // The shifts a line offers: not those already chosen on another line.

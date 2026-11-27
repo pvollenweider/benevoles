@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { crossesMidnight, fmtRange, toMin, toMinEnd } from "./gantt-utils"
+import { shiftsOverlap } from "./utils"
 import { answerConditionMention } from "./role-answer"
 import { shiftsClash } from "./shift-overlap"
 import { unionLength } from "./interval-union"
@@ -58,6 +59,8 @@ export type RecapShift = {
 
 export type Gap =
   | { kind: "overlap"; minutes: number }
+  /** Overlap the event allows (#1467): a warning, never a refusal. */
+  | { kind: "allowed_overlap"; minutes: number }
   /** Overlap the sign-up accepts: one of the two roles is cumulable (#986). */
   | { kind: "parallel"; minutes: number }
   | { kind: "back_to_back" }
@@ -109,13 +112,14 @@ export function recapShifts(shifts: RecapShiftInput[]): RecapShift[] {
 }
 
 /** What separates shift `i` from shift `i + 1`: null after the last one. */
-export function gapAfter(sorted: RecapShift[], i: number): Gap | null {
+export function gapAfter(sorted: RecapShift[], i: number, eventOverlapsAllowed = false): Gap | null {
   const a = sorted[i]
   const b = sorted[i + 1]
   if (!b) return null
   if (b.startAbs < a.endAbs) {
     const minutes = Math.min(a.endAbs, b.endAbs) - b.startAbs
-    return shiftsClash(a, b) ? { kind: "overlap", minutes } : { kind: "parallel", minutes }
+    if (shiftsClash(a, b, eventOverlapsAllowed)) return { kind: "overlap", minutes }
+    return { kind: eventOverlapsAllowed ? "allowed_overlap" : "parallel", minutes }
   }
   const gap = b.startAbs - a.endAbs
   if (gap === 0) return { kind: "back_to_back" }
@@ -127,6 +131,7 @@ export function gapAfter(sorted: RecapShift[], i: number): Gap | null {
 export function gapLabel(g: Gap): string | null {
   switch (g.kind) {
     case "overlap": return `Ces deux créneaux se chevauchent de ${fmtDuration(g.minutes)} : l'inscription sera refusée.`
+    case "allowed_overlap": return `En même temps que le créneau suivant pendant ${fmtDuration(g.minutes)}.`
     case "parallel": return `En même temps que le créneau suivant pendant ${fmtDuration(g.minutes)} : c'est possible, l'un des deux postes se cumule avec un autre créneau.`
     case "back_to_back": return "Enchaîné avec le suivant, sans pause."
     case "break": return `Pause de ${fmtDuration(g.minutes)} avant le suivant.`
@@ -138,8 +143,67 @@ export function gapLabel(g: Gap): string | null {
  * Whether two of the shifts overlap in a way the sign-up refuses: any pair, not only neighbours, and
  * neither of a cumulable role (#986, src/lib/shift-overlap.ts).
  */
-export function hasOverlap(sorted: RecapShift[]): boolean {
+export function hasOverlap(sorted: RecapShift[], eventOverlapsAllowed = false): boolean {
+  if (eventOverlapsAllowed) return false
   return sorted.some((a, i) => sorted.slice(i + 1).some((b) => shiftsClash(a, b)))
+}
+
+/** A shift the volunteer already holds, for the recap's overlap warning (#1467). */
+export type RecapHeldShift = {
+  id?: string
+  label?: string
+  roleName?: string
+  date: Date | string
+  startTime: string
+  endTime: string
+}
+
+/** One overlap the event allows (#1467): between two picked shifts, or with one already held. */
+export type AllowedOverlapNotice =
+  | { kind: "picked"; minutes: number; names: [string, string] }
+  | { kind: "held"; minutes: number; label: string }
+
+const overlapMinutes = (a: { date: Date | string; startTime: string; endTime: string }, b: { date: Date | string; startTime: string; endTime: string }) => {
+  const start = (s: typeof a) => dayIndex(typeof s.date === "string" ? s.date : s.date.toISOString()) * DAY + toMin(s.startTime)
+  const end = (s: typeof a) => dayIndex(typeof s.date === "string" ? s.date : s.date.toISOString()) * DAY + toMinEnd(s.endTime, s.startTime)
+  return Math.max(0, Math.min(end(a), end(b)) - Math.max(start(a), start(b)))
+}
+
+const heldName = (s: RecapHeldShift) => (s.label && s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName ?? s.label ?? "")
+
+/**
+ * Every overlap the event allows, among the picked shifts (not only neighbours) and with the
+ * shifts the volunteer already holds, ordered by the picked shift. Empty when the event does not
+ * allow overlaps. Pure.
+ */
+export function allowedOverlapNotices(sorted: RecapShift[], held: RecapHeldShift[] = []): AllowedOverlapNotice[] {
+  if (sorted.length === 0) return []
+  const out: AllowedOverlapNotice[] = []
+  for (let i = 0; i < sorted.length; i++) {
+    for (let j = i + 1; j < sorted.length; j++) {
+      if (shiftsOverlap(sorted[i], sorted[j])) out.push({ kind: "picked", minutes: overlapMinutes(sorted[i], sorted[j]), names: [sorted[i].name, sorted[j].name] })
+    }
+    for (const h of held) {
+      if (shiftsOverlap(sorted[i], h)) out.push({ kind: "held", minutes: overlapMinutes(sorted[i], h), label: heldName(h) })
+    }
+  }
+  return out
+}
+
+/**
+ * What the volunteer is asked to do about allowed overlaps (#1467), said once in the block however
+ * many overlaps there are: a recap that repeats it per pair is not read.
+ */
+export const ALLOWED_OVERLAP_ADVICE = "Tu peux quand même t'inscrire. Vérifie que tu peux faire les deux. Si quelqu'un te remplace, dis-le à l'organisation."
+
+/** One allowed overlap as a short fact (#1467), naming the shifts, without the advice. */
+export function allowedOverlapFact(n: AllowedOverlapNotice): string {
+  const during = `pendant ${fmtDuration(n.minutes)}`
+  if (n.kind === "held") return `Un de ces créneaux a lieu en même temps que ton créneau « ${n.label} » ${during}.`
+  const [a, b] = n.names
+  return a === b
+    ? `Deux créneaux « ${a} » ont lieu en même temps ${during}.`
+    : `« ${a} » et « ${b} » ont lieu en même temps ${during}.`
 }
 
 /** The personal data the form will send, worded for the volunteer. */

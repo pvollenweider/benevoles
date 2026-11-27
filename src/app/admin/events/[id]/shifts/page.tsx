@@ -92,6 +92,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         initialPlaces={mealOnTheGoShown ? event.places.map((p) => ({ ...p, archivedAt: p.archivedAt?.toISOString() ?? null })) : null}
         initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
         questions={event.questions}
+        overlapsAllowed={event.overlapsAllowed}
         initialShifts={event.shifts.map(({ registrations, ...s }) => ({
           ...s,
           date: s.date.toISOString().split("T")[0],

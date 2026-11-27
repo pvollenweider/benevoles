@@ -72,7 +72,7 @@ export type ViewRequest = {
 export type VolunteerSwapInput = {
   now: Date
   timeZone: string
-  event: CancelDeadlineSetting & { shiftSwapsEnabled: boolean; shiftSwapsApproval: boolean; sectorsAdoptedAt?: Date | string | null }
+  event: CancelDeadlineSetting & { shiftSwapsEnabled: boolean; shiftSwapsApproval: boolean; overlapsAllowed?: boolean; sectorsAdoptedAt?: Date | string | null }
   me: string
   /** Each person concerned (me and the requesters of open requests), by volunteer id. */
   persons: Map<string, SwapPerson>
@@ -159,8 +159,8 @@ export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwap
       const d = deadlineOf(r.expiresAt, [theirs.shift, mineReg.shift])
       if (!beforeSwapDeadline(now, d)) continue
       const conditionFor = (roleName: string) => input.answerConditions?.get(roleName) ?? null
-      if (!personSwapCheck({ person: meAsPerson, giving: mineReg, receiving: theirs.shift, held: myHeld, reserved: input.reserved, limits: input.limits, answerCondition: conditionFor(theirs.shift.roleName), answers: input.answers?.get(me) }).ok) continue
-      if (!personSwapCheck({ person: requester, giving: theirs, receiving: mineReg.shift, held: theirHeld, reserved: input.reserved, limits: input.limits, answerCondition: conditionFor(mineReg.shift.roleName), answers: input.answers?.get(r.volunteerId) }).ok) continue
+      if (!personSwapCheck({ person: meAsPerson, giving: mineReg, receiving: theirs.shift, held: myHeld, reserved: input.reserved, limits: input.limits, answerCondition: conditionFor(theirs.shift.roleName), answers: input.answers?.get(me), eventOverlapsAllowed: input.event.overlapsAllowed }).ok) continue
+      if (!personSwapCheck({ person: requester, giving: theirs, receiving: mineReg.shift, held: theirHeld, reserved: input.reserved, limits: input.limits, answerCondition: conditionFor(mineReg.shift.roleName), answers: input.answers?.get(r.volunteerId), eventOverlapsAllowed: input.event.overlapsAllowed }).ok) continue
       ids.push(mineReg.id)
       deadline = deadline && deadline < d ? deadline : d
     }

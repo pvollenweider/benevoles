@@ -90,6 +90,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const members = todayIds ? ctx.members.filter((m) => todayIds.has(m.id)) : ctx.members
   const { candidates } = findCandidates({
     shifts, eventShifts: ctx.eventShifts, members, registrations: ctx.registrations, invites: ctx.invites, declines: ctx.declines, includeDeclined,
+    eventOverlapsAllowed: event.overlapsAllowed,
   })
   const recipients = selectedRecipients(candidates, volunteerIds)
   const skipped = new Set(volunteerIds).size - recipients.length

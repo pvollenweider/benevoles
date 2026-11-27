@@ -36,7 +36,7 @@ const toShift = (s: ShiftRow, occupied: number): BoardShift => {
 
 /** Everything the board reads, for the whole event or one person. */
 async function loadContext(db: Db, eventId: string, scope: "event" | "all", onlyVolunteerId?: string) {
-  const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true, organizationId: true, availabilityEnabled: true, availabilityAdoptedAt: true, organization: { select: { timeZone: true } }, ...WORKLOAD_EVENT_SELECT } })
+  const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true, organizationId: true, availabilityEnabled: true, availabilityAdoptedAt: true, overlapsAllowed: true, organization: { select: { timeZone: true } }, ...WORKLOAD_EVENT_SELECT } })
   if (!event) return null
   const availability = await readAvailabilityGate(db, eventId)
   if (!availability.inUse) return null
@@ -89,6 +89,7 @@ async function loadContext(db: Db, eventId: string, scope: "event" | "all", only
     gate: workloadGateOf(event), collecting: event.availabilityEnabled,
     shifts, people: boardPeople, drafts,
     reserved: reservedRoles(roleRows), answerConditions: reservedAnswerConditions(roleRows), limits: roleLimits(roleRows),
+    overlapsAllowed: event.overlapsAllowed,
   }
 }
 

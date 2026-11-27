@@ -35,6 +35,8 @@ type Props = {
   pushDefaultOn?: boolean
   /** One shift fixed by the flow: the picker is replaced by its name. */
   lockedShift?: boolean
+  /** The event allows overlapping shifts (#1467): an overlap is offered, not marked. */
+  eventOverlapsAllowed?: boolean
   onSent?: (sent: Sent) => void
 }
 
@@ -50,7 +52,7 @@ const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLocaleL
  * The shifts to propose, the members with the reasons they're listed, a manual selection, a
  * preview, then one email per person (#566). Nothing is ever ticked by the page itself.
  */
-export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members, registrations, invites, declines, tags, initialShiftIds, today, timeZone, registeredTodayDefault = false, pushDefaultOn = false, lockedShift = false, onSent }: Props) {
+export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members, registrations, invites, declines, tags, initialShiftIds, today, timeZone, registeredTodayDefault = false, pushDefaultOn = false, lockedShift = false, eventOverlapsAllowed = false, onSent }: Props) {
   const router = useRouter()
   const id = useId()
   const [shiftIds, setShiftIds] = useState<Set<string>>(() => new Set(initialShiftIds))
@@ -85,12 +87,12 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
   // Every member that could be written to for these shifts, whatever the tag shown: a person ticked
   // under one tag stays ticked when the filter changes.
   const all = useMemo(
-    () => findCandidates({ shifts: chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined }),
-    [chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined],
+    () => findCandidates({ shifts: chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined, eventOverlapsAllowed }),
+    [chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined, eventOverlapsAllowed],
   )
   const view = useMemo(
-    () => (tag || registeredToday ? findCandidates({ shifts: chosenShifts, eventShifts, members: viewMembers, registrations, invites, declines, includeDeclined, tag }) : all),
-    [all, tag, registeredToday, viewMembers, chosenShifts, eventShifts, registrations, invites, declines, includeDeclined],
+    () => (tag || registeredToday ? findCandidates({ shifts: chosenShifts, eventShifts, members: viewMembers, registrations, invites, declines, includeDeclined, tag, eventOverlapsAllowed }) : all),
+    [all, tag, registeredToday, viewMembers, chosenShifts, eventShifts, registrations, invites, declines, includeDeclined, eventOverlapsAllowed],
   )
   const q = fold(search.trim())
   const listed = q ? view.candidates.filter((c) => fold(`${c.member.firstName} ${c.member.lastName}`).includes(q)) : view.candidates

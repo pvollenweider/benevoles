@@ -246,7 +246,7 @@ export async function POST(req: Request) {
     if (fullRefusal) return refuse(fullRefusal)
   }
 
-  const selectionRefusal = selectionOverlapRefusal(shifts)
+  const selectionRefusal = selectionOverlapRefusal(shifts, event.overlapsAllowed)
   if (selectionRefusal) return refuse(selectionRefusal)
 
   // Roles reserved to members with a tag (#470): all the role's shifts count, see reservedRoleRefusal.
@@ -359,7 +359,7 @@ export async function POST(req: Request) {
         where: { eventId, status: { not: "cancelled" }, assignedOnly: true },
         select: { roleName: true, assignedOnly: true },
       }))
-      const clashRefusal = existingOverlapRefusal(allEventRegs, shifts, hiddenRoles)
+      const clashRefusal = existingOverlapRefusal(allEventRegs, shifts, hiddenRoles, event.overlapsAllowed)
       if (clashRefusal) return refuse(clashRefusal)
     }
   }
@@ -572,11 +572,11 @@ export async function POST(req: Request) {
           select: { roleName: true, assignedOnly: true },
         }))
         if (asksAssignedOnly(current, hiddenNow)) throw new AssignedOnlyError()
-        const clashNow = findOverlap(liveNow, current, new Set([...hiddenRoles, ...hiddenNow]))
+        const clashNow = findOverlap(liveNow, current, new Set([...hiddenRoles, ...hiddenNow]), event.overlapsAllowed)
         if (clashNow) {
           if (proven) throw new OverlapError(clashNow.label)
           // To the owner, by email: their own shift is named, assigned by the organisation or not.
-          conflict ??= overlapConflict(liveNow, current)
+          conflict ??= overlapConflict(liveNow, current, event.overlapsAllowed)
         }
 
         // Shifts per volunteer for a role (#466), under the same volunteer lock, so two concurrent

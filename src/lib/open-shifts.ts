@@ -220,6 +220,8 @@ export function findCandidates(input: {
   /** Only members carrying this tag (case-insensitive); empty: everyone. */
   tag?: string
   includeDeclined?: boolean
+  /** The event allows overlapping shifts (#1467): an overlap is offered, never marked. */
+  eventOverlapsAllowed?: boolean
 }): { candidates: Candidate[]; excluded: Exclusions } {
   const excluded: Exclusions = { inactive: 0, noEmail: 0, declined: 0, alreadyOnShifts: 0, reserved: 0, tooYoung: 0 }
   const eventShifts = new Map(input.eventShifts.map((s) => [s.id, s]))
@@ -251,7 +253,7 @@ export function findCandidates(input: {
         if (!other) continue
         const minutes = overlapMinutes(other, shift)
         // A cumulable role (#986) on either side: sign-up accepts it, so it is offered.
-        if (minutes > 0 && shiftsClash(other, shift) && (!overlap || minutes > overlap.minutes)) overlap = { shift: other, minutes, status: r.status }
+        if (minutes > 0 && shiftsClash(other, shift, input.eventOverlapsAllowed) && (!overlap || minutes > overlap.minutes)) overlap = { shift: other, minutes, status: r.status }
       }
       if (overlap) return { shiftId: shift.id, status: "overlap", overlap, availability }
       return { shiftId: shift.id, status: "offer", availability }

@@ -57,10 +57,10 @@ export function fullShift(shiftId: string, label: string): SignupRefusal {
 }
 
 /** Two of the asked shifts overlap each other, neither of a cumulable role (#986). */
-export function selectionOverlapRefusal(shifts: (OverlapShift & { label: string })[]): SignupRefusal | null {
+export function selectionOverlapRefusal(shifts: (OverlapShift & { label: string })[], eventOverlapsAllowed = false): SignupRefusal | null {
   for (let i = 0; i < shifts.length; i++) {
     for (let j = i + 1; j < shifts.length; j++) {
-      if (shiftsClash(shifts[i], shifts[j])) {
+      if (shiftsClash(shifts[i], shifts[j], eventOverlapsAllowed)) {
         return { status: 400, body: { error: `Les créneaux "${shifts[i].label}" et "${shifts[j].label}" se chevauchent.` } }
       }
     }
@@ -81,10 +81,11 @@ export function findOverlap(
   existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
   hiddenRoles: Set<string> = new Set(),
+  eventOverlapsAllowed = false,
 ): { label: string | null } | null {
   for (const reg of existing) {
     for (const shift of shifts) {
-      if (shiftsClash(reg.shift, shift)) {
+      if (shiftsClash(reg.shift, shift, eventOverlapsAllowed)) {
         const hidden = !!reg.shift.assignedOnly || (reg.shift.roleName !== undefined && hiddenRoles.has(reg.shift.roleName))
         return { label: hidden ? null : reg.shift.label }
       }
@@ -102,8 +103,9 @@ export function existingOverlapRefusal(
   existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
   hiddenRoles: Set<string> = new Set(),
+  eventOverlapsAllowed = false,
 ): SignupRefusal | null {
-  const clash = findOverlap(existing, shifts, hiddenRoles)
+  const clash = findOverlap(existing, shifts, hiddenRoles, eventOverlapsAllowed)
   return clash ? overlapWithExisting(clash.label) : null
 }
 

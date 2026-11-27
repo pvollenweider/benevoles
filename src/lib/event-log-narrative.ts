@@ -91,6 +91,7 @@ const FIELD_LABELS: Record<string, string> = {
   shiftRosterEnabled: "qui est inscrit, visible des bénévoles confirmés et des membres invités",
   // Default view of the shifts on the public page (#1407).
   publicShiftView: "affichage des créneaux par défaut",
+  overlapsAllowed: "créneaux qui se chevauchent",
   rosterName: "nom affiché aux autres bénévoles",
   rosterAudience: "nom visible par",
   isListed: "visibilité",

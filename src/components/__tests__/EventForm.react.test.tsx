@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, fireEvent, cleanup, act } from "@testing-library/react"
+import { render, screen, fireEvent, cleanup, act, within, waitFor } from "@testing-library/react"
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
 // announce()'s own two-step (empty, then the text on the next frame) is tested on its own; here we
@@ -263,5 +263,74 @@ describe("EventForm: dates refused by the days-off rule (#1171, lot 2)", () => {
     expect(screen.getAllByRole("alert").some((el) => el.textContent?.includes("Dates non enregistrées"))).toBe(true)
     fireEvent.change(end, { target: { value: "2031-07-07" } })
     expect(screen.getAllByRole("alert").some((el) => el.textContent?.includes("Dates non enregistrées"))).toBe(false)
+  })
+})
+
+// « Créneaux qui se chevauchent » (#1467): a state line, one button, a confirmation before turning
+// it on, an amber note while on, and no dialog to turn it off.
+describe("EventForm — overlapping shifts control (#1467)", () => {
+  beforeEach(() => cleanup())
+  afterEach(() => {
+    cleanup()
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+    announceMock.mockClear()
+  })
+
+  const renderOverlaps = (overlapsAllowed = false) =>
+    render(<EventForm initialData={{ ...initialData, overlapsAllowed }} />)
+
+  it("shows the state line, the help sentence and the one button, off by default", () => {
+    renderOverlaps()
+    expect(screen.getByText("Chevauchements : non autorisés")).toBeInTheDocument()
+    const button = screen.getByRole("button", { name: "Autoriser les chevauchements…" })
+    expect(button).toHaveAttribute("aria-describedby", "event-overlaps-help")
+    expect(screen.queryByText("Les inscriptions existantes qui se chevauchent sont conservées.")).toBeNull()
+    expect(screen.queryByText(/Attention :/)).toBeNull()
+  })
+
+  it("asks before turning it on; cancel leaves it off and returns the focus to the button", async () => {
+    renderOverlaps()
+    const button = screen.getByRole("button", { name: "Autoriser les chevauchements…" })
+    fireEvent.click(button)
+    const dialog = screen.getByRole("dialog")
+    expect(within(dialog).getByRole("heading", { name: "Autoriser les créneaux qui se chevauchent ?" })).toBeInTheDocument()
+    const cancel = within(dialog).getByRole("button", { name: "Annuler" })
+    expect(cancel).toHaveFocus()
+    expect(dialog).toHaveTextContent("Plus aucune inscription ne sera refusée parce que deux créneaux se chevauchent")
+    fireEvent.click(cancel)
+    expect(screen.queryByRole("dialog")).toBeNull()
+    expect(screen.getByText("Chevauchements : non autorisés")).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole("button", { name: "Autoriser les chevauchements…" })).toHaveFocus())
+  })
+
+  it("confirm turns it on, shows the amber note it is described by, then off without a dialog", async () => {
+    renderOverlaps()
+    fireEvent.click(screen.getByRole("button", { name: "Autoriser les chevauchements…" }))
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Autoriser" }))
+    expect(screen.queryByRole("dialog")).toBeNull()
+    expect(screen.getByText("Chevauchements : autorisés")).toBeInTheDocument()
+    const button = screen.getByRole("button", { name: "Ne plus autoriser les chevauchements" })
+    expect(button).toHaveAttribute("aria-describedby", "event-overlaps-help event-overlaps-note")
+    const note = document.getElementById("event-overlaps-note")!
+    expect(note).toHaveTextContent("Attention : Les chevauchements ne sont plus vérifiés pour cet événement.")
+    expect(note).toHaveClass("bg-amber-50", "border-amber-300", "text-amber-900")
+    expect(screen.queryByText("Les inscriptions existantes qui se chevauchent sont conservées.")).toBeNull()
+
+    fireEvent.click(button)
+    expect(screen.queryByRole("dialog")).toBeNull()
+    expect(screen.getByText("Chevauchements : non autorisés")).toBeInTheDocument()
+    expect(screen.getByText("Les inscriptions existantes qui se chevauchent sont conservées.")).toBeInTheDocument()
+    expect(announceMock).toHaveBeenCalledWith(expect.any(Function), "Chevauchements : non autorisés.")
+  })
+
+  it("takes the focus from the poste settings' link", () => {
+    window.history.replaceState(null, "", "/admin/events/evt-1/edit#event-overlaps")
+    try {
+      renderOverlaps()
+      expect(screen.getByRole("button", { name: "Autoriser les chevauchements…" })).toHaveFocus()
+    } finally {
+      window.history.replaceState(null, "", "/")
+    }
   })
 })

@@ -195,6 +195,10 @@ model Event {
   // where it stays readable, the list below; always the list for a long event), "frise" or
   // "liste". A visitor's choice, kept on the device, still wins. A validated set of values.
   publicShiftView     String    @default("auto")
+  // Overlapping shifts allowed for the whole event (#1467): off by default. When on, the one
+  // overlap rule (src/lib/shift-overlap.ts) lets every two shifts of this event overlap, whatever
+  // their postes; per-poste `Shift.overlapAllowed` values are kept and apply again when it is off.
+  overlapsAllowed     Boolean   @default(false)
   // Registration window (#463), independent from publication: a published event can be visible
   // while sign-ups are closed. Open by default so existing events keep working; copies and
   // templates start closed. Optional schedule, as instants (entered in the organisation's zone).
