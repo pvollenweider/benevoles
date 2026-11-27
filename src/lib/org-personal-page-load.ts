@@ -18,7 +18,7 @@ import { orgLinksOpen } from "./org-lifecycle"
 import { orgBaseUrl } from "./urls"
 import { orgTimeZone } from "./time-zone"
 import { contactEmail } from "./site"
-import { buildOrgPageData, type OrgPageData } from "./org-personal-page"
+import { buildOrgPageData, orgCancelContactEmail, type OrgPageData } from "./org-personal-page"
 import { LIVE_STATUSES } from "./registration-capacity"
 import { guardTokenLookup, pageClient } from "./token-page-guard"
 import { tokenUseAllowed } from "./token-rate-limit"
@@ -84,7 +84,7 @@ export const loadOrgPage = cache(async (token: string): Promise<OrgPageLoaded> =
     now: new Date(),
     timeZone,
     orgHomeUrl: baseUrl,
-    contactEmail: contactEmail(),
+    contactEmail: orgCancelContactEmail(target.organization.replyToEmail, process.env.EMAIL_REPLY_TO),
     calendarFeed,
   })
 
