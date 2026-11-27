@@ -10,6 +10,9 @@ import { assignLanes, clamp, fromMin, toMin, toMinEnd } from "./gantt-utils"
 
 // ── Layout constants ──────────────────────────────────────────────────────────
 export const PX_PER_MIN = 2.5
+/** Below this width (#1470: about 31 minutes at PX_PER_MIN), a bar shows its shift's own label
+ * before its hours: the hours alone are cut off and say nothing of which shift it is. */
+export const NARROW_BAR_PX = 80
 export const SNAP       = 15
 // 56, not 48: room for three lines of 12/11 px text in a bar (42 px tall inside a dashed frame).
 export const ROW_H      = 56

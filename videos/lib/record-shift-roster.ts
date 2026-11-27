@@ -114,7 +114,7 @@ export async function recordShiftRoster({ page, base, dir, scene, tap, settle, f
     await tap(page, page.getByRole("button", { name: "Frise", exact: true }))
     await at("Survolez un créneau")
     const bar = page.getByRole("button", { name: /, Buvette[^:]* : sélectionner/ }).first()
-    await bar.hover(); await page.getByText(/Buvette · (12h|12:00)/, { exact: false }).waitFor()
+    await bar.hover(); await page.getByText(/(12h|12:00)\S* · Buvette/, { exact: false }).waitFor()
     assert((await names()).includes("Bruno"))
     await at("En Frise, Tab entre dans le planning du jour")
     for (let i = 0; i < 20 && !await page.evaluate(() => document.activeElement?.hasAttribute("data-shift-id")); i++) {

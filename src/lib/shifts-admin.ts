@@ -134,14 +134,18 @@ export function timelineBarTime(s: { startTime: string; endTime: string }): stri
 
 /**
  * The accessible name of a shift's bar on the admin timeline: the role (shown by the row, not the
- * bar), then the bar's visible text in its order, then the action: « Bar, 10h30–12h15, Soir,
+ * bar), then the bar's visible text in its order, then the action. A narrow bar (#1470,
+ * NARROW_BAR_PX) shows its label before its hours, and its name follows (`labelFirst`): « Bar, 10h30–12h15, Soir,
  * 3/5 inscrits, 2 libres, modifier ». It holds the visible words in a row so that a voice command
  * using them reaches the bar (WCAG 2.5.3, axe `label-content-name-mismatch`); the « · » of the bar
  * becomes a comma. The hours and places in words (#587) are its description, `timelineBarDescription`.
  */
-export function timelineBarName(s: BarShift): string {
-  const label = s.label && s.label !== s.roleName ? `, ${s.label}` : ""
-  return `${s.roleName}, ${timelineBarTime(s)}${label}, ${timelineBarPlaces(s).split(" · ").join(", ")}, modifier`
+export function timelineBarName(s: BarShift, opts: { labelFirst?: boolean } = {}): string {
+  const hasLabel = !!s.label && s.label !== s.roleName
+  const places = timelineBarPlaces(s).split(" · ").join(", ")
+  if (hasLabel && opts.labelFirst) return `${s.roleName}, ${s.label}, ${timelineBarTime(s)}, ${places}, modifier`
+  const label = hasLabel ? `, ${s.label}` : ""
+  return `${s.roleName}, ${timelineBarTime(s)}${label}, ${places}, modifier`
 }
 
 /**

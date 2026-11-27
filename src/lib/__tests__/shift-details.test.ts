@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { barDetailsText, detailsButtonName, shiftDetails, shiftDetailsById } from "../shift-details"
+import { barDetailsText, detailsButtonName, hasShortShift, shiftDetails, shiftDetailsById } from "../shift-details"
 
 describe("shiftDetails (#1471)", () => {
   it("keeps the description and the public practical info, never a contact", () => {
@@ -37,5 +37,21 @@ describe("names and descriptions", () => {
     expect(barDetailsText(shiftDetails({ locationDetails: "Entrée B" })!)).toBe("Lieu : Entrée B.")
     expect(barDetailsText(shiftDetails({ description: "Servir" })!)).toBe("Détails sous le planning.")
     expect(barDetailsText(shiftDetails({ instructions: "Gilet", latitude: 46.2, longitude: 6.1 })!)).toBe("Lieu : Point de rendez-vous. Détails sous le planning.")
+  })
+})
+
+describe("hasShortShift (#1470)", () => {
+  it("is true from one shift of 60 minutes or less, cancelled ones aside", () => {
+    expect(hasShortShift([{ startTime: "08:00", endTime: "09:00" }])).toBe(true)
+    expect(hasShortShift([{ startTime: "08:00", endTime: "09:01" }])).toBe(false)
+    expect(hasShortShift([{ startTime: "08:00", endTime: "08:30", status: "cancelled" }, { startTime: "10:00", endTime: "14:00" }])).toBe(false)
+  })
+  it("counts a night shift's real length", () => {
+    expect(hasShortShift([{ startTime: "22:00", endTime: "00:30" }])).toBe(false)
+    expect(hasShortShift([{ startTime: "23:30", endTime: "00:15" }])).toBe(true)
+  })
+  it("reads time like the frise: « 24:00 » ends the day, equal hours are a whole day", () => {
+    expect(hasShortShift([{ startTime: "23:30", endTime: "24:00" }])).toBe(true)
+    expect(hasShortShift([{ startTime: "08:00", endTime: "08:00" }])).toBe(false)
   })
 })

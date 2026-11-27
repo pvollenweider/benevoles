@@ -6,11 +6,11 @@
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react"
-import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
+import { barText, shiftListText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
 import ShiftInfoList from "@/components/ShiftInfoList"
-import { barDetailsText, DETAILS_HOVER_DELAY_MS, FRISE_DETAILS_PROMPT, FRISE_DETAILS_ROSTER_PROMPT, type ShiftDetails } from "@/lib/shift-details"
+import { barDetailsText, DETAILS_HOVER_DELAY_MS, FRISE_DETAILS_PROMPT, FRISE_DETAILS_ROSTER_PROMPT, FRISE_SHORT_PROMPT, type ShiftDetails } from "@/lib/shift-details"
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 import { FRISE_KEYS_SHOWN, FRISE_KEYS_SPOKEN, friseKey, friseTabStop, friseTarget, type FriseRows } from "@/lib/frise-keyboard"
 import { chartMinWidth, daySpan, LABEL_W, MAX_PX_PER_MIN, MIN_BAR_W } from "@/lib/frise-geometry"
@@ -48,6 +48,7 @@ export default function DayTimeline({
   dayLabel,
   roster,
   details,
+  shortShifts = false,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -79,6 +80,11 @@ export default function DayTimeline({
    * is in its description.
    */
   details?: Map<string, ShiftDetails> | null
+  /**
+   * The event has a short shift (#1470), decided once for the whole event so every day has the
+   * line: it then always says the name, hours and places of the bar pointed at.
+   */
+  shortShifts?: boolean
 }) {
   const [detailId, setDetailId] = useState<string | null>(null)
   // With details (#1471), the line follows a pointer only after it rests on a bar: on its way down
@@ -89,7 +95,7 @@ export default function DayTimeline({
   const lineRef = useRef<HTMLDivElement>(null)
   useEffect(() => () => { if (hoverTimer.current) clearTimeout(hoverTimer.current) }, [])
   const hasDetails = (details?.size ?? 0) > 0
-  const hasLine = !!roster || hasDetails
+  const hasLine = !!roster || hasDetails || shortShifts
   const keyboardInLine = () => !!lineRef.current?.querySelector(":focus-visible")
   const showNow = (id: string) => {
     if (hoverTimer.current) clearTimeout(hoverTimer.current)
@@ -470,15 +476,24 @@ export default function DayTimeline({
     {hasLine && (
       // Plain text, not live: the focused bar's description says the place and where the rest is.
       // Kept until another bar; a fixed minimum height, so the page does not jump under the pointer.
-      <div ref={lineRef} data-frise-detail data-roster-detail={roster ? "" : undefined} className={`-mt-3 mb-5 ${hasDetails ? "min-h-16" : "min-h-10"} text-sm text-gray-700 break-words`}>
+      <div ref={lineRef} data-frise-detail data-roster-detail={roster ? "" : undefined} className={`-mt-3 mb-5 ${hasDetails ? "min-h-24" : "min-h-16"} text-sm text-gray-700 break-words`}>
         {detailShift ? (
           <>
-            <p className="font-medium text-gray-900">{detailShift.label} · {fmt(detailShift.startTime)}–{fmt(detailShift.endTime)}</p>
+            {/* The list's own words (#1470): what a bar too narrow for its text cannot show. */}
+            {(() => {
+              const text = shiftListText(detailShift, viewOf(detailShift), { locked: locked && !selected.has(detailShift.id), limitReached: selected.has(detailShift.id) ? undefined : limitReachedRoles?.get(detailShift.roleName) })
+              return (
+                <>
+                  <p className="font-medium text-gray-900">{text.title}</p>
+                  <p>{text.status}{text.details ? ` · ${text.details}` : ""}</p>
+                </>
+              )
+            })()}
             {detailInfo?.description && <p className="mt-0.5 whitespace-pre-line">{detailInfo.description}</p>}
             {detailInfo && <ShiftInfoList info={detailInfo.info} className="mt-0.5" />}
             {roster && <p className="mt-0.5"><RosterSummary entry={detailEntry} own={detailEntry?.own ?? false} /></p>}
           </>
-        ) : <p>{!hasDetails ? ROSTER_FRISE_PROMPT : roster ? FRISE_DETAILS_ROSTER_PROMPT : FRISE_DETAILS_PROMPT}</p>}
+        ) : <p>{hasDetails ? (roster ? FRISE_DETAILS_ROSTER_PROMPT : FRISE_DETAILS_PROMPT) : roster ? ROSTER_FRISE_PROMPT : FRISE_SHORT_PROMPT}</p>}
       </div>
     )}
     {/* Only while a bar has the keyboard focus (never for a mouse or a touch): the keys, in short. */}

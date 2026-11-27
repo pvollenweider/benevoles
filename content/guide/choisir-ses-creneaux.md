@@ -64,6 +64,8 @@ Avant de choisir, tu peux lire ce que l'organisation a indiqué sur un créneau 
 
 Les coordonnées de la personne de contact ne s'affichent qu'une fois inscrit, dans l'email de confirmation et sur ta page « Mes inscriptions ».
 
+Quand un événement a des créneaux courts, d'une heure ou moins, leurs barres sont trop étroites pour afficher leur nom. La ligne sous la frise donne alors, pour le créneau survolé, parcouru au clavier ou touché, son nom, ses horaires et ses places. La vue **Liste** les montre tous en entier.
+
 ## Sélectionner un créneau
 
 Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection : dans la colonne de droite (« Créneaux sélectionnés ») sur ordinateur, sous le planning sur téléphone. Pour le retirer, clique sur le **✕** à droite de son nom dans cette liste.
@@ -91,7 +93,7 @@ Sinon, la page n'affiche aucun nom, seulement les places libres : c'est le cas p
 
 Dans la vue **Liste**, une ligne sous chaque créneau dit qui y est inscrit, par exemple « Sur ce créneau : Aline M., Luc D. et 2 autres bénévoles. », ou « Avec toi : … » sur un de tes créneaux, ou « 3 autres bénévoles, sans nom affiché ». Dans la vue **Frise**, les barres ne changent pas : sous le planning de chaque jour, une ligne montre qui est inscrit sur le dernier créneau que tu as touché, survolé ou atteint au clavier (« Touche, survole ou sélectionne au clavier un créneau pour voir qui est inscrit. La vue Liste affiche tous les noms. »). Au clavier, chaque jour de la frise est un seul arrêt de Tab : les flèches gauche et droite passent d'un créneau à l'autre du même poste, haut et bas au poste voisin, y compris sur un créneau complet, déjà pris ou réservé, qui dit pourquoi il ne peut pas être choisi.
 
-![Page d'inscription avec l'interrupteur « Voir qui est inscrit » allumé, à côté de « Frise » et « Liste », sa phrase d'explication, la frise du jour, puis sous la frise la ligne du créneau survolé : son poste et ses heures, puis « Sur ce créneau : » suivi des prénoms et initiales des bénévoles qui l'acceptent et du nombre des autres](/doc-img/public-roster-switch.png)
+![Page d'inscription avec l'interrupteur « Voir qui est inscrit » allumé, à côté de « Frise » et « Liste », sa phrase d'explication, la frise du jour, puis sous la frise la ligne du créneau survolé : ses heures et son poste, son état (places libres ou complet), puis « Sur ce créneau : » suivi des prénoms et initiales des bénévoles qui l'acceptent et du nombre des autres](/doc-img/public-roster-switch.png)
 
 En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
 

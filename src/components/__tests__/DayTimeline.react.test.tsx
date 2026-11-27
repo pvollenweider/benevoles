@@ -210,13 +210,13 @@ describe("DayTimeline with the roster", () => {
     const a = screen.getByRole("button", { name: /^18h–20h/ })
     expect(a).toHaveAccessibleDescription("Sur ce créneau : Aline, initiale M et 1 autre bénévole.")
     fireEvent.focus(a)
-    expect(screen.getByText("Bar · 18h–20h")).toBeInTheDocument()
+    expect(screen.getByText("18h–20h · Bar")).toBeInTheDocument()
     fireEvent.pointerLeave(a)
-    expect(screen.getByText("Bar · 18h–20h")).toBeInTheDocument()
+    expect(screen.getByText("18h–20h · Bar")).toBeInTheDocument()
     const b = screen.getByRole("button", { name: /^20h–22h/ })
     expect(b).toHaveAccessibleDescription("Sur ce créneau : personne d'autre pour l'instant.")
     fireEvent.click(b)
-    expect(screen.getByText("Bar · 20h–22h")).toBeInTheDocument()
+    expect(screen.getByText("20h–22h · Bar")).toBeInTheDocument()
   })
 
   it("a full (aria-disabled) bar lets the tap through to update the line", () => {
@@ -226,7 +226,7 @@ describe("DayTimeline with the roster", () => {
     expect(bar).toHaveAttribute("aria-disabled", "true")
     expect(bar.className).toContain("pointer-events-none")
     fireEvent.click(bar.parentElement!)
-    expect(screen.getByText("Bar · 18h–20h")).toBeInTheDocument()
+    expect(screen.getByText("18h–20h · Bar")).toBeInTheDocument()
   })
 
   it("nothing of the roster without the switch", () => {
@@ -327,7 +327,7 @@ describe("DayTimeline with the keyboard", () => {
     bar("open").focus()
     fireEvent.keyDown(bar("open"), { key: "ArrowLeft" })
     expect(bar("full")).toHaveAccessibleDescription("Sur ce créneau : Zoé, initiale R.")
-    expect(screen.getByText("Bar · 08h–10h")).toBeInTheDocument()
+    expect(screen.getByText("08h–10h · Bar")).toBeInTheDocument()
   })
 })
 
@@ -377,7 +377,7 @@ describe("DayTimeline details", () => {
     const roleLine = document.querySelector("[data-roster-detail]") as HTMLElement
     expect(roleLine).toHaveTextContent(/qui est inscrit/)
     expect(roleLine).not.toHaveTextContent(/détails/)
-    expect(roleLine.className).toContain("min-h-10")
+    expect(roleLine.className).toContain("min-h-16")
   })
 
   it("adds no line and no description at all without roster and details", () => {
@@ -405,5 +405,24 @@ describe("DayTimeline details", () => {
     fireEvent.pointerLeave(wrapper, { pointerType: "mouse" })
     act(() => { vi.advanceTimersByTime(DETAILS_HOVER_DELAY_MS * 2) })
     expect(line()).not.toHaveTextContent("Servir les boissons")
+  })
+})
+
+// Short shifts (#1470): a line names the bar pointed at, even without details or roster.
+describe("DayTimeline with short shifts", () => {
+  afterEach(cleanup)
+  const line = () => document.querySelector("[data-frise-detail]") as HTMLElement
+
+  it("names the bar's shift, hours and places in the list's words, at once on focus", () => {
+    render(<DayTimeline shifts={[shift("a", { roleName: "Signaleurs", label: "Km 12", startTime: "08:00", endTime: "08:30", capacity: 2, registered: 1, spotsLeft: 1 })]} shows={[]} selected={new Set()} onToggle={() => {}} shortShifts />)
+    expect(line()).toHaveTextContent("Pointe ou parcours un créneau pour voir ici son nom, ses horaires et ses places.")
+    fireEvent.focus((document.querySelector('[data-shift-id="a"]') as HTMLElement).parentElement!)
+    expect(line()).toHaveTextContent("08h–08h30 · Signaleurs (Km 12)")
+    expect(line()).toHaveTextContent("1 place libre sur 2")
+  })
+
+  it("adds nothing when the event has no short shift", () => {
+    render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set()} onToggle={() => {}} />)
+    expect(line()).toBeNull()
   })
 })

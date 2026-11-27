@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { shiftDetailsById } from "@/lib/shift-details"
+import { hasShortShift, shiftDetailsById } from "@/lib/shift-details"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
@@ -619,6 +619,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const longEvent = isLongEvent(event.startDate, event.endDate)
   const today = new Date().toLocaleDateString("sv-SE", { timeZone: event.timeZone })
   const shownDays = visibleDays(Object.keys(shiftsByDay), today, longEvent)
+  // A short shift among those the page shows (#1470): every shown day's frise then gets the line
+  // naming the bar pointed at. Decided once, from what the page shows (a group or shared link
+  // without the short poste gets no line).
+  const shortShiftsLine = hasShortShift(shownDays.flatMap((day) => shiftsByDay[day] ?? []))
   const months = usesMonthView(shownDays) ? groupDaysByMonth(shownDays) : null
   const month = months ? (months.find((m) => m.key === chosenMonth) ?? months[0]) : null
   const daysOnPage = month ? month.days : shownDays
@@ -1344,6 +1348,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         dayLabel={formatCalendarDay(day)}
                         roster={shownRoster}
                         details={shiftDetailsMap}
+                        shortShifts={shortShiftsLine}
                       />
                         </div>
                       )}
