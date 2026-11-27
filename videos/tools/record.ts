@@ -5573,6 +5573,8 @@ async function main() {
         await at("Même publié, il peut rester")
         await at("Les inscriptions peuvent être immédiates")
         await page.getByText("Inscriptions", { exact: true }).last().scrollIntoViewIfNeeded()
+        await page.getByText("Affichage des créneaux par défaut", { exact: true }).scrollIntoViewIfNeeded()
+        await page.waitForTimeout(2000)
       })
 
       await scene("appearance", async (at) => {

@@ -1569,3 +1569,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **ORG_TIMEZONE_CHARTER — READY, publiée, révision 5.** La convention et son commutateur sont présentés dans les paramètres et le formulaire. [Revue](evidence/batch44/org-timezone-charter/review.md).
 
 **ORG_FIRST_STEPS — NOT READY, non publiée.** La répétition atteint le guide mais le lecteur vidéo réel est absent du serveur isolé sans source média ; aucun lecteur de substitution n'a été utilisé. [Suivi et preuves](evidence/batch44/STATUS.md).
+
+**ADMIN_FEATURES_OVERVIEW — READY, publiée, révision 8.** Le formulaire actuel montre aussi les réglages d'affichage et de chevauchement (#1407, #1467). [Revue](evidence/batch44/admin-features-tour/review.md).
