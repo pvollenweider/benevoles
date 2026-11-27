@@ -1,0 +1,10 @@
+welcome: 3 audiovisual checkpoints; no issue reported
+settings: 3 audiovisual checkpoints; no issue reported
+age: 3 audiovisual checkpoints; no issue reported
+quota: 4 audiovisual checkpoints; REVIEW
+  00:13 : Le message explicite « Limite de 2 créneaux par personne atteinte » n'apparaît à l'écran qu'à la fin de la phrase qui le décrit, suite au changement d'affichage vers la vue liste.
+reserved: 3 audiovisual checkpoints; no issue reported
+eligible: 3 audiovisual checkpoints; no issue reported
+answer: 6 audiovisual checkpoints; no issue reported
+result: 5 audiovisual checkpoints; no issue reported
+8 scene reviews; 1 flagged. This does not replace inspection of the final video.

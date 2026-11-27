@@ -1553,3 +1553,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **VOLUNTEER_DISCOVER_EVENT — READY, publiée, révision 5.** La seconde prise montre la liste, ses couleurs et le conseil de rotation avant la frise. [Revue](evidence/batch44/volunteer-discover-event/review.md).
 
 **SHIFT_ROSTER_VISIBILITY — READY, publiée, révision 4.** La liste et la ligne de frise montrent les états actuels ; le courriel ouvre le lien commun. [Revue](evidence/batch44/shift-roster-visibility/review.md).
+
+**SHIFT_ELIGIBILITY_RULES — NOT READY, non publiée.** La première prise affiche tardivement l'explication du quota ; la seconde corrige ce point, mais la revue et sa contre-vérification signalent une prononciation et des manipulations à reprendre dans la scène de réponse. [Suivi et preuves](evidence/batch44/STATUS.md).
