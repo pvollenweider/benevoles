@@ -15,3 +15,7 @@
 - EVENT_REVIEW_PUBLISH — READY published: take 2 shows the current convention window and passes audiovisual, final-audio, frame/timeline and validation checks; narration unchanged.
 - ACCESSIBILITY_KEYBOARD_DISPLAY — NOT READY, not published: macOS Accessibility permission was denied for the native capture process; required Safari zoom and VoiceOver inserts cannot be verified. No substitute capture or narrated take.
 - ORG_EMAIL_SETTINGS — READY published: take 1 passed audiovisual, final-audio, frame/timeline and validation checks; expanded address-alert help visible, narration unchanged.
+
+## Phase C
+
+- EVENT_SIGNUP_PAGE_SETTINGS — NOT READY, not published: production has not started.
