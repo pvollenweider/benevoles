@@ -1,0 +1,9 @@
+welcome: 3 audiovisual checkpoints; no issue reported
+discover: 3 audiovisual checkpoints; no issue reported
+choose: 3 audiovisual checkpoints; no issue reported
+details: 3 audiovisual checkpoints; no issue reported
+preferences: 3 audiovisual checkpoints; no issue reported
+confirm: 3 audiovisual checkpoints; REVIEW
+  À 00:03, le clic sur 'Confirmer mon inscription' est effectué avant l'annonce vocale 'confirme ton inscription' qui débute à 00:04, alors que la page de confirmation est déjà affichée.
+success: 4 audiovisual checkpoints; no issue reported
+7 scene reviews; 1 flagged. This does not replace inspection of the final video.

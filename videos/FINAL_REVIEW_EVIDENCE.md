@@ -1545,3 +1545,7 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 - **SECTORS** (`sectors`) : narration modifiée (« Les bénévoles ne voient pas les secteurs, sauf si vous choisissez de regrouper les créneaux par secteur sur la page d'inscription »), avec le bloc `viewer` et le script ; la carte Secteurs filmée après le premier secteur montre le nouvel interrupteur. À refilmer avec le prochain lot.
 - **SECTOR_LEADERS** (`sector-leaders`) : la carte Secteurs, si elle est filmée une fois les secteurs adoptés, gagne l'interrupteur. Image seule.
 - Aucune vidéo n'est régénérée dans ce changement.
+
+## Lot 44 — en cours, 27 novembre 2026
+
+**VOLUNTEER_REGISTER — NOT READY.** La première prise clique sur la confirmation avant son annonce ; la seconde passe la validation et les contrôles audiovisuels automatisés, mais le visionnage intégral avec la narration reste à faire avant toute publication. [Suivi et preuves](evidence/batch44/STATUS.md).
