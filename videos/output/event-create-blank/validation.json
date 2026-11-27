@@ -1,70 +1,71 @@
 {
   "id": "EVENT_CREATE_BLANK",
   "slug": "event-create-blank",
-  "validatedAt": "2026-10-11T16:22:40.540Z",
+  "validatedAt": "2026-11-27T20:46:40.213Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 154720,
+  "captureMs": 158120,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 14277,
-      "audioMs": 14275,
+      "visualMs": 14143,
+      "audioMs": 14141,
       "driftMs": 2
     },
     {
       "id": "identity-dates",
-      "visualMs": 17751,
-      "audioMs": 17749,
-      "driftMs": 2
-    },
-    {
-      "id": "location",
-      "visualMs": 18362,
-      "audioMs": 18359,
-      "driftMs": 3
-    },
-    {
-      "id": "public-content",
-      "visualMs": 19195,
-      "audioMs": 19193,
-      "driftMs": 2
-    },
-    {
-      "id": "phone-color",
-      "visualMs": 16955,
-      "audioMs": 16954,
+      "visualMs": 17915,
+      "audioMs": 17914,
       "driftMs": 1
     },
     {
-      "id": "create",
-      "visualMs": 15713,
-      "audioMs": 15711,
+      "id": "location",
+      "visualMs": 19991,
+      "audioMs": 19990,
+      "driftMs": 1
+    },
+    {
+      "id": "public-content",
+      "visualMs": 19821,
+      "audioMs": 19820,
+      "driftMs": 1
+    },
+    {
+      "id": "phone-color",
+      "visualMs": 18162,
+      "audioMs": 18160,
       "driftMs": 2
+    },
+    {
+      "id": "create",
+      "visualMs": 14638,
+      "audioMs": 14637,
+      "driftMs": 1
     },
     {
       "id": "autosave",
-      "visualMs": 20394,
-      "audioMs": 20392,
-      "driftMs": 2
+      "visualMs": 20866,
+      "audioMs": 20865,
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 16927,
-      "audioMs": 16927,
-      "driftMs": 0
+      "visualMs": 17424,
+      "audioMs": 17423,
+      "driftMs": 1
     }
   ],
   "anchorsChecked": 7,
   "music": {
-    "voicedWindows": 139,
-    "musicOnlyWindows": 4,
-    "smallestGapLu": 13.8,
-    "largestGapLu": 18.3,
-    "quietestMusicOnlyLufs": -32.8,
-    "loudestMusicOnlyLufs": -32.3,
-    "medianVoiceLufs": -16.3
+    "voicedWindows": 141,
+    "musicOnlyWindows": 5,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.7,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -32.5,
+    "medianVoiceLufs": -16.4
   },
   "issues": []
 }

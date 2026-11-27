@@ -18,4 +18,4 @@
 
 ## Phase C
 
-- EVENT_SIGNUP_PAGE_SETTINGS — NOT READY, not published: production has not started.
+- EVENT_CREATE_BLANK — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
