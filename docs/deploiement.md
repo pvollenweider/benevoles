@@ -364,6 +364,17 @@ Quand le script se termine, échoue ou atteint sa limite, l'entrée écrit le fi
 Avec Docker Compose, le préchauffage tourne de la même façon (sur l'hôte de `NEXT_PUBLIC_APP_URL`, `localhost` par défaut) ; rien n'attend `/api/health/ready`, le serveur répond dès son démarrage. Le préchauffage ne se lance que pour la commande `node server.js` : le Job de migration, qui utilise la même image, n'est pas concerné.
 - Les cron jobs de rappels, d'envoi des emails, de rejets différés et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`. La lecture des rejets différés lit en plus `IMAP_*` dans l'application (facultatif, voir [configuration.md](configuration.md#rejets-différés-optionnel)).
 
+## Mise à jour depuis 2.8.x
+
+Les migrations de la 2.9 ajoutent des colonnes sans rien retirer ; elles passent par le Job habituel sur Kubernetes et au démarrage de l'application avec Docker Compose.
+
+- **Kubernetes : action requise avant la mise à jour.** L'application et le Job de migration ne se connectent plus en superutilisateur (voir [Rôles PostgreSQL](#rôles-postgresql)). Avant de déployer la 2.9 :
+  1. en superutilisateur, dans le pod PostgreSQL, créer les rôles `benevoles_owner` et `benevoles_app` avec leur mot de passe (hexadécimal, `openssl rand -hex 32`), donner à `benevoles_owner` la propriété des objets du schéma `public` et à `benevoles_app` ses droits sur les lignes, avec les droits par défaut décrits dans [Rôles PostgreSQL](#rôles-postgresql) ;
+  2. créer les secrets GitHub `APP_DB_PASSWORD` et `MIGRATE_DB_PASSWORD` avec ces mots de passe. Sans eux, l'étape « Sync k8s secret » s'arrête avant de toucher au cluster et la version en cours continue de servir ;
+  3. appliquer les manifestes avec la nouvelle image : `k8s/deployment.yaml` (système de fichiers en lecture seule et trois volumes `emptyDir`, voir [Restrictions des pods](#restrictions-des-pods)), `k8s/job-migrate.yaml` (lit `MIGRATE_DATABASE_URL`) et `k8s/networkpolicy.yaml` (voir [Isolation réseau](#isolation-réseau)).
+- **Docker Compose** : rien à changer.
+- **Refus d'emails après l'envoi** (facultatif) : les réglages `IMAP_*` activent leur lecture, voir [configuration.md](configuration.md).
+
 ## Mise à jour depuis 2.7.x
 
 Les migrations de la 2.8 ajoutent des tables et des colonnes sans rien retirer ; elles passent par le Job habituel sur Kubernetes et au démarrage de l'application avec Docker Compose. Aucune nouvelle variable obligatoire sur Kubernetes.

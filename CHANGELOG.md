@@ -11,22 +11,38 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+## [2.9.0] — 2026-11-27
+
+### En bref
+
+- **Toutes ses inscriptions en un lien** : chaque bénévole retrouve ses créneaux de tous vos événements sur une seule page, et peut y abonner son agenda.
+- **50 modèles de messages prêts à l'emploi**, à ajouter en un clic.
+- **Partager un seul créneau** qui manque de monde, par un lien ou un QR code.
+- **Une page d'inscription plus lisible** : liste ou frise selon l'écran, détails d'un créneau sans le choisir, et créneaux regroupés par secteur si vous le souhaitez.
+- **Des créneaux qui se chevauchent**, quand votre événement l'autorise.
+
+### Mise à jour depuis 2.8.x
+
+Les migrations ajoutent des colonnes sans rien retirer ; elles passent par le Job habituel (Kubernetes) ou au démarrage (Docker Compose).
+
+- **Kubernetes : action requise avant la mise à jour.** L'application et les migrations se connectent chacune avec leur propre rôle PostgreSQL : créer les rôles `benevoles_owner` et `benevoles_app`, puis les secrets GitHub `APP_DB_PASSWORD` et `MIGRATE_DB_PASSWORD`, sans quoi le déploiement s'arrête avant de toucher au cluster. Le conteneur de l'application passe aussi en lecture seule. Voir `docs/deploiement.md`, « Mise à jour depuis 2.8.x ».
+- **Docker Compose** : rien à changer.
+- **Facultatif** : les réglages `IMAP_*` activent la lecture des refus d'emails arrivés après l'envoi (`docs/configuration.md`).
+
 ### Ajouté
 
-- **Créneaux regroupés par secteur sur la page d'inscription** (#1469) : un événement qui utilise des secteurs peut ranger les créneaux de chaque journée sous le nom de leur secteur, en liste comme en frise, avec « Autres postes » à la fin. L'option est désactivée par défaut : les bénévoles ne voient vos secteurs que si vous l'activez.
-- **« Détails » plus discret dans la vue Liste** (#1471) : sous chaque créneau, « Détails » devient un petit lien bleu précédé d'une flèche, sans cadre, au lieu d'un grand bouton.
-- **Détails d'un créneau sans le choisir** (#1471) : dans la vue Liste, un bouton « Détails » sous chaque créneau montre sa description, son lieu et ses consignes sans le sélectionner ; dans la frise, ces détails s'affichent sous le planning pour le créneau survolé, parcouru au clavier ou touché.
-- **Alerte quand un bénévole attendu bientôt ne reçoit pas ses emails** (#1476) : si l'adresse d'une personne inscrite à un créneau dans les trois jours est refusée, les organisateurs sont prévenus tout de suite, avec son prochain créneau et son téléphone, sans attendre le résumé de la nuit.
-- **Créneaux qui se chevauchent** (#1467) : un réglage de l'événement autorise une personne à s'inscrire à deux créneaux aux mêmes heures, quel que soit le poste. L'option est désactivée par défaut et demande une confirmation ; les inscriptions qui se chevauchent restent signalées dans la liste.
-- **Toutes tes inscriptions en un lien** (#1429) : un bénévole reçoit un lien personnel qui rassemble ses créneaux à venir dans tous les événements d'une organisation. Il peut y annuler un créneau, ouvrir la page de l'événement et renouveler son lien ; « J'ai perdu mon lien » le lui renvoie par email.
-- **Mon calendrier** (#1429) : depuis cette page, le bénévole abonne son agenda à ses créneaux confirmés, tous événements confondus. L'agenda se met à jour tout seul quand un horaire change ou qu'un créneau est annulé. Google Agenda et un fichier `.ics` sont aussi proposés. Après un renouvellement du lien personnel, il faut s'abonner de nouveau.
-- **Bibliothèque de modèles de messages** (#1414) : 50 textes prêts à l'emploi, rangés en 11 catégories, à ajouter en un clic depuis **Paramètres › Modèles de messages**, avec un aperçu de l'email tel que le bénévole le recevra. Les mentions `[à compléter]` bloquent l'envoi tant qu'elles restent. Une organisation peut garder jusqu'à 100 modèles.
-- **Partager ce créneau** (#1386) : depuis « Où manque-t-il du monde ? », un lien public vers un seul créneau, à coller dans un groupe de discussion ou sur la page de l'association, avec QR code et le nombre d'inscriptions qu'il a apportées. Une option accepte les inscriptions sur ce créneau après la fermeture des inscriptions de l'événement, tant qu'il n'a pas commencé et qu'il reste une place.
-- **Adresses refusées après l'envoi** : quand le serveur du destinataire refuse un email après coup, l'adresse du membre passe « Adresse à vérifier » dans le quart d'heure, comme pour un refus immédiat. L'adresse et l'inscription ne sont jamais modifiées. Sur une instance auto-hébergée, cette lecture demande les réglages `IMAP_*` ; sans eux, rien ne change.
-- **Plannings imprimables, journées denses** (#1431) : une journée de nombreux créneaux courts est découpée en tranches de six heures, précédées d'une vue d'ensemble qui donne le nombre d'inscrits par créneau. Dans le planning par jour, les cases complètes, avec places libres ou vides se distinguent aussi en noir et blanc.
-- **Pages en Markdown** : chaque page publique existe aussi en Markdown, à son adresse suivie de `.md`.
-- **État du service** (#1387) : la page [statut.benevol.app](https://statut.benevol.app), hébergée hors du serveur, vérifie toutes les 5 minutes que le site, l'application et les vidéos répondent, et garde l'historique des incidents.
-- **Vidéos** : deux nouvelles vidéos, « Retrouver toutes mes inscriptions » et l'ajout d'un texte de la bibliothèque de modèles ; onze vidéos actualisées, dont l'inscription depuis un téléphone et « Découvrir un événement ».
+- **Mes inscriptions, pour toute l'organisation** : un lien personnel rassemble les créneaux à venir d'un bénévole dans tous vos événements ; il peut y annuler un créneau, et « J'ai perdu mon lien » le lui renvoie (#1429).
+- **Mon calendrier** : le bénévole abonne son agenda à tous ses créneaux confirmés, qui se met à jour tout seul quand un horaire change (#1429).
+- **Bibliothèque de modèles de messages** : 50 textes en 11 catégories, avec l'aperçu de l'email ; les mentions « [à compléter] » bloquent l'envoi tant qu'elles restent (#1414).
+- **Partager ce créneau** : depuis « Où manque-t-il du monde ? », un lien public et un QR code vers un seul créneau, qui peut accepter des inscriptions après la fermeture de l'événement (#1386).
+- **Détails d'un créneau sans le choisir** : un lien « Détails » sous chaque créneau de la liste, et une ligne sous la frise pour le créneau survolé, parcouru au clavier ou touché (#1471).
+- **Créneaux regroupés par secteur sur la page d'inscription**, en liste comme en frise ; désactivé par défaut, vos secteurs ne sont visibles des bénévoles que si vous l'activez (#1469).
+- **Créneaux qui se chevauchent** : une option de l'événement autorise deux créneaux aux mêmes heures, avec confirmation ; les chevauchements restent signalés dans les inscriptions (#1467).
+- **Alerte immédiate** quand l'adresse d'un bénévole attendu dans les trois jours est refusée, avec son prochain créneau et son téléphone (#1476).
+- **Refus d'emails arrivés après l'envoi** : l'adresse passe « Adresse à vérifier » dans le quart d'heure, comme pour un refus immédiat.
+- **État du service** : [statut.benevol.app](https://statut.benevol.app), hébergé hors du serveur, vérifie le site toutes les 5 minutes et garde l'historique des incidents (#1387).
+- **Pages en Markdown** : chaque page publique existe aussi à son adresse suivie de `.md`.
+- **Vidéos** : « Retrouver toutes mes inscriptions », l'ajout d'un modèle de la bibliothèque, et onze vidéos actualisées.
 - **Emails envoyés aux administrateurs** : sur la fiche d'une organisation, l'opérateur voit par jour et par type les emails envoyés à ses administrateurs sur les 30 derniers jours, acceptés ou refusés, sans adresse ni contenu. <!-- interne -->
 - **Adresses refusées après l'envoi, côté opérateur** : les avis de non-remise sont lus toutes les quinze minutes dans la boîte des notifications, et la page « Santé du service » affiche le dernier passage et les avis non rapprochés. Jusqu'au 31 décembre 2026, un avis qui concerne un email envoyé avant cette version est rapproché par l'adresse seule. La mise en route est décrite dans la configuration. <!-- interne -->
 - **Santé du service** : la page affiche aussi la mémoire, le CPU, la durée de marche, la taille de la base et les connexions ouvertes. <!-- interne -->
@@ -35,15 +51,13 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
-- **Créneaux courts dans la frise** (#1470) : sur la page d'inscription, quand un événement a des créneaux d'une heure ou moins, la ligne sous la frise donne le nom, les horaires et les places du créneau survolé, parcouru au clavier ou touché ; sur tous les événements, cette ligne reprend maintenant les mots de la vue Liste, avec l'état du créneau. Dans la frise des organisateurs, une barre courte affiche son libellé avant son horaire.
-- **Convention des bénévoles** : le texte que les bénévoles acceptent à l'inscription porte ce nom partout, dans les paramètres comme dans les guides. Une organisation peut aussi choisir de ne pas en demander : les bénévoles s'inscrivent alors sans l'accepter, et aucune preuve d'acceptation n'est conservée.
-- **Frise ou liste sur la page d'inscription** (#1407) : la page choisit l'affichage le plus lisible, la frise quand elle tient à l'écran, la liste sinon (souvent sur un téléphone tenu droit) et toujours pour une saison de permanences. L'organisateur peut imposer « Frise » ou « Liste » dans les paramètres de l'événement, et le choix du visiteur l'emporte toujours. Sur téléphone, une phrase propose de le tourner ou de toucher « Frise ».
-- **Vue Liste des créneaux** : chaque créneau disponible porte à gauche la couleur de son poste, comme dans la frise ; les créneaux qu'on ne peut pas choisir (complet, fermé, terminé…) sont plus discrets.
-- **Emails de confirmation et de rappel** (#1429) : le bouton principal devient **Mes inscriptions** et ouvre le lien personnel vers toutes les inscriptions auprès de l'organisation. Les emails qui demandent une action sur un événement (place proposée, échange, disponibilités) gardent leur lien, et les liens déjà reçus continuent de fonctionner.
-- **Liste avec téléphones** (#1431) : une ligne par bénévole (nom, téléphone, email) et une colonne par jour de l'événement, en paysage.
-- **Plannings par poste et individuel** (#1444) : le planning par poste n'imprime plus de frise quand elle ne fait que répéter son tableau. Le planning individuel réunit les contacts en haut, puis donne un tableau par journée avec l'horaire, le poste et les coéquipiers. L'en-tête de la frise dit « Poste » au lieu de « Rôle ».
-- **Nouveaux espaces validés automatiquement** : ils envoient au plus 100 emails groupés par jour tant que l'opérateur ne les a pas relus ; ensuite, le plafond habituel s'applique.
-- **Guide « Choisir ses créneaux »** : trois captures sur téléphone montrent la liste, puis la frise avec le téléphone tenu droit et tourné.
+- **Frise ou liste selon l'écran** : la page d'inscription choisit la vue la plus lisible ; l'organisateur peut imposer l'une ou l'autre, et le choix du visiteur l'emporte toujours (#1407).
+- **Vue Liste** : chaque créneau disponible porte la couleur de son poste ; ceux qu'on ne peut pas choisir sont plus discrets.
+- **Créneaux courts** : la ligne sous la frise donne le nom, les horaires et les places du créneau pointé ; dans la frise des organisateurs, une barre courte montre d'abord son libellé (#1470).
+- **Convention des bénévoles** : c'est son nom partout, et une organisation peut choisir de ne pas en demander (#1468).
+- **Emails de confirmation et de rappel** : le bouton **Mes inscriptions** ouvre toutes les inscriptions auprès de l'organisation ; les liens déjà reçus fonctionnent toujours (#1429).
+- **Plannings imprimables** : les journées denses sont découpées en tranches de six heures, le planning par poste n'imprime plus de frise inutile, le planning individuel donne un tableau par journée, et la liste avec téléphones passe en paysage (#1431, #1444).
+- **Nouveaux espaces validés automatiquement** : au plus 100 emails groupés par jour, jusqu'à leur relecture par l'opérateur.
 - **Page d'accueil** : la première phrase dit ce qu'est benevol.app, « un logiciel libre de planning pour bénévoles ».
 - **Statistiques de l'opérateur** : la page se lit en deux groupes, « Charge actuelle » et « Croissance et inscription ». Le premier ajoute les événements en cours et à venir, le rythme des inscriptions, l'heure la plus chargée, les emails en attente, un graphique « Charge par jour » et les 10 prochains événements. La liste des organisations signale celles qui ont un événement en cours ou proche, et peut filtrer dessus. <!-- interne -->
 - **Isolation réseau** : dans le cluster, chaque composant ne joint plus que ce dont il a besoin. L'application joint la base, le DNS, Traefik et internet ; PostgreSQL et le serveur de médias n'ouvrent aucune connexion sortante ; les sauvegardes, les migrations et les tâches planifiées sont limitées de la même façon. <!-- interne -->
@@ -51,8 +65,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
-- **Inscription avec confirmation par e-mail** : après l'envoi du formulaire, la page affichée est la même pour toutes les demandes ; c'est l'e-mail reçu qui dit la suite.
-- **Liens reçus par email** : quand trop de liens erronés sont ouverts depuis le même réseau, les pages de confirmation d'inscription, de place en liste d'attente et « Je ne peux pas » se bloquent une heure pour ce réseau, et le disent.
+- **Inscription avec confirmation par e-mail** : la page affichée après l'envoi est la même pour toutes les demandes ; c'est l'e-mail reçu qui dit la suite.
+- **Liens reçus par email** : après trop de liens erronés depuis un même réseau, les pages de confirmation, de place proposée et « Je ne peux pas » se bloquent une heure pour ce réseau, et le disent.
 - **Sauvegardes** : elles sont chiffrées avec GnuPG, qui refuse un fichier modifié après coup ; les anciens fichiers restent lisibles. La copie hors site vit dans son propre namespace, hors de portée du compte de déploiement, et un fichier déjà envoyé n'est plus jamais réécrit (`docs/deploiement.md`). <!-- interne -->
 - **Rôles PostgreSQL en production** : l'application se connecte avec un rôle qui ne peut que lire et écrire des lignes, les migrations avec le rôle propriétaire du schéma. Deux nouveaux secrets, `APP_DB_PASSWORD` et `MIGRATE_DB_PASSWORD`, une nouvelle clé `MIGRATE_DATABASE_URL`, et des rôles à créer à la main avant le déploiement (`docs/deploiement.md`, « Rôles PostgreSQL »). <!-- interne -->
 - **Fichiers de l'application en lecture seule** : le serveur ne peut plus modifier ses propres fichiers ; sur Kubernetes, le conteneur a un système de fichiers en lecture seule, avec trois volumes pour ce qu'il écrit. Rien à changer avec Docker Compose (`docs/deploiement.md`, « Restrictions des pods »). <!-- interne -->
@@ -60,16 +74,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
-- **Adresse à vérifier** : l'étiquette ne disparaît plus à chaque nouvel email envoyé à une boîte qui le refuse après coup. Elle reste jusqu'à ce que l'adresse soit corrigée, ou qu'un email soit resté 48 heures sans être refusé.
-- **Mes inscriptions, délai d'annulation passé** : la page de toutes tes inscriptions indique l'adresse de l'organisation pour prévenir d'un empêchement, et non plus l'adresse de contact de benevol.app.
-- **Inscription avec confirmation par e-mail** : une personne n'est plus refusée parce qu'une autre a envoyé des demandes avec son adresse. Une nouvelle demande qui ne peut pas être enregistrée (créneau déjà pris, horaires qui se chevauchent) ne remplace plus la demande en attente, dont le lien reste valable.
-- **Rappels propres à un événement** : un rappel ajouté ou modifié après l'heure où il aurait dû partir ne part plus pour les personnes déjà inscrites.
-- **Poste attribué par l'organisation** : une question posée seulement à un tel poste n'apparaît plus sur la page d'inscription publique, et le nom du poste non plus. La personne placée sur ce poste la reçoit toujours.
-- **Rétablir une inscription** : impossible pour une personne dont la fiche a été effacée ou fusionnée ; le message dit quelle fiche utiliser.
-- **Accès accueil** : il enregistre les présences du jour affiché sur sa page Jour J, et seulement pour les personnes que cette page montre.
-- **Longueurs et nombres maximums** : le nom, le téléphone et les étiquettes d'un membre, le commentaire d'une inscription, le programme des spectacles et les places d'un créneau ont désormais un maximum. Une valeur trop grande reçoit un message clair, et l'import la signale sur sa ligne au lieu de la couper.
-- **Connexion interrompue** : après une coupure, souvent pendant une mise à jour du service, la page se recharge d'elle-même ou propose « Recharger la page » au lieu d'un écran d'erreur en anglais.
-- **`/llms.txt` et `/llms-full.txt`** : un lien vers une section d'une page mène désormais à cette section en ligne.
+- **Inscription avec confirmation par e-mail** : une personne n'est plus refusée parce qu'une autre a fait des demandes avec son adresse, et une demande qui échoue ne remplace plus celle en attente.
+- **Rappels propres à un événement** : un rappel ajouté ou modifié après son heure ne part plus pour les personnes déjà inscrites.
+- **Poste attribué par l'organisation** : une question posée seulement à ce poste, et le nom du poste, n'apparaissent plus sur la page d'inscription.
+- **Rétablir une inscription** : refusé, avec la fiche à utiliser, quand la fiche de la personne a été effacée ou fusionnée.
+- **Accès accueil** : il enregistre les présences du jour affiché, et seulement pour les personnes que la page montre.
+- **Longueurs et nombres maximums** sur les fiches, les commentaires, le programme des spectacles et les places, avec un message clair, et signalés ligne par ligne à l'import.
+- **Connexion interrompue** : la page se recharge d'elle-même, ou propose « Recharger la page », au lieu d'un écran d'erreur en anglais.
+- **`/llms.txt`** : un lien vers une section d'une page mène à cette section.
 - **Mise à jour sans coupure** : lors d'un déploiement, l'ancien pod attend que le routeur cesse de lui envoyer des requêtes avant de s'arrêter. <!-- interne -->
 - **Suivi des erreurs** : les connexions coupées (y compris leur forme Firefox, « Error in input stream ») et les scripts injectés par une extension du visiteur ne sont plus envoyés à Sentry. <!-- interne -->
 - **Robustesse des routes** : un corps de requête mal formé reçoit une erreur 400 au lieu d'une erreur serveur ; deux demandes d'inscription simultanées pour une même nouvelle adresse aboutissent toutes deux ; le nettoyage de nuit conserve une organisation réactivée entre-temps. <!-- interne -->
