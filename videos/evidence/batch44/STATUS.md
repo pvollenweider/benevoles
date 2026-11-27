@@ -19,3 +19,4 @@
 ## Phase C
 
 - EVENT_CREATE_BLANK — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.
+- EVENT_CREATE_TEMPLATE — READY published: take 1 passed audiovisual, final-audio, frame/timeline, music and validation checks; narration unchanged.

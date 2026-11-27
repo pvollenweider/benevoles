@@ -1,112 +1,115 @@
 WEBVTT
 
-00:00:00.001 --> 00:00:04.579
+00:00:00.000 --> 00:00:04.185
 Un modèle fait gagner du temps quand
 l’événement ressemble à un cas courant. Il
 
-00:00:04.579 --> 00:00:08.831
+00:00:04.185 --> 00:00:08.370
 crée un brouillon avec des postes, des
-créneaux, des horaires et des capacités
+créneaux, des horaires et des nombres de
 
-00:00:08.831 --> 00:00:12.101
-déjà cohérents. Rien n’est publié
+00:00:08.370 --> 00:00:11.658
+places déjà cohérents. Rien n’est publié
 automatiquement, et tout reste modifiable.
 
-00:00:14.270 --> 00:00:19.146
+00:00:13.820 --> 00:00:18.357
 Pour un événement daté, cinq points de
 départ sont proposés. Festival couvre
 
-00:00:19.146 --> 00:00:24.835
+00:00:18.357 --> 00:00:23.650
 plusieurs soirées ; Buvette organise le
 bar et la caisse sur une journée ;
 
-00:00:24.835 --> 00:00:28.898
+00:00:23.650 --> 00:00:27.430
 Manifestation sportive prépare dossards,
 parcours et ravitaillement ; Fête de
 
-00:00:28.898 --> 00:00:33.368
+00:00:27.430 --> 00:00:31.589
 village s’étale sur deux jours ; Montage,
 exploitation, démontage sépare clairement
 
-00:00:33.368 --> 00:00:38.244
+00:00:31.589 --> 00:00:36.126
 les trois phases. Pour une activité qui
 revient chaque semaine, quatre autres
 
-00:00:38.244 --> 00:00:41.901
+00:00:36.126 --> 00:00:39.529
 modèles préparent une saison de
 permanences : épicerie participative,
 
-00:00:41.901 --> 00:00:45.965
+00:00:39.529 --> 00:00:43.309
 distribution alimentaire, permanence
 d’accueil et repair café. Une vidéo dédiée
 
-00:00:45.965 --> 00:00:50.435
+00:00:43.309 --> 00:00:47.468
 les présente. La page blanche reste
 préférable pour un format très
 
-00:00:50.435 --> 00:00:50.841
+00:00:47.468 --> 00:00:47.846
 particulier.
 
-00:00:51.294 --> 00:00:55.597
+00:00:48.298 --> 00:00:52.001
 Choisissons Fête de village. L’aperçu
 résume les postes, le nombre de créneaux
 
-00:00:55.597 --> 00:01:00.977
+00:00:52.001 --> 00:00:56.630
 et les places qui seront créées. Avant de
 continuer, donnez un titre à cette édition
 
-00:01:00.977 --> 00:01:05.639
+00:00:56.630 --> 00:01:00.641
 et indiquez son premier jour ; prenons le
 samedi vingt-et-un novembre. Le deuxième
 
-00:01:05.639 --> 00:01:08.149
+00:01:00.641 --> 00:01:02.801
 jour est calculé automatiquement par le
 modèle.
 
-00:01:08.602 --> 00:01:13.300
+00:01:03.256 --> 00:01:07.410
 Créer le brouillon génère ici dix créneaux
-et ouvre l’étape du planning. Le statut
+et ouvre l’étape du planning. Le bandeau
 
-00:01:13.300 --> 00:01:17.662
-reste Brouillon. Le modèle n’envoie aucun
-email et n’ouvre aucune inscription : il
+00:01:07.410 --> 00:01:10.971
+indique Prêt à publier, mais l’événement
+reste en brouillon. Le modèle n’envoie
 
-00:01:17.662 --> 00:01:22.024
-fournit seulement une base de travail plus
-rapide à corriger qu’une page vide.
+00:01:10.971 --> 00:01:15.125
+aucun email et n’ouvre aucune inscription
+: il fournit seulement une base de travail
 
-00:01:24.199 --> 00:01:28.664
+00:01:15.125 --> 00:01:17.202
+plus rapide à corriger qu’une page vide.
+
+00:01:19.388 --> 00:01:23.074
 Dans le planning obtenu, chaque ligne est
 ordinaire. On peut renommer un poste,
 
-00:01:28.664 --> 00:01:33.128
-modifier son libellé, ses horaires, sa
-capacité, ses conditions ou sa couleur ;
+00:01:23.074 --> 00:01:26.761
+modifier son libellé, ses horaires, son
+nombre de places, ses conditions ou sa
 
-00:01:33.128 --> 00:01:37.593
-on peut aussi supprimer un créneau inutile
-et en ajouter d’autres. Ajustons par
+00:01:26.761 --> 00:01:30.447
+couleur ; on peut aussi supprimer un
+créneau inutile et en ajouter d’autres.
 
-00:01:37.593 --> 00:01:42.401
-exemple la capacité de la première Buvette
-pour coller à la taille réelle de
+00:01:30.447 --> 00:01:34.701
+Ajustons par exemple le nombre de places
+de la première Buvette pour coller à la
 
-00:01:42.401 --> 00:01:42.744
-l’équipe.
+00:01:34.701 --> 00:01:35.835
+taille réelle de l’équipe.
 
-00:01:45.808 --> 00:01:50.558
+00:01:38.919 --> 00:01:43.651
 Vous avez un brouillon de dix créneaux et
-la capacité de la première Buvette est
+le nombre de places de la première Buvette
 
-00:01:50.558 --> 00:01:54.675
-maintenant de cinq places. Choisissez le
-modèle le plus proche de votre besoin,
+00:01:43.651 --> 00:01:47.791
+est maintenant de cinq places. Choisissez
+le modèle le plus proche de votre besoin,
 
-00:01:54.675 --> 00:01:58.792
+00:01:47.791 --> 00:01:51.636
 vérifiez les postes et les horaires, puis
 testez l’aperçu bénévole avant de publier.
 
-00:01:58.792 --> 00:02:02.275
+00:01:51.636 --> 00:01:54.889
 Le modèle propose une base ; vous adaptez
 le planning réel.
 
