@@ -638,7 +638,7 @@ async function main() {
       await page.getByText(/^Tes créneaux/).filter({ visible: true }).first().scrollIntoViewIfNeeded()
       await at(0.54) /* mid-sentence: bring the button into view after showing the recap */
       await submit.scrollIntoViewIfNeeded()
-      await at("confirme ton inscription.")
+      await at(0.8) /* mid-sentence: confirm after the spoken instruction begins */
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
       await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
