@@ -1575,3 +1575,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **EVENT_REVIEW_PUBLISH — READY, publiée, révision 5.** La fenêtre de l'aperçu porte le titre actuel de la convention. [Revue](evidence/batch44/event-review-publish/review.md).
 
 **ACCESSIBILITY_KEYBOARD_DISPLAY — NOT READY, non publiée.** L'autorisation Accessibilité macOS est refusée au processus de capture ; les inserts Safari et VoiceOver requis ne peuvent pas être vérifiés. [Preuve](evidence/batch44/accessibility-keyboard-display/native-preflight.txt).
+
+**ORG_EMAIL_SETTINGS — READY, publiée, révision 7.** Le texte d'aide du résumé quotidien et de l'alerte immédiate est à jour. [Revue](evidence/batch44/org-email-settings/review.md).
