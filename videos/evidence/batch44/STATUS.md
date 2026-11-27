@@ -10,3 +10,4 @@
 - SECTORS — NOT READY, not published: take 1 omitted the post-creation grouping switch and had an abrupt final transition; take 2 fixes both, but the audiovisual review still flags that the URL mentioned in the filter explanation is not visible. Narration as supplied; no further take.
 - SECTOR_LEADERS — READY published: take 1 passed audiovisual, final-audio, frame/timeline and validation checks; the post-adoption settings card is not shown. Narration unchanged.
 - ORG_TIMEZONE_CHARTER — READY published: take 1 passed audiovisual, final-audio, frame/timeline and validation checks; updated convention narration and switch shown.
+- ORG_FIRST_STEPS — NOT READY, not published: rehearsal reaches the guide but its real inline player is absent on the isolated server without a media source. No narrated take; the recorder refuses a fabricated player, and production access is restricted by the brief.
