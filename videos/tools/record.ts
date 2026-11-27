@@ -2049,7 +2049,7 @@ async function main() {
         await page.screenshot({ path: path.join(dir, "review", "product-quota-frise.png") })
         await writeFile(path.join(dir, "review", "product-quota-frise.json"), JSON.stringify({ url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), visibleBarText: quotaText, accessibleName: await limited.getAttribute("aria-label"), check: "Quota reason checked in the visible label under the bar, with the button accessible name checked separately" }, null, 2))
         if (!/limite/i.test(quotaText)) throw new Error("Product bug: Frise quota reached is only in the accessible name, absent from visible bar text; exact frame/URL in review/product-quota-frise.*")
-        await at("Elle peut d’abord retirer un")
+        // Show the full reason during the sentence that describes the limit.
         await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
         const listQuota = page.getByRole("button", { name: /Buvette.*Limite de 2 créneaux par personne atteinte/i }).first()
         await listQuota.scrollIntoViewIfNeeded()
