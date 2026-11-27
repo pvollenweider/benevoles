@@ -1,0 +1,5 @@
+# Qui est inscrit — prise 2
+
+La liste montre les lignes colorées et les noms ; la frise montre la ligne de détail actuelle. Le véritable courriel mène à « Mes inscriptions », puis à l'événement. La narration reste inchangée.
+
+La première prise présentait une transition anticipée et un signalement vocal ; la seconde retarde le clic et utilise une nouvelle voix auditée. La revue audiovisuelle de la seconde prise ne signale plus ces écarts. Elle affirme que « À confirmer » manque à 00:16 de la scène de confirmation : [l'image du MP4 à cet instant](a-confirmer.png) montre explicitement cet état sous l'interrupteur ; le signalement confond l'état de visibilité avec la confirmation de l'inscription. Les autres scènes ne sont pas signalées. La transcription indépendante du MP4 correspond au manifeste, les images et la timeline ont été vérifiées, et la validation passe avec la musique à 15,3–18,9 LU sous la voix. SHA-256 du MP4 : `047f1868f59eb6fc827eafe396c736dfe156cbaf5ae79035633e52ca71f74059`.
