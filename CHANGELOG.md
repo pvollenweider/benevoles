@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Vidéos** : « S’inscrire comme bénévole depuis son téléphone » et « Trouver et lire la page d’inscription » montrent la page d'inscription de la version 2.9 : la liste aux couleurs des postes sur un téléphone, et la phrase qui propose de le tourner pour voir la frise.
+
 ## [2.9.0] — 2026-11-27
 
 ### En bref
