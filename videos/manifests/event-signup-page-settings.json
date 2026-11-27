@@ -1,0 +1,76 @@
+{
+  "id": "EVENT_SIGNUP_PAGE_SETTINGS",
+  "slug": "event-signup-page-settings",
+  "title": "Régler ce que voient les bénévoles sur la page d'inscription",
+  "description": "Affichage par défaut, créneaux qui se chevauchent, convention des bénévoles et regroupement par secteur : quatre réglages et leur effet sur la page d'inscription.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, patient pace around 130 words per minute and clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "settings-view": "Affichage par défaut",
+    "settings-overlaps": "Créneaux qui se chevauchent",
+    "settings-convention": "Convention des bénévoles",
+    "settings-sectors": "Regroupement par secteur",
+    "settings-details": "Détails d'un créneau"
+  },
+  "segments": [
+    {
+      "id": "settings-welcome",
+      "transcript": "Quatre réglages décident de ce que voient les bénévoles sur la page d'inscription. Chacun se change en quelques secondes, et son effet est visible tout de suite.",
+      "fallbackDurationMs": 13980
+    },
+    {
+      "id": "settings-view",
+      "transcript": "Dans les informations de l'événement, Affichage des créneaux par défaut vaut Automatique : la frise quand elle reste lisible, sinon la liste. Choisissons Liste pour l'imposer. Sur la page d'inscription, les créneaux s'affichent maintenant en liste. Les boutons Frise et Liste restent là : le visiteur garde la main, et son choix est gardé sur son appareil.",
+      "fallbackDurationMs": 27820
+    },
+    {
+      "id": "settings-overlaps",
+      "transcript": "Sans autre réglage, personne ne peut prendre deux créneaux aux mêmes heures. Choisissons le Bar de 18 h : le Vestiaire aux mêmes heures ne peut plus être choisi. Revenons au formulaire de l'événement. Dans Créneaux qui se chevauchent, le bouton Autoriser les chevauchements ouvre une confirmation qui explique la conséquence. Confirmons. Sur la page d'inscription, les deux créneaux se choisissent ensemble. Le récapitulatif signale le chevauchement et demande au bénévole de vérifier qu'il peut faire les deux.",
+      "fallbackDurationMs": 37500
+    },
+    {
+      "id": "settings-convention",
+      "transcript": "La convention des bénévoles se règle pour toute l'organisation, dans les Paramètres de l'organisation, par un propriétaire. Désactivons Demander aux bénévoles d'accepter une convention. Puis enregistrons. Le formulaire d'inscription ne montre alors plus ni case, ni lien vers une convention, et aucune preuve d'acceptation n'est conservée.",
+      "fallbackDurationMs": 22740
+    },
+    {
+      "id": "settings-sectors",
+      "transcript": "Dans l'événement, la carte Secteurs propose, une fois le premier secteur créé, Regrouper les créneaux par secteur sur la page d'inscription. Il est désactivé par défaut : sans lui, les bénévoles ne voient jamais le nom de vos secteurs. Activons-le. En liste, chaque journée range ses créneaux sous le nom de leur secteur, dans l'ordre de vos secteurs, avec Autres postes à la fin. En frise, les mêmes groupes s'affichent sous un bandeau.",
+      "fallbackDurationMs": 35180
+    },
+    {
+      "id": "settings-details",
+      "transcript": "Revenons à la liste. Sous un créneau, Détails montre sa description, son lieu et ses consignes, sans le choisir.",
+      "fallbackDurationMs": 10260
+    },
+    {
+      "id": "settings-recap",
+      "transcript": "Affichage par défaut, chevauchements, convention et regroupement par secteur : quatre réglages, pour une page d'inscription qui ressemble à votre événement.",
+      "fallbackDurationMs": 11180
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous changez les quatre réglages qui décident de ce que voient les bénévoles sur la page d'inscription, et vous voyez l'effet de chacun.",
+    "steps": [
+      "Dans les informations de l'événement, choisissez Automatique, Frise ou Liste dans Affichage des créneaux par défaut.",
+      "Dans Créneaux qui se chevauchent, Autoriser les chevauchements permet de prendre deux créneaux aux mêmes heures, après confirmation.",
+      "Dans les Paramètres de l'organisation, désactivez Demander aux bénévoles d'accepter une convention si vous n'en voulez pas, puis enregistrez.",
+      "Une fois le premier secteur créé, activez Regrouper les créneaux par secteur sur la page d'inscription dans la carte Secteurs.",
+      "Vérifiez chaque fois le résultat sur la page d'inscription, en liste et en frise."
+    ],
+    "remember": [
+      "Le visiteur peut toujours passer de la frise à la liste, et son choix est gardé sur son appareil.",
+      "Avec les chevauchements autorisés, le récapitulatif signale chaque chevauchement au bénévole au lieu de refuser l'inscription.",
+      "La convention se règle pour toute l'organisation ; sans convention, aucune preuve d'acceptation n'est conservée.",
+      "Sans le regroupement, les bénévoles ne voient jamais le nom de vos secteurs."
+    ]
+  }
+}
