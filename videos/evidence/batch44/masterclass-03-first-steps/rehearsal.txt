@@ -1,0 +1,28 @@
+Previous capture preserved: /private/tmp/codex-video-44/videos/output/masterclass-03-first-steps/previous-capture-2026-11-27T19-24-26-015Z-93e3fa55
+Scene welcome: rehearsal
+Scene checklist: rehearsal
+Scene identity: rehearsal
+Scene timezone: rehearsal
+Scene event: rehearsal
+Scene shift: rehearsal
+Scene publish: rehearsal
+Scene test: rehearsal
+Scene help: rehearsal
+Error: Scene help failed
+    at scene (/private/tmp/benevoles-video-production.aNOKSf/videos/tools/record.ts:338:13)
+    at async recordInlineHelp (/private/tmp/benevoles-video-production.aNOKSf/videos/lib/record-inline-help.ts:7:3)
+    at async main (/private/tmp/benevoles-video-production.aNOKSf/videos/tools/record.ts:6033:7) {
+  [cause]: locator.waitFor: Timeout 8000ms exceeded.
+  Call log:
+  [2m  - waiting for getByRole('button', { name: /^Voir la vidéo.*Bien démarrer avec une nouvelle organisation/ }) to be visible[22m
+  
+      at <anonymous> (/private/tmp/benevoles-video-production.aNOKSf/videos/lib/record-inline-help.ts:25:17)
+      at async scene (/private/tmp/benevoles-video-production.aNOKSf/videos/tools/record.ts:331:7)
+      at async recordInlineHelp (/private/tmp/benevoles-video-production.aNOKSf/videos/lib/record-inline-help.ts:7:3)
+      at async main (/private/tmp/benevoles-video-production.aNOKSf/videos/tools/record.ts:6033:7) {
+    log: [
+      "  - waiting for getByRole('button', { name: /^Voir la vidéo.*Bien démarrer avec une nouvelle organisation/ }) to be visible"
+    ],
+    name: 'TimeoutError'
+  }
+}

@@ -12,9 +12,11 @@ export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: 
   await tap(page, help)
   const popup = await popupReady
   await popup.waitForLoadState("domcontentloaded")
-  assert.equal(new URL(popup.url()).origin, new URL(baseUrl).origin)
+  const guideUrl = popup.url()
+  assert.equal(new URL(guideUrl).origin, "https://www.benevol.app")
+  assert.equal(new URL(guideUrl).pathname, "/doc/admin")
   await popup.close()
-  await page.goto(`${baseUrl}/doc/admin`)
+  await page.goto(guideUrl)
   await at("Retrouvons Premiers pas")
   const firstSteps = page.locator('a[href="/doc/premiers-pas"]').first()
   await firstSteps.waitFor(); await tap(page, firstSteps)

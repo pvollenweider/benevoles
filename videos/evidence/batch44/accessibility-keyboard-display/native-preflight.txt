@@ -1,0 +1,2 @@
+Native capture unavailable: macOS Accessibility permission is denied for this process. Native keyboard/VoiceOver operation cannot be verified; no media recorded.
+Native capture failed (1)

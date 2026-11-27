@@ -1,6 +1,6 @@
 {
   "admin-features-tour": {
-    "durationMs": 293960,
+    "durationMs": 305320,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -102,7 +102,7 @@
     "poster": true
   },
   "event-review-publish": {
-    "durationMs": 128120,
+    "durationMs": 130400,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -174,7 +174,7 @@
     "poster": true
   },
   "org-email-settings": {
-    "durationMs": 210600,
+    "durationMs": 198960,
     "width": 1280,
     "height": 800,
     "poster": true

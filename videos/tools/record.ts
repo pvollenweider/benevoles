@@ -4931,8 +4931,12 @@ async function main() {
         await at("Choisissons aussi une taille de t-shirt")
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         if (!await page.getByRole("radio", { name: "M", exact: true }).isChecked()) throw new Error("The demonstrated t-shirt size must actually be selected")
+        await at("Le formulaire permet de relire")
+        await tap(page, page.getByRole("button", { name: "convention des bénévoles", exact: true }))
+        const convention = page.getByRole("dialog", { name: "Convention des bénévoles" })
+        await convention.waitFor()
         await at("Acceptons cette convention")
-        await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
+        await tap(page, convention.getByRole("button", { name: "J'ai lu et j'accepte", exact: true }))
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
       })
 
@@ -5573,6 +5577,8 @@ async function main() {
         await at("Même publié, il peut rester")
         await at("Les inscriptions peuvent être immédiates")
         await page.getByText("Inscriptions", { exact: true }).last().scrollIntoViewIfNeeded()
+        await page.getByText("Affichage des créneaux par défaut", { exact: true }).scrollIntoViewIfNeeded()
+        await page.waitForTimeout(2000)
       })
 
       await scene("appearance", async (at) => {

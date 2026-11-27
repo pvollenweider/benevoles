@@ -141,8 +141,8 @@
         "organisateur"
       ],
       "feature": "Réglages des emails",
-      "updatedAt": "2026-11-20",
-      "revision": 6,
+      "updatedAt": "2026-11-27",
+      "revision": 7,
       "level": "essentiel",
       "updated": "2026-11-20"
     },
@@ -217,8 +217,8 @@
         "organisateur"
       ],
       "feature": "Publication d'un événement",
-      "updatedAt": "2026-10-15",
-      "revision": 4,
+      "updatedAt": "2026-11-27",
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -914,8 +914,8 @@
         "organisateur"
       ],
       "feature": "Vue d'ensemble de l'administration",
-      "updatedAt": "2026-11-19",
-      "revision": 7,
+      "updatedAt": "2026-11-27",
+      "revision": 8,
       "level": "decouverte",
       "updated": "2026-11-19",
       "thumbnailTitle": "Organiser ses bénévoles"
