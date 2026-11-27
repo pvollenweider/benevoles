@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { shiftDetailsById } from "@/lib/shift-details"
+import { hasShortShift, shiftDetailsById } from "@/lib/shift-details"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
@@ -428,6 +428,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // What a volunteer can read about each shift before choosing it (#1471): « Détails » in the
   // list, the line under the frise.
   const shiftDetailsMap = useMemo(() => shiftDetailsById(event?.shifts ?? []), [event?.shifts])
+  // An event with a short shift (#1470): every day's frise gets the line naming the bar pointed at.
+  const shortShiftsLine = useMemo(() => hasShortShift(event?.shifts ?? []), [event?.shifts])
   // Shifts of reserved roles (#470) this visitor can't take; the server checks it again at sign-up.
   const reservedShiftIds = useMemo(
     () => new Set((event?.shifts ?? []).filter((s) => s.reserved && !allowedReserved.has(s.roleName)).map((s) => s.id)),
@@ -1344,6 +1346,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         dayLabel={formatCalendarDay(day)}
                         roster={shownRoster}
                         details={shiftDetailsMap}
+                        shortShifts={shortShiftsLine}
                       />
                         </div>
                       )}

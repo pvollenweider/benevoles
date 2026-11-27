@@ -76,3 +76,22 @@ export const FRISE_DETAILS_PROMPT = "Pointe ou parcours un créneau pour voir se
 
 /** The same, when « Voir qui est inscrit » is on too: the line says both. */
 export const FRISE_DETAILS_ROSTER_PROMPT = "Pointe ou parcours un créneau pour voir ici ses détails et qui est inscrit. Sur un téléphone, toucher un créneau le choisit : la vue « Liste » montre les détails et tous les noms sans choisir."
+
+/** A shift this short (#1470) is a bar too narrow to read on a phone: on an event that has one,
+ * the line under the frise says the name, hours and places of the bar pointed at, on every day. */
+export const SHORT_SHIFT_MINUTES = 60
+
+/** Whether an event has a short shift (#1470), cancelled ones aside. A night shift counts its
+ * real length (22:00 to 00:30 is 150 minutes). */
+export function hasShortShift(shifts: { startTime: string; endTime: string; status?: string }[]): boolean {
+  const minutes = (t: string) => { const [h, m = "0"] = t.split(":"); return parseInt(h, 10) * 60 + parseInt(m, 10) }
+  return shifts.some((s) => {
+    if (s.status === "cancelled") return false
+    let d = minutes(s.endTime) - minutes(s.startTime)
+    if (d <= 0) d += 24 * 60
+    return d <= SHORT_SHIFT_MINUTES
+  })
+}
+
+/** Said in the line under the frise when it is there only for short shifts. */
+export const FRISE_SHORT_PROMPT = "Pointe ou parcours un créneau pour voir ici son nom, ses horaires et ses places. La vue « Liste » les montre tous en entier."

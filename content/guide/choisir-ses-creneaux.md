@@ -64,6 +64,8 @@ Avant de choisir, tu peux lire ce que l'organisation a indiqué sur un créneau 
 
 Les coordonnées de la personne de contact ne s'affichent qu'une fois inscrit, dans l'email de confirmation et sur ta page « Mes inscriptions ».
 
+Quand un événement a des créneaux courts, d'une heure ou moins, leurs barres sont trop étroites pour afficher leur nom. La ligne sous la frise donne alors, pour le créneau survolé, parcouru au clavier ou touché, son nom, ses horaires et ses places. La vue **Liste** les montre tous en entier.
+
 ## Sélectionner un créneau
 
 Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection : dans la colonne de droite (« Créneaux sélectionnés ») sur ordinateur, sous le planning sur téléphone. Pour le retirer, clique sur le **✕** à droite de son nom dans cette liste.

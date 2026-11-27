@@ -245,3 +245,12 @@ describe("ShiftDayList details", () => {
     expect(row).not.toHaveTextContent("Entrée B")
   })
 })
+
+// Short shifts (#1470): the list is the place where they read in full, whatever their length.
+describe("ShiftDayList with short shifts", () => {
+  afterEach(cleanup)
+  it("shows a 30-minute shift's full label, hours and places", () => {
+    render(<ShiftDayList shifts={[shift("k", { roleName: "Signaleurs", label: "Km 12", startTime: "08:00", endTime: "08:30", capacity: 2, registered: 1, spotsLeft: 1 })]} shows={[]} selected={new Set()} onToggle={() => {}} dayLabel="samedi 24 octobre" />)
+    expect(screen.getByRole("button", { name: /^08h–08h30 · Signaleurs \(Km 12\)/ })).toHaveTextContent("1 place libre sur 2")
+  })
+})

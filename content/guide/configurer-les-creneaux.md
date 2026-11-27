@@ -18,6 +18,8 @@ Un créneau correspond à un poste tenu par un bénévole ou un membre du staff 
 
 ![Page des créneaux d'un événement : choix Frise ou Liste, boutons « Créer une série », « Répéter chaque semaine » et « + Ajouter un créneau », puis la frise, un bloc par jour, avec les postes en lignes et les créneaux en barres colorées par poste](/doc-img/admin-shifts.png)
 
+Une barre affiche l'horaire du créneau, son libellé s'il diffère du poste, puis ses inscrits. Pour un créneau court, d'une demi-heure environ, la barre affiche d'abord le libellé (par exemple « Km 12 »), puis l'horaire : une suite de créneaux courts d'un même poste reste lisible. Le texte complet s'affiche au survol, et un clic ouvre le créneau.
+
 ## Ajouter un créneau
 
 | Champ | Description |

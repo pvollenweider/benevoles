@@ -14,7 +14,7 @@ import { getBarClasses } from "@/lib/roles"
 import { shiftStaffingState } from "@/lib/staffing"
 import { toMin, toMinEnd, fromMin, fmt, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
 import {
-  AXIS_H, GAP, HANDLE_W, LABEL_W, LANE_GAP, MIN_DUR, PX_PER_MIN, ROW_H, SECTOR_H, SHOW_H,
+  AXIS_H, GAP, HANDLE_W, LABEL_W, LANE_GAP, MIN_DUR, NARROW_BAR_PX, PX_PER_MIN, ROW_H, SECTOR_H, SHOW_H,
   dayRange, draftEnd, draftStart, hourTicks, layoutRoles, layoutSectorGroups, offsetToMin, resizedTimes,
 } from "@/lib/day-timeline"
 import { groupRolesBySector, postesCount, sectorGroupKey, type SectorLike } from "@/lib/sectors"
@@ -398,6 +398,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
           const belowMin   = !isFull && shiftStaffingState({ ...shift, active: shift.registrationCount }) === "below_minimum"
           const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default", shift.colorKey)
           const hasLabel   = shift.label && shift.label !== shift.roleName
+          // A short shift's bar (#1470): its own label before the hours, so a column of short
+          // shifts of one poste reads « Km 12 / 08h–08h30 » rather than a row of cut-off hours.
+          // The bar's name (timelineBarName) follows the same order.
+          const labelFirst = !!hasLabel && barWidth < NARROW_BAR_PX
 
           return (
             <div
@@ -421,7 +425,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
               tabIndex={0}
               aria-haspopup="dialog"
               aria-expanded={isSelected}
-              aria-label={timelineBarName(shift)}
+              aria-label={timelineBarName(shift, { labelFirst })}
               aria-describedby={`shift-bar-desc-${shift.id}`}
               onMouseDown={e => e.stopPropagation()}
               onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
@@ -432,15 +436,22 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
                   (the bar's children are presentational, so this one is not exposed). */}
               <div
                 className="flex flex-col justify-center px-2 overflow-hidden w-full"
-                title={[timelineBarTime(shift), hasLabel ? shift.label : null, timelineBarPlaces(shift)].filter(Boolean).join(" · ")}
+                title={(labelFirst ? [shift.label, timelineBarTime(shift)] : [timelineBarTime(shift), hasLabel ? shift.label : null]).concat(timelineBarPlaces(shift)).filter(Boolean).join(" · ")}
               >
                 {/* The spaces between the lines keep their words apart in the visible
                     text that the bar's name must contain (WCAG 2.5.3); a flex column
                     does not render them. */}
-                <span className="text-white text-xs font-bold leading-none truncate text-shadow-[0_1px_2px_rgb(0_0_0/0.3)]">
+                {labelFirst && (
+                  <>
+                    <span className="text-white text-xs font-bold leading-none truncate text-shadow-[0_1px_2px_rgb(0_0_0/0.3)]">
+                      {shift.label}
+                    </span>{" "}
+                  </>
+                )}
+                <span className={`text-white leading-none truncate ${labelFirst ? "text-[11px] mt-0.5" : "text-xs font-bold text-shadow-[0_1px_2px_rgb(0_0_0/0.3)]"}`}>
                   {timelineBarTime(shift)}
                 </span>{" "}
-                {hasLabel && (
+                {hasLabel && !labelFirst && (
                   <>
                     <span className="text-white text-[11px] leading-none truncate mt-0.5">
                       {shift.label}

@@ -26,6 +26,24 @@ describe("AdminDayTimeline", () => {
     <AdminDayTimeline eventId="evt-1" date="2026-07-04" shifts={shifts} onCreated={vi.fn()} onUpdated={vi.fn()} onDeleted={vi.fn()} />,
   )
 
+  // Short shifts (#1470): a narrow bar shows its own label before its hours, and its name follows.
+  it("puts a short shift's label first in its bar, and keeps the bar's name and every visible word", () => {
+    setup([shift({ id: "k12", label: "Km 12", startTime: "08:00", endTime: "08:30" }), shift({ id: "long", label: "Soir", startTime: "10:30", endTime: "12:15" })])
+    const narrow = screen.getByRole("button", { name: /^Bar, Km 12, 08h–08h30, / })
+    const words = narrow.querySelector("[title]") as HTMLElement
+    expect(words.firstElementChild).toHaveTextContent("Km 12")
+    expect(words).toHaveAttribute("title", expect.stringMatching(/^Km 12 · 08h–08h30 · /))
+    expect(visibleTextInName(words.textContent ?? "", narrow.getAttribute("aria-label") ?? "")).toBe(true)
+    const wide = screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ })
+    expect((wide.querySelector("[title]") as HTMLElement).firstElementChild).toHaveTextContent("10h30–12h15")
+  })
+
+  it("keeps the hours first in a narrow bar whose label is the poste's own name", () => {
+    setup([shift({ id: "same", label: "Bar", startTime: "08:00", endTime: "08:30" })])
+    const bar = screen.getByRole("button", { name: /^Bar, 08h–08h30, / })
+    expect((bar.querySelector("[title]") as HTMLElement).firstElementChild).toHaveTextContent("08h–08h30")
+  })
+
   // The overnight demo show (« Bal populaire » 21:00–01:00) was a 2 px sliver: its width was
   // toMin(end) - toMin(start), negative past midnight.
   it("draws an overnight show over its whole span, band and label", () => {
