@@ -43,7 +43,7 @@ Sur un téléphone tenu droit, les créneaux s'affichent en **Liste** quand la f
 
 Dans la vue **Liste**, un créneau qui peut être choisi porte la couleur de son poste sur un bord à gauche ; un créneau qui ne peut pas être choisi (complet, fermé, terminé, réservé, en conflit, inscriptions fermées) est écrit en gris, sans cadre ; son état suit le titre (à droite sur un petit écran), ou passe dessous quand la ligne est trop étroite.
 
-![Planning public d'un événement sur un téléphone tenu droit, en liste : sous les boutons « Frise » et « Liste », la phrase « Pour voir la journée en frise, tourne le téléphone ou touche « Frise ». », puis les créneaux du jour les uns sous les autres, ceux qu'on peut choisir avec la couleur de leur poste à gauche, les créneaux complets en gris sans cadre](/doc-img/public-list-mobile.png)
+![Planning public d'un événement sur un téléphone tenu droit, en liste : sous les boutons « Frise » et « Liste », la phrase « Pour voir la journée en frise, tourne le téléphone ou touche « Frise ». », puis les créneaux du jour les uns sous les autres, ceux qu'on peut choisir avec la couleur de leur poste à gauche, les créneaux complets en gris sans cadre, et sous chacun un bouton « Détails »](/doc-img/public-list-mobile.png)
 
 La même journée en **Frise**, sur le même téléphone. Tenu droit, il ne montre que le début de la journée, et le reste se fait défiler sur le côté :
 
