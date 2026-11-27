@@ -121,7 +121,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
         />
       )}
       {availability && <EventAvailabilityOption eventId={event.id} initial={availability} />}
-      {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} />}
+      {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} initialPublicGrouping={event.publicSectorGrouping} />}
       {!wizard && (
         <section aria-labelledby={DELETE_SECTION_ID} className="border-t border-gray-200 pt-6 space-y-3">
           <FocusTargetHeading id={DELETE_SECTION_ID} className="text-base font-semibold text-gray-900">Suppression définitive</FocusTargetHeading>

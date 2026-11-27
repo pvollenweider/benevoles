@@ -137,6 +137,8 @@ export type DuplicableEvent = {
   /** Sectors (#1147): the source's option, its adoption and its sectors (archived ones included, left out of the copy). */
   sectorsEnabled?: boolean
   sectorsAdoptedAt?: Date | null
+  /** Shifts grouped by sector on the sign-up page (#1469): copied with the settings, with the sectors. */
+  publicSectorGrouping?: boolean
   sectors?: { id: string; name: string; displayOrder: number; archivedAt: Date | null }[]
   /** Places of the event (#1171, lot 2); the active ones are copied with fresh ids. */
   places?: { id: string; name: string; displayOrder: number; archivedAt: Date | null }[]
@@ -324,6 +326,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
       sectorsEnabled: sectorPlan.sectorsEnabled,
       sectorsAdoptedAt: sectorPlan.sectorsAdoptedAt,
+      publicSectorGrouping: copy.settings && !!sectorPlan.sectorsAdoptedAt ? !!source.publicSectorGrouping : false,
       ...duplicatedSwaps(source, !!copy.settings),
     },
     sectors: sectorPlan.sectors,

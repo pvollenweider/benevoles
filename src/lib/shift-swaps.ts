@@ -289,7 +289,8 @@ export function swapRefusalMessage(code: SwapEndReason): string {
     case "other_poste":
       return "Ces deux créneaux ne sont pas du même poste : ils ne peuvent pas s'échanger."
     case "other_sector":
-      // Volunteers never see sectors (#1175): the words say the postes, not why.
+      // Volunteers see sectors only on a sign-up page grouped by sector (#1469), never in swaps
+      // (#1175): the words say the postes, not why.
       return "Ces deux postes ne permettent pas un échange de créneaux."
     case "sector_changed":
       return "L'organisation des postes a changé : cet échange n'est plus possible."

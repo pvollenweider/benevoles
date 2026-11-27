@@ -11,6 +11,7 @@ import { shiftListText, shiftViewState, type HeldKind, type TimelineShift } from
 import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { RosterSummary } from "@/components/public/RosterName"
 import { shiftListRowLook } from "@/lib/shift-list-look"
+import { groupShiftsBySector, type PublicSector } from "@/lib/sectors"
 
 type Show = { name: string; startTime: string; endTime: string }
 
@@ -28,6 +29,11 @@ type Show = { name: string; startTime: string; endTime: string }
  * `roster` (#1068): « Voir qui est inscrit » is on, by shift id. A line under each shift with other
  * confirmed volunteers says who (« Sur ce créneau : Aline M. et 2 autres bénévoles. »), read with
  * the button as its description; nothing under a shift with nobody else.
+ *
+ * `sectors` (#1469): the event groups its shifts by sector. A day with a shift in a sector is split:
+ * the shows first in their own list, then per group an <h3> with the sector's name and its own list
+ * named « Créneaux {secteur}, {jour} », the sectors in their order and « Autres postes » last. A day
+ * with no shift in a sector, or only « Autres postes », keeps the single list it has without sectors.
  */
 export default function ShiftDayList({
   shifts,
@@ -44,6 +50,7 @@ export default function ShiftDayList({
   dayLabel,
   roster,
   details,
+  sectors,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -65,6 +72,8 @@ export default function ShiftDayList({
    * under the row opens it in place, without selecting the shift.
    */
   details?: Map<string, ShiftDetails> | null
+  /** The sectors the event groups its shifts by (#1469), in order; empty or absent = no grouping. */
+  sectors?: PublicSector[]
 }) {
   const [openDetails, setOpenDetails] = useState<Set<string>>(() => new Set())
   const visible = shifts
@@ -92,89 +101,115 @@ export default function ShiftDayList({
     return { shift, view, text, look, rosterEntry, rosterId, reasonId }
   })
 
+  type Row = (typeof rows)[number]
+  // One row, with its gap to the row above it in the same list.
+  const renderRow = ({ shift, view, text, look, rosterEntry, rosterId, reasonId }: Row, gap: string) => {
+    return (
+      <li key={shift.id} className={gap || undefined}>
+        <button
+          type="button"
+          data-shift-id={shift.id}
+          aria-pressed={view.clickable ? view.selected : undefined}
+          aria-disabled={view.clickable ? undefined : true}
+          aria-describedby={[rosterId, reasonId].filter(Boolean).join(" ") || undefined}
+          onClick={() => { if (view.clickable) onToggle(shift.id, shift.status) }}
+          className={look.button}
+        >
+          <span className={look.title}>{text.title}{look.kind === "quiet" ? " " : null}</span>
+          {/* Spaces between the lines: the accessible name reads them apart. On a quiet row the
+              button is a flex container, where a whitespace-only text node has no box: the
+              spaces its name needs are inside the spans instead, without changing the layout. */}
+          {" "}
+          <span className={look.statusLine}>
+            {view.held ? (
+              // Held: a check in a circle, as on the timeline; selected: a plain check.
+              <svg aria-hidden="true" className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            ) : view.selected ? (
+              <svg aria-hidden="true" className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            ) : null}
+            <span>{text.status}{look.kind === "quiet" ? " " : null}</span>
+          </span>
+          {text.details && <>{" "}<span className={look.details}>{text.details}</span></>}
+        </button>
+        {rosterId && (
+          <p id={rosterId} className="mt-1 px-1 text-sm text-gray-700 break-words">
+            <RosterSummary entry={rosterEntry} own={rosterEntry?.own ?? false} />
+          </p>
+        )}
+        {details?.get(shift.id) && (() => {
+          const info = details.get(shift.id)!
+          const open = openDetails.has(shift.id)
+          const panelId = `details-list-${shift.id}`
+          return (
+            <>
+              {/* A sibling of the row, on its own line: a slip of the finger never selects the
+                  shift. Never disabled, never grey, even under a shift that can't be chosen. A
+                  text button (DESIGN.md « Bouton texte »): blue word and chevron, no frame, 24 px
+                  target (2.5.8), so it says « more to see » without weighing like the row. */}
+              <button
+                type="button"
+                aria-expanded={open}
+                aria-controls={panelId}
+                aria-label={detailsButtonName(text.title)}
+                onClick={() => setOpenDetails((prev) => {
+                  const next = new Set(prev)
+                  if (next.has(shift.id)) next.delete(shift.id)
+                  else next.add(shift.id)
+                  return next
+                })}
+                className="mt-1 inline-flex min-h-6 items-center gap-1 rounded px-1 text-sm font-medium text-blue-700 underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:text-[LinkText]"
+              >
+                <svg aria-hidden="true" className={`h-3.5 w-3.5 transition-transform motion-reduce:transition-none ${open ? "rotate-90" : ""}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+                Détails
+              </button>
+              <div id={panelId} hidden={!open} className="mt-1 px-1 text-sm text-gray-700 break-words">
+                {info.description && <p className="whitespace-pre-line">{info.description}</p>}
+                <ShiftInfoList info={info.info} className={info.description ? "mt-1" : ""} />
+              </div>
+            </>
+          )
+        })()}
+      </li>
+    )
+  }
+  const gapOf = (list: Row[], i: number, after: boolean) => i > 0
+    ? (list[i - 1].look.kind === "quiet" && list[i].look.kind === "quiet" ? "mt-1" : "mt-2")
+    : after ? "mt-2" : ""
+  const showItems = shows.map((show, i) => (
+    <li key={`show-${i}`} className={`rounded-xl bg-indigo-50 px-4 py-2 text-sm text-indigo-950 break-words ${i > 0 ? "mt-2" : ""}`}>
+      Spectacle : {show.name}, {fmt(show.startTime)}–{fmt(show.endTime)}
+    </li>
+  ))
+
+  const groups = groupShiftsBySector(rows.map((r) => ({ ...r, sectorId: r.shift.sectorId })), sectors ?? [])
+  if (!groups || (groups.length === 1 && groups[0].id === null)) {
+    return (
+      <ul aria-label={`Créneaux du ${dayLabel}`} className="mb-5">
+        {showItems}
+        {rows.map((row, i) => renderRow(row, gapOf(rows, i, shows.length > 0)))}
+      </ul>
+    )
+  }
+
   return (
-    <ul aria-label={`Créneaux du ${dayLabel}`} className="mb-5">
-      {shows.map((show, i) => (
-        <li key={`show-${i}`} className={`rounded-xl bg-indigo-50 px-4 py-2 text-sm text-indigo-950 break-words ${i > 0 ? "mt-2" : ""}`}>
-          Spectacle : {show.name}, {fmt(show.startTime)}–{fmt(show.endTime)}
-        </li>
+    <div className="mb-5">
+      {shows.length > 0 && <ul aria-label={`Spectacles du ${dayLabel}`}>{showItems}</ul>}
+      {groups.map((group, g) => (
+        <section key={group.id ?? "none"} className={g > 0 || shows.length > 0 ? "mt-4" : undefined}>
+          {/* Under the day's <h2> and visibly below it (smaller, groups closer than days); never
+              truncated: a sector name is at most 60 characters. */}
+          <h3 className="mb-2 border-b border-gray-200 pb-1 text-xs font-semibold text-gray-600 break-words">{group.name}</h3>
+          <ul aria-label={`Créneaux ${group.name}, ${dayLabel}`}>
+            {group.shifts.map((row, i) => renderRow(row, gapOf(group.shifts, i, false)))}
+          </ul>
+        </section>
       ))}
-      {rows.map(({ shift, view, text, look, rosterEntry, rosterId, reasonId }, i) => {
-        const gap = i > 0
-          ? (rows[i - 1].look.kind === "quiet" && look.kind === "quiet" ? "mt-1" : "mt-2")
-          : shows.length > 0 ? "mt-2" : ""
-        return (
-          <li key={shift.id} className={gap || undefined}>
-            <button
-              type="button"
-              data-shift-id={shift.id}
-              aria-pressed={view.clickable ? view.selected : undefined}
-              aria-disabled={view.clickable ? undefined : true}
-              aria-describedby={[rosterId, reasonId].filter(Boolean).join(" ") || undefined}
-              onClick={() => { if (view.clickable) onToggle(shift.id, shift.status) }}
-              className={look.button}
-            >
-              <span className={look.title}>{text.title}{look.kind === "quiet" ? " " : null}</span>
-              {/* Spaces between the lines: the accessible name reads them apart. On a quiet row the
-                  button is a flex container, where a whitespace-only text node has no box: the
-                  spaces its name needs are inside the spans instead, without changing the layout. */}
-              {" "}
-              <span className={look.statusLine}>
-                {view.held ? (
-                  // Held: a check in a circle, as on the timeline; selected: a plain check.
-                  <svg aria-hidden="true" className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                ) : view.selected ? (
-                  <svg aria-hidden="true" className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                ) : null}
-                <span>{text.status}{look.kind === "quiet" ? " " : null}</span>
-              </span>
-              {text.details && <>{" "}<span className={look.details}>{text.details}</span></>}
-            </button>
-            {rosterId && (
-              <p id={rosterId} className="mt-1 px-1 text-sm text-gray-700 break-words">
-                <RosterSummary entry={rosterEntry} own={rosterEntry?.own ?? false} />
-              </p>
-            )}
-            {details?.get(shift.id) && (() => {
-              const info = details.get(shift.id)!
-              const open = openDetails.has(shift.id)
-              const panelId = `details-list-${shift.id}`
-              return (
-                <>
-                  {/* A sibling of the row, on its own line: a slip of the finger never selects the
-                      shift. Never disabled, never grey, even under a shift that can't be chosen. */}
-                  <button
-                    type="button"
-                    aria-expanded={open}
-                    aria-controls={panelId}
-                    aria-label={detailsButtonName(text.title)}
-                    onClick={() => setOpenDetails((prev) => {
-                      const next = new Set(prev)
-                      if (next.has(shift.id)) next.delete(shift.id)
-                      else next.add(shift.id)
-                      return next
-                    })}
-                    className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-gray-400 bg-white px-3 text-sm font-medium text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:border-[ButtonText]"
-                  >
-                    <svg aria-hidden="true" className={`h-4 w-4 transition-transform motion-reduce:transition-none ${open ? "rotate-90" : ""}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                    Détails
-                  </button>
-                  <div id={panelId} hidden={!open} className="mt-1 px-1 text-sm text-gray-700 break-words">
-                    {info.description && <p className="whitespace-pre-line">{info.description}</p>}
-                    <ShiftInfoList info={info.info} className={info.description ? "mt-1" : ""} />
-                  </div>
-                </>
-              )
-            })()}
-          </li>
-        )
-      })}
-    </ul>
+    </div>
   )
 }

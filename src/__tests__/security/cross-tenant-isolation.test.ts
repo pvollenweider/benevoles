@@ -2345,6 +2345,15 @@ describe("Sectors — cross-tenant isolation (#1147)", () => {
     expect(tx.event.update).not.toHaveBeenCalled()
   })
 
+  it("PUT sectors/public (#1469) returns 404 for an org-B event and changes nothing", async () => {
+    const route = await import("@/app/api/admin/events/[id]/sectors/public/route")
+    const update = vi.fn()
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue(null), update } })
+    expect((await route.PUT(makeRequest("/api/admin/events/evt-b/sectors/public", "PUT", { enabled: true }), params("evt-b"))).status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(update).not.toHaveBeenCalled()
+  })
+
   it("an org-B sector through an org-A event is not found: the row locks filter on the event and the organisation", async () => {
     const one = await import("@/app/api/admin/events/[id]/sectors/[sectorId]/route")
     const { tx } = sectorDb({ id: "evt-a" })

@@ -1537,3 +1537,11 @@ Sur la page d'inscription, la ligne sous la frise reprend maintenant les mots de
 
 - **SHIFT_ROSTER_VISIBILITY** (`shift-roster-visibility`) : la ligne de la frise avec « Voir qui est inscrit » change d’ordre et gagne l’état du créneau ; le sélecteur de `videos/lib/record-shift-roster.ts` suit ce changement. Image seule, à refilmer.
 - Les jeux de tournage n'ont pas de créneau de moins d'une heure : aucune autre vidéo ne change. Aucune vidéo n'est régénérée dans ce changement.
+
+## À refilmer : créneaux regroupés par secteur sur la page d'inscription (#1469, 27 novembre 2026)
+
+Une fois le premier secteur enregistré, la carte **Secteurs** des informations de l'événement montre un second interrupteur, « Regrouper les créneaux par secteur sur la page d'inscription », désactivé par défaut. Activé, la page d'inscription range les créneaux de chaque journée sous le nom de leur secteur. Sans l'option, la page d'inscription ne change pas : aucun sélecteur de capture ne casse.
+
+- **SECTORS** (`sectors`) : narration modifiée (« Les bénévoles ne voient pas les secteurs, sauf si vous choisissez de regrouper les créneaux par secteur sur la page d'inscription »), avec le bloc `viewer` et le script ; la carte Secteurs filmée après le premier secteur montre le nouvel interrupteur. À refilmer avec le prochain lot.
+- **SECTOR_LEADERS** (`sector-leaders`) : la carte Secteurs, si elle est filmée une fois les secteurs adoptés, gagne l'interrupteur. Image seule.
+- Aucune vidéo n'est régénérée dans ce changement.

@@ -26,7 +26,7 @@ Un événement organisé par secteurs, ses postes rangés, ses vues filtrées et
 ## Points d'attention
 
 - Seed : `scripts/seed-video-scenario.ts sectors` (organisation dédiée active, sans bêta depuis #1311, événement qui commence demain pour que Jour J soit proposé, secteurs désactivés). Une prise par seed : la prise enregistre des secteurs, ce qui ne peut plus être défait.
-- Les bénévoles ne voient jamais les secteurs : ne rien montrer côté page d'inscription.
+- Les bénévoles ne voient pas les secteurs, sauf si l'événement regroupe ses créneaux par secteur sur la page d'inscription (#1469, désactivé par défaut) : ne rien montrer côté page d'inscription ; une fois le premier secteur enregistré, la carte Secteurs montre aussi l'interrupteur « Regrouper les créneaux par secteur sur la page d'inscription ».
 - Le compteur de 5 personnes vient des inscriptions confirmées de Parking Nord (Aline, Nicolas, Léa, Noah) et Parking Mairie (Sarah).
 - L'adresse de la page n'est pas visible dans la capture : la narration le montre en rouvrant la page, sans afficher l'identifiant du secteur.
 - Lot 39 : READY et publié le 2026-11-10, révision 2 ; 220,480 s, seconde prise retenue, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Première prise archivée pour une saisie horaire native corrigée. Preuves : `videos/evidence/sectors/batch39/`.

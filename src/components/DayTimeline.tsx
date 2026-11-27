@@ -5,7 +5,7 @@
 
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react"
+import { Fragment, useEffect, useId, useRef, useState, type KeyboardEvent } from "react"
 import { barText, shiftListText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
@@ -14,6 +14,7 @@ import { barDetailsText, DETAILS_HOVER_DELAY_MS, FRISE_DETAILS_PROMPT, FRISE_DET
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 import { FRISE_KEYS_SHOWN, FRISE_KEYS_SPOKEN, friseKey, friseTabStop, friseTarget, type FriseRows } from "@/lib/frise-keyboard"
 import { chartMinWidth, daySpan, LABEL_W, MAX_PX_PER_MIN, MIN_BAR_W } from "@/lib/frise-geometry"
+import { sectorRowGroups, type PublicSector } from "@/lib/sectors"
 
 export { fmt }
 export type { TimelineShift }
@@ -25,6 +26,8 @@ const LANE_GAP = 4
 const GAP     = 4
 const SHOW_H  = 22
 const AXIS_H  = 18
+// The sector band above each group (#1469): room for a name on two lines of text-xs.
+const BAND_H  = 32
 // The chart is fluid: it takes the whole width of its card and positions everything
 // in percent of the day. Below MIN_PX_PER_MIN it stops shrinking and the card scrolls
 // horizontally, as on phones; MAX_PX_PER_MIN stops a short day from being stretched.
@@ -49,6 +52,7 @@ export default function DayTimeline({
   roster,
   details,
   shortShifts = false,
+  sectors,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -85,6 +89,12 @@ export default function DayTimeline({
    * line: it then always says the name, hours and places of the bar pointed at.
    */
   shortShifts?: boolean
+  /**
+   * The sectors the event groups its shifts by (#1469), in order. When a shift of the day has one,
+   * the rows go sector by sector (« Autres postes » last), each group under a band with its name
+   * and wrapped in a group named by it; the arrows and the tab stop follow that same order.
+   */
+  sectors?: PublicSector[]
 }) {
   const [detailId, setDetailId] = useState<string | null>(null)
   // With details (#1471), the line follows a pointer only after it rests on a bar: on its way down
@@ -135,7 +145,11 @@ export default function DayTimeline({
     byRole[s.roleName].push(s)
     if ((s.displayOrder ?? 0) < roleMinOrder[s.roleName]) roleMinOrder[s.roleName] = s.displayOrder ?? 0
   }
-  const roleOrder = Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
+  const posteOrder = Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
+  // Sector groups (#1469): a poste's sector is shared by its shifts. Not grouped when no shift of
+  // the day has a sector, or when « Autres postes » would be the only group.
+  const sectorGroups = sectorRowGroups(posteOrder, (role) => byRole[role][0]?.sectorId ?? null, sectors ?? [])
+  const roleOrder = sectorGroups ? sectorGroups.flatMap((g) => g.roles) : posteOrder
 
   // Lane-pack overlapping shifts within each role (same post, same time, different
   // label) onto separate sub-rows instead of letting them stack invisibly.
@@ -166,12 +180,226 @@ export default function DayTimeline({
     if (target) bars.current.get(target)?.focus()
   }
 
+  // One geometry for the label column, the groups and the rows (#1469): a band of BAND_H above each
+  // sector group, then its postes. Without groups, the postes one under the other as before.
   const roleTop: Record<string, number> = {}
+  const groupTop: number[] = []
+  const groupHeight: number[] = []
+  let rowsTotalH = 0
   {
     let acc = 0
-    for (const role of roleOrder) { roleTop[role] = acc; acc += roleHeight[role] + GAP }
+    for (const [g, roles] of (sectorGroups ? sectorGroups.map((x) => x.roles) : [roleOrder]).entries()) {
+      if (sectorGroups) acc += BAND_H
+      groupTop[g] = acc
+      for (const role of roles) { roleTop[role] = acc; acc += roleHeight[role] + GAP }
+      groupHeight[g] = acc - groupTop[g]
+    }
+    rowsTotalH = acc
   }
-  const rowsTotalH = roleOrder.reduce((sum, r) => sum + roleHeight[r] + GAP, 0)
+  const bandId = (g: number) => `${hintId}-sector-${g}`
+
+  // One poste's row of bars, `offset` above it being its group's top (0 without groups).
+  const renderRole = (role: string, offset: number) => (
+    <div
+      key={role}
+      className="absolute inset-x-0"
+      style={{ top: roleTop[role] - offset, height: roleHeight[role] }}
+    >
+      {byRole[role].map((shift) => {
+        const heldKind        = held?.get(shift.id)
+        // Held wins over everything else: selected, full, waitlist, conflict, reserved.
+        // The same rules as the list view (#808): src/lib/public-timeline.ts.
+        const view            = viewOf(shift)
+        const isRegistered    = !!heldKind
+        const isConflict      = view.conflict
+        const isFull          = view.full
+        const isClosed        = view.closed
+        const isEnded         = view.ended
+        const isWaitlistable  = view.waitlistable
+        const unavail         = view.unavailable
+        const isSelected      = view.selected
+        const isReserved      = view.reserved
+        const state           = view.look
+        // A held bar does nothing: no hover darkening suggesting otherwise.
+        const barCls          = isRegistered
+          ? getBarClasses(shift.roleName, "default", shift.colorKey).replace(/\s*hover:\S+/g, "")
+          : getBarClasses(shift.roleName, state, shift.colorKey)
+        const clickable       = view.clickable
+        const fullNoWaitlist  = !isRegistered && isFull && !isWaitlistable
+        const startMin        = toMin(shift.startTime)
+        const endMin          = toMinEnd(shift.endTime, shift.startTime)
+        const laneTop         = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
+        const LABEL_H         = 14
+        const overnight       = crossesMidnight(shift.startTime, shift.endTime)
+        const timeRange       = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
+        const timeLabel       = overnight ? `${timeRange} +1` : timeRange
+        // Fallback for bars too narrow for the full range (common on phones: a 45–70min
+        // shift at a natural day-wide zoom often lands just under the full-range
+        // threshold) — the start time alone, so the bar still says *something* useful
+        // instead of going blank. Never used for "En attente", which has no shorter form.
+        const timeShort       = fmt(shift.startTime)
+        // Longer texts ("22h–02h +1", "En attente") need a wider bar to be shown whole.
+        const longText        = overnight || (isSelected && isWaitlistable)
+        // Same "N/capacity" indicator as the admin timeline (#243), shown inside the bar
+        // itself the same way, so small groups can see at a glance whether a shift has
+        // enough room. Skipped once full (the "Complet" / waitlist wording already says
+        // all that matters) and on a held bar (its name and tag say what matters).
+        const spotsText       = unavail || isRegistered ? null : `${shift.registered}/${shift.capacity}`
+        const { ariaLabel, tag, tagShort, subLabel } = barText({
+          shift,
+          conflict: isConflict,
+          held: heldKind,
+          selected: isSelected,
+          reserved: isReserved,
+          locked,
+          limitReached: limitReachedRoles?.get(shift.roleName),
+        })
+        const showSubLabel    = !!tag || !!subLabel
+
+        return (
+          // @container: the text inside hides itself when the bar is too narrow for it
+          // (the button keeps its full accessible name).
+          <div
+            key={shift.id}
+            onPointerEnter={hasLine ? (e) => onBarPointer(shift.id, e.pointerType) : undefined}
+            onPointerLeave={hasLine ? cancelRest : undefined}
+            // A touch moves the tab stop too: Safari does not focus a clicked button.
+            onClick={() => { setStopId(shift.id); if (hasLine) showNow(shift.id) }}
+            onFocus={() => { setStopId(shift.id); if (hasLine) showNow(shift.id) }}
+            className="absolute @container focus-within:z-20"
+            style={{
+              left: `${pct(startMin)}%`,
+              width: `${pctW(startMin, endMin)}%`,
+              minWidth: MIN_BAR_W,
+              top: laneTop,
+              height: ROW_H,
+            }}
+          >
+            <button
+              ref={(el) => { if (el) bars.current.set(shift.id, el); else bars.current.delete(shift.id) }}
+              type="button"
+              data-shift-id={shift.id}
+              tabIndex={shift.id === tabStop ? 0 : -1}
+              // Not `disabled`: a bar that can't be chosen stays reachable with the arrows,
+              // says why in its name, and its click does nothing (Enter and Space included).
+              aria-disabled={clickable ? undefined : true}
+              aria-pressed={clickable ? isSelected : undefined}
+              aria-label={ariaLabel}
+              aria-describedby={[roster && `roster-bar-${shift.id}`, details?.has(shift.id) && `details-bar-${shift.id}`].filter(Boolean).join(" ") || undefined}
+              onClick={() => { if (clickable) onToggle(shift.id, shift.status) }}
+              onKeyDown={onBarKey(shift.id)}
+              // In forced colours, the GrayText the system gave a disabled bar; a held bar keeps its CanvasText frame.
+              className={`absolute inset-x-0 rounded border border-transparent ${roster && !clickable ? "pointer-events-none" : ""} forced-colors:aria-pressed:bg-[Highlight] ${isRegistered ? "forced-colors:border-2 forced-colors:border-[CanvasText]" : "forced-colors:aria-disabled:border-[GrayText]"} forced-colors:aria-disabled:text-[GrayText] flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${fullNoWaitlist ? FULL_OUTLINE : ""} ${barCls}`}
+              style={{
+                top: 0,
+                bottom: showSubLabel ? LABEL_H : 0,
+                borderLeft: fullNoWaitlist ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
+                ...(fullNoWaitlist ? {
+                  backgroundColor: "white",
+                  backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.06) 6px, rgba(0,0,0,0.06) 8px)",
+                } : {}),
+                ...(isWaitlistable && !isSelected && !isRegistered ? {
+                  backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.35) 5px, rgba(255,255,255,0.35) 7px)",
+                } : {}),
+              }}
+            >
+              {isConflict || isReserved || (unavail && !isSelected) ? (
+                <span className="inline-flex items-center gap-0.5 text-[10px] px-1 truncate leading-none text-gray-700">
+                  {/* Reserved (#470): a lock that fits the narrowest bar, the word when there is room. */}
+                  {isReserved && (
+                    <svg aria-hidden="true" className="w-2.5 h-2.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v2H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1V6a4 4 0 00-4-4zm2 6V6a2 2 0 10-4 0v2h4z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                  <span className="hidden @min-[64px]:inline">{isReserved ? "Réservé" : isEnded ? "Terminé" : isFull ? "Complet" : isClosed ? "Fermé" : ""}</span>
+                </span>
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-0.5 px-1.5 max-w-full overflow-hidden">
+                  <div className="flex items-center gap-0.5 max-w-full overflow-hidden">
+                    {isRegistered && (
+                      // Held (#534): a check in a circle, unlike the plain check of a selection.
+                      <svg aria-hidden="true" className="w-3 h-3 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                    {isSelected && (
+                      <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                    {isSelected && isWaitlistable ? (
+                      <span
+                        className="hidden @min-[68px]:inline text-white text-xs font-bold truncate leading-none"
+                        style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                      >
+                        En attente
+                      </span>
+                    ) : (
+                      <>
+                        {/* Narrow bars (common on phones: a 45–70min shift at a natural
+                            day-wide zoom often lands here) get the start time alone
+                            instead of nothing; the full range takes over once there's
+                            room, hiding this one. */}
+                        <span
+                          className={`hidden @min-[34px]:inline ${longText ? "@min-[92px]:hidden" : "@min-[64px]:hidden"} text-white text-xs font-bold truncate leading-none`}
+                          style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                        >
+                          {timeShort}
+                        </span>
+                        <span
+                          className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[64px]:inline"} text-white text-xs font-bold truncate leading-none`}
+                          style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                        >
+                          {timeLabel}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  {/* A space between the time and the count: their words stay apart in
+                      the visible text that the bar's name must contain (WCAG 2.5.3). */}
+                  {spotsText && " "}
+                  {spotsText && (
+                    // Much lower breakpoint than the time text above: "3/5" is short
+                    // enough to fit right alongside the narrow-bar start-time fallback,
+                    // and being on its own line it never competes with the selected-state
+                    // checkmark for width. The old, higher threshold here left it
+                    // invisible on the exact bar sizes common on phones — reported by
+                    // beta testers right after #244/#248 shipped.
+                    <span
+                      className="hidden @min-[34px]:inline text-white text-[9px] font-medium truncate leading-none"
+                      style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                    >
+                      {spotsText}
+                    </span>
+                  )}
+                </div>
+              )}
+            </button>
+            {details?.get(shift.id) && <span id={`details-bar-${shift.id}`} className="sr-only">{barDetailsText(details.get(shift.id)!)}</span>}
+              {roster && <span id={`roster-bar-${shift.id}`} className="sr-only">{rosterSpokenSummary(roster.get(shift.id), roster.get(shift.id)?.own ?? false)}</span>}
+            {showSubLabel && (
+              <span
+                className="absolute inset-x-0 bottom-0 text-[10px] text-gray-600 truncate text-center pointer-events-none"
+                style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
+                aria-hidden="true"
+              >
+                {/* A narrow bar (most of them at 390 px) gets the short form of a long
+                    tag, so the details after it stay visible; the name has it whole. */}
+                {tag && (tagShort ? (
+                  <>
+                    <span className="@min-[260px]:hidden font-semibold text-gray-800">{tagShort}</span>
+                    <span className="hidden @min-[260px]:inline font-semibold text-gray-800">{tag}</span>
+                  </>
+                ) : <span className="font-semibold text-gray-800">{tag}</span>)}
+                {tag && subLabel && " · "}
+                {subLabel}
+              </span>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
 
   const hours: number[] = []
   for (let h = dayStart / 60; h <= dayEnd / 60; h++) hours.push(h)
@@ -198,19 +426,25 @@ export default function DayTimeline({
 
           {/* Label column */}
           <div className="absolute top-0 left-0 flex flex-col z-10" style={{ width: LABEL_W }}>
-            {roleOrder.map((role) => (
-              <div
-                key={role}
-                className="flex items-center justify-end pr-2 bg-white"
-                style={{ height: roleHeight[role], marginBottom: GAP }}
-              >
-                <span
-                  className="text-[10px] text-gray-600 line-clamp-2 leading-tight text-right"
-                  title={role}
-                >
-                  {role.split(" &")[0].split(" —")[0].trim()}
-                </span>
-              </div>
+            {(sectorGroups ? sectorGroups.map((x) => x.roles) : [roleOrder]).map((roles, g) => (
+              <Fragment key={g}>
+                {/* Under the sector's band, which spans this column too: no white ground here. */}
+                {sectorGroups && <div aria-hidden="true" style={{ height: BAND_H }} />}
+                {roles.map((role) => (
+                  <div
+                    key={role}
+                    className="flex items-center justify-end pr-2 bg-white"
+                    style={{ height: roleHeight[role], marginBottom: GAP }}
+                  >
+                    <span
+                      className="text-[10px] text-gray-600 line-clamp-2 leading-tight text-right"
+                      title={role}
+                    >
+                      {role.split(" &")[0].split(" —")[0].trim()}
+                    </span>
+                  </div>
+                ))}
+              </Fragment>
             ))}
             <div style={{ height: SHOW_H + AXIS_H }} />
           </div>
@@ -230,208 +464,21 @@ export default function DayTimeline({
               />
             ))}
 
-            {/* Shift rows */}
-            {roleOrder.map((role) => (
-              <div
-                key={role}
-                className="absolute inset-x-0"
-                style={{ top: roleTop[role], height: roleHeight[role] }}
-              >
-                {byRole[role].map((shift) => {
-                  const heldKind        = held?.get(shift.id)
-                  // Held wins over everything else: selected, full, waitlist, conflict, reserved.
-                  // The same rules as the list view (#808): src/lib/public-timeline.ts.
-                  const view            = viewOf(shift)
-                  const isRegistered    = !!heldKind
-                  const isConflict      = view.conflict
-                  const isFull          = view.full
-                  const isClosed        = view.closed
-                  const isEnded         = view.ended
-                  const isWaitlistable  = view.waitlistable
-                  const unavail         = view.unavailable
-                  const isSelected      = view.selected
-                  const isReserved      = view.reserved
-                  const state           = view.look
-                  // A held bar does nothing: no hover darkening suggesting otherwise.
-                  const barCls          = isRegistered
-                    ? getBarClasses(shift.roleName, "default", shift.colorKey).replace(/\s*hover:\S+/g, "")
-                    : getBarClasses(shift.roleName, state, shift.colorKey)
-                  const clickable       = view.clickable
-                  const fullNoWaitlist  = !isRegistered && isFull && !isWaitlistable
-                  const startMin        = toMin(shift.startTime)
-                  const endMin          = toMinEnd(shift.endTime, shift.startTime)
-                  const laneTop         = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
-                  const LABEL_H         = 14
-                  const overnight       = crossesMidnight(shift.startTime, shift.endTime)
-                  const timeRange       = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
-                  const timeLabel       = overnight ? `${timeRange} +1` : timeRange
-                  // Fallback for bars too narrow for the full range (common on phones: a 45–70min
-                  // shift at a natural day-wide zoom often lands just under the full-range
-                  // threshold) — the start time alone, so the bar still says *something* useful
-                  // instead of going blank. Never used for "En attente", which has no shorter form.
-                  const timeShort       = fmt(shift.startTime)
-                  // Longer texts ("22h–02h +1", "En attente") need a wider bar to be shown whole.
-                  const longText        = overnight || (isSelected && isWaitlistable)
-                  // Same "N/capacity" indicator as the admin timeline (#243), shown inside the bar
-                  // itself the same way, so small groups can see at a glance whether a shift has
-                  // enough room. Skipped once full (the "Complet" / waitlist wording already says
-                  // all that matters) and on a held bar (its name and tag say what matters).
-                  const spotsText       = unavail || isRegistered ? null : `${shift.registered}/${shift.capacity}`
-                  const { ariaLabel, tag, tagShort, subLabel } = barText({
-                    shift,
-                    conflict: isConflict,
-                    held: heldKind,
-                    selected: isSelected,
-                    reserved: isReserved,
-                    locked,
-                    limitReached: limitReachedRoles?.get(shift.roleName),
-                  })
-                  const showSubLabel    = !!tag || !!subLabel
-
-                  return (
-                    // @container: the text inside hides itself when the bar is too narrow for it
-                    // (the button keeps its full accessible name).
-                    <div
-                      key={shift.id}
-                      onPointerEnter={hasLine ? (e) => onBarPointer(shift.id, e.pointerType) : undefined}
-                      onPointerLeave={hasLine ? cancelRest : undefined}
-                      // A touch moves the tab stop too: Safari does not focus a clicked button.
-                      onClick={() => { setStopId(shift.id); if (hasLine) showNow(shift.id) }}
-                      onFocus={() => { setStopId(shift.id); if (hasLine) showNow(shift.id) }}
-                      className="absolute @container focus-within:z-20"
-                      style={{
-                        left: `${pct(startMin)}%`,
-                        width: `${pctW(startMin, endMin)}%`,
-                        minWidth: MIN_BAR_W,
-                        top: laneTop,
-                        height: ROW_H,
-                      }}
-                    >
-                      <button
-                        ref={(el) => { if (el) bars.current.set(shift.id, el); else bars.current.delete(shift.id) }}
-                        type="button"
-                        data-shift-id={shift.id}
-                        tabIndex={shift.id === tabStop ? 0 : -1}
-                        // Not `disabled`: a bar that can't be chosen stays reachable with the arrows,
-                        // says why in its name, and its click does nothing (Enter and Space included).
-                        aria-disabled={clickable ? undefined : true}
-                        aria-pressed={clickable ? isSelected : undefined}
-                        aria-label={ariaLabel}
-                        aria-describedby={[roster && `roster-bar-${shift.id}`, details?.has(shift.id) && `details-bar-${shift.id}`].filter(Boolean).join(" ") || undefined}
-                        onClick={() => { if (clickable) onToggle(shift.id, shift.status) }}
-                        onKeyDown={onBarKey(shift.id)}
-                        // In forced colours, the GrayText the system gave a disabled bar; a held bar keeps its CanvasText frame.
-                        className={`absolute inset-x-0 rounded border border-transparent ${roster && !clickable ? "pointer-events-none" : ""} forced-colors:aria-pressed:bg-[Highlight] ${isRegistered ? "forced-colors:border-2 forced-colors:border-[CanvasText]" : "forced-colors:aria-disabled:border-[GrayText]"} forced-colors:aria-disabled:text-[GrayText] flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${fullNoWaitlist ? FULL_OUTLINE : ""} ${barCls}`}
-                        style={{
-                          top: 0,
-                          bottom: showSubLabel ? LABEL_H : 0,
-                          borderLeft: fullNoWaitlist ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
-                          ...(fullNoWaitlist ? {
-                            backgroundColor: "white",
-                            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.06) 6px, rgba(0,0,0,0.06) 8px)",
-                          } : {}),
-                          ...(isWaitlistable && !isSelected && !isRegistered ? {
-                            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.35) 5px, rgba(255,255,255,0.35) 7px)",
-                          } : {}),
-                        }}
-                      >
-                        {isConflict || isReserved || (unavail && !isSelected) ? (
-                          <span className="inline-flex items-center gap-0.5 text-[10px] px-1 truncate leading-none text-gray-700">
-                            {/* Reserved (#470): a lock that fits the narrowest bar, the word when there is room. */}
-                            {isReserved && (
-                              <svg aria-hidden="true" className="w-2.5 h-2.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v2H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1V6a4 4 0 00-4-4zm2 6V6a2 2 0 10-4 0v2h4z" clipRule="evenodd" />
-                              </svg>
-                            )}
-                            <span className="hidden @min-[64px]:inline">{isReserved ? "Réservé" : isEnded ? "Terminé" : isFull ? "Complet" : isClosed ? "Fermé" : ""}</span>
-                          </span>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center gap-0.5 px-1.5 max-w-full overflow-hidden">
-                            <div className="flex items-center gap-0.5 max-w-full overflow-hidden">
-                              {isRegistered && (
-                                // Held (#534): a check in a circle, unlike the plain check of a selection.
-                                <svg aria-hidden="true" className="w-3 h-3 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                              )}
-                              {isSelected && (
-                                <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                              )}
-                              {isSelected && isWaitlistable ? (
-                                <span
-                                  className="hidden @min-[68px]:inline text-white text-xs font-bold truncate leading-none"
-                                  style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
-                                >
-                                  En attente
-                                </span>
-                              ) : (
-                                <>
-                                  {/* Narrow bars (common on phones: a 45–70min shift at a natural
-                                      day-wide zoom often lands here) get the start time alone
-                                      instead of nothing; the full range takes over once there's
-                                      room, hiding this one. */}
-                                  <span
-                                    className={`hidden @min-[34px]:inline ${longText ? "@min-[92px]:hidden" : "@min-[64px]:hidden"} text-white text-xs font-bold truncate leading-none`}
-                                    style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
-                                  >
-                                    {timeShort}
-                                  </span>
-                                  <span
-                                    className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[64px]:inline"} text-white text-xs font-bold truncate leading-none`}
-                                    style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
-                                  >
-                                    {timeLabel}
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                            {/* A space between the time and the count: their words stay apart in
-                                the visible text that the bar's name must contain (WCAG 2.5.3). */}
-                            {spotsText && " "}
-                            {spotsText && (
-                              // Much lower breakpoint than the time text above: "3/5" is short
-                              // enough to fit right alongside the narrow-bar start-time fallback,
-                              // and being on its own line it never competes with the selected-state
-                              // checkmark for width. The old, higher threshold here left it
-                              // invisible on the exact bar sizes common on phones — reported by
-                              // beta testers right after #244/#248 shipped.
-                              <span
-                                className="hidden @min-[34px]:inline text-white text-[9px] font-medium truncate leading-none"
-                                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
-                              >
-                                {spotsText}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </button>
-                      {details?.get(shift.id) && <span id={`details-bar-${shift.id}`} className="sr-only">{barDetailsText(details.get(shift.id)!)}</span>}
-                        {roster && <span id={`roster-bar-${shift.id}`} className="sr-only">{rosterSpokenSummary(roster.get(shift.id), roster.get(shift.id)?.own ?? false)}</span>}
-                      {showSubLabel && (
-                        <span
-                          className="absolute inset-x-0 bottom-0 text-[10px] text-gray-600 truncate text-center pointer-events-none"
-                          style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
-                          aria-hidden="true"
-                        >
-                          {/* A narrow bar (most of them at 390 px) gets the short form of a long
-                              tag, so the details after it stay visible; the name has it whole. */}
-                          {tag && (tagShort ? (
-                            <>
-                              <span className="@min-[260px]:hidden font-semibold text-gray-800">{tagShort}</span>
-                              <span className="hidden @min-[260px]:inline font-semibold text-gray-800">{tag}</span>
-                            </>
-                          ) : <span className="font-semibold text-gray-800">{tag}</span>)}
-                          {tag && subLabel && " · "}
-                          {subLabel}
-                        </span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            ))}
+            {/* Shift rows; with sectors (#1469), each group after its band, in a group named by it,
+                placed at the group's top with its rows relative to it (DOM order = visual order). */}
+            {sectorGroups ? sectorGroups.map((group, g) => (
+              <Fragment key={group.id ?? "none"}>
+                <div
+                  className="absolute z-20 flex items-end border-b border-gray-300 bg-white pb-1 pl-1 forced-colors:border-[CanvasText]"
+                  style={{ top: groupTop[g] - BAND_H, height: BAND_H, left: -LABEL_W, right: 0 }}
+                >
+                  <span id={bandId(g)} className="line-clamp-2 text-xs font-semibold leading-[14px] text-gray-800 break-words">{group.name}</span>
+                </div>
+                <div role="group" aria-labelledby={bandId(g)} className="absolute inset-x-0" style={{ top: groupTop[g], height: groupHeight[g] }}>
+                  {group.roles.map((role) => renderRole(role, groupTop[g]))}
+                </div>
+              </Fragment>
+            )) : roleOrder.map((role) => renderRole(role, 0))}
 
             {/* Spacer for label rows */}
             <div style={{ height: rowsTotalH }} />

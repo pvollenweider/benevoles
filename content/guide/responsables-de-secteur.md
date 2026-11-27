@@ -39,7 +39,7 @@ Dans un événement qui [utilise des secteurs](gerer-les-postes.md), un responsa
 - Il reçoit les emails de nouvelle inscription et de désistement de tous les postes du secteur. Une personne responsable à la fois du secteur et d'un de ses postes ne reçoit qu'un email, avec le lien du secteur
 - Renommer le secteur ne change rien pour ses responsables : leur lien affiche le nouveau nom. Archiver le secteur vide son lien, qui reste valable : les responsables ne voient plus aucun poste jusqu'à ce que vous rétablissiez le secteur et y replaciez des postes
 - Dupliquer l'événement avec ses responsables reprend les responsables de secteur dans la copie du secteur, sauf ceux d'un secteur archivé
-- Être responsable ne prend aucune place et ne compte aucune heure. Les bénévoles ne voient pas les secteurs : sur leur page, seul le nom des responsables de leur poste apparaît
+- Être responsable ne prend aucune place et ne compte aucune heure. Les bénévoles ne voient pas les secteurs, sauf sur la page d'inscription quand l'événement [regroupe ses créneaux par secteur](gerer-les-postes.md#regrouper-les-creneaux-par-secteur-sur-la-page-d-inscription) : sur leur page, seul le nom des responsables de leur poste apparaît
 - Les modifications de réponse à une question rattachée à un poste vont aux responsables de ce poste, pas à ceux du secteur
 
 ![Page de la responsable du poste Buvette : chaque créneau avec ses bénévoles inscrits, leur email et leur téléphone, et les personnes en liste d'attente](/doc-img/leader-page.png)

@@ -13,6 +13,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Créneaux regroupés par secteur sur la page d'inscription** (#1469) : un événement qui utilise des secteurs peut ranger les créneaux de chaque journée sous le nom de leur secteur, en liste comme en frise, avec « Autres postes » à la fin. L'option est désactivée par défaut : les bénévoles ne voient vos secteurs que si vous l'activez.
+- **« Détails » plus discret dans la vue Liste** (#1471) : sous chaque créneau, « Détails » devient un petit lien bleu précédé d'une flèche, sans cadre, au lieu d'un grand bouton.
 - **Détails d'un créneau sans le choisir** (#1471) : dans la vue Liste, un bouton « Détails » sous chaque créneau montre sa description, son lieu et ses consignes sans le sélectionner ; dans la frise, ces détails s'affichent sous le planning pour le créneau survolé, parcouru au clavier ou touché.
 - **Alerte quand un bénévole attendu bientôt ne reçoit pas ses emails** (#1476) : si l'adresse d'une personne inscrite à un créneau dans les trois jours est refusée, les organisateurs sont prévenus tout de suite, avec son prochain créneau et son téléphone, sans attendre le résumé de la nuit.
 - **Créneaux qui se chevauchent** (#1467) : un réglage de l'événement autorise une personne à s'inscrire à deux créneaux aux mêmes heures, quel que soit le poste. L'option est désactivée par défaut et demande une confirmation ; les inscriptions qui se chevauchent restent signalées dans la liste.

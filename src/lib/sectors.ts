@@ -5,8 +5,9 @@
  * Sectors grouping several postes (#1147), available to every active organisation since #1311
  * (they left the beta programme). A sector groups postes of one event (« Parking » for « Parking
  * Nord » and « Parking Mairie »); a poste belongs to zero or one sector (Shift.sectorId, shared per
- * poste, src/lib/role-settings.ts). Only organisers see sectors: the volunteers' pages, emails and
- * API are unchanged.
+ * poste, src/lib/role-settings.ts). Only organisers see sectors, unless the event groups its shifts
+ * by sector on the sign-up page (#1469, `publicSectorsOf`): then the page shows the sector names as
+ * headings, and nothing else (emails, personal pages and leader links are unchanged).
  *
  * The event option « Organiser les postes par secteurs » (Event.sectorsEnabled):
  * - is offered to every active organisation, or while the event already has it on or adopted it
@@ -25,7 +26,7 @@
 export const SECTOR_NAME_MAX = 60
 
 export const SECTORS_OPTION_LABEL = "Organiser les postes par secteurs"
-export const SECTORS_OPTION_HINT = "Un secteur regroupe plusieurs postes, par exemple « Parking » pour « Parking Nord » et « Parking Mairie ». Les secteurs servent à l'organisation : les bénévoles ne les voient pas."
+export const SECTORS_OPTION_HINT = "Un secteur regroupe plusieurs postes, par exemple « Parking » pour « Parking Nord » et « Parking Mairie ». Les secteurs servent à l'organisation : les bénévoles ne les voient pas, sauf si vous choisissez de regrouper les créneaux par secteur sur la page d'inscription."
 export const SECTORS_FIRST_SAVE_NOTICE = "En créant ce premier secteur, vous conservez l'organisation par secteurs pour cet événement."
 export const SECTORS_ADOPTED_NOTICE = "Cet événement utilise des secteurs. Vous pouvez les réorganiser, mais vous ne pouvez plus désactiver cette organisation."
 export const NO_SECTOR_LABEL = "Autres postes"
@@ -197,3 +198,73 @@ export function archiveSectorSentence(name: string, postes: number): string {
 
 /** The key of a group in the timeline's collapsed set: the sector's id, or « none ». */
 export const sectorGroupKey = (group: Pick<SectorGroup, "id">) => group.id ?? "none"
+
+export const PUBLIC_GROUPING_LABEL = "Regrouper les créneaux par secteur sur la page d'inscription"
+export const PUBLIC_GROUPING_HINT = "Les bénévoles voient alors le nom de vos secteurs, en titre au-dessus de leurs postes. Désactivé, la page d'inscription reste sans secteurs."
+
+export const PUBLIC_GROUPING_NOT_ADOPTED_ERROR = "Créez d'abord un secteur dans « Gérer les postes » : il n'y a encore rien à regrouper."
+
+export type PublicSector = { id: string; name: string }
+
+/**
+ * What the sign-up page may know of the sectors (#1469): the active sectors in their order, and
+ * each shift's sector, only when the event adopted sectors AND chose to group its shifts by sector.
+ * Otherwise nothing: no name and no sector id leaves the server, so the promise « les bénévoles ne
+ * les voient pas » holds for every event that did not choose otherwise. A shift whose sector is
+ * archived or unknown has none (« Autres postes »).
+ */
+export function publicSectorsOf(
+  event: SectorsEventState & { publicSectorGrouping?: boolean | null; sectors?: SectorLike[] | null },
+): { sectors: PublicSector[]; sectorOf: (sectorId: string | null | undefined) => string | null } {
+  if (!event.publicSectorGrouping || !sectorsAdopted(event)) return { sectors: [], sectorOf: () => null }
+  const sectors = activeSectors(event.sectors ?? []).map((s) => ({ id: s.id, name: s.name }))
+  const known = new Set(sectors.map((s) => s.id))
+  return { sectors, sectorOf: (id) => (id && known.has(id) ? id : null) }
+}
+
+export type SectorShiftGroup<T> = { id: string | null; name: string; shifts: T[] }
+
+/**
+ * A day's shifts grouped for the sign-up page (#1469), in the order the page reads them: the
+ * sectors in their order, « Autres postes » last, empty groups left out, each group keeping the
+ * order of `shifts`. Null when no shift of the day has a sector: the day is not grouped.
+ */
+export function groupShiftsBySector<T extends { sectorId?: string | null }>(shifts: T[], sectors: PublicSector[]): SectorShiftGroup<T>[] | null {
+  if (sectors.length === 0 || !shifts.some((s) => s.sectorId)) return null
+  const byId = new Map<string, T[]>()
+  const none: T[] = []
+  const known = new Set(sectors.map((s) => s.id))
+  for (const shift of shifts) {
+    if (shift.sectorId && known.has(shift.sectorId)) {
+      const list = byId.get(shift.sectorId) ?? []
+      list.push(shift)
+      byId.set(shift.sectorId, list)
+    } else none.push(shift)
+  }
+  const groups: SectorShiftGroup<T>[] = sectors.filter((s) => byId.has(s.id)).map((s) => ({ id: s.id, name: s.name, shifts: byId.get(s.id)! }))
+  if (none.length > 0) groups.push({ id: null, name: NO_SECTOR_LABEL, shifts: none })
+  return groups
+}
+
+export type SectorRows = { id: string | null; name: string; roles: string[] }
+
+/**
+ * The day's postes grouped by sector for the frise (#1469): the sectors in their order, each with
+ * its postes in `postes`' order, « Autres postes » last, empty groups left out. Null when no poste
+ * of the day has a sector, or when « Autres postes » would be the only group: no bands at all.
+ */
+export function sectorRowGroups(postes: string[], sectorOf: (role: string) => string | null | undefined, sectors: PublicSector[]): SectorRows[] | null {
+  if (sectors.length === 0) return null
+  const known = new Set(sectors.map((s) => s.id))
+  const byId = new Map<string, string[]>()
+  const none: string[] = []
+  for (const role of postes) {
+    const id = sectorOf(role)
+    if (id && known.has(id)) byId.set(id, [...(byId.get(id) ?? []), role])
+    else none.push(role)
+  }
+  if (byId.size === 0) return null
+  const groups: SectorRows[] = sectors.filter((s) => byId.has(s.id)).map((s) => ({ id: s.id, name: s.name, roles: byId.get(s.id)! }))
+  if (none.length > 0) groups.push({ id: null, name: NO_SECTOR_LABEL, roles: none })
+  return groups
+}
