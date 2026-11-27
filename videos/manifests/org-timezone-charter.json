@@ -1,14 +1,14 @@
 {
   "id": "ORG_TIMEZONE_CHARTER",
   "slug": "org-timezone-charter",
-  "title": "Régler le fuseau horaire et la Charte des bénévoles",
+  "title": "Régler le fuseau horaire et la convention des bénévoles",
   "description": "Configurer les heures de référence et le texte que chaque bénévole accepte avant son inscription.",
   "viewer": {
-    "summary": "Dans cette vidéo, vous réglez le fuseau horaire de votre organisation et la Convention des Bénévoles.",
+    "summary": "Dans cette vidéo, vous réglez le fuseau horaire de votre organisation et la convention des bénévoles.",
     "steps": [
       "Choisissez le fuseau horaire du lieu où se déroulent vos événements.",
       "Enregistrez : les heures saisies dans le planning ne changent pas, seuls les calculs automatiques s'ajustent.",
-      "Rédigez la Convention des Bénévoles avec des engagements concrets.",
+      "Rédigez la convention des bénévoles avec des engagements concrets.",
       "Vérifiez le résultat côté bénévole : la convention s'affiche avant la confirmation d'inscription, avec « J'ai lu et j'accepte »."
     ],
     "remember": [
@@ -29,7 +29,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Deux paramètres communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Charte des bénévoles explique clairement le cadre accepté avant chaque inscription.",
+      "transcript": "Deux paramètres communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la convention des bénévoles explique clairement le cadre accepté avant chaque inscription.",
       "fallbackDurationMs": 15000
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "id": "charter",
-      "transcript": "La Charte des bénévoles présente le cadre de l’engagement. Le paramètre Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la charte par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
+      "transcript": "La Convention des bénévoles présente le cadre de l’engagement. Le paramètre Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la convention par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
       "fallbackDurationMs": 38000
     },
     {

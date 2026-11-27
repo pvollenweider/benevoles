@@ -63,7 +63,7 @@ Modules `src/lib/` à connaître :
 | `targeted-message.ts` | Messages ciblés : audiences, limites, push associé |
 | `registration-decision.ts` | Acceptation ou refus des demandes sur les créneaux « Sur validation » |
 | `event-questions.ts` | Questions d'inscription personnalisées : validation des questions et des réponses |
-| `volunteer-charter.ts` | Texte par défaut de la charte du bénévole |
+| `volunteer-charter.ts` | Texte par défaut de la convention des bénévoles, et la décision de la demander |
 | `event-page-markdown.ts` | Rend le Markdown des pages personnalisées d'événement en HTML (`marked`), sanitisé avec DOMPurify (liste blanche de balises/attributs) à la lecture, pas à l'écriture |
 | `sector-leaders.ts` | Notifie les responsables de secteur d'un poste à chaque nouvelle inscription (#186) |
 | `org-log.ts` / `org-log-read.ts` | Journal d'activité au niveau de l'organisation — écriture et lecture (#194) |
@@ -100,7 +100,7 @@ Principaux modèles Prisma (`prisma/schema.prisma`) :
 
 | Modèle | Rôle |
 |--------|------|
-| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`), fuseau horaire (`timeZone`, vide = `APP_TIME_ZONE`), adresse de réponse (`replyToEmail`), paramètres des emails (`notificationSettings`) |
+| `Organization` | Tenant : slug, `active`, convention, assurance, titre de la page publique (`publicTitle`), fuseau horaire (`timeZone`, vide = `APP_TIME_ZONE`), adresse de réponse (`replyToEmail`), paramètres des emails (`notificationSettings`) |
 | `OrgSlugHistory` | Anciens slugs |
 | `AdminUser` | Compte propriétaire (`admin`), organisateur (`organizer`) ou super admin ; empreintes des jetons d'activation et de réinitialisation ; `sessionVersion` ; abonnement aux nouveautés produit (`receiveProductUpdates`, #200) |
 | `Event` | Événement : dates, statut de publication, répertorié ou non (`isListed`), fenêtre d'inscription (`registrationsOpen`, `registrationOpensAt`, `registrationClosesAt`), téléphone obligatoire, rappels activés |

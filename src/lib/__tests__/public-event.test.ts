@@ -75,6 +75,17 @@ describe("toPublicEvent charter", () => {
     expect(out.volunteerCharter).toBeNull()
     expect(out.hasOrgInsurance).toBe(false)
   })
+
+  it("passes whether the organisation asks for a convention at all", () => {
+    const row = (volunteerConventionEnabled: boolean) => ({
+      id: "e", slug: "fete", title: "Fête", description: null, location: null, startDate: new Date(), endDate: new Date(),
+      publicInstructions: null, confirmationMessage: null, requirePhone: false, showSchedule: [],
+      organization: { name: "Org", slug: "org", volunteerCharter: null, hasOrgInsurance: true, volunteerConventionEnabled },
+      pages: [], shifts: [],
+    } as unknown as PublicEventRow)
+    expect(toPublicEvent(row(true)).volunteerConventionEnabled).toBe(true)
+    expect(toPublicEvent(row(false)).volunteerConventionEnabled).toBe(false)
+  })
 })
 
 // A shift's meeting point is a whole pair (#191 audit): never its latitude with the event's longitude.

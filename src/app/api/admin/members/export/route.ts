@@ -43,9 +43,10 @@ export async function GET() {
     if (!outcomesByVolunteer.has(o.volunteerId)) outcomesByVolunteer.set(o.volunteerId, [])
     outcomesByVolunteer.get(o.volunteerId)!.push(o)
   }
-  // Last time each member accepted the volunteer charter (#569), across every registration they
-  // have (several possible per person); null for a member whose registrations were all added by
-  // an admin by hand. Ordered newest first, so the first row kept per volunteer is the latest.
+  // Last time each member accepted the volunteer convention (#569), across every registration
+  // they have (several possible per person); null for a member whose registrations were all added
+  // by an admin by hand, or when the organisation asked for no convention (#1468). Ordered newest
+  // first, so the first row kept per volunteer is the latest.
   const acceptances = await db.registration.findMany({
     where: { volunteerId: { in: members.map((m) => m.id) }, charterAcceptedAt: { not: null } },
     orderBy: { charterAcceptedAt: "desc" },

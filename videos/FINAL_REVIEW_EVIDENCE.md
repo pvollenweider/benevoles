@@ -1487,3 +1487,24 @@ Dans la vue **Liste**, un créneau qui peut être choisi porte désormais un bor
 - **SHIFT_ROSTER_VISIBILITY** (`shift-roster-visibility`) : les lignes de la liste et leurs noms montrent l'ancien aspect.
 
 Aucune narration ne change.
+
+## À refilmer : convention des bénévoles (#1468, 1er décembre 2026)
+
+Le texte accepté à l'inscription s'appelle désormais « convention des bénévoles » partout. Les paramètres gagnent le commutateur « Demander aux bénévoles d'accepter une convention », qui peut être désactivé : le formulaire public n'affiche alors ni case, ni lien, ni fenêtre. Les sources (narration, bloc `viewer`, scripts, sélecteurs de capture) sont mises à jour dans ce lot ; aucune capture ni aucun rendu n'est régénéré ici, la voix et les captures longues restant hors de ce changement. La révision du catalogue est à incrémenter au rendu.
+
+**Narration et image changent** :
+
+- **ORG_TIMEZONE_CHARTER** (`org-timezone-charter`) : la narration des chapitres « accueil » et « convention », le bloc `viewer`, le titre et le script changent ; l'image montre le nouveau titre de section et le commutateur de demande de convention.
+- **ORG_FIRST_STEPS** (`masterclass-03-first-steps`) : la narration des chapitres « checklist » et « identité », le bloc `viewer` et le script changent ; l'image montre la section renommée dans les paramètres.
+- **ADMIN_FEATURES_OVERVIEW** (`admin-features-tour`) : la narration du chapitre « organisation » et le script changent ; l'image montre la section renommée dans les paramètres.
+
+**Image seule** (la narration écrite change de casse, la prononciation reste la même) :
+
+- **EVENT_REVIEW_PUBLISH** (`event-review-publish`) : la fenêtre ouverte dans le formulaire s'intitule « Convention des bénévoles » ; la narration dit déjà « cette convention ».
+- **VOLUNTEER_FORM_RECAP** (`volunteer-form-recap`) : la fenêtre de la convention porte le nouveau titre ; la narration ne fait que perdre la majuscule.
+- **ACCESSIBILITY_KEYBOARD_DISPLAY** (`accessibility-keyboard-display`) : le sélecteur de vérification vise le nouveau titre de section ; l'image des paramètres est périmée par le titre et le commutateur ajouté.
+
+**Sources ajustées sans refilm** :
+
+- **DATA_EXPORTS_ARCHIVES** (`data-exports-archives`) : seules deux occurrences écrites de « Convention » passent en minuscules ; le fichier CSV montré et l'image ne changent pas.
+- **WORKLOAD_PROTECTION** (`workload-protection`) : le scénario dit « convention » au lieu de « charte » ; aucune narration, aucun bloc `viewer`, aucune image ne change.

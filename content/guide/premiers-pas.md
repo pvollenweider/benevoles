@@ -15,7 +15,7 @@ aliases: []
 
 Tant que votre organisation n'a pas terminé sa mise en place, une liste **Premiers pas** s'affiche en haut de la liste des événements et du tableau de bord. Elle indique dans quel ordre procéder, avec un lien vers chaque étape :
 
-1. personnaliser la page publique et la charte (facultatif, des valeurs par défaut existent) : voir [Personnaliser l'organisation](personnaliser-l-organisation.md) et [Charte du bénévole](charte-du-benevole.md) ;
+1. personnaliser la page publique et la convention (facultatif, des valeurs par défaut existent) : voir [Personnaliser l'organisation](personnaliser-l-organisation.md) et [Convention des bénévoles](convention-des-benevoles.md) ;
 2. vérifier le fuseau horaire (facultatif, Europe/Zurich par défaut) ;
 3. créer votre premier événement : voir [Créer un événement](creer-un-evenement.md) ;
 4. définir les postes et les créneaux : voir [Configurer les créneaux](configurer-les-creneaux.md) ;

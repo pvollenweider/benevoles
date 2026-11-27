@@ -262,7 +262,7 @@ describe("EventPageClient — charter dialog", () => {
 
   it("is a modal with a trap, closes with Escape from anywhere and gives focus back to its link", async () => {
     const link = await openCharter()
-    const dialog = screen.getByRole("dialog", { name: "Convention des Bénévoles" })
+    const dialog = screen.getByRole("dialog", { name: "Convention des bénévoles" })
     expect(dialog).toHaveAttribute("aria-modal", "true")
     const close = screen.getByRole("button", { name: "Fermer" })
     expect(close).toHaveFocus()

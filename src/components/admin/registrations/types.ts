@@ -27,8 +27,9 @@ export type Registration = {
   checkedInAt?: string | null
   /** "absent" when an organizer recorded that the person did not come (#1141); null otherwise. */
   attendanceStatus?: string | null
-  /** Proof of acceptance of the volunteer charter (#569): null for an "admin_manual" registration
-   * (no volunteer consent was given there), see src/lib/charter-hash.ts. */
+  /** Proof of acceptance of the volunteer convention (#569): null for an "admin_manual"
+   * registration (no volunteer consent was given there), or when no convention was asked (#1468),
+   * see src/lib/charter-hash.ts. */
   /** Proof of charter acceptance (#569), already worded by charterAcceptanceLabel; null for a
    * registration added by an organizer or made before the proof was stored. */
   charterAcceptance?: string | null

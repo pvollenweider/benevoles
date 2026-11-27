@@ -32,7 +32,7 @@ export async function PATCH(req: Request) {
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     return NextResponse.json({ error: "Aucune modification." }, { status: 400 })
   }
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; shiftSwapsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null; workloadPolicyDefault?: Prisma.InputJsonValue | typeof Prisma.DbNull } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; volunteerConventionEnabled?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; shiftSwapsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null; workloadPolicyDefault?: Prisma.InputJsonValue | typeof Prisma.DbNull } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -77,13 +77,23 @@ export async function PATCH(req: Request) {
   if ("volunteerCharter" in body) {
     const charter = typeof body.volunteerCharter === "string" ? body.volunteerCharter.trim() : ""
     if (charter.length > MARKDOWN_TEXT_MAX) {
-      return NextResponse.json({ error: tooLongMessage("La charte", MARKDOWN_TEXT_MAX) }, { status: 400 })
+      return NextResponse.json({ error: tooLongMessage("La convention", MARKDOWN_TEXT_MAX) }, { status: 400 })
     }
     updates.volunteerCharter = charter || null
   }
 
   if (typeof body.hasOrgInsurance === "boolean") {
     updates.hasOrgInsurance = body.hasOrgInsurance
+  }
+
+  // « Demander aux bénévoles d'accepter une convention » (#1468): on by default, off means the
+  // public sign-up asks only for the data consent. A value of another type is refused rather than
+  // silently ignored.
+  if ("volunteerConventionEnabled" in body) {
+    if (typeof body.volunteerConventionEnabled !== "boolean") {
+      return NextResponse.json({ error: "Valeur invalide pour la convention des bénévoles." }, { status: 400 })
+    }
+    updates.volunteerConventionEnabled = body.volunteerConventionEnabled
   }
 
   // « Qui est inscrit » (#1068): the value of the organisation's next new events; none changes now.

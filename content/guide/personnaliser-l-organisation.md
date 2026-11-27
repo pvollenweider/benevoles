@@ -3,7 +3,7 @@ roles: [admin]
 group: organisation
 order: 40
 summary: Nom, adresse, logo, titre public, fuseau horaire, « Qui est inscrit » par défaut et taux horaire pour valoriser le bénévolat.
-related: [charte-du-benevole, equipe-d-organisation, premiers-pas]
+related: [convention-des-benevoles, equipe-d-organisation, premiers-pas]
 legacy: [admin#nom-et-adresse-de-l-organisation, admin#logo-de-l-organisation, admin#titre-de-la-page-publique, admin#fuseau-horaire]
 aliases: []
 ---

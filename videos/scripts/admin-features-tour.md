@@ -12,7 +12,7 @@ Souriant, sympathique et concret. La narration ressemble à une visite faite par
 
 ## Parcours
 
-1. Identité publique, slug, sous-domaine, fuseau horaire et Charte des bénévoles.
+1. Identité publique, slug, sous-domaine, fuseau horaire et Convention des bénévoles.
 2. Propriétaire, organisateur et responsable de secteur ; périmètre du lien personnel du responsable.
 3. Cycle de vie, visibilité et ouverture programmée des inscriptions.
 4. Apparence, lieu et coordonnées OpenStreetMap.
@@ -43,7 +43,7 @@ Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034.
 Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
 
 - `intro` : Voici une visite complète de l’administration, dans l’ordre où vous l’utiliserez vraiment : préparer votre organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.
-- `organization` : Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine votre sous-domaine sur benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la Charte des bénévoles que chacun devra accepter.
+- `organization` : Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine votre sous-domaine sur benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la convention des bénévoles que chacun devra accepter.
 - `team` : Côté équipe, le propriétaire administre l’organisation et ses accès. Les organisateurs préparent les événements, les membres et les communications. Les responsables de secteur reçoivent un lien personnel limité à leur poste, avec les noms et coordonnées des inscrits, sans accès au reste de l’administration.
 - `lifecycle` : Un événement suit un cycle clair : brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé. Même publié, il peut rester non répertorié et accessible seulement par son lien. Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.
 - `appearance` : Dans ses paramètres, vous réglez le titre, les dates, les messages et une couleur d’en-tête accessible. Le lieu peut recevoir des coordonnées : les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.

@@ -99,7 +99,7 @@ partageront le même identifiant.
 **Public :** propriétaire. **Durée :** 6 min.
 
 - checklist automatique ;
-- nom, page publique et charte ;
+- nom, page publique et convention ;
 - fuseau horaire ;
 - premier événement, créneaux, publication et inscription de test ;
 - étapes facultatives et possibilité de masquer la checklist.
@@ -153,7 +153,7 @@ partageront le même identifiant.
 
 **Jeu de données :** organisation avec deux événements répertoriés et un événement non répertorié.
 
-### 07. Fuseau horaire, charte et réglages communs
+### 07. Fuseau horaire, convention et réglages communs
 
 **Identifiant :** `ORG_TIMEZONE_CHARTER`.
 
@@ -161,10 +161,10 @@ partageront le même identifiant.
 
 - choisir le fuseau horaire ;
 - effet sur horaires, rappels, délais et changements d’heure ;
-- écrire et prévisualiser la Convention des Bénévoles ;
+- écrire et prévisualiser la convention des bénévoles ;
 - parcours d’acceptation côté bénévole.
 
-**Jeu de données :** créneaux autour du passage heure d’été/hiver et charte réaliste.
+**Jeu de données :** créneaux autour du passage heure d’été/hiver et convention réaliste.
 
 ### 08. Propriétaires, organisateurs et permissions
 
@@ -839,7 +839,7 @@ Plutôt qu’un seed gigantesque, utiliser des **scénarios composables**. Chaqu
 
 | Scénario | But | Volume indicatif |
 |---|---|---:|
-| `fresh-organization` | onboarding, identité, charte, équipe | 0 événement |
+| `fresh-organization` | onboarding, identité, convention, équipe | 0 événement |
 | `village-festival` | parcours général, planning, pages et programme | 24 membres, 12 créneaux |
 | `large-festival` | filtres, recherche, rapports, badges | 120 membres, 35 créneaux, 90 inscriptions |
 | `staffing-alerts` | toutes les alertes du dashboard | 6 événements, 12 alertes |
@@ -868,7 +868,7 @@ Chaque seed doit être :
 | GUIDE_ADMIN — premiers pas | 03 |
 | GUIDE_ADMIN — tableau de bord | 04 |
 | GUIDE_ADMIN — recherche | 05 |
-| GUIDE_ADMIN — organisation, équipe, emails, fuseau, charte | 06–09 |
+| GUIDE_ADMIN — organisation, équipe, emails, fuseau, convention | 06–09 |
 | GUIDE_ADMIN — création, modèles, publication, cycle de vie | 10–14, 17 |
 | GUIDE_ADMIN — programme, pages, QR code, jalons | 15–16 |
 | GUIDE_ADMIN — créneaux et postes | 18–25 |

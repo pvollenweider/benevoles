@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Length caps of the organisers' free texts (events, shifts, the volunteer charter, member notes).
+ * Length caps of the organisers' free texts (events, shifts, the volunteer convention, member notes).
  * Every one is re-rendered on public pages and in emails, so none may grow without bound. The caps
  * are well above any real use: the Markdown texts get the same 20,000 characters as an event's
  * custom pages. The forms carry the same values as `maxLength`.
@@ -10,7 +10,7 @@
  */
 export const EVENT_TITLE_MAX = 200
 export const EVENT_LOCATION_MAX = 500
-/** Markdown texts: event description, public instructions, confirmation message, volunteer charter. */
+/** Markdown texts: event description, public instructions, confirmation message, volunteer convention. */
 export const MARKDOWN_TEXT_MAX = 20000
 export const SHOW_NAME_MAX = 200
 export const SHIFT_ROLE_NAME_MAX = 100

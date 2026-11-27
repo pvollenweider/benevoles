@@ -37,7 +37,7 @@
     },
     {
       "id": "organization",
-      "transcript": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine votre sous-domaine sur benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la Charte des bénévoles que chacun devra accepter.",
+      "transcript": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine votre sous-domaine sur benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la convention des bénévoles que chacun devra accepter.",
       "fallbackDurationMs": 15000
     },
     {

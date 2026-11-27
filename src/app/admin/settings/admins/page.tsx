@@ -59,7 +59,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, betaOptInAt: true, betaOptInById: true, logo: ORG_LOGO_SELECT } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, volunteerConventionEnabled: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, betaOptInAt: true, betaOptInById: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -125,7 +125,7 @@ export default async function AdminsSettingsPage() {
             <dt className="text-gray-600">Titre public</dt><dd className="text-gray-900">{org.publicTitle || "aucun"}</dd>
             <dt className="text-gray-600">Adresse</dt><dd className="text-gray-900 break-all">{org.slug}.{baseDomain}</dd>
             <dt className="text-gray-600">Fuseau horaire</dt><dd className="text-gray-900">{org.timeZone || APP_TIME_ZONE}</dd>
-            <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{charterStatusLabel(org.volunteerCharter)}</dd>
+            <dt className="text-gray-600">Convention des bénévoles</dt><dd className="text-gray-900">{charterStatusLabel(org.volunteerCharter, org.volunteerConventionEnabled)}</dd>
             <dt className="text-gray-600">Qui est inscrit, nouveaux événements</dt><dd className="text-gray-900">{org.shiftRosterDefault ? "activé" : "désactivé"}</dd>
             <dt className="text-gray-600">Taux horaire de valorisation</dt><dd className="text-gray-900">{hourRate ? hourRateLabel(hourRate) : "aucun"}</dd>
             {showSwapsDefault && <><dt className="text-gray-600">Échanges de créneaux, nouveaux événements</dt><dd className="text-gray-900">{org.shiftSwapsDefault ? "activé" : "désactivé"}</dd></>}
@@ -163,6 +163,7 @@ export default async function AdminsSettingsPage() {
         <OrgCharterForm
           initialCharter={org.volunteerCharter ?? null}
           initialHasOrgInsurance={org.hasOrgInsurance}
+          initialVolunteerConventionEnabled={org.volunteerConventionEnabled}
         />
       )}
 

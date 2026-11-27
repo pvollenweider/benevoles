@@ -9,7 +9,7 @@ parcours réellement vécu par les bénévoles.
 ## Démonstration
 
 1. Lire la progression et distinguer les étapes obligatoires des paramètres facultatifs.
-2. Personnaliser le titre public et la Charte des bénévoles.
+2. Personnaliser le titre public et la convention des bénévoles.
 3. Choisir le fuseau horaire de l’organisation.
 4. Revenir à la checklist et constater les coches calculées automatiquement.
 5. Créer un événement minimal en brouillon.
@@ -20,7 +20,7 @@ parcours réellement vécu par les bénévoles.
 
 ## Résultat visible
 
-- La page publique utilise le titre et la charte personnalisés.
+- La page publique utilise le titre et la convention personnalisés.
 - Les horaires et rappels utilisent le fuseau choisi.
 - L’événement est publié avec un créneau réellement accessible.
 - L’inscription de test apparaît dans l’administration et son email dans la boîte vidéo.
@@ -28,7 +28,7 @@ parcours réellement vécu par les bénévoles.
 
 ## Points d’attention
 
-- Le titre, la charte et le fuseau sont facultatifs : des valeurs par défaut existent.
+- Le titre, la convention et le fuseau sont facultatifs : des valeurs par défaut existent.
 - L’événement reste invisible tant qu’il est en brouillon.
 - L’aperçu bénévole est utile avant publication, mais la checklist demande aussi une véritable
   inscription de test afin de vérifier l’email.

@@ -10,6 +10,11 @@ Les pages publiques parlent presque toujours de « bénévoles ». Selon le publ
 - **Volontaires** : synonyme courant en France. Il ne doit jamais laisser croire à un contrat de volontariat, ni à un service civique.
 - **Collaborateurs** : uniquement pour une équipe qui mêle salariés et bénévoles, par exemple « staff, bénévoles et collaborateurs ». Jamais pour désigner des bénévoles seuls : un bénévole n'est pas un salarié.
 
+## La convention des bénévoles
+
+- Le texte que les bénévoles acceptent à l'inscription s'appelle **« convention des bénévoles »**, jamais « charte », dans l'interface, les emails, les guides et la documentation. Un organisateur peut choisir de n'en demander aucune : on dit alors qu'il n'y a pas de convention, et non que la charte est désactivée.
+- Les identifiants du code et les noms de fichiers (`volunteerCharter`, `charterAcceptedAt`, `OrgCharterForm`) ne changent pas : la règle porte sur le texte visible.
+
 ## La page et son lien
 
 - **« Mes inscriptions »** est le nom de la page du bénévole : le libellé du bouton qui l'ouvre, et dans une phrase « ta page « Mes inscriptions » ». On ne dit ni « ton espace », ni « ton compte », ni « ton tableau de bord ».

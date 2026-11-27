@@ -167,9 +167,11 @@ export const VOLUNTEER_FIELDS_ON_ERASURE: Record<string, "clear" | "keep"> = {
  * Every column of Registration, and what an erasure does with it. "regenerate" = a fresh token
  * nobody is ever sent, so every personal link of the person stops working.
  *
- * The charter acceptance proof (#569, hash of the text shown and date) is kept: it identifies a
+ * The convention acceptance proof (#569, hash of the text shown and date) is kept: it identifies a
  * text version, not a person, and once the registration no longer points to anyone it says only
  * "this anonymous registration accepted that version" — the same as the registration's own date.
+ * Both columns are null for a registration made while the organisation asked for no convention
+ * (#1468), so the exported acceptance date is empty there.
  */
 export const REGISTRATION_FIELDS_ON_ERASURE: Record<string, "clear" | "keep" | "regenerate"> = {
   id: "keep",

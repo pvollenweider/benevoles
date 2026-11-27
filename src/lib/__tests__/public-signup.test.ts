@@ -87,10 +87,18 @@ describe("validateSignup", () => {
     expect(validateSignup({ ...base, form: { ...ok, phone: "1".repeat(50), comment: "x".repeat(2000) } })).toBeNull()
   })
 
-  it("checks charter, consent and required fields, in that order", () => {
+  it("checks convention, consent and required fields, in that order", () => {
     expect(validateSignup({ ...base, charterAccepted: false })).toContain("convention")
     expect(validateSignup({ ...base, form: { ...ok, consent: false } })).toBe("Coche la case d'accord sur tes données pour t'inscrire.")
     expect(validateSignup({ ...base, form: { ...ok, email: "" } })).toContain("obligatoires")
+  })
+
+  // No convention asked (#1468): no message about it, even with the box unchecked; the data consent
+  // is still required.
+  it("requires no convention when the organisation asks for none", () => {
+    expect(validateSignup({ ...base, charterAccepted: false, volunteerConventionEnabled: false })).toBeNull()
+    expect(validateSignup({ ...base, charterAccepted: false, volunteerConventionEnabled: false, form: { ...ok, consent: false } }))
+      .toBe("Coche la case d'accord sur tes données pour t'inscrire.")
   })
 
   it("requires a non-blank phone only when the event does", () => {

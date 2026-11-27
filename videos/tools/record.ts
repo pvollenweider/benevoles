@@ -1040,9 +1040,9 @@ async function main() {
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       })
 
-      await page.screencast.showChapter("La charte", { description: "Le cadre accepté par chaque bénévole", duration: 1_400 })
+      await page.screencast.showChapter("La convention", { description: "Le cadre accepté par chaque bénévole", duration: 1_400 })
       await scene("charter", async (at) => {
-        const heading = page.getByRole("heading", { name: "Charte des bénévoles" })
+        const heading = page.getByRole("heading", { name: "Convention des bénévoles" })
         await heading.scrollIntoViewIfNeeded()
         const panel = heading.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')]")
         const charter = panel.locator("textarea")
@@ -1051,8 +1051,8 @@ async function main() {
         await tap(page, insurance)
         await at(0.23) /* mid-sentence */
         await tap(page, insurance)
-        await at("Réinitialiser la charte par défaut")
-        await tap(page, panel.getByRole("button", { name: "Réinitialiser la charte par défaut", exact: true }))
+        await at("Réinitialiser la convention par défaut")
+        await tap(page, panel.getByRole("button", { name: "Réinitialiser la convention par défaut", exact: true }))
         const completeText = await charter.inputValue()
         if (!completeText.includes("dès que possible") || !completeText.includes("3. L'organisation")) {
           throw new Error("Current complete convention required: do not capture the obsolete build or the one-sentence test text")
@@ -1078,9 +1078,9 @@ async function main() {
         await page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).scrollIntoViewIfNeeded()
         await at("Ouvrez la convention depuis le")
         await tap(page, page.getByRole("button", { name: "convention des bénévoles" }))
-        await page.getByRole("dialog", { name: "Convention des Bénévoles" }).waitFor()
+        await page.getByRole("dialog", { name: "Convention des bénévoles" }).waitFor()
         await at("faisons-le défiler pour lire aussi")
-        const dialog = page.getByRole("dialog", { name: "Convention des Bénévoles" })
+        const dialog = page.getByRole("dialog", { name: "Convention des bénévoles" })
         const box = await dialog.boundingBox()
         if (!box) throw new Error("Convention dialog is not visible")
         const previousScroll = await dialog.evaluate(element => [element, ...element.querySelectorAll("*")].reduce((sum, node) => sum + node.scrollTop, 0))
@@ -1102,7 +1102,7 @@ async function main() {
         await page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).scrollIntoViewIfNeeded()
         await at("Une modification de votre texte")
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
-        await page.getByRole("heading", { name: "Charte des bénévoles", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Convention des bénévoles", exact: true }).scrollIntoViewIfNeeded()
         await at("Pour une information urgente, utilisez")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
         await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
@@ -2426,9 +2426,9 @@ async function main() {
         await typeNaturally(page, page.getByLabel(/Commentaire/), "Je prévois une pause avant la nuit.")
       })
       await scene("agreement", async (at) => {
-        await at("Ouvre la Convention des Bénévoles")
+        await at("Ouvre la convention des bénévoles")
         await tap(page, page.getByRole("button", { name: "convention des bénévoles" }))
-        await page.getByRole("dialog", { name: "Convention des Bénévoles" }).waitFor()
+        await page.getByRole("dialog", { name: "Convention des bénévoles" }).waitFor()
         await at(0.44) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: "J'ai lu et j'accepte" }))
         await at("Lire puis cocher ces deux")
@@ -5570,7 +5570,7 @@ async function main() {
         await show("Adresse de votre espace", 0.12)
         await show("Titre de la page publique", 0.48)
         await show("Fuseau horaire", 0.68)
-        await show("Charte des bénévoles", 0.82)
+        await show("Convention des bénévoles", 0.82)
       })
 
       await scene("team", async (at) => {
@@ -5957,7 +5957,7 @@ async function main() {
         const titleForm = titleField.locator("xpath=ancestor::form")
         await tap(page, titleForm.getByRole("button", { name: "Enregistrer" }))
         await titleForm.getByText("Titre enregistré.").waitFor()
-        const charterHeading = page.getByRole("heading", { name: "Charte des bénévoles" })
+        const charterHeading = page.getByRole("heading", { name: "Convention des bénévoles" })
         await charterHeading.scrollIntoViewIfNeeded()
         const charterBox = charterHeading.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')]")
         const charter = charterBox.locator("textarea")

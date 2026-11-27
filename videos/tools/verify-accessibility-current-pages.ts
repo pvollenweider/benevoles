@@ -61,7 +61,7 @@ async function main() {
   checks.actualReorderPersistedAndRestored=true
   checks.currentTabs=true;checks.listView=true;checks.roleCumulAndReorderControls=true
   await page.goto(base+'/admin/settings/admins')
-  await page.getByRole('heading',{name:'Charte des bénévoles',exact:true}).waitFor()
+  await page.getByRole('heading',{name:'Convention des bénévoles',exact:true}).waitFor()
   await page.getByRole('switch',{name:"Assurance RC fournie par l'organisation",exact:true}).waitFor()
   await page.screenshot({path:path.join(directory,'charter.png')})
   checks.charterAndSwitch=true
@@ -104,7 +104,7 @@ async function main() {
   await page.screenshot({path:path.join(directory,'accessibility-statement.png')})
   checks.actualFooterStatementLink=page.url()
   await writeFile(path.join(directory,'checks.json'),JSON.stringify(checks,null,2))
-  console.log('Current tabs, Liste, Cumul, reorder controls, charter, real keyboard public selection and footer statement verified. Native footage still required.')
+  console.log('Current tabs, Liste, Cumul, reorder controls, convention, real keyboard public selection and footer statement verified. Native footage still required.')
  } finally {await browser.close()}
 }
 main().catch(error=>{console.error(error);process.exitCode=1})

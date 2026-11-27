@@ -268,7 +268,7 @@ src/
 │   ├── product-updates/unsubscribed/     # Désabonnement des nouveautés produit
 │   ├── admin/                            # Administration d'une organisation
 │   │   ├── dashboard/, events/, members/, search/, account/
-│   │   ├── settings/                     # admins/ (équipe, nom, slug, charte, fuseau), notifications/, message-templates/, activity/
+│   │   ├── settings/                     # admins/ (équipe, nom, slug, convention, fuseau), notifications/, message-templates/, activity/
 │   │   └── login, forgot-password, reset-password, accept-invite/
 │   ├── super-admin/                      # organizations/, health/ (santé du service), product-updates/, profile/
 │   └── api/
@@ -303,7 +303,7 @@ content/                                  # Sources Markdown des pages publiques
 
 | Modèle | Description |
 |--------|-------------|
-| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole, option d'assurance de l'organisation, titre de la page publique et fuseau horaire |
+| `Organization` | Tenant (org) avec slug unique, flag `active`, convention des bénévoles, option d'assurance de l'organisation, titre de la page publique et fuseau horaire |
 | `AdminUser` | Compte d'administration : `admin` ou `organizer` rattaché à une org, ou `super_admin` sans org ; onboarding par token révocable |
 | `Event` | Événement avec dates, statut, slug unique par org |
 | `Shift` | Créneau horaire (rôle, capacité, statut, ordre) |

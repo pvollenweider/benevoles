@@ -94,7 +94,7 @@ Nous pouvons faire évoluer cet accord, notamment pour suivre la loi ou le servi
 - **Catégories de données** :
   - identité et coordonnées : prénom, nom, adresse email, téléphone ;
   - date de naissance, seulement pour un créneau avec un âge minimum ;
-  - inscriptions, liste d'attente et présences ; acceptation de votre charte du bénévole ;
+  - inscriptions, liste d'attente et présences ; acceptation de votre convention des bénévoles ;
   - choix de chaque bénévole d'afficher son nom aux autres bénévoles d'un événement (« Qui est inscrit »), avec la date et la version du texte accepté ;
   - réponses aux questions de vos événements ;
   - disponibilités, étiquettes et notes internes ;

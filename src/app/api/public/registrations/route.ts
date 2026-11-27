@@ -56,7 +56,7 @@ import {
   type SignupRefusal,
 } from "@/lib/signup-eligibility"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
-import { resolveCharterText } from "@/lib/volunteer-charter"
+import { isVolunteerConventionAsked, resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
 import { lockSignupVolunteer, SignupMatchMovedError } from "@/lib/signup-volunteer"
 import { touchOrgActivity } from "@/lib/org-activity"
@@ -97,10 +97,9 @@ const schema = z.object({
   birthDate: z.preprocess((v) => (v === "" ? undefined : v), birthDateSchema.optional()),
   comment: z.string().max(SIGNUP_COMMENT_MAX).optional(),
   consent: z.literal(true),
-  // The volunteer ticked "J'ai lu et j'accepte la convention des bénévoles" (#569): the page
-  // already refuses to submit without it (validateSignup). Required (#696): a false or missing
-  // value is refused below with a readable message, before any lookup.
-  charterAccepted: z.literal(true),
+  // The volunteer ticked "J'ai lu et j'accepte la convention des bénévoles" (#569). Checked below
+  // from the raw body, only when the organisation asks for a convention (#1468): reading it
+  // through the schema would refuse a stale page that sends nothing while no convention is asked.
   inviteToken: z.string().max(200).optional(),
   /** Answers to the event's custom questions (#483), by question id. */
   answers: z.record(z.string(), z.unknown()).optional(),
@@ -134,14 +133,6 @@ export async function POST(req: Request) {
 
   const body = await req.json().catch(() => null)
   if (!body || typeof body !== "object") return NextResponse.json({ error: "Données invalides." }, { status: 400 })
-  if (body.charterAccepted !== true) {
-    // A page opened before the checkbox was sent with the form doesn't send it at all: reloading
-    // the page brings the current form.
-    return NextResponse.json(
-      { error: "Coche « J'ai lu et j'accepte la convention des bénévoles », puis confirme à nouveau. Si la case n'apparaît pas, recharge la page.", field: "charterAccepted" },
-      { status: 400 },
-    )
-  }
   // Over-long phone or comment (#1047): named, so a volunteer whose older phone came back
   // pre-filled knows what to shorten.
   const tooLong = tooLongSignupField(body ?? {})
@@ -159,9 +150,21 @@ export async function POST(req: Request) {
   const orgSlug = req.headers.get(ORG_HEADER)
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published", organization: { ...PUBLIC_ORG_WHERE, ...(orgSlug ? { slug: orgSlug } : {}) } },
-    include: { organization: { select: { slug: true, timeZone: true, volunteerCharter: true, hasOrgInsurance: true } } },
+    include: { organization: { select: { slug: true, timeZone: true, volunteerCharter: true, hasOrgInsurance: true, volunteerConventionEnabled: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
+  // The organisation may ask for no convention at all (#1468): then an acceptance is neither
+  // required nor read, even from a page that still sends one.
+  const conventionAsked = isVolunteerConventionAsked(event.organization.volunteerConventionEnabled)
+  if (conventionAsked && body.charterAccepted !== true) {
+    // A page opened before the checkbox was sent with the form doesn't send it at all: reloading
+    // the page brings the current form. A page loaded while no convention was asked has no box
+    // either; the same message says to reload.
+    return NextResponse.json(
+      { error: "Coche « J'ai lu et j'accepte la convention des bénévoles », puis confirme à nouveau. Si la case n'apparaît pas, recharge la page.", field: "charterAccepted" },
+      { status: 400 },
+    )
+  }
   const refuse = (r: SignupRefusal) => NextResponse.json(r.body, { status: r.status })
   const invalidShifts = () => NextResponse.json({ error: INVALID_SHIFTS }, { status: 409 })
 
@@ -426,22 +429,27 @@ export async function POST(req: Request) {
   // Proof of acceptance (#569): the exact text shown to this volunteer, hashed. CharterVersion
   // resolves the hash back to its text later; upserted once per distinct text an organization has
   // shown (never overwritten: "create" wins a race, "update" is a no-op on an existing row).
-  const charterText = resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance)
-  const charterHash = hashCharterText(charterText)
-  const charterAcceptedAt = new Date()
-  // Stored before the transaction, outside the shift locks (AUTHZ-04): a first sign-up's insert of
-  // a new text no longer makes every concurrent one wait for its commit. Never overwritten ("create"
-  // wins a race, "update" is a no-op); a text kept although the sign-up then fails is harmless, it
-  // is the text the organisation shows.
-  // Two first sign-ups racing on a new text: the loser's insert hits the unique key, the row is there.
-  try {
-    await prisma.charterVersion.upsert({
-      where: { organizationId_hash: { organizationId, hash: charterHash } },
-      create: { organizationId, hash: charterHash, text: charterText },
-      update: {},
-    })
-  } catch (e) {
-    if (!isUniqueViolation(e)) throw e
+  // Without a convention (#1468) there is nothing to prove: no hash, no date, no CharterVersion.
+  let charterHash: string | null = null
+  let charterAcceptedAt: Date | null = null
+  if (conventionAsked) {
+    const charterText = resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance)
+    charterHash = hashCharterText(charterText)
+    charterAcceptedAt = new Date()
+    // Stored before the transaction, outside the shift locks (AUTHZ-04): a first sign-up's insert of
+    // a new text no longer makes every concurrent one wait for its commit. Never overwritten ("create"
+    // wins a race, "update" is a no-op); a text kept although the sign-up then fails is harmless, it
+    // is the text the organisation shows.
+    // Two first sign-ups racing on a new text: the loser's insert hits the unique key, the row is there.
+    try {
+      await prisma.charterVersion.upsert({
+        where: { organizationId_hash: { organizationId, hash: charterHash } },
+        create: { organizationId, hash: charterHash, text: charterText },
+        update: {},
+      })
+    } catch (e) {
+      if (!isUniqueViolation(e)) throw e
+    }
   }
 
   // Notifications of this sign-up, built by the usual helpers into an outbox collector (#293).

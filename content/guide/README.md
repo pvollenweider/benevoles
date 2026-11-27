@@ -119,7 +119,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 - [Exporter et conserver ses données](exporter-et-conserver-ses-donnees.md) : Exporter un événement, les membres ou le journal à tout moment, et savoir combien de temps chaque donnée est conservée. Pour : organisateurs.
 - [Journal d'activité de l'organisation](journal-d-activite-de-l-organisation.md) : La liste chronologique de ce qui concerne l'organisation plutôt qu'un événement : membres, comptes organisateurs, emails, paramètres. Pour : organisateurs.
 - [Personnaliser l'organisation](personnaliser-l-organisation.md) : Nom, adresse, logo, titre public, fuseau horaire, « Qui est inscrit » par défaut et taux horaire pour valoriser le bénévolat. Pour : organisateurs.
-- [Charte du bénévole](charte-du-benevole.md) : Personnaliser la convention que les bénévoles acceptent avant de s'inscrire, et retrouver la preuve de leur acceptation. Pour : organisateurs.
+- [Convention des bénévoles](convention-des-benevoles.md) : Personnaliser la convention que les bénévoles acceptent avant de s'inscrire, ou choisir de ne pas en demander, et retrouver la preuve d'acceptation. Pour : organisateurs.
 
 ### Aide
 

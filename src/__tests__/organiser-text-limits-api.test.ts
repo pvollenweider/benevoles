@@ -98,9 +98,9 @@ describe("organiser text caps", () => {
       .toBe("Les notes : 5 000 caractères au maximum.")
   })
 
-  it("the volunteer charter is capped at 20,000 characters", async () => {
+  it("the volunteer convention is capped at 20,000 characters", async () => {
     const { PATCH } = await import("@/app/api/admin/settings/organization/route")
     expect(await errorOf(await PATCH(json("/api/admin/settings/organization", "PATCH", { volunteerCharter: "x".repeat(20_001) }))))
-      .toBe("La charte : 20 000 caractères au maximum.")
+      .toBe("La convention : 20 000 caractères au maximum.")
   })
 })

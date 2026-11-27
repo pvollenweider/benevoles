@@ -143,4 +143,34 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
       create: { organizationId: "org-a", hash: expectedHash, text: custom },
     }))
   })
+
+  // No convention asked (#1468): the sign-up goes through without the flag, stores no proof and
+  // writes no CharterVersion.
+  it("accepts a sign-up without acceptance when the organisation asks for no convention", async () => {
+    m.eventFindFirst.mockResolvedValue({
+      id: "evt-1", organizationId: "org-a", title: "Fête", confirmationMessage: null,
+      organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: true, volunteerConventionEnabled: false },
+    })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ charterAccepted: undefined }))
+    expect(res.status).toBeLessThan(300)
+    expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ charterAcceptedHash: null, charterAcceptedAt: null }),
+    }))
+    expect(m.charterUpsert).not.toHaveBeenCalled()
+  })
+
+  it("ignores a stale acceptance from a page loaded before the convention was turned off", async () => {
+    m.eventFindFirst.mockResolvedValue({
+      id: "evt-1", organizationId: "org-a", title: "Fête", confirmationMessage: null,
+      organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: true, volunteerConventionEnabled: false },
+    })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ charterAccepted: false }))
+    expect(res.status).toBeLessThan(300)
+    expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ charterAcceptedHash: null }),
+    }))
+    expect(m.charterUpsert).not.toHaveBeenCalled()
+  })
 })

@@ -38,8 +38,8 @@ export function onboardingSteps(f: OnboardingFacts): OnboardingStep[] {
   return [
     {
       id: "organization",
-      label: "Personnaliser la page publique et la charte",
-      hint: "Titre affiché aux bénévoles et texte de la charte qu'ils acceptent en s'inscrivant. Des valeurs par défaut existent.",
+      label: "Personnaliser la page publique et la convention",
+      hint: "Titre affiché aux bénévoles et texte de la convention qu'ils acceptent en s'inscrivant. Des valeurs par défaut existent.",
       href: "/admin/settings/admins",
       done: f.publicTitle !== null || f.charterCustomized,
       optional: true,
