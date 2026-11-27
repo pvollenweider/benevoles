@@ -190,7 +190,7 @@ async function main() {
       await verifyProductBuild("http://localhost:43102")
     } else if (script === "scripts/seed-video-scenario.ts") {
       if (batch35Seeds.includes(rest[0]) && !["45439", "45441"].includes(url.port)) throw new Error("Batch35 seed requires its dedicated database")
-      if (rest.length !== 1 || ![...batch35Seeds, "volunteer-org-registrations", "sectors", "last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", "shift-eligibility-rules", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
+      if (rest.length !== 1 || ![...batch35Seeds, "volunteer-org-registrations", "sectors", "last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", "shift-eligibility-rules", "sector-leaders", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
       if (["sectors", "data-exports-archives", "event-activity-log"].includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Exports require the isolated video DB")
         await verifyProductBuild("http://localhost:43102")
