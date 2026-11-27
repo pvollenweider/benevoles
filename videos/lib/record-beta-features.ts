@@ -309,8 +309,12 @@ export async function recordSectors(options: Options) {
     assert.equal(await count.innerText(), "5 personnes recevront ce message.")
     await count.scrollIntoViewIfNeeded()
   })
+  await go(`${event}/edit`)
+  await card.scrollIntoViewIfNeeded()
   await scene("sectors-result", async at => {
-    await at("Votre événement est maintenant organisé par secteurs")
+    const grouping = card.getByRole("switch", { name: "Regrouper les créneaux par secteur sur la page d'inscription", exact: true })
+    assert.equal(await grouping.getAttribute("aria-checked"), "false")
+    await at("Créez d'abord les secteurs")
     await go(`${event}/shifts`)
     await page.locator("[data-sector-toggle]").filter({ hasText: "Backline" }).first().scrollIntoViewIfNeeded()
   })
