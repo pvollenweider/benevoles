@@ -1561,3 +1561,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **VOLUNTEER_FORM_RECAP — NOT READY, non publiée.** La première prise signale un changement de voix ; la seconde corrige la voix mais le retrait annoncé dans la scène de charge n'est pas montré assez longtemps. [Suivi et preuves](evidence/batch44/STATUS.md).
 
 **VOLUNTEER_CALENDAR — READY, publiée, révision 4.** La nouvelle narration présente l'abonnement de l'organisation et le fichier ponctuel ; le flux et son horaire modifié sont vérifiés. [Revue](evidence/batch44/volunteer-calendar/review.md).
+
+**SECTORS — NOT READY, non publiée.** La seconde prise montre l'interrupteur de regroupement désactivé, mais la revue signale que l'adresse évoquée pour le filtre n'est pas visible. [Suivi et preuves](evidence/batch44/STATUS.md).
