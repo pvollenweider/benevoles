@@ -1557,3 +1557,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **SHIFT_ELIGIBILITY_RULES — NOT READY, non publiée.** La première prise affiche tardivement l'explication du quota ; la seconde corrige ce point, mais la revue et sa contre-vérification signalent une prononciation et des manipulations à reprendre dans la scène de réponse. [Suivi et preuves](evidence/batch44/STATUS.md).
 
 **VOLUNTEER_CHOOSE_SHIFTS — READY, publiée, révision 4.** Le parcours montre le sélecteur et la ligne de détails actuels. [Revue](evidence/batch44/volunteer-choose-shifts/review.md).
+
+**VOLUNTEER_FORM_RECAP — NOT READY, non publiée.** La première prise signale un changement de voix ; la seconde corrige la voix mais le retrait annoncé dans la scène de charge n'est pas montré assez longtemps. [Suivi et preuves](evidence/batch44/STATUS.md).

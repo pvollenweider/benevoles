@@ -1,0 +1,11 @@
+welcome: 3 audiovisual checkpoints; no issue reported
+selection: 5 audiovisual checkpoints; REVIEW
+  00:11 : Le clic sur le bouton Continuer et l'ouverture du formulaire interviennent à 00:09, avant que la voix ne les annonce à 00:11.
+identity: 4 audiovisual checkpoints; no issue reported
+questions: 3 audiovisual checkpoints; no issue reported
+agreement: 3 audiovisual checkpoints; no issue reported
+recap: 3 audiovisual checkpoints; no issue reported
+workload: 4 audiovisual checkpoints; REVIEW
+  Entre 00:18 et 00:20, une coupe abrupte montre brièvement le planning puis renvoie au formulaire : l'action de retrait du créneau Logistique sur le planning n'est pas montrée à l'écran.
+result: 4 audiovisual checkpoints; no issue reported
+8 scene reviews; 2 flagged. This does not replace inspection of the final video.
