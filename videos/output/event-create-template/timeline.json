@@ -1,18 +1,18 @@
 {
   "slug": "event-create-template",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-11T10:00:51.294Z",
+  "recordedAt": "2026-11-27T20:51:35.858Z",
   "video": "capture.webm",
   "product": {
-    "commit": "50109e997d01413760453ed446600b2f6ba55b1e",
-    "sourceTree": "363172874e5c6efafeadc746ea190fefda2714f1",
-    "productSourceSha256": "2fa7868a8ea6adb0fa0c9af26edb2c48365e3914d204eb4d1847347188354e91",
-    "buildId": "J9FLk7d2muTPYQm0aZ-LE",
-    "snapshot": "/tmp/benevoles-video-production.batch1pass2",
-    "builtAt": "2026-10-11T09:57:50.976Z"
+    "commit": "f345e1224fbb137c17c0ec2c8274ba4570bd51a9",
+    "sourceTree": "5b46ee904987817667980526e99b82ecba67b936",
+    "productSourceSha256": "8c4d9071c0cf4571ee4f2e9318b64f9a7a87e085e9671e8b7c6d4ad075e18a3a",
+    "buildId": "b9pCkSi99S66RniP68oOt",
+    "snapshot": "/tmp/benevoles-video-production.lo504hWH",
+    "builtAt": "2026-11-27T20:38:31.558Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "formation-template",
     "scenario": "EVENT_CREATE_TEMPLATE",
@@ -26,201 +26,201 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 3124
+      "atMs": 3139
     },
     {
       "kind": "click",
-      "atMs": 18674
+      "atMs": 17745
     },
     {
       "kind": "click",
-      "atMs": 20774
+      "atMs": 20044
     },
     {
       "kind": "click",
-      "atMs": 23957
+      "atMs": 23059
     },
     {
       "kind": "click",
-      "atMs": 28340
+      "atMs": 26960
     },
     {
       "kind": "click",
-      "atMs": 30523
+      "atMs": 29476
     },
     {
       "kind": "click",
-      "atMs": 39972
+      "atMs": 38031
     },
     {
       "kind": "click",
-      "atMs": 41855
+      "atMs": 39532
     },
     {
       "kind": "click",
-      "atMs": 43323
+      "atMs": 40876
     },
     {
       "kind": "click",
-      "atMs": 44773
+      "atMs": 42242
     },
     {
       "kind": "click",
-      "atMs": 48205
+      "atMs": 45108
     },
     {
       "kind": "click",
-      "atMs": 51754
+      "atMs": 48780
     },
     {
       "kind": "click",
-      "atMs": 59188
+      "atMs": 55126
     },
     {
       "kind": "click",
-      "atMs": 63554
+      "atMs": 58814
     },
     {
       "kind": "click",
-      "atMs": 69604
+      "atMs": 64191
     },
     {
       "kind": "click",
-      "atMs": 84218
+      "atMs": 79433
     },
     {
       "kind": "click",
-      "atMs": 89885
+      "atMs": 84580
     },
     {
       "kind": "click",
-      "atMs": 98417
+      "atMs": 91815
     },
     {
       "kind": "click",
-      "atMs": 100251
+      "atMs": 93766
     },
     {
       "kind": "click",
-      "atMs": 115186
+      "atMs": 108150
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1,
-      "endMs": 12103
+      "startMs": 0,
+      "endMs": 11660
     },
     {
       "id": "compare",
-      "startMs": 14270,
-      "endMs": 50842
+      "startMs": 13820,
+      "endMs": 47847
     },
     {
       "id": "preview",
-      "startMs": 51294,
-      "endMs": 68149
+      "startMs": 48298,
+      "endMs": 62802
     },
     {
       "id": "create",
-      "startMs": 68602,
-      "endMs": 82027
+      "startMs": 63256,
+      "endMs": 77204
     },
     {
       "id": "adapt",
-      "startMs": 84199,
-      "endMs": 102745
+      "startMs": 79388,
+      "endMs": 95840
     },
     {
       "id": "result",
-      "startMs": 105808,
-      "endMs": 122277
+      "startMs": 98919,
+      "endMs": 114890
     }
   ],
   "anchors": [
     {
       "segmentId": "compare",
       "phrase": "Festival couvre plusieurs soirées",
-      "startMs": 3906,
-      "endMs": 5843,
-      "cueMs": 18178
+      "startMs": 3432,
+      "endMs": 5065,
+      "cueMs": 17253
     },
     {
       "segmentId": "compare",
       "phrase": "Buvette organise",
-      "startMs": 6029,
-      "endMs": 8427,
-      "cueMs": 20301
+      "startMs": 5742,
+      "endMs": 8032,
+      "cueMs": 19562
     },
     {
       "segmentId": "compare",
       "phrase": "Manifestation sportive prépare",
-      "startMs": 9191,
-      "endMs": 12665,
-      "cueMs": 23463
+      "startMs": 8748,
+      "endMs": 11911,
+      "cueMs": 22569
     },
     {
       "segmentId": "compare",
       "phrase": "Fête de village s’étale",
-      "startMs": 13593,
-      "endMs": 15350,
-      "cueMs": 27865
+      "startMs": 12662,
+      "endMs": 14444,
+      "cueMs": 26482
     },
     {
       "segmentId": "compare",
       "phrase": "Montage, exploitation, démontage sépare",
-      "startMs": 15788,
-      "endMs": 19450,
-      "cueMs": 30058
+      "startMs": 15173,
+      "endMs": 18340,
+      "cueMs": 28994
     },
     {
       "segmentId": "compare",
       "phrase": "épicerie participative",
-      "startMs": 25183,
-      "endMs": 30319,
-      "cueMs": 39453
+      "startMs": 23680,
+      "endMs": 28370,
+      "cueMs": 37500
     },
     {
       "segmentId": "compare",
       "phrase": "La page blanche reste préférable",
-      "startMs": 33469,
-      "endMs": 36106,
-      "cueMs": 47741
+      "startMs": 30829,
+      "endMs": 33695,
+      "cueMs": 44649
     },
     {
       "segmentId": "preview",
       "phrase": "Avant de continuer",
-      "startMs": 7368,
-      "endMs": 11383,
-      "cueMs": 58663
+      "startMs": 6330,
+      "endMs": 9595,
+      "cueMs": 54628
     },
     {
       "segmentId": "preview",
       "phrase": "prenons le samedi",
-      "startMs": 11758,
-      "endMs": 13303,
-      "cueMs": 63055
+      "startMs": 9995,
+      "endMs": 11388,
+      "cueMs": 58295
     },
     {
       "segmentId": "create",
       "phrase": "Créer le brouillon génère",
-      "startMs": 532,
-      "endMs": 4131,
-      "cueMs": 69135
+      "startMs": 442,
+      "endMs": 3503,
+      "cueMs": 63701
     },
     {
       "segmentId": "create",
-      "phrase": "Le statut reste Brouillon",
-      "startMs": 4908,
-      "endMs": 5988,
-      "cueMs": 73513
+      "phrase": "Le bandeau indique Prêt à publier",
+      "startMs": 4072,
+      "endMs": 7038,
+      "cueMs": 67331
     },
     {
       "segmentId": "adapt",
       "phrase": "Ajustons par exemple",
-      "startMs": 13746,
-      "endMs": 18093,
-      "cueMs": 97947
+      "startMs": 11879,
+      "endMs": 16074,
+      "cueMs": 91269
     }
   ]
 }
