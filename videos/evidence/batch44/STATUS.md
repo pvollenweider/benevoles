@@ -12,3 +12,4 @@
 - ORG_TIMEZONE_CHARTER — READY published: take 1 passed audiovisual, final-audio, frame/timeline and validation checks; updated convention narration and switch shown.
 - ORG_FIRST_STEPS — NOT READY, not published: rehearsal reaches the guide but its real inline player is absent on the isolated server without a media source. No narrated take; the recorder refuses a fabricated player, and production access is restricted by the brief.
 - ADMIN_FEATURES_OVERVIEW — READY published: take 2 passed audiovisual, final-audio, frame/timeline and validation checks; the current event form covers #1407 and #1467 as well as the convention.
+- EVENT_REVIEW_PUBLISH — READY published: take 2 shows the current convention window and passes audiovisual, final-audio, frame/timeline and validation checks; narration unchanged.

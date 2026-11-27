@@ -1571,3 +1571,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **ORG_FIRST_STEPS — NOT READY, non publiée.** La répétition atteint le guide mais le lecteur vidéo réel est absent du serveur isolé sans source média ; aucun lecteur de substitution n'a été utilisé. [Suivi et preuves](evidence/batch44/STATUS.md).
 
 **ADMIN_FEATURES_OVERVIEW — READY, publiée, révision 8.** Le formulaire actuel montre aussi les réglages d'affichage et de chevauchement (#1407, #1467). [Revue](evidence/batch44/admin-features-tour/review.md).
+
+**EVENT_REVIEW_PUBLISH — READY, publiée, révision 5.** La fenêtre de l'aperçu porte le titre actuel de la convention. [Revue](evidence/batch44/event-review-publish/review.md).
