@@ -9,13 +9,21 @@ import { RETENTION_DAYS } from "./retention"
  * `addressHash` (AUTH_SECRET is server-only) and passes the hash in here, next to the member's
  * recent outcomes (any address, any organization already filtered by the loader).
  *
- * Rule: only the outcomes recorded for the member's CURRENT address (matching hash) count, and
- * only the latest one of those decides the status — a later acceptance clears an earlier
- * rejection, and changing the address starts from a clean slate (the old failures keep their old
- * hash, which no longer matches). Outcomes older than the retention window are ignored: a row that
- * outlives it is deleted by the nightly cleanup anyway, but a status computed just before that
- * run must not jump ahead of it.
+ * Rule: only the outcomes recorded for the member's CURRENT address (matching hash) count;
+ * changing the address starts from a clean slate (the old failures keep their old hash, which no
+ * longer matches). Outcomes older than the retention window are ignored: a row that outlives it is
+ * deleted by the nightly cleanup anyway, but a status computed just before that run must not jump
+ * ahead of it.
+ *
+ * A permanent rejection keeps the address « to verify » until an email accepted AFTER it has stayed
+ * `ACCEPTANCE_PROOF_HOURS` without a new rejection (#1477). « Accepted » only means our relay took
+ * the message: a mailbox that bounces after acceptance gets every reminder accepted first, so an
+ * acceptance that cleared the mark at once made it vanish at each send, until the bounce was read.
+ * Without a rejection, the latest outcome decides, as before.
  */
+
+/** How long an accepted email must stay without a bounce before it counts as proof the address works. */
+export const ACCEPTANCE_PROOF_HOURS = 48
 
 export type AddressOutcomeInput = {
   addressHash: string | null
@@ -52,7 +60,14 @@ export function addressStatus(
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   const latest = matching[0]
   if (!latest) return { kind: "ok" }
-  if (latest.outcome === "rejected_permanent") return { kind: "to_verify", since: latest.createdAt }
+  const rejection = matching.find((o) => o.outcome === "rejected_permanent")
+  if (rejection) {
+    // Newest first: every outcome before `rejection` in the list was recorded after it, and none
+    // of those is a rejection. One of them proves the address only once it has aged enough.
+    const proofBefore = now.getTime() - ACCEPTANCE_PROOF_HOURS * 60 * 60 * 1000
+    const proven = matching.some((o) => o.outcome === "accepted_by_relay" && o.createdAt > rejection.createdAt && o.createdAt.getTime() <= proofBefore)
+    if (!proven) return { kind: "to_verify", since: rejection.createdAt }
+  }
   if (latest.outcome === "failed_temporary") return { kind: "temporary_incident", since: latest.createdAt }
   return { kind: "ok" }
 }
