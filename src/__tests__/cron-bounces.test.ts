@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const mocks = vi.hoisted(() => ({ process: vi.fn(), alerts: vi.fn(), deliver: vi.fn(), report: vi.fn() }))
 vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s3cret" } }))
 vi.mock("@/lib/bounce-mailbox", () => ({ processDeferredBounces: mocks.process }))
-vi.mock("@/lib/address-alert-data", () => ({ enqueueAddressAlerts: mocks.alerts }))
+vi.mock("@/lib/address-alert-data", () => ({ runAddressAlerts: mocks.alerts }))
 vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse: mocks.deliver }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => mocks.report }))
 

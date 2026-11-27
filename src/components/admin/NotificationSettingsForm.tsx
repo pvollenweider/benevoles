@@ -124,7 +124,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         <div>
           <label htmlFor={`${id}-addresses`} className="text-sm font-medium text-gray-800">Résumé quotidien des adresses à vérifier</label>
           <p id={`${id}-addresses-help`} className="text-xs text-gray-600">
-            Un email par jour aux organisateurs actifs, seulement quand une confirmation, une proposition de liste d&apos;attente ou un rappel a échoué définitivement depuis la veille. Quand la personne concernée a un créneau dans les trois jours, une alerte part tout de suite, avec son prochain créneau et son téléphone.
+            Un email par jour aux organisateurs actifs, seulement quand une confirmation, une proposition de liste d&apos;attente ou un rappel a échoué définitivement depuis la veille. Quand la personne concernée a un créneau dans les trois jours, une alerte part tout de suite, avec son prochain créneau et son téléphone. Décocher coupe aussi cette alerte.
           </p>
         </div>
       </div>

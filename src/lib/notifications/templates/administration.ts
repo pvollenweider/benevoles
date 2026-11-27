@@ -248,16 +248,16 @@ export function renderAddressToVerifyAlert(p: NotificationPayload): RenderedEmai
     : `Un email important n'a pas pu être remis à ${d.members.length} bénévoles : leur adresse est refusée par le serveur destinataire. Ces personnes ont un créneau bientôt et ne reçoivent pas nos rappels.`
   const lines = (m: AddressAlertMember) => [
     `Prochain créneau : ${m.shiftName}, ${m.when} (${m.eventTitle})`,
-    ...(m.neverReached ? ["Aucun de nos emails ne lui est arrivé depuis son inscription."] : []),
+    ...(m.refusals ? [m.refusals] : []),
     m.phone ? `Téléphone : ${m.phone}` : "Pas de téléphone sur sa fiche.",
   ]
-  const closing = "Le plus sûr est de la joindre autrement avant son créneau, puis de corriger son adresse dans Membres."
-  const closingMany = "Le plus sûr est de les joindre autrement avant leur créneau, puis de corriger leur adresse dans Membres."
+  const closing = "Le plus sûr est de joindre cette personne autrement avant son créneau, puis de corriger son adresse dans Membres."
+  const closingMany = "Le plus sûr est de joindre ces personnes autrement avant leur créneau, puis de corriger leur adresse dans Membres."
 
   const text = [
     intro,
     ``,
-    ...d.members.flatMap((m) => [m.name, ...lines(m).map((l) => `  ${l}`), ``]),
+    ...d.members.flatMap((m) => [m.name, ...lines(m).map((l) => `  - ${l}`), ``]),
     one ? closing : closingMany,
     ``,
     `Voir les adresses à vérifier :`,
@@ -267,7 +267,7 @@ export function renderAddressToVerifyAlert(p: NotificationPayload): RenderedEmai
   const html = wrap(`
     <p>${escapeHtml(intro)}</p>
     ${d.members.map((m) => `
-    <p style="margin:1.1em 0 0.2em"><strong>${escapeHtml(m.name)}</strong></p>
+    <h2 style="margin:1.1em 0 0.2em;font-size:1em;font-weight:600">${escapeHtml(m.name)}</h2>
     <ul style="margin:0;padding-left:1.2em;line-height:1.6">
       ${lines(m).map((l) => `<li>${escapeHtml(l)}</li>`).join("")}
     </ul>`).join("")}

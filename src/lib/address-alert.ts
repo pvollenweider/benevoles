@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { ACCEPTANCE_PROOF_HOURS } from "./address-status"
-
 /**
  * Alert to an organisation's administrators when an email to a volunteer has just failed for good
  * and that person has a confirmed shift soon (#1476). The nightly summary of addresses to verify
@@ -16,9 +14,26 @@ import { ACCEPTANCE_PROOF_HOURS } from "./address-status"
  * the reminder sent two days before to give the organisers a day's notice. */
 export const ADDRESS_ALERT_WINDOW_HOURS = 72
 
-/** How far back each run looks for new permanent failures. The run is every 15 minutes; the
- * overlap is absorbed by the outbox dedupe key (same people, same day: one email). */
-export const ADDRESS_ALERT_LOOKBACK_MINUTES = 30
+/** A first run, or a run whose predecessor is unknown, looks this far back. */
+export const ADDRESS_ALERT_DEFAULT_LOOKBACK_MINUTES = 30
+
+/** A run after a gap (deploy, restart) catches up, but never further back than this. */
+export const ADDRESS_ALERT_MAX_LOOKBACK_HOURS = 6
+
+/** Someone already refused in the hours before the window does not raise a second alert: the
+ * organisers were told, or the address was already known. Twelve hours lets the bounce of the
+ * day-of reminder alert again after the one of the day before. */
+export const ADDRESS_ALERT_QUIET_HOURS = 12
+
+/**
+ * Where a run's window starts: the start of the previous run, so the windows follow each other
+ * without a gap or an overlap, bounded by the maximum lookback.
+ */
+export function alertWindowStart(previousRunStartedAt: Date | null, now: Date): Date {
+  const floor = now.getTime() - ADDRESS_ALERT_MAX_LOOKBACK_HOURS * 60 * 60 * 1000
+  const previous = previousRunStartedAt?.getTime() ?? now.getTime() - ADDRESS_ALERT_DEFAULT_LOOKBACK_MINUTES * 60 * 1000
+  return new Date(Math.min(now.getTime(), Math.max(previous, floor)))
+}
 
 export type AlertShift = { startsAt: Date; endsAt: Date; roleName: string; label: string | null; eventTitle: string }
 
@@ -31,24 +46,20 @@ export function nextShiftSoon(shifts: AlertShift[], now: Date, windowHours: numb
     .sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime())[0] ?? null
 }
 
-export type AlertOutcome = { outcome: string; createdAt: Date; outboxId: string | null; messageRef: string | null }
+export type AlertOutcome = { outcome: string; kind: string; createdAt: Date }
 
 /**
- * Whether nothing we sent to this address is known to have arrived: at least one permanent
- * rejection, and every email our relay accepted either bounced (a rejection carries the same
- * outbox row or the same direct reference) or is too recent to count as delivered. Said only when
- * it holds for every recorded email of the address: an old acceptance with no bounce on record
- * makes it false, even if that email was in fact lost.
+ * What the recorded history says about this address, as a fact and nothing more: how many emails
+ * it refused and since when, inside the retention window. Null for a single refusal (the alert
+ * itself says it). Never « no email ever arrived »: the history is 30 days deep and an accepted
+ * email proves nothing either way, so that claim could be false.
  */
-export function neverReached(outcomes: AlertOutcome[], now: Date): boolean {
-  const rejected = outcomes.filter((o) => o.outcome === "rejected_permanent")
-  if (rejected.length === 0) return false
-  const bouncedOutbox = new Set(rejected.map((o) => o.outboxId).filter((id): id is string => !!id))
-  const bouncedRef = new Set(rejected.map((o) => o.messageRef).filter((ref): ref is string => !!ref))
-  const proofBefore = now.getTime() - ACCEPTANCE_PROOF_HOURS * 60 * 60 * 1000
-  return outcomes
-    .filter((o) => o.outcome === "accepted_by_relay")
-    .every((o) => (o.outboxId && bouncedOutbox.has(o.outboxId)) || (o.messageRef && bouncedRef.has(o.messageRef)) || o.createdAt.getTime() > proofBefore)
+export function refusalsText(outcomes: AlertOutcome[], timeZone: string): string | null {
+  const rejected = outcomes.filter((o) => o.outcome === "rejected_permanent").sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+  if (rejected.length < 2) return null
+  const since = new Intl.DateTimeFormat("fr-CH", { timeZone, day: "numeric", month: "long" }).format(rejected[0].createdAt)
+  const confirmation = rejected.some((o) => o.kind === "registration_confirmation")
+  return `Son adresse a refusé ${rejected.length} emails depuis le ${since}${confirmation ? ", dont la confirmation d'inscription" : ""}.`
 }
 
 const hour = (t: string) => {
@@ -80,7 +91,8 @@ export type AddressAlertMember = {
   eventTitle: string
   shiftName: string
   when: string
-  neverReached: boolean
+  /** A sentence on earlier refusals of the same address; null when this is the first on record. */
+  refusals: string | null
 }
 
 export function addressAlertSubject(members: { name: string }[]): string {
