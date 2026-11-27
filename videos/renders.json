@@ -192,7 +192,7 @@
     "poster": true
   },
   "org-timezone-charter": {
-    "durationMs": 133480,
+    "durationMs": 133880,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -246,7 +246,7 @@
     "poster": true
   },
   "sector-leaders": {
-    "durationMs": 282640,
+    "durationMs": 292360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -294,7 +294,7 @@
     "poster": true
   },
   "shift-roster-visibility": {
-    "durationMs": 260000,
+    "durationMs": 262360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -342,13 +342,13 @@
     "poster": true
   },
   "volunteer-calendar": {
-    "durationMs": 182520,
+    "durationMs": 99200,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-choose-shifts": {
-    "durationMs": 164720,
+    "durationMs": 171680,
     "width": 1280,
     "height": 800,
     "poster": true
