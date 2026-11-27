@@ -92,8 +92,8 @@
         "organisateur"
       ],
       "feature": "Fuseau horaire et convention des bénévoles",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
+      "updatedAt": "2026-11-27",
+      "revision": 5,
       "level": "avance"
     },
     {
@@ -648,8 +648,8 @@
         "benevole"
       ],
       "feature": "Choix des créneaux sur la page publique",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
+      "updatedAt": "2026-11-27",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -761,14 +761,14 @@
         "mise-à-jour"
       ],
       "seedScenario": "personal-calendar",
-      "feature": "Export calendrier des créneaux",
+      "feature": "Abonnement au calendrier des créneaux",
       "level": "essentiel",
       "published": true,
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-16",
-      "revision": 3,
+      "updatedAt": "2026-11-27",
+      "revision": 4,
       "themes": [
         "parcours-benevole"
       ]
@@ -988,8 +988,8 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-11-10",
-      "revision": 7,
+      "updatedAt": "2026-11-27",
+      "revision": 8,
       "level": "essentiel",
       "updated": "2026-11-10"
     },
@@ -1777,8 +1777,8 @@
         "benevole"
       ],
       "feature": "Qui est inscrit",
-      "updatedAt": "2026-11-16",
-      "revision": 3,
+      "updatedAt": "2026-11-27",
+      "revision": 4,
       "level": "essentiel",
       "added": "2026-10-21",
       "updated": "2026-11-16"

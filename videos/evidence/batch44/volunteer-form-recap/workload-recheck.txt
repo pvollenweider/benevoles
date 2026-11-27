@@ -1,0 +1,3 @@
+workload: 4 audiovisual checkpoints; REVIEW
+  À 00:19, le planning s'affiche une seconde avant de revenir brutalement au formulaire à 00:20 : le retrait du créneau Logistique et le recalcul des horaires annoncés ne sont pas montrés.
+1 scene reviews; 1 flagged. This does not replace inspection of the final video.

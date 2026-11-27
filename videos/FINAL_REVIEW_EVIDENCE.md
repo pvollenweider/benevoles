@@ -1551,3 +1551,19 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **VOLUNTEER_REGISTER — READY, publiée, révision 7.** La seconde prise passe la revue audiovisuelle, la transcription indépendante du MP4, la revue des images et la validation ; la narration est inchangée. [Suivi et preuves](evidence/batch44/STATUS.md).
 
 **VOLUNTEER_DISCOVER_EVENT — READY, publiée, révision 5.** La seconde prise montre la liste, ses couleurs et le conseil de rotation avant la frise. [Revue](evidence/batch44/volunteer-discover-event/review.md).
+
+**SHIFT_ROSTER_VISIBILITY — READY, publiée, révision 4.** La liste et la ligne de frise montrent les états actuels ; le courriel ouvre le lien commun. [Revue](evidence/batch44/shift-roster-visibility/review.md).
+
+**SHIFT_ELIGIBILITY_RULES — NOT READY, non publiée.** La première prise affiche tardivement l'explication du quota ; la seconde corrige ce point, mais la revue et sa contre-vérification signalent une prononciation et des manipulations à reprendre dans la scène de réponse. [Suivi et preuves](evidence/batch44/STATUS.md).
+
+**VOLUNTEER_CHOOSE_SHIFTS — READY, publiée, révision 4.** Le parcours montre le sélecteur et la ligne de détails actuels. [Revue](evidence/batch44/volunteer-choose-shifts/review.md).
+
+**VOLUNTEER_FORM_RECAP — NOT READY, non publiée.** La première prise signale un changement de voix ; la seconde corrige la voix mais le retrait annoncé dans la scène de charge n'est pas montré assez longtemps. [Suivi et preuves](evidence/batch44/STATUS.md).
+
+**VOLUNTEER_CALENDAR — READY, publiée, révision 4.** La nouvelle narration présente l'abonnement de l'organisation et le fichier ponctuel ; le flux et son horaire modifié sont vérifiés. [Revue](evidence/batch44/volunteer-calendar/review.md).
+
+**SECTORS — NOT READY, non publiée.** La seconde prise montre l'interrupteur de regroupement désactivé, mais la revue signale que l'adresse évoquée pour le filtre n'est pas visible. [Suivi et preuves](evidence/batch44/STATUS.md).
+
+**SECTOR_LEADERS — READY, publiée, révision 8.** La carte Secteurs n'est pas filmée dans ce parcours. [Revue](evidence/batch44/sector-leaders/review.md).
+
+**ORG_TIMEZONE_CHARTER — READY, publiée, révision 5.** La convention et son commutateur sont présentés dans les paramètres et le formulaire. [Revue](evidence/batch44/org-timezone-charter/review.md).

@@ -1,0 +1,5 @@
+answer: 5 audiovisual checkpoints; REVIEW
+  Entre 00:07 et 00:09, le volet de configuration du poste se referme sans que la case 'Oui' soit cochée ni que l'action d'enregistrement ne soit montrée.
+  À 00:14, lapsus audio : la narratrice prononce 'Sur la mage publique' au lieu de 'page publique'.
+  À 00:23, décalage visuel : la voix décrit le refus du formulaire alors que l'utilisateur est encore en train de remplir la date de naissance et n'a pas encore cliqué sur Confirmer.
+1 scene reviews; 1 flagged. This does not replace inspection of the final video.
