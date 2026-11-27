@@ -115,7 +115,7 @@ const inputCls = "w-full border border-gray-500 rounded-xl px-3 py-2.5 text-sm f
 /** The confirmation before overlapping shifts are allowed for the event (#1467). */
 const OVERLAPS_ALLOW_RECAP: ActionRecap = {
   title: "Autoriser les créneaux qui se chevauchent ?",
-  warning: "Plus aucune inscription ne sera refusée parce que deux créneaux se chevauchent : inscription par les bénévoles, ajout par l'organisation, échanges et propositions d'affectation. Une personne pourra être attendue à deux endroits en même temps : vérifier le planning devient votre travail.",
+  warning: "Plus aucune inscription ne sera refusée parce que deux créneaux se chevauchent : inscription par les bénévoles, ajout par l'organisation et échanges de créneaux. Une personne pourra être attendue à deux endroits en même temps : vérifier le planning devient votre travail. La protection des pauses et de la charge, si elle est active, garde ses propres règles.",
   confirmLabel: "Autoriser",
   cancelLabel: "Annuler",
   danger: false,
@@ -145,6 +145,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   const [saveError, setSaveError] = useState<string | null>(null)
   // Overlapping shifts (#1467): the one button opens the confirmation before turning it on.
   const [overlapsDialogOpen, setOverlapsDialogOpen] = useState(false)
+  const [overlapsTurnedOff, setOverlapsTurnedOff] = useState(false)
   const overlapsButtonRef = useRef<HTMLButtonElement>(null)
 
   const mounted = useRef(false)
@@ -786,7 +787,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         {/* Overlapping shifts for the whole event (#1467): off by default, one button, a dialog
             before turning it on, and an amber note while it is on. */}
-        <fieldset id="event-overlaps" aria-describedby="event-overlaps-help">
+        <fieldset id="event-overlaps">
           <legend className="text-sm font-medium text-gray-700 mb-1">Créneaux qui se chevauchent</legend>
           <p className="text-sm text-gray-800">Chevauchements : {form.overlapsAllowed ? "autorisés" : "non autorisés"}</p>
           <p id="event-overlaps-help" className="text-xs text-gray-600 mt-1">
@@ -796,10 +797,11 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             ref={overlapsButtonRef}
             id="event-overlaps-button"
             type="button"
-            aria-describedby={form.overlapsAllowed ? "event-overlaps-help event-overlaps-note" : "event-overlaps-help"}
+            aria-describedby={form.overlapsAllowed ? "event-overlaps-help event-overlaps-note" : overlapsTurnedOff ? "event-overlaps-help event-overlaps-kept" : "event-overlaps-help"}
             onClick={() => {
               if (!form.overlapsAllowed) { setOverlapsDialogOpen(true); return }
               setForm((f) => ({ ...f, overlapsAllowed: false }))
+              setOverlapsTurnedOff(true)
               announce(setSavedAnnouncement, "Chevauchements : non autorisés.")
             }}
             className="mt-2 min-h-11 rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -811,7 +813,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               <strong className="font-semibold">Attention :</strong> Les chevauchements ne sont plus vérifiés pour cet événement. Les inscriptions qui se chevauchent sont signalées dans la liste des inscriptions.
             </p>
           )}
-          {!form.overlapsAllowed && (
+          {/* Only after turning it off here: on an event that never allowed overlaps it would raise a question nobody asked. */}
+          {!form.overlapsAllowed && overlapsTurnedOff && (
             <p id="event-overlaps-kept" className="mt-2 text-xs text-gray-600">Les inscriptions existantes qui se chevauchent sont conservées.</p>
           )}
         </fieldset>

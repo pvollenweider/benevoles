@@ -3,7 +3,7 @@
 
 import ShiftInfoList from "@/components/ShiftInfoList"
 import { REQUEST_SHORT, WAITLIST_SHORT } from "@/lib/waitlist-copy"
-import { allowedOverlapNotices, allowedOverlapText, gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapHeldShift, type RecapShiftInput } from "@/lib/signup-recap"
+import { ALLOWED_OVERLAP_ADVICE, allowedOverlapFact, allowedOverlapNotices, gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapHeldShift, type RecapShiftInput } from "@/lib/signup-recap"
 import type { ShiftInfo } from "@/lib/shift-info"
 import type { WorkloadShift } from "@/lib/workload"
 import { blocksWorkload, recapWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
@@ -65,14 +65,15 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
       {allowedNotices.length > 0 && (
         <div id={allowedBlockId} className={`${dense ? "mx-4 mb-2" : ""} rounded-lg bg-amber-50 border border-amber-300 px-3 py-2 text-xs text-amber-950`}>
           <p>
-            <strong className="font-medium text-amber-900">À vérifier :</strong>{" "}
-            {allowedOverlapText(allowedNotices[0])}
+            <strong className="font-semibold text-amber-900">À vérifier :</strong>{" "}
+            {allowedNotices.length === 1 ? allowedOverlapFact(allowedNotices[0]) : "plusieurs de ces créneaux ont lieu en même temps."}
           </p>
           {allowedNotices.length > 1 && (
             <ul role="list" className="mt-1 space-y-0.5">
-              {allowedNotices.slice(1).map((n, i) => <li key={i}>{allowedOverlapText(n)}</li>)}
+              {allowedNotices.map((n, i) => <li key={i}>{allowedOverlapFact(n)}</li>)}
             </ul>
           )}
+          <p className="mt-1">{ALLOWED_OVERLAP_ADVICE}</p>
         </div>
       )}
       {workload.length > 0 && (blocks ? (

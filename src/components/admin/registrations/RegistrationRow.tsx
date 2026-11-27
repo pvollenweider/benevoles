@@ -83,10 +83,10 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
             </span>
           )}
           {overlapsWith && (
-            // An overlap the rule lets through (#986, #1467): the same mark for a cumulable poste and
-            // for an event that allows overlaps; the other shift is named for screen readers.
+            // Two shifts at the same hours for this person (#986, #1467), whatever let it through; the
+            // other shift is named for screen readers.
             <span className="inline-flex items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-900">
-              Chevauchement autorisé<span className="sr-only"> avec {spokenShift(overlapsWith)}</span>
+              Chevauche un autre créneau<span className="sr-only"> : {spokenShift(overlapsWith)}</span>
             </span>
           )}
         </p>

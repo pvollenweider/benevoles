@@ -203,22 +203,22 @@ describe("the event setting, at each call site (#1467)", () => {
     expect(chosenOverlapMessage(b, [a], true)).toBeNull()
   })
 
-  it("registrations list: marks the two rows of an overlap the event allows, like a cumulable poste", () => {
+  it("registrations list: marks the two rows of any overlap a person holds", () => {
     const ref = (id: string, startTime: string, endTime: string, overlapAllowed?: boolean): ShiftRef => ({ id, roleName: id, label: id, date: DAY2, startTime, endTime, capacity: 2, registrationCount: 0, overlapAllowed })
     const person = { id: "v1" }
     const rows = [
       { id: "r1", status: "active", volunteer: person, shift: ref("buvette", "10:00", "14:00") },
       { id: "r2", status: "active", volunteer: person, shift: ref("accueil", "12:00", "13:00") },
     ]
-    expect(allowedOverlapMarks(rows).size).toBe(0)
-    const marks = allowedOverlapMarks(rows, true)
+    // Marked whatever let the pair through, so a setting turned off since never hides it (#1467).
+    const marks = allowedOverlapMarks(rows)
     expect(marks.get("r1")?.id).toBe("accueil")
     expect(marks.get("r2")?.id).toBe("buvette")
     // A cumulable poste is marked the same way, with the setting off.
     const cumulable = [{ ...rows[0], shift: ref("secours", "09:00", "17:00", true) }, rows[1]]
     expect(allowedOverlapMarks(cumulable).size).toBe(2)
     // A waiting entry does not commit the person to the hours.
-    expect(allowedOverlapMarks([{ ...rows[0], status: "waiting" }, rows[1]], true).size).toBe(0)
+    expect(allowedOverlapMarks([{ ...rows[0], status: "waiting" }, rows[1]]).size).toBe(0)
   })
 
   it("member merge: the setting of one event never exempts a pair of shifts of two events", () => {
@@ -238,8 +238,9 @@ describe("the event setting, at each call site (#1467)", () => {
     expect(mergeConflicts(make(["e1", "e1"], { e1: true }), {}).filter((c) => c.kind === "overlap")).toEqual([])
     // Two events, the setting of one: the pair still clashes.
     expect(mergeConflicts(make(["e1", "e2"], { e1: true, e2: false }), {}).filter((c) => c.kind === "overlap")).toHaveLength(1)
-    // Two events, both allow it: each event's own setting, no clash.
-    expect(mergeConflicts(make(["e1", "e2"], { e1: true, e2: true }), {}).filter((c) => c.kind === "overlap")).toEqual([])
+    // Two events that both allow it: the setting covers one event's own shifts, never a pair
+    // that spans two events.
+    expect(mergeConflicts(make(["e1", "e2"], { e1: true, e2: true }), {}).filter((c) => c.kind === "overlap")).toHaveLength(1)
   })
 
   it("open-shifts finder offers an overlapping shift when the event allows it", () => {

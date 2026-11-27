@@ -131,7 +131,7 @@ export function gapAfter(sorted: RecapShift[], i: number, eventOverlapsAllowed =
 export function gapLabel(g: Gap): string | null {
   switch (g.kind) {
     case "overlap": return `Ces deux créneaux se chevauchent de ${fmtDuration(g.minutes)} : l'inscription sera refusée.`
-    case "allowed_overlap": return `Ces deux créneaux se chevauchent de ${fmtDuration(g.minutes)}. C'est autorisé pour cet événement : vérifie que tu peux tenir les deux, ou préviens l'organisation si quelqu'un te remplace.`
+    case "allowed_overlap": return `En même temps que le créneau suivant pendant ${fmtDuration(g.minutes)}.`
     case "parallel": return `En même temps que le créneau suivant pendant ${fmtDuration(g.minutes)} : c'est possible, l'un des deux postes se cumule avec un autre créneau.`
     case "back_to_back": return "Enchaîné avec le suivant, sans pause."
     case "break": return `Pause de ${fmtDuration(g.minutes)} avant le suivant.`
@@ -160,7 +160,7 @@ export type RecapHeldShift = {
 
 /** One overlap the event allows (#1467): between two picked shifts, or with one already held. */
 export type AllowedOverlapNotice =
-  | { kind: "picked"; minutes: number }
+  | { kind: "picked"; minutes: number; names: [string, string] }
   | { kind: "held"; minutes: number; label: string }
 
 const overlapMinutes = (a: { date: Date | string; startTime: string; endTime: string }, b: { date: Date | string; startTime: string; endTime: string }) => {
@@ -181,7 +181,7 @@ export function allowedOverlapNotices(sorted: RecapShift[], held: RecapHeldShift
   const out: AllowedOverlapNotice[] = []
   for (let i = 0; i < sorted.length; i++) {
     for (let j = i + 1; j < sorted.length; j++) {
-      if (shiftsOverlap(sorted[i], sorted[j])) out.push({ kind: "picked", minutes: overlapMinutes(sorted[i], sorted[j]) })
+      if (shiftsOverlap(sorted[i], sorted[j])) out.push({ kind: "picked", minutes: overlapMinutes(sorted[i], sorted[j]), names: [sorted[i].name, sorted[j].name] })
     }
     for (const h of held) {
       if (shiftsOverlap(sorted[i], h)) out.push({ kind: "held", minutes: overlapMinutes(sorted[i], h), label: heldName(h) })
@@ -190,12 +190,20 @@ export function allowedOverlapNotices(sorted: RecapShift[], held: RecapHeldShift
   return out
 }
 
-/** The block's sentence for one allowed overlap (#1467). */
-export function allowedOverlapText(n: AllowedOverlapNotice): string {
-  const rest = "Tu peux quand même t'inscrire. Vérifie que tu peux faire les deux. Si quelqu'un te remplace, dis-le à l'organisation."
-  return n.kind === "held"
-    ? `Ce créneau a lieu en même temps que ton créneau « ${n.label} » pendant ${fmtDuration(n.minutes)}. ${rest}`
-    : `Ces deux créneaux ont lieu en même temps pendant ${fmtDuration(n.minutes)}. ${rest}`
+/**
+ * What the volunteer is asked to do about allowed overlaps (#1467), said once in the block however
+ * many overlaps there are: a recap that repeats it per pair is not read.
+ */
+export const ALLOWED_OVERLAP_ADVICE = "Tu peux quand même t'inscrire. Vérifie que tu peux faire les deux. Si quelqu'un te remplace, dis-le à l'organisation."
+
+/** One allowed overlap as a short fact (#1467), naming the shifts, without the advice. */
+export function allowedOverlapFact(n: AllowedOverlapNotice): string {
+  const during = `pendant ${fmtDuration(n.minutes)}`
+  if (n.kind === "held") return `Un de ces créneaux a lieu en même temps que ton créneau « ${n.label} » ${during}.`
+  const [a, b] = n.names
+  return a === b
+    ? `Deux créneaux « ${a} » ont lieu en même temps ${during}.`
+    : `« ${a} » et « ${b} » ont lieu en même temps ${during}.`
 }
 
 /** The personal data the form will send, worded for the volunteer. */

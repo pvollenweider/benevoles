@@ -277,8 +277,9 @@ export function mergeConflicts(input: MemberMergeInput, choices: MemberMergeChoi
       if (b.shiftId === a.shiftId) continue
       const shiftB = shifts.get(b.shiftId)
       if (!shiftB) continue
-      // Each shift needs its own event's setting: one event never exempts a pair that spans two.
-      const allowed = !!input.eventOverlapsAllowed?.[shiftA.eventId] && !!input.eventOverlapsAllowed?.[shiftB.eventId]
+      // The setting covers two shifts of the same event only: a pair that spans two events is never
+      // exempted, even when both events allow overlaps.
+      const allowed = shiftA.eventId === shiftB.eventId && !!input.eventOverlapsAllowed?.[shiftA.eventId]
       if (shiftsClash(shiftA, shiftB, allowed)) {
         conflicts.push({ kind: "overlap", shiftIds: [shiftA.id, shiftB.id], labels: [shiftA.label, shiftB.label] })
       }

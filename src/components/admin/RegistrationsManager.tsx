@@ -87,10 +87,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     ),
     [registrations, mode, personalLimits],
   )
-  // An overlap the rule lets through (#986, #1467) is marked on both of its rows, same wording.
+  // Two shifts at the same hours for one person (#986, #1467): marked on both rows, whatever let it through.
   const allowedOverlaps = useMemo(
-    () => allowedOverlapMarks(registrations, eventOverlapsAllowed),
-    [registrations, eventOverlapsAllowed],
+    () => allowedOverlapMarks(registrations),
+    [registrations],
   )
   const [search, setSearch] = useState(initialSearch ?? "")
   const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null

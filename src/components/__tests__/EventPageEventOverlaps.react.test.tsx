@@ -63,7 +63,8 @@ describe("EventPageClient — the event allows overlaps (#1467)", () => {
     await screen.findByRole("heading", { name: "Tes informations" })
 
     const block = document.getElementById("signup-recap-allowed-overlaps")!
-    expect(block).toHaveTextContent("À vérifier : Ces deux créneaux ont lieu en même temps pendant 1 h.")
+    expect(block).toHaveTextContent("À vérifier : « Bar » et « Accueil » ont lieu en même temps pendant 1 h.")
+    expect(block).toHaveTextContent("Tu peux quand même t'inscrire.")
     expect(screen.queryByText(/retires-en un avant de confirmer/)).toBeNull()
     // The confirm button references the one block, in the card recap only (never the sidebar's copy).
     expect(document.querySelectorAll("#signup-recap-allowed-overlaps")).toHaveLength(1)

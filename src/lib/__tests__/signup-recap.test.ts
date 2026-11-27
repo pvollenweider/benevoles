@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { allowedOverlapNotices, allowedOverlapText, fmtDuration, gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "../signup-recap"
+import { ALLOWED_OVERLAP_ADVICE, allowedOverlapFact, allowedOverlapNotices, fmtDuration, gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "../signup-recap"
 
 const s = (id: string, over: Partial<RecapShiftInput>): RecapShiftInput => ({
   id, roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", status: "open", waitlistEnabled: false, minAge: null, ...over,
@@ -78,7 +78,7 @@ describe("signup recap, an event that allows overlaps (#1467)", () => {
     const rows = recapShifts([at("a", "10:00", "14:00"), at("b", "12:00", "16:00")])
     const gap = gapAfter(rows, 0, true)
     expect(gap).toEqual({ kind: "allowed_overlap", minutes: 120 })
-    expect(gapLabel(gap!)).toBe("Ces deux créneaux se chevauchent de 2 h. C'est autorisé pour cet événement : vérifie que tu peux tenir les deux, ou préviens l'organisation si quelqu'un te remplace.")
+    expect(gapLabel(gap!)).toBe("En même temps que le créneau suivant pendant 2 h.")
     expect(hasOverlap(rows, true)).toBe(false)
   })
 
@@ -92,11 +92,12 @@ describe("signup recap, an event that allows overlaps (#1467)", () => {
     const rows = recapShifts([at("a", "08:00", "14:00"), at("b", "12:00", "15:00"), at("c", "16:00", "18:00")])
     expect(gapAfter(rows, 0, true)?.kind).toBe("allowed_overlap")
     const notices = allowedOverlapNotices(rows, [{ roleName: "Accueil", label: "Accueil", date: "2026-07-04", startTime: "13:00", endTime: "15:00" }])
-    expect(notices).toContainEqual({ kind: "picked", minutes: 120 })
+    expect(notices).toContainEqual(expect.objectContaining({ kind: "picked", minutes: 120 }))
     expect(notices).toContainEqual({ kind: "held", minutes: 60, label: "Accueil" })
-    expect(allowedOverlapText({ kind: "held", minutes: 90, label: "Accueil" })).toBe(
-      "Ce créneau a lieu en même temps que ton créneau « Accueil » pendant 1 h 30. Tu peux quand même t'inscrire. Vérifie que tu peux faire les deux. Si quelqu'un te remplace, dis-le à l'organisation.",
-    )
+    expect(allowedOverlapFact({ kind: "held", minutes: 90, label: "Accueil" })).toBe("Un de ces créneaux a lieu en même temps que ton créneau « Accueil » pendant 1 h 30.")
+    expect(allowedOverlapFact({ kind: "picked", minutes: 120, names: ["Accueil", "Buvette"] })).toBe("« Accueil » et « Buvette » ont lieu en même temps pendant 2 h.")
+    expect(allowedOverlapFact({ kind: "picked", minutes: 60, names: ["Buvette", "Buvette"] })).toBe("Deux créneaux « Buvette » ont lieu en même temps pendant 1 h.")
+    expect(ALLOWED_OVERLAP_ADVICE).toBe("Tu peux quand même t'inscrire. Vérifie que tu peux faire les deux. Si quelqu'un te remplace, dis-le à l'organisation.")
   })
 
   it("warns about an overlap with a held shift at any hour, not only next to a picked one", () => {

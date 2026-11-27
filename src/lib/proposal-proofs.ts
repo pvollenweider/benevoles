@@ -45,9 +45,8 @@ export function certificates(model: Model): Certificate[] {
     else if (eligible < cap) out.push({ kind: "shift", level: "capacity", shiftId: s.id, need: cap, eligible })
   }
   // Groups of shifts sharing one instant: at each start, the open shifts running then, none cumulable.
-  // An event that allows overlaps (#1467) can put the same person on all of them: no such proof.
   const seen = new Set<string>()
-  for (const s of model.input.overlapsAllowed ? [] : model.open) {
+  for (const s of model.open) {
     const at = model.interval.get(s.id)!.start
     const group = model.open.filter((o) => {
       const i = model.interval.get(o.id)!

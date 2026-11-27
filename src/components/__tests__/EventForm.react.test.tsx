@@ -285,7 +285,7 @@ describe("EventForm — overlapping shifts control (#1467)", () => {
     expect(screen.getByText("Chevauchements : non autorisés")).toBeInTheDocument()
     const button = screen.getByRole("button", { name: "Autoriser les chevauchements…" })
     expect(button).toHaveAttribute("aria-describedby", "event-overlaps-help")
-    expect(screen.getByText("Les inscriptions existantes qui se chevauchent sont conservées.")).toBeInTheDocument()
+    expect(screen.queryByText("Les inscriptions existantes qui se chevauchent sont conservées.")).toBeNull()
     expect(screen.queryByText(/Attention :/)).toBeNull()
   })
 

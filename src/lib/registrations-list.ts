@@ -3,7 +3,8 @@
 
 import { fold } from "./text-fold"
 
-import { allowedOverlap, shiftsClash } from "./shift-overlap"
+import { shiftsClash } from "./shift-overlap"
+import { shiftsOverlap } from "./utils"
 import { clockTime } from "./gantt-utils"
 import { matchesGroupFilter, type RegistrationGroupFilter } from "./group-links"
 
@@ -136,13 +137,13 @@ export function overlappingShiftIds(shifts: ShiftRef[], existing: ShiftRef[] | u
 }
 
 /**
- * The registrations whose volunteer holds an overlap the rule lets through (#986, #1467), mapped
- * to the other shift: a cumulable poste or an event that allows overlaps. One mark per row; the
- * same wording for both, because the organiser has to check the planning either way.
+ * The registrations whose volunteer holds two shifts at the same hours (#986, #1467), mapped to the
+ * other shift. Every such pair is marked, whatever let it through (a cumulable poste, an event
+ * that allows overlaps, or a setting turned off since): the organiser has to check the planning
+ * either way, and a mark that vanished with the setting would hide exactly what to check.
  */
 export function allowedOverlapMarks(
   registrations: { id: string; status?: string; volunteer: { id: string }; shift: ShiftRef }[],
-  eventOverlapsAllowed = false,
 ): Map<string, ShiftRef> {
   const out = new Map<string, ShiftRef>()
   const committed = registrations.filter((r) => r.status === "active" || r.status === "requested")
@@ -151,7 +152,7 @@ export function allowedOverlapMarks(
   for (const rows of byVolunteer.values()) {
     for (let i = 0; i < rows.length; i++) {
       for (let j = i + 1; j < rows.length; j++) {
-        if (!allowedOverlap(rows[i].shift, rows[j].shift, eventOverlapsAllowed)) continue
+        if (!shiftsOverlap(rows[i].shift, rows[j].shift)) continue
         if (!out.has(rows[i].id)) out.set(rows[i].id, rows[j].shift)
         if (!out.has(rows[j].id)) out.set(rows[j].id, rows[i].shift)
       }
