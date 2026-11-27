@@ -1,0 +1,5 @@
+# Abonnement au calendrier — prise 1
+
+La carte de la page de l'organisation montre l'abonnement, la copie de l'adresse masquée et le téléchargement réel. Le flux contient trois créneaux confirmés sans l'attente ; après le changement d'horaire, il conserve les identifiants et donne la nouvelle heure. Le fichier vient du navigateur. Aucun agenda externe n'est ouvert.
+
+La revue audiovisuelle signale que les actions dans Google Agenda ne sont pas filmées : les instructions figurent sur la carte Benevol et la narration les explique sans prétendre qu'un résultat externe est montré, conformément au périmètre demandé. Les autres scènes ne sont pas signalées. La transcription indépendante du MP4 correspond au manifeste ; « e-mails » au lieu de « emails » et « .ics » au lieu de « point i c s » expliquent les écarts de reconnaissance. Les images et la timeline ont été vérifiées, y compris le masquage de l'adresse. La validation passe ; musique à 14,5–18,7 LU sous la voix, durée 99,2 s. SHA-256 : `e899e455f12531f158d3ad279ad4c23e0e2b0a9a3011dad87045233b5a6c20e2`.

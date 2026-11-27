@@ -440,7 +440,7 @@ async function main() {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      const personalTour = slug === "volunteer-personal-registrations" ? (await import("../lib/org-registrations-fixture")).personalTourOrgToken : null
+      const personalTour = ["volunteer-personal-registrations", "volunteer-calendar"].includes(slug) ? (await import("../lib/org-registrations-fixture")).personalTourOrgToken : null
       await page.goto(personalTour ? `${baseUrl}/mes-inscriptions/${personalTour}` : slug === "message-templates" ? `${baseUrl}/admin/settings/admins` : slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
     }
 
@@ -2556,97 +2556,72 @@ async function main() {
         await page.getByText(/^Ton lien a été renouvelé/).waitFor()
       })
     } else if (slug === "volunteer-calendar") {
-      const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`
-      const initialCalendar = await page.evaluate(async () => (await fetch("/api/public/registrations/demo-volunteer-camille-0001")).json())
-      const nightDate = initialCalendar.registrations.find((r: { shift: { label: string } }) => r.shift.label === "Rangement de nuit — calendrier")?.shift.date.slice(0, 10)
-      if (!nightDate) throw new Error("Calendar fixture is missing its overnight shift")
+      const { personalTourOrgToken } = await import("../lib/org-registrations-fixture")
+      const personalUrl = `${baseUrl}/mes-inscriptions/${personalTourOrgToken}`
+      const initial = await page.evaluate(async () => (await fetch("/api/public/registrations/demo-volunteer-camille-0001")).json())
+      const nightDate = initial.registrations.find((r: { shift: { label: string } }) => r.shift.label === "Rangement de nuit — calendrier")?.shift.date.slice(0, 10)
+      if (!nightDate) throw new Error("Calendar fixture missing overnight shift")
       const nextDate = new Date(Date.parse(`${nightDate}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10)
       const { localDateTimeToUtc } = await import("../../src/lib/time-zone")
-      // The fixture can cross Zurich's autumn clock change; never assume UTC+2.
-      const icsInstant = (date: string, time: string) => localDateTimeToUtc(new Date(`${date}T00:00:00Z`), time, initialCalendar.timeZone ?? "Europe/Zurich").toISOString().replace(/[-:]/g, "").replace(".000", "")
-      const folder = path.join(dir, "downloads")
-      await mkdir(folder, { recursive: true })
-      const download = async (link: Locator, filename: string) => {
-        const pending = page.waitForEvent("download")
-        await tap(page, link)
-        const file = await pending
-        const target = path.join(folder, filename)
-        await file.saveAs(target)
-        return (await readFile(target, "utf8")).replace(/\r\n[ \t]/g, "")
-      }
-      const allLink = () => page.getByRole("link", { name: /^Télécharger tout mon planning/ })
+      const instant = (date: string, time: string) => localDateTimeToUtc(new Date(`${date}T00:00:00Z`), time, initial.timeZone ?? "Europe/Zurich").toISOString().replace(/[-:]/g, "").replace(".000", "")
+      const card = () => page.getByRole("region", { name: "Mon calendrier" })
       const events = (ics: string) => ics.split("BEGIN:VEVENT").slice(1).map(block => block.split("END:VEVENT")[0])
-      let oldPlanning = ""
-      let newPlanning = ""
+      const uids = (ics: string) => [...ics.matchAll(/^UID:(.+)$/gm)].map(match => match[1].trim()).sort()
+      const maskAddress = async () => { await page.addStyleTag({ content: '#calendar-title + p ~ details span[translate="no"] { filter: blur(8px) }' }) }
+      const openPage = async () => { await page.goto(personalUrl); await settle(page); await maskAddress(); await card().waitFor() }
+      await openPage()
+      const webcal = card().getByRole("link", { name: "S'abonner avec l'agenda de cet appareil" })
+      const href = await webcal.getAttribute("href")
+      if (!href?.startsWith("webcal:")) throw new Error("Real subscription link missing")
+      const feedPath = new URL(href.replace(/^webcal:/, "https:")).pathname
+      const fetchFeed = () => page.evaluate(async path => { const response = await fetch(path); if (!response.ok) throw new Error(`Calendar feed HTTP ${response.status}`); return (await response.text()).replace(/\r\n[ \t]/g, "") }, feedPath)
+      const before = await fetchFeed()
+      if (events(before).length !== 3 || !before.includes("Rangement de nuit") || !before.includes("Accueil") || events(before).some(e => /Buvette.*14.?18/i.test(e))) throw new Error("Subscription must contain exactly the confirmed shifts and no waitlist")
+      const oldNight = events(before).find(e => e.includes("Rangement de nuit"))
+      if (!oldNight?.includes(`DTSTART:${instant(nightDate, "22:00")}`)) throw new Error("Initial subscription time incorrect")
       await scene("welcome", async () => {
-        await page.screencast.showChapter(manifest.title, { description: "Un fichier pour les créneaux confirmés", duration: 2_300 })
-        await allLink().waitFor()
+        await page.screencast.showChapter(manifest.title, { description: "Un abonnement pour tes créneaux confirmés", duration: 2_300 })
+        await card().scrollIntoViewIfNeeded()
       })
-      await scene("one", async at => {
-        const one = await download(page.getByRole("link", { name: /Ajouter à mon calendrier.*Accueil/ }), "accueil.ics")
-        if (events(one).length !== 1 || !one.includes("Accueil")) throw new Error("Single calendar download is not exactly Accueil")
-        await at("Ce téléchargement ne crée pas")
-        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
+      await scene("page", async () => { await card().scrollIntoViewIfNeeded() })
+      await scene("device", async at => { await at("choisis S'abonner avec l'agenda"); await webcal.scrollIntoViewIfNeeded(); await webcal.focus() })
+      await scene("online", async at => {
+        await at("ouvre Google Agenda ou autre")
+        await tap(page, card().getByText("Google Agenda ou autre agenda en ligne", { exact: true }))
+        await at("puis copie l'adresse de l'abonnement")
+        await tap(page, card().getByRole("button", { name: "Copier l'adresse de l'abonnement" }))
+        await card().getByRole("status").waitFor({ state: "visible" })
       })
-      await scene("all", async at => {
-        oldPlanning = await download(allLink(), "planning-original.ics")
-        if (events(oldPlanning).length !== 3) throw new Error("Calendar export must contain exactly three confirmed registrations")
-        if (!oldPlanning.includes("Rangement de nuit") || !oldPlanning.includes("Accueil")) throw new Error("Calendar export is missing a confirmed shift")
-        await at("L'inscription en liste d'attente n'y")
-        await page.getByRole("button", { name: "Quitter la liste d'attente du créneau Buvette", exact: true }).scrollIntoViewIfNeeded()
-      })
-      await scene("import", async at => {
-        // User requested no native Calendar access. Explain import over the real download
-        // control and its hint; do not fabricate or claim a calendar-client result.
-        await allLink().scrollIntoViewIfNeeded()
-        await at(0.48) /* mid-sentence */
-        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
-      })
-      await scene("details", async at => {
-        for (const expected of ["Arrive 15 minutes avant", "Manon Aebi", "/my/", "GEO:"]) {
-          if (!oldPlanning.includes(expected)) throw new Error(`Calendar download missing ${expected}`)
-        }
-        await page.getByText("Arrive 15 minutes avant, au stand bleu.", { exact: true }).scrollIntoViewIfNeeded()
-        await at("le lieu, les consignes et")
-        await page.locator("#avant-ta-mission").getByText(/Manon Aebi,/).scrollIntoViewIfNeeded()
-        await at("Garde ce fichier pour toi")
-        await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
-      })
-      await scene("night", async () => {
-        await page.getByText("Rangement de nuit — calendrier", { exact: true }).scrollIntoViewIfNeeded()
-        const night = events(oldPlanning).find(event => event.includes("Rangement de nuit"))
-        if (!night?.includes(`DTSTART:${icsInstant(nightDate, "22:00")}`) || !night.includes(`DTEND:${icsInstant(nextDate, "02:00")}`)) throw new Error("Overnight calendar dates or Zurich conversion incorrect")
-      })
+      await scene("privacy", async () => { await card().scrollIntoViewIfNeeded() })
       await scene("change", async at => {
+        await at("Si l'organisation change un horaire")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
         await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
         const row = page.getByRole("row").filter({ hasText: "Rangement de nuit — calendrier" })
         await tap(page, row.getByRole("button", { name: /^Modifier le créneau/ }))
         await fillVisibly(page, page.getByLabel(/^Début(?:\s|$)/), "23:00")
-        await at("il ne se met pas")
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
         await page.getByRole("heading", { name: "Modifier le créneau", exact: true }).waitFor({ state: "hidden" })
-        if ((await readFile(path.join(folder, "planning-original.ics"), "utf8")).replace(/\r\n[ \t]/g, "") !== oldPlanning) throw new Error("Previously downloaded calendar changed unexpectedly")
-        await at(0.75) /* mid-sentence */
-        await page.goto(personalUrl); await settle(page)
-        await page.getByText("Rangement de nuit — calendrier", { exact: true }).scrollIntoViewIfNeeded()
+        await openPage()
+        const after = await fetchFeed()
+        const night = events(after).find(e => e.includes("Rangement de nuit"))
+        if (JSON.stringify(uids(before)) !== JSON.stringify(uids(after)) || !night?.includes(`DTSTART:${instant(nightDate, "23:00")}`) || !night.includes(`DTEND:${instant(nextDate, "02:00")}`)) throw new Error("Updated feed time or identifiers incorrect")
+        await card().scrollIntoViewIfNeeded()
       })
-      await scene("reimport", async at => {
-        newPlanning = await download(allLink(), "planning-modifie.ics")
-        const uids = (ics: string) => [...ics.matchAll(/^UID:(.+)$/gm)].map(match => match[1].trim()).sort()
-        if (JSON.stringify(uids(oldPlanning)) !== JSON.stringify(uids(newPlanning))) throw new Error("Calendar registration identifiers changed")
-        const night = events(newPlanning).find(event => event.includes("Rangement de nuit"))
-        if (!night?.includes(`DTSTART:${icsInstant(nightDate, "23:00")}`)) throw new Error("Updated calendar does not contain 23:00 Zurich start")
-        if (!night.includes(`DTEND:${icsInstant(nextDate, "02:00")}`)) throw new Error("PRODUCT BUG: shifting overnight start also changed its 02:00 end; refuse a misleading calendar take")
-        await at(0.52) /* mid-sentence */
-        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
+      await scene("file", async at => {
+        await card().scrollIntoViewIfNeeded()
+        await at("Télécharger tout mon planning")
+        const pending = page.waitForEvent("download")
+        await tap(page, card().getByRole("link", { name: /^Télécharger tout mon planning/ }))
+        const file = await pending
+        const folder = path.join(dir, "downloads"); await mkdir(folder, { recursive: true })
+        const target = path.join(folder, "planning.ics"); await file.saveAs(target)
+        const downloaded = (await readFile(target, "utf8")).replace(/\r\n[ \t]/g, "")
+        if (events(downloaded).length !== 3 || JSON.stringify(uids(downloaded)) !== JSON.stringify(uids(before))) throw new Error("Browser download differs from confirmed subscription")
       })
-      await scene("result", async at => {
-        await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).scrollIntoViewIfNeeded()
-        await at(0.50) /* mid-sentence */
-        await page.getByRole("button", { name: "Quitter la liste d'attente du créneau Buvette", exact: true }).scrollIntoViewIfNeeded()
-      })
-      await writeFile(path.join(dir, "calendar-download-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), originalEvents: events(oldPlanning).length, updatedEvents: events(newPlanning).length, stableRegistrationIds: true, overnightUtcVerified: true, originalFileUnchanged: true, nativeCalendarImport: "Not performed, per user request" }, null, 2))
+      await scene("renew", async () => { await card().scrollIntoViewIfNeeded() })
+      await scene("result", async () => { await page.getByRole("heading", { name: "Toutes mes inscriptions", exact: true }).scrollIntoViewIfNeeded() })
+      await writeFile(path.join(dir, "calendar-subscription-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), confirmedEvents: events(before).length, waitlistExcluded: true, stableIdentifiers: true, changedTimeVerified: true, browserDownload: true, externalCalendar: "not filmed", addressMasked: true }, null, 2))
     } else if (slug === "privacy-personal-links") {
       if (!privacyRecording) throw new Error("Privacy recording preparation missing")
       const { recordPrivacy } = await import("../lib/record-privacy")
