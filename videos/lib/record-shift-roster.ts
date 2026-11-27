@@ -76,15 +76,15 @@ export async function recordShiftRoster({ page, base, dir, scene, tap, settle, f
       const data = await response.json() as { messages: { ID: string }[] }
       for (const m of data.messages) {
         const detail = await (await page.request.get(`${mailpit}/api/v1/message/${m.ID}`)).json() as { Text: string }
-        if (detail.Text.includes("/my/")) { mailId = m.ID; break }
+        if (detail.Text.includes("/mes-inscriptions/")) { mailId = m.ID; break }
       }
       if (!mailId) await page.waitForTimeout(300)
     }
     assert(mailId, "Actual confirmation email missing")
     await page.goto(`${mailpit}/view/${mailId}`); await settle(page)
-    const link = page.frameLocator("iframe").locator('a[href*="/my/"]').first(); await link.waitFor()
+    const link = page.frameLocator("iframe").locator('a[href*="/mes-inscriptions/"]').first(); await link.waitFor()
     const href = await link.getAttribute("href"); assert(href)
-    aline = new URL(href).pathname
+    const organizationPath = new URL(href).pathname
     await at("Suivez son lien personnel")
     // Follow the real link through the local public-host proxy.
     const popupReady = page.waitForEvent("popup")
@@ -92,9 +92,12 @@ export async function recordShiftRoster({ page, base, dir, scene, tap, settle, f
     const popup = await popupReady
     await popup.waitForLoadState("domcontentloaded")
     assert.equal(new URL(popup.url()).hostname, "formation-roster.benevol.app")
-    assert.equal(new URL(popup.url()).pathname, aline)
+    assert.equal(new URL(popup.url()).pathname, organizationPath)
     const actual = popup.url(); await popup.close()
     await page.goto(actual); await settle(page)
+    await tap(page, page.getByRole("link", { name: /Voir l'événement/ }).first())
+    await roster().waitFor()
+    aline = new URL(page.url()).pathname
     await at("La carte Qui est inscrit montre uniquement")
     await roster().scrollIntoViewIfNeeded()
     assert.equal(await roster().getByRole("heading", { level: 3 }).count(), 1)
@@ -103,6 +106,8 @@ export async function recordShiftRoster({ page, base, dir, scene, tap, settle, f
     await tap(page, roster().getByRole("switch", { name: "Afficher mon nom aux autres bénévoles", exact: true }))
     await expect(roster().getByRole("switch", { name: "Afficher mon nom aux autres bénévoles", exact: true })).toHaveAttribute("aria-checked", "true")
     await at("Pour consulter les autres créneaux")
+    // Let the spoken link name begin before leaving the personal page.
+    await page.waitForTimeout(1500)
     await tap(page, roster().getByRole("link", { name: "Voir qui est inscrit sur les autres créneaux" }))
     await toggle().waitFor(); assert.equal(await toggle().getAttribute("aria-checked"), "true")
   })
