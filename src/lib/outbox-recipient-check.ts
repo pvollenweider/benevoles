@@ -40,7 +40,7 @@ import {
  *   this address.
  * - Inactivity messages: their own check (inactivityCopyBlocked in outbox.ts).
  * - Organiser-facing emails (admin_notification, registration_cancelled, digests, answers_changed, availability_changed,
- *   addresses_to_verify_summary, milestone_owner_reminder, past_event_notice), platform emails
+ *   addresses_to_verify_summary, address_to_verify_alert, milestone_owner_reminder, past_event_notice), platform emails
  *   (product_update, release_available, operator_alert, space_approved, signup_confirmation,
  *   admin_welcome): no personal link of a member; not checked here.
  */

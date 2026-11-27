@@ -770,6 +770,17 @@ const cases: [string, NotificationPayload][] = [
       membersUrl: "https://rhone.benevol.app/admin/members?verify=1",
     },
   }],
+  ["address_to_verify_alert", {
+    kind: "address_to_verify_alert",
+    recipient,
+    data: {
+      members: [
+        { name: "Julie Martin", phone: "079 555 01 23", eventTitle: "Marché de Noël", shiftName: "Stand de vente", when: "aujourd'hui, vendredi 27 novembre, de 14 h à 16 h", refusals: "Son adresse a refusé 3 emails depuis le 19 novembre, dont la confirmation d'inscription." },
+        { name: "Marc Dupont", phone: null, eventTitle: "Marché de Noël", shiftName: "Buvette · Soir", when: "demain, samedi 28 novembre, de 18 h à 21 h 30", refusals: null },
+      ],
+      membersUrl: "https://rhone.benevol.app/admin/members?verify=1",
+    },
+  }],
   ["past_event_notice", {
     kind: "past_event_notice",
     recipient,
@@ -881,6 +892,7 @@ describe("render — snapshot of every notification kind", () => {
       answers_changed: true,
       sector_leader_answers_changed: true,
       addresses_to_verify_summary: true,
+      address_to_verify_alert: true,
       past_event_notice: true,
       org_reactivation: true,
       org_inactivity_notice: true,

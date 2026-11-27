@@ -6,6 +6,7 @@
  */
 
 import type { NotificationPayload } from "../types"
+import { addressAlertSubject, type AddressAlertMember } from "@/lib/address-alert"
 import { renderMarkdown } from "@/lib/markdown"
 import { clockTime } from "../../gantt-utils"
 import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, adminFindReplacementUrl, adminRecentCancellationsUrl, BASE_URL, type RenderedEmail } from "./shared"
@@ -232,6 +233,47 @@ export function renderAddressesToVerifySummary(p: NotificationPayload): Rendered
     </ul>
     <p style="margin-top:1.25em">${btn(d.membersUrl, "Voir les adresses à vérifier")}</p>
   `, `${d.count} adresse${plural ? "s" : ""} à vérifier.`)
+
+  return { subject, html, text }
+}
+
+// ── Alerte immédiate : adresse refusée d'une personne attendue bientôt (#1476) ────────────────
+
+export function renderAddressToVerifyAlert(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { members: AddressAlertMember[]; membersUrl: string }
+  const one = d.members.length === 1
+  const subject = addressAlertSubject(d.members)
+  const intro = one
+    ? `Un email important n'a pas pu être remis à ${d.members[0].name} : son adresse est refusée par le serveur destinataire. Cette personne a un créneau bientôt et ne reçoit pas nos rappels.`
+    : `Un email important n'a pas pu être remis à ${d.members.length} bénévoles : leur adresse est refusée par le serveur destinataire. Ces personnes ont un créneau bientôt et ne reçoivent pas nos rappels.`
+  const lines = (m: AddressAlertMember) => [
+    `Prochain créneau : ${m.shiftName}, ${m.when} (${m.eventTitle})`,
+    ...(m.refusals ? [m.refusals] : []),
+    m.phone ? `Téléphone : ${m.phone}` : "Pas de téléphone sur sa fiche.",
+  ]
+  const closing = "Le plus sûr est de joindre cette personne autrement avant son créneau, puis de corriger son adresse dans Membres."
+  const closingMany = "Le plus sûr est de joindre ces personnes autrement avant leur créneau, puis de corriger leur adresse dans Membres."
+
+  const text = [
+    intro,
+    ``,
+    ...d.members.flatMap((m) => [m.name, ...lines(m).map((l) => `  - ${l}`), ``]),
+    one ? closing : closingMany,
+    ``,
+    `Voir les adresses à vérifier :`,
+    d.membersUrl,
+  ].join("\n")
+
+  const html = wrap(`
+    <p>${escapeHtml(intro)}</p>
+    ${d.members.map((m) => `
+    <h2 style="margin:1.1em 0 0.2em;font-size:1em;font-weight:600">${escapeHtml(m.name)}</h2>
+    <ul style="margin:0;padding-left:1.2em;line-height:1.6">
+      ${lines(m).map((l) => `<li>${escapeHtml(l)}</li>`).join("")}
+    </ul>`).join("")}
+    <p style="margin-top:1.25em">${escapeHtml(one ? closing : closingMany)}</p>
+    <p style="margin-top:1.25em">${btn(d.membersUrl, "Voir les adresses à vérifier")}</p>
+  `, subject)
 
   return { subject, html, text }
 }

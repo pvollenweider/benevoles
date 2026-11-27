@@ -18,7 +18,7 @@ import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderReminderRul
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-leaders"
 import { renderOpenShifts } from "./open-shifts"
-import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated, renderMilestoneOwnerReminder } from "./administration"
+import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderAddressToVerifyAlert, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated, renderMilestoneOwnerReminder } from "./administration"
 import { renderSectorLeaderWithdrawalDigest, renderWithdrawalAdminDigest } from "./withdrawal-digest"
 import { renderAnswersChanged, renderSectorLeaderAnswersChanged } from "./answers-changed"
 import { renderAvailabilityRequest } from "./availability"
@@ -114,6 +114,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderReleaseAvailable(payload)
     case "addresses_to_verify_summary":
       return renderAddressesToVerifySummary(payload)
+    case "address_to_verify_alert":
+      return renderAddressToVerifyAlert(payload)
     case "past_event_notice":
       return renderPastEventNotice(payload)
     case "org_reactivation":

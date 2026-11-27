@@ -15,6 +15,9 @@ export const JOBS = {
   // Deferred bounces (#602): read over IMAP by src/lib/bounce-mailbox.ts, which claims the run
   // itself; the health page has a dedicated item (assessDeferredBounces) instead of the generic one.
   bounces: { label: "Rejets différés", maxAgeHours: 1 },
+  // Alert to the organisers when someone expected soon has a refused address (#1476): run at the
+  // end of the bounce cron; its start time is where the next run's window begins.
+  "address-alerts": { label: "Alertes d'adresse refusée", maxAgeHours: 1 },
   cleanup: { label: "Nettoyage nocturne", maxAgeHours: 26 },
   backup: { label: "Sauvegarde chiffrée", maxAgeHours: 26 },
   "backup-offsite": { label: "Copie hors site", maxAgeHours: 26 },

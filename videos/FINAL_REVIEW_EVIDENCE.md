@@ -1516,3 +1516,10 @@ Le formulaire d'événement porte un nouveau groupe **Créneaux qui se chevauche
 - Image seule, le groupe allonge et décale le formulaire sous les inscriptions : **EVENT_CREATE_BLANK**, **EVENT_CREATE_TEMPLATE**, **EVENT_VISIBILITY_REGISTRATION_WINDOW**, **EVENT_DUPLICATE**, **ORGANIZER_CREATE_PUBLISH** et **ADMIN_FEATURES_OVERVIEW**, déjà listées dans « À refilmer : affichage des créneaux par défaut ». À refilmer en une seule fois.
 - Vérifiées et laissées telles quelles, leur narration parle du refus d'un chevauchement, qui reste la règle par défaut : `volunteer-choose-shifts`, `volunteer-confirmation-errors`, `registrations-management`, `shift-swaps`, `accessibility-keyboard-display`, `members-duplicates-merge`.
 - Aucune vidéo ne présente le nouveau réglage. Aucune capture n'est régénérée dans ce changement.
+
+## À refilmer : alerte immédiate d'adresse refusée (#1476, 27 novembre 2026)
+
+Dans **Paramètres des emails**, le texte d'aide de la case « Résumé quotidien des adresses à vérifier » gagne deux phrases : l'alerte immédiate quand la personne a un créneau dans les trois jours, et le fait que décocher la coupe aussi. Le libellé de la case ne change pas, donc le sélecteur de capture (`videos/tools/record.ts`) reste valable.
+
+- **ORG_EMAIL_SETTINGS** (`org-email-settings`) : image seule, la scène qui cadre cette case montre l'ancien texte d'aide. La narration reste juste. À refilmer avec le prochain lot ; une phrase sur l'alerte immédiate pourrait y être ajoutée.
+- Aucune vidéo ne montre le nouvel email. Aucune capture vidéo n'est régénérée dans ce changement.

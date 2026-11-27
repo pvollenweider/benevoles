@@ -54,6 +54,7 @@ export function adminEmailsWindowStart(now: Date, days: number, timeZone: string
  * event's front desk included), never volunteers, members or sector leaders.
  */
 export const ADMIN_EMAIL_KINDS: ReadonlySet<NotificationKind> = new Set<NotificationKind>([
+  "address_to_verify_alert",
   "addresses_to_verify_summary",
   "admin_invite",
   "admin_notification",
