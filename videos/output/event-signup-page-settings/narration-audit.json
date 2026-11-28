@@ -1,0 +1,80 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-28T03:44:30.969Z",
+  "revalidatedAt": "2026-11-28T03:44:30.970Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "settings-welcome",
+      "audioSha256": "1a055f4c7a52c482e39bcab767990b32a9ddf46d5a3b6a6cef835c26d20248c4",
+      "recognized": "Quatre réglages décident de ce que voient les bénévoles sur la page d'inscription. Chacun se change en quelques secondes et son effet est visible tout de suite.",
+      "expected": "Quatre réglages décident de ce que voient les bénévoles sur la page d'inscription. Chacun se change en quelques secondes, et son effet est visible tout de suite.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings-view",
+      "audioSha256": "cf327868e414dc1b397c4dbb143d85d737125124839b89ccb811452296f5900b",
+      "recognized": "Dans les informations de l'événement, affichage des créneaux par défaut vaut automatique. La frise quand elle reste lisible, sinon la liste. Choisissons liste pour l'imposer. Sur la page d'inscription, les créneaux s'affichent maintenant en liste. Les boutons frise et liste restent là, le visiteur garde la main, et son choix est gardé sur son appareil.",
+      "expected": "Dans les informations de l'événement, Affichage des créneaux par défaut vaut Automatique : la frise quand elle reste lisible, sinon la liste. Choisissons Liste pour l'imposer. Sur la page d'inscription, les créneaux s'affichent maintenant en liste. Les boutons Frise et Liste restent là : le visiteur garde la main, et son choix est gardé sur son appareil.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings-overlaps",
+      "audioSha256": "39f87bb91e6c69d65f70b4165f63cca24b2c20a8e9e45ec3528e5da4ec8b9ee0",
+      "recognized": "Sans autre réglage, personne ne peut prendre deux créneaux aux mêmes heures. Choisissons le bar de dix-huit heures, le vestiaire aux mêmes heures ne peut plus être choisi. Revenons au formulaire de l'événement. Dans créneaux qui se chevauchent, le bouton autoriser les chevauchements ouvre une confirmation qui explique la conséquence. Confirmons. Sur la page d'inscription, les deux créneaux se choisissent ensemble. Le récapitulatif signale le chevauchement et demande au bénévole de vérifier qu'il peut faire les deux.",
+      "expected": "Sans autre réglage, personne ne peut prendre deux créneaux aux mêmes heures. Choisissons le Bar de 18 h : le Vestiaire aux mêmes heures ne peut plus être choisi. Revenons au formulaire de l'événement. Dans Créneaux qui se chevauchent, le bouton Autoriser les chevauchements ouvre une confirmation qui explique la conséquence. Confirmons. Sur la page d'inscription, les deux créneaux se choisissent ensemble. Le récapitulatif signale le chevauchement et demande au bénévole de vérifier qu'il peut faire les deux.",
+      "wordErrorRate": 0.0375,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings-convention",
+      "audioSha256": "c5547e1834f3c8c86560883919425922ee56f3c6f826dee6df0fdcf8fcee8a02",
+      "recognized": "La convention des bénévoles se règle pour toute l'organisation, dans les paramètres de l'organisation par un propriétaire. Désactivons « Demander aux bénévoles d'accepter une convention », puis enregistrons. Le formulaire d'inscription ne montre alors plus ni case, ni lien vers une convention et aucune preuve d'acceptation n'est conservée.",
+      "expected": "La convention des bénévoles se règle pour toute l'organisation, dans les Paramètres de l'organisation, par un propriétaire. Désactivons Demander aux bénévoles d'accepter une convention. Puis enregistrons. Le formulaire d'inscription ne montre alors plus ni case, ni lien vers une convention, et aucune preuve d'acceptation n'est conservée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings-sectors",
+      "audioSha256": "9dd235dbb98d430b82eb44fdaae6ba4eaa7e0ad58d0647659fca59749e304c24",
+      "recognized": "Dans l'événement, la carte Secteurs propose, une fois le premier secteur créé, regrouper les créneaux par secteur sur la page d'inscription. Il est désactivé par défaut. Sans lui, les bénévoles ne voient jamais le nom de vos secteurs. Activons-le. En liste, chaque journée range ses créneaux sous le nom de leur secteur, dans l'ordre de vos secteurs avec autre poste à la fin. En frise, les mêmes groupes s'affichent sous un bandeau.",
+      "expected": "Dans l'événement, la carte Secteurs propose, une fois le premier secteur créé, Regrouper les créneaux par secteur sur la page d'inscription. Il est désactivé par défaut : sans lui, les bénévoles ne voient jamais le nom de vos secteurs. Activons-le. En liste, chaque journée range ses créneaux sous le nom de leur secteur, dans l'ordre de vos secteurs, avec Autres postes à la fin. En frise, les mêmes groupes s'affichent sous un bandeau.",
+      "wordErrorRate": 0.025974025974025976,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings-details",
+      "audioSha256": "2430b05e1ca4e45a95443fc763ee10f9c35e3d298f812caf6810916d8df0cfb3",
+      "recognized": "Revenons à la liste. Sous un créneau, Détails montre sa description, son lieu et ses consignes sans le choisir.",
+      "expected": "Revenons à la liste. Sous un créneau, Détails montre sa description, son lieu et ses consignes, sans le choisir.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings-recap",
+      "audioSha256": "f3ddc375b3ad0b1dad7752091c9e1537515680f5ea1a4b9f2169bb3c7efcbf25",
+      "recognized": "Affichage par défaut, chevauchement, convention et regroupement par secteur. Quatre réglages pour une page d'inscription qui ressemble à votre événement.",
+      "expected": "Affichage par défaut, chevauchements, convention et regroupement par secteur : quatre réglages, pour une page d'inscription qui ressemble à votre événement.",
+      "wordErrorRate": 0.047619047619047616,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

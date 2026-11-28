@@ -1,0 +1,274 @@
+{
+  "slug": "event-signup-page-settings",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-28T03:49:36.713Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "3293405bf961b84180060a1dc59caaa66f98baa0",
+    "sourceTree": "058ca9c69a6f15ffdd23fbb34757d7006dcf324e",
+    "productSourceSha256": "89a70d835799996ec5738ed69e06f619095221f4962630bba33a0150e606cd33",
+    "buildId": "1X1L5zrtxoa3_ek74p5kp",
+    "snapshot": "/tmp/benevoles-video-production.fdcCJ7",
+    "builtAt": "2026-11-28T03:47:04.892Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_SIGNUP_PAGE_SETTINGS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 19971
+    },
+    {
+      "kind": "click",
+      "atMs": 37467
+    },
+    {
+      "kind": "click",
+      "atMs": 43824
+    },
+    {
+      "kind": "click",
+      "atMs": 50389
+    },
+    {
+      "kind": "click",
+      "atMs": 52565
+    },
+    {
+      "kind": "click",
+      "atMs": 53346
+    },
+    {
+      "kind": "click",
+      "atMs": 54829
+    },
+    {
+      "kind": "click",
+      "atMs": 68720
+    },
+    {
+      "kind": "click",
+      "atMs": 72070
+    },
+    {
+      "kind": "click",
+      "atMs": 73871
+    },
+    {
+      "kind": "click",
+      "atMs": 74688
+    },
+    {
+      "kind": "click",
+      "atMs": 94256
+    },
+    {
+      "kind": "click",
+      "atMs": 101847
+    },
+    {
+      "kind": "click",
+      "atMs": 106813
+    },
+    {
+      "kind": "click",
+      "atMs": 108178
+    }
+  ],
+  "cues": [
+    {
+      "id": "settings-welcome",
+      "startMs": 1350,
+      "endMs": 9133
+    },
+    {
+      "id": "settings-view",
+      "startMs": 11396,
+      "endMs": 30730
+    },
+    {
+      "id": "settings-overlaps",
+      "startMs": 32993,
+      "endMs": 59131
+    },
+    {
+      "id": "settings-convention",
+      "startMs": 61393,
+      "endMs": 79429
+    },
+    {
+      "id": "settings-sectors",
+      "startMs": 81691,
+      "endMs": 103849
+    },
+    {
+      "id": "settings-details",
+      "startMs": 106112,
+      "endMs": 112962
+    },
+    {
+      "id": "settings-recap",
+      "startMs": 113414,
+      "endMs": 123379
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "settings-view",
+      "phrase": "Affichage des créneaux par défaut",
+      "startMs": 200,
+      "endMs": 4934,
+      "cueMs": 11598
+    },
+    {
+      "segmentId": "settings-view",
+      "phrase": "Choisissons Liste",
+      "startMs": 8081,
+      "endMs": 9879,
+      "cueMs": 19477
+    },
+    {
+      "segmentId": "settings-view",
+      "phrase": "Sur la page d'inscription",
+      "startMs": 10501,
+      "endMs": 13454,
+      "cueMs": 21899
+    },
+    {
+      "segmentId": "settings-view",
+      "phrase": "le visiteur garde la main",
+      "startMs": 16338,
+      "endMs": 19064,
+      "cueMs": 27735
+    },
+    {
+      "segmentId": "settings-overlaps",
+      "phrase": "Choisissons le Bar de 18 h",
+      "startMs": 3983,
+      "endMs": 5719,
+      "cueMs": 36977
+    },
+    {
+      "segmentId": "settings-overlaps",
+      "phrase": "le Vestiaire aux mêmes heures ne peut plus être choisi",
+      "startMs": 5990,
+      "endMs": 7950,
+      "cueMs": 38985
+    },
+    {
+      "segmentId": "settings-overlaps",
+      "phrase": "Revenons au formulaire de l'événement",
+      "startMs": 8472,
+      "endMs": 9791,
+      "cueMs": 41468
+    },
+    {
+      "segmentId": "settings-overlaps",
+      "phrase": "Autoriser les chevauchements",
+      "startMs": 10343,
+      "endMs": 16446,
+      "cueMs": 43338
+    },
+    {
+      "segmentId": "settings-overlaps",
+      "phrase": "Confirmons",
+      "startMs": 16897,
+      "endMs": 17424,
+      "cueMs": 49893
+    },
+    {
+      "segmentId": "settings-overlaps",
+      "phrase": "les deux créneaux se choisissent ensemble",
+      "startMs": 18015,
+      "endMs": 20965,
+      "cueMs": 51483
+    },
+    {
+      "segmentId": "settings-overlaps",
+      "phrase": "Le récapitulatif",
+      "startMs": 21327,
+      "endMs": 25863,
+      "cueMs": 54323
+    },
+    {
+      "segmentId": "settings-convention",
+      "phrase": "dans les Paramètres de l'organisation",
+      "startMs": 273,
+      "endMs": 6301,
+      "cueMs": 61668
+    },
+    {
+      "segmentId": "settings-convention",
+      "phrase": "Désactivons Demander aux bénévoles",
+      "startMs": 6836,
+      "endMs": 9759,
+      "cueMs": 68231
+    },
+    {
+      "segmentId": "settings-convention",
+      "phrase": "Puis enregistrons",
+      "startMs": 10186,
+      "endMs": 10887,
+      "cueMs": 71581
+    },
+    {
+      "segmentId": "settings-convention",
+      "phrase": "Le formulaire d'inscription",
+      "startMs": 11389,
+      "endMs": 17753,
+      "cueMs": 72784
+    },
+    {
+      "segmentId": "settings-sectors",
+      "phrase": "la carte Secteurs",
+      "startMs": 282,
+      "endMs": 6968,
+      "cueMs": 81975
+    },
+    {
+      "segmentId": "settings-sectors",
+      "phrase": "Activons-le",
+      "startMs": 12079,
+      "endMs": 12587,
+      "cueMs": 93772
+    },
+    {
+      "segmentId": "settings-sectors",
+      "phrase": "En liste",
+      "startMs": 13127,
+      "endMs": 19281,
+      "cueMs": 94819
+    },
+    {
+      "segmentId": "settings-sectors",
+      "phrase": "En frise",
+      "startMs": 19674,
+      "endMs": 21946,
+      "cueMs": 101365
+    },
+    {
+      "segmentId": "settings-details",
+      "phrase": "Revenons à la liste",
+      "startMs": 213,
+      "endMs": 1030,
+      "cueMs": 106328
+    },
+    {
+      "segmentId": "settings-details",
+      "phrase": "Détails",
+      "startMs": 1573,
+      "endMs": 6477,
+      "cueMs": 107686
+    }
+  ]
+}

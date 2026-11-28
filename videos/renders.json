@@ -107,6 +107,12 @@
     "height": 800,
     "poster": true
   },
+  "event-signup-page-settings": {
+    "durationMs": 123840,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "event-visibility-registration-window": {
     "durationMs": 127000,
     "width": 1280,
