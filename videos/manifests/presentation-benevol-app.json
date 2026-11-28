@@ -1,0 +1,98 @@
+{
+  "id": "PRODUCT_PRESENTATION",
+  "slug": "presentation-benevol-app",
+  "title": "benevol.app en deux minutes",
+  "description": "Une fête de village, de la préparation au bilan : ce que benevol.app change pour les organisateurs et les bénévoles, en deux minutes.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "voiceStyle": "Speak with a warm, genuine smile, like telling a friend from another association how this year's village fête went. Natural conversational French, lively but unhurried pace around 125 words per minute, clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch and warmth from beginning to end. Never sound like an advertisement, corporate, theatrical, childish or rushed.",
+  "secondVoice": {
+    "voice": "Puck",
+    "voiceStyle": "Bright, confident and friendly, a smile in the voice, like a warm radio host introducing the next part of a story. Short punchy lines with natural French rhythm, a clear lift on questions. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity and energy from beginning to end. Never shout, never sound like a hard-sell advertisement, never rush."
+  },
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "p-hook",
+      "transcript": "Des dizaines de bénévoles. Une seule fête. Et un tableur qui déborde ?",
+      "fallbackDurationMs": 7740,
+      "speaker": "second"
+    },
+    {
+      "id": "p-elodie",
+      "transcript": "Élodie organise la fête du village de Montvert. Cette année, elle a rangé le tableur.",
+      "fallbackDurationMs": 8700
+    },
+    {
+      "id": "p-prepare-hook",
+      "transcript": "Préparer, sans repartir de zéro.",
+      "fallbackDurationMs": 3900,
+      "speaker": "second"
+    },
+    {
+      "id": "p-prepare",
+      "transcript": "Elle reprend la fête de l'an dernier : les dates se décalent toutes seules. Sur la frise, elle voit sa journée d'un coup d'œil, poste par poste. Une navette réservée aux plus de vingt et un ans, et sur validation ? C'est réglé dans les paramètres du poste.",
+      "fallbackDurationMs": 24540
+    },
+    {
+      "id": "p-volunteers-hook",
+      "transcript": "Et pour les bénévoles ?",
+      "fallbackDurationMs": 3900,
+      "speaker": "second"
+    },
+    {
+      "id": "p-signup",
+      "transcript": "Élodie partage un seul lien. Léa l'ouvre, choisit l'accueil du matin, laisse son nom et son email, et c'est fait. Pas de compte, pas de mot de passe. Ses rappels arriveront tout seuls.",
+      "fallbackDurationMs": 17340
+    },
+    {
+      "id": "p-free",
+      "transcript": "Gratuit, et sans compte pour les bénévoles.",
+      "fallbackDurationMs": 4860,
+      "speaker": "second"
+    },
+    {
+      "id": "p-follow",
+      "transcript": "De son côté, Élodie voit tout de suite où il manque du monde. Pour trouver du renfort, elle écrit aux bénévoles à partir d'un modèle de message.",
+      "fallbackDurationMs": 14460
+    },
+    {
+      "id": "p-dayof-hook",
+      "transcript": "Le jour J, tout est prêt.",
+      "fallbackDurationMs": 4380,
+      "speaker": "second"
+    },
+    {
+      "id": "p-print-after",
+      "transcript": "La veille, elle imprime les plannings, les feuilles de présence et les badges. Et après la fête, le bilan compte les bénévoles et les heures données : de quoi remercier chacun, et préparer l'an prochain.",
+      "fallbackDurationMs": 18300
+    },
+    {
+      "id": "p-cta",
+      "transcript": "Une fête, une course, un festival ? Essayez benevol.app. C'est gratuit, open source et hébergé en France. Demandez votre espace sur benevol.app.",
+      "fallbackDurationMs": 12060,
+      "speaker": "second"
+    }
+  ],
+  "viewer": {
+    "summary": "Une fête de village, de la préparation au bilan : comment benevol.app aide une organisatrice et ses bénévoles, en deux minutes.",
+    "steps": [
+      "Préparez l'événement, ou reprenez celui de l'an dernier, et lisez votre journée sur la frise.",
+      "Partagez un seul lien : chaque bénévole choisit ses créneaux, sans compte ni mot de passe.",
+      "Voyez où il manque du monde et écrivez aux bénévoles à partir d'un modèle.",
+      "Imprimez les plannings, les feuilles de présence et les badges.",
+      "Après l'événement, retrouvez le bilan des bénévoles et des heures."
+    ],
+    "remember": [
+      "Les rappels partent tout seuls avant chaque créneau.",
+      "benevol.app est gratuit et open source, hébergé en France, sans cookie de pistage.",
+      "Pour l'essayer, demandez votre espace sur benevol.app."
+    ]
+  }
+}

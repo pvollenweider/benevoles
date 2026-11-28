@@ -2,7 +2,7 @@
   "id": "EVENT_SIGNUP_PAGE_SETTINGS",
   "slug": "event-signup-page-settings",
   "title": "Régler ce que voient les bénévoles sur la page d'inscription",
-  "description": "Affichage par défaut, créneaux qui se chevauchent, convention des bénévoles et regroupement par secteur : quatre réglages et leur effet sur la page d'inscription.",
+  "description": "Affichage par défaut, créneaux qui se chevauchent, convention et regroupement par secteur : quatre réglages de la page d'inscription.",
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
