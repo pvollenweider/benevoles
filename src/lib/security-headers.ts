@@ -177,6 +177,7 @@ export const APP_TOP_LEVEL_SEGMENTS: readonly string[] = [
   "mes-inscriptions",
   "citer",
   "continuite-du-service",
+  "se-former",
   "tarifs",
   "videos",
   "waitlist",
