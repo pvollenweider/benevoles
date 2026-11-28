@@ -442,6 +442,36 @@
       "uploadedAt": "2026-11-21T13:33:21.088Z",
       "thumbnailKey": "532694095ae0fa96"
     },
+    "presentation-benevol-app": {
+      "videoId": "g952VdrIbek",
+      "revision": 1,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "evenement-cycle-de-vie",
+        "parcours-benevole"
+      ],
+      "uploadedAt": "2026-11-28T08:36:39.894Z",
+      "thumbnailKey": "8ac87165980fbaea"
+    },
+    "presentation-permanences": {
+      "videoId": "SPjWNoR1kQI",
+      "revision": 1,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "planning-creneaux",
+        "parcours-benevole"
+      ],
+      "uploadedAt": "2026-11-28T08:36:48.721Z",
+      "thumbnailKey": "b6013fab6a4c459b"
+    },
     "privacy-personal-links": {
       "videoId": "9dELAhOnzr4",
       "revision": 6,
