@@ -12,7 +12,7 @@ C'est gratuit, open source et hébergé en France.
 
 ## Une saison type
 
-Quatre modèles d'activité régulière créent une saison de 13 semaines déjà remplie de permanences, que vous ajustez ensuite :
+Quatre modèles d'activité régulière créent une saison d'un an déjà remplie de permanences, que vous ajustez ensuite :
 
 - **Épicerie participative** : caisse et accueil le mardi et le jeudi de 17 h à 19 h 30 et le samedi de 9 h à 12 h, mise en rayon le samedi de 8 h à 9 h, réception des livraisons le mercredi de 18 h à 19 h 30.
 - **Distribution alimentaire** : tri des denrées le vendredi de 14 h à 17 h, transport le samedi de 8 h à 9 h, distribution de 9 h à 12 h.
