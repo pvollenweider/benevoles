@@ -27,3 +27,4 @@
 - EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published: take 1 final MP4 independent transcript and audiovisual audit now completed; several scene boundaries are displaced or truncated (up to 102.4% difference), and the status menu is not shown while statuses are described. A corrected narration and second take are needed.
 
 - EVENT_SIGNUP_PAGE_SETTINGS — READY, published: take 1 accepted against the narration and main sources; validation, MP4 transcript, audiovisual review and music checks passed. The guide now supports multiple video embeds per unit.
+- EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published after take 2: narration boundaries corrected and MP4 transcript/validation passed; the native status menu is absent from the capture and the archive selection follows its narration. Recorder adjusted for the local public host and organization subdomain.

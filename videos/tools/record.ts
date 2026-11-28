@@ -20,7 +20,7 @@ const batch40Public = ["LAST_MINUTE_CHANGES", "SHIFT_ELIGIBILITY_RULES", "MEMBER
 const attendancePublic = reference === "ATTENDANCE_CHECK_IN"
 const frontDeskPublic = reference === "FRONT_DESK_ACCESS"
 const batch41Public = process.env.VIDEO_PUBLIC_CAPTURE === "1"
-const publicOperator = batch41Public || frontDeskPublic || attendancePublic || batch40Public || ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY", "EVENT_SIGNUP_PAGE_SETTINGS"].includes(reference) || reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
+const publicOperator = batch41Public || frontDeskPublic || attendancePublic || batch40Public || ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY", "EVENT_SIGNUP_PAGE_SETTINGS", "EVENT_VISIBILITY_REGISTRATION_WINDOW"].includes(reference) || reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
 const baseUrl = frontDeskPublic ? "https://formation-accueil.benevol.app" : attendancePublic ? "https://formation-jour-j.benevol.app" : batch41Public ? `https://${process.env.VIDEO_ORG ?? "default"}.benevol.app` : batch40Public ? `https://${reference === "LAST_MINUTE_CHANGES" ? "formation-imprevus" : "default"}.benevol.app` : publicOperator ? "https://www.benevol.app" : localBaseUrl
 const host = new URL(localBaseUrl).hostname
 if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
@@ -4819,10 +4819,10 @@ async function main() {
         const status = page.getByLabel("Statut")
         await status.scrollIntoViewIfNeeded()
         await at("Brouillon signifie invisible au public")
-        await saveVisibility(() => status.selectOption("draft"))
-        await at("Publié rend la page accessible")
-        await saveVisibility(() => status.selectOption("published"))
+        await tap(page, status)
         await at("Un événement ne peut passer à Publié")
+        await page.keyboard.press("Escape")
+        await saveVisibility(() => status.selectOption("published"))
         await page.getByText(/Un événement ne peut être publié qu'avec au moins un créneau/).scrollIntoViewIfNeeded()
       })
 
@@ -4855,7 +4855,7 @@ async function main() {
 
       // The fully rendered public page can keep background requests open.
       // Wait for its actual content instead of network idleness.
-      await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`, { waitUntil: "domcontentloaded" })
+      await page.goto(`https://${org}.benevol.app/${eventSlug}`, { waitUntil: "domcontentloaded" })
       await page.getByRole("heading", { name: "Fête du village de Montvert", exact: true }).waitFor()
       await page.getByText(/inscriptions ouvrent le/i).waitFor()
       await page.evaluate(() => document.fonts.ready)
@@ -4872,6 +4872,9 @@ async function main() {
         const status = page.getByLabel("Statut")
         await status.scrollIntoViewIfNeeded()
         await at("Après l’événement")
+        await tap(page, status)
+        await at("Fermer les inscriptions suffit")
+        await page.keyboard.press("Escape")
         await saveVisibility(() => status.selectOption("archived"))
         await at(0.70)
         await page.goto(`${baseUrl}/admin/events`); await settle(page)
