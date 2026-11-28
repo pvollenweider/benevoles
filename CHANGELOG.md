@@ -16,6 +16,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Vidéos** : « S’inscrire comme bénévole depuis son téléphone » et « Trouver et lire la page d’inscription » montrent la page d'inscription de la version 2.9 : la liste aux couleurs des postes sur un téléphone, et la phrase qui propose de le tourner pour voir la frise. « Ajouter ses créneaux à son calendrier » explique l'abonnement qui se met à jour tout seul ; les vidéos sur le choix des créneaux, « Voir qui est inscrit », les responsables de secteur, la convention des bénévoles, le tour de l'administration, la publication d'un événement, les paramètres des emails, « Créer un événement depuis une page blanche » et « Démarrer un événement avec un modèle » sont à jour.
 - **Vidéo « Régler ce que voient les bénévoles sur la page d'inscription »** : sources prêtes (jeu de données, recorder, narration), pas encore tournée. <!-- interne -->
 - **Outils vidéo** : le lanceur local et les deux revues (audiovisuelle et son final) acceptent explicitement la vidéo des réglages de la page d'inscription, avec la vérification de son jeu de données fictif, et EVENT_VISIBILITY_REGISTRATION_WINDOW. <!-- interne -->
+- **Outils vidéo, deux voix** : une vidéo peut déclarer une seconde voix (`secondVoice`) et lui attribuer des segments ; chaque voix est générée en une prise continue, prouvée et validée séparément, et la relecture audiovisuelle sait que l'alternance est voulue. Les vidéos à une voix ne changent pas. <!-- interne -->
 
 ## [2.9.0] — 2026-11-27
 

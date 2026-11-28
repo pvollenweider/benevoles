@@ -93,11 +93,16 @@ it("gives every catalog video the same verdict and cache key as the frozen oracl
   let comparedOnDisk = 0
   let skippedForMissingMetadata = 0
   let syntheticCompared = 0
+  let twoVoiceVideos = 0
   let passingOnDisk = 0
   let failingOnDisk = 0
 
   for (const entry of catalog.videos) {
     const manifest = await loadManifest(entry.manifest)
+    // A two-voice narration (#1495) postdates the frozen oracle, which knows one voice only: it
+    // would accept a one-voice record for a two-voice video. Those videos are left out here and
+    // covered by their own cases in narration-generation.test.ts; the frozen files never change.
+    if (manifest.secondVoice) { twoVoiceVideos++; continue }
     const metadataFile = path.join(videoDir(entry.manifest), "audio-metadata.json")
 
     if (existsSync(metadataFile)) {
@@ -137,8 +142,8 @@ it("gives every catalog video the same verdict and cache key as the frozen oracl
   }
 
   console.log(`narration records: ${comparedOnDisk} on-disk compared, ${skippedForMissingMetadata} skipped for missing metadata, ${syntheticCompared} synthetic`)
-  expect(comparedOnDisk + skippedForMissingMetadata).toBe(catalog.videos.length)
-  expect(syntheticCompared).toBe(catalog.videos.length)
+  expect(comparedOnDisk + skippedForMissingMetadata + twoVoiceVideos).toBe(catalog.videos.length)
+  expect(syntheticCompared + twoVoiceVideos).toBe(catalog.videos.length)
   expect(passingOnDisk, "at least one on-disk record must pass").toBeGreaterThan(0)
   expect(failingOnDisk, "at least one on-disk record must fail").toBeGreaterThan(0)
 })
