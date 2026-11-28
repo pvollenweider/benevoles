@@ -28,3 +28,5 @@
 
 - EVENT_SIGNUP_PAGE_SETTINGS — READY, published: take 1 accepted against the narration and main sources; validation, MP4 transcript, audiovisual review and music checks passed. The guide now supports multiple video embeds per unit.
 - EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published after take 2: narration boundaries corrected and MP4 transcript/validation passed; the native status menu is absent from the capture and the archive selection follows its narration. Recorder adjusted for the local public host and organization subdomain.
+
+- PRODUCT_PRESENTATION — NOT READY: take 1 stopped on an overlong card; take 2 passed validation and audio checks but audiovisual review flagged unseen summary statistics and an early CTA card. No publication.

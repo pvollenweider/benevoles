@@ -46,7 +46,7 @@ export async function recordProductPresentation(options: Options) {
 
   // A hook of the second voice: a full-screen card while it speaks, then the story goes on.
   const card = (id: string, cardTitle: string, description: string) => scene(id, async () => {
-    await page.screencast.showChapter(cardTitle, { description, duration: 2_200 })
+    await page.screencast.showChapter(cardTitle, { description, duration: 600 })
   })
 
   await go(event)
@@ -71,6 +71,7 @@ export async function recordProductPresentation(options: Options) {
   })
 
   // Léa signs up through the shared link, for real.
+  const organizerCookies = await page.context().cookies()
   await card("p-volunteers-hook", "Un lien, c'est tout", "Les bénévoles choisissent eux-mêmes leurs créneaux")
   await scene("p-signup", async at => {
     await at("Élodie partage un seul lien")
@@ -101,6 +102,7 @@ export async function recordProductPresentation(options: Options) {
   await card("p-free", "Gratuit", "Et sans compte pour les bénévoles")
 
   // Following: where people are missing, then a message from a template.
+  await page.context().addCookies(organizerCookies)
   await scene("p-follow", async at => {
     await at("voit tout de suite où il manque du monde")
     await go(`${event}/staffing`)
