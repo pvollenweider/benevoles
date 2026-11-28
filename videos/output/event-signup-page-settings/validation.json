@@ -1,0 +1,65 @@
+{
+  "id": "EVENT_SIGNUP_PAGE_SETTINGS",
+  "slug": "event-signup-page-settings",
+  "validatedAt": "2026-11-28T03:50:37.430Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 123840,
+  "scenes": [
+    {
+      "id": "settings-welcome",
+      "visualMs": 7783,
+      "audioMs": 7781,
+      "driftMs": 2
+    },
+    {
+      "id": "settings-view",
+      "visualMs": 19334,
+      "audioMs": 19331,
+      "driftMs": 3
+    },
+    {
+      "id": "settings-overlaps",
+      "visualMs": 26138,
+      "audioMs": 26135,
+      "driftMs": 3
+    },
+    {
+      "id": "settings-convention",
+      "visualMs": 18036,
+      "audioMs": 18034,
+      "driftMs": 2
+    },
+    {
+      "id": "settings-sectors",
+      "visualMs": 22158,
+      "audioMs": 22156,
+      "driftMs": 2
+    },
+    {
+      "id": "settings-details",
+      "visualMs": 6850,
+      "audioMs": 6848,
+      "driftMs": 2
+    },
+    {
+      "id": "settings-recap",
+      "visualMs": 9965,
+      "audioMs": 9965,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 21,
+  "music": {
+    "voicedWindows": 107,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.3,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}
