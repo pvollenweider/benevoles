@@ -30,3 +30,5 @@
 - EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published after take 2: narration boundaries corrected and MP4 transcript/validation passed; the native status menu is absent from the capture and the archive selection follows its narration. Recorder adjusted for the local public host and organization subdomain.
 
 - PRODUCT_PRESENTATION — NOT READY: take 1 stopped on an overlong card; take 2 passed validation and audio checks but audiovisual review flagged unseen summary statistics and an early CTA card. No publication.
+
+- RECURRING_PRESENTATION — NOT READY: rehearsal reaches the real public page, but the 91-day template yields seven dates and no month buttons (minimum eight); the approved story describes a year. No narrated take or publication.

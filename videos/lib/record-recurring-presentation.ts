@@ -72,7 +72,7 @@ export async function recordRecurringPresentation(options: Options) {
   const go = async (route: string) => { await page.goto(`${base}${route}`); await settle(page) }
   const heading = (name: string) => page.getByRole("heading", { level: 1, name, exact: true })
   const card = (id: string, cardTitle: string, description: string) => scene(id, async () => {
-    await page.screencast.showChapter(cardTitle, { description, duration: 2_200 })
+    await page.screencast.showChapter(cardTitle, { description, duration: 600 })
   })
   let eventPath = ""
   let publicUrl = ""
@@ -104,7 +104,11 @@ export async function recordRecurringPresentation(options: Options) {
     eventPath = new URL(page.url()).pathname.replace(/\/shifts\/?$/, "").replace(/\/$/, "")
     await go(`${eventPath}/review`)
     await tap(page, page.getByRole("button", { name: /^Publier/ }).first())
-    await page.getByRole("button", { name: /^Dépublier/ }).first().waitFor()
+    await page.getByText("Publié", { exact: true }).first().waitFor()
+    await go(`${eventPath}/edit`)
+    const registrations = page.getByRole("checkbox", { name: "Inscriptions ouvertes" })
+    if (!(await registrations.isChecked())) await tap(page, registrations)
+    await page.waitForTimeout(1_000)
     const slug = await page.evaluate(async (path) => (await (await fetch(`/api${path}`)).json()).slug as string, eventPath)
     publicUrl = `https://${ORG_SLUG}.benevol.app/${slug}`
     await go(`${eventPath}/shifts`)
