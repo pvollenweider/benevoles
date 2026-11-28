@@ -37,3 +37,5 @@
 - RECURRING_PRESENTATION — NOT READY: one-year template and month buttons confirmed in rehearsal; take 1 overran the season scene, and take 2 overran signup by 6.5 seconds. Both authorized takes exhausted; no publication.
 
 - RECURRING_PRESENTATION — READY published: take 3 passed audiovisual, full-audio, frame/timeline, music and validation checks; narration unchanged.
+
+- ORG_FIRST_STEPS — READY published: take 1 passed audiovisual, full-audio, frames, music and validation checks; the real inline player uses locally served copies of the published media. Setup restored the tracked `videos/output/product-server-43102.json` left modified by the merged branch; untracked presentation renders were left alone.

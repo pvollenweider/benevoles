@@ -2,13 +2,13 @@ Bien démarrer avec une nouvelle organisation
 
 Quand une association découvre benevol point app, la liste Premiers pas lui donne un ordre simple. Elle ne fait rien à votre place : elle indique ce qui est déjà prêt, la prochaine action utile, et le résultat à vérifier avant d’inviter de vrais bénévoles.
 
-Les quatre étapes obligatoires sont de créer l’événement, définir ses créneaux, le publier, puis faire une inscription de test. Le titre public, la charte et le fuseau horaire sont facultatifs, car des valeurs par défaut existent. Les coches sont calculées à partir des données : pas besoin de les remplir manuellement.
+Les quatre étapes obligatoires sont de créer l’événement, définir ses créneaux, le publier, puis faire une inscription de test. Le titre public, la convention et le fuseau horaire sont facultatifs, car des valeurs par défaut existent. Les coches sont calculées à partir des données : pas besoin de les remplir manuellement.
 
-Commençons par ce que verront les bénévoles. Dans les paramètres, donnez à la page publique un titre accueillant, puis lisez la Convention des Bénévoles complète. Ce texte explique le cadre de l’engagement et devra être accepté dans le formulaire. Gardons toutes ses clauses : dans cette démonstration, nous ne remplaçons pas la convention par une phrase raccourcie. Enregistrons le texte entier, que vous pouvez relire avant de le personnaliser.
+Commençons par ce que verront les bénévoles. Dans les paramètres, donnez à la page publique un titre accueillant, puis lisez la convention des bénévoles complète. Ce texte explique le cadre de l’engagement et devra être accepté dans le formulaire. Gardons toutes ses clauses : dans cette démonstration, nous ne remplaçons pas la convention par une phrase raccourcie. Enregistrons le texte entier, que vous pouvez relire avant de le personnaliser.
 
-Vérifiez ensuite le fuseau horaire. Il sert à calculer les rappels, l’expiration des offres de liste d’attente, le journal et les documents. Ici, l’association travaille en Europe Zurich. Changer ce réglage adapte les instants d’envoi sans déplacer les heures affichées sur les créneaux.
+Vérifiez ensuite le fuseau horaire. Il sert à calculer les rappels, l’expiration des offres de liste d’attente, le journal et les documents. Ici, l’association travaille en Europe Zurich. Changer ce paramètre adapte les instants d’envoi sans déplacer les heures affichées sur les créneaux.
 
-De retour aux Premiers pas, les réglages facultatifs sont maintenant cochés. Créons la Fête du parc depuis une page blanche. Saisissez un titre clair, le lieu, puis les dates de début et de fin. À la validation, l’événement naît en brouillon : les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.
+De retour aux Premiers pas, les paramètres facultatifs sont maintenant cochés. Créons la Fête du parc depuis une page blanche. Saisissez un titre clair, le lieu, puis les dates de début et de fin. À la validation, l’événement naît en brouillon : les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.
 
 La prochaine étape consiste à rendre le planning concret. Ajoutez un créneau, choisissez le poste Accueil, puis indiquez neuf heures, midi et trois places. Après validation, le créneau apparaît réellement dans le planning, regroupé sous son poste. Vous pouvez encore le modifier ou l’annuler avant toute publication.
 

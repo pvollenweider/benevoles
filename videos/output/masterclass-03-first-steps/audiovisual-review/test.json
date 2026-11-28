@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:35:53.239Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "0de67532b0ecb02edbd4104c17baafbd10b7c15fab0161ad24bd4cd38fa260d6",
+  "clipSha256": "c9cd68a61bc245ec6646fea135f44ec240ee0be252db9fb12b938c94b7c50c95",
+  "scene": "test",
+  "review": {
+    "heardOpening": "Dernière étape, vivre le parcours",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Sélectionnez Accueil",
+        "visibleSeconds": 4.2,
+        "visible": "Clic sur le créneau Accueil puis sur Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "complétez les coordonnées fictives",
+        "visibleSeconds": 7,
+        "visible": "Saisie du prénom, nom et email fictifs dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "acceptez la convention et confirmez.",
+        "visibleSeconds": 10.3,
+        "visible": "Coche de la case de convention et confirmation du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "le message de succès",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la page de confirmation Demande d'inscription reçue",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine fluide, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

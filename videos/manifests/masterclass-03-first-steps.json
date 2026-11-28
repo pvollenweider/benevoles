@@ -80,5 +80,6 @@
       "fallbackDurationMs": 21000
     }
   ],
-  "continuousPauseTags": false
+  "continuousPauseTags": false,
+  "posterAtMs": 15000
 }

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:35:20.551Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "cc7909cf4cde244c131c29c37b3e5c65445355063718102075156fd5c1e1f6ff",
+  "clipSha256": "ccec2b8bba080403edb1182f6773ca8fc07922d8c9b4a87a2636a97a675f1af7",
+  "scene": "event",
+  "review": {
+    "heardOpening": "De retour aux Premiers pas, les paramètres facultatifs",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "les paramètres facultatifs sont maintenant cochés",
+        "visibleSeconds": 0,
+        "visible": "Page Premiers pas affichée avec les deux étapes facultatives cochées de vert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Créons la Fête du parc depuis une page blanche",
+        "visibleSeconds": 5.3,
+        "visible": "Clic sur la tuile Page blanche dans le formulaire Nouvel événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Saisissez un titre clair, le lieu, puis les dates de début et de fin",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie de Fête du parc, du lieu Kiosque du parc et des dates de début et fin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "À la validation, l'événement naît en brouillon",
+        "visibleSeconds": 13.6,
+        "visible": "Page de l'événement affichée avec le statut Brouillon à côté du titre Fête du parc",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisation naturelle avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

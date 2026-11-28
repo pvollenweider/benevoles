@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:35:10.533Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "8cd9736c29cb0583ac60ba405f2d4b332be902b73eb3e90e146eb1b3b5637391",
+  "clipSha256": "a714d3c09f625d9e19994a90403ce515d416430b910d5d180c02062879bf1dc2",
+  "scene": "timezone",
+  "review": {
+    "heardOpening": "Vérifiez ensuite le fuseau horaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Vérifiez ensuite le fuseau horaire",
+        "visibleSeconds": 0,
+        "visible": "Section Fuseau horaire visible avec le champ de sélection et le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "l’association travaille en Europe Zurich",
+        "visibleSeconds": 2.8,
+        "visible": "Option Europe/Zurich sélectionnée dans la liste déroulante",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Changer ce paramètre adapte les instants d’envoi",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur Enregistrer et apparition du message Fuseau horaire enregistré : Europe/Zurich",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible, accompagnée d'un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

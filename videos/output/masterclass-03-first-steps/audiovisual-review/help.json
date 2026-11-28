@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:36:10.339Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "6521349d9a764e799bde58d2131a4dd7b5f3f0bee6cb676eb40e09bfd137ca66",
+  "clipSha256": "7462b6dae1ffe44136be4ee240024d768f99fa84333332a492a6a9218cbb8fd6",
+  "scene": "help",
+  "review": {
+    "heardOpening": "Besoin d’aide ? Aide ouvre le guide organisateur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "Aide ouvre le guide organisateur dans un nouvel onglet.",
+        "visibleSeconds": 2.5,
+        "visible": "Ouverture de la page Guide organisateur dans un nouvel onglet.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Retrouvons Premiers pas.",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur Premiers pas et chargement de la section correspondante.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Voir la vidéo ouvre le lecteur directement dans la documentation",
+        "visibleSeconds": 7,
+        "visible": "Clic sur le bouton Voir la vidéo et déploiement du lecteur vidéo.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "La transcription reste consultable juste dessous.",
+        "visibleSeconds": 19,
+        "visible": "Défilement vers le bas affichant la section Transcription sous la vidéo.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23,
+        "spoken": "ou replier le lecteur pour continuer votre lecture.",
+        "visibleSeconds": 23.5,
+        "visible": "Clic pour replier le lecteur vidéo qui disparaît de la page.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
