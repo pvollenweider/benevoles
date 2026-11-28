@@ -108,10 +108,9 @@ export async function recordRecurringPresentation(options: Options) {
     await go(`${eventPath}/edit`)
     const registrations = page.getByRole("checkbox", { name: "Inscriptions ouvertes" })
     if (!(await registrations.isChecked())) await tap(page, registrations)
-    await page.waitForTimeout(1_000)
+    await page.waitForTimeout(250)
     const slug = await page.evaluate(async (path) => (await (await fetch(`/api${path}`)).json()).slug as string, eventPath)
     publicUrl = `https://${ORG_SLUG}.benevol.app/${slug}`
-    await go(`${eventPath}/shifts`)
   })
 
   // Sarah signs up for three Saturdays, in one go.
@@ -144,7 +143,7 @@ export async function recordRecurringPresentation(options: Options) {
   await scene("r-mypage", async at => {
     await at("Sur sa page Mes inscriptions")
     await page.goto(await myRegistrationsLink(page)); await settleDom(page)
-    await heading("Mes inscriptions").waitFor()
+    await heading("Toutes mes inscriptions").waitFor()
     await at("Un rappel part avant chaque permanence")
     await page.getByRole("heading", { name: "Mon calendrier" }).first().scrollIntoViewIfNeeded()
   })
