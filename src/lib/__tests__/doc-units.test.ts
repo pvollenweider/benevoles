@@ -179,8 +179,8 @@ describe("docUnitProblems", () => {
     expect(docUnitProblems([unit({ slug: "a", summary: SUMMARY }), unit({ slug: "b", summary: SUMMARY })])).toEqual(["b: same summary as a"])
   })
 
-  it("allows one video per unit at most, and no « · » in a title", () => {
-    expect(docUnitProblems([unit({ slug: "a", body: "\n<!-- video: A -->\n\nx\n\n<!-- video: B -->\n" })])).toEqual(["a: one video at most per unit"])
+  it("allows several videos per unit, and no « · » in a title", () => {
+    expect(docUnitProblems([unit({ slug: "a", body: "\n<!-- video: A -->\n\nx\n\n<!-- video: B -->\n" })])).toEqual([])
     expect(docUnitProblems([unit({ slug: "a", title: "Un · deux" })])).toEqual(["a: no « · » or em dash in the title"])
   })
 

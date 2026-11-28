@@ -1553,3 +1553,5 @@ Une fois le premier secteur enregistré, la carte **Secteurs** des informations 
 **ACCESSIBILITY_KEYBOARD_DISPLAY — NOT READY, non publiée.** L'autorisation Accessibilité macOS est refusée au processus de capture ; les inserts Safari et VoiceOver requis ne peuvent pas être vérifiés. [Preuve](evidence/batch44/accessibility-keyboard-display/native-preflight.txt).
 
 **ORG_EMAIL_SETTINGS — READY, publiée, révision 7.** Le texte d'aide du résumé quotidien et de l'alerte immédiate est à jour. [Revue](evidence/batch44/org-email-settings/review.md).
+
+- **EVENT_VISIBILITY_REGISTRATION_WINDOW**, lot 44 phase C : prise 2 non retenue ; le menu natif n'apparaît pas dans la capture et la sélection Archivé suit sa mention. Voir [la revue](evidence/batch44/event-visibility-registration-window/review.md).
