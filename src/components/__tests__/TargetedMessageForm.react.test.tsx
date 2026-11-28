@@ -173,8 +173,11 @@ describe("TargetedMessageForm", () => {
     await screen.findByRole("dialog", { name: "Confirmer l'envoi" })
     fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"))
     fireEvent.click(screen.getByRole("button", { name: "Confirmer l'envoi" }))
-    expect(await screen.findByRole("alert")).toHaveTextContent("l'envoi n'est pas confirmé. Regardez « Messages envoyés » avant de réessayer")
+    const alert = await screen.findByRole("alert")
+    expect(alert).toHaveTextContent("l'envoi n'est pas confirmé. Regardez « Messages envoyés » avant de réessayer")
     expect(screen.queryByRole("dialog", { name: "Confirmer l'envoi" })).not.toBeInTheDocument()
+    // Focused, so a screen reader reads it rather than the button the dialog gives focus back to.
+    await waitFor(() => expect(alert).toHaveFocus())
   })
 
   // « Programmer l'envoi » (#1019): a date and time of the organisation's zone, checked like on

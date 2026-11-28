@@ -24,7 +24,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
-- **Écrire aux bénévoles** : si le serveur ne répond pas, l'aperçu le dit au lieu de laisser un bouton sans effet. À l'envoi, le message indique que l'envoi n'est pas confirmé et renvoie à « Messages envoyés » avant tout nouvel essai, au lieu d'un bouton bloqué.
+- **Écrire aux bénévoles** : si le serveur ne répond pas, l'aperçu le dit au lieu de laisser un bouton sans effet. À l'envoi, le message indique que l'envoi n'est pas confirmé et renvoie à « Messages envoyés » avant tout nouvel essai, au lieu d'un bouton bloqué ; ce message, comme un refus du serveur, prend le focus pour être lu par les lecteurs d'écran.
 - **Filtres par tag** (membres, disponibilités, invitations) : les tags suivent l'ordre alphabétique français, accents et majuscules compris ; « Électricien » ne passe plus après « zone ».
 
 ## [2.9.0] — 2026-11-27

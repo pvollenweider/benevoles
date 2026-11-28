@@ -216,9 +216,16 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
     }).catch(() => null)
     const d = res ? await res.json().catch(() => ({})) : {}
     setSending(false)
+    if (!res || !res.ok) {
+      // No answer: the message may have left anyway, so the text points to the list before a retry.
+      const text = typeof d?.error === "string" ? d.error : res ? "Erreur lors de l'envoi." : SEND_NO_ANSWER
+      // As in schedule(): the dialog closes and the error takes the focus, so it is read instead of
+      // being cut off by the focus going back to the opener.
+      flushSync(() => { setConfirming(false); setError(text) })
+      errorRef.current?.focus()
+      return
+    }
     setConfirming(false)
-    // No answer: the message may have left anyway, so the text points to the list before a retry.
-    if (!res || !res.ok) { setError(typeof d?.error === "string" ? d.error : res ? "Erreur lors de l'envoi." : SEND_NO_ANSWER); return }
     setSent({ ...d, pushRequested: push })
     // The « Messages envoyés » list below (#467) shows the new message; client state is kept.
     router.refresh()
