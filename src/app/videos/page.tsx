@@ -7,7 +7,9 @@ import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { serializeJsonLd, videoLibraryJsonLd, videoLibraryMetadata } from "@/lib/video-seo"
 import { videoSeoContext } from "@/lib/video-seo-context"
 import VideoGallery from "@/components/videos/VideoGallery"
+import Link from "next/link"
 import { SITE_NAME } from "@/lib/seo-metadata"
+import { isHostedService } from "@/lib/site"
 
 // Rendered per request: whether the videos can be played (and so indexed) depends on
 // VIDEO_MEDIA_BASE_URL, and the canonical URL on NEXT_PUBLIC_APP_URL, both only set in the running
@@ -32,6 +34,14 @@ export default function VideosPage() {
         <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
           {videos.length} tutoriel{videos.length > 1 ? "s" : ""} vidéo pour prendre en main {SITE_NAME}, par thème et par public.
         </p>
+        {/* The training path (/se-former) is a page of the hosted service only. */}
+        {isHostedService() && (
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Pour débuter, le parcours{" "}
+            <Link href="/se-former" className="text-blue-600 dark:text-blue-400 underline rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">Se former en une heure</Link>
+            {" "}enchaîne treize de ces vidéos dans l&apos;ordre d&apos;une première activité.
+          </p>
+        )}
       </div>
       <VideoGallery videos={videos.map(toGalleryVideo)} />
     </div>

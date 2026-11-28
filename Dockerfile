@@ -99,6 +99,8 @@ COPY --from=builder /app/content/pages/MANIFESTE.md ./content/pages/MANIFESTE.md
 COPY --from=builder /app/content/pages/CITER.md ./content/pages/CITER.md
 # Logiciel libre (#1326).
 COPY --from=builder /app/content/pages/LOGICIEL-LIBRE-BENEVOLES.md ./content/pages/LOGICIEL-LIBRE-BENEVOLES.md
+# Se former en une heure (2026-11-28).
+COPY --from=builder /app/content/pages/SE-FORMER.md ./content/pages/SE-FORMER.md
 # Continuité du service (#1357).
 COPY --from=builder /app/content/pages/CONTINUITE-DU-SERVICE.md ./content/pages/CONTINUITE-DU-SERVICE.md
 COPY --from=builder /app/content/pages/FAQ-ACCUEIL.md ./content/pages/FAQ-ACCUEIL.md

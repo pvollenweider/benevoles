@@ -216,6 +216,20 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // The training path (2026-11-28): thirteen published videos in the order of a first activity,
+    // under an hour, for an organisation that wants to train its team without a live session.
+    path: "/se-former",
+    title: "Se former en une heure",
+    summary: `Treize vidéos dans l'ordre d'une première activité : mise en place, planning, inscriptions, messages, jour J et bilan, en moins d'une heure.`,
+    metaTitle: `Se former à ${SITE_NAME} en une heure`,
+    metaDescription: `Treize vidéos sous-titrées, dans l'ordre d'une première activité : mise en place, planning, inscriptions, messages, jour J et bilan.`,
+    source: "content/pages/SE-FORMER.md",
+    priority: 0.5,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The service continuity page (#1357): backups and restore, the paper fallback for the day,
     // the way out (exports, AGPL, self-hosting), the limits of the hosted service and the notice
     // before a final shutdown, with a visible FAQ that is also its FAQPage structured data. A trust

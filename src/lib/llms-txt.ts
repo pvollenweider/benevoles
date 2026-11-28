@@ -184,7 +184,7 @@ export function portableMarkdown(markdown: string, base: string, pagePath: strin
 const link = (title: string, url: string, note?: string) => `- [${title}](${url})${note ? `: ${note}` : ""}`
 
 /** Pages of the hosted service listed after the price: the manifesto (#1259), the citation page (#1323), the free software page (#1326), the service continuity page (#1357), then practical pages (#871, #1258). */
-export const RESOURCE_PATHS = ["/manifeste", "/citer", "/logiciel-libre-benevoles", "/continuite-du-service", "/tableur-ou-outil-dedie", "/ressources"]
+export const RESOURCE_PATHS = ["/manifeste", "/citer", "/logiciel-libre-benevoles", "/continuite-du-service", "/se-former", "/tableur-ou-outil-dedie", "/ressources"]
 
 /**
  * The identity block of /llms.txt and /llms-full.txt (#1323), from CITER.md: the exact name, the
