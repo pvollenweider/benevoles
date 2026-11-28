@@ -34,6 +34,10 @@ type Props = {
 
 type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; declinedExcluded?: number; audience: string; preview: { subject: string; html: string } | null; addressesToVerify?: number }
 
+/** No answer from the server (network down, request cut): shown instead of a button that does nothing. */
+const PREVIEW_NO_ANSWER = "Le serveur n'a pas répondu. Vérifiez votre connexion et réessayez."
+const SEND_NO_ANSWER = "Le serveur n'a pas répondu : l'envoi n'est pas confirmé. Regardez « Messages envoyés » avant de réessayer, pour ne pas l'envoyer deux fois."
+
 /**
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
  * number of people written to (#396). Sending goes through the outbox on the server.
@@ -163,9 +167,10 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ audience, subject, message, dryRun: true }),
-    })
-    const d = await res.json()
-    if (!res.ok) { setError(typeof d?.error === "string" ? d.error : "Erreur lors de l'aperçu."); return }
+    }).catch(() => null)
+    // No answer, or an answer that is not JSON (a proxy error page): said, never a silent button.
+    const d = res ? await res.json().catch(() => ({})) : {}
+    if (!res || !res.ok) { setError(typeof d?.error === "string" ? d.error : res ? "Erreur lors de l'aperçu." : PREVIEW_NO_ANSWER); return }
     setDryFor({ key: audienceKey, data: d })
     setShowPreview(true)
   }
@@ -208,11 +213,12 @@ export default function TargetedMessageForm({ eventId, roles, shifts, sectors = 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ audience, subject, message, push }),
-    })
-    const d = await res.json()
+    }).catch(() => null)
+    const d = res ? await res.json().catch(() => ({})) : {}
     setSending(false)
     setConfirming(false)
-    if (!res.ok) { setError(typeof d?.error === "string" ? d.error : "Erreur lors de l'envoi."); return }
+    // No answer: the message may have left anyway, so the text points to the list before a retry.
+    if (!res || !res.ok) { setError(typeof d?.error === "string" ? d.error : res ? "Erreur lors de l'envoi." : SEND_NO_ANSWER); return }
     setSent({ ...d, pushRequested: push })
     // The « Messages envoyés » list below (#467) shows the new message; client state is kept.
     router.refresh()

@@ -4,6 +4,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import InvitationsManager from "@/components/admin/InvitationsManager"
 import HelpLink from "@/components/admin/HelpLink"
 import { REMIND_COOLDOWN_MS, emailedWithin } from "@/lib/invitation-sending"
+import { sortTags } from "@/lib/sort-tags"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Invitations" }
@@ -81,7 +82,7 @@ export default async function EventInvitationsPage({
           email: v.email,
           tags: v.tags,
         }))}
-        allTags={Array.from(allTags).sort()}
+        allTags={sortTags(allTags)}
         invites={invites.map((i) => ({
           id: i.id,
           sentAt: i.sentAt.toISOString(),

@@ -150,6 +150,33 @@ describe("TargetedMessageForm", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Trop de messages envoyés cette heure.")
   })
 
+  // No answer from the server (SonarQube S9383): the request used to reject unhandled and the
+  // button did nothing, or stayed busy for good after « Confirmer l'envoi ».
+  it("says so when the preview gets no answer, instead of a silent button", async () => {
+    setup()
+    await screen.findByText(/12 personnes/)
+    fireEvent.change(screen.getByLabelText("Objet *"), { target: { value: "x" } })
+    fireEvent.change(screen.getByLabelText("Message *"), { target: { value: "y" } })
+    fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"))
+    fireEvent.click(screen.getByRole("button", { name: "Voir l'aperçu et envoyer" }))
+    expect(await screen.findByRole("alert")).toHaveTextContent("Le serveur n'a pas répondu. Vérifiez votre connexion et réessayez.")
+  })
+
+  it("says the send is not confirmed when it gets no answer, and points to « Messages envoyés »", async () => {
+    setup({ kind: "role", roleName: "Bar" })
+    await screen.findByText("3 personnes recevront ce message.")
+    fireEvent.change(screen.getByLabelText("Objet *"), { target: { value: "Parking" } })
+    fireEvent.change(screen.getByLabelText("Message *"), { target: { value: "Entrée par la rue Basse." } })
+    fireEvent.click(screen.getByRole("button", { name: "Voir l'aperçu et envoyer" }))
+    await screen.findByRole("dialog", { name: "Aperçu de l'email" })
+    fireEvent.click(screen.getByRole("button", { name: "Envoyer à 3 personnes" }))
+    await screen.findByRole("dialog", { name: "Confirmer l'envoi" })
+    fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"))
+    fireEvent.click(screen.getByRole("button", { name: "Confirmer l'envoi" }))
+    expect(await screen.findByRole("alert")).toHaveTextContent("l'envoi n'est pas confirmé. Regardez « Messages envoyés » avant de réessayer")
+    expect(screen.queryByRole("dialog", { name: "Confirmer l'envoi" })).not.toBeInTheDocument()
+  })
+
   // « Programmer l'envoi » (#1019): a date and time of the organisation's zone, checked like on
   // the server, a preview and a confirmation that say when and that the count is recalculated.
   describe("scheduled send", () => {

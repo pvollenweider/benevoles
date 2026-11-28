@@ -9,6 +9,7 @@ import HelpLink from "@/components/admin/HelpLink"
 import AvailabilityManager from "@/components/admin/AvailabilityManager"
 import { loadAvailabilityOverview } from "@/lib/event-availability-server"
 import { answersOpen, organiserDeadlineSentence } from "@/lib/event-availability-text"
+import { sortTags } from "@/lib/sort-tags"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Disponibilités" }
@@ -30,7 +31,7 @@ export default async function EventAvailabilityPage({ params }: { params: Promis
   ])
   if (!overview) notFound()
   const open = answersOpen(event.availabilityDeadline)
-  const allTags = [...new Set(members.flatMap((m) => m.tags))].sort()
+  const allTags = sortTags(members.flatMap((m) => m.tags))
 
   return (
     <div className="space-y-5">

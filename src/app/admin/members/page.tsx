@@ -16,6 +16,7 @@ import HelpLink from "@/components/admin/HelpLink"
 import InviteToEventMenu from "@/components/admin/InviteToEventMenu"
 import { eventDatesLabel } from "@/lib/event-nav"
 import { inviteTargetsWhere } from "@/lib/invite-targets"
+import { sortTags } from "@/lib/sort-tags"
 
 export const dynamic = "force-dynamic"
 
@@ -57,7 +58,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
     db.volunteer.findMany({ select: { tags: true } }).then((rows) => {
       const set = new Set<string>()
       for (const r of rows) for (const t of r.tags) set.add(t)
-      return Array.from(set).sort()
+      return sortTags(set)
     }),
     db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } }),
   ])
