@@ -19,7 +19,7 @@ L'événement porte la période : pour une saison de septembre à juin, donnez �
 
 ## Partir d'un exemple
 
-Quatre modèles d'activité régulière créent un événement de 13 semaines déjà rempli de permanences, à ajuster ensuite (choisissez-les dans **Comment commencer ?** en créant un événement) :
+Quatre modèles d'activité régulière créent un événement d'un an déjà rempli de permanences, à ajuster ensuite (choisissez-les dans **Comment commencer ?** en créant un événement) :
 
 | Modèle | Permanences |
 |--------|-------------|

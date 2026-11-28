@@ -48,8 +48,12 @@ export type EventTemplate = {
   recurrences?: TemplateRecurrence[]
 }
 
-/** A recurring template runs this long by default; the organizer extends the event afterwards. */
-export const RECURRING_TEMPLATE_DAYS = 91
+/**
+ * A recurring template runs one year (52 weeks) by default: a weekly or fortnightly activity
+ * usually runs all year, and a season long enough gives the public page its month buttons.
+ * The organizer shortens or extends the event afterwards.
+ */
+export const RECURRING_TEMPLATE_DAYS = 364
 
 const span = (roleName: string, day: number, slots: [string, string][], capacity: number, label?: string): TemplateShift[] =>
   slots.map(([startTime, endTime]) => ({ roleName, label, day, startTime, endTime, capacity }))

@@ -19,6 +19,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Vidéo « benevol.app en deux minutes »** : sources prêtes (recorder sur le jeu de démonstration, narration validée), pas encore tournée. <!-- interne -->
 - **Vidéo « Des bénévoles chaque semaine, sans refaire le planning »** : sources prêtes (jeu de données d'un repair café, recorder, narration à deux voix validée), pas encore tournée. <!-- interne -->
 
+### Modifié
+
+- **Modèles d'activité régulière** : épicerie participative, distribution alimentaire, permanence d'accueil et repair café créent maintenant un an de permanences au lieu de 13 semaines. Une activité qui tourne toute l'année n'a plus à être prolongée, et la page publique propose d'emblée un bouton par mois.
+
 ## [2.9.0] — 2026-11-27
 
 ### En bref
