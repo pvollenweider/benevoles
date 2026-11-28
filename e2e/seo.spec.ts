@@ -49,6 +49,7 @@ const PAGES: { path: string; types: string[]; ogType: string }[] = [
   { path: "/logiciel-libre-benevoles", types: ["WebPage", "BreadcrumbList", "SoftwareApplication", "FAQPage"], ogType: "website" },
   // #1357: the service continuity page, a trust page with its own FAQ.
   { path: "/continuite-du-service", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
+  { path: "/se-former", types: ["WebPage", "BreadcrumbList"], ogType: "website" },
   { path: "/doc", types: ["CollectionPage", "BreadcrumbList", "Organization"], ogType: "website" },
   { path: "/doc/revenir-sur-la-page-d-inscription", types: ["TechArticle", "BreadcrumbList", "Organization"], ogType: "article" },
   { path: "/legal/privacy", types: ["WebPage", "BreadcrumbList"], ogType: "website" },
