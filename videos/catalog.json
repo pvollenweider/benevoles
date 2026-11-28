@@ -924,6 +924,33 @@
       "level": "decouverte"
     },
     {
+      "id": "PRODUCT_PRESENTATION",
+      "manifest": "presentation-benevol-app",
+      "category": "getting-started",
+      "tags": [
+        "présentation",
+        "découverte",
+        "planning",
+        "inscription",
+        "jour-j"
+      ],
+      "published": false,
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Présentation de benevol.app",
+      "thumbnailTitle": "Vos bénévoles, sans le tableur",
+      "updatedAt": "2026-11-28",
+      "revision": 1,
+      "level": "decouverte",
+      "added": "2026-11-28"
+    },
+    {
       "id": "ADMIN_FEATURES_OVERVIEW",
       "manifest": "admin-features-tour",
       "category": "getting-started",

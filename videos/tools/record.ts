@@ -565,6 +565,9 @@ async function main() {
       if (slug === "beta-access") await beta.recordBetaAccess({ ...tools, operator: betaSessions!.operator, owner: betaSessions!.owner })
       else if (slug === "sectors") await beta.recordSectors(tools)
       else await beta.recordShiftSwaps(tools)
+    } else if (slug === "presentation-benevol-app") {
+      // The product presentation: a village fête from preparation to review, on the demo organisation.
+      await (await import("../lib/record-product-presentation")).recordProductPresentation({ page, base: baseUrl, publicUrl: `${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`, title: manifest.title, scene, tap, settle, fill: fillVisibly })
     } else if (slug === "event-signup-page-settings") {
       // The sign-up page settings: its own organisation and recorder.
       await (await import("../lib/record-signup-page-settings")).recordSignupPageSettings({ page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally })
