@@ -1,0 +1,92 @@
+{
+  "id": "RECURRING_PRESENTATION",
+  "slug": "presentation-permanences",
+  "title": "Des bénévoles chaque semaine, sans refaire le planning",
+  "description": "Un repair café ouvert un samedi sur deux : la saison créée d'un coup, l'inscription à plusieurs dates, le suivi et le rapport annuel.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "voiceStyle": "Speak with a warm, genuine smile, like telling a friend from another association how your weekly activity runs. Natural conversational French, lively but unhurried pace around 125 words per minute, clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch and warmth from beginning to end. Never sound like an advertisement, corporate, theatrical, childish or rushed.",
+  "secondVoice": {
+    "voice": "Puck",
+    "voiceStyle": "Bright, confident and friendly, a smile in the voice, like a warm radio host introducing the next part of a story. Short punchy lines with natural French rhythm, a clear lift on questions. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity and energy from beginning to end. Never shout, never sound like a hard-sell advertisement, never rush."
+  },
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "r-hook",
+      "transcript": "Votre association n'a pas un grand jour par an. Elle ouvre chaque samedi.",
+      "fallbackDurationMs": 7740,
+      "speaker": "second"
+    },
+    {
+      "id": "r-story",
+      "transcript": "Au Repair Café de Montvert, l'accueil et les réparateurs se relaient un samedi sur deux, toute l'année. Nicolas refaisait le planning chaque mois. Plus maintenant.",
+      "fallbackDurationMs": 13500
+    },
+    {
+      "id": "r-season-hook",
+      "transcript": "Une fois pour toute la saison.",
+      "fallbackDurationMs": 4380,
+      "speaker": "second"
+    },
+    {
+      "id": "r-season",
+      "transcript": "Il part du modèle Repair café. La saison se crée d'un coup, déjà remplie de permanences, et les jours fériés sont sautés tout seuls.",
+      "fallbackDurationMs": 13020
+    },
+    {
+      "id": "r-volunteers-hook",
+      "transcript": "Et les bénévoles, ils s'y retrouvent ?",
+      "fallbackDurationMs": 4860,
+      "speaker": "second"
+    },
+    {
+      "id": "r-signup",
+      "transcript": "Ils ouvrent le lien : un bouton par mois, les dates les unes sous les autres. Sarah prend trois samedis d'un coup, en une seule inscription.",
+      "fallbackDurationMs": 13980
+    },
+    {
+      "id": "r-mypage",
+      "transcript": "Sur sa page Mes inscriptions, elle retrouve toutes ses dates, et son agenda se met à jour tout seul. Un rappel part avant chaque permanence.",
+      "fallbackDurationMs": 13500
+    },
+    {
+      "id": "r-year-hook",
+      "transcript": "Et en fin d'année ?",
+      "fallbackDurationMs": 3900,
+      "speaker": "second"
+    },
+    {
+      "id": "r-year",
+      "transcript": "Nicolas voit tout de suite les samedis qui manquent de monde. Et il exporte les heures de chacun pour le rapport annuel.",
+      "fallbackDurationMs": 12060
+    },
+    {
+      "id": "r-cta",
+      "transcript": "Un repair café, une épicerie, un café associatif ? Décrivez votre permanence une fois. Essayez benevol.app : demandez votre espace sur benevol.app.",
+      "fallbackDurationMs": 12060,
+      "speaker": "second"
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, un repair café qui ouvre un samedi sur deux crée sa saison en une fois, et ses bénévoles s'inscrivent pour plusieurs dates.",
+    "steps": [
+      "Créez la saison à partir d'un modèle d'activité régulière : les permanences sont créées, jours fériés exclus.",
+      "Publiez et partagez le lien : la page montre un bouton par mois.",
+      "Les bénévoles choisissent plusieurs dates en une seule inscription.",
+      "Chacun retrouve ses dates sur sa page Mes inscriptions, et peut y abonner son agenda.",
+      "Suivez les dates qui manquent de monde, et exportez les heures pour le rapport annuel."
+    ],
+    "remember": [
+      "Quatre modèles existent : épicerie participative, distribution alimentaire, permanence d'accueil et repair café.",
+      "Un rappel part avant chaque permanence.",
+      "Pour l'essayer, demandez votre espace sur benevol.app."
+    ]
+  }
+}

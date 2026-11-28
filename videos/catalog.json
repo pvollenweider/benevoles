@@ -924,6 +924,33 @@
       "level": "decouverte"
     },
     {
+      "id": "RECURRING_PRESENTATION",
+      "manifest": "presentation-permanences",
+      "category": "getting-started",
+      "tags": [
+        "présentation",
+        "permanences",
+        "récurrence",
+        "saison",
+        "repair-café"
+      ],
+      "published": false,
+      "seedScenario": "repair-cafe-presentation",
+      "themes": [
+        "planning-creneaux",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Permanences toute l'année",
+      "thumbnailTitle": "Une permanence, toute la saison",
+      "updatedAt": "2026-11-28",
+      "revision": 1,
+      "level": "decouverte",
+      "added": "2026-11-28"
+    },
+    {
       "id": "PRODUCT_PRESENTATION",
       "manifest": "presentation-benevol-app",
       "category": "getting-started",

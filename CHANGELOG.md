@@ -17,6 +17,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Outils vidéo** : le lanceur local et les deux revues (audiovisuelle et son final) acceptent explicitement la vidéo des réglages de la page d'inscription, avec la vérification de son jeu de données fictif, et EVENT_VISIBILITY_REGISTRATION_WINDOW. <!-- interne -->
 - **Outils vidéo, deux voix** : une vidéo peut déclarer une seconde voix (`secondVoice`) et lui attribuer des segments ; chaque voix est générée en une prise continue, prouvée et validée séparément, et la relecture audiovisuelle sait que l'alternance est voulue. Les vidéos à une voix ne changent pas. <!-- interne -->
 - **Vidéo « benevol.app en deux minutes »** : sources prêtes (recorder sur le jeu de démonstration, narration validée), pas encore tournée. <!-- interne -->
+- **Vidéo « Des bénévoles chaque semaine, sans refaire le planning »** : sources prêtes (jeu de données d'un repair café, recorder, narration à deux voix validée), pas encore tournée. <!-- interne -->
 
 ## [2.9.0] — 2026-11-27
 
