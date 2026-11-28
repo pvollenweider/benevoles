@@ -7,6 +7,7 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
 import { audioDir, loadManifest, videoDir, type AudioMetadata } from "../lib/manifest"
+import { takeGenerationSha256, voiceGroups } from "../lib/narration-generation"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
@@ -126,69 +127,77 @@ async function main() {
   }
 
   if (manifest.continuousNarration) {
-    const master = path.join(dir, "continuous-narration.wav")
     if (manifest.continuousPauseTags === true) throw new Error("Inline pause tags can be spoken aloud; use plain paragraph breaks")
-    const transcript = manifest.segments.map((segment) => segment.transcript).join("\n\n")
-    const generationSha256 = createHash("sha256")
-      .update(JSON.stringify({ transcript, style: manifest.voiceStyle, model, voice, promptVersion: 3 }))
-      .digest("hex")
-    const files = manifest.segments.map((segment) => path.join(dir, `${segment.id}.wav`))
-    const cached = !force && manifest.segments.every((segment, index) =>
-      previous?.segments[segment.id]?.file === path.relative(videoDir(manifest.slug), files[index])
-      && previous.segments[segment.id].generationSha256 === generationSha256)
-    if (resplit) {
-      await splitContinuousNarration(master, files, manifest.segments.map((segment) => segment.transcript), await durationMs(master))
-      console.log("✓ continuous narration re-split")
-    } else if (!cached) {
-      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-        body: JSON.stringify({
-          model,
-          input: [{
-            type: "user_input",
-            content: [{
-              type: "text",
-              text: transcript,
-              annotations: [{
-                type: "speech_metadata",
-                // Gemini 3.8 anchors identity on the selected voice; long identity directives
-                // can increase drift. Keep the requested delivery in metadata, not the text.
-                style: manifest.voiceStyle,
+    // One continuous take per voice (videos/lib/narration-generation.ts): a one-voice video has a
+    // single take, as always; a two-voice video has one take per voice, each cut into its segments.
+    const twoVoices = !!manifest.secondVoice
+    if (twoVoices) metadata.secondVoice = manifest.secondVoice!.voice
+    for (const group of voiceGroups(manifest)) {
+      const groupVoice = group.speaker === "main" ? voice : group.voice
+      const master = path.join(dir, group.speaker === "main" ? "continuous-narration.wav" : "continuous-narration-second.wav")
+      const transcript = group.segments.map((segment) => segment.transcript).join("\n\n")
+      const generationSha256 = takeGenerationSha256({ ...group, voice: groupVoice }, model, twoVoices)
+      const files = group.segments.map((segment) => path.join(dir, `${segment.id}.wav`))
+      const cached = !force && group.segments.every((segment, index) =>
+        previous?.segments[segment.id]?.file === path.relative(videoDir(manifest.slug), files[index])
+        && previous.segments[segment.id].generationSha256 === generationSha256)
+      const label = twoVoices ? `continuous narration (${group.speaker} voice, ${groupVoice})` : "continuous narration"
+      if (resplit) {
+        await splitContinuousNarration(master, files, group.segments.map((segment) => segment.transcript), await durationMs(master))
+        console.log(`✓ ${label} re-split`)
+      } else if (!cached) {
+        const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+          body: JSON.stringify({
+            model,
+            input: [{
+              type: "user_input",
+              content: [{
+                type: "text",
+                text: transcript,
+                annotations: [{
+                  type: "speech_metadata",
+                  // Gemini 3.8 anchors identity on the selected voice; long identity directives
+                  // can increase drift. Keep the requested delivery in metadata, not the text.
+                  style: group.voiceStyle,
+                }],
               }],
             }],
-          }],
-          response_format: { type: "audio" },
-          generation_config: { speech_config: [{ voice }] },
-        }),
-      })
-      const body = await response.json().catch(() => null) as unknown
-      if (!response.ok) {
-        const detail = JSON.stringify(body)?.slice(0, 500) ?? response.statusText
-        throw new Error(`Gemini TTS rejected the continuous narration (${response.status}): ${detail}`)
+            response_format: { type: "audio" },
+            generation_config: { speech_config: [{ voice: groupVoice }] },
+          }),
+        })
+        const body = await response.json().catch(() => null) as unknown
+        if (!response.ok) {
+          const detail = JSON.stringify(body)?.slice(0, 500) ?? response.statusText
+          throw new Error(`Gemini TTS rejected the ${label} (${response.status}): ${detail}`)
+        }
+        const responseShape = body as { status?: string; usage?: unknown; steps?: { type?: string; content?: { type?: string; data?: string }[] }[] }
+        await writeFile(path.join(videoDir(manifest.slug), group.speaker === "main" ? "tts-response-summary.json" : "tts-response-summary-second.json"), JSON.stringify({
+          receivedAt: new Date().toISOString(), status: responseShape.status, usage: responseShape.usage,
+          steps: responseShape.steps?.map(s => ({ type: s.type, content: s.content?.map(c => ({ type: c.type, encodedLength: c.data?.length })) })),
+        }, null, 2))
+        const data = audioData(body)
+        if (!data) throw new Error(`Gemini TTS returned no audio for the ${label}`)
+        const temp = `${master}.tmp`
+        await writeFile(temp, Buffer.from(data, "base64"))
+        await rename(temp, master)
+        await splitContinuousNarration(master, files, group.segments.map((segment) => segment.transcript), await durationMs(master))
+        console.log(`✓ ${label}`)
       }
-      const responseShape = body as { status?: string; usage?: unknown; steps?: { type?: string; content?: { type?: string; data?: string }[] }[] }
-      await writeFile(path.join(videoDir(manifest.slug), "tts-response-summary.json"), JSON.stringify({
-        receivedAt: new Date().toISOString(), status: responseShape.status, usage: responseShape.usage,
-        steps: responseShape.steps?.map(s => ({ type: s.type, content: s.content?.map(c => ({ type: c.type, encodedLength: c.data?.length })) })),
-      }, null, 2))
-      const data = audioData(body)
-      if (!data) throw new Error("Gemini TTS returned no audio for the continuous narration")
-      const temp = `${master}.tmp`
-      await writeFile(temp, Buffer.from(data, "base64"))
-      await rename(temp, master)
-      await splitContinuousNarration(master, files, manifest.segments.map((segment) => segment.transcript), await durationMs(master))
-      console.log("✓ continuous narration")
-    }
-    for (let index = 0; index < manifest.segments.length; index++) {
-      const segment = manifest.segments[index]
-      const file = files[index]
-      metadata.segments[segment.id] = {
-        file: path.relative(videoDir(manifest.slug), file),
-        durationMs: await durationMs(file),
-        generationSha256,
+      for (let index = 0; index < group.segments.length; index++) {
+        const segment = group.segments[index]
+        const file = files[index]
+        metadata.segments[segment.id] = {
+          file: path.relative(videoDir(manifest.slug), file),
+          durationMs: await durationMs(file),
+          generationSha256,
+        }
       }
     }
+    // The manifest's order, whatever the voice: tools read the segments in this order.
+    metadata.segments = Object.fromEntries(manifest.segments.map((segment) => [segment.id, metadata.segments[segment.id]]))
     await writeFile(metadataFile, `${JSON.stringify(metadata, null, 2)}\n`)
     console.log(`Audio ready in ${dir}`)
     return
