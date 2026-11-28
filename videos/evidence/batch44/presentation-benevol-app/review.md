@@ -1,5 +1,5 @@
-# PRODUCT_PRESENTATION — NOT READY
+# PRODUCT_PRESENTATION — READY, take 3
 
-- Rehearsal exposed loss of the organizer session after Léa's registration; the recorder restores the real organizer cookies. Take 1 stopped because a chapter card exceeded its short narration; its minimum display wait was reduced.
-- Take 2 completed and was assembled. The two voice masters were split at measured silences and independently audited against the unchanged manifest. Full final-audio ASR completed. Validation passed; music measured 14.7–18.7 LU below the voice.
-- The final audiovisual review flagged two unresolved issues: the summary heading is visible but the volunteer and hour statistics described in the narration are not; the call-to-action card disappears before the matching words while the badge form remains visible. Frame review confirms the relevant screens. The two permitted takes are exhausted, so this render is not published.
+- Rehearsal passed on the verified current main build after a fresh demo seed. The recorder restores the organizer session after Léa’s real signup; the short chapter-card wait was corrected after take 1.
+- Take 3 uses the unchanged, independently audited Kore and Puck masters. The recorder scrolls the summary figures into view and opens the real request page before holding each CTA card on its sentence. The final audiovisual audit reports no flags in 11 scenes. The independent full soundtrack transcript matches the manifest (the recognizer renders the spoken domain phonetically). The contact sheet and timeline show the summary figures and both CTA cards, with fixture identities and no technical screen.
+- Validation passed; music is 14.7–18.5 LU below the voice. Final MP4 SHA-256: `679f55b4a024599a81065a169adf52026d85a1f8df1e12568912221953d74b81`.

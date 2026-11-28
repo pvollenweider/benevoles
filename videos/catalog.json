@@ -961,7 +961,7 @@
         "inscription",
         "jour-j"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie",

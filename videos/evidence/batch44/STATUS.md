@@ -32,3 +32,5 @@
 - PRODUCT_PRESENTATION — NOT READY: take 1 stopped on an overlong card; take 2 passed validation and audio checks but audiovisual review flagged unseen summary statistics and an early CTA card. No publication.
 
 - RECURRING_PRESENTATION — NOT READY: rehearsal reaches the real public page, but the 91-day template yields seven dates and no month buttons (minimum eight); the approved story describes a year. No narrated take or publication.
+
+- PRODUCT_PRESENTATION — READY: take 3 passed audiovisual, full-audio, frame/timeline, music and validation checks; narration unchanged.
