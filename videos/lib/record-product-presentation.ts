@@ -46,7 +46,7 @@ export async function recordProductPresentation(options: Options) {
 
   // A hook of the second voice: a full-screen card while it speaks, then the story goes on.
   const card = (id: string, cardTitle: string, description: string) => scene(id, async () => {
-    await page.screencast.showChapter(cardTitle, { description, duration: 2_200 })
+    await page.screencast.showChapter(cardTitle, { description, duration: 600 })
   })
 
   await go(event)
@@ -71,6 +71,7 @@ export async function recordProductPresentation(options: Options) {
   })
 
   // Léa signs up through the shared link, for real.
+  const organizerCookies = await page.context().cookies()
   await card("p-volunteers-hook", "Un lien, c'est tout", "Les bénévoles choisissent eux-mêmes leurs créneaux")
   await scene("p-signup", async at => {
     await at("Élodie partage un seul lien")
@@ -101,6 +102,7 @@ export async function recordProductPresentation(options: Options) {
   await card("p-free", "Gratuit", "Et sans compte pour les bénévoles")
 
   // Following: where people are missing, then a message from a template.
+  await page.context().addCookies(organizerCookies)
   await scene("p-follow", async at => {
     await at("voit tout de suite où il manque du monde")
     await go(`${event}/staffing`)
@@ -123,15 +125,21 @@ export async function recordProductPresentation(options: Options) {
     await heading("Documents à imprimer").waitFor()
     await page.getByRole("heading", { level: 2, name: "Badges", exact: true }).scrollIntoViewIfNeeded()
     await at("Et après la fête")
-    await page.getByRole("heading", { level: 2, name: "Résumé de l'événement", exact: true }).scrollIntoViewIfNeeded()
+    // The heading at the top of the viewport, so the volunteer and hour figures below it are on screen.
+    const summary = page.getByRole("region", { name: "Résumé de l'événement" })
+    await summary.evaluate(element => element.scrollIntoView({ block: "start", behavior: "smooth" }))
+    await summary.getByRole("heading", { level: 3, name: "Heures", exact: true }).waitFor()
+    await page.waitForTimeout(800)
   })
 
   // The call to action: an end card held long enough to read, then where to start.
+  // The space request page comes first, so no earlier screen stays visible between the cards.
   await scene("p-cta", async at => {
-    await page.screencast.showChapter("Essayez benevol.app", { description: "Gratuit · Open source · Hébergé en France", duration: 3_000 })
-    await at("Demandez votre espace sur benevol.app")
     await page.goto(`${base}/inscription`); await settleDom(page)
     await page.getByRole("heading", { level: 1 }).first().waitFor()
-    await page.screencast.showChapter("Demandez votre espace", { description: "benevol.app", duration: 2_000 })
+    await at("Essayez benevol.app")
+    await page.screencast.showChapter("Essayez benevol.app", { description: "Gratuit · Open source · Hébergé en France", duration: 4_500 })
+    await at("Demandez votre espace sur benevol.app")
+    await page.screencast.showChapter("Demandez votre espace", { description: "benevol.app", duration: 3_000 })
   })
 }

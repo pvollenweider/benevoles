@@ -934,7 +934,7 @@
         "saison",
         "repair-café"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "repair-cafe-presentation",
       "themes": [
         "planning-creneaux",
@@ -961,7 +961,7 @@
         "inscription",
         "jour-j"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie",

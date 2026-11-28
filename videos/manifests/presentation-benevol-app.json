@@ -4,6 +4,7 @@
   "title": "benevol.app en deux minutes",
   "description": "Une fête de village, de la préparation au bilan : ce que benevol.app change pour les organisateurs et les bénévoles, en deux minutes.",
   "language": "fr-CH",
+  "posterAtMs": 25000,
   "voice": "Kore",
   "voiceStyle": "Speak with a warm, genuine smile, like telling a friend from another association how this year's village fête went. Natural conversational French, lively but unhurried pace around 125 words per minute, clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch and warmth from beginning to end. Never sound like an advertisement, corporate, theatrical, childish or rushed.",
   "secondVoice": {

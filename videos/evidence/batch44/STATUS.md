@@ -28,3 +28,12 @@
 
 - EVENT_SIGNUP_PAGE_SETTINGS — READY, published: take 1 accepted against the narration and main sources; validation, MP4 transcript, audiovisual review and music checks passed. The guide now supports multiple video embeds per unit.
 - EVENT_VISIBILITY_REGISTRATION_WINDOW — NOT READY, not published after take 2: narration boundaries corrected and MP4 transcript/validation passed; the native status menu is absent from the capture and the archive selection follows its narration. Recorder adjusted for the local public host and organization subdomain.
+
+- PRODUCT_PRESENTATION — NOT READY: take 1 stopped on an overlong card; take 2 passed validation and audio checks but audiovisual review flagged unseen summary statistics and an early CTA card. No publication.
+
+- RECURRING_PRESENTATION — NOT READY: rehearsal reaches the real public page, but the 91-day template yields seven dates and no month buttons (minimum eight); the approved story describes a year. No narrated take or publication.
+
+- PRODUCT_PRESENTATION — READY: take 3 passed audiovisual, full-audio, frame/timeline, music and validation checks; narration unchanged.
+- RECURRING_PRESENTATION — NOT READY: one-year template and month buttons confirmed in rehearsal; take 1 overran the season scene, and take 2 overran signup by 6.5 seconds. Both authorized takes exhausted; no publication.
+
+- RECURRING_PRESENTATION — READY published: take 3 passed audiovisual, full-audio, frame/timeline, music and validation checks; narration unchanged.
