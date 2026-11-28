@@ -127,20 +127,21 @@ export async function recordRecurringPresentation(options: Options) {
     await repair().first().scrollIntoViewIfNeeded(); await tap(page, repair().first())
     await tap(page, page.getByRole("button", { name: /^Continuer/ }).filter({ visible: true }).first())
     await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-    await fill(page, page.getByRole("textbox", { name: "Prénom", exact: true }), VOLUNTEER.firstName, 80)
-    await fill(page, page.getByRole("textbox", { name: "Nom", exact: true }), surnameOf(VOLUNTEER.firstName), 80)
-    await fill(page, page.getByRole("textbox", { name: "Email", exact: true }), VOLUNTEER.email, 80)
+    // The form is not narrated: filled at once, without touch markers, so the scene keeps to its sentences.
+    await page.getByRole("textbox", { name: "Prénom", exact: true }).fill(VOLUNTEER.firstName)
+    await page.getByRole("textbox", { name: "Nom", exact: true }).fill(surnameOf(VOLUNTEER.firstName))
+    await page.getByRole("textbox", { name: "Email", exact: true }).fill(VOLUNTEER.email)
     const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
-    if (await charter.count()) await tap(page, charter)
-    await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
-    const submit = page.getByRole("button", { name: "Confirmer mon inscription" })
-    await submit.scrollIntoViewIfNeeded()
-    await tap(page, submit)
-    await page.waitForURL(/\/success/, { timeout: 20_000 }); await settleDom(page)
+    if (await charter.count()) await charter.check()
+    await page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }).check()
+    await page.getByRole("button", { name: "Confirmer mon inscription" }).scrollIntoViewIfNeeded()
   })
 
-  // Her page, from her real email: every date, the calendar subscription.
+  // Her page, from her real email: every date, the calendar subscription. The sign-up is confirmed
+  // as the scene opens, then her page comes from the link of her real confirmation email.
   await scene("r-mypage", async at => {
+    await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
+    await page.waitForURL(/\/success/, { timeout: 20_000 })
     await at("Sur sa page Mes inscriptions")
     await page.goto(await myRegistrationsLink(page)); await settleDom(page)
     await heading("Toutes mes inscriptions").waitFor()
