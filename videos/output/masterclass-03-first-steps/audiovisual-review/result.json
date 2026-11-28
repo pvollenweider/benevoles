@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:36:27.051Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "4e48d77268740cb8599e211e44f397c2c22c142c6fd9401741504dbbe43945b4",
+  "clipSha256": "9bc9a993901c3f565472ef7361aa200b4196c039f7f4ed6a6c8a973d135e9168",
+  "scene": "result",
+  "review": {
+    "heardOpening": "En revenant dans l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "En revenant dans l'administration, les étapes obligatoires sont terminées et la checklist disparaît",
+        "visibleSeconds": 0,
+        "visible": "L'espace d'administration de l'association est affiché sur l'onglet Événements, sans checklist",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "un événement publié",
+        "visibleSeconds": 0,
+        "visible": "L'événement « Fête du parc » est visible avec le badge vert « Publié »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "un propriétaire peut la masquer pour toute l'équipe",
+        "visibleSeconds": 15,
+        "visible": "Écran de conclusion stable pendant l'explication de l'option alternative",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et intelligible, avec une musique de fond légère."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

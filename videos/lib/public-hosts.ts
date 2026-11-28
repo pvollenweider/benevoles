@@ -69,7 +69,7 @@ export function localGatewayTarget(requestUrl: string, appBase: string): URL | n
   if (requested.protocol !== "http:" || requested.username || requested.password ||
       !["localhost", "127.0.0.1"].includes(requested.hostname)) return null
   const port = requested.port || "80"
-  const origin = port === appPort ? `http://127.0.0.1:${appPort}` : port === mailpitPort() ? `http://127.0.0.1:${mailpitPort()}` : null
+  const origin = port === appPort ? `http://127.0.0.1:${appPort}` : port === mailpitPort() ? `http://127.0.0.1:${mailpitPort()}` : port === "4870" ? "http://127.0.0.1:4870" : null
   if (!origin) return null
   // Assign the path instead of resolving it: even //host/path cannot replace the origin.
   const target = new URL(origin)

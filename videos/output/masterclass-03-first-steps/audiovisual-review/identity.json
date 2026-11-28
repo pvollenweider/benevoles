@@ -1,0 +1,41 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:34:56.647Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "1e6a20368ff05be37c3d58453c2863acc8d98b6d29ea344374a549a34c386096",
+  "clipSha256": "4b050d4fdba81908c505c0c95950b9a3a9bd98c6cadda837f541b48f886481a1",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Commençons par ce que verront les bénévoles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "donnez à la page publique un titre accueillant",
+        "visibleSeconds": 3.5,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "puis lisez la convention des bénévoles complète",
+        "visibleSeconds": 6,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Enregistrons le texte entier",
+        "visibleSeconds": 19.5,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

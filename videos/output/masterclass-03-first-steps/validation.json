@@ -1,82 +1,83 @@
 {
   "id": "ORG_FIRST_STEPS",
   "slug": "masterclass-03-first-steps",
-  "validatedAt": "2026-10-11T21:41:56.837Z",
+  "validatedAt": "2026-11-28T12:37:35.983Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Charon",
-  "captureMs": 204840,
+  "captureMs": 204720,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13468,
-      "audioMs": 13467,
-      "driftMs": 1
+      "visualMs": 13173,
+      "audioMs": 13171,
+      "driftMs": 2
     },
     {
       "id": "checklist",
-      "visualMs": 17544,
-      "audioMs": 17542,
+      "visualMs": 17733,
+      "audioMs": 17731,
       "driftMs": 2
     },
     {
       "id": "identity",
-      "visualMs": 24184,
-      "audioMs": 24182,
+      "visualMs": 22398,
+      "audioMs": 22396,
       "driftMs": 2
     },
     {
       "id": "timezone",
-      "visualMs": 16680,
-      "audioMs": 16678,
-      "driftMs": 2
+      "visualMs": 14799,
+      "audioMs": 14798,
+      "driftMs": 1
     },
     {
       "id": "event",
-      "visualMs": 19831,
-      "audioMs": 19830,
+      "visualMs": 19009,
+      "audioMs": 19008,
       "driftMs": 1
     },
     {
       "id": "shift",
-      "visualMs": 18023,
-      "audioMs": 18022,
-      "driftMs": 1
+      "visualMs": 17684,
+      "audioMs": 17684,
+      "driftMs": 0
     },
     {
       "id": "publish",
-      "visualMs": 16062,
-      "audioMs": 16061,
-      "driftMs": 1
-    },
-    {
-      "id": "test",
-      "visualMs": 20832,
-      "audioMs": 20830,
+      "visualMs": 16047,
+      "audioMs": 16045,
       "driftMs": 2
     },
     {
-      "id": "help",
-      "visualMs": 24608,
-      "audioMs": 24607,
+      "id": "test",
+      "visualMs": 22189,
+      "audioMs": 22188,
       "driftMs": 1
     },
     {
+      "id": "help",
+      "visualMs": 25935,
+      "audioMs": 25935,
+      "driftMs": 0
+    },
+    {
       "id": "result",
-      "visualMs": 18270,
-      "audioMs": 18261,
-      "driftMs": 9
+      "visualMs": 20077,
+      "audioMs": 20073,
+      "driftMs": 4
     }
   ],
   "anchorsChecked": 17,
   "music": {
-    "voicedWindows": 188,
+    "voicedWindows": 186,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 13.7,
-    "largestGapLu": 18,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 18.9,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -17.1
+    "medianVoiceLufs": -16.5
   },
   "issues": []
 }

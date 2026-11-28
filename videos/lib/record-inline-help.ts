@@ -29,6 +29,19 @@ export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: 
   const region = page.locator(`[id="${regionId}"]`)
   const video = region.locator("video")
   await video.waitFor()
+  assert(await video.evaluate(async (el: HTMLVideoElement) => {
+    const poster = new Image()
+    poster.src = el.poster
+    await poster.decode()
+    const track = el.querySelector("track")
+    if (!track) return false
+    track.track.mode = "hidden"
+    if (track.readyState !== 2) await new Promise<void>((resolve, reject) => {
+      track.addEventListener("load", () => resolve(), { once: true })
+      track.addEventListener("error", () => reject(new Error("Captions failed to load")), { once: true })
+    })
+    return poster.naturalWidth > 0 && track.track.cues !== null && track.track.cues.length > 0
+  }), "The published poster and captions must load")
   assert(await video.evaluate((el: HTMLVideoElement) => !el.autoplay), "The reader's click must start playback, not an autoplay attribute")
   await page.waitForFunction(id => {
     const el = document.getElementById(id)?.querySelector("video")

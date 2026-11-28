@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:35:33.301Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "2c91671a33e2c2aaef93515c5ec5adfc6eebefb3f185f1ac1a003b240715b6b8",
+  "clipSha256": "fe6fea88dc50534395e7c9b69a499fa1b8b334deb8dffe05748710508ac61f96",
+  "scene": "shift",
+  "review": {
+    "heardOpening": "La prochaine étape consiste à",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ajoutez un créneau",
+        "visibleSeconds": 3.5,
+        "visible": "Ouverture du formulaire de création intitulé Nouveau créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "choisissez le poste Accueil",
+        "visibleSeconds": 5.2,
+        "visible": "Le poste Accueil est sélectionné dans le champ correspondant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "puis indiquez neuf heures, midi et trois places",
+        "visibleSeconds": 7,
+        "visible": "Les champs Début (09:00), Fin (12:00) et Places (3) sont renseignés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "le créneau apparaît réellement dans le planning, regroupé sous son poste",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la frise du planning avec le bloc bleu 09h-12h sous la ligne Accueil",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-28T12:34:44.815Z",
+  "videoSha256": "2f081e4296557f96d154d4fca238d81d9309d8a1508ee97ea3b74b6e9b6c7668",
+  "promptSha256": "47eaaf0c6e1f1fa9793cc9ff5fc2e22fdf20a2faaf431db921539fb51c1c4f86",
+  "clipSha256": "5da433cc9f6ec922b8863cb307f6d14ecc1864090deafb42050d61569e4d9661",
+  "scene": "checklist",
+  "review": {
+    "heardOpening": "Les quatre étapes obligatoires sont de créer l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Les quatre étapes obligatoires sont de créer l'événement, définir ses créneaux, le publier, puis faire une inscription de test.",
+        "visibleSeconds": 1,
+        "visible": "Liste 'Premiers pas' affichant les étapes 3 à 6 correspondant aux étapes obligatoires mentionnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Le titre public, la convention et le fuseau horaire sont facultatifs, car des valeurs par défaut existent.",
+        "visibleSeconds": 8.5,
+        "visible": "Étapes 1 et 2 visibles avec la mention 'facultatif'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Les coches sont calculées à partir des données : pas besoin de les remplir manuellement.",
+        "visibleSeconds": 14,
+        "visible": "Indicateurs d'avancement et puces numérotées de la liste des étapes visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et naturelle, parfaitement synchronisée avec la présentation de l'écran d'accueil des événements."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
