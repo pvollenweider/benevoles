@@ -149,6 +149,11 @@ async function main() {
     const { seedVideoWorkloadProtection } = await import("./seed-video-workload")
     return seedVideoWorkloadProtection(prisma)
   }
+  // The permanences presentation: a repair café, its own organisation (scripts/seed-video-repair-cafe.ts).
+  if (scenario === "repair-cafe-presentation") {
+    const { seedVideoRepairCafe } = await import("./seed-video-repair-cafe")
+    return seedVideoRepairCafe(prisma)
+  }
   // The sign-up page settings: its own organisation (scripts/seed-video-signup-settings.ts).
   if (scenario === "signup-page-settings") {
     const { seedVideoSignupPageSettings } = await import("./seed-video-signup-settings")
