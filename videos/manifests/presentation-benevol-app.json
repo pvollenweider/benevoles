@@ -1,0 +1,68 @@
+{
+  "id": "PRODUCT_PRESENTATION",
+  "slug": "presentation-benevol-app",
+  "title": "benevol.app en deux minutes",
+  "description": "Une fête de village, de la préparation au bilan : ce que benevol.app change pour les organisateurs et pour les bénévoles.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with a warm, genuine smile, like telling a friend from another association how this year's village fête went. Natural conversational French, lively but unhurried pace around 125 words per minute, clear articulation, small natural pauses between the moments of the story. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch and warmth from beginning to end. Never sound like an advertisement, corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "pres-welcome",
+      "transcript": "Chaque été, Élodie organise la fête du village de Montvert. Il lui faut des bénévoles pour l'accueil, la buvette, la navette et le démontage. Longtemps, tout a tenu dans un tableur et beaucoup de messages.",
+      "fallbackDurationMs": 18600
+    },
+    {
+      "id": "pres-prepare",
+      "transcript": "Cette année, elle prépare tout dans benevol.app. Pour gagner du temps, elle reprend la fête de l'an dernier : les dates se décalent toutes seules. Sur la frise, elle voit sa journée d'un coup d'œil, poste par poste, avec les places encore libres.",
+      "fallbackDurationMs": 22440
+    },
+    {
+      "id": "pres-signup",
+      "transcript": "Elle partage ensuite un seul lien, par email ou sur une affiche. Léa l'ouvre depuis chez elle. Elle choisit l'accueil du matin. Son nom, son email, son téléphone, et l'inscription part. Pas de compte à créer, pas de mot de passe à retenir. Léa reçoit un email pour confirmer, et ses rappels arriveront tout seuls.",
+      "fallbackDurationMs": 28200
+    },
+    {
+      "id": "pres-follow",
+      "transcript": "De son côté, Élodie voit tout de suite où il manque du monde, du créneau le plus vide au plus proche du complet. Pour trouver du renfort, elle écrit aux bénévoles en partant d'un modèle de message, qu'elle n'a plus qu'à relire.",
+      "fallbackDurationMs": 21960
+    },
+    {
+      "id": "pres-print",
+      "transcript": "La veille, elle imprime le planning de chaque poste, les feuilles de présence et les badges. Le jour J, l'accueil peut aussi pointer les arrivées depuis un téléphone.",
+      "fallbackDurationMs": 15240
+    },
+    {
+      "id": "pres-after",
+      "transcript": "Après la fête, le bilan compte les bénévoles, les nouveaux comme les fidèles, et les heures données. De quoi remercier chacun, et préparer l'an prochain.",
+      "fallbackDurationMs": 13800
+    },
+    {
+      "id": "pres-closing",
+      "transcript": "benevol.app est gratuit et open source. Il est développé en Suisse, hébergé en France, sans cookie de pistage. Votre association prépare une fête, une course ou des permanences ? Demandez votre espace sur benevol.app.",
+      "fallbackDurationMs": 18120
+    }
+  ],
+  "viewer": {
+    "summary": "Une fête de village, de la préparation au bilan : comment benevol.app aide une organisatrice et ses bénévoles, en deux minutes.",
+    "steps": [
+      "Préparez l'événement, ou reprenez celui de l'an dernier, et lisez votre journée sur la frise.",
+      "Partagez un seul lien : chaque bénévole choisit ses créneaux, sans compte ni mot de passe.",
+      "Voyez où il manque du monde et écrivez aux bénévoles à partir d'un modèle.",
+      "Imprimez les plannings, les feuilles de présence et les badges.",
+      "Après l'événement, retrouvez le bilan des bénévoles et des heures."
+    ],
+    "remember": [
+      "Les rappels partent tout seuls avant chaque créneau.",
+      "benevol.app est gratuit et open source, hébergé en France, sans cookie de pistage.",
+      "Pour l'essayer, demandez votre espace sur benevol.app."
+    ]
+  }
+}
