@@ -44,39 +44,48 @@ export async function recordProductPresentation(options: Options) {
   if (!href) throw new Error("Demo event not found: run scripts/seed-demo.ts on the local video database")
   const event = `/admin/events/${href.split("/").filter(Boolean).at(-1)}`
 
-  // 1. The story starts: the fête, its postes, the spreadsheet of the past years.
+  // A hook of the second voice: a full-screen card while it speaks, then the story goes on.
+  const card = (id: string, cardTitle: string, description: string) => scene(id, async () => {
+    await page.screencast.showChapter(cardTitle, { description, duration: 2_200 })
+  })
+
   await go(event)
-  await scene("pres-welcome", async () => {
-    await page.screencast.showChapter(title, { description: "Une fête de village, de la préparation au bilan", duration: 2_600 })
+  await scene("p-hook", async () => {
+    await page.screencast.showChapter(title, { description: "Des dizaines de bénévoles. Une seule fête.", duration: 2_800 })
+  })
+  await scene("p-elodie", async () => {
     await heading(EVENT_TITLE).waitFor()
   })
 
-  // 2. Preparing: last year's fête taken up again, then the day on the frise.
-  await scene("pres-prepare", async at => {
-    await at("elle reprend la fête de l'an dernier")
+  // Preparing: last year's fête taken up again, the day on the frise, a demanding poste.
+  await card("p-prepare-hook", "Préparer", "Sans repartir de zéro")
+  await scene("p-prepare", async at => {
+    await at("Elle reprend la fête de l'an dernier")
     await go(`${event}/duplicate`)
     await heading("Dupliquer l'événement").waitFor()
     await at("Sur la frise")
     await go(`${event}/shifts`)
     await page.getByRole("button", { name: /Buvette/ }).filter({ visible: true }).first().scrollIntoViewIfNeeded()
+    await at("Une navette réservée aux plus de vingt et un ans")
+    await page.getByRole("button", { name: /Navette|Chauffeur navette/ }).filter({ visible: true }).first().scrollIntoViewIfNeeded()
   })
 
-  // 3. Léa signs up through the shared link, for real.
-  await scene("pres-signup", async at => {
-    await at("Léa l'ouvre depuis chez elle")
+  // Léa signs up through the shared link, for real.
+  await card("p-volunteers-hook", "Un lien, c'est tout", "Les bénévoles choisissent eux-mêmes leurs créneaux")
+  await scene("p-signup", async at => {
+    await at("Élodie partage un seul lien")
     await page.goto(publicUrl); await settleDom(page)
     await heading(EVENT_TITLE).waitFor()
-    await at("Elle choisit l'accueil du matin")
+    await at("Léa l'ouvre")
     const morning = page.getByRole("button", { name: /^09h–12h.*Accueil.*sélectionner/ }).filter({ visible: true }).first()
     await morning.scrollIntoViewIfNeeded()
     await tap(page, morning)
     await tap(page, page.getByRole("button", { name: /^Continuer/ }).filter({ visible: true }).first())
     await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-    await at("Son nom, son email, son téléphone")
-    await fill(page, page.getByRole("textbox", { name: "Prénom", exact: true }), VOLUNTEER.firstName, 120)
-    await fill(page, page.getByRole("textbox", { name: "Nom", exact: true }), fullNameOf(VOLUNTEER.firstName).split(" ").slice(1).join(" "), 120)
-    await fill(page, page.getByRole("textbox", { name: "Email", exact: true }), VOLUNTEER.email, 120)
-    await fill(page, page.getByRole("textbox", { name: /Téléphone/, exact: true }), VOLUNTEER.phone, 120)
+    await fill(page, page.getByRole("textbox", { name: "Prénom", exact: true }), VOLUNTEER.firstName, 80)
+    await fill(page, page.getByRole("textbox", { name: "Nom", exact: true }), fullNameOf(VOLUNTEER.firstName).split(" ").slice(1).join(" "), 80)
+    await fill(page, page.getByRole("textbox", { name: "Email", exact: true }), VOLUNTEER.email, 80)
+    await fill(page, page.getByRole("textbox", { name: /Téléphone/, exact: true }), VOLUNTEER.phone, 80)
     const size = page.getByRole("radio", { name: "M", exact: true })
     if (await size.count()) { await size.scrollIntoViewIfNeeded(); await tap(page, size) }
     const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
@@ -86,12 +95,13 @@ export async function recordProductPresentation(options: Options) {
     await submit.scrollIntoViewIfNeeded()
     await tap(page, submit)
     await page.waitForURL(/\/success/, { timeout: 20_000 }); await settleDom(page)
-    await at("Pas de compte à créer")
+    await at("Pas de compte, pas de mot de passe")
     await page.getByRole("heading", { level: 1 }).first().scrollIntoViewIfNeeded()
   })
+  await card("p-free", "Gratuit", "Et sans compte pour les bénévoles")
 
-  // 4. Following: where people are missing, then a message from a template.
-  await scene("pres-follow", async at => {
+  // Following: where people are missing, then a message from a template.
+  await scene("p-follow", async at => {
     await at("voit tout de suite où il manque du monde")
     await go(`${event}/staffing`)
     await heading("Où manque-t-il du monde ?").waitFor()
@@ -105,26 +115,23 @@ export async function recordProductPresentation(options: Options) {
     await page.waitForTimeout(600)
   })
 
-  // 5. The day before: the documents to print.
-  await scene("pres-print", async at => {
+  // The day before and after the fête: the documents, the review.
+  await card("p-dayof-hook", "Le jour J", "Tout est prêt")
+  await scene("p-print-after", async at => {
     await at("La veille")
     await go(`${event}/print`)
     await heading("Documents à imprimer").waitFor()
-    await at("Le jour J")
     await page.getByRole("heading", { level: 2, name: "Badges", exact: true }).scrollIntoViewIfNeeded()
-  })
-
-  // 6. After the fête: the review.
-  await scene("pres-after", async at => {
-    await at("le bilan")
+    await at("Et après la fête")
     await page.getByRole("heading", { level: 2, name: "Résumé de l'événement", exact: true }).scrollIntoViewIfNeeded()
   })
 
-  // 7. Trust, and where to start.
-  await scene("pres-closing", async at => {
-    await page.screencast.showChapter("Gratuit et open source", { description: "Développé en Suisse, hébergé en France, sans cookie de pistage", duration: 3_400 })
+  // The call to action: an end card held long enough to read, then where to start.
+  await scene("p-cta", async at => {
+    await page.screencast.showChapter("Essayez benevol.app", { description: "Gratuit · Open source · Hébergé en France", duration: 3_000 })
     await at("Demandez votre espace sur benevol.app")
     await page.goto(`${base}/inscription`); await settleDom(page)
     await page.getByRole("heading", { level: 1 }).first().waitFor()
+    await page.screencast.showChapter("Demandez votre espace", { description: "benevol.app", duration: 2_000 })
   })
 }
