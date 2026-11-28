@@ -9,13 +9,50 @@ export type GenerationManifest = {
   continuousPauseTags?: boolean
   voice: string
   voiceStyle: string
-  segments: { id: string; transcript: string }[]
+  /** A second voice for the short lines that give the rhythm (presentation videos). */
+  secondVoice?: { voice: string; voiceStyle: string }
+  segments: { id: string; transcript: string; speaker?: "second" }[]
 }
 type GenerationMetadata = {
   model: string
   voice: string
+  secondVoice?: string
   segments: Record<string, { generationSha256?: string }>
   sentenceRevision?: SentenceRevision
+}
+
+/** One continuous take: every segment said by one voice, in the manifest's order. */
+export type VoiceGroup = { speaker: "main" | "second"; voice: string; voiceStyle: string; segments: { id: string; transcript: string }[] }
+
+/**
+ * The continuous takes of a narration. A one-voice video has one take with every segment, exactly
+ * as before. A two-voice video (`secondVoice`) has one take per voice: each voice keeps one
+ * identity from beginning to end, and its segments are cut from its own take.
+ */
+export function voiceGroups(manifest: GenerationManifest): VoiceGroup[] {
+  const main: VoiceGroup = { speaker: "main", voice: manifest.voice, voiceStyle: manifest.voiceStyle, segments: manifest.segments.filter(s => s.speaker !== "second") }
+  if (!manifest.secondVoice) {
+    assert(manifest.segments.every(s => s.speaker === undefined), "A segment names a second voice the manifest does not declare")
+    return [main]
+  }
+  const second: VoiceGroup = { speaker: "second", voice: manifest.secondVoice.voice, voiceStyle: manifest.secondVoice.voiceStyle, segments: manifest.segments.filter(s => s.speaker === "second") }
+  assert(main.segments.length > 0 && second.segments.length > 0, "A two-voice narration needs segments for each voice")
+  return [main, second]
+}
+
+/**
+ * The generation proof of one continuous take. A one-voice take keeps its historical form (every
+ * existing narration stays valid); the takes of a two-voice video also name their speaker.
+ */
+export function takeGenerationSha256(group: VoiceGroup, model: string, twoVoices: boolean): string {
+  return createHash("sha256").update(JSON.stringify({
+    transcript: group.segments.map(segment => segment.transcript).join("\n\n"),
+    style: group.voiceStyle,
+    model,
+    voice: group.voice,
+    promptVersion: 3,
+    ...(twoVoices ? { speaker: group.speaker } : {}),
+  })).digest("hex")
 }
 
 /** Explicit provenance for a continuous base with only edited sentences replaced. */
@@ -43,6 +80,22 @@ export function assertNarrationGeneration(manifest: GenerationManifest, audio: G
   assert(manifest.continuousPauseTags !== true, "Obsolete pause instructions require regenerated narration")
   assert.equal(audio.model, "gemini-3.8-flash-tts", "Gemini 3.8 TTS narration is required")
   assert.equal(audio.voice, manifest.voice, "Narration voice differs from the current manifest")
+  if (manifest.secondVoice) {
+    // Two voices: one continuous take per voice, each segment proved by its own voice's take.
+    assert(!audio.sentenceRevision, "Sentence revisions are not supported for a two-voice narration: regenerate it")
+    assert.equal(audio.secondVoice, manifest.secondVoice.voice, "Second narration voice differs from the current manifest")
+    let mainSha = ""
+    for (const group of voiceGroups(manifest)) {
+      const expected = takeGenerationSha256(group, audio.model, true)
+      if (group.speaker === "main") mainSha = expected
+      for (const segment of group.segments) {
+        assert.equal(audio.segments[segment.id]?.generationSha256, expected,
+          `${segment.id}: generation proof missing, mixed, or outdated for the current script and its voice`)
+      }
+    }
+    return mainSha
+  }
+  assert(!audio.secondVoice, "The narration has a second voice the manifest no longer declares")
   if (audio.sentenceRevision) {
     const revision = audio.sentenceRevision
     assert.equal(revision.version, 1)
@@ -71,13 +124,7 @@ export function assertNarrationGeneration(manifest: GenerationManifest, audio: G
     for (const segment of manifest.segments) assert.equal(audio.segments[segment.id]?.generationSha256, expected, "Sentence revision proof outdated")
     return expected
   }
-  const expected = createHash("sha256").update(JSON.stringify({
-    transcript: manifest.segments.map(segment => segment.transcript).join("\n\n"),
-    style: manifest.voiceStyle,
-    model: audio.model,
-    voice: audio.voice,
-    promptVersion: 3,
-  })).digest("hex")
+  const expected = takeGenerationSha256(voiceGroups(manifest)[0], audio.model, false)
   assert(manifest.segments.length > 0, "Narration chapters are required")
   for (const segment of manifest.segments) {
     assert.equal(audio.segments[segment.id]?.generationSha256, expected,

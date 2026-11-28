@@ -6,6 +6,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { execFileSync } from "node:child_process"
 import { loadCatalog, loadManifest, videoDir } from "../lib/manifest"
+import { assertNarrationGeneration } from "../lib/narration-generation"
 import { assembledOnTarget } from "../lib/product-evidence"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped JSON reports read from disk
@@ -26,8 +27,8 @@ async function main() {
     const audio = await json(path.join(directory, "audio-metadata.json"))
     const narration = await json(path.join(directory, "narration-audit.json"))
     const generationIds = new Set<string>()
-    const continuousTranscript = manifest.segments.map(segment => segment.transcript).join("\n\n")
-    const expectedGeneration = createHash("sha256").update(JSON.stringify({ transcript: continuousTranscript, style: manifest.voiceStyle, model: audio?.model, voice: audio?.voice, promptVersion: 3 })).digest("hex")
+    // One proof per continuous take (one voice, or one per voice: videos/lib/narration-generation.ts).
+    const generationCurrent = (() => { try { assertNarrationGeneration(manifest, audio); return true } catch { return false } })()
     const narrationChapters = []
     for (const segment of manifest.segments) {
       const metadata = audio?.segments?.[segment.id]
@@ -40,7 +41,7 @@ async function main() {
       }
       narrationChapters.push({ id: segment.id, audioPresent: !!audioSha256, expectedTranscriptCurrent: audit?.expected === segment.transcript, auditMatchesAudio: !!audioSha256 && audit?.audioSha256 === audioSha256, auditPassed: audit?.needsReview === false, generationIdentified: !!metadata?.generationSha256 })
     }
-    const sourceNarrationEvidenceCurrent = manifest.continuousPauseTags !== true && narration?.promptVersion === 2 && audio?.model === "gemini-3.8-flash-tts" && audio?.voice === manifest.voice && manifest.continuousNarration === true && generationIds.size === 1 && generationIds.has(expectedGeneration) && narrationChapters.every(chapter => chapter.audioPresent && chapter.expectedTranscriptCurrent && chapter.auditMatchesAudio && chapter.auditPassed && chapter.generationIdentified)
+    const sourceNarrationEvidenceCurrent = manifest.continuousPauseTags !== true && narration?.promptVersion === 2 && audio?.model === "gemini-3.8-flash-tts" && audio?.voice === manifest.voice && manifest.continuousNarration === true && generationIds.size === (manifest.secondVoice ? 2 : 1) && generationCurrent && narrationChapters.every(chapter => chapter.audioPresent && chapter.expectedTranscriptCurrent && chapter.auditMatchesAudio && chapter.auditPassed && chapter.generationIdentified)
     let videoSha256: string | null = null
     try { videoSha256 = createHash("sha256").update(await readFile(path.join(directory, `${manifest.slug}.mp4`))).digest("hex") }
     catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }

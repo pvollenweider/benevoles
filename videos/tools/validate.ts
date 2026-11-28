@@ -129,7 +129,7 @@ async function main() {
   }
   await writeFile(path.join(dir, "validation.json"), `${JSON.stringify(report, null, 2)}\n`)
   if (issues.length > 0) throw new Error(`${manifest.id} synchronization failed:\n- ${issues.join("\n- ")}`)
-  console.log(`✓ ${manifest.id}: ${scenes.length} scene durations aligned, ${audio.sentenceRevision ? "sentence revisions with selected" : "one continuous"} ${manifest.voice} voice; narration content ${narrationContentChecked ? "checked" : "NOT CHECKED"}; music ${music?.smallestGapLu}–${music?.largestGapLu} LU under the voice`)
+  console.log(`✓ ${manifest.id}: ${scenes.length} scene durations aligned, ${audio.sentenceRevision ? "sentence revisions with selected" : "one continuous"} ${manifest.voice}${manifest.secondVoice ? ` and ${manifest.secondVoice.voice}` : ""} voice${manifest.secondVoice ? "s" : ""}; narration content ${narrationContentChecked ? "checked" : "NOT CHECKED"}; music ${music?.smallestGapLu}–${music?.largestGapLu} LU under the voice`)
 }
 
 main().catch((error) => {

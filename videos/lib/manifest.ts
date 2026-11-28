@@ -9,6 +9,8 @@ export type VideoSegment = {
   id: string
   transcript: string
   style?: string
+  /** Said by the manifest's `secondVoice` (a two-voice video); the main voice otherwise. */
+  speaker?: "second"
   fallbackDurationMs: number
 }
 
@@ -30,6 +32,11 @@ export type VideoManifest = {
   language: string
   voice: string
   voiceStyle: string
+  /**
+   * A second voice, for the short lines that give a presentation video its rhythm. Each voice is
+   * generated as its own continuous take (videos/lib/narration-generation.ts, `voiceGroups`).
+   */
+  secondVoice?: { voice: string; voiceStyle: string }
   continuousNarration?: boolean
   /** Legacy marker: new narration never uses inline pause tags; true is rejected. */
   continuousPauseTags?: boolean
@@ -67,6 +74,8 @@ type VideoCatalog = {
 export type AudioMetadata = {
   model: string
   voice: string
+  /** The second voice of a two-voice narration. */
+  secondVoice?: string
   generatedAt: string
   sentenceRevision?: import("./narration-generation").SentenceRevision
   segments: Record<string, { file: string; durationMs: number; generationSha256: string }>
