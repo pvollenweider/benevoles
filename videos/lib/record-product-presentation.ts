@@ -125,15 +125,21 @@ export async function recordProductPresentation(options: Options) {
     await heading("Documents à imprimer").waitFor()
     await page.getByRole("heading", { level: 2, name: "Badges", exact: true }).scrollIntoViewIfNeeded()
     await at("Et après la fête")
-    await page.getByRole("heading", { level: 2, name: "Résumé de l'événement", exact: true }).scrollIntoViewIfNeeded()
+    // The heading at the top of the viewport, so the volunteer and hour figures below it are on screen.
+    const summary = page.getByRole("region", { name: "Résumé de l'événement" })
+    await summary.evaluate(element => element.scrollIntoView({ block: "start", behavior: "smooth" }))
+    await summary.getByRole("heading", { level: 3, name: "Heures", exact: true }).waitFor()
+    await page.waitForTimeout(800)
   })
 
   // The call to action: an end card held long enough to read, then where to start.
+  // The space request page comes first, so no earlier screen stays visible between the cards.
   await scene("p-cta", async at => {
-    await page.screencast.showChapter("Essayez benevol.app", { description: "Gratuit · Open source · Hébergé en France", duration: 3_000 })
-    await at("Demandez votre espace sur benevol.app")
     await page.goto(`${base}/inscription`); await settleDom(page)
     await page.getByRole("heading", { level: 1 }).first().waitFor()
-    await page.screencast.showChapter("Demandez votre espace", { description: "benevol.app", duration: 2_000 })
+    await at("Essayez benevol.app")
+    await page.screencast.showChapter("Essayez benevol.app", { description: "Gratuit · Open source · Hébergé en France", duration: 4_500 })
+    await at("Demandez votre espace sur benevol.app")
+    await page.screencast.showChapter("Demandez votre espace", { description: "benevol.app", duration: 3_000 })
   })
 }
