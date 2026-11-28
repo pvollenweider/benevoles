@@ -50,7 +50,7 @@ export async function recordSignupPageSettings(options: Options) {
   const go = async (route: string) => { await page.goto(`${base}${route}`); await settle(page) }
   const edit = `/admin/events/${EVENT_ID}/edit`
   const publicPage = async () => {
-    await page.goto(`${base}/${EVENT_SLUG}?org=${ORG_SLUG}`); await settleDom(page)
+    await page.goto(`https://${ORG_SLUG}.benevol.app/${EVENT_SLUG}`); await settleDom(page)
     await page.getByRole("heading", { level: 1, name: EVENT_TITLE }).waitFor()
   }
   const saved = () => page.getByText(/^Modifications enregistrées à/).first().waitFor()
