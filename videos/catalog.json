@@ -356,7 +356,7 @@
         "convention",
         "secteurs"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "signup-page-settings",
       "themes": [
         "evenement-cycle-de-vie",
@@ -366,7 +366,7 @@
         "organisateur"
       ],
       "feature": "Réglages de la page d'inscription",
-      "updatedAt": "2026-11-27",
+      "updatedAt": "2026-11-28",
       "revision": 1,
       "level": "avance",
       "added": "2026-11-27"

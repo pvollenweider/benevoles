@@ -21,6 +21,10 @@ Le lien partagé est toujours l'adresse publique de l'événement, jamais un lie
 
 Une messagerie peut garder l'ancien aperçu quelque temps après une modification du titre ou de la description.
 
+Avant de partager le lien, vous pouvez régler ce que voient les bénévoles sur la page d'inscription : l'affichage des créneaux par défaut, les créneaux qui se chevauchent, la convention des bénévoles et le regroupement par secteur (voir [Créer un événement](creer-un-evenement.md#page-blanche) et [Organiser les postes par secteurs](gerer-les-postes.md#regrouper-les-creneaux-par-secteur-sur-la-page-d-inscription)).
+
+<!-- video: EVENT_SIGNUP_PAGE_SETTINGS -->
+
 ## QR code
 
 Dans l'onglet **Partage**, page **QR code**, télécharger le QR code de la page d'inscription de l'événement (formats PNG ou SVG). Pratique pour l'affichage en salle ou sur une affiche. Pour un partage en ligne (messagerie, email, réseau social), utilisez plutôt **Copier le lien** ou **Partager**.
