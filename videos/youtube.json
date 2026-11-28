@@ -280,6 +280,20 @@
       "uploadedAt": "2026-11-20T13:29:57.762Z",
       "thumbnailKey": "f23b5574f3fb96d5"
     },
+    "masterclass-03-first-steps": {
+      "videoId": "0mIRqxMpTBc",
+      "revision": 4,
+      "privacy": "public",
+      "captions": true,
+      "thumbnail": true,
+      "synthetic": true,
+      "format": "native",
+      "playlists": [
+        "decouvrir-administration"
+      ],
+      "uploadedAt": "2026-11-28T12:52:43.206Z",
+      "thumbnailKey": "fc2731b3c32ccbc2"
+    },
     "members-duplicates-merge": {
       "videoId": "jULq80zSY60",
       "revision": 5,
