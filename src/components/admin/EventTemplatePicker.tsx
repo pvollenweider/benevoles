@@ -97,7 +97,7 @@ export default function EventTemplatePicker({ children }: { children: React.Reac
               />
               <p id={`${id}-date-hint`} className="text-xs text-gray-600 mt-1">
                 {recurring
-                  ? `${Math.round(template.days / 7)} semaines à partir de cette date ; la période se prolonge ensuite en modifiant l'événement.`
+                  ? `${template.days >= 364 ? "Un an" : `${Math.round(template.days / 7)} semaines`} à partir de cette date ; la période se modifie ensuite avec l'événement.`
                   : template.days > 1 ? `${template.days} jours à partir de cette date.` : "Un seul jour."}
               </p>
             </div>
