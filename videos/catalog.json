@@ -934,7 +934,7 @@
         "saison",
         "repair-café"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "repair-cafe-presentation",
       "themes": [
         "planning-creneaux",
